@@ -12,41 +12,35 @@ import ru.geekbrains.stargame.engine.math.Rnd;
  */
 
 public class StarsHandler {
-    private static final int STARS = 50;
-    private static Star[] stars = new Star[STARS];
+    private final int STARS = 50;
+    private Star[] stars = new Star[STARS];
+    private Texture starTexture = new Texture("star.png");
 
-    private static Texture starTexture = new Texture("star.png");
-
-    public static Star[] getStars() {
-        return stars;
-    }
-
-    static {
+    public StarsHandler() {
         for (int i = 0; i < stars.length; i++) {
-            stars[i] = new Star(
-                    new TextureRegion(starTexture), Rnd.nextFloat(-0.05f, 0.05f), Rnd.nextFloat(-0.5f, -0.1f), 0.01f);
+            stars[i] = new Star(starTexture, Rnd.nextFloat(-0.05f, 0.05f), Rnd.nextFloat(-0.4f, -0.1f), 0.01f);
         }
     }
 
-    public static void draw(SpriteBatch batch){
+    public void draw(SpriteBatch batch){
         for (int i = 0; i < stars.length; i++) {
             stars[i].draw(batch);
         }
     }
 
-    public static void update(float delta){
+    public void update(float delta){
         for (int i = 0; i < stars.length; i++) {
             stars[i].update(delta);
         }
     }
 
-    public static void resize(Rect worldBounds) {
+    public void resize(Rect worldBounds) {
         for (int i = 0; i < stars.length; i++) {
             stars[i].resize(worldBounds);
         }
     }
 
-    public static void dispose(){
+    public void dispose(){
         starTexture.dispose();
     }
 }

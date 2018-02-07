@@ -13,12 +13,10 @@ import ru.geekbrains.stargame.engine.math.Rect;
 
 public class GameScreen extends Base2DScreen {
 
-    private Texture backgroundTexture;
     private Background background;
-    private Texture playerTexture;
+    private StarsHandler stars;
 
     Player player;
-    Player[] enemies;
 
     public GameScreen(Game game) {
         super(game);
@@ -27,10 +25,9 @@ public class GameScreen extends Base2DScreen {
     @Override
     public void show() {
         super.show();
-        backgroundTexture = new Texture("Grid.png");
-        playerTexture = new Texture("Player.png");
-        background = new Background(new TextureRegion(backgroundTexture));
-        player = new Player(new TextureRegion(playerTexture));
+        background = new Background(new Texture("space.jpg"));
+        player = new Player(new Texture("rocket.png"));
+        stars = new StarsHandler();
     }
 
     @Override
@@ -44,13 +41,13 @@ public class GameScreen extends Base2DScreen {
     }
 
     public void update(float delta) {
-        StarsHandler.update(delta);
+        stars.update(delta);
         player.update(delta);
     }
 
     public void draw() {
         background.draw(batch);
-        StarsHandler.draw(batch);
+        stars.draw(batch);
         player.draw(batch);
     }
 
@@ -58,7 +55,7 @@ public class GameScreen extends Base2DScreen {
     protected void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
-        StarsHandler.resize(worldBounds);
+        stars.resize(worldBounds);
         player.resize(worldBounds);
     }
 
@@ -69,9 +66,16 @@ public class GameScreen extends Base2DScreen {
     }
 
     @Override
+    protected void touchDragged(Vector2 touch, int pointer) {
+        super.touchDragged(touch, pointer);
+        player.setTarget(touch);
+    }
+
+    @Override
     public void dispose() {
         super.dispose();
-        backgroundTexture.dispose();
-        playerTexture.dispose();
+        background.dispose();
+        stars.dispose();
+        player.dispose();
     }
 }

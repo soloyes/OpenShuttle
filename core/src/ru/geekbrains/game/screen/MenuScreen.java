@@ -18,9 +18,6 @@ import ru.geekbrains.stargame.engine.math.Rect;
 
 public class MenuScreen extends Base2DScreen implements ActionListener {
 
-    private static final float BUTTON_HEIGHT = 0.15f;
-    private static final float BUTTON_PRESS_SCALE = 0.9f;
-
     private Texture backgroundTexture;
     private Background background;
 
@@ -30,7 +27,7 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
     private Texture buttonPlayTexture;
     private PlayButton buttonPlay;
 
-    private Star[] stars;
+    private StarsHandler stars;
 
     public MenuScreen(Game game) {
         super(game);
@@ -39,18 +36,16 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
     @Override
     public void show() {
         super.show();
-        backgroundTexture = new Texture("Grid.png");
-        background = new Background(new TextureRegion(backgroundTexture));
+        backgroundTexture = new Texture("space.jpg");
+        background = new Background(backgroundTexture);
 
         buttonExitTexture = new Texture("exit.png");
-        buttonExit = new ExitButton(
-                new TextureRegion(buttonExitTexture), BUTTON_PRESS_SCALE, this);
+        buttonExit = new ExitButton(buttonExitTexture, this);
 
         buttonPlayTexture = new Texture("play.png");
-        buttonPlay = new PlayButton(
-                new TextureRegion(buttonPlayTexture), BUTTON_PRESS_SCALE, this);
+        buttonPlay = new PlayButton(buttonPlayTexture, this);
 
-        stars = StarsHandler.getStars();
+        stars = new StarsHandler();
      }
 
     @Override
@@ -61,13 +56,13 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
     }
 
     public void update(float delta) {
-        StarsHandler.update(delta);
+        stars.update(delta);
     }
 
     public void draw() {
         batch.begin();
         background.draw(batch);
-        StarsHandler.draw(batch);
+        stars.draw(batch);
         buttonExit.draw(batch);
         buttonPlay.draw(batch);
         batch.end();
@@ -77,16 +72,17 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
     protected void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
-        StarsHandler.resize(worldBounds);
+        stars.resize(worldBounds);
         buttonExit.resize(worldBounds);
         buttonPlay.resize(worldBounds);
     }
 
     @Override
     public void dispose() {
-        backgroundTexture.dispose();
-        buttonPlayTexture.dispose();
-        buttonExitTexture.dispose();
+        background.dispose();
+        buttonPlay.dispose();
+        buttonExit.dispose();
+        stars.dispose();
         super.dispose();
     }
 

@@ -1,6 +1,7 @@
 package ru.geekbrains.stargame.engine.ui;
 
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -9,14 +10,15 @@ import ru.geekbrains.stargame.engine.Sprite;
 
 public class ScaledTouchUpButton extends Sprite {
 
+    private static final float BUTTON_PRESS_SCALE = 0.9f;
+    private static final float BUTTON_SIZE_SCALE = 0.15f;
     private int pointer;
     private boolean pressed;
-    private float pressScale;
     private final ActionListener actionListener;
 
-    public ScaledTouchUpButton(TextureRegion region, float pressScale, ActionListener actionListener) {
-        super(region);
-        this.pressScale = pressScale;
+    public ScaledTouchUpButton(Texture texture, ActionListener actionListener) {
+        super(texture);
+        setHeightProportion(BUTTON_SIZE_SCALE);
         this.actionListener = actionListener;
     }
 
@@ -26,7 +28,7 @@ public class ScaledTouchUpButton extends Sprite {
             return;
         }
         this.pointer = pointer;
-        scale = pressScale;
+        scale = BUTTON_PRESS_SCALE;
         pressed = true;
     }
 

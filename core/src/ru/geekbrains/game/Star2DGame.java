@@ -15,10 +15,4 @@ public class Star2DGame extends Game {
     public void create() {
         setScreen(new MenuScreen(this));
     }
-
-    @Override
-    public void dispose() {
-        StarsHandler.dispose();
-        super.dispose();
-    }
 }
