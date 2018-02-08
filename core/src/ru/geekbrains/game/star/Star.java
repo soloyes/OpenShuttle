@@ -9,8 +9,17 @@ import ru.geekbrains.stargame.engine.math.Rnd;
 
 public class Star extends Sprite {
 
-    private final Vector2 v = new Vector2();
+    private Vector2 v = new Vector2();
     private Rect worldBounds;
+
+    public Vector2 getV() {
+        return v;
+    }
+
+    public void setV(Vector2 v) {
+        this.v = v;
+    }
+
 
     public Star(TextureRegion region, float vx, float vy, float height) {
         super(region);

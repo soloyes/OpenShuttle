@@ -2,8 +2,11 @@ package ru.geekbrains.game.star;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
+import ru.geekbrains.game.players.Player;
 import ru.geekbrains.stargame.engine.math.Rect;
 import ru.geekbrains.stargame.engine.math.Rnd;
 
@@ -14,15 +17,22 @@ import ru.geekbrains.stargame.engine.math.Rnd;
 public class StarsHandler {
     private final int STARS = 50;
     private Star[] stars = new Star[STARS];
-    private Texture starTexture = new Texture("star.png");
+    private TextureRegion starTexture;
 
-    public StarsHandler() {
+    public StarsHandler(TextureAtlas atlas) {
+        starTexture = atlas.findRegion("star");
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(
-                    new TextureRegion(starTexture),
+                    starTexture,
                     Rnd.nextFloat(-0.05f, 0.05f),
-                    Rnd.nextFloat(-0.4f, -0.1f),
-                    0.01f);
+                    Rnd.nextFloat(-0.3f, -0.1f),
+                    0.009f);
+        }
+    }
+
+    public void setV() {
+        for (int i = 0; i < stars.length; i++) {
+            stars[i].setV(stars[i].getV().rotate(10));
         }
     }
 
@@ -45,6 +55,6 @@ public class StarsHandler {
     }
 
     public void dispose(){
-        starTexture.dispose();
+        starTexture.getTexture().dispose();
     }
 }

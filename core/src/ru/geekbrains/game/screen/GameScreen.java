@@ -27,8 +27,9 @@ public class GameScreen extends Base2DScreen {
         super.show();
         mainAtlas = new TextureAtlas("mainAtlas.atlas");
         background = new Background(mainAtlas);
-        player = new Player(mainAtlas);
-        stars = new StarsHandler();
+        stars = new StarsHandler(mainAtlas);
+        player = new Player(mainAtlas, stars);
+
     }
 
     @Override
@@ -75,8 +76,8 @@ public class GameScreen extends Base2DScreen {
     public void dispose() {
         super.dispose();
         background.dispose();
-        stars.dispose();
         player.dispose();
+        stars.dispose();
         mainAtlas.dispose();
     }
 }

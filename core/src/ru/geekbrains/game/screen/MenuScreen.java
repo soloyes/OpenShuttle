@@ -36,7 +36,7 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
         background = new Background(mainAtlas);
         buttonExit = new ExitButton(mainAtlas, this);
         buttonPlay = new PlayButton(mainAtlas, this);
-        stars = new StarsHandler();
+        stars = new StarsHandler(mainAtlas);
      }
 
     @Override
@@ -70,12 +70,12 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
 
     @Override
     public void dispose() {
+        super.dispose();
         background.dispose();
         buttonPlay.dispose();
         buttonExit.dispose();
-        stars.dispose();
         mainAtlas.dispose();
-        super.dispose();
+        stars.dispose();
     }
 
     @Override
