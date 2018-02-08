@@ -8,7 +8,7 @@ import ru.geekbrains.stargame.engine.Sprite;
 /**
  * Created by sol on 2/6/18.
  */
-
+ 
 public class Player extends Sprite {
 
     private Vector2 target;
