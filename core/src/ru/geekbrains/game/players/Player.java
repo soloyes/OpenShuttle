@@ -25,6 +25,7 @@ public class Player extends Sprite {
         tmp.set(target);
         setAngle(tmp.sub(pos).angle() - 90);
         //stars.setV();
+        
     }
 
     public Player(TextureAtlas atlas, StarsHandler stars) {
