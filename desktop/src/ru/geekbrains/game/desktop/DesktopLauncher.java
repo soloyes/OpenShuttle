@@ -14,7 +14,7 @@ public class DesktopLauncher {
 
 		//config.fullscreen = true;
 		config.vSyncEnabled = true;
-
+		config.foregroundFPS = 60;
 		new LwjglApplication(new Star2DGame(), config);
 
 //		Matrix4 matrix4 = new Matrix4();

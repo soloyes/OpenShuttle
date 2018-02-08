@@ -1,6 +1,6 @@
 package ru.geekbrains.game.players;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.stargame.engine.Sprite;
@@ -25,8 +25,8 @@ public class Player extends Sprite {
         setAngle(tmp.sub(pos).angle() - 90);
     }
 
-    public Player(Texture texture) {
-        super(texture);
+    public Player(TextureAtlas atlas) {
+        super(atlas.findRegion("player"), 1, 6, 6);
         tmp = new Vector2();
         tmp2 = new Vector2();
         tmp3 = new Vector2();
@@ -38,14 +38,20 @@ public class Player extends Sprite {
         destanation = new Vector2();
     }
 
-    public void update(float delta){
+    public void update(float delta) {
         tmp2.set(target);
         destanation = tmp2.sub(pos);
         tmp3.set(destanation);
         norDestanation = tmp3.nor();
         tmp3.set(norDestanation);
-        if (destanation.len2() > 0.0001f) {
-            pos.add(tmp3.scl(velocity*delta));
+
+        if (destanation.len() > delta) {
+            pos.add(tmp3.scl(velocity * delta));
+            frame += 1;
+            frame %= 6;
+        } else {
+            pos.set(target);
+            frame = 0;
         }
     }
 }

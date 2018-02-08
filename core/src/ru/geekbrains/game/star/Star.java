@@ -1,6 +1,6 @@
 package ru.geekbrains.game.star;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.stargame.engine.Sprite;
@@ -12,8 +12,8 @@ public class Star extends Sprite {
     private final Vector2 v = new Vector2();
     private Rect worldBounds;
 
-    public Star(Texture texture, float vx, float vy, float height) {
-        super(texture);
+    public Star(TextureRegion region, float vx, float vy, float height) {
+        super(region);
         v.set(vx, vy);
         setHeightProportion(Rnd.nextFloat(height, height*2));
     }

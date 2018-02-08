@@ -3,6 +3,7 @@ package ru.geekbrains.game.screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -18,16 +19,11 @@ import ru.geekbrains.stargame.engine.math.Rect;
 
 public class MenuScreen extends Base2DScreen implements ActionListener {
 
-    private Texture backgroundTexture;
     private Background background;
-
-    private Texture buttonExitTexture;
     private ExitButton buttonExit;
-
-    private Texture buttonPlayTexture;
     private PlayButton buttonPlay;
-
     private StarsHandler stars;
+    private TextureAtlas mainAtlas;
 
     public MenuScreen(Game game) {
         super(game);
@@ -36,15 +32,10 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
     @Override
     public void show() {
         super.show();
-        backgroundTexture = new Texture("space.jpg");
-        background = new Background(backgroundTexture);
-
-        buttonExitTexture = new Texture("exit.png");
-        buttonExit = new ExitButton(buttonExitTexture, this);
-
-        buttonPlayTexture = new Texture("play.png");
-        buttonPlay = new PlayButton(buttonPlayTexture, this);
-
+        mainAtlas = new TextureAtlas("mainAtlas.atlas");
+        background = new Background(mainAtlas);
+        buttonExit = new ExitButton(mainAtlas, this);
+        buttonPlay = new PlayButton(mainAtlas, this);
         stars = new StarsHandler();
      }
 
@@ -83,6 +74,7 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
         buttonPlay.dispose();
         buttonExit.dispose();
         stars.dispose();
+        mainAtlas.dispose();
         super.dispose();
     }
 

@@ -18,7 +18,11 @@ public class StarsHandler {
 
     public StarsHandler() {
         for (int i = 0; i < stars.length; i++) {
-            stars[i] = new Star(starTexture, Rnd.nextFloat(-0.05f, 0.05f), Rnd.nextFloat(-0.4f, -0.1f), 0.01f);
+            stars[i] = new Star(
+                    new TextureRegion(starTexture),
+                    Rnd.nextFloat(-0.05f, 0.05f),
+                    Rnd.nextFloat(-0.4f, -0.1f),
+                    0.01f);
         }
     }
 

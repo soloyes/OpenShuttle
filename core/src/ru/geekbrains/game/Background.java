@@ -1,14 +1,14 @@
 package ru.geekbrains.game;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import ru.geekbrains.stargame.engine.Sprite;
 import ru.geekbrains.stargame.engine.math.Rect;
 
 public class Background extends Sprite {
 
-    public Background(Texture texture) {
-        super(texture);
+    public Background(TextureAtlas atlas) {
+        super(atlas.findRegion("space"));
     }
 
     @Override

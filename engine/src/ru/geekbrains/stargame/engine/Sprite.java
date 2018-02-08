@@ -1,7 +1,5 @@
 package ru.geekbrains.stargame.engine;
 
-
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -13,16 +11,21 @@ public class Sprite extends Rect {
     protected float angle;
     protected float scale = 1f;
     protected TextureRegion[] regions;
-    protected int frame;
-    private Texture texture;
+    public int frame;
 
-    public Sprite(Texture texture) {
-        this.texture = texture;
-        if (texture == null) {
+    public Sprite(TextureRegion region) {
+        if (region == null) {
             throw new NullPointerException("Texture is null");
         }
         regions = new TextureRegion[1];
-        regions[0] = new TextureRegion(texture);
+        regions[0] = region;
+    }
+
+    public Sprite(TextureRegion region, int i, int j, int frames) {
+        if (region == null) {
+            throw new NullPointerException("Texture is null");
+        }
+        regions = Regions.split(region, i, j, frames);
     }
 
     public void draw(SpriteBatch batch) {
@@ -85,6 +88,8 @@ public class Sprite extends Rect {
     }
 
     public void dispose(){
-        texture.dispose();
+        for (int i = 0; i < regions.length; i++) {
+            regions[i].getTexture().dispose();
+        }
     }
 }

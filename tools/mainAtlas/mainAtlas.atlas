@@ -1,0 +1,40 @@
+
+mainAtlas.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+player
+  rotate: false
+  xy: 1, 1117
+  size: 3072, 512
+  orig: 3072, 512
+  offset: 0, 0
+  index: -1
+space
+  rotate: false
+  xy: 1, 35
+  size: 1920, 1080
+  orig: 1920, 1080
+  offset: 0, 0
+  index: -1
+play
+  rotate: false
+  xy: 3075, 1117
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+exit
+  rotate: false
+  xy: 1923, 603
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+star
+  rotate: false
+  xy: 1, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1

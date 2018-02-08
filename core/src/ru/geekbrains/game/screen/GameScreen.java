@@ -1,8 +1,7 @@
 package ru.geekbrains.game.screen;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.game.Background;
@@ -15,6 +14,7 @@ public class GameScreen extends Base2DScreen {
 
     private Background background;
     private StarsHandler stars;
+    private TextureAtlas mainAtlas;
 
     Player player;
 
@@ -25,8 +25,9 @@ public class GameScreen extends Base2DScreen {
     @Override
     public void show() {
         super.show();
-        background = new Background(new Texture("space.jpg"));
-        player = new Player(new Texture("rocket.png"));
+        mainAtlas = new TextureAtlas("mainAtlas.atlas");
+        background = new Background(mainAtlas);
+        player = new Player(mainAtlas);
         stars = new StarsHandler();
     }
 
@@ -36,7 +37,6 @@ public class GameScreen extends Base2DScreen {
         batch.begin();
         update(delta);
         draw();
-
         batch.end();
     }
 
@@ -77,5 +77,6 @@ public class GameScreen extends Base2DScreen {
         background.dispose();
         stars.dispose();
         player.dispose();
+        mainAtlas.dispose();
     }
 }
