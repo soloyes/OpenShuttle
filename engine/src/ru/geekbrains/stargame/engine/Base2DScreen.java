@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.stargame.engine.math.MatrixUtils;
 import ru.geekbrains.stargame.engine.math.Rect;
 
-public class Base2DScreen implements Screen, InputProcessor {
+public abstract class Base2DScreen implements Screen, InputProcessor {
 
     protected Game game;
 
@@ -22,8 +22,8 @@ public class Base2DScreen implements Screen, InputProcessor {
     private Rect worldBounds; // границы проекции мировых координат
     private Rect glBounds; // дефолтные границы проекции мир - gl
 
-    protected Matrix4 worldToGl;
-    protected Matrix3 screenToWorld;
+    private Matrix4 worldToGl;
+    private Matrix3 screenToWorld;
 
     protected SpriteBatch batch;
 
@@ -43,7 +43,7 @@ public class Base2DScreen implements Screen, InputProcessor {
         this.worldToGl = new Matrix4();
         this.screenToWorld = new Matrix3();
         if (batch != null) {
-            throw new RuntimeException("batch != null, повторная установка screen без dispose");
+            throw new RuntimeException("batch != null, set screen without dispose dispose");
         }
         batch = new SpriteBatch();
     }
@@ -71,9 +71,7 @@ public class Base2DScreen implements Screen, InputProcessor {
         resize(worldBounds);
     }
 
-    protected void resize(Rect worldBounds) {
-
-    }
+    protected abstract void resize(Rect worldBounds);
 
     @Override
     public void pause() {
@@ -118,37 +116,40 @@ public class Base2DScreen implements Screen, InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touch.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
-        System.out.println("touchDown X=" + touch.x + " Y=" + touch.y);
         touchDown(touch, pointer);
+        checkPlayerToched();
+        System.out.println("touchDown X=" + touch.x + " Y=" + touch.y);
         return false;
     }
 
-    protected void touchDown(Vector2 touch, int pointer) {
-
-    }
+    protected abstract void touchDown(Vector2 touch, int pointer);
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         touch.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
-        System.out.println("touchUp X=" + touch.x + " Y=" + touch.y);
         touchUp(touch, pointer);
+        System.out.println("touchUp X=" + touch.x + " Y=" + touch.y);
         return false;
     }
 
-    protected void touchUp(Vector2 touch, int pointer) {
-
-    }
+    protected abstract void touchUp(Vector2 touch, int pointer);
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         touch.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
-        System.out.println("touchDragged X=" + touch.x + " Y=" + touch.y);
         touchDragged(touch, pointer);
+        checkPlayerToched();
+        System.out.println("touchDragged X=" + touch.x + " Y=" + touch.y);
         return false;
     }
 
-    protected void touchDragged(Vector2 touch, int pointer) {
+    protected abstract void touchDragged(Vector2 touch, int pointer);
 
+    private void checkPlayerToched(){
+        if (touch.x < worldBounds.getLeft()) touch.x = worldBounds.getLeft();
+        if (touch.x > worldBounds.getRight()) touch.x = worldBounds.getRight();
+        if (touch.y < worldBounds.getBottom()) touch.y = worldBounds.getBottom();
+        if (touch.y > worldBounds.getTop()) touch.y = worldBounds.getTop();
     }
 
     @Override

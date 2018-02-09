@@ -61,7 +61,6 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
 
     @Override
     protected void resize(Rect worldBounds) {
-        super.resize(worldBounds);
         background.resize(worldBounds);
         stars.resize(worldBounds);
         buttonExit.resize(worldBounds);
@@ -80,16 +79,19 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
 
     @Override
     protected void touchUp(Vector2 touch, int pointer) {
-        super.touchUp(touch, pointer);
         buttonExit.touchUp(touch, pointer);
         buttonPlay.touchUp(touch, pointer);
     }
 
     @Override
     protected void touchDown(Vector2 touch, int pointer) {
-        super.touchDown(touch, pointer);
         buttonExit.touchDown(touch, pointer);
         buttonPlay.touchDown(touch, pointer);
+    }
+
+    @Override
+    protected void touchDragged(Vector2 touch, int pointer) {
+
     }
 
     @Override

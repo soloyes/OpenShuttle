@@ -27,7 +27,7 @@ public class StarsHandler {
         }
     }
 
-    public void setV(float angle) {
+    public void setVangle(float angle) {
         for (int i = 0; i < stars.length; i++) {
             stars[i].setV(stars[i].getV().setAngle(angle - 180));
         }

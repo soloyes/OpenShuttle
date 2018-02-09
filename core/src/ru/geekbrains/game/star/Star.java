@@ -20,7 +20,6 @@ public class Star extends Sprite {
         this.v = v;
     }
 
-
     public Star(TextureRegion region, float vx, float vy, float height) {
         super(region);
         v.set(vx, vy);

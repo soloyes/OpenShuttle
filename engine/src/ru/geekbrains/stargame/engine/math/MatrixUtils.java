@@ -4,14 +4,7 @@ package ru.geekbrains.stargame.engine.math;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 
-/**
- * Утилита для работы с матрицами
- */
 public class MatrixUtils {
-
-    private MatrixUtils() {
-    }
-
     /**
      * Расчёт матрицы перехода 4x4
      * @param mat итоговая матрица преобразований

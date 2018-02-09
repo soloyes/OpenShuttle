@@ -15,8 +15,7 @@ public class GameScreen extends Base2DScreen {
     private Background background;
     private StarsHandler stars;
     private TextureAtlas mainAtlas;
-
-    Player player;
+    private Player player;
 
     public GameScreen(Game game) {
         super(game);
@@ -29,7 +28,6 @@ public class GameScreen extends Base2DScreen {
         background = new Background(mainAtlas);
         stars = new StarsHandler(mainAtlas);
         player = new Player(mainAtlas, stars);
-
     }
 
     @Override
@@ -54,7 +52,6 @@ public class GameScreen extends Base2DScreen {
 
     @Override
     protected void resize(Rect worldBounds) {
-        super.resize(worldBounds);
         background.resize(worldBounds);
         stars.resize(worldBounds);
         player.resize(worldBounds);
@@ -62,14 +59,22 @@ public class GameScreen extends Base2DScreen {
 
     @Override
     protected void touchDown(Vector2 touch, int pointer) {
-        super.touchDown(touch, pointer);
         player.setTarget(touch);
     }
 
     @Override
     protected void touchDragged(Vector2 touch, int pointer) {
-        super.touchDragged(touch, pointer);
         player.setTarget(touch);
+    }
+
+    @Override
+    protected void touchUp(Vector2 touch, int pointer) {
+
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
     }
 
     @Override
