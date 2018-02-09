@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.game.star.StarsHandler;
 import ru.geekbrains.stargame.engine.Sprite;
-import ru.geekbrains.stargame.engine.math.Rect;
 
 /**
  * Created by sol on 2/6/18.

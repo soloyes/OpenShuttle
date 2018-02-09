@@ -2,14 +2,11 @@ package ru.geekbrains.game.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.game.Background;
 
-import ru.geekbrains.game.star.Star;
 import ru.geekbrains.game.star.StarsHandler;
 import ru.geekbrains.game.ui.ExitButton;
 import ru.geekbrains.game.ui.PlayButton;

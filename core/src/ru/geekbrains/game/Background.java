@@ -18,6 +18,5 @@ public class Background extends Sprite {
     }
 
     public void update(){
-
     }
 }

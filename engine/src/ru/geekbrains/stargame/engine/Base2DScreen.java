@@ -137,7 +137,7 @@ public abstract class Base2DScreen implements Screen, InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         touch.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
-        touchDragged(touch, pointer);
+        touchDown(touch, pointer);
         checkPlayerToched();
         System.out.println("touchDragged X=" + touch.x + " Y=" + touch.y);
         return false;
