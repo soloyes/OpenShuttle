@@ -1,12 +1,9 @@
 package ru.geekbrains.game.star;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.game.players.Player;
 import ru.geekbrains.stargame.engine.math.Rect;
 import ru.geekbrains.stargame.engine.math.Rnd;
 
@@ -30,9 +27,9 @@ public class StarsHandler {
         }
     }
 
-    public void setV() {
+    public void setV(float angle) {
         for (int i = 0; i < stars.length; i++) {
-            stars[i].setV(stars[i].getV().rotate(10));
+            stars[i].setV(stars[i].getV().setAngle(angle - 180));
         }
     }
 

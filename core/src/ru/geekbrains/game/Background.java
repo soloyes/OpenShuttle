@@ -16,4 +16,8 @@ public class Background extends Sprite {
         setHeightProportion(worldBounds.getHeight());
         pos.set(worldBounds.pos);
     }
+
+    public void update(){
+
+    }
 }
