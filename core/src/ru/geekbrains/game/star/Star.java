@@ -43,9 +43,7 @@ public class Star extends Sprite {
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
         float posX = Rnd.nextFloat(worldBounds.getLeft(), worldBounds.getRight());
-//        float posX = worldBounds.getLeft() + 0.2f;
         float posY = Rnd.nextFloat(worldBounds.getBottom(), worldBounds.getTop());
-//        float posY = worldBounds.getTop();
         pos.set(posX, posY);
     }
 }

@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.game.Background;
+import ru.geekbrains.game.ui.Background;
 
 import ru.geekbrains.game.star.StarsHandler;
 import ru.geekbrains.game.ui.ExitButton;

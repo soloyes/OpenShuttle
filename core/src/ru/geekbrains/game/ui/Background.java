@@ -1,4 +1,4 @@
-package ru.geekbrains.game;
+package ru.geekbrains.game.ui;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
@@ -15,8 +15,5 @@ public class Background extends Sprite {
     public void resize(Rect worldBounds) {
         setHeightProportion(worldBounds.getHeight());
         pos.set(worldBounds.pos);
-    }
-
-    public void update(){
     }
 }

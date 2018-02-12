@@ -26,11 +26,11 @@ public class Player extends Sprite {
         tmp.set(target);
         setAngle(tmp.sub(pos).angle() - 90);
         tmp.set(target);
-        stars.setVangle(tmp.sub(pos).angle());
+        stars.setVAngle(tmp.sub(pos).angle());
     }
 
     public Player(TextureAtlas atlas, StarsHandler stars) {
-        super(atlas.findRegion("player"), 1, 6, 6);
+        super(atlas.findRegion("player"), 1, 12, 12);
         tmp = new Vector2();
         tmp2 = new Vector2();
         tmp3 = new Vector2();
@@ -57,7 +57,7 @@ public class Player extends Sprite {
             if (destanation.len() > delta) {
                 pos.mulAdd(tmp3, VELOCITY * delta);
                 frame += 1;
-                frame %= 6;
+                frame %= 12;
             }
             else pos.set(target);
             //
