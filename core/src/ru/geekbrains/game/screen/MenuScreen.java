@@ -2,12 +2,12 @@ package ru.geekbrains.game.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.game.ui.Background;
-
 import ru.geekbrains.game.star.StarsHandler;
+import ru.geekbrains.game.ui.Background;
 import ru.geekbrains.game.ui.ExitButton;
 import ru.geekbrains.game.ui.PlayButton;
 import ru.geekbrains.stargame.engine.ActionListener;
@@ -21,6 +21,7 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
     private PlayButton buttonPlay;
     private StarsHandler stars;
     private TextureAtlas mainAtlas;
+    private Music music;
 
     public MenuScreen(Game game) {
         super(game);
@@ -29,11 +30,14 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
     @Override
     public void show() {
         super.show();
-        mainAtlas = new TextureAtlas("mainAtlas.atlas");
+        mainAtlas = new TextureAtlas("textures/mainAtlas.atlas");
         background = new Background(mainAtlas);
         buttonExit = new ExitButton(mainAtlas, this);
         buttonPlay = new PlayButton(mainAtlas, this);
         stars = new StarsHandler(mainAtlas);
+        music = Gdx.audio.newMusic(Gdx.files.internal("Menu.ogg"));
+        music.setLooping(true);
+        music.play();
      }
 
     @Override
@@ -72,6 +76,7 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
         buttonExit.dispose();
         mainAtlas.dispose();
         stars.dispose();
+        music.dispose();
     }
 
     @Override
@@ -97,6 +102,7 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
             Gdx.app.exit();
         } else if (src == buttonPlay) {
             game.setScreen(new GameScreen(game));
+            music.stop();
         } else {
             throw new RuntimeException("Unknown src " + src);
         }

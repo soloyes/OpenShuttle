@@ -15,7 +15,7 @@ public class Player extends Sprite {
     private Vector2 target;
     private Vector2 destanation;
     private Vector2 norDestanation;
-    private final float VELOCITY;
+    private final float VELOCITY = 0.5f;
     private Vector2 tmp;
     private Vector2 tmp2;
     private Vector2 tmp3;
@@ -34,13 +34,13 @@ public class Player extends Sprite {
         tmp = new Vector2();
         tmp2 = new Vector2();
         tmp3 = new Vector2();
-        target = new Vector2();
+        target = new Vector2(0.0f, 0.0f);
         norDestanation = new Vector2();
         destanation = new Vector2();
 
         setHeightProportion(0.15f);
-        VELOCITY = 0.5f;
-        pos.set(0.0f,-0.0f);
+        pos.set(0.0f, 1f);
+        setAngle(180);
 
         this.stars = stars;
     }

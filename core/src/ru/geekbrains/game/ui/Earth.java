@@ -11,7 +11,7 @@ import ru.geekbrains.stargame.engine.math.Rect;
 
 public class Earth extends Sprite {
 
-    private final float ROTATION = 0.05f;
+    private final float ROTATION = -5f;
 
     public Earth(TextureAtlas atlas) {
         super(atlas.findRegion("earth"));
@@ -25,6 +25,6 @@ public class Earth extends Sprite {
 
     @Override
     public void update(float delta) {
-        angle += ROTATION;
+        angle += ROTATION*delta;
     }
 }

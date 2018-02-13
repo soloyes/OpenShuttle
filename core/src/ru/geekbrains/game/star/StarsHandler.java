@@ -12,7 +12,7 @@ import ru.geekbrains.stargame.engine.math.Rnd;
  */
 
 public class StarsHandler {
-    private final int STARS = 50;
+    private final int STARS = 80;
     private Star[] stars = new Star[STARS];
     private TextureRegion starTexture;
 
@@ -22,8 +22,8 @@ public class StarsHandler {
             stars[i] = new Star(
                     starTexture,
                     Rnd.nextFloat(-0.05f, 0.05f),
-                    Rnd.nextFloat(-0.3f, -0.1f),
-                    0.009f);
+                    Rnd.nextFloat(-0.2f, -0.1f),
+                    0.005f);
         }
     }
 

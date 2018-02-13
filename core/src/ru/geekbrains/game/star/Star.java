@@ -22,7 +22,7 @@ public class Star extends Sprite {
 
     public Star(TextureRegion region, float vx, float vy, float height) {
         super(region);
-        v.set(vx, vy);
+        v.set(vx, -vy);
         setHeightProportion(Rnd.nextFloat(height, height*2));
     }
 
@@ -33,10 +33,10 @@ public class Star extends Sprite {
     }
 
     protected void checkAndHandleBounds() {
-        if (getRight() < worldBounds.getLeft()) setLeft(worldBounds.getRight());
-        if (getLeft() > worldBounds.getRight()) setRight(worldBounds.getLeft());
-        if (getTop() < worldBounds.getBottom()) setBottom(worldBounds.getTop());
-        if (getBottom() > worldBounds.getTop()) setTop(worldBounds.getBottom());
+        if (this.getRight() < worldBounds.getLeft()) setLeft(worldBounds.getRight());
+        if (this.getLeft() > worldBounds.getRight()) setRight(worldBounds.getLeft());
+        if (this.getTop() < worldBounds.getBottom()) setBottom(worldBounds.getTop());
+        if (this.getBottom() > worldBounds.getTop()) setTop(worldBounds.getBottom());
     }
 
     @Override
