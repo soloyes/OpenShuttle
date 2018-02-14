@@ -20,11 +20,13 @@ public class Astronaut extends Sprite{
     private Vector2 tmp;
     private Vector2 tmp1;
     private int rotation = 1;
+    private Player player;
 
-    public Astronaut(TextureAtlas atlas) {
+    public Astronaut(TextureAtlas atlas, Player player) {
         super(atlas.findRegion("astronaut"));
         tmp = new Vector2();
         tmp1 = new Vector2();
+        this.player = player;
         setHeightProportion(0.1f);
     }
 
@@ -78,6 +80,10 @@ public class Astronaut extends Sprite{
                         this.getTop() < worldBounds.getBottom() ||
                         this.getBottom() > worldBounds.getTop())
         {
+            generate(Side.randomSide());
+        }
+
+        if (isMe(player.pos)) {
             generate(Side.randomSide());
         }
     }
