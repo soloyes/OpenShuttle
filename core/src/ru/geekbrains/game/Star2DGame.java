@@ -22,8 +22,9 @@ public class Star2DGame extends Game {
     @Override
     public void create() {
         this.atlas = new TextureAtlas("textures/mainAtlas.atlas");
-        gameMusic.put("menuScreen", Gdx.audio.newMusic(Gdx.files.internal("Menu.ogg")));
-        gameMusic.put("gameScreen", Gdx.audio.newMusic(Gdx.files.internal("Game.ogg")));
+        gameMusic.put("menuScreen", Gdx.audio.newMusic(Gdx.files.internal("music/Menu.ogg")));
+        gameMusic.put("gameScreen", Gdx.audio.newMusic(Gdx.files.internal("music/Game.ogg")));
+        gameMusic.put("problem", Gdx.audio.newMusic(Gdx.files.internal("music/problem.ogg")));
         setScreen(new MenuScreen(this, atlas, gameMusic));
     }
 

@@ -34,7 +34,7 @@ public class GameScreen extends Base2DScreen {
         super.show();
         stars = new StarsHandler(mainAtlas);
         player = new Player(mainAtlas, stars);
-        astronaut = new Astronaut(mainAtlas, player);
+        astronaut = new Astronaut(mainAtlas, player, gameMusic);
         earth = new Earth(mainAtlas);
         gameMusic.get("gameScreen").setLooping(true);
         gameMusic.get("gameScreen").play();

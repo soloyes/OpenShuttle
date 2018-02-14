@@ -1,9 +1,10 @@
 package ru.geekbrains.game.players;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+
+import java.util.Map;
 
 import ru.geekbrains.stargame.engine.Sprite;
 import ru.geekbrains.stargame.engine.math.Rect;
@@ -30,13 +31,14 @@ public class Astronaut extends Sprite{
     private Rect outerRect;
     //
 
-    private Music sound;
+    private Map<String, Music> gameMusic;
 
-    public Astronaut(TextureAtlas atlas, Player player) {
+    public Astronaut(TextureAtlas atlas, Player player, Map<String, Music> gameMusic) {
         super(atlas.findRegion("astronaut"));
         tmp = new Vector2();
         tmp1 = new Vector2();
         this.player = player;
+        this.gameMusic = gameMusic;
 
         //Square with size as diagonale of player Rect.
         outerRect = new Rect();
@@ -46,7 +48,6 @@ public class Astronaut extends Sprite{
         //
 
         setHeightProportion(0.1f);
-        sound = Gdx.audio.newMusic(Gdx.files.internal("problem.mp3"));
     }
 
     @Override
@@ -97,17 +98,17 @@ public class Astronaut extends Sprite{
         this.angle += 360 / (Rnd.nextInt(6) + 1);
         this.rotation = Rnd.nextInt(3) - 1;
 
-        sound.play();
+        gameMusic.get("problem").play();
     }
 
      private void checkAndHandleBounds() {
         if (this.isOutside(worldBounds)) {
-            sound.stop();
+            gameMusic.get("problem").stop();
             generate(Side.randomSide());
         }
 
         if (this.isMe(player.pos)) {
-            sound.stop();
+            gameMusic.get("problem").stop();
             generate(Side.randomSide());
         }
     }
