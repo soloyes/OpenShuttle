@@ -22,7 +22,7 @@ public class StarsHandler {
             stars[i] = new Star(
                     starTexture,
                     Rnd.nextFloat(-0.05f, 0.05f),
-                    Rnd.nextFloat(-0.2f, -0.1f),
+                    Rnd.nextFloat(-0.1f, -0.1f),
                     0.005f);
         }
     }

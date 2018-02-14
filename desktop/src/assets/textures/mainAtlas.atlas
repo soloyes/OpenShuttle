@@ -3,51 +3,44 @@ mainAtlas.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-player
+planet
   rotate: false
-  xy: 1, 1257
+  xy: 1, 1234
+  size: 2400, 2400
+  orig: 2400, 2400
+  offset: 0, 0
+  index: -1
+rocket
+  rotate: false
+  xy: 1, 720
   size: 3072, 512
   orig: 3072, 512
   offset: 0, 0
   index: -1
-space
-  rotate: false
-  xy: 1, 175
-  size: 1920, 1080
-  orig: 1920, 1080
-  offset: 0, 0
-  index: -1
 astronaut
   rotate: false
-  xy: 1923, 572
+  xy: 1, 35
   size: 405, 683
   orig: 405, 683
   offset: 0, 0
   index: -1
 play
   rotate: false
-  xy: 3075, 1257
+  xy: 2403, 3122
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 exit
   rotate: false
-  xy: 2330, 743
+  xy: 408, 206
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
-earth
-  rotate: false
-  xy: 1, 1
-  size: 171, 172
-  orig: 171, 172
-  offset: 0, 0
-  index: -1
 star
   rotate: false
-  xy: 1923, 538
+  xy: 1, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

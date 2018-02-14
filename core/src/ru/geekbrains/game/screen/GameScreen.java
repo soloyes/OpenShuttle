@@ -1,45 +1,43 @@
 package ru.geekbrains.game.screen;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.Map;
+
 import ru.geekbrains.game.players.Astronaut;
 import ru.geekbrains.game.players.Player;
 import ru.geekbrains.game.star.StarsHandler;
-import ru.geekbrains.game.ui.Background;
 import ru.geekbrains.game.ui.Earth;
 import ru.geekbrains.stargame.engine.Base2DScreen;
 import ru.geekbrains.stargame.engine.math.Rect;
 
 public class GameScreen extends Base2DScreen {
 
-    private Background background;
     private Earth earth;
     private StarsHandler stars;
     private TextureAtlas mainAtlas;
     private Player player;
     private Astronaut astronaut;
-    private Music music;
+    private Map<String, Music> gameMusic;
 
-    public GameScreen(Game game) {
+    public GameScreen(Game game, TextureAtlas atlas, Map<String, Music> gameMusic) {
         super(game);
+        this.mainAtlas = atlas;
+        this.gameMusic = gameMusic;
     }
 
     @Override
     public void show() {
         super.show();
-        mainAtlas = new TextureAtlas("textures/mainAtlas.atlas");
         stars = new StarsHandler(mainAtlas);
         player = new Player(mainAtlas, stars);
         astronaut = new Astronaut(mainAtlas);
-        background = new Background(mainAtlas);
         earth = new Earth(mainAtlas);
-        music = Gdx.audio.newMusic(Gdx.files.internal("Game.ogg"));
-        music.setLooping(true);
-        music.play();
+        gameMusic.get("gameScreen").setLooping(true);
+        gameMusic.get("gameScreen").play();
     }
 
     @Override
@@ -55,12 +53,10 @@ public class GameScreen extends Base2DScreen {
         stars.update(delta);
         player.update(delta);
         astronaut.update(delta);
-        background.update(delta);
         earth.update(delta);
     }
 
     public void draw() {
-        background.draw(batch);
         earth.draw(batch);
         stars.draw(batch);
         player.draw(batch);
@@ -69,7 +65,6 @@ public class GameScreen extends Base2DScreen {
 
     @Override
     protected void resize(Rect worldBounds) {
-        background.resize(worldBounds);
         earth.resize(worldBounds);
         stars.resize(worldBounds);
         player.resize(worldBounds);
@@ -99,12 +94,9 @@ public class GameScreen extends Base2DScreen {
     @Override
     public void dispose() {
         super.dispose();
-        background.dispose();
         earth.dispose();
         player.dispose();
         astronaut.dispose();
         stars.dispose();
-        mainAtlas.dispose();
-        music.dispose();
     }
 }

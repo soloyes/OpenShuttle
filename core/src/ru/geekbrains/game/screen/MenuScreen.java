@@ -6,8 +6,9 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.Map;
+
 import ru.geekbrains.game.star.StarsHandler;
-import ru.geekbrains.game.ui.Background;
 import ru.geekbrains.game.ui.ExitButton;
 import ru.geekbrains.game.ui.PlayButton;
 import ru.geekbrains.stargame.engine.ActionListener;
@@ -16,28 +17,26 @@ import ru.geekbrains.stargame.engine.math.Rect;
 
 public class MenuScreen extends Base2DScreen implements ActionListener {
 
-    private Background background;
     private ExitButton buttonExit;
     private PlayButton buttonPlay;
     private StarsHandler stars;
     private TextureAtlas mainAtlas;
-    private Music music;
+    private Map<String, Music> gameMusic;
 
-    public MenuScreen(Game game) {
+    public MenuScreen(Game game, TextureAtlas atlas, Map<String, Music> gameMusic) {
         super(game);
+        this.mainAtlas = atlas;
+        this.gameMusic = gameMusic;
     }
 
     @Override
     public void show() {
         super.show();
-        mainAtlas = new TextureAtlas("textures/mainAtlas.atlas");
-        background = new Background(mainAtlas);
         buttonExit = new ExitButton(mainAtlas, this);
         buttonPlay = new PlayButton(mainAtlas, this);
         stars = new StarsHandler(mainAtlas);
-        music = Gdx.audio.newMusic(Gdx.files.internal("Menu.ogg"));
-        music.setLooping(true);
-        music.play();
+        gameMusic.get("menuScreen").setLooping(true);
+        gameMusic.get("menuScreen").play();
      }
 
     @Override
@@ -53,7 +52,6 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
 
     public void draw() {
         batch.begin();
-        background.draw(batch);
         stars.draw(batch);
         buttonExit.draw(batch);
         buttonPlay.draw(batch);
@@ -62,7 +60,6 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
 
     @Override
     protected void resize(Rect worldBounds) {
-        background.resize(worldBounds);
         stars.resize(worldBounds);
         buttonExit.resize(worldBounds);
         buttonPlay.resize(worldBounds);
@@ -71,12 +68,9 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
     @Override
     public void dispose() {
         super.dispose();
-        background.dispose();
         buttonPlay.dispose();
         buttonExit.dispose();
-        mainAtlas.dispose();
         stars.dispose();
-        music.dispose();
     }
 
     @Override
@@ -101,8 +95,8 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
         if (src == buttonExit) {
             Gdx.app.exit();
         } else if (src == buttonPlay) {
-            game.setScreen(new GameScreen(game));
-            music.stop();
+            game.setScreen(new GameScreen(game, mainAtlas, gameMusic));
+            gameMusic.get("menuScreen").stop();
         } else {
             throw new RuntimeException("Unknown src " + src);
         }

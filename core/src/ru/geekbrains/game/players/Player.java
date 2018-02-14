@@ -30,7 +30,7 @@ public class Player extends Sprite {
     }
 
     public Player(TextureAtlas atlas, StarsHandler stars) {
-        super(atlas.findRegion("player"), 1, 12, 12);
+        super(atlas.findRegion("rocket"), 1, 12, 12);
         tmp = new Vector2();
         tmp2 = new Vector2();
         tmp3 = new Vector2();
