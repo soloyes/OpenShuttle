@@ -1,6 +1,6 @@
 package ru.geekbrains.game.players;
 
-import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
@@ -24,6 +24,7 @@ public class Astronaut extends Sprite{
     private Vector2 tmp1;
     private int rotation = 1;
     private Player player;
+    private Sound entrySound;
 
     //Player sprite is rotating. So we must to be able to get the fact when astronaut is outside.
     //We incapsulate astronaut sprite insight sqare with side = actronaut sprite diagonale.
@@ -31,14 +32,15 @@ public class Astronaut extends Sprite{
     private Rect outerRect;
     //
 
-    private Map<String, Music> gameMusic;
+    private Map<String, Object> music;
 
-    public Astronaut(TextureAtlas atlas, Player player, Map<String, Music> gameMusic) {
+    public Astronaut(TextureAtlas atlas, Player player, Map<String, Object> music) {
         super(atlas.findRegion("astronaut"));
         tmp = new Vector2();
         tmp1 = new Vector2();
         this.player = player;
-        this.gameMusic = gameMusic;
+        this.music = music;
+        entrySound = (Sound) music.get("rogerroll");
 
         //Square with size as diagonale of player Rect.
         outerRect = new Rect();
@@ -98,17 +100,17 @@ public class Astronaut extends Sprite{
         this.angle += 360 / (Rnd.nextInt(6) + 1);
         this.rotation = Rnd.nextInt(3) - 1;
 
-        gameMusic.get("problem").play();
+        entrySound.play();
     }
 
      private void checkAndHandleBounds() {
         if (this.isOutside(worldBounds)) {
-            gameMusic.get("problem").stop();
+            entrySound.stop();
             generate(Side.randomSide());
         }
 
         if (this.isMe(player.pos)) {
-            gameMusic.get("problem").stop();
+            entrySound.stop();
             generate(Side.randomSide());
         }
     }

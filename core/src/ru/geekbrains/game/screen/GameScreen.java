@@ -2,6 +2,7 @@ package ru.geekbrains.game.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
@@ -21,12 +22,15 @@ public class GameScreen extends Base2DScreen {
     private TextureAtlas mainAtlas;
     private Player player;
     private Astronaut astronaut;
-    private Map<String, Music> gameMusic;
+    private Map<String, Object> music;
+    private Music gameScreenMusic;
 
-    public GameScreen(Game game, TextureAtlas atlas, Map<String, Music> gameMusic) {
+
+    public GameScreen(Game game, TextureAtlas atlas, Map<String, Object> music) {
         super(game);
         this.mainAtlas = atlas;
-        this.gameMusic = gameMusic;
+        this.music = music;
+        this.gameScreenMusic = (Music) music.get("gameScreen");
     }
 
     @Override
@@ -34,10 +38,10 @@ public class GameScreen extends Base2DScreen {
         super.show();
         stars = new StarsHandler(mainAtlas);
         player = new Player(mainAtlas, stars);
-        astronaut = new Astronaut(mainAtlas, player, gameMusic);
+        astronaut = new Astronaut(mainAtlas, player, music);
         earth = new Earth(mainAtlas);
-        gameMusic.get("gameScreen").setLooping(true);
-        gameMusic.get("gameScreen").play();
+        gameScreenMusic.setLooping(true);
+        gameScreenMusic.play();
     }
 
     @Override

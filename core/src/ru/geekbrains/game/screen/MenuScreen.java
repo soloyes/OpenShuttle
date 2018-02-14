@@ -21,12 +21,14 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
     private PlayButton buttonPlay;
     private StarsHandler stars;
     private TextureAtlas mainAtlas;
-    private Map<String, Music> gameMusic;
+    private Map<String, Object> gameMusic;
+    private Music menuMusic;
 
-    public MenuScreen(Game game, TextureAtlas atlas, Map<String, Music> gameMusic) {
+    public MenuScreen(Game game, TextureAtlas atlas, Map<String, Object> gameMusic) {
         super(game);
         this.mainAtlas = atlas;
         this.gameMusic = gameMusic;
+        this.menuMusic = (Music) gameMusic.get("menuScreen");
     }
 
     @Override
@@ -35,8 +37,8 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
         buttonExit = new ExitButton(mainAtlas, this);
         buttonPlay = new PlayButton(mainAtlas, this);
         stars = new StarsHandler(mainAtlas);
-        gameMusic.get("menuScreen").setLooping(true);
-        gameMusic.get("menuScreen").play();
+        menuMusic.setLooping(true);
+        menuMusic.play();
      }
 
     @Override
@@ -96,7 +98,7 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
             Gdx.app.exit();
         } else if (src == buttonPlay) {
             game.setScreen(new GameScreen(game, mainAtlas, gameMusic));
-            gameMusic.get("menuScreen").stop();
+            menuMusic.stop();
         } else {
             throw new RuntimeException("Unknown src " + src);
         }
