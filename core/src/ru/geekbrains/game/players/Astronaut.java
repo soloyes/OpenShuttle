@@ -1,5 +1,7 @@
 package ru.geekbrains.game.players;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
@@ -15,24 +17,43 @@ public class Astronaut extends Sprite{
 
     private Rect worldBounds;
 
-    private float velocity = 0.1f;
+    private float velocity = 0.05f;
     private Vector2 norDirection = new Vector2();
     private Vector2 tmp;
     private Vector2 tmp1;
     private int rotation = 1;
     private Player player;
 
+    //Player sprite is rotating. So we must to be able to get the fact when astronaut is outside.
+    //We incapsulate astronaut sprite insight sqare with side = actronaut sprite diagonale.
+    //in generate() method we check the outerRect is out of worldBounds or not
+    private Rect outerRect;
+    //
+
+    private Music sound;
+
     public Astronaut(TextureAtlas atlas, Player player) {
         super(atlas.findRegion("astronaut"));
         tmp = new Vector2();
         tmp1 = new Vector2();
         this.player = player;
+
+        //Square with size as diagonale of player Rect.
+        outerRect = new Rect();
+        outerRect.setWidth((float) Math.sqrt(Math.pow(this.getWidth(),2) + Math.pow(this.getHeight(), 2)));
+        outerRect.setHeight(outerRect.getWidth());
+        outerRect.pos.set(this.pos);
+        //
+
         setHeightProportion(0.1f);
+        sound = Gdx.audio.newMusic(Gdx.files.internal("problem.mp3"));
     }
 
     @Override
     public void update(float delta) {
         pos.mulAdd(norDirection, delta * velocity);
+        //outer sqare follow to astronaut
+        outerRect.pos.set(this.pos);
         this.angle += (0.5f * rotation) % 360;
         checkAndHandleBounds();
     }
@@ -49,22 +70,25 @@ public class Astronaut extends Sprite{
                 x = Rnd.nextFloat(worldBounds.getLeft(), worldBounds.getRight());
                 y = Rnd.nextFloat(
                         worldBounds.getBottom(),
-                        worldBounds.getBottom() - this.getHeight());
+                        worldBounds.getBottom() - outerRect.getHeight());
                 break;
             case WEST:
                 y = Rnd.nextFloat(worldBounds.getBottom(), worldBounds.getTop());
                 x = Rnd.nextFloat(
-                        worldBounds.getLeft() - this.getWidth(),
+                        worldBounds.getLeft() - outerRect.getWidth(),
                         worldBounds.getLeft());
                 break;
             case EAST:
                 y = Rnd.nextFloat(worldBounds.getBottom(), worldBounds.getTop());
                 x = Rnd.nextFloat(
                         worldBounds.getRight(),
-                        worldBounds.getRight() + this.getWidth());
+                        worldBounds.getRight() + outerRect.getWidth());
         }
         pos.set(x, y);
-        tmp1.set(Rnd.nextFloat(worldBounds.getWidth() / 4,worldBounds.getWidth() / 4),
+        //outer sqare follow to astronaut
+        outerRect.pos.set(this.pos);
+
+        tmp1.set(Rnd.nextFloat(-worldBounds.getWidth() / 4,worldBounds.getWidth() / 4),
                 Rnd.nextFloat(-worldBounds.getHeight() / 4,worldBounds.getHeight() / 4));
         tmp.set(pos);
         tmp1.sub(tmp);
@@ -72,18 +96,18 @@ public class Astronaut extends Sprite{
 
         this.angle += 360 / (Rnd.nextInt(6) + 1);
         this.rotation = Rnd.nextInt(3) - 1;
+
+        sound.play();
     }
 
      private void checkAndHandleBounds() {
-        if (this.getRight() < worldBounds.getLeft() ||
-                        this.getLeft() > worldBounds.getRight() ||
-                        this.getTop() < worldBounds.getBottom() ||
-                        this.getBottom() > worldBounds.getTop())
-        {
+        if (this.isOutside(worldBounds)) {
+            sound.stop();
             generate(Side.randomSide());
         }
 
-        if (isMe(player.pos)) {
+        if (this.isMe(player.pos)) {
+            sound.stop();
             generate(Side.randomSide());
         }
     }
