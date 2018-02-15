@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Regions {
 
-    public static TextureRegion[] split(TextureRegion region, int rows, int cols, int frames) {
+    static TextureRegion[] split(TextureRegion region, int rows, int cols, int frames) {
         if(region == null) throw new RuntimeException("Split null region");
         TextureRegion[] regions = new TextureRegion[frames];
         int tileWidth = region.getRegionWidth() / cols;

@@ -21,7 +21,7 @@ public class InsightRect extends Sprite {
         super(region);
     }
 
-    public InsightRect(TextureRegion region, int i, int j, int frames) {
+    protected InsightRect(TextureRegion region, int i, int j, int frames) {
         super(region, i, j, frames);
     }
 

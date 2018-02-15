@@ -55,14 +55,14 @@ public class GameScreen extends Base2DScreen {
         batch.end();
     }
 
-    public void update(float delta) {
+    private void update(float delta) {
         stars.update(delta);
         player.update(delta);
         astronaut.update(delta);
         earth.update(delta);
     }
 
-    public void draw() {
+    private void draw() {
         earth.draw(batch);
         stars.draw(batch);
         player.draw(batch);
@@ -88,9 +88,7 @@ public class GameScreen extends Base2DScreen {
     }
 
     @Override
-    protected void touchUp(Vector2 touch, int pointer) {
-
-    }
+    protected void touchUp(Vector2 touch, int pointer) {}
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {

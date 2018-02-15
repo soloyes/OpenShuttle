@@ -48,11 +48,11 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
         draw();
     }
 
-    public void update(float delta) {
+    private void update(float delta) {
         stars.update(delta);
     }
 
-    public void draw() {
+    private void draw() {
         batch.begin();
         stars.draw(batch);
         buttonExit.draw(batch);

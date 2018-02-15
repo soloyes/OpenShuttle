@@ -11,7 +11,7 @@ import ru.geekbrains.game.star.StarsHandler;
 
 public class Player extends InsightRect {
 
-    private final float VELOCITY = 0.5f;
+    private final float VELOCITY = 0.4f;
 
     private Vector2 target;
     private Vector2 destanation;
@@ -48,7 +48,7 @@ public class Player extends InsightRect {
     }
 
     public void update(float delta) {
-        //For smooth player manipulation
+        //Calculate player target
         if  (!this.isMe(target)) {
             tmp2.set(target);
             destanation = tmp2.sub(pos);

@@ -12,15 +12,15 @@ public class Star extends Sprite {
     private Vector2 v = new Vector2();
     private Rect worldBounds;
 
-    public Vector2 getV() {
+    Vector2 getV() {
         return v;
     }
 
-    public void setV(Vector2 v) {
+    void setV(Vector2 v) {
         this.v = v;
     }
 
-    public Star(TextureRegion region, float vx, float vy, float height) {
+    Star(TextureRegion region, float vx, float vy, float height) {
         super(region);
         v.set(vx, -vy);
         setHeightProportion(Rnd.nextFloat(height, height*2));
@@ -32,7 +32,7 @@ public class Star extends Sprite {
         checkAndHandleBounds();
     }
 
-    protected void checkAndHandleBounds() {
+    private void checkAndHandleBounds() {
         if (this.getRight() < worldBounds.getLeft()) setLeft(worldBounds.getRight());
         if (this.getLeft() > worldBounds.getRight()) setRight(worldBounds.getLeft());
         if (this.getTop() < worldBounds.getBottom()) setBottom(worldBounds.getTop());

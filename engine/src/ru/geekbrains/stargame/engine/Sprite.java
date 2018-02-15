@@ -10,8 +10,8 @@ public class Sprite extends Rect {
 
     protected float angle;
     protected float scale = 1f;
-    public TextureRegion[] regions;
-    public int frame;
+    private TextureRegion[] regions;
+    protected int frame;
 
     public Sprite(TextureRegion region) {
         if (region == null) {
@@ -45,7 +45,7 @@ public class Sprite extends Rect {
         setHeight(width / aspect);
     }
 
-    public void setHeightProportion(float height) {
+    protected void setHeightProportion(float height) {
         setHeight(height);
         float aspect = regions[frame].getRegionWidth() / (float) regions[frame].getRegionHeight();
         setWidth(height * aspect);
@@ -75,7 +75,7 @@ public class Sprite extends Rect {
         return angle;
     }
 
-    public void setAngle(float angle) {
+    protected void setAngle(float angle) {
         this.angle = angle;
     }
 
