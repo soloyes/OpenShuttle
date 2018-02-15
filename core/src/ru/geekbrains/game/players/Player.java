@@ -4,18 +4,18 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.game.star.StarsHandler;
-import ru.geekbrains.stargame.engine.Sprite;
 
 /**
  * Created by sol on 2/6/18.
  */
 
-public class Player extends Sprite {
+public class Player extends InsightRect {
+
+    private final float VELOCITY = 0.5f;
 
     private Vector2 target;
     private Vector2 destanation;
     private Vector2 norDestanation;
-    private final float VELOCITY = 0.5f;
     private Vector2 tmp;
     private Vector2 tmp2;
     private Vector2 tmp3;
@@ -23,6 +23,7 @@ public class Player extends Sprite {
 
     public void setTarget(Vector2 target) {
         this.target = target;
+        checkAndHandleBounds();
         tmp.set(target);
         setAngle(tmp.sub(pos).angle() - 90);
         tmp.set(target);
@@ -41,8 +42,9 @@ public class Player extends Sprite {
         setHeightProportion(0.15f);
         pos.set(0.0f, 1f);
         setAngle(180);
-
         this.stars = stars;
+
+        initParkingRect(this);
     }
 
     public void update(float delta) {
@@ -56,15 +58,30 @@ public class Player extends Sprite {
             //Parking
             if (destanation.len() > delta) {
                 pos.mulAdd(tmp3, VELOCITY * delta);
+                setPosParkingRect(this);
                 frame += 1;
                 frame %= 12;
             }
-            else pos.set(target);
+            else {
+                pos.set(target);
+                setPosParkingRect(this);
+            }
             //
         }
         else {
             frame = 0;
         }
         //
+    }
+
+    private void checkAndHandleBounds(){
+        if (worldBounds.getRight() - target.x < parkingRect.getHalfWidth())
+            target.x = worldBounds.getRight() - parkingRect.getHalfWidth() / 2;
+        if (target.y - worldBounds.getBottom() < parkingRect.getHalfHeight())
+            target.y = worldBounds.getBottom() + parkingRect.getHalfHeight() / 2;
+        if (target.x - worldBounds.getLeft() < parkingRect.getHalfWidth())
+            target.x = worldBounds.getLeft() + parkingRect.getHalfWidth() / 2;
+        if (worldBounds.getTop() - target.y < parkingRect.getHalfWidth())
+            target.y = worldBounds.getTop() - parkingRect.getHalfWidth() / 2;
     }
 }

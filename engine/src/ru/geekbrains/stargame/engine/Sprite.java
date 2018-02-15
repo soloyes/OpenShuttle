@@ -10,7 +10,7 @@ public class Sprite extends Rect {
 
     protected float angle;
     protected float scale = 1f;
-    protected TextureRegion[] regions;
+    public TextureRegion[] regions;
     public int frame;
 
     public Sprite(TextureRegion region) {

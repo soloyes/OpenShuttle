@@ -2,7 +2,6 @@ package ru.geekbrains.game.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
@@ -17,11 +16,14 @@ import ru.geekbrains.stargame.engine.math.Rect;
 
 public class GameScreen extends Base2DScreen {
 
+    private TextureAtlas mainAtlas;
+
     private Earth earth;
     private StarsHandler stars;
-    private TextureAtlas mainAtlas;
+
     private Player player;
     private Astronaut astronaut;
+
     private Map<String, Object> music;
     private Music gameScreenMusic;
 
