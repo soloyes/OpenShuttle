@@ -27,6 +27,7 @@ public class Star2DGame extends Game {
         music.put("gameScreen", Gdx.audio.newMusic(Gdx.files.internal("music/game.ogg")));
         music.put("problem", Gdx.audio.newMusic(Gdx.files.internal("music/problem.ogg")));
         music.put("rogerroll", Gdx.audio.newSound(Gdx.files.internal("music/rogerroll.ogg")));
+        music.put("alien", Gdx.audio.newSound(Gdx.files.internal("music/alien.ogg")));
         setScreen(new MenuScreen(this, atlas, music));
     }
 

@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.Map;
 
+import ru.geekbrains.game.players.Alien;
 import ru.geekbrains.game.players.Astronaut;
 import ru.geekbrains.game.players.Player;
 import ru.geekbrains.game.star.StarsHandler;
@@ -23,6 +24,7 @@ public class GameScreen extends Base2DScreen {
 
     private Player player;
     private Astronaut astronaut;
+    private Alien alien;
 
     private Map<String, Object> music;
     private Music gameScreenMusic;
@@ -41,6 +43,8 @@ public class GameScreen extends Base2DScreen {
         stars = new StarsHandler(mainAtlas);
         player = new Player(mainAtlas, stars);
         astronaut = new Astronaut(mainAtlas, player, music);
+        alien = new Alien(mainAtlas, player, music);
+
         earth = new Earth(mainAtlas);
         gameScreenMusic.setLooping(true);
         gameScreenMusic.play();
@@ -59,6 +63,7 @@ public class GameScreen extends Base2DScreen {
         stars.update(delta);
         player.update(delta);
         astronaut.update(delta);
+        alien.update(delta);
         earth.update(delta);
     }
 
@@ -67,6 +72,7 @@ public class GameScreen extends Base2DScreen {
         stars.draw(batch);
         player.draw(batch);
         astronaut.draw(batch);
+        alien.draw(batch);
     }
 
     @Override
@@ -75,6 +81,7 @@ public class GameScreen extends Base2DScreen {
         stars.resize(worldBounds);
         player.resize(worldBounds);
         astronaut.resize(worldBounds);
+        alien.resize(worldBounds);
     }
 
     @Override
@@ -101,6 +108,7 @@ public class GameScreen extends Base2DScreen {
         earth.dispose();
         player.dispose();
         astronaut.dispose();
+        alien.dispose();
         stars.dispose();
     }
 }

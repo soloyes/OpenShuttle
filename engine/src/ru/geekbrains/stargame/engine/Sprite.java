@@ -28,6 +28,10 @@ public class Sprite extends Rect {
         regions = Regions.split(region, i, j, frames);
     }
 
+    public Sprite(){
+
+    }
+
     public void draw(SpriteBatch batch) {
         batch.draw(
                 regions[frame], // текущий регион
@@ -75,7 +79,7 @@ public class Sprite extends Rect {
         return angle;
     }
 
-    protected void setAngle(float angle) {
+    public void setAngle(float angle) {
         this.angle = angle;
     }
 

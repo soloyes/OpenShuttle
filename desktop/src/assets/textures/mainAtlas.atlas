@@ -5,42 +5,49 @@ filter: Nearest,Nearest
 repeat: none
 planet
   rotate: false
-  xy: 1, 1234
+  xy: 1, 1543
   size: 2400, 2400
   orig: 2400, 2400
   offset: 0, 0
   index: -1
 rocket
   rotate: false
-  xy: 1, 720
+  xy: 1, 1029
   size: 3072, 512
   orig: 3072, 512
   offset: 0, 0
   index: -1
+aliens
+  rotate: false
+  xy: 1, 515
+  size: 1536, 512
+  orig: 1536, 512
+  offset: 0, 0
+  index: -1
 astronaut
   rotate: false
-  xy: 1, 35
+  xy: 2403, 3260
   size: 405, 683
   orig: 405, 683
   offset: 0, 0
   index: -1
 play
   rotate: false
-  xy: 2403, 3122
+  xy: 1, 1
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 exit
   rotate: false
-  xy: 408, 206
+  xy: 1539, 515
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 star
   rotate: false
-  xy: 1, 1
+  xy: 2403, 3226
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
