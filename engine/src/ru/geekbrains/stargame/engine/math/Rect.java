@@ -58,6 +58,11 @@ public class Rect {
         halfWidth = from.halfWidth;
         halfHeight = from.halfHeight;
     }
+    public void set(Rect from, float i) {
+        pos.set(from.pos);
+        halfWidth = i * from.halfWidth;
+        halfHeight = i * from.halfHeight;
+    }
 
     public void setLeft(float left) {
         pos.x = left + halfWidth;

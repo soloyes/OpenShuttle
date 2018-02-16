@@ -19,8 +19,7 @@ public abstract class InsightRect extends Sprite {
 
     protected Map<String, Object> music;
 
-    protected Rect parkingRect = new Sprite();
-    protected Rect influenceRect = new Rect();
+    protected Rect parkingRect = new Rect();
     protected Rect worldBounds;
 
     protected Vector2 tmp1 = new Vector2();
@@ -42,11 +41,10 @@ public abstract class InsightRect extends Sprite {
     }
 
     protected InsightRect(){
-
     }
 
-    protected void initParkingRect(float width, float height) {
-        //Side size = insight diagonale size
+    protected void initInsightRect(float width, float height, float times) {
+        //Side size = base sprite diagonale size
         parkingRect.setWidth((float)
                 Math.sqrt(Math.pow(width, 2) +
                         Math.pow(height, 2)));
@@ -54,10 +52,7 @@ public abstract class InsightRect extends Sprite {
         //
     }
 
-    public void initInfluenceRect(Sprite base) {
-    }
-
-    protected void setPosParkingRect(Sprite base){
+    protected void setPosInsightRect(Sprite base){
         parkingRect.pos.set(base.pos);
     }
 
@@ -86,7 +81,6 @@ public abstract class InsightRect extends Sprite {
 
     protected void newItem(Sprite base){
         parkingRect.pos.set(generate(Side.randomSide()));
-        System.out.println(parkingRect.pos);
         base.pos.set(parkingRect.pos);
 
         tmp2.set(Rnd.nextFloat(-worldBounds.getWidth() / 4,worldBounds.getWidth() / 4),

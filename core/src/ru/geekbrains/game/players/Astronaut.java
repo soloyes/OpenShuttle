@@ -22,27 +22,25 @@ public class Astronaut extends InsightRect {
         itemSound = (Sound) music.get("rogerroll");
         setHeightProportion(0.1f);
 
-        initParkingRect(this.getWidth(), this.getHeight());
+        initInsightRect(this.getWidth(), this.getHeight(), 2f);
     }
 
     private void checkAndHandleBounds() {
         if (parkingRect.isOutside(worldBounds)) {
             itemSound.stop();
             newItem(this);
-            System.out.println("blabla");
         }
 
         if (this.isMe(player.pos)) {
             itemSound.stop();
             newItem(this);
-            System.out.println("bla");
         }
     }
 
     @Override
     public void update(float delta) {
         pos.mulAdd(norDirection, delta * VELOCITY);
-        setPosParkingRect(this);
+        setPosInsightRect(this);
         this.angle += (0.5f * rotation) % 360;
         checkAndHandleBounds();
     }

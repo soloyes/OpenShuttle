@@ -35,11 +35,11 @@ public class Player extends InsightRect {
         destanation = new Vector2();
 
         setHeightProportion(0.15f);
-        pos.set(0.0f, 1f);
+        pos.set(0.0f, 0.5f);
         setAngle(180);
         this.stars = stars;
 
-        initParkingRect(this.getWidth(), this.getHeight());
+        initInsightRect(this.getWidth(), this.getHeight(), 2f);
     }
 
     private void checkAndHandleBounds(){
@@ -77,5 +77,6 @@ public class Player extends InsightRect {
             frame = 0;
         }
         //
+        setPosInsightRect(this);
     }
 }
