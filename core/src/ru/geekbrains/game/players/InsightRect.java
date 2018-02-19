@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.Map;
 
+import ru.geekbrains.game.Logic.Score;
 import ru.geekbrains.stargame.engine.Sprite;
 import ru.geekbrains.stargame.engine.math.Rect;
 import ru.geekbrains.stargame.engine.math.Rnd;
@@ -27,10 +28,15 @@ public abstract class InsightRect extends Sprite {
     protected Vector2 tmp3 = new Vector2();
     protected Vector2 norDirection = new Vector2();
     private Vector2 newItem = new Vector2();
+    protected Score score;
 
     protected int rotation = 1;
     protected Player player;
     protected Sound itemSound;
+
+    public void setScore(Score score) {
+        this.score = score;
+    }
 
     protected InsightRect(TextureRegion region) {
         super(region);

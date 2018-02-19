@@ -30,11 +30,6 @@ public class Astronaut extends InsightRect {
             itemSound.stop();
             newItem(this);
         }
-
-        if (this.isMe(player.pos)) {
-            itemSound.stop();
-            newItem(this);
-        }
     }
 
     @Override

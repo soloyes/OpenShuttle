@@ -17,6 +17,9 @@ public class Player extends InsightRect {
     private Vector2 destanation;
     private Vector2 norDestanation;
 
+    private Astronaut astronaut;
+    private Alien alien;
+
     private StarsHandler stars;
 
     public void setTarget(Vector2 target) {
@@ -26,6 +29,14 @@ public class Player extends InsightRect {
         setAngle(tmp1.sub(pos).angle() - 90);
         tmp1.set(target);
         stars.setVAngle(tmp1.sub(pos).angle());
+    }
+
+    public void setAstronaut(Astronaut astronaut) {
+        this.astronaut = astronaut;
+    }
+
+    public void setAlien(Alien alien) {
+        this.alien = alien;
     }
 
     public Player(TextureAtlas atlas, StarsHandler stars) {
@@ -53,6 +64,29 @@ public class Player extends InsightRect {
             target.y = worldBounds.getTop() - parkingRect.getHalfWidth() / 2;
     }
 
+    private void checkCollisions(){
+        //With astronaut
+        if (this.isMe(astronaut.pos)) {
+            astronaut.itemSound.stop();
+            astronaut.newItem(astronaut);
+            score.increaseAndGet();
+        }
+        //With alien
+        if (alien.isHungry()) {
+            if (this.isMe(alien.pos)) {
+                alien.setHungry(false);
+                pos.set(0.0f, 0.5f);
+                setAngle(180);
+                setTarget(new Vector2(0.0f, 0.0f));
+            }
+            score.decrereaseAndGet(alien.getPower());
+        }
+
+        if (score.getScore() < 0) {
+            score.setScore(0);
+        }
+    }
+
     @Override
     public void update(float delta) {
         //Calculate player target
@@ -78,5 +112,6 @@ public class Player extends InsightRect {
         }
         //
         setPosInsightRect(this);
+        checkCollisions();
     }
 }

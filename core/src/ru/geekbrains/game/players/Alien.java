@@ -2,7 +2,6 @@ package ru.geekbrains.game.players;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector2;
 
 import java.util.Map;
 
@@ -14,23 +13,34 @@ import ru.geekbrains.stargame.engine.math.Rnd;
  */
 
 public class Alien extends InsightRect {
+
     private final float VELOCITY = 0.2f;
+    private Astronaut astronaut;
+    private boolean hungry;
+    private int power;
 
-    private boolean eatable;
-
-    public void setEatable(boolean eatable) {
-        this.eatable = eatable;
+    public void setHungry(boolean hungry) {
+        this.hungry = hungry;
     }
 
-    public boolean isEatable() {
-        return eatable;
+    public boolean isHungry() {
+        return hungry;
+    }
+
+    public void setAstronaut(Astronaut astronaut) {
+        this.astronaut = astronaut;
+    }
+
+    public int getPower() {
+        return power;
     }
 
     public Alien(TextureAtlas atlas, Player player, Map<String, Object> music) {
         this(atlas, 1,3,3);
         this.player = player;
         this.music = music;
-        setEatable(true);
+        this.power = 1;
+        setHungry(true);
         itemSound = (Sound) music.get("alien");
     }
 
@@ -43,35 +53,27 @@ public class Alien extends InsightRect {
 
     private void checkAndHandleBounds() {
         if (parkingRect.isOutside(worldBounds)) {
-            setEatable(true);
+            setHungry(true);
             itemSound.stop();
-            newItem(this);
             frame = Rnd.nextInt(3);
+            newItem(this);
         }
+    }
 
-        if (isEatable()) {
-            if (this.isMe(player.pos)) {
-                setEatable(false);
-                player.pos.set(0.0f, 0.5f);
-                player.setAngle(180);
-                player.setTarget(new Vector2(0.0f, 0.0f));
-            }
-
-            //
+    @Override
+    public void update(float delta) {
+        //
+        if (isHungry()) {
             tmp1.set(pos);
             if (tmp1.sub(player.pos).len() < 0.2f) {
                 tmp1.set(player.pos);
                 tmp1.sub(pos);
                 norDirection.set(tmp1.nor());
             }
-            //
         }
-    }
-
-    @Override
-    public void update(float delta) {
-        this.pos.mulAdd(norDirection, delta * VELOCITY);
-        this.angle += (0.5f * rotation) % 360;
+        //
+        pos.mulAdd(norDirection, delta * VELOCITY);
+        angle += (0.5f * rotation) % 360;
         setPosInsightRect(this);
         checkAndHandleBounds();
     }

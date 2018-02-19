@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.Map;
 
+import ru.geekbrains.game.Logic.Score;
 import ru.geekbrains.game.players.Alien;
 import ru.geekbrains.game.players.Astronaut;
 import ru.geekbrains.game.players.Player;
@@ -29,11 +30,14 @@ public class GameScreen extends Base2DScreen {
     private Map<String, Object> music;
     private Music gameScreenMusic;
 
+    private Score score;
+
     public GameScreen(Game game, TextureAtlas atlas, Map<String, Object> music) {
         super(game);
         this.mainAtlas = atlas;
         this.music = music;
         this.gameScreenMusic = (Music) music.get("gameScreen");
+        score = new Score();
     }
 
     @Override
@@ -44,8 +48,14 @@ public class GameScreen extends Base2DScreen {
         astronaut = new Astronaut(mainAtlas, player, music);
         alien = new Alien(mainAtlas, player, music);
         earth = new Earth(mainAtlas);
-        gameScreenMusic.setLooping(true);
 
+        alien.setScore(score);
+        player.setScore(score);
+        player.setAstronaut(astronaut);
+        player.setAlien(alien);
+        alien.setAstronaut(astronaut);
+
+        gameScreenMusic.setLooping(true);
         gameScreenMusic.play();
     }
 
