@@ -44,8 +44,8 @@ public class Alien extends InsightRect {
     private void checkAndHandleBounds() {
         if (parkingRect.isOutside(worldBounds)) {
             setEatable(true);
-            newItem(this);
             itemSound.stop();
+            newItem(this);
             frame = Rnd.nextInt(3);
         }
 
@@ -55,7 +55,6 @@ public class Alien extends InsightRect {
                 player.pos.set(0.0f, 0.5f);
                 player.setAngle(180);
                 player.setTarget(new Vector2(0.0f, 0.0f));
-                System.out.println("bbb");
             }
 
             //

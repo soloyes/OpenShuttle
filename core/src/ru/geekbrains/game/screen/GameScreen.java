@@ -29,7 +29,6 @@ public class GameScreen extends Base2DScreen {
     private Map<String, Object> music;
     private Music gameScreenMusic;
 
-
     public GameScreen(Game game, TextureAtlas atlas, Map<String, Object> music) {
         super(game);
         this.mainAtlas = atlas;
@@ -44,9 +43,9 @@ public class GameScreen extends Base2DScreen {
         player = new Player(mainAtlas, stars);
         astronaut = new Astronaut(mainAtlas, player, music);
         alien = new Alien(mainAtlas, player, music);
-
         earth = new Earth(mainAtlas);
         gameScreenMusic.setLooping(true);
+
         gameScreenMusic.play();
     }
 
@@ -62,9 +61,9 @@ public class GameScreen extends Base2DScreen {
     private void update(float delta) {
         stars.update(delta);
         player.update(delta);
+        earth.update(delta);
         astronaut.update(delta);
         alien.update(delta);
-        earth.update(delta);
     }
 
     private void draw() {
