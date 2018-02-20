@@ -19,7 +19,7 @@ public class Score {
         return ++score;
     }
 
-    public int decrereaseAndGet(int power){
-        return score - power;
+    public int decreaseAndGet(int power){
+        return score -= power;
     }
 }

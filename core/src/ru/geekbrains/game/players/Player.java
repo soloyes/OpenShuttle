@@ -3,6 +3,7 @@ package ru.geekbrains.game.players;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.geekbrains.game.Logic.Lives;
 import ru.geekbrains.game.star.StarsHandler;
 
 /**
@@ -19,6 +20,7 @@ public class Player extends InsightRect {
 
     private Astronaut astronaut;
     private Alien alien;
+    private Lives lives;
 
     private StarsHandler stars;
 
@@ -37,6 +39,10 @@ public class Player extends InsightRect {
 
     public void setAlien(Alien alien) {
         this.alien = alien;
+    }
+
+    public void setLives(Lives lives) {
+        this.lives = lives;
     }
 
     public Player(TextureAtlas atlas, StarsHandler stars) {
@@ -78,12 +84,8 @@ public class Player extends InsightRect {
                 pos.set(0.0f, 0.5f);
                 setAngle(180);
                 setTarget(new Vector2(0.0f, 0.0f));
+                lives.decreaseAndGet();
             }
-            score.decrereaseAndGet(alien.getPower());
-        }
-
-        if (score.getScore() < 0) {
-            score.setScore(0);
         }
     }
 

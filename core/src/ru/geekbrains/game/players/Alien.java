@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import java.util.Map;
 
+import ru.geekbrains.game.Logic.Lives;
 import ru.geekbrains.stargame.engine.math.Rect;
 import ru.geekbrains.stargame.engine.math.Rnd;
 
@@ -18,6 +19,7 @@ public class Alien extends InsightRect {
     private Astronaut astronaut;
     private boolean hungry;
     private int power;
+    private Lives lives;
 
     public void setHungry(boolean hungry) {
         this.hungry = hungry;
@@ -39,7 +41,7 @@ public class Alien extends InsightRect {
         this(atlas, 1,3,3);
         this.player = player;
         this.music = music;
-        this.power = 1;
+        this.power = 2;
         setHungry(true);
         itemSound = (Sound) music.get("alien");
     }
@@ -70,12 +72,28 @@ public class Alien extends InsightRect {
                 tmp1.sub(pos);
                 norDirection.set(tmp1.nor());
             }
+            tmp2.set(pos);
+            if (tmp2.sub(astronaut.pos).len() < 0.1f) {
+                tmp2.set(astronaut.pos);
+                tmp2.sub(pos);
+                norDirection.set(tmp2.nor());
+            }
         }
         //
         pos.mulAdd(norDirection, delta * VELOCITY);
         angle += (0.5f * rotation) % 360;
         setPosInsightRect(this);
         checkAndHandleBounds();
+        checkCollisions();
+    }
+
+    private void checkCollisions(){
+        if (isHungry()) {
+            if (this.isMe(astronaut.pos)) {
+                newItem(astronaut);
+                score.decreaseAndGet(getPower());
+            }
+        }
     }
 
     @Override
@@ -84,5 +102,9 @@ public class Alien extends InsightRect {
         newItem(this);
         frame ++;
         frame %= 2;
+    }
+
+    public void setLives(Lives lives) {
+        this.lives = lives;
     }
 }

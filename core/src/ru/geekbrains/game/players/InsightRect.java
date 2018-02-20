@@ -85,7 +85,7 @@ public abstract class InsightRect extends Sprite {
         return newItem.set(x ,y);
     }
 
-    protected void newItem(Sprite base){
+    protected void newItem(InsightRect base){
         parkingRect.pos.set(generate(Side.randomSide()));
         base.pos.set(parkingRect.pos);
 
@@ -98,7 +98,7 @@ public abstract class InsightRect extends Sprite {
         base.setAngle(base.getAngle() + 360 / (Rnd.nextInt(6) + 1));
         rotation = Rnd.nextInt(3) - 1;
 
-        itemSound.play();
+        base.itemSound.play();
     }
 
     @Override
