@@ -4,20 +4,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import ru.geekbrains.stargame.engine.Sprite;
-import ru.geekbrains.stargame.engine.math.Rect;
+import ru.geekbrains.stargame.engine.Rect;
 
 /**
  * Created by sol on 2/20/18.
  */
 
 public class Lives extends Sprite {
+    private final int INIT_LIVES = 3;
     private int lives;
     private Rect worldBounds;
 
     public Lives(TextureAtlas atlas) {
         super(atlas.findRegion("rocket"), 1, 12, 12);
         setHeightProportion(0.07f);
-        lives = 3;
+        lives = INIT_LIVES;
     }
 
     public int decreaseAndGet() {
@@ -42,5 +43,13 @@ public class Lives extends Sprite {
 
     public int getLives() {
         return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    public void initLives(){
+        this.lives = INIT_LIVES;
     }
 }

@@ -5,14 +5,16 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.stargame.engine.math.MatrixUtils;
-import ru.geekbrains.stargame.engine.math.Rect;
+import java.util.Map;
+
+import ru.geekbrains.stargame.engine.utils.math.MatrixUtils;
 
 public abstract class Base2DScreen implements Screen, InputProcessor {
 
@@ -31,6 +33,18 @@ public abstract class Base2DScreen implements Screen, InputProcessor {
 
     public Base2DScreen(Game game) {
         this.game = game;
+    }
+
+    protected Music backgroundMusic;
+
+    protected Map<String, Object> gameMusic;
+
+    public Music getBackgroundMusic() {
+        return backgroundMusic;
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     @Override

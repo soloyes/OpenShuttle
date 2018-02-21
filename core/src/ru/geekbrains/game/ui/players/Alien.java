@@ -1,4 +1,4 @@
-package ru.geekbrains.game.players;
+package ru.geekbrains.game.ui.players;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import java.util.Map;
 
 import ru.geekbrains.game.Logic.Lives;
-import ru.geekbrains.stargame.engine.math.Rect;
-import ru.geekbrains.stargame.engine.math.Rnd;
+import ru.geekbrains.stargame.engine.Rect;
+import ru.geekbrains.stargame.engine.utils.math.Rnd;
 
 /**
  * Created by sol on 2/15/18.

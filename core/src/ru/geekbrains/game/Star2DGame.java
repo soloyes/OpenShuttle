@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.geekbrains.game.screen.MenuScreen;
+import ru.geekbrains.game.ui.screen.MenuScreen;
 
 /**
  * Created by sol on 1/29/18.

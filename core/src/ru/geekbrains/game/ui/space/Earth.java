@@ -1,9 +1,9 @@
-package ru.geekbrains.game.ui;
+package ru.geekbrains.game.ui.space;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import ru.geekbrains.stargame.engine.Sprite;
-import ru.geekbrains.stargame.engine.math.Rect;
+import ru.geekbrains.stargame.engine.Rect;
 
 /**
  * Created by sol on 2/12/18.

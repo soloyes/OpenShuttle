@@ -1,4 +1,4 @@
-package ru.geekbrains.stargame.engine.math;
+package ru.geekbrains.stargame.engine;
 
 import com.badlogic.gdx.math.Vector2;
 

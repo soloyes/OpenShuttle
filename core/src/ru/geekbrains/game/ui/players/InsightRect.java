@@ -1,4 +1,4 @@
-package ru.geekbrains.game.players;
+package ru.geekbrains.game.ui.players;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -8,8 +8,8 @@ import java.util.Map;
 
 import ru.geekbrains.game.Logic.Score;
 import ru.geekbrains.stargame.engine.Sprite;
-import ru.geekbrains.stargame.engine.math.Rect;
-import ru.geekbrains.stargame.engine.math.Rnd;
+import ru.geekbrains.stargame.engine.Rect;
+import ru.geekbrains.stargame.engine.utils.math.Rnd;
 
 /**
  * Created by sol on 2/15/18.
@@ -85,7 +85,7 @@ public abstract class InsightRect extends Sprite {
         return newItem.set(x ,y);
     }
 
-    protected void newItem(InsightRect base){
+    public void newItem(InsightRect base){
         parkingRect.pos.set(generate(Side.randomSide()));
         base.pos.set(parkingRect.pos);
 

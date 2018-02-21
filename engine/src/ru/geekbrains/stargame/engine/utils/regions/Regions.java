@@ -1,4 +1,4 @@
-package ru.geekbrains.stargame.engine;
+package ru.geekbrains.stargame.engine.utils.regions;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 

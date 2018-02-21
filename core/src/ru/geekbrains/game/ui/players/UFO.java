@@ -1,4 +1,4 @@
-package ru.geekbrains.game.players;
+package ru.geekbrains.game.ui.players;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

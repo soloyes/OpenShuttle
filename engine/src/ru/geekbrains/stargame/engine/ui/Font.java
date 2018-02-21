@@ -1,4 +1,4 @@
-package ru.geekbrains.stargame.engine;
+package ru.geekbrains.stargame.engine.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,7 +18,11 @@ public class Font extends BitmapFont {
     }
 
     public void setWordSize(float wordSize) {
+        System.out.println(getCapHeight());
+        System.out.println(getScaleX() + " " + getScaleY());
         getData().setScale(wordSize / getCapHeight());
+        System.out.println(getScaleX() + " " + getScaleY());
+        System.out.println(getCapHeight());
     }
 
     public GlyphLayout draw(Batch batch, CharSequence str, float x, float y, int halign) {

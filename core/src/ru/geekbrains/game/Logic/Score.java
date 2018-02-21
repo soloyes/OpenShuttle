@@ -22,4 +22,8 @@ public class Score {
     public int decreaseAndGet(int power){
         return score -= power;
     }
+
+    public void initScore(){
+        score = 0;
+    }
 }

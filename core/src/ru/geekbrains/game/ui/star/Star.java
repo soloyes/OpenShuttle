@@ -1,11 +1,11 @@
-package ru.geekbrains.game.star;
+package ru.geekbrains.game.ui.star;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.stargame.engine.Sprite;
-import ru.geekbrains.stargame.engine.math.Rect;
-import ru.geekbrains.stargame.engine.math.Rnd;
+import ru.geekbrains.stargame.engine.Rect;
+import ru.geekbrains.stargame.engine.utils.math.Rnd;
 
 public class Star extends Sprite {
 

@@ -1,8 +1,10 @@
-package ru.geekbrains.stargame.engine.math;
+package ru.geekbrains.stargame.engine.utils.math;
 
 
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
+
+import ru.geekbrains.stargame.engine.Rect;
 
 public class MatrixUtils {
     /**
