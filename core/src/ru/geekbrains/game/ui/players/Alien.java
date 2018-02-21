@@ -11,6 +11,7 @@ import ru.geekbrains.stargame.engine.utils.math.Rnd;
 
 /**
  * Created by sol on 2/15/18.
+ * Class for store and manipulate with Alien
  */
 
 public class Alien extends InsightRect {

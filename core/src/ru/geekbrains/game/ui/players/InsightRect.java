@@ -14,6 +14,7 @@ import ru.geekbrains.stargame.engine.utils.math.Rnd;
 /**
  * Created by sol on 2/15/18.
  * Class storing worldCoordinates, parking rectangle and rectangle for action (interact with others)
+ * Also Base class for every player and bot
  */
 
 public abstract class InsightRect extends Sprite {

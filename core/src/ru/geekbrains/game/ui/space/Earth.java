@@ -7,6 +7,8 @@ import ru.geekbrains.stargame.engine.Rect;
 
 /**
  * Created by sol on 2/12/18.
+ * Class for store and manipulate with Earth.
+ * The background is solud color + starts, which generate by StarsHandler.
  */
 
 public class Earth extends Sprite {

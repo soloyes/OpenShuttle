@@ -9,6 +9,7 @@ import ru.geekbrains.stargame.engine.utils.math.Rnd;
 
 /**
  * Created by sol on 2/6/18.
+ * Class for store and manipulate with Star
  */
 
 public class StarsHandler {

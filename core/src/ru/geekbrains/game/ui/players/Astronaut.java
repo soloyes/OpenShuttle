@@ -9,6 +9,7 @@ import ru.geekbrains.stargame.engine.Rect;
 
 /**
  * Created by sol on 2/6/18.
+ * Class for store and manipulate with game state
  */
 
 public class Astronaut extends InsightRect {

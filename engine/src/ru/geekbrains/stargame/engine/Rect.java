@@ -4,9 +4,9 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Rect {
 
-    public final Vector2 pos = new Vector2(); // позиция по центру
-    protected float halfWidth; // половина ширины
-    protected float halfHeight; // половина высоты
+    public final Vector2 pos = new Vector2(); // Center position
+    protected float halfWidth;
+    protected float halfHeight;
 
     public Rect() {
     }

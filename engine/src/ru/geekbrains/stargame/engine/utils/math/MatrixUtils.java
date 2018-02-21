@@ -7,12 +7,14 @@ import com.badlogic.gdx.math.Matrix4;
 import ru.geekbrains.stargame.engine.Rect;
 
 public class MatrixUtils {
+
     /**
-     * Расчёт матрицы перехода 4x4
-     * @param mat итоговая матрица преобразований
-     * @param src исходный квадрат
-     * @param dst итоговый квадрат
+     * Calculation for matrix 4*4
+     * @param mat destanation matrix
+     * @param src source rectangle
+     * @param dst destanation rectangle
      */
+
     public static void calcTransitionMatrix(Matrix4 mat, Rect src, Rect dst) {
         float scaleX = dst.getWidth() / src.getWidth();
         float scaleY = dst.getHeight() / src.getHeight();
@@ -24,11 +26,12 @@ public class MatrixUtils {
     }
 
     /**
-     * Расчёт матрицы перехода 3x3
-     * @param mat итоговая матрица преобразований
-     * @param src исходный квадрат
-     * @param dst итоговый квадрат
+     * Calculation for matrix 3*3
+     * @param mat destanation matrix
+     * @param src source rectangle
+     * @param dst destanation rectangle
      */
+
     public static void calcTransitionMatrix(Matrix3 mat, Rect src, Rect dst) {
         float scaleX = dst.getWidth() / src.getWidth();
         float scaleY = dst.getHeight() / src.getHeight();

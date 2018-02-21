@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 /**
  * Created by sol on 2/20/18.
+ * Class for store and manipulate with BitmapFont.
+ * Wrapper
  */
 
 public class Font extends BitmapFont {

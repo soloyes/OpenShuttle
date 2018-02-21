@@ -8,7 +8,7 @@ import ru.geekbrains.stargame.engine.Rect;
 
 /**
  * Created by sol on 2/20/18.
- * Class for working with lives
+ * Class for store and manipulate with lives
  */
 
 public class Lives extends Sprite {

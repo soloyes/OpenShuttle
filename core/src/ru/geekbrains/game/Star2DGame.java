@@ -13,6 +13,8 @@ import ru.geekbrains.game.ui.screen.MenuScreen;
 
 /**
  * Created by sol on 1/29/18.
+ * Class for base load/unload all media data, dispose them.
+ * Also entry point to the game.
  */
 
 public class Star2DGame extends Game {

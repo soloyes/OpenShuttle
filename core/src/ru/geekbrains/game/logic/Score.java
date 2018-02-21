@@ -2,6 +2,7 @@ package ru.geekbrains.game.logic;
 
 /**
  * Created by sol on 2/19/18.
+ * Class for store and manipulate with score
  */
 
 public class Score {
@@ -20,7 +21,6 @@ public class Score {
         if (score < 0 ){
             score = 0;
         }
-
         return  score;
     }
 

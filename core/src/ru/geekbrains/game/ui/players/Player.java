@@ -8,6 +8,7 @@ import ru.geekbrains.game.ui.star.StarsHandler;
 
 /**
  * Created by sol on 2/6/18.
+ * Class for store and manipulate with player
  */
 
 public class Player extends InsightRect {

@@ -8,10 +8,12 @@ import ru.geekbrains.stargame.engine.utils.regions.Regions;
 
 public class Sprite extends Rect {
 
+    private TextureRegion[] regions;
     protected float angle;
     protected float scale = 1f;
-    private TextureRegion[] regions;
     protected int frame;
+
+    public Sprite(){}
 
     public Sprite(TextureRegion region) {
         if (region == null) {
@@ -28,18 +30,14 @@ public class Sprite extends Rect {
         regions = Regions.split(region, i, j, frames);
     }
 
-    public Sprite(){
-
-    }
-
     public void draw(SpriteBatch batch) {
         batch.draw(
-                regions[frame], // текущий регион
-                getLeft(), getBottom(), // точка отрисовки
-                halfWidth, halfHeight, // точка вращения
-                getWidth(), getHeight(), // ширина и высота
-                scale, scale, // масштаб по x и y
-                angle // угол вращения
+                regions[frame], // Current region
+                getLeft(), getBottom(), // Draw point
+                halfWidth, halfHeight, // Rotation point
+                getWidth(), getHeight(), // Width, Height
+                scale, scale, // ScaleX, ScaleY
+                angle // Rotation angle
         );
     }
 
@@ -55,25 +53,15 @@ public class Sprite extends Rect {
         setWidth(height * aspect);
     }
 
-    public void resize(Rect worldBounds) {
+    public void resize(Rect worldBounds) {}
 
-    }
+    protected void touchDown(Vector2 touch, int pointer) {}
 
-    protected void touchDown(Vector2 touch, int pointer) {
+    protected void touchUp(Vector2 touch, int pointer) {}
 
-    }
+    protected void touchDragged(Vector2 touch, int pointer) {}
 
-    protected void touchUp(Vector2 touch, int pointer) {
-
-    }
-
-    protected void touchDragged(Vector2 touch, int pointer) {
-
-    }
-
-    public void update(float delta) {
-
-    }
+    public void update(float delta) {}
 
     public float getAngle() {
         return angle;

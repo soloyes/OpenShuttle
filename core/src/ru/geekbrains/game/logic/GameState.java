@@ -7,6 +7,7 @@ import ru.geekbrains.stargame.engine.ui.Font;
 
 /**
  * Created by sol on 2/21/18.
+ * Class for store and manipulate with game state
  */
 
 public class GameState {
