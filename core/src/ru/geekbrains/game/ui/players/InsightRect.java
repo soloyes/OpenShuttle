@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.Map;
 
-import ru.geekbrains.game.Logic.Score;
+import ru.geekbrains.game.logic.Score;
 import ru.geekbrains.stargame.engine.Sprite;
 import ru.geekbrains.stargame.engine.Rect;
 import ru.geekbrains.stargame.engine.utils.math.Rnd;
@@ -18,6 +18,9 @@ import ru.geekbrains.stargame.engine.utils.math.Rnd;
 
 public abstract class InsightRect extends Sprite {
 
+    protected int rotation = 1;
+    private boolean loud;
+
     protected Map<String, Object> music;
 
     protected Rect parkingRect = new Rect();
@@ -28,9 +31,8 @@ public abstract class InsightRect extends Sprite {
     protected Vector2 tmp3 = new Vector2();
     protected Vector2 norDirection = new Vector2();
     private Vector2 newItem = new Vector2();
-    protected Score score;
 
-    protected int rotation = 1;
+    protected Score score;
     protected Player player;
     protected Sound itemSound;
 
@@ -38,15 +40,22 @@ public abstract class InsightRect extends Sprite {
         this.score = score;
     }
 
+    public boolean isLoud() {
+        return loud;
+    }
+
+    public void setLoud(boolean loud) {
+        this.loud = loud;
+    }
+
+    protected InsightRect(){}
+
     protected InsightRect(TextureRegion region) {
         super(region);
     }
 
     protected InsightRect(TextureRegion region, int i, int j, int frames) {
         super(region, i, j, frames);
-    }
-
-    protected InsightRect(){
     }
 
     protected void initInsightRect(float width, float height, float times) {
@@ -98,7 +107,9 @@ public abstract class InsightRect extends Sprite {
         base.setAngle(base.getAngle() + 360 / (Rnd.nextInt(6) + 1));
         rotation = Rnd.nextInt(3) - 1;
 
-        base.itemSound.play();
+        if (isLoud()) {
+            base.itemSound.play();
+        }
     }
 
     @Override

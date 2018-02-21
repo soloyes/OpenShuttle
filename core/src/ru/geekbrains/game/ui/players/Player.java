@@ -3,7 +3,7 @@ package ru.geekbrains.game.ui.players;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.game.Logic.Lives;
+import ru.geekbrains.game.logic.Lives;
 import ru.geekbrains.game.ui.star.StarsHandler;
 
 /**

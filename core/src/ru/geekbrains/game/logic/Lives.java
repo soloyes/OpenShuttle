@@ -1,4 +1,4 @@
-package ru.geekbrains.game.Logic;
+package ru.geekbrains.game.logic;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -8,6 +8,7 @@ import ru.geekbrains.stargame.engine.Rect;
 
 /**
  * Created by sol on 2/20/18.
+ * Class for working with lives
  */
 
 public class Lives extends Sprite {
@@ -18,11 +19,20 @@ public class Lives extends Sprite {
     public Lives(TextureAtlas atlas) {
         super(atlas.findRegion("rocket"), 1, 12, 12);
         setHeightProportion(0.07f);
+
+        initLives();
+    }
+
+    public void initLives(){
         lives = INIT_LIVES;
     }
 
     public int decreaseAndGet() {
         return --lives;
+    }
+
+    public boolean hasLives(){
+        return lives > 0;
     }
 
     @Override
@@ -39,17 +49,5 @@ public class Lives extends Sprite {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         this.worldBounds = worldBounds;
-    }
-
-    public int getLives() {
-        return lives;
-    }
-
-    public void setLives(int lives) {
-        this.lives = lives;
-    }
-
-    public void initLives(){
-        this.lives = INIT_LIVES;
     }
 }

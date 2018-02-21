@@ -20,6 +20,7 @@ public class Astronaut extends InsightRect {
         this.player = player;
         this.music = music;
         itemSound = (Sound) music.get("rogerroll");
+        setLoud(true);
         setHeightProportion(0.1f);
 
         initInsightRect(this.getWidth(), this.getHeight(), 2f);

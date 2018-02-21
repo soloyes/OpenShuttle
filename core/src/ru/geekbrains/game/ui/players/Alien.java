@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import java.util.Map;
 
-import ru.geekbrains.game.Logic.Lives;
+import ru.geekbrains.game.logic.Lives;
 import ru.geekbrains.stargame.engine.Rect;
 import ru.geekbrains.stargame.engine.utils.math.Rnd;
 
@@ -44,6 +44,7 @@ public class Alien extends InsightRect {
         this.power = 2;
         setHungry(true);
         itemSound = (Sound) music.get("alien");
+        setLoud(true);
     }
 
     private Alien(TextureAtlas atlas, int i, int j, int frames) {

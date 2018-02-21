@@ -1,4 +1,4 @@
-package ru.geekbrains.game.Logic;
+package ru.geekbrains.game.logic;
 
 /**
  * Created by sol on 2/19/18.
@@ -11,16 +11,17 @@ public class Score {
         return score;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
     public int increaseAndGet(){
         return ++score;
     }
 
     public int decreaseAndGet(int power){
-        return score -= power;
+        score -= power;
+        if (score < 0 ){
+            score = 0;
+        }
+
+        return  score;
     }
 
     public void initScore(){

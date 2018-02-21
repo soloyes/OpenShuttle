@@ -8,8 +8,7 @@ import com.badlogic.gdx.utils.Align;
 
 import java.util.Map;
 
-import ru.geekbrains.game.Logic.Lives;
-import ru.geekbrains.game.Logic.Score;
+import ru.geekbrains.game.logic.GameState;
 import ru.geekbrains.game.ui.players.Alien;
 import ru.geekbrains.game.ui.players.Astronaut;
 import ru.geekbrains.game.ui.players.Player;
@@ -17,7 +16,6 @@ import ru.geekbrains.game.ui.star.StarsHandler;
 import ru.geekbrains.game.ui.space.Earth;
 import ru.geekbrains.stargame.engine.ActionListener;
 import ru.geekbrains.stargame.engine.Base2DScreen;
-import ru.geekbrains.stargame.engine.ui.Font;
 import ru.geekbrains.stargame.engine.Rect;
 
 public class GameScreen extends Base2DScreen implements ActionListener{
@@ -31,15 +29,7 @@ public class GameScreen extends Base2DScreen implements ActionListener{
     private Astronaut astronaut;
     private Alien alien;
 
-    private Score score;
-    private Lives lives;
     private GameState gameState;
-
-    private Font font002;
-    private Font font004;
-    private StringBuilder sbScore;
-    private StringBuilder sbGameOver;
-
     private MenuBar menuBar;
 
     public GameScreen(Game game, TextureAtlas atlas, Map<String, Object> music) {
@@ -55,18 +45,8 @@ public class GameScreen extends Base2DScreen implements ActionListener{
         astronaut = new Astronaut(mainAtlas, player, music);
         alien = new Alien(mainAtlas, player, music);
 
+        gameState = new GameState(mainAtlas);
         menuBar = new MenuBar(atlas, music);
-
-        score = new Score();
-        lives = new Lives(mainAtlas);
-
-        font002 = new Font("fonts/font.fnt", "fonts/font.png");
-        font004 = new Font("fonts/font.fnt", "fonts/font.png");
-
-        sbScore = new StringBuilder();
-        sbGameOver = new StringBuilder("GameOver");
-
-        gameState = GameState.PLAY;
     }
 
     private void update(float delta) {
@@ -75,12 +55,14 @@ public class GameScreen extends Base2DScreen implements ActionListener{
         astronaut.update(delta);
         alien.update(delta);
 
-        if ( lives.getLives() != 0){
+        if (gameState.getLives().hasLives()){
             player.update(delta);
         }
-        else if (lives.getLives() == 0) {
-            gameState = GameState.GAMEOVER;
+        else {
+            gameState.setGameOver();
             alien.setHungry(false);
+            astronaut.setLoud(false);
+            alien.setLoud(false);
         }
     }
 
@@ -90,48 +72,59 @@ public class GameScreen extends Base2DScreen implements ActionListener{
         astronaut.draw(batch);
         alien.draw(batch);
 
-        if (gameState.equals(GameState.PLAY)){
+        if (gameState.isPlaying()){
             player.draw(batch);
             printInfo();
         }
         else {
-            GameOver();
+            printGameOver();
         }
     }
 
     private void printInfo(){
-        sbScore.setLength(0);
-        if (score.getScore() < 0) {
-            score.setScore(0);
-        }
-        font002.draw(batch, sbScore.append("Score: ").append(score.getScore()), worldBounds.getLeft(),worldBounds.getTop());
-        lives.draw(batch);
+        gameState.getSbScore().setLength(0);
+        gameState.getFont002().draw(
+                batch,
+                gameState.getSbScore().append("Score: ").append(gameState.getScore().getScore()),
+                worldBounds.getLeft(),
+                worldBounds.getTop());
+        gameState.getLives().draw(batch);
     }
 
-    private void GameOver(){
-        font004.draw(batch, sbGameOver, 0.0f, 0.0f, Align.center);
+    private void printGameOver(){
+        gameState.getFont004().draw(
+                batch,
+                gameState.getSbGameOver(),
+                0.0f,
+                0.0f,
+                Align.center);
         menuBar.draw(batch);
 
         if (backgroundMusic != gameMusic.get("menuScreen")) {
-            backgroundMusic.stop();
-            backgroundMusic = (Music) gameMusic.get("menuScreen");
-            backgroundMusic.setLooping(true);
-            backgroundMusic.play();
+            changeMusic((Music) gameMusic.get("menuScreen"));
         }
     }
 
     public void playAgain(){
-        gameState = GameState.PLAY;
-        lives.initLives();
-        score.initScore();
+        gameState.statePlayAgain();
+        gameState.initLives();
+        gameState.initScore();
 
+        player.setTarget(gameState.getZeroVector());
+
+        alien.setLoud(true);
         alien.setHungry(true);
         alien.newItem(alien);
 
+        astronaut.setLoud(true);
         astronaut.newItem(astronaut);
 
+        changeMusic((Music) gameMusic.get("gameScreen"));
+    }
+
+    private void changeMusic(Music music){
         backgroundMusic.stop();
-        backgroundMusic = (Music) gameMusic.get("gameScreen");
+        backgroundMusic = music;
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
     }
@@ -139,17 +132,17 @@ public class GameScreen extends Base2DScreen implements ActionListener{
     @Override
     public void show() {
         super.show();
-        alien.setScore(score);
+        alien.setScore(gameState.getScore());
         alien.setAstronaut(astronaut);
-        alien.setLives(lives);
+        alien.setLives(gameState.getLives());
 
         player.setAstronaut(astronaut);
         player.setAlien(alien);
-        player.setScore(score);
-        player.setLives(lives);
+        player.setScore(gameState.getScore());
+        player.setLives(gameState.getLives());
 
-        font002.setWordSize(0.02f);
-        font004.setWordSize(0.04f);
+        gameState.getFont002().setWordSize(0.02f);
+        gameState.getFont004().setWordSize(0.04f);
 
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
@@ -174,14 +167,14 @@ public class GameScreen extends Base2DScreen implements ActionListener{
         player.resize(worldBounds);
         astronaut.resize(worldBounds);
         alien.resize(worldBounds);
-        lives.resize(worldBounds);
+        gameState.getLives().resize(worldBounds);
         menuBar.resize(worldBounds);
     }
 
     @Override
     protected void touchDown(Vector2 touch, int pointer) {
         player.setTarget(touch);
-        if (gameState == GameState.GAMEOVER){
+        if (!gameState.isPlaying()){
             menuBar.touchDown(touch, pointer);
         }
     }
@@ -193,7 +186,7 @@ public class GameScreen extends Base2DScreen implements ActionListener{
 
     @Override
     protected void touchUp(Vector2 touch, int pointer) {
-        if (gameState == GameState.GAMEOVER){
+        if (!gameState.isPlaying()){
             menuBar.touchUp(touch, pointer);
         }
     }
@@ -206,16 +199,12 @@ public class GameScreen extends Base2DScreen implements ActionListener{
         astronaut.dispose();
         alien.dispose();
         stars.dispose();
-        lives.dispose();
+        gameState.getLives().dispose();
         menuBar.dispose();
     }
 
     @Override
     public void actionPerformed(Object src) {
         menuBar.GameActionPerformed(src);
-    }
-
-    private enum GameState{
-        PLAY, GAMEOVER;
     }
 }
