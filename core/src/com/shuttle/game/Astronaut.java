@@ -14,15 +14,6 @@ public class Astronaut implements Poolable {
     private int width, height;
     private float angle;
 
-    public Vector2 getPosition() {
-        return position;
-    }
-
-    @Override
-    public boolean isActive() {
-        return active;
-    }
-
     public Astronaut(GameScreen gs) {
         this.gs = gs;
         this.texture = Assets.getInstance().getAtlas().findRegion("astronaut");
@@ -33,8 +24,13 @@ public class Astronaut implements Poolable {
         this.active = false;
     }
 
-    public void render(SpriteBatch batch) {
-        batch.draw(texture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, 1, 1, angle);
+    @Override
+    public boolean isActive() {
+        return active;
+    }
+
+    public void deactivate() {
+        active = false;
     }
 
     public void init(float x, float y) {
@@ -43,11 +39,15 @@ public class Astronaut implements Poolable {
         active = true;
     }
 
+    public void render(SpriteBatch batch) {
+        batch.draw(texture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, 1, 1, angle);
+    }
+
     public void update(float dt) {
         position.mulAdd(velocity, dt);
     }
 
-    public void deactivate() {
-        active = false;
+    public Vector2 getPosition() {
+        return position;
     }
 }

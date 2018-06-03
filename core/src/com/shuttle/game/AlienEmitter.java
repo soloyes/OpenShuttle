@@ -7,18 +7,14 @@ public class AlienEmitter extends ObjectPool<Alien> {
     private GameScreen gs;
     private float time;
 
-    @Override
-    protected Alien newObject() {
-        return new Alien(gs);
-    }
-
     public AlienEmitter(GameScreen gs) {
         this.gs = gs;
 
     }
 
-    public void createBot() {
-        getActiveElement().init(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
+    @Override
+    protected Alien newObject() {
+        return new Alien(gs);
     }
 
     public void render(SpriteBatch batch) {
@@ -37,5 +33,9 @@ public class AlienEmitter extends ObjectPool<Alien> {
             activeList.get(i).update(dt);
         }
         checkPool();
+    }
+
+    public void createBot() {
+        getActiveElement().init(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
     }
 }

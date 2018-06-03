@@ -19,18 +19,6 @@ public class GameScreen implements Screen {
     private BitmapFont font64;
     private Camera camera;
 
-    public ParticleEmitter getParticleEmitter() {
-        return particleEmitter;
-    }
-
-    public AlienEmitter getAlienEmitter() {
-        return alienEmitter;
-    }
-
-    public AstronautEmitter getAstronautEmitter() {
-        return astronautEmitter;
-    }
-
     public GameScreen(SpriteBatch batch, Camera camera) {
         this.batch = batch;
         this.camera = camera;
@@ -55,9 +43,9 @@ public class GameScreen implements Screen {
         batch.begin();
         background.render(batch);
         player.render(batch);
+        particleEmitter.render(batch);
         alienEmitter.render(batch);
         astronautEmitter.render(batch);
-        particleEmitter.render(batch);
         batch.end();
         ScreenManager.getInstance().resetCamera();
         batch.begin();
@@ -105,11 +93,6 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void dispose() {
-        batch.dispose();
-    }
-
-    @Override
     public void resize(int width, int height) {
         ScreenManager.getInstance().resize(width, height);
     }
@@ -127,5 +110,22 @@ public class GameScreen implements Screen {
     @Override
     public void hide() {
 
+    }
+
+    @Override
+    public void dispose() {
+        batch.dispose();
+    }
+
+    public AlienEmitter getAlienEmitter() {
+        return alienEmitter;
+    }
+
+    public AstronautEmitter getAstronautEmitter() {
+        return astronautEmitter;
+    }
+
+    public ParticleEmitter getParticleEmitter() {
+        return particleEmitter;
     }
 }

@@ -13,24 +13,15 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 
 public class Assets {
     private static Assets ourInstance = new Assets();
-
-    public static Assets getInstance() {
-        return ourInstance;
-    }
-
     private AssetManager assetManager;
     private TextureAtlas atlas;
 
-    public AssetManager getAssetManager() {
-        return assetManager;
-    }
-
-    public TextureAtlas getAtlas() {
-        return atlas;
-    }
-
     private Assets() {
         this.assetManager = new AssetManager();
+    }
+
+    public void clear() {
+        assetManager.clear();
     }
 
     public void loadAssets(ScreenManager.ScreenType type) {
@@ -45,10 +36,6 @@ public class Assets {
                 createStdFont(64);
                 break;
         }
-    }
-
-    public void makeLinks() {
-        atlas = assetManager.get("game.pack", TextureAtlas.class);
     }
 
     public void createStdFont(int size) {
@@ -67,7 +54,19 @@ public class Assets {
         assetManager.load("gomarice" + size + ".ttf", BitmapFont.class, fontParameter);
     }
 
-    public void clear() {
-        assetManager.clear();
+    public void makeLinks() {
+        atlas = assetManager.get("game.pack", TextureAtlas.class);
+    }
+
+    public AssetManager getAssetManager() {
+        return assetManager;
+    }
+
+    public TextureAtlas getAtlas() {
+        return atlas;
+    }
+
+    public static Assets getInstance() {
+        return ourInstance;
     }
 }

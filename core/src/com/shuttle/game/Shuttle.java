@@ -15,20 +15,10 @@ public class Shuttle {
     private Vector2 position;
     private Vector2 velocity;
     private int score, scoreView;
-
     private float angle;
     private float acceleration;
-
     private Vector2 tmp;
     private StringBuilder tmpString;
-
-    public Vector2 getPosition() {
-        return position;
-    }
-
-    public void addScore(int amount) {
-        score += amount;
-    }
 
     public Shuttle(GameScreen gs, float x, float y, float acceleration) {
         this.gs = gs;
@@ -43,6 +33,9 @@ public class Shuttle {
         this.tmpString = new StringBuilder(200);
     }
 
+    public void addScore(int amount) {
+        score += amount;
+    }
 
     public void render(SpriteBatch batch) {
         batch.draw(texture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, 1, 1, angle);
@@ -111,11 +104,11 @@ public class Shuttle {
             }
         }
 
-        if(velocity.len() > 600) {
+        if (velocity.len() > 600) {
             dxy = 20;
             for (int i = -70; i < 70; i += 5) {
                 float sa = Math.abs(70.0f - Math.abs(i)) / 70.0f;
-                sa *= ((velocity.len()-600) / 600.0f);
+                sa *= ((velocity.len() - 600) / 600.0f);
                 gs.getParticleEmitter().setup(
                         position.x + 90 * (float) Math.cos(Math.toRadians(angle + i)),
                         position.y + 90 * (float) Math.sin(Math.toRadians(angle + i)),
@@ -156,5 +149,9 @@ public class Shuttle {
             }
             velocity.add(acceleration * (float) Math.cos(Math.toRadians(angle)) * dt, acceleration * (float) Math.sin(Math.toRadians(angle)) * dt);
         }
+    }
+
+    public Vector2 getPosition() {
+        return position;
     }
 }

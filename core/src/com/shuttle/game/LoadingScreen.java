@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 /**
  * Created by FlameXander on 12.03.2018.
  */
-
 public class LoadingScreen implements Screen {
     private SpriteBatch batch;
     private Texture texture;

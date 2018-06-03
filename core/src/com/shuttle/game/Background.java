@@ -6,28 +6,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class Background {
-    private class Star {
-        private Vector2 position;
-        private float speed;
-        private float size;
-
-        public Star() {
-            position = new Vector2(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
-            speed = MathUtils.random(5.0f, 60.0f);
-            size = MathUtils.random(0.5f, 1.5f);
-        }
-
-        public void update(float dt) {
-            position.x -= speed * dt;
-            if (position.x < -20) {
-                position.x = Rules.SPACE_WIDTH;
-                position.y = MathUtils.random(0, Rules.SPACE_HEIGHT);
-                speed = MathUtils.random(5.0f, 60.0f);
-                size = MathUtils.random(0.5f, 1.5f);
-            }
-        }
-    }
-
     private TextureRegion starTexture;
     private Star[] stars;
 
@@ -51,6 +29,28 @@ public class Background {
     public void update(float dt) {
         for (int i = 0; i < stars.length; i++) {
             stars[i].update(dt);
+        }
+    }
+
+    private class Star {
+        private Vector2 position;
+        private float speed;
+        private float size;
+
+        public Star() {
+            position = new Vector2(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
+            speed = MathUtils.random(5.0f, 60.0f);
+            size = MathUtils.random(0.5f, 1.5f);
+        }
+
+        public void update(float dt) {
+            position.x -= speed * dt;
+            if (position.x < -20) {
+                position.x = Rules.SPACE_WIDTH;
+                position.y = MathUtils.random(0, Rules.SPACE_HEIGHT);
+                speed = MathUtils.random(5.0f, 60.0f);
+                size = MathUtils.random(0.5f, 1.5f);
+            }
         }
     }
 }

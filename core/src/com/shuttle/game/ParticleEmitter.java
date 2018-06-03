@@ -43,6 +43,10 @@ public class ParticleEmitter extends ObjectPool<Particle> {
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
+    public float lerp(float value1, float value2, float point) {
+        return value1 + (value2 - value1) * point;
+    }
+
     public void setup(float x, float y, float vx, float vy, float timeMax, float size1, float size2, float r1, float g1, float b1, float a1, float r2, float g2, float b2, float a2) {
         getActiveElement().init(x, y, vx, vy, timeMax, size1, size2, r1, g1, b1, a1, r2, g2, b2, a2);
     }
@@ -52,9 +56,5 @@ public class ParticleEmitter extends ObjectPool<Particle> {
             activeList.get(i).update(dt);
         }
         checkPool();
-    }
-
-    public float lerp(float value1, float value2, float point) {
-        return value1 + (value2 - value1) * point;
     }
 }

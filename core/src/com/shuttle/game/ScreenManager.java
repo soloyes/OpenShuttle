@@ -8,46 +8,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.*;
 
 public class ScreenManager {
-    public enum ScreenType {
-        MENU, GAME;
-    }
-
     private static ScreenManager ourInstance = new ScreenManager();
-
-    public static ScreenManager getInstance() {
-        return ourInstance;
-    }
-
     private ShuttleGame game;
     private Screen targetScreen;
     private LoadingScreen loadingScreen;
     private GameScreen gameScreen;
     private MenuScreen menuScreen;
-
     private SpriteBatch batch;
     private Viewport viewport;
     private Camera camera;
 
-    public Viewport getViewport() {
-        return viewport;
-    }
-
     private ScreenManager() {
-    }
-
-    public void init(ShuttleGame game, SpriteBatch batch) {
-        this.game = game;
-        this.batch = batch;
-        this.camera = new OrthographicCamera(1080, 1920);
-        this.viewport = new FitViewport(1080, 1920, camera);
-        this.gameScreen = new GameScreen(batch, camera);
-        this.menuScreen = new MenuScreen(batch);
-        this.loadingScreen = new LoadingScreen(batch);
-    }
-
-    public void resize(int width, int height) {
-        viewport.update(width, height);
-        viewport.apply();
     }
 
     public void changeScreen(ScreenType type) {
@@ -79,5 +50,32 @@ public class ScreenManager {
 
     public void goToTarget() {
         game.setScreen(targetScreen);
+    }
+
+    public void init(ShuttleGame game, SpriteBatch batch) {
+        this.game = game;
+        this.batch = batch;
+        this.camera = new OrthographicCamera(1080, 1920);
+        this.viewport = new FitViewport(1080, 1920, camera);
+        this.gameScreen = new GameScreen(batch, camera);
+        this.menuScreen = new MenuScreen(batch);
+        this.loadingScreen = new LoadingScreen(batch);
+    }
+
+    public void resize(int width, int height) {
+        viewport.update(width, height);
+        viewport.apply();
+    }
+
+    public static ScreenManager getInstance() {
+        return ourInstance;
+    }
+
+    public Viewport getViewport() {
+        return viewport;
+    }
+
+    public enum ScreenType {
+        MENU, GAME
     }
 }

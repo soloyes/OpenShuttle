@@ -8,24 +8,9 @@ import java.util.List;
 /**
  * Created by FlameXander on 23.09.2017.
  */
-
 public abstract class ObjectPool<T extends Poolable> {
     protected List<T> activeList;
     protected List<T> freeList;
-
-    public List<T> getActiveList() {
-        return activeList;
-    }
-
-    public List<T> getFreeList() {
-        return freeList;
-    }
-
-    protected abstract T newObject();
-
-    public void free(int index) {
-        freeList.add(activeList.remove(index));
-    }
 
     public ObjectPool() {
         this.activeList = new ArrayList<T>();
@@ -38,6 +23,20 @@ public abstract class ObjectPool<T extends Poolable> {
         }
     }
 
+    protected abstract T newObject();
+
+    public void checkPool() {
+        for (int i = activeList.size() - 1; i >= 0; i--) {
+            if (!activeList.get(i).isActive()) {
+                free(i);
+            }
+        }
+    }
+
+    public void free(int index) {
+        freeList.add(activeList.remove(index));
+    }
+
     public T getActiveElement() {
         if (freeList.size() == 0) {
             freeList.add(newObject());
@@ -47,11 +46,11 @@ public abstract class ObjectPool<T extends Poolable> {
         return temp;
     }
 
-    public void checkPool() {
-        for (int i = activeList.size() - 1; i >= 0; i--) {
-            if (!activeList.get(i).isActive()) {
-                free(i);
-            }
-        }
+    public List<T> getActiveList() {
+        return activeList;
+    }
+
+    public List<T> getFreeList() {
+        return freeList;
     }
 }

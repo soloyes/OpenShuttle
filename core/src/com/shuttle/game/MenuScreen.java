@@ -47,6 +47,27 @@ public class MenuScreen implements Screen {
         stage.act(dt);
     }
 
+    @Override
+    public void resize(int width, int height) {
+        ScreenManager.getInstance().resize(width, height);
+    }
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
+    public void hide() {
+    }
+
+    @Override
+    public void dispose() {
+    }
+
     public void createGUI() {
         stage = new Stage(ScreenManager.getInstance().getViewport(), batch);
         Gdx.input.setInputProcessor(stage);
@@ -77,26 +98,5 @@ public class MenuScreen implements Screen {
                 Gdx.app.exit();
             }
         });
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        ScreenManager.getInstance().resize(width, height);
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void hide() {
-    }
-
-    @Override
-    public void dispose() {
     }
 }

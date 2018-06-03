@@ -7,18 +7,14 @@ public class AstronautEmitter extends ObjectPool<Astronaut> {
     private GameScreen gs;
     private float time;
 
-    @Override
-    protected Astronaut newObject() {
-        return new Astronaut(gs);
-    }
-
     public AstronautEmitter(GameScreen gs) {
         this.gs = gs;
 
     }
 
-    public void createBot() {
-        getActiveElement().init(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
+    @Override
+    protected Astronaut newObject() {
+        return new Astronaut(gs);
     }
 
     public void render(SpriteBatch batch) {
@@ -37,5 +33,9 @@ public class AstronautEmitter extends ObjectPool<Astronaut> {
             activeList.get(i).update(dt);
         }
         checkPool();
+    }
+
+    public void createBot() {
+        getActiveElement().init(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
     }
 }
