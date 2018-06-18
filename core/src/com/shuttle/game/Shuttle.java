@@ -1,12 +1,13 @@
 package com.shuttle.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.screens.ScreenManager;
 
 public class Shuttle {
     private GameScreen gs;
@@ -19,7 +20,7 @@ public class Shuttle {
     private float acceleration;
     private float fuel, maxFuel;
     private int hp, maxHp;
-    private int lifes;
+    private int lives;
     private Vector2 tmp;
     private StringBuilder tmpString;
 
@@ -38,7 +39,7 @@ public class Shuttle {
         this.fuel = this.maxFuel;
         this.maxHp = 3;
         this.hp = this.maxHp;
-        this.lifes = 3;
+        this.lives = 3;
     }
 
     public void addScore(int amount) {
@@ -52,8 +53,8 @@ public class Shuttle {
     public void renderGUI(SpriteBatch batch, BitmapFont font) {
         tmpString.setLength(0);
         tmpString.append("SCORE: ").append(scoreView);
-        tmpString.append("\nHP: ").append(hp).append("/").append(maxHp).append(" x").append(lifes);
-        tmpString.append("\nFUEL: ").append((int)fuel).append("/").append((int)maxFuel);
+        tmpString.append("\nHP: ").append(hp).append("/").append(maxHp).append(" x").append(lives);
+        tmpString.append("\nFUEL: ").append((int) fuel).append("/").append((int) maxFuel);
 
         font.draw(batch, tmpString, 20, 1900);
     }
@@ -81,8 +82,8 @@ public class Shuttle {
 
         int dxy = 90;
         gs.getParticleEmitter().setup(
-                position.x - 65 * (float) Math.cos(Math.toRadians(angle)),
-                position.y - 65 * (float) Math.sin(Math.toRadians(angle)),
+                position.x - 100 * (float) Math.cos(Math.toRadians(angle)),
+                position.y - 100 * (float) Math.sin(Math.toRadians(angle)),
                 MathUtils.random(-dxy, dxy),
                 MathUtils.random(-dxy, dxy),
                 0.5f,
@@ -101,8 +102,8 @@ public class Shuttle {
             dxy = 180;
             for (int i = 0; i < 3; i++) {
                 gs.getParticleEmitter().setup(
-                        position.x - 65 * (float) Math.cos(Math.toRadians(angle)),
-                        position.y - 65 * (float) Math.sin(Math.toRadians(angle)),
+                        position.x - 100 * (float) Math.cos(Math.toRadians(angle)),
+                        position.y - 100 * (float) Math.sin(Math.toRadians(angle)),
                         MathUtils.random(-dxy, dxy),
                         MathUtils.random(-dxy, dxy),
                         0.3f,

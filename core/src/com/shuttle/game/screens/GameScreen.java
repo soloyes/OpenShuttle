@@ -1,11 +1,20 @@
-package com.shuttle.game;
+package com.shuttle.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.shuttle.game.AlienEmitter;
+import com.shuttle.game.Assets;
+import com.shuttle.game.Background;
+import com.shuttle.game.Consumable;
+import com.shuttle.game.ConsumableEmitter;
+import com.shuttle.game.ParticleEmitter;
+import com.shuttle.game.Rules;
+import com.shuttle.game.Shuttle;
 
 public class GameScreen implements Screen {
     private SpriteBatch batch;
@@ -29,7 +38,16 @@ public class GameScreen implements Screen {
         consumableEmitter = new ConsumableEmitter(this);
         background = new Background();
         player = new Shuttle(this, 540, 960);
-        font64 = Assets.getInstance().getAssetManager().get("gomarice64.ttf", BitmapFont.class);
+        font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class);
+
+        Assets.getInstance()
+                .getAssetManager()
+                .get("music/game.ogg", Music.class)
+                .play();
+        Assets.getInstance()
+                .getAssetManager()
+                .get("music/game.ogg", Music.class)
+                .setLooping(true);
     }
 
     @Override

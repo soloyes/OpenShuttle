@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.screens.GameScreen;
 
 public class Consumable implements Poolable {
     public enum Type {
@@ -30,7 +31,7 @@ public class Consumable implements Poolable {
         this.gs = gs;
         this.textures = new TextureRegion[2];
         this.textures[0] = Assets.getInstance().getAtlas().findRegion("astronaut");
-        this.textures[1] = Assets.getInstance().getAtlas().findRegion("Crate");
+        this.textures[1] = Assets.getInstance().getAtlas().findRegion("crate");
         this.position = new Vector2(0, 0);
         this.velocity = new Vector2(0, 0);
         this.width = textures[0].getRegionWidth();

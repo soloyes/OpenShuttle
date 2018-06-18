@@ -1,4 +1,4 @@
-package com.shuttle.game;
+package com.shuttle.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.shuttle.game.Assets;
 
 /**
  * Created by FlameXander on 12.03.2018.
@@ -18,7 +19,7 @@ public class LoadingScreen implements Screen {
     public LoadingScreen(SpriteBatch batch) {
         this.batch = batch;
         Pixmap pixmap = new Pixmap(1080, 60, Pixmap.Format.RGB888);
-        pixmap.setColor(Color.GREEN);
+        pixmap.setColor(0.8f, 0.43f, 0.33f, 1f);
         pixmap.fill();
         this.texture = new Texture(pixmap);
         pixmap.dispose();

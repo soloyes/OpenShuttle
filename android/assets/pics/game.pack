@@ -1,0 +1,54 @@
+
+game.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+crate
+  rotate: false
+  xy: 1, 391
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+rocket
+  rotate: false
+  xy: 1, 261
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+astronaut
+  rotate: false
+  xy: 259, 391
+  size: 128, 256
+  orig: 128, 256
+  offset: 0, 0
+  index: -1
+play
+  rotate: false
+  xy: 1, 131
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+exit
+  rotate: false
+  xy: 259, 261
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+alien
+  rotate: false
+  xy: 1, 1
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+star16
+  rotate: false
+  xy: 389, 631
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1

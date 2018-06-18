@@ -1,4 +1,4 @@
-package com.shuttle.game;
+package com.shuttle.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.*;
+import com.shuttle.game.Assets;
+import com.shuttle.game.ShuttleGame;
 
 public class ScreenManager {
     private static ScreenManager ourInstance = new ScreenManager();
