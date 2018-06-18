@@ -3,18 +3,18 @@ package com.shuttle.game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 
-public class AstronautEmitter extends ObjectPool<Astronaut> {
+public class ConsumableEmitter extends ObjectPool<Consumable> {
     private GameScreen gs;
     private float time;
 
-    public AstronautEmitter(GameScreen gs) {
+    public ConsumableEmitter(GameScreen gs) {
         this.gs = gs;
 
     }
 
     @Override
-    protected Astronaut newObject() {
-        return new Astronaut(gs);
+    protected Consumable newObject() {
+        return new Consumable(gs);
     }
 
     public void render(SpriteBatch batch) {

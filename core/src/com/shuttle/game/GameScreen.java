@@ -6,15 +6,13 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector3;
 
 public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Shuttle player;
     private Background background;
     private ParticleEmitter particleEmitter;
-    private AstronautEmitter astronautEmitter;
+    private ConsumableEmitter consumableEmitter;
     private AlienEmitter alienEmitter;
     private BitmapFont font64;
     private Camera camera;
@@ -28,9 +26,9 @@ public class GameScreen implements Screen {
     public void show() {
         particleEmitter = new ParticleEmitter();
         alienEmitter = new AlienEmitter(this);
-        astronautEmitter = new AstronautEmitter(this);
+        consumableEmitter = new ConsumableEmitter(this);
         background = new Background();
-        player = new Shuttle(this, 540, 960, 800);
+        player = new Shuttle(this, 540, 960);
         font64 = Assets.getInstance().getAssetManager().get("gomarice64.ttf", BitmapFont.class);
     }
 
@@ -45,7 +43,7 @@ public class GameScreen implements Screen {
         player.render(batch);
         particleEmitter.render(batch);
         alienEmitter.render(batch);
-        astronautEmitter.render(batch);
+        consumableEmitter.render(batch);
         batch.end();
         ScreenManager.getInstance().resetCamera();
         batch.begin();
@@ -58,7 +56,7 @@ public class GameScreen implements Screen {
         background.update(dt);
         player.update(dt);
         alienEmitter.update(dt);
-        astronautEmitter.update(dt);
+        consumableEmitter.update(dt);
         particleEmitter.update(dt);
         checkCollision();
         cameraUpdate();
@@ -83,8 +81,8 @@ public class GameScreen implements Screen {
     }
 
     public void checkCollision() {
-        for (int i = 0; i < astronautEmitter.getActiveList().size(); i++) {
-            Astronaut a = astronautEmitter.getActiveList().get(i);
+        for (int i = 0; i < consumableEmitter.getActiveList().size(); i++) {
+            Consumable a = consumableEmitter.getActiveList().get(i);
             if (player.getPosition().dst(a.getPosition()) < 144) {
                 a.deactivate();
                 player.addScore(1000);
@@ -121,8 +119,8 @@ public class GameScreen implements Screen {
         return alienEmitter;
     }
 
-    public AstronautEmitter getAstronautEmitter() {
-        return astronautEmitter;
+    public ConsumableEmitter getConsumableEmitter() {
+        return consumableEmitter;
     }
 
     public ParticleEmitter getParticleEmitter() {
