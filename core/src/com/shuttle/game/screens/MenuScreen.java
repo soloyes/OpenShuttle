@@ -1,6 +1,5 @@
 package com.shuttle.game.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -36,7 +35,6 @@ public class MenuScreen extends BaseScreen {
     public void createGUI() {
         font96 = Assets.getInstance().getAssetManager().get("fonts/gomarice96.ttf", BitmapFont.class);
         stage.addActor(new MenuBar());
-        System.out.println(Gdx.graphics.getWidth() + " " + Gdx.graphics.getHeight());
     }
 
     @Override

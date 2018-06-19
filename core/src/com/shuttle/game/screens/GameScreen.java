@@ -1,10 +1,8 @@
 package com.shuttle.game.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.AlienEmitter;
@@ -16,7 +14,7 @@ import com.shuttle.game.ParticleEmitter;
 import com.shuttle.game.Rules;
 import com.shuttle.game.Shuttle;
 
-public class GameScreen implements Screen {
+public class GameScreen extends BaseScreen implements Screen {
     private SpriteBatch batch;
     private Shuttle player;
     private Background background;
@@ -27,19 +25,14 @@ public class GameScreen implements Screen {
     private Camera camera;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
+        super(batch);
         this.batch = batch;
         this.camera = camera;
     }
 
     @Override
     public void show() {
-        particleEmitter = new ParticleEmitter();
-        alienEmitter = new AlienEmitter(this);
-        consumableEmitter = new ConsumableEmitter(this);
-        background = new Background();
-        player = new Shuttle(this, 540, 960);
-        font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class);
-
+        createGUI();
         Assets.getInstance()
                 .getAssetManager()
                 .get("music/game.ogg", Music.class)
@@ -51,10 +44,19 @@ public class GameScreen implements Screen {
     }
 
     @Override
+    void createGUI() {
+        particleEmitter = new ParticleEmitter();
+        alienEmitter = new AlienEmitter(this);
+        consumableEmitter = new ConsumableEmitter(this);
+        background = new Background();
+        player = new Shuttle(this, 540, 960);
+        font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class);
+    }
+
+    @Override
     public void render(float delta) {
+        super.render(delta);
         update(delta);
-        Gdx.gl.glClearColor(0, 0, 0.05f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         background.render(batch);
@@ -82,6 +84,7 @@ public class GameScreen implements Screen {
 
     public void cameraUpdate() {
         camera.position.set(player.getPosition().x, player.getPosition().y, 0);
+
         if (camera.position.x < 540) {
             camera.position.x = 540;
         }
@@ -106,31 +109,6 @@ public class GameScreen implements Screen {
                 player.addScore(1000);
             }
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        ScreenManager.getInstance().resize(width, height);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        batch.dispose();
     }
 
     public AlienEmitter getAlienEmitter() {
