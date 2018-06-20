@@ -38,6 +38,9 @@ public class Assets {
                 assetManager.load("music/game.ogg", Music.class);
                 createStdFont(64);
                 break;
+            case CONFIG:
+                assetManager.load("pics/game.pack", TextureAtlas.class);
+                createStdFont(64);
         }
     }
 

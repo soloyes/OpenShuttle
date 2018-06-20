@@ -1,9 +1,6 @@
 package com.shuttle.game.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,11 +9,12 @@ import com.shuttle.game.Assets;
 /**
  * Created by FlameXander on 12.03.2018.
  */
-public class LoadingScreen implements Screen {
+public class LoadingScreen extends BaseScreen implements Screen {
     private SpriteBatch batch;
     private Texture texture;
 
     public LoadingScreen(SpriteBatch batch) {
+        super(batch);
         this.batch = batch;
         Pixmap pixmap = new Pixmap(1080, 60, Pixmap.Format.RGB888);
         pixmap.setColor(0.8f, 0.43f, 0.33f, 1f);
@@ -30,9 +28,13 @@ public class LoadingScreen implements Screen {
     }
 
     @Override
+    void createGUI() {
+
+    }
+
+    @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        super.render(delta);
         if (Assets.getInstance().getAssetManager().update()) {
             Assets.getInstance().makeLinks();
             ScreenManager.getInstance().goToTarget();
@@ -40,23 +42,6 @@ public class LoadingScreen implements Screen {
         batch.begin();
         batch.draw(texture, 0, 0, 1080 * Assets.getInstance().getAssetManager().getProgress(), 60);
         batch.end();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        ScreenManager.getInstance().resize(width, height);
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void hide() {
     }
 
     @Override
