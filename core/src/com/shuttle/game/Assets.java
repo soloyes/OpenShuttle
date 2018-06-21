@@ -40,7 +40,9 @@ public class Assets {
                 break;
             case CONFIG:
                 assetManager.load("pics/game.pack", TextureAtlas.class);
+                createStdFont(32);
                 createStdFont(64);
+                createStdFont(96);
         }
     }
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.Assets;
 import com.shuttle.game.buttons.MenuBar;
+import com.shuttle.game.conf.GamePreferences;
 
 /**
  * @author Shuttle on 3/24/18.
@@ -12,23 +13,32 @@ import com.shuttle.game.buttons.MenuBar;
 public class MenuScreen extends BaseScreen {
     private BitmapFont font96;
     private SpriteBatch batch;
+    private GamePreferences preferences;
 
     public MenuScreen(SpriteBatch batch) {
         super(batch);
         this.batch = batch;
+        //:todo Maybe better to to Util class Preferences instead current realization.
+        preferences = new GamePreferences();
     }
 
     @Override
     public void show() {
         super.show();
-        Assets.getInstance()
-                .getAssetManager()
-                .get("music/menu.ogg", Music.class)
-                .play();
-        Assets.getInstance()
-                .getAssetManager()
-                .get("music/menu.ogg", Music.class)
-                .setLooping(true);
+        if (preferences.isMusicEnabled()) {
+            Assets.getInstance()
+                    .getAssetManager()
+                    .get("music/menu.ogg", Music.class)
+                    .play();
+            Assets.getInstance()
+                    .getAssetManager()
+                    .get("music/menu.ogg", Music.class)
+                    .setLooping(true);
+            Assets.getInstance()
+                    .getAssetManager()
+                    .get("music/menu.ogg", Music.class)
+                    .setVolume(preferences.getMusicVolume());
+        }
     }
 
     @Override

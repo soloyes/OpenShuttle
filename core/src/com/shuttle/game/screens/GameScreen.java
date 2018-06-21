@@ -13,6 +13,7 @@ import com.shuttle.game.ConsumableEmitter;
 import com.shuttle.game.ParticleEmitter;
 import com.shuttle.game.Rules;
 import com.shuttle.game.Shuttle;
+import com.shuttle.game.conf.GamePreferences;
 
 public class GameScreen extends BaseScreen implements Screen {
     private SpriteBatch batch;
@@ -23,24 +24,33 @@ public class GameScreen extends BaseScreen implements Screen {
     private AlienEmitter alienEmitter;
     private BitmapFont font64;
     private Camera camera;
+    private GamePreferences preferences;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
         this.batch = batch;
         this.camera = camera;
+        //:todo Maybe better to to Util class Preferences instead current realization.
+        preferences = new GamePreferences();
     }
 
     @Override
     public void show() {
         createGUI();
-        Assets.getInstance()
-                .getAssetManager()
-                .get("music/game.ogg", Music.class)
-                .play();
-        Assets.getInstance()
-                .getAssetManager()
-                .get("music/game.ogg", Music.class)
-                .setLooping(true);
+        if (preferences.isMusicEnabled()) {
+            Assets.getInstance()
+                    .getAssetManager()
+                    .get("music/game.ogg", Music.class)
+                    .play();
+            Assets.getInstance()
+                    .getAssetManager()
+                    .get("music/game.ogg", Music.class)
+                    .setLooping(true);
+            Assets.getInstance()
+                    .getAssetManager()
+                    .get("music/game.ogg", Music.class)
+                    .setVolume(preferences.getMusicVolume());
+        }
     }
 
     @Override
