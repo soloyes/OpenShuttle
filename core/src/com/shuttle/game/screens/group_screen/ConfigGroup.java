@@ -24,6 +24,7 @@ import com.shuttle.game.screens.ScreenManager;
 public class ConfigGroup extends Group {
     private Table table;
     private Array<Music> musicArray;
+    private GamePreferences preferences = new GamePreferences();
 
     public ConfigGroup() {
         /////////
@@ -59,7 +60,7 @@ public class ConfigGroup extends Group {
         //table.setDebug(true);
 
         final Slider musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, skin, "default-horizontal");
-        musicSlider.setValue(GamePreferences.getOurInstance().getMusicVolume());
+        musicSlider.setValue(preferences.getMusicVolume());
         musicSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
@@ -68,23 +69,23 @@ public class ConfigGroup extends Group {
                 for (int i = 0; i < musicArray.size; i++) {
                     musicArray.get(i).setVolume(musicSlider.getValue());
                 }
-                GamePreferences.getOurInstance().setMusicVolume(musicSlider.getValue());
+                preferences.setMusicVolume(musicSlider.getValue());
                 return false;
             }
         });
 
         final Slider soundSlider = new Slider(0.0f, 1.0f, 0.1f, false, skin, "default-horizontal");
-        soundSlider.setValue(GamePreferences.getOurInstance().getSoundVolume());
+        soundSlider.setValue(preferences.getSoundVolume());
         soundSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                GamePreferences.getOurInstance().setSoundVolume(soundSlider.getValue());
+                preferences.setSoundVolume(soundSlider.getValue());
                 return false;
             }
         });
 
         final CheckBox musicCheckBox = new CheckBox("Music", checkBoxStyle32);
-        musicCheckBox.setChecked(GamePreferences.getOurInstance().isMusicEnabled());
+        musicCheckBox.setChecked(preferences.isMusicEnabled());
         musicCheckBox.addListener(new ClickListener() {
             @Override
             public boolean handle(Event event) {
@@ -95,18 +96,18 @@ public class ConfigGroup extends Group {
                     if (enabled) musicArray.get(i).play();
                     else musicArray.get(i).stop();
                 }
-                GamePreferences.getOurInstance().setMusicEnabled(enabled);
+                preferences.setMusicEnabled(enabled);
                 return false;
             }
         });
 
         final CheckBox soundCheckBox = new CheckBox("Sound", checkBoxStyle32);
-        soundCheckBox.setChecked(GamePreferences.getOurInstance().isSoundEnabled());
+        soundCheckBox.setChecked(preferences.isSoundEnabled());
         soundCheckBox.addListener(new ClickListener() {
             @Override
             public boolean handle(Event event) {
                 boolean enabled = soundCheckBox.isChecked();
-                GamePreferences.getOurInstance().setSoundEnabled(enabled);
+                preferences.setSoundEnabled(enabled);
                 return false;
             }
         });

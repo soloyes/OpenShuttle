@@ -13,6 +13,9 @@ public class ShuttleGame extends Game {
     public void create() {
         batch = new SpriteBatch();
         ScreenManager.getInstance().init(this, batch);
+        if (screenType == null){
+            screenType = ScreenManager.ScreenType.MENU;
+        }
         ScreenManager.getInstance().changeScreen(screenType);
     }
 

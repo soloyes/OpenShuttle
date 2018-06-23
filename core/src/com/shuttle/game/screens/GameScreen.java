@@ -1,7 +1,5 @@
 package com.shuttle.game.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -19,10 +17,8 @@ import com.shuttle.game.ConsumableEmitter;
 import com.shuttle.game.ParticleEmitter;
 import com.shuttle.game.Rules;
 import com.shuttle.game.Shuttle;
-import com.shuttle.game.conf.GamePreferences;
 
 public class GameScreen extends BaseScreen {
-    private SpriteBatch batch;
     private Shuttle player;
     private Background background;
     private ParticleEmitter particleEmitter;
@@ -34,7 +30,6 @@ public class GameScreen extends BaseScreen {
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
-        this.batch = batch;
         this.camera = camera;
     }
 
@@ -42,7 +37,11 @@ public class GameScreen extends BaseScreen {
     public void show() {
         super.show();
         createGUI();
-        if (GamePreferences.getOurInstance().isMusicEnabled()) {
+        if (preferences.isMusicEnabled()) {
+            Assets.getInstance()
+                    .getAssetManager()
+                    .get("music/game.ogg", Music.class)
+                    .setVolume(preferences.getMusicVolume());
             Assets.getInstance()
                     .getAssetManager()
                     .get("music/game.ogg", Music.class)
@@ -51,10 +50,6 @@ public class GameScreen extends BaseScreen {
                     .getAssetManager()
                     .get("music/game.ogg", Music.class)
                     .setLooping(true);
-            Assets.getInstance()
-                    .getAssetManager()
-                    .get("music/game.ogg", Music.class)
-                    .setVolume(GamePreferences.getOurInstance().getMusicVolume());
         }
     }
 

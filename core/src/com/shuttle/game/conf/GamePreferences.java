@@ -7,14 +7,14 @@ import com.badlogic.gdx.Preferences;
  * @author Shuttle on 6/19/18.
  */
 public class GamePreferences {
-    private static GamePreferences ourInstance = new GamePreferences();
     private static final String PREF_MUSIC_VOLUME = "volume";
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
     private static final String PREF_SOUND_VOLUME = "sound";
     private static final String PREFS_NAME = "shuttleGame_preferences";
+    private Preferences preferences;
 
-    private GamePreferences() {
+    public GamePreferences() {
         if (!getPrefs().contains(PREF_MUSIC_VOLUME)) {
             setMusicVolume(0.5f);
         }
@@ -29,8 +29,10 @@ public class GamePreferences {
         }
     }
 
-    private Preferences getPrefs() {
-        return Gdx.app.getPreferences(PREFS_NAME);
+    public Preferences getPrefs() {
+        if (preferences == null)
+            preferences = Gdx.app.getPreferences(PREFS_NAME);
+        return preferences;
     }
 
     public float getMusicVolume() {
@@ -40,10 +42,6 @@ public class GamePreferences {
     public void setMusicVolume(float volume) {
         getPrefs().putFloat(PREF_MUSIC_VOLUME, volume);
         getPrefs().flush();
-    }
-
-    public static GamePreferences getOurInstance() {
-        return ourInstance;
     }
 
     public float getSoundVolume() {

@@ -5,15 +5,20 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.shuttle.game.conf.GamePreferences;
 
 /**
  * @author Shuttle on 4/6/18.
  */
 public abstract class BaseScreen implements Screen {
     protected Stage stage;
+    protected GamePreferences preferences;
+    protected SpriteBatch batch;
 
     public BaseScreen(SpriteBatch batch) {
-        stage = new Stage(ScreenManager.getInstance().getViewport(), batch);
+        this.stage = new Stage(ScreenManager.getInstance().getViewport(), batch);
+        this.preferences = new GamePreferences();
+        this.batch = batch;
     }
 
     @Override
