@@ -7,29 +7,34 @@ import com.badlogic.gdx.Preferences;
  * @author Shuttle on 6/19/18.
  */
 public class GamePreferences {
+    private static GamePreferences ourInstance = new GamePreferences();
     private static final String PREF_MUSIC_VOLUME = "volume";
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
     private static final String PREF_SOUND_VOLUME = "sound";
     private static final String PREFS_NAME = "shuttleGame_preferences";
 
-    public GamePreferences() {
-        if (!getPrefs().contains(PREF_MUSIC_VOLUME)){
+    private GamePreferences() {
+        if (!getPrefs().contains(PREF_MUSIC_VOLUME)) {
             setMusicVolume(0.5f);
         }
-        if (!getPrefs().contains(PREF_SOUND_VOLUME)){
+        if (!getPrefs().contains(PREF_SOUND_VOLUME)) {
             setSoundVolume(0.5f);
         }
-        if (!getPrefs().contains(PREF_MUSIC_ENABLED)){
+        if (!getPrefs().contains(PREF_MUSIC_ENABLED)) {
             setMusicEnabled(true);
         }
-        if (!getPrefs().contains(PREF_SOUND_ENABLED)){
-            setSoundEffectsEnabled(true);
+        if (!getPrefs().contains(PREF_SOUND_ENABLED)) {
+            setSoundEnabled(true);
         }
     }
 
+    private Preferences getPrefs() {
+        return Gdx.app.getPreferences(PREFS_NAME);
+    }
+
     public float getMusicVolume() {
-        return getPrefs().getFloat(PREF_MUSIC_VOLUME, 0.5f);
+        return getPrefs().getFloat(PREF_MUSIC_VOLUME);
     }
 
     public void setMusicVolume(float volume) {
@@ -37,12 +42,12 @@ public class GamePreferences {
         getPrefs().flush();
     }
 
-    private Preferences getPrefs() {
-        return Gdx.app.getPreferences(PREFS_NAME);
+    public static GamePreferences getOurInstance() {
+        return ourInstance;
     }
 
     public float getSoundVolume() {
-        return getPrefs().getFloat(PREF_SOUND_VOLUME, 0.5f);
+        return getPrefs().getFloat(PREF_SOUND_VOLUME);
     }
 
     public void setSoundVolume(float volume) {
@@ -51,7 +56,7 @@ public class GamePreferences {
     }
 
     public boolean isMusicEnabled() {
-        return getPrefs().getBoolean(PREF_MUSIC_ENABLED, true);
+        return getPrefs().getBoolean(PREF_MUSIC_ENABLED);
     }
 
     public void setMusicEnabled(boolean musicEnabled) {
@@ -59,11 +64,11 @@ public class GamePreferences {
         getPrefs().flush();
     }
 
-    public boolean isSoundEffectsEnabled() {
-        return getPrefs().getBoolean(PREF_SOUND_ENABLED, true);
+    public boolean isSoundEnabled() {
+        return getPrefs().getBoolean(PREF_SOUND_ENABLED);
     }
 
-    public void setSoundEffectsEnabled(boolean soundEffectsEnabled) {
+    public void setSoundEnabled(boolean soundEffectsEnabled) {
         getPrefs().putBoolean(PREF_SOUND_ENABLED, soundEffectsEnabled);
         getPrefs().flush();
     }

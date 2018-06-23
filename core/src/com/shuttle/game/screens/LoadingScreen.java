@@ -28,7 +28,7 @@ public class LoadingScreen extends BaseScreen implements Screen {
     }
 
     @Override
-    void createGUI() {
+    public void createGUI() {
 
     }
 

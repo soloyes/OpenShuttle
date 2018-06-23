@@ -5,8 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.screens.ScreenManager;
 
-import lombok.NonNull;
-
 public class ShuttleGame extends Game {
     private SpriteBatch batch;
     private ScreenManager.ScreenType screenType;

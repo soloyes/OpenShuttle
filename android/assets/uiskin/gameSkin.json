@@ -276,12 +276,39 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 			a: 1
 		}
 	}
+	button-c1: {
+		name: button
+		color: {
+			r: 0.8
+			g: 0.42745098
+			b: 0.32941177
+			a: 1
+		}
+	}
+	button-pressed-c1: {
+		name: button-pressed
+		color: {
+			r: 0.8
+			g: 0.42745098
+			b: 0.32941177
+			a: 1
+		}
+	}
+	button-over-c1: {
+		name: button-over
+		color: {
+			r: 0.8
+			g: 0.42745098
+			b: 0.32941177
+			a: 1
+		}
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {
-		up: button-c
-		down: button-pressed-c
-		over: button-over-c
+		up: button-c1
+		down: button-pressed-c1
+		over: button-over-c1
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {

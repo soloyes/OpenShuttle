@@ -1,10 +1,16 @@
 package com.shuttle.game.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.AlienEmitter;
 import com.shuttle.game.Assets;
 import com.shuttle.game.Background;
@@ -15,7 +21,7 @@ import com.shuttle.game.Rules;
 import com.shuttle.game.Shuttle;
 import com.shuttle.game.conf.GamePreferences;
 
-public class GameScreen extends BaseScreen implements Screen {
+public class GameScreen extends BaseScreen {
     private SpriteBatch batch;
     private Shuttle player;
     private Background background;
@@ -24,20 +30,19 @@ public class GameScreen extends BaseScreen implements Screen {
     private AlienEmitter alienEmitter;
     private BitmapFont font64;
     private Camera camera;
-    private GamePreferences preferences;
+    private Button pauseBtn;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
         this.batch = batch;
         this.camera = camera;
-        //:todo Maybe better to to Util class Preferences instead current realization.
-        preferences = new GamePreferences();
     }
 
     @Override
     public void show() {
+        super.show();
         createGUI();
-        if (preferences.isMusicEnabled()) {
+        if (GamePreferences.getOurInstance().isMusicEnabled()) {
             Assets.getInstance()
                     .getAssetManager()
                     .get("music/game.ogg", Music.class)
@@ -49,18 +54,35 @@ public class GameScreen extends BaseScreen implements Screen {
             Assets.getInstance()
                     .getAssetManager()
                     .get("music/game.ogg", Music.class)
-                    .setVolume(preferences.getMusicVolume());
+                    .setVolume(GamePreferences.getOurInstance().getMusicVolume());
         }
     }
 
     @Override
-    void createGUI() {
+    public void createGUI() {
         particleEmitter = new ParticleEmitter();
         alienEmitter = new AlienEmitter(this);
         consumableEmitter = new ConsumableEmitter(this);
         background = new Background();
         player = new Shuttle(this, 540, 960);
         font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class);
+
+        Skin skin = Assets.getInstance().getAssetManager().get("uiskin/gameSkin.json");
+        pauseBtn = new Button(skin, "default");
+        pauseBtn.setOrigin(Align.center);
+        pauseBtn.setSize(128f, 128f);
+        pauseBtn.setPosition(
+                ScreenManager.getInstance().getViewport().getWorldWidth() - pauseBtn.getWidth() - 20,
+                ScreenManager.getInstance().getViewport().getWorldHeight() - pauseBtn.getHeight() - 20
+        );
+        pauseBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
+            }
+        });
+
+        stage.addActor(pauseBtn);
     }
 
     @Override
@@ -79,6 +101,7 @@ public class GameScreen extends BaseScreen implements Screen {
         batch.begin();
         player.renderGUI(batch, font64);
         batch.end();
+        stage.draw();
     }
 
     public void update(float dt) {

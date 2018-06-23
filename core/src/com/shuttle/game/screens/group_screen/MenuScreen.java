@@ -1,31 +1,23 @@
-package com.shuttle.game.screens;
+package com.shuttle.game.screens.group_screen;
 
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.Assets;
-import com.shuttle.game.buttons.MenuBar;
 import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.screens.BaseScreen;
 
 /**
  * @author Shuttle on 3/24/18.
  */
 public class MenuScreen extends BaseScreen {
-    private BitmapFont font96;
-    private SpriteBatch batch;
-    private GamePreferences preferences;
-
     public MenuScreen(SpriteBatch batch) {
         super(batch);
-        this.batch = batch;
-        //:todo Maybe better to to Util class Preferences instead current realization.
-        preferences = new GamePreferences();
     }
 
     @Override
     public void show() {
         super.show();
-        if (preferences.isMusicEnabled()) {
+        if (GamePreferences.getOurInstance().isMusicEnabled()) {
             Assets.getInstance()
                     .getAssetManager()
                     .get("music/menu.ogg", Music.class)
@@ -37,23 +29,20 @@ public class MenuScreen extends BaseScreen {
             Assets.getInstance()
                     .getAssetManager()
                     .get("music/menu.ogg", Music.class)
-                    .setVolume(preferences.getMusicVolume());
+                    .setVolume(GamePreferences.getOurInstance().getMusicVolume());
         }
     }
 
     @Override
     public void createGUI() {
-        font96 = Assets.getInstance().getAssetManager().get("fonts/gomarice96.ttf", BitmapFont.class);
+        stage.addActor(new MenuGroup());
+        stage.addActor(new ConfigGroup());
         stage.addActor(new MenuBar());
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-        batch.begin();
-        font96.draw(batch, "Shuttle", 0, 1800, 1080, 1, false);
-        batch.end();
-        stage.act(delta);
         stage.draw();
     }
 }

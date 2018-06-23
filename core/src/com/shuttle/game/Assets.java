@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.shuttle.game.screens.ScreenManager;
 
 public class Assets {
@@ -29,20 +30,18 @@ public class Assets {
         switch (type) {
             case MENU:
                 assetManager.load("pics/game.pack", TextureAtlas.class);
-                createStdFont(32);
-                createStdFont(96);
                 assetManager.load("music/menu.ogg", Music.class);
+                assetManager.load("uiskin/gameSkin.json", Skin.class);
+                createStdFont(32);
+                createStdFont(64);
+                createStdFont(96);
                 break;
             case GAME:
                 assetManager.load("pics/game.pack", TextureAtlas.class);
                 assetManager.load("music/game.ogg", Music.class);
+                assetManager.load("uiskin/gameSkin.json", Skin.class);
                 createStdFont(64);
                 break;
-            case CONFIG:
-                assetManager.load("pics/game.pack", TextureAtlas.class);
-                createStdFont(32);
-                createStdFont(64);
-                createStdFont(96);
         }
     }
 

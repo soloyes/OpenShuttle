@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.*;
 import com.shuttle.game.Assets;
 import com.shuttle.game.ShuttleGame;
+import com.shuttle.game.screens.group_screen.MenuScreen;
 
 public class ScreenManager {
     private static ScreenManager ourInstance = new ScreenManager();
@@ -16,7 +17,6 @@ public class ScreenManager {
     private LoadingScreen loadingScreen;
     private GameScreen gameScreen;
     private MenuScreen menuScreen;
-    private ConfigScreen configScreen;
     private SpriteBatch batch;
     private Viewport viewport;
     private Camera camera;
@@ -42,10 +42,6 @@ public class ScreenManager {
                 targetScreen = gameScreen;
                 Assets.getInstance().loadAssets(ScreenType.GAME);
                 break;
-            case CONFIG:
-                targetScreen = configScreen;
-                Assets.getInstance().loadAssets(ScreenType.CONFIG);
-                break;
         }
     }
 
@@ -67,7 +63,6 @@ public class ScreenManager {
         this.gameScreen = new GameScreen(batch, camera);
         this.menuScreen = new MenuScreen(batch);
         this.loadingScreen = new LoadingScreen(batch);
-        this.configScreen = new ConfigScreen(batch);
     }
 
     public void resize(int width, int height) {
