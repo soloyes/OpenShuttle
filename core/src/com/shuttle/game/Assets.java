@@ -40,7 +40,9 @@ public class Assets {
                 assetManager.load("pics/game.pack", TextureAtlas.class);
                 assetManager.load("music/game.ogg", Music.class);
                 assetManager.load("uiskin/gameSkin.json", Skin.class);
+                createStdFont(32);
                 createStdFont(64);
+                createStdFont(96);
                 break;
         }
     }

@@ -1,7 +1,7 @@
 package com.shuttle.game.screens;
 
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Camera;;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -17,6 +17,7 @@ import com.shuttle.game.ConsumableEmitter;
 import com.shuttle.game.ParticleEmitter;
 import com.shuttle.game.Rules;
 import com.shuttle.game.Shuttle;
+import com.shuttle.game.screens.group_screen.ConfigGroup;
 
 public class GameScreen extends BaseScreen {
     private Shuttle player;
@@ -26,11 +27,12 @@ public class GameScreen extends BaseScreen {
     private AlienEmitter alienEmitter;
     private BitmapFont font64;
     private Camera camera;
-    private Button pauseBtn;
+    private boolean pause;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
         this.camera = camera;
+        pause = false;
     }
 
     @Override
@@ -63,51 +65,86 @@ public class GameScreen extends BaseScreen {
         font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class);
 
         Skin skin = Assets.getInstance().getAssetManager().get("uiskin/gameSkin.json");
-        pauseBtn = new Button(skin, "default");
+        Button pauseBtn = new Button(skin, "default");
         pauseBtn.setOrigin(Align.center);
         pauseBtn.setSize(128f, 128f);
         pauseBtn.setPosition(
                 ScreenManager.getInstance().getViewport().getWorldWidth() - pauseBtn.getWidth() - 20,
                 ScreenManager.getInstance().getViewport().getWorldHeight() - pauseBtn.getHeight() - 20
         );
-        pauseBtn.addListener(new ChangeListener() {
+
+        final ConfigGroup configGroup = new ConfigGroup();
+        configGroup.setVisible(false);
+        final Button buttonMenu = new Button(skin, "default");
+        buttonMenu.setVisible(false);
+        final Button buttonRestart = new Button(skin, "default");
+        buttonRestart.setVisible(false);
+
+        buttonMenu.setOrigin(Align.center);
+        buttonRestart.setOrigin(Align.center);
+
+        buttonMenu.setSize(128f, 128f);
+        buttonRestart.setSize(128f, 128f);
+
+        buttonRestart.setPosition(
+                ScreenManager.getInstance().getViewport().getWorldWidth() - buttonRestart.getWidth(),
+                0
+        );
+
+        buttonMenu.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
             }
         });
 
+        buttonRestart.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
+            }
+        });
+
+        pauseBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                pause = !pause;
+                configGroup.setVisible(pause);
+                buttonMenu.setVisible(pause);
+                buttonRestart.setVisible(pause);
+            }
+        });
+
         stage.addActor(pauseBtn);
+        stage.addActor(configGroup);
+        stage.addActor(buttonMenu);
+        stage.addActor(buttonRestart);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-        update(delta);
+        if (pause) {
+            cameraUpdate();
+        } else {
+            update(delta);
+        }
+        checkPause();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         background.render(batch);
         player.render(batch);
-        particleEmitter.render(batch);
+
+        if (!pause)
+            particleEmitter.render(batch);
+        checkPause();
         alienEmitter.render(batch);
         consumableEmitter.render(batch);
-        batch.end();
         ScreenManager.getInstance().resetCamera();
-        batch.begin();
         player.renderGUI(batch, font64);
         batch.end();
-        stage.draw();
-    }
 
-    public void update(float dt) {
-        cameraUpdate();
-        background.update(dt);
-        player.update(dt);
-        alienEmitter.update(dt);
-        consumableEmitter.update(dt);
-        particleEmitter.update(dt);
-        checkCollision();
-        cameraUpdate();
+        stage.draw();
     }
 
     public void cameraUpdate() {
@@ -127,6 +164,27 @@ public class GameScreen extends BaseScreen {
         }
 
         camera.update();
+    }
+
+    public void update(float dt) {
+        cameraUpdate();
+        background.update(dt);
+        player.update(dt);
+        alienEmitter.update(dt);
+        consumableEmitter.update(dt);
+        particleEmitter.update(dt);
+        checkCollision();
+        cameraUpdate();
+    }
+
+    private void checkPause() {
+        if (pause) {
+            batch.setColor(1, 1, 1, 0.3f);
+            font64.setColor(1, 1, 1, 0.3f);
+        } else {
+            batch.setColor(1, 1, 1, 1);
+            font64.setColor(1, 1, 1, 1f);
+        }
     }
 
     public void checkCollision() {
@@ -149,5 +207,11 @@ public class GameScreen extends BaseScreen {
 
     public ParticleEmitter getParticleEmitter() {
         return particleEmitter;
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        pause = false;
     }
 }

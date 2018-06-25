@@ -1,7 +1,5 @@
 package com.shuttle.game;
 
-import com.badlogic.gdx.utils.Pool;
-
 import java.util.ArrayList;
 import java.util.List;
 

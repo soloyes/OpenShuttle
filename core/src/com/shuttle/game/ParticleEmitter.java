@@ -3,8 +3,6 @@ package com.shuttle.game;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
 
 /**
  * Created by FlameXander on 02.07.2017.
@@ -30,7 +28,7 @@ public class ParticleEmitter extends ObjectPool<Particle> {
             batch.setColor(lerp(o.getR1(), o.getR2(), t), lerp(o.getG1(), o.getG2(), t), lerp(o.getB1(), o.getB2(), t), lerp(o.getA1(), o.getA2(), t));
             batch.draw(oneParticle, o.getPosition().x - 8, o.getPosition().y - 8, 8, 8, 16, 16, scale, scale, 0);
         }
-        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        //batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
         for (int i = 0; i < activeList.size(); i++) {
             Particle o = activeList.get(i);

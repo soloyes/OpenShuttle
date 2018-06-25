@@ -93,7 +93,10 @@ public class ConfigGroup extends Group {
                 Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
                 boolean enabled = musicCheckBox.isChecked();
                 for (int i = 0; i < musicArray.size; i++) {
-                    if (enabled) musicArray.get(i).play();
+                    if (enabled) {
+                        musicArray.get(i).setVolume(preferences.getMusicVolume());
+                        musicArray.get(i).play();
+                    }
                     else musicArray.get(i).stop();
                 }
                 preferences.setMusicEnabled(enabled);

@@ -9,8 +9,8 @@ public class ConsumableEmitter extends ObjectPool<Consumable> {
     private float time;
 
     public ConsumableEmitter(GameScreen gs) {
+        super();
         this.gs = gs;
-
     }
 
     @Override
