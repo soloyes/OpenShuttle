@@ -23,6 +23,11 @@ public class Shuttle {
     private int lives;
     private Vector2 tmp;
     private StringBuilder tmpString;
+    private int takeRange;
+
+    public int getTakeRange() {
+        return takeRange;
+    }
 
     public Shuttle(GameScreen gs, float x, float y) {
         this.gs = gs;
@@ -40,6 +45,7 @@ public class Shuttle {
         this.maxHp = 3;
         this.hp = this.maxHp;
         this.lives = 3;
+        this.takeRange = 500;
     }
 
     public void addScore(int amount) {

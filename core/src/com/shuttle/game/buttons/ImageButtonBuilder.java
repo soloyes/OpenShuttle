@@ -25,6 +25,7 @@ public class ImageButtonBuilder {
         myButtonStyle = new ImageButton.ImageButtonStyle();
         myButtonStyle.imageUp = skin.getDrawable(name);
         myButton = new ImageButton(myButtonStyle);
+        myButton.setOrigin(1);
         myButton.setScale(SCALE);
         myButton.setTransform(true);
 

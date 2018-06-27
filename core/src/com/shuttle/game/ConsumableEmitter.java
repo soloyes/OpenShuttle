@@ -10,7 +10,9 @@ public class ConsumableEmitter extends ObjectPool<Consumable> {
 
     public ConsumableEmitter(GameScreen gs) {
         this.gs = gs;
-
+        for (int i = 0; i < 20; i++) {
+            createBot();
+        }
     }
 
     @Override

@@ -5,6 +5,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.AlienEmitter;
 import com.shuttle.game.Assets;
 import com.shuttle.game.Background;
@@ -23,11 +25,13 @@ public class GameScreen extends BaseScreen implements Screen {
     private AlienEmitter alienEmitter;
     private BitmapFont font64;
     private Camera camera;
+    private Vector2 tmp;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
         this.batch = batch;
         this.camera = camera;
+        this.tmp = new Vector2(0, 0);
     }
 
     @Override
@@ -61,9 +65,9 @@ public class GameScreen extends BaseScreen implements Screen {
         batch.begin();
         background.render(batch);
         player.render(batch);
-        particleEmitter.render(batch);
         alienEmitter.render(batch);
         consumableEmitter.render(batch);
+        particleEmitter.render(batch);
         batch.end();
         ScreenManager.getInstance().resetCamera();
         batch.begin();
@@ -78,7 +82,7 @@ public class GameScreen extends BaseScreen implements Screen {
         alienEmitter.update(dt);
         consumableEmitter.update(dt);
         particleEmitter.update(dt);
-        checkCollision();
+        checkCollision(dt);
         cameraUpdate();
     }
 
@@ -101,12 +105,36 @@ public class GameScreen extends BaseScreen implements Screen {
         camera.update();
     }
 
-    public void checkCollision() {
+    public void checkCollision(float dt) {
         for (int i = 0; i < consumableEmitter.getActiveList().size(); i++) {
             Consumable a = consumableEmitter.getActiveList().get(i);
-            if (player.getPosition().dst(a.getPosition()) < 144) {
+            if (player.getPosition().dst(a.getPosition()) < 60) {
                 a.deactivate();
                 player.addScore(1000);
+            }
+
+            if (player.getPosition().dst(a.getPosition()) < player.getTakeRange()) {
+                particleEmitter.setupFromPointToPoint(a.getPosition().x, a.getPosition().y, player.getPosition().x, player.getPosition().y, 1400, 1, 2, 0, 1, 0, 0.3f, 0.5f, 1, 0.5f, 0.3f);
+
+                tmp.set(player.getPosition());
+                tmp.sub(a.getPosition());
+                tmp.nor();
+                tmp.scl(200.0f);
+                a.getPosition().mulAdd(tmp, dt);
+                float dst = Vector2.dst(player.getPosition().x, player.getPosition().y, a.getPosition().x, a.getPosition().y);
+                float k = dst / player.getTakeRange();
+                k += 0.2f;
+                if (k > 1.0f) {
+                    k = 1.0f;
+                }
+
+                for (int j = 0; j < 24; j++) {
+                    float ang = 6.28f / 24 * j;
+                    float rad = 128 * k;
+                    particleEmitter.setup(a.getPosition().x + rad * (float)Math.cos(ang) + MathUtils.random(-10, 10), a.getPosition().y + rad * (float)Math.sin(ang) + MathUtils.random(-10, 10), MathUtils.random(-20,20), MathUtils.random(-20,20), 0.05f,3,3,0,1,0,0.2f,0,1,0,0.0f);
+                }
+
+                a.setDrawScale(k);
             }
         }
     }
