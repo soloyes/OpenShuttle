@@ -17,6 +17,7 @@ public class ScreenManager {
     private LoadingScreen loadingScreen;
     private GameScreen gameScreen;
     private MenuScreen menuScreen;
+    private TestScreen testScreen;
     private SpriteBatch batch;
     private Viewport viewport;
     private Camera camera;
@@ -42,6 +43,10 @@ public class ScreenManager {
                 targetScreen = gameScreen;
                 Assets.getInstance().loadAssets(ScreenType.GAME);
                 break;
+            case TEST:
+                targetScreen = testScreen;
+                Assets.getInstance().loadAssets(ScreenType.TEST);
+                break;
         }
     }
 
@@ -62,6 +67,7 @@ public class ScreenManager {
         this.viewport = new FitViewport(1080, 1920, camera);
         this.gameScreen = new GameScreen(batch, camera);
         this.menuScreen = new MenuScreen(batch);
+        this.testScreen = new TestScreen(batch);
         this.loadingScreen = new LoadingScreen(batch);
     }
 
@@ -79,6 +85,6 @@ public class ScreenManager {
     }
 
     public enum ScreenType {
-        MENU, GAME, CONFIG
+        MENU, GAME, CONFIG, TEST
     }
 }

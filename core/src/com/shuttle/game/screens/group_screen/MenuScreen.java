@@ -39,9 +39,12 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void createGUI() {
         background = new Background();
-        stage.addActor(new MenuGroup());
+        MenuGroup menuGroup = new MenuGroup();
+        MenuBar menuBar = new MenuBar();
+        menuBar.setGroup(menuGroup);
+        stage.addActor(menuGroup);
         stage.addActor(new ConfigGroup());
-        stage.addActor(new MenuBar());
+        stage.addActor(menuBar);
     }
 
     @Override
