@@ -11,6 +11,9 @@ public class AlienEmitter extends ObjectPool<Alien> {
     public AlienEmitter(GameScreen gs) {
         super();
         this.gs = gs;
+        for (int i = 0; i < 20; i++) {
+            createAlien();
+        }
     }
 
     @Override
@@ -28,7 +31,7 @@ public class AlienEmitter extends ObjectPool<Alien> {
         time += dt;
         if (time > 5.0f) {
             time = 0.0f;
-            createBot();
+            createAlien();
         }
         for (int i = 0; i < activeList.size(); i++) {
             activeList.get(i).update(dt);
@@ -36,7 +39,7 @@ public class AlienEmitter extends ObjectPool<Alien> {
         checkPool();
     }
 
-    public void createBot() {
+    public void createAlien() {
         getActiveElement().init(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
     }
 }

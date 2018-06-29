@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.shuttle.game.Alien;
 import com.shuttle.game.AlienEmitter;
 import com.shuttle.game.Assets;
 import com.shuttle.game.Background;
@@ -29,6 +31,7 @@ public class GameScreen extends BaseScreen {
     private ConsumableEmitter consumableEmitter;
     private AlienEmitter alienEmitter;
     private BitmapFont font64;
+    private TextureRegion starTex;
     private Camera camera;
     private Vector2 tmp;
     private boolean pause;
@@ -38,13 +41,14 @@ public class GameScreen extends BaseScreen {
         this.batch = batch;
         this.camera = camera;
         this.tmp = new Vector2(0, 0);
-        pause = false;
+        this.pause = false;
     }
 
     @Override
     public void show() {
         super.show();
         createGUI();
+        starTex = Assets.getInstance().getAtlas().findRegion("star16");
         if (preferences.isMusicEnabled()) {
             Assets.getInstance()
                     .getAssetManager()
@@ -131,6 +135,7 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);
+        checkPauseColor();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         background.render(batch);
@@ -138,24 +143,29 @@ public class GameScreen extends BaseScreen {
         alienEmitter.render(batch);
         consumableEmitter.render(batch);
         particleEmitter.render(batch);
+        player.drawRadar(batch, player.getPosition().x, player.getPosition().y);
         batch.end();
         ScreenManager.getInstance().resetCamera();
         batch.begin();
         player.renderGUI(batch, font64);
         batch.end();
+        stage.draw();
     }
-
 
     public void update(float dt) {
         cameraUpdate();
-        background.update(dt);
-        player.update(dt);
-        alienEmitter.update(dt);
-        consumableEmitter.update(dt);
-        particleEmitter.update(dt);
-        checkCollision(dt);
+        if (!pause) {
+            background.update(dt);
+            player.update(dt);
+            alienEmitter.update(dt);
+            consumableEmitter.update(dt);
+            particleEmitter.update(dt);
+            checkCollision(dt);
+        }
         cameraUpdate();
+        stage.act();
     }
+
 
     public void cameraUpdate() {
         camera.position.set(player.getPosition().x, player.getPosition().y, 0);
@@ -176,18 +186,7 @@ public class GameScreen extends BaseScreen {
         camera.update();
     }
 
-    public void update(float dt) {
-        cameraUpdate();
-        background.update(dt);
-        player.update(dt);
-        alienEmitter.update(dt);
-        consumableEmitter.update(dt);
-        particleEmitter.update(dt);
-        checkCollision();
-        cameraUpdate();
-    }
-
-    private void checkPause() {
+    private void checkPauseColor() {
         if (pause) {
             batch.setColor(1, 1, 1, 0.3f);
             font64.setColor(1, 1, 1, 0.3f);
@@ -196,7 +195,6 @@ public class GameScreen extends BaseScreen {
             font64.setColor(1, 1, 1, 1f);
         }
     }
-
 
     public void checkCollision(float dt) {
         for (int i = 0; i < consumableEmitter.getActiveList().size(); i++) {
@@ -224,10 +222,24 @@ public class GameScreen extends BaseScreen {
                 for (int j = 0; j < 24; j++) {
                     float ang = 6.28f / 24 * j;
                     float rad = 128 * k;
-                    particleEmitter.setup(a.getPosition().x + rad * (float)Math.cos(ang) + MathUtils.random(-10, 10), a.getPosition().y + rad * (float)Math.sin(ang) + MathUtils.random(-10, 10), MathUtils.random(-20,20), MathUtils.random(-20,20), 0.05f,3,3,0,1,0,0.2f,0,1,0,0.0f);
+                    particleEmitter.setup(a.getPosition().x + rad * (float) Math.cos(ang) + MathUtils.random(-10, 10), a.getPosition().y + rad * (float) Math.sin(ang) + MathUtils.random(-10, 10), MathUtils.random(-20, 20), MathUtils.random(-20, 20), 0.05f, 3, 3, 0, 1, 0, 0.2f, 0, 1, 0, 0.0f);
                 }
 
                 a.setDrawScale(k);
+            }
+
+
+        }
+
+        for (int i = 0; i < alienEmitter.getActiveList().size(); i++) {
+            Alien a = alienEmitter.getActiveList().get(i);
+            if (player.getPosition().dst(a.getPosition()) < 160 && player.getSpeedRang().getLevel() > 0) {
+                a.destroy();
+                player.addScore(5000);
+                for (int j = 0; j < 30; j++) {
+                    particleEmitter.setup(a.getPosition().x + MathUtils.random(-30, 30), a.getPosition().y + MathUtils.random(-30, 30), MathUtils.random(-400, 400), MathUtils.random(-400, 400), 0.4f, 8, 4, 0, 1, 0, 1f, 0, 1, 0, 0.2f);
+
+                }
             }
         }
     }

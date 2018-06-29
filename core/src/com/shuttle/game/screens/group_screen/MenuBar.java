@@ -63,7 +63,9 @@ public class MenuBar extends Group {
             userName.setText(file.readString());
         }
 
+        this.userName.setText("Player");
         isEmptyUserName = userName.getText().isEmpty();
+
 
         buttonExit.setPosition(
                 ScreenManager.getInstance().getViewport().getWorldWidth() - buttonExit.getWidth(),

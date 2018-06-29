@@ -32,7 +32,6 @@ public class Consumable implements Poolable {
         this.width = textures[0].getRegionWidth();
         this.height = textures[0].getRegionHeight();
         this.texture = textures[0];
-        //this.type = Type.Astronaut;
         this.active = false;
     }
 
