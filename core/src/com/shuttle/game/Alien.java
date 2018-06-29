@@ -37,6 +37,10 @@ public class Alien implements Poolable {
         batch.draw(texture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, 1, 1, 0);
     }
 
+    public void destroy() {
+        active = false;
+    }
+
     public void update(float dt) {
         position.mulAdd(velocity, dt);
     }

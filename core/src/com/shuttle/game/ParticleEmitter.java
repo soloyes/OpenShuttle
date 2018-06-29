@@ -3,15 +3,21 @@ package com.shuttle.game;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
 
 /**
  * Created by FlameXander on 02.07.2017.
  */
 public class ParticleEmitter extends ObjectPool<Particle> {
     private TextureRegion oneParticle;
+    private Vector2 tmp;
 
     public ParticleEmitter() {
         this.oneParticle = Assets.getInstance().getAtlas().findRegion("star16");
+        this.tmp = new Vector2(0, 0);
     }
 
     @Override
@@ -28,7 +34,7 @@ public class ParticleEmitter extends ObjectPool<Particle> {
             batch.setColor(lerp(o.getR1(), o.getR2(), t), lerp(o.getG1(), o.getG2(), t), lerp(o.getB1(), o.getB2(), t), lerp(o.getA1(), o.getA2(), t));
             batch.draw(oneParticle, o.getPosition().x - 8, o.getPosition().y - 8, 8, 8, 16, 16, scale, scale, 0);
         }
-        //batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
         for (int i = 0; i < activeList.size(); i++) {
             Particle o = activeList.get(i);
@@ -47,6 +53,19 @@ public class ParticleEmitter extends ObjectPool<Particle> {
 
     public void setup(float x, float y, float vx, float vy, float timeMax, float size1, float size2, float r1, float g1, float b1, float a1, float r2, float g2, float b2, float a2) {
         getActiveElement().init(x, y, vx, vy, timeMax, size1, size2, r1, g1, b1, a1, r2, g2, b2, a2);
+    }
+
+    public void setupFromPointToPoint(float x1, float y1, float x2, float y2, float velocity, float size1, float size2, float r1, float g1, float b1, float a1, float r2, float g2, float b2, float a2) {
+        float dst = Vector2.dst(x1, y1, x2, y2) / 10.0f;
+        tmp.set(x2, y2);
+        tmp.sub(x1, y1);
+        tmp.nor();
+        tmp.scl(10.0f);
+        for (int i = 0; i < (int) dst; i++) {
+            float ox = x1 + i * tmp.x;
+            float oy = y1 + i * tmp.y;
+            getActiveElement().init(ox + MathUtils.random(-20, 20), oy + MathUtils.random(-20, 20), 0, 0, 0.1f, size1, size2, r1, g1, b1, a1, r2, g2, b2, a2);
+        }
     }
 
     public void update(float dt) {

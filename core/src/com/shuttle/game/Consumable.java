@@ -16,6 +16,11 @@ public class Consumable implements Poolable {
     private boolean active;
     private int width, height;
     private float angle;
+    private float drawScale;
+
+    public void setDrawScale(float drawScale) {
+        this.drawScale = drawScale;
+    }
 
     public Consumable(GameScreen gs) {
         this.gs = gs;
@@ -27,7 +32,6 @@ public class Consumable implements Poolable {
         this.width = textures[0].getRegionWidth();
         this.height = textures[0].getRegionHeight();
         this.texture = textures[0];
-        //this.type = Type.Astronaut;
         this.active = false;
     }
 
@@ -51,10 +55,11 @@ public class Consumable implements Poolable {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(texture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, 1, 1, angle);
+        batch.draw(texture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, drawScale, drawScale, angle);
     }
 
     public void update(float dt) {
+        drawScale = 1.0f;
         position.mulAdd(velocity, dt);
     }
 

@@ -60,7 +60,7 @@ public class MenuBar extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (!group.isEmptyUserName()) {
-                    ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.TEST);
+                    ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
                     group.getFile().writeString(group.getUserName().getText(), false);
                 }
             }

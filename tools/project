@@ -1,7 +1,7 @@
 name=game.pack
 filename=game.pack
 input=images
-output=..\android\assets
+output=..\android\assets\pics
 
 alias=true
 alphaThreshold=0
