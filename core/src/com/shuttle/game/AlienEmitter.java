@@ -9,8 +9,8 @@ public class AlienEmitter extends ObjectPool<Alien> {
     private float time;
 
     public AlienEmitter(GameScreen gs) {
+        super();
         this.gs = gs;
-
     }
 
     @Override

@@ -5,15 +5,20 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.shuttle.game.conf.GamePreferences;
 
 /**
  * @author Shuttle on 4/6/18.
  */
 public abstract class BaseScreen implements Screen {
     protected Stage stage;
+    protected GamePreferences preferences;
+    protected SpriteBatch batch;
 
     public BaseScreen(SpriteBatch batch) {
-        stage = new Stage(ScreenManager.getInstance().getViewport(), batch);
+        this.stage = new Stage(ScreenManager.getInstance().getViewport(), batch);
+        this.preferences = new GamePreferences();
+        this.batch = batch;
     }
 
     @Override
@@ -22,11 +27,11 @@ public abstract class BaseScreen implements Screen {
         createGUI();
     }
 
-    abstract void createGUI();
+    public abstract void createGUI();
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0f, 0f, 0.05f, 1.0f);
+        Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
@@ -52,6 +57,6 @@ public abstract class BaseScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 }

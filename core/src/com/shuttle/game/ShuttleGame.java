@@ -2,25 +2,31 @@ package com.shuttle.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.screens.ScreenManager;
-
-import lombok.NonNull;
 
 public class ShuttleGame extends Game {
     private SpriteBatch batch;
     private ScreenManager.ScreenType screenType;
+    private FileHandle file;
 
     @Override
     public void create() {
-        batch = new SpriteBatch();
+        this.batch = new SpriteBatch();
         ScreenManager.getInstance().init(this, batch);
+        if (screenType == null) {
+            screenType = ScreenManager.ScreenType.MENU;
+        }
         ScreenManager.getInstance().changeScreen(screenType);
+        this.file = Gdx.files.local("username");
+        file.writeString("", false);
     }
 
     @Override
     public void dispose() {
         batch.dispose();
+        file.delete();
     }
 
     @Override

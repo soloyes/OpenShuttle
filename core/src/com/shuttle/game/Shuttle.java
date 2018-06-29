@@ -1,6 +1,7 @@
 package com.shuttle.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -28,6 +29,7 @@ public class Shuttle {
     public int getTakeRange() {
         return takeRange;
     }
+    private FileHandle fileHandle;
 
     public Shuttle(GameScreen gs, float x, float y) {
         this.gs = gs;
@@ -45,6 +47,7 @@ public class Shuttle {
         this.maxHp = 3;
         this.hp = this.maxHp;
         this.lives = 3;
+        this.fileHandle = Gdx.files.local("username");
         this.takeRange = 500;
     }
 
@@ -58,7 +61,8 @@ public class Shuttle {
 
     public void renderGUI(SpriteBatch batch, BitmapFont font) {
         tmpString.setLength(0);
-        tmpString.append("SCORE: ").append(scoreView);
+        tmpString.append("NAME: ").append(fileHandle.readString());
+        tmpString.append("\nSCORE: ").append(scoreView);
         tmpString.append("\nHP: ").append(hp).append("/").append(maxHp).append(" x").append(lives);
         tmpString.append("\nFUEL: ").append((int) fuel).append("/").append((int) maxFuel);
 
