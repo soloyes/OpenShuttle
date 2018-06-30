@@ -1,6 +1,5 @@
 package com.shuttle.game.screens;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,6 +15,7 @@ import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.Alien;
 import com.shuttle.game.AlienEmitter;
 import com.shuttle.game.Assets;
+import com.shuttle.game.AsteroidEmitter;
 import com.shuttle.game.Background;
 import com.shuttle.game.Consumable;
 import com.shuttle.game.ConsumableEmitter;
@@ -30,6 +30,7 @@ public class GameScreen extends BaseScreen {
     private ParticleEmitter particleEmitter;
     private ConsumableEmitter consumableEmitter;
     private AlienEmitter alienEmitter;
+    private AsteroidEmitter asteroidEmitter;
     private BitmapFont font64;
     private TextureRegion starTex;
     private Camera camera;
@@ -47,7 +48,6 @@ public class GameScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        createGUI();
         starTex = Assets.getInstance().getAtlas().findRegion("star16");
         if (preferences.isMusicEnabled()) {
             Assets.getInstance()
@@ -68,8 +68,9 @@ public class GameScreen extends BaseScreen {
     @Override
     public void createGUI() {
         particleEmitter = new ParticleEmitter();
-        alienEmitter = new AlienEmitter(this);
-        consumableEmitter = new ConsumableEmitter(this);
+        alienEmitter = new AlienEmitter();
+        consumableEmitter = new ConsumableEmitter();
+        asteroidEmitter = new AsteroidEmitter();
         background = new Background();
         player = new Shuttle(this, 540, 960);
         font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class);
@@ -142,6 +143,7 @@ public class GameScreen extends BaseScreen {
         player.render(batch);
         alienEmitter.render(batch);
         consumableEmitter.render(batch);
+        asteroidEmitter.render(batch);
         particleEmitter.render(batch);
         player.drawRadar(batch, player.getPosition().x, player.getPosition().y);
         batch.end();
@@ -159,6 +161,7 @@ public class GameScreen extends BaseScreen {
             player.update(dt);
             alienEmitter.update(dt);
             consumableEmitter.update(dt);
+            asteroidEmitter.update(dt);
             particleEmitter.update(dt);
             checkCollision(dt);
         }
@@ -166,6 +169,15 @@ public class GameScreen extends BaseScreen {
         stage.act();
     }
 
+    private void checkPauseColor() {
+        if (pause) {
+            batch.setColor(1, 1, 1, 0.3f);
+            font64.setColor(1, 1, 1, 0.3f);
+        } else {
+            batch.setColor(1, 1, 1, 1);
+            font64.setColor(1, 1, 1, 1f);
+        }
+    }
 
     public void cameraUpdate() {
         camera.position.set(player.getPosition().x, player.getPosition().y, 0);
@@ -184,16 +196,6 @@ public class GameScreen extends BaseScreen {
         }
 
         camera.update();
-    }
-
-    private void checkPauseColor() {
-        if (pause) {
-            batch.setColor(1, 1, 1, 0.3f);
-            font64.setColor(1, 1, 1, 0.3f);
-        } else {
-            batch.setColor(1, 1, 1, 1);
-            font64.setColor(1, 1, 1, 1f);
-        }
     }
 
     public void checkCollision(float dt) {
@@ -228,7 +230,6 @@ public class GameScreen extends BaseScreen {
                 a.setDrawScale(k);
             }
 
-
         }
 
         for (int i = 0; i < alienEmitter.getActiveList().size(); i++) {
@@ -244,6 +245,12 @@ public class GameScreen extends BaseScreen {
         }
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        pause = false;
+    }
+
     public AlienEmitter getAlienEmitter() {
         return alienEmitter;
     }
@@ -254,11 +261,5 @@ public class GameScreen extends BaseScreen {
 
     public ParticleEmitter getParticleEmitter() {
         return particleEmitter;
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-        pause = false;
     }
 }

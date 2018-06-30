@@ -2,23 +2,23 @@ package com.shuttle.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.shuttle.game.screens.GameScreen;
 
 public class AlienEmitter extends ObjectPool<Alien> {
-    private GameScreen gs;
     private float time;
 
-    public AlienEmitter(GameScreen gs) {
-        super();
-        this.gs = gs;
+    public AlienEmitter() {
         for (int i = 0; i < 20; i++) {
             createAlien();
         }
     }
 
+    public void createAlien() {
+        getActiveElement().init(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
+    }
+
     @Override
     protected Alien newObject() {
-        return new Alien(gs);
+        return new Alien(/*gs*/);
     }
 
     public void render(SpriteBatch batch) {
@@ -37,9 +37,5 @@ public class AlienEmitter extends ObjectPool<Alien> {
             activeList.get(i).update(dt);
         }
         checkPool();
-    }
-
-    public void createAlien() {
-        getActiveElement().init(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
     }
 }

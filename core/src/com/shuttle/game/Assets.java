@@ -7,7 +7,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
@@ -42,6 +41,7 @@ public class Assets {
                 assetManager.load("pics/game.pack", TextureAtlas.class);
                 assetManager.load("music/game.ogg", Music.class);
                 assetManager.load("uiskin/gameSkin.json", Skin.class);
+                assetManager.load("pics/asteroid.png", Texture.class);
                 createStdFont(32);
                 createStdFont(64);
                 createStdFont(96);

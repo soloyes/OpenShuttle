@@ -96,8 +96,7 @@ public class ConfigGroup extends Group {
                     if (enabled) {
                         musicArray.get(i).setVolume(preferences.getMusicVolume());
                         musicArray.get(i).play();
-                    }
-                    else musicArray.get(i).stop();
+                    } else musicArray.get(i).stop();
                 }
                 preferences.setMusicEnabled(enabled);
                 return false;

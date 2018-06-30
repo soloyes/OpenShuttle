@@ -2,22 +2,23 @@ package com.shuttle.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.shuttle.game.screens.GameScreen;
 
 public class ConsumableEmitter extends ObjectPool<Consumable> {
-    private GameScreen gs;
     private float time;
 
-    public ConsumableEmitter(GameScreen gs) {
-        this.gs = gs;
+    public ConsumableEmitter() {
         for (int i = 0; i < 20; i++) {
             createBot();
         }
     }
 
+    public void createBot() {
+        getActiveElement().init(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
+    }
+
     @Override
     protected Consumable newObject() {
-        return new Consumable(gs);
+        return new Consumable();
     }
 
     public void render(SpriteBatch batch) {
@@ -36,9 +37,5 @@ public class ConsumableEmitter extends ObjectPool<Consumable> {
             activeList.get(i).update(dt);
         }
         checkPool();
-    }
-
-    public void createBot() {
-        getActiveElement().init(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
     }
 }

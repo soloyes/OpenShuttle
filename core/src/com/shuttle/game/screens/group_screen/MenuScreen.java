@@ -4,7 +4,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.Assets;
 import com.shuttle.game.Background;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.screens.BaseScreen;
 
 /**
@@ -57,7 +56,7 @@ public class MenuScreen extends BaseScreen {
         stage.draw();
     }
 
-    public void update(float delta){
+    public void update(float delta) {
         background.update(delta);
     }
 }

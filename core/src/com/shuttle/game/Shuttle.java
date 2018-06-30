@@ -11,48 +11,6 @@ import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 
 public class Shuttle {
-    public enum SpeedRang {
-        NONE(0, 0, 0, 0, 0, 0.5f, 480.0f), WHITE(1, 1, 1, 1, 0.1f, 0.8f, 520.0f), GREEN(2, 0, 1, 0, 0.1f, 1.0f, 560.0f), YELLOW(3, 1, 1, 0, 0.1f, 1.6f, 600.0f), RED(4, 1, 0, 0, 0.1f, 3.0f, 600.0f);
-
-        private int level;
-        private float fr;
-        private float fg;
-        private float fb;
-        private float fa;
-        private float fuelPerSec;
-        private float acceleration;
-
-        public int getLevel() {
-            return level;
-        }
-
-        SpeedRang(int level, float fr, float fg, float fb, float fa, float fuelPerSec, float acceleration) {
-            this.level = level;
-            this.fr = fr;
-            this.fg = fg;
-            this.fb = fb;
-            this.fa = fa;
-            this.fuelPerSec = fuelPerSec;
-            this.acceleration = acceleration;
-        }
-
-        private static SpeedRang getRangFromVelocity(float velLength) {
-            if (velLength > 960) {
-                return RED;
-            }
-            if (velLength > 900) {
-                return YELLOW;
-            }
-            if (velLength > 800) {
-                return GREEN;
-            }
-            if (velLength > 600) {
-                return WHITE;
-            }
-            return NONE;
-        }
-    }
-
     private GameScreen gs;
     private TextureRegion texture;
     private TextureRegion starTex;
@@ -61,7 +19,6 @@ public class Shuttle {
     private Vector2 velocity;
     private int score, scoreView;
     private float angle;
-    // private float acceleration;
     private float fuel, maxFuel;
     private int hp, maxHp;
     private int lives;
@@ -69,16 +26,7 @@ public class Shuttle {
     private StringBuilder tmpString;
     private int takeRange;
     private SpeedRang speedRang;
-
-    public int getTakeRange() {
-        return takeRange;
-    }
-
     private FileHandle fileHandle;
-
-    public SpeedRang getSpeedRang() {
-        return speedRang;
-    }
 
     public Shuttle(GameScreen gs, float x, float y) {
         this.gs = gs;
@@ -103,6 +51,43 @@ public class Shuttle {
 
     public void addScore(int amount) {
         score += amount;
+    }
+
+    public void drawRadar(SpriteBatch batch, float sx, float sy) {
+        batch.setColor(1, 1f, 1, 1);
+        batch.draw(starTex, sx, sy, 8f, 8f, 16, 16, 5, 5, 0);
+
+        for (int i = 0; i < gs.getAlienEmitter().getActiveList().size(); i++) {
+            Alien a = gs.getAlienEmitter().getActiveList().get(i);
+            float d = Vector2.dst(position.x, position.y, a.getPosition().x, a.getPosition().y);
+            if (d < 2000) {
+                float sc = (1.0f - d / 2000f) * 2 + 2.0f;
+                tmp.set(a.getPosition());
+                tmp.sub(position);
+                tmp.nor();
+                tmp.scl(d / 2000.0f * 300);
+                batch.setColor(1, 0, 0, 1);
+                batch.draw(starTex, position.x + tmp.x, position.y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
+                batch.setColor(1, 1, 1, 1);
+            }
+        }
+
+        for (int i = 0; i < gs.getConsumableEmitter().getActiveList().size(); i++) {
+            Consumable c = gs.getConsumableEmitter().getActiveList().get(i);
+            float d = Vector2.dst(position.x, position.y, c.getPosition().x, c.getPosition().y);
+            if (d < 2000) {
+                float sc = (1.0f - d / 2000f) * 2 + 2.0f;
+
+                tmp.set(c.getPosition());
+                tmp.sub(position);
+                tmp.nor();
+                tmp.scl(d / 2000.0f * 300);
+
+                batch.setColor(0, 1, 0, 1);
+                batch.draw(starTex, position.x + tmp.x, position.y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
+                batch.setColor(1, 1, 1, 1);
+            }
+        }
     }
 
     public void render(SpriteBatch batch) {
@@ -207,7 +192,6 @@ public class Shuttle {
             }
         }
 
-
         if (velocity.len() > 300) {
             dxy = 20;
             for (int i = -45; i <= 45; i += 3) {
@@ -232,44 +216,56 @@ public class Shuttle {
         }
     }
 
-    public void drawRadar(SpriteBatch batch, float sx, float sy) {
-        batch.setColor(1, 1f, 1, 1);
-        batch.draw(starTex, sx, sy, 8f, 8f, 16, 16, 5, 5, 0);
-
-        for (int i = 0; i < gs.getAlienEmitter().getActiveList().size(); i++) {
-            Alien a = gs.getAlienEmitter().getActiveList().get(i);
-            float d = Vector2.dst(position.x, position.y, a.getPosition().x, a.getPosition().y);
-            if (d < 2000) {
-                float sc = (1.0f - d / 2000f) * 2 + 2.0f;
-                tmp.set(a.getPosition());
-                tmp.sub(position);
-                tmp.nor();
-                tmp.scl(d / 2000.0f * 300);
-                batch.setColor(1, 0, 0, 1);
-                batch.draw(starTex, position.x + tmp.x, position.y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
-                batch.setColor(1, 1, 1, 1);
-            }
-        }
-
-        for (int i = 0; i < gs.getConsumableEmitter().getActiveList().size(); i++) {
-            Consumable c = gs.getConsumableEmitter().getActiveList().get(i);
-            float d = Vector2.dst(position.x, position.y, c.getPosition().x, c.getPosition().y);
-            if (d < 2000) {
-                float sc = (1.0f - d / 2000f) * 2 + 2.0f;
-
-                tmp.set(c.getPosition());
-                tmp.sub(position);
-                tmp.nor();
-                tmp.scl(d / 2000.0f * 300);
-
-                batch.setColor(0, 1, 0, 1);
-                batch.draw(starTex, position.x + tmp.x, position.y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
-                batch.setColor(1, 1, 1, 1);
-            }
-        }
-    }
-
     public Vector2 getPosition() {
         return position;
+    }
+
+    public SpeedRang getSpeedRang() {
+        return speedRang;
+    }
+
+    public int getTakeRange() {
+        return takeRange;
+    }
+
+    public enum SpeedRang {
+        NONE(0, 0, 0, 0, 0, 0.5f, 480.0f), WHITE(1, 1, 1, 1, 0.1f, 0.8f, 520.0f), GREEN(2, 0, 1, 0, 0.1f, 1.0f, 560.0f), YELLOW(3, 1, 1, 0, 0.1f, 1.6f, 600.0f), RED(4, 1, 0, 0, 0.1f, 3.0f, 600.0f);
+        private int level;
+        private float fr;
+        private float fg;
+        private float fb;
+        private float fa;
+        private float fuelPerSec;
+        private float acceleration;
+
+        SpeedRang(int level, float fr, float fg, float fb, float fa, float fuelPerSec, float acceleration) {
+            this.level = level;
+            this.fr = fr;
+            this.fg = fg;
+            this.fb = fb;
+            this.fa = fa;
+            this.fuelPerSec = fuelPerSec;
+            this.acceleration = acceleration;
+        }
+
+        private static SpeedRang getRangFromVelocity(float velLength) {
+            if (velLength > 960) {
+                return RED;
+            }
+            if (velLength > 900) {
+                return YELLOW;
+            }
+            if (velLength > 800) {
+                return GREEN;
+            }
+            if (velLength > 600) {
+                return WHITE;
+            }
+            return NONE;
+        }
+
+        public int getLevel() {
+            return level;
+        }
     }
 }

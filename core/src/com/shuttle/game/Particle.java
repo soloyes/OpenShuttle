@@ -15,7 +15,7 @@ public class Particle implements Poolable {
     private float r2, g2, b2, a2;
     private boolean active;
     private float time;
-    private float timeMax;
+    private float duration;
     private float size1, size2;
 
     public Particle() {
@@ -30,7 +30,7 @@ public class Particle implements Poolable {
         return active;
     }
 
-    public void init(float x, float y, float vx, float vy, float timeMax, float size1, float size2, float r1, float g1, float b1, float a1, float r2, float g2, float b2, float a2) {
+    public void init(float x, float y, float vx, float vy, float duration, float size1, float size2, float r1, float g1, float b1, float a1, float r2, float g2, float b2, float a2) {
         this.position.x = x;
         this.position.y = y;
         this.velocity.x = vx;
@@ -44,7 +44,7 @@ public class Particle implements Poolable {
         this.a1 = a1;
         this.a2 = a2;
         this.time = 0.0f;
-        this.timeMax = timeMax;
+        this.duration = duration;
         this.size1 = size1;
         this.size2 = size2;
         this.active = true;
@@ -53,7 +53,7 @@ public class Particle implements Poolable {
     public void update(float dt) {
         time += dt;
         position.mulAdd(velocity, dt);
-        if (time > timeMax) {
+        if (time > duration) {
             deactivate();
         }
     }

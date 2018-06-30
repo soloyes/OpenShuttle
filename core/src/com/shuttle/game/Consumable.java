@@ -4,10 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.screens.GameScreen;
 
 public class Consumable implements Poolable {
-    private GameScreen gs;
     private Type type;
     private TextureRegion texture;
     private TextureRegion[] textures;
@@ -22,8 +20,7 @@ public class Consumable implements Poolable {
         this.drawScale = drawScale;
     }
 
-    public Consumable(GameScreen gs) {
-        this.gs = gs;
+    public Consumable() {
         this.textures = new TextureRegion[2];
         this.textures[0] = Assets.getInstance().getAtlas().findRegion("astronaut");
         this.textures[1] = Assets.getInstance().getAtlas().findRegion("crate");

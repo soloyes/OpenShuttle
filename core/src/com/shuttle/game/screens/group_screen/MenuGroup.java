@@ -65,15 +65,15 @@ public class MenuGroup extends Group {
         }
     }
 
-    public boolean isEmptyUserName() {
-        return isEmptyUserName;
-    }
-
     public FileHandle getFile() {
         return file;
     }
 
     public TextField getUserName() {
         return userName;
+    }
+
+    public boolean isEmptyUserName() {
+        return isEmptyUserName;
     }
 }

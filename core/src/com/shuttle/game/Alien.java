@@ -3,18 +3,15 @@ package com.shuttle.game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.screens.GameScreen;
 
 public class Alien implements Poolable {
-    private GameScreen gs;
     private TextureRegion texture;
     private Vector2 position;
     private Vector2 velocity;
     private boolean active;
     private int width, height;
 
-    public Alien(GameScreen gs) {
-        this.gs = gs;
+    public Alien() {
         this.texture = Assets.getInstance().getAtlas().findRegion("alien");
         this.position = new Vector2(0, 0);
         this.velocity = new Vector2(0, 0);
