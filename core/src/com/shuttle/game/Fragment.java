@@ -17,6 +17,7 @@ public class Fragment implements Poolable {
     private boolean active;
     private int width, height;
     private float rotation;
+    private float acceleration;
 
     public Fragment() {
         this.textureRegions = Regions.split(
@@ -27,6 +28,7 @@ public class Fragment implements Poolable {
         this.position = new Vector2(0, 0);
         this.velocity = new Vector2(0, 0);
         this.rotation = MathUtils.random(365f);
+        this.acceleration = 1f;
         this.active = false;
     }
 
@@ -35,11 +37,12 @@ public class Fragment implements Poolable {
         return active;
     }
 
-    public void init(float x, float y, Vector2 velocity) {
+    public void init(float x, float y, Vector2 velocity, float acceleration, float size) {
         this.velocity = velocity;
         this.rotation = MathUtils.random(365f);
-        int s = MathUtils.random(16, 64);
-        this.width = height = s;
+        int s = MathUtils.random(32, 96);
+        this.acceleration = acceleration;
+        this.width = height = (int) (s * size);
         this.position.set(x, y);
         this.active = true;
     }
@@ -56,7 +59,7 @@ public class Fragment implements Poolable {
     }
 
     public void update(float delta) {
-        position.mulAdd(velocity, delta);
+        position.mulAdd(velocity, acceleration * delta);
         checkAndHandleBounds();
     }
 

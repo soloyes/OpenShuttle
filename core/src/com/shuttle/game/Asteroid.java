@@ -26,11 +26,11 @@ public class Asteroid implements Poolable {
                 8,
                 32);
         this.position = new Vector2(0, 0);
-        this.active = false;
         this.rotation = MathUtils.random(365f);
-        this.width = textureRegions[0].getRegionWidth();
-        this.height = textureRegions[0].getRegionHeight();
         this.velocity = MathUtils.random(100, 300);
+        this.width = 128;
+        this.height = 128;
+        this.active = false;
     }
 
     @Override

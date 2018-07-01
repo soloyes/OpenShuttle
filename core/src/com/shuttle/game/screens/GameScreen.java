@@ -78,6 +78,7 @@ public class GameScreen extends BaseScreen {
         fragmentEmitter = new FragmentEmitter();
         background = new Background();
         player = new Shuttle(this, 540, 960);
+        fragmentEmitter.setShuttle(player);
         font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class);
 
         Skin skin = Assets.getInstance().getAssetManager().get("uiskin/gameSkin.json");
@@ -255,7 +256,25 @@ public class GameScreen extends BaseScreen {
             if (player.getPosition().dst(a.getPosition()) < 128) {
                 a.destroy();
                 float dxy = 180;
-                for (int j = 0; j < 32; j++) {
+                int dustCover = 0;
+                switch (player.getSpeedRang()) {
+                    case NONE:
+                        dustCover += 32;
+                        break;
+                    case WHITE:
+                        dustCover += 64;
+                        break;
+                    case GREEN:
+                        dustCover += 96;
+                        break;
+                    case YELLOW:
+                        dustCover += 128;
+                        break;
+                    case RED:
+                        dustCover += 140;
+                        break;
+                }
+                for (int j = 0; j < dustCover; j++) {
                     particleEmitter.setup(
                             a.getPosition().x,
                             a.getPosition().y,
