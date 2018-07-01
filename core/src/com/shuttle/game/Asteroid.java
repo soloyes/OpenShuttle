@@ -10,16 +10,14 @@ import com.badlogic.gdx.math.Vector2;
  * @author Shuttle on 6/30/18.
  */
 public class Asteroid implements Poolable {
-    private final float velocity = 200f;
+    private float velocity;
     private TextureRegion[] textureRegions;
-    private float frame;
     private Vector2 position;
-    private boolean active;
-    private int width;
-    private int height;
-    private float rotation;
-    private Vector2 destanation;
     private Vector2 target;
+    private float frame;
+    private boolean active;
+    private int width, height;
+    private float rotation;
 
     public Asteroid() {
         this.textureRegions = Regions.split(
@@ -32,6 +30,7 @@ public class Asteroid implements Poolable {
         this.rotation = MathUtils.random(365f);
         this.width = textureRegions[0].getRegionWidth();
         this.height = textureRegions[0].getRegionHeight();
+        this.velocity = MathUtils.random(100, 300);
     }
 
     @Override
@@ -39,11 +38,10 @@ public class Asteroid implements Poolable {
         return active;
     }
 
-    public void init(float x, float y, Vector2 destanation) {
+    public void init(float x, float y, Vector2 target) {
         this.position.set(x, y);
-        this.destanation = destanation;
-        this.target = destanation.sub(position);
-        target.nor();
+        this.target = target;
+        target.sub(position).nor();
         this.active = true;
     }
 
@@ -51,8 +49,8 @@ public class Asteroid implements Poolable {
         frame += 0.3f;
         batch.draw(
                 textureRegions[(int) frame],
-                position.x,
-                position.y,
+                position.x - width / 2,
+                position.y - height / 2,
                 width / 2, height / 2, width, height, 1, 1, rotation
         );
         frame %= textureRegions.length - 1;
@@ -72,5 +70,17 @@ public class Asteroid implements Poolable {
 
     public void destroy() {
         active = false;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public int getWidth() {
+        return width;
     }
 }

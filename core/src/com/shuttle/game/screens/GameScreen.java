@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,10 +16,12 @@ import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.Alien;
 import com.shuttle.game.AlienEmitter;
 import com.shuttle.game.Assets;
+import com.shuttle.game.Asteroid;
 import com.shuttle.game.AsteroidEmitter;
 import com.shuttle.game.Background;
 import com.shuttle.game.Consumable;
 import com.shuttle.game.ConsumableEmitter;
+import com.shuttle.game.FragmentEmitter;
 import com.shuttle.game.ParticleEmitter;
 import com.shuttle.game.Rules;
 import com.shuttle.game.Shuttle;
@@ -31,6 +34,7 @@ public class GameScreen extends BaseScreen {
     private ConsumableEmitter consumableEmitter;
     private AlienEmitter alienEmitter;
     private AsteroidEmitter asteroidEmitter;
+    private FragmentEmitter fragmentEmitter;
     private BitmapFont font64;
     private TextureRegion starTex;
     private Camera camera;
@@ -71,6 +75,7 @@ public class GameScreen extends BaseScreen {
         alienEmitter = new AlienEmitter();
         consumableEmitter = new ConsumableEmitter();
         asteroidEmitter = new AsteroidEmitter();
+        fragmentEmitter = new FragmentEmitter();
         background = new Background();
         player = new Shuttle(this, 540, 960);
         font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class);
@@ -140,10 +145,11 @@ public class GameScreen extends BaseScreen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         background.render(batch);
-        player.render(batch);
+        asteroidEmitter.render(batch);
+        fragmentEmitter.render(batch);
         alienEmitter.render(batch);
         consumableEmitter.render(batch);
-        asteroidEmitter.render(batch);
+        player.render(batch);
         particleEmitter.render(batch);
         player.drawRadar(batch, player.getPosition().x, player.getPosition().y);
         batch.end();
@@ -162,6 +168,7 @@ public class GameScreen extends BaseScreen {
             alienEmitter.update(dt);
             consumableEmitter.update(dt);
             asteroidEmitter.update(dt);
+            fragmentEmitter.update(dt);
             particleEmitter.update(dt);
             checkCollision(dt);
         }
@@ -229,7 +236,6 @@ public class GameScreen extends BaseScreen {
 
                 a.setDrawScale(k);
             }
-
         }
 
         for (int i = 0; i < alienEmitter.getActiveList().size(); i++) {
@@ -241,6 +247,34 @@ public class GameScreen extends BaseScreen {
                     particleEmitter.setup(a.getPosition().x + MathUtils.random(-30, 30), a.getPosition().y + MathUtils.random(-30, 30), MathUtils.random(-400, 400), MathUtils.random(-400, 400), 0.4f, 8, 4, 0, 1, 0, 1f, 0, 1, 0, 0.2f);
 
                 }
+            }
+        }
+
+        for (int i = 0; i < asteroidEmitter.getActiveList().size(); i++) {
+            Asteroid a = asteroidEmitter.getActiveList().get(i);
+            if (player.getPosition().dst(a.getPosition()) < 128) {
+                a.destroy();
+                float dxy = 180;
+                for (int j = 0; j < 32; j++) {
+                    particleEmitter.setup(
+                            a.getPosition().x,
+                            a.getPosition().y,
+                            MathUtils.random(-dxy, dxy),
+                            MathUtils.random(-dxy, dxy),
+                            1f,
+                            6.0f,
+                            1.0f,
+                            0.17f,
+                            0.17f,
+                            0.17f,
+                            1,
+                            0,
+                            0,
+                            0,
+                            0
+                    );
+                }
+                fragmentEmitter.boom(a.getPosition());
             }
         }
     }

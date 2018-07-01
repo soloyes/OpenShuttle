@@ -54,8 +54,8 @@ public class Shuttle {
     }
 
     public void drawRadar(SpriteBatch batch, float sx, float sy) {
-        batch.setColor(1, 1f, 1, 1);
-        batch.draw(starTex, sx, sy, 8f, 8f, 16, 16, 5, 5, 0);
+        //batch.setColor(1, 1f, 1, 1);
+       // batch.draw(starTex, sx, sy, 8f, 8f, 16, 16, 5, 5, 0);
 
         for (int i = 0; i < gs.getAlienEmitter().getActiveList().size(); i++) {
             Alien a = gs.getAlienEmitter().getActiveList().get(i);

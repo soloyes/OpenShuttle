@@ -10,6 +10,29 @@ import com.badlogic.gdx.math.Vector2;
 public class AsteroidEmitter extends ObjectPool<Asteroid> {
     private float time;
 
+    @Override
+    protected Asteroid newObject() {
+        return new Asteroid();
+    }
+
+    public void render(SpriteBatch batch) {
+        for (int i = 0; i < activeList.size(); i++) {
+            activeList.get(i).render(batch);
+        }
+    }
+
+    public void update(float dt) {
+        time += dt;
+        if (time > 5.0f) {
+            time = 0.0f;
+            createAsteroid(128, 128);
+        }
+        for (int i = 0; i < activeList.size(); i++) {
+            activeList.get(i).update(dt);
+        }
+        checkPool();
+    }
+
     public void createAsteroid(int width, int height) {
         float x = 0;
         float y = 0;
@@ -48,29 +71,6 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
             );
         }
         getActiveElement().init(x, y, destanation);
-    }
-
-    @Override
-    protected Asteroid newObject() {
-        return new Asteroid();
-    }
-
-    public void render(SpriteBatch batch) {
-        for (int i = 0; i < activeList.size(); i++) {
-            activeList.get(i).render(batch);
-        }
-    }
-
-    public void update(float dt) {
-        time += dt;
-        if (time > 5.0f) {
-            time = 0.0f;
-            createAsteroid(128, 128);
-        }
-        for (int i = 0; i < activeList.size(); i++) {
-            activeList.get(i).update(dt);
-        }
-        checkPool();
     }
 
     private enum Side {
