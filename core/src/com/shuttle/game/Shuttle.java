@@ -41,7 +41,7 @@ public class Shuttle {
         this.tmpString = new StringBuilder(200);
         this.maxFuel = 120.0f;
         this.fuel = this.maxFuel;
-        this.maxHp = 3;
+        this.maxHp = 10;
         this.hp = this.maxHp;
         this.lives = 3;
         this.fileHandle = Gdx.files.local("username");
@@ -55,7 +55,7 @@ public class Shuttle {
 
     public void drawRadar(SpriteBatch batch, float sx, float sy) {
         //batch.setColor(1, 1f, 1, 1);
-       // batch.draw(starTex, sx, sy, 8f, 8f, 16, 16, 5, 5, 0);
+        // batch.draw(starTex, sx, sy, 8f, 8f, 16, 16, 5, 5, 0);
 
         for (int i = 0; i < gs.getAlienEmitter().getActiveList().size(); i++) {
             Alien a = gs.getAlienEmitter().getActiveList().get(i);
@@ -126,6 +126,12 @@ public class Shuttle {
         position.mulAdd(velocity, dt);
         speedRang = SpeedRang.getRangFromVelocity(velocity.len());
         fuel -= speedRang.fuelPerSec * dt;
+        if (fuel < 0.0f) {
+            fuel = 0.0f;
+            if (velocity.len() > 100) {
+                velocity.nor().scl(100);
+            }
+        }
         createFXs();
         if (Gdx.input.isTouched()) {
             float radialSpeed = 135.0f;
@@ -152,46 +158,67 @@ public class Shuttle {
 
     public void createFXs() {
         int dxy = 90;
-        gs.getParticleEmitter().setup(
-                position.x - 90 * (float) Math.cos(Math.toRadians(angle)),
-                position.y - 90 * (float) Math.sin(Math.toRadians(angle)),
-                MathUtils.random(-dxy, dxy),
-                MathUtils.random(-dxy, dxy),
-                0.3f + speedRang.level * 0.1f,
-                4.0f + speedRang.level * 1.5f,
-                0.4f,
-                1,
-                0.6f - speedRang.level * 0.15f,
-                0,
-                1,
-                1,
-                0,
-                0,
-                0.5f
-        );
-        if (MathUtils.random(0, 100) < 6 + speedRang.level * 2) {
-            dxy = 180;
-            for (int i = 0; i < speedRang.level + 1; i++) {
+        if (fuel > 0.1f) {
+            if (velocity.len() > 80) {
                 gs.getParticleEmitter().setup(
                         position.x - 90 * (float) Math.cos(Math.toRadians(angle)),
                         position.y - 90 * (float) Math.sin(Math.toRadians(angle)),
                         MathUtils.random(-dxy, dxy),
                         MathUtils.random(-dxy, dxy),
-                        0.3f,
-                        8.0f + speedRang.level * 2,
-                        0.0f,
-                        1,
+                        0.3f + speedRang.level * 0.1f,
+                        4.0f + speedRang.level * 1.5f,
                         0.4f,
+                        1,
+                        0.6f - speedRang.level * 0.15f,
                         0,
+                        1,
                         1,
                         0,
                         0,
-                        0,
-                        0.2f
+                        0.5f
                 );
+                if (MathUtils.random(0, 100) < 6 + speedRang.level * 2) {
+                    dxy = 180;
+                    for (int i = 0; i < speedRang.level + 1; i++) {
+                        gs.getParticleEmitter().setup(
+                                position.x - 90 * (float) Math.cos(Math.toRadians(angle)),
+                                position.y - 90 * (float) Math.sin(Math.toRadians(angle)),
+                                MathUtils.random(-dxy, dxy),
+                                MathUtils.random(-dxy, dxy),
+                                0.3f,
+                                8.0f + speedRang.level * 2,
+                                0.0f,
+                                1,
+                                0.4f,
+                                0,
+                                1,
+                                0,
+                                0,
+                                0,
+                                0.2f
+                        );
+                    }
+                }
             }
+        } else {
+            gs.getParticleEmitter().setup(
+                    position.x - 90 * (float) Math.cos(Math.toRadians(angle)),
+                    position.y - 90 * (float) Math.sin(Math.toRadians(angle)),
+                    MathUtils.random(-dxy, dxy),
+                    MathUtils.random(-dxy, dxy),
+                    0.2f,
+                    3.0f,
+                    2.4f,
+                    0.2f,
+                    0.2f,
+                    1.0f,
+                    0.4f,
+                    0,
+                    0,
+                    0,
+                    0.2f
+            );
         }
-
         if (velocity.len() > 300) {
             dxy = 20;
             for (int i = -45; i <= 45; i += 3) {
