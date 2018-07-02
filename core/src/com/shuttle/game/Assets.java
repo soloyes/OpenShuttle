@@ -47,7 +47,7 @@ public class Assets {
                 createStdFont(96);
                 break;
             case TEST:
-                assetManager.load("pics/game.pack", TextureAtlas.class);;
+                assetManager.load("pics/game.pack", TextureAtlas.class);
                 break;
         }
     }
