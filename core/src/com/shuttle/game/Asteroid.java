@@ -10,14 +10,14 @@ import com.badlogic.gdx.math.Vector2;
  * @author Shuttle on 6/30/18.
  */
 public class Asteroid implements Poolable {
-    private float velocity;
     private TextureRegion[] textureRegions;
     private Vector2 position;
-    private Vector2 target;
+    private Vector2 velocity;
     private float frame;
     private boolean active;
     private int width, height;
     private float rotation;
+    private boolean fragment;
 
     public Asteroid() {
         this.textureRegions = Regions.split(
@@ -25,11 +25,9 @@ public class Asteroid implements Poolable {
                 8,
                 8,
                 32);
-        this.position = new Vector2(0, 0);
+        this.position = new Vector2();
+        this.velocity = new Vector2();
         this.rotation = MathUtils.random(365f);
-        this.velocity = MathUtils.random(100, 300);
-        this.width = 128;
-        this.height = 128;
         this.active = false;
     }
 
@@ -38,34 +36,45 @@ public class Asteroid implements Poolable {
         return active;
     }
 
-    public void init(float x, float y, Vector2 target) {
-        this.position.set(x, y);
-        this.target = target;
-        target.sub(position).nor();
+    public void init(Vector2 position, Vector2 destanation, float acceleration, float size, boolean isFragment) {
+        this.position.set(position);
+        this.fragment = isFragment;
+        destanation.sub(position).nor();
+        velocity.set(destanation).scl(acceleration * MathUtils.random(50, 300));
+        float s;
+        if (!isFragment) {
+            s = textureRegions[0].getRegionWidth();
+        } else {
+            s = MathUtils.random(
+                    textureRegions[0].getRegionWidth() * 0.25f,
+                    textureRegions[0].getRegionWidth() * 0.75f
+            );
+        }
+        this.width = this.height = (int) (s * size);
         this.active = true;
     }
 
     public void render(SpriteBatch batch) {
-        frame += 0.3f;
         batch.draw(
                 textureRegions[(int) frame],
                 position.x - width / 2,
                 position.y - height / 2,
                 width / 2, height / 2, width, height, 1, 1, rotation
         );
-        frame %= textureRegions.length - 1;
     }
 
-    public void update(float delta) {
-        position.mulAdd(target, velocity * delta);
+    public void update(float dt) {
+        frame += 0.3f;
+        frame %= textureRegions.length - 1;
+        position.mulAdd(velocity, dt);
         checkAndHandleBounds();
     }
 
     private void checkAndHandleBounds() {
-        if (position.x + width < 0) destroy();
-        if (position.x > Rules.SPACE_WIDTH) destroy();
-        if (position.y + height < 0) destroy();
-        if (position.y > Rules.SPACE_HEIGHT) destroy();
+        if (position.x + width / 2 < 0) destroy();
+        if (position.x - width / 2 > Rules.SPACE_WIDTH) destroy();
+        if (position.y + height / 2 < 0) destroy();
+        if (position.y - height / 2 > Rules.SPACE_HEIGHT) destroy();
     }
 
     public void destroy() {
@@ -82,5 +91,9 @@ public class Asteroid implements Poolable {
 
     public int getWidth() {
         return width;
+    }
+
+    public boolean isFragment() {
+        return fragment;
     }
 }

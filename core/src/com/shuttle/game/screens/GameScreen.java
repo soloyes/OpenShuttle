@@ -1,11 +1,11 @@
 package com.shuttle.game.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -21,7 +21,6 @@ import com.shuttle.game.AsteroidEmitter;
 import com.shuttle.game.Background;
 import com.shuttle.game.Consumable;
 import com.shuttle.game.ConsumableEmitter;
-import com.shuttle.game.FragmentEmitter;
 import com.shuttle.game.ParticleEmitter;
 import com.shuttle.game.Rules;
 import com.shuttle.game.Shuttle;
@@ -34,25 +33,22 @@ public class GameScreen extends BaseScreen {
     private ConsumableEmitter consumableEmitter;
     private AlienEmitter alienEmitter;
     private AsteroidEmitter asteroidEmitter;
-    private FragmentEmitter fragmentEmitter;
     private BitmapFont font64;
-    private TextureRegion starTex;
     private Camera camera;
     private Vector2 tmp;
     private boolean pause;
+    private ShaderProgram shaderProgram;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
         this.batch = batch;
         this.camera = camera;
         this.tmp = new Vector2(0, 0);
-        this.pause = false;
     }
 
     @Override
     public void show() {
         super.show();
-        starTex = Assets.getInstance().getAtlas().findRegion("star16");
         if (preferences.isMusicEnabled()) {
             Assets.getInstance()
                     .getAssetManager()
@@ -71,14 +67,28 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void createGUI() {
+        pause = false;
+        shaderProgram = new ShaderProgram(
+                Gdx.files.internal("shaders/default.vert"),
+                Gdx.files.internal("shaders/default.frag")
+        );
+
+        if (!shaderProgram.isCompiled()) {
+            System.err.println(shaderProgram.getLog());
+            System.exit(0);
+        }
+
         particleEmitter = new ParticleEmitter();
         alienEmitter = new AlienEmitter();
         consumableEmitter = new ConsumableEmitter();
         asteroidEmitter = new AsteroidEmitter();
-        fragmentEmitter = new FragmentEmitter();
         background = new Background();
-        player = new Shuttle(this, 540, 960);
-        fragmentEmitter.setShuttle(player);
+        player = new Shuttle(
+                this,
+                ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
+                ScreenManager.getInstance().getViewport().getWorldHeight() / 2
+        );
+        asteroidEmitter.setShuttle(player);
         font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class);
 
         Skin skin = Assets.getInstance().getAssetManager().get("uiskin/gameSkin.json");
@@ -142,22 +152,31 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);
-        checkPauseColor();
         batch.setProjectionMatrix(camera.combined);
+        if (pause) {
+            batch.setShader(shaderProgram);
+        } else {
+            batch.setShader(null);
+        }
+
+        //BEGIN
         batch.begin();
         background.render(batch);
         asteroidEmitter.render(batch);
-        fragmentEmitter.render(batch);
         alienEmitter.render(batch);
         consumableEmitter.render(batch);
         player.render(batch);
         particleEmitter.render(batch);
         player.drawRadar(batch, player.getPosition().x, player.getPosition().y);
         batch.end();
+
         ScreenManager.getInstance().resetCamera();
+        //BEGIN
         batch.begin();
         player.renderGUI(batch, font64);
         batch.end();
+
+        batch.setShader(null);
         stage.draw();
     }
 
@@ -169,22 +188,11 @@ public class GameScreen extends BaseScreen {
             alienEmitter.update(dt);
             consumableEmitter.update(dt);
             asteroidEmitter.update(dt);
-            fragmentEmitter.update(dt);
             particleEmitter.update(dt);
             checkCollision(dt);
         }
         cameraUpdate();
         stage.act();
-    }
-
-    private void checkPauseColor() {
-        if (pause) {
-            batch.setColor(1, 1, 1, 0.3f);
-            font64.setColor(1, 1, 1, 0.3f);
-        } else {
-            batch.setColor(1, 1, 1, 1);
-            font64.setColor(1, 1, 1, 1f);
-        }
     }
 
     public void cameraUpdate() {
@@ -253,7 +261,7 @@ public class GameScreen extends BaseScreen {
 
         for (int i = 0; i < asteroidEmitter.getActiveList().size(); i++) {
             Asteroid a = asteroidEmitter.getActiveList().get(i);
-            if (player.getPosition().dst(a.getPosition()) < 128) {
+            if (!a.isFragment() && player.getPosition().dst(a.getPosition()) < 128) {
                 a.destroy();
                 float dxy = 180;
                 int dustCover = 0;
@@ -293,7 +301,7 @@ public class GameScreen extends BaseScreen {
                             0
                     );
                 }
-                fragmentEmitter.boom(a.getPosition());
+                asteroidEmitter.boom(a.getPosition());
             }
         }
     }
@@ -301,7 +309,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void dispose() {
         super.dispose();
-        pause = false;
+        shaderProgram.dispose();
     }
 
     public AlienEmitter getAlienEmitter() {
