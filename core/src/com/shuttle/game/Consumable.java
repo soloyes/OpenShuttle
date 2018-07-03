@@ -13,8 +13,12 @@ public class Consumable implements Poolable {
     private Vector2 velocity;
     private boolean active;
     private int width, height;
-    private float angle;
+    private float angle, rotationSpeed;
     private float drawScale;
+
+    public Type getType() {
+        return type;
+    }
 
     public void setDrawScale(float drawScale) {
         this.drawScale = drawScale;
@@ -23,7 +27,7 @@ public class Consumable implements Poolable {
     public Consumable() {
         this.textures = new TextureRegion[2];
         this.textures[0] = Assets.getInstance().getAtlas().findRegion("astronaut");
-        this.textures[1] = Assets.getInstance().getAtlas().findRegion("crate");
+        this.textures[1] = Assets.getInstance().getAtlas().findRegion("Crate");
         this.position = new Vector2(0, 0);
         this.velocity = new Vector2(0, 0);
         this.width = textures[0].getRegionWidth();
@@ -44,6 +48,7 @@ public class Consumable implements Poolable {
     public void init(float x, float y) {
         position.set(x, y);
         angle = MathUtils.random(0, 360);
+        rotationSpeed = MathUtils.random(-20, 20);
         active = true;
         type = Type.values()[MathUtils.random(0, 1)];
         texture = textures[type.textureIndex];
@@ -58,6 +63,7 @@ public class Consumable implements Poolable {
     public void update(float dt) {
         drawScale = 1.0f;
         position.mulAdd(velocity, dt);
+        angle += rotationSpeed * dt;
     }
 
     public Vector2 getPosition() {

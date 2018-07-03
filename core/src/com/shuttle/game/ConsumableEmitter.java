@@ -7,7 +7,7 @@ public class ConsumableEmitter extends ObjectPool<Consumable> {
     private float time;
 
     public ConsumableEmitter() {
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < Rules.CONSUMABLES_AT_START; i++) {
             createBot();
         }
     }
@@ -29,7 +29,7 @@ public class ConsumableEmitter extends ObjectPool<Consumable> {
 
     public void update(float dt) {
         time += dt;
-        if (time > 5.0f) {
+        if (time > Rules.CONSUMABLES_RESPAWN_TIME) {
             time = 0.0f;
             createBot();
         }

@@ -27,6 +27,42 @@ public class Shuttle {
     private int takeRange;
     private SpeedRang speedRang;
     private FileHandle fileHandle;
+    private float zigzagEffect;
+
+    private int killSeries;
+    private float killTimer;
+    private String[] killMsgs = {"", "KILLED", "DOUBLE KILL", "MULTI KILL", "ULATRA KILL", "RAMPAGE", "HOLY S**T"};
+    private int[] killMsgsScale = {0, 4, 5, 6, 7, 10, 15};
+
+    public Vector2 getVelocity() {
+        return velocity;
+    }
+
+    public boolean addZigZag(float amount) {
+        if (zigzagEffect < 0.1f) {
+            zigzagEffect += amount;
+            return true;
+        }
+        return false;
+    }
+
+    public void killPlusPlus() {
+        killSeries++;
+        if (killSeries > 6) {
+            killSeries = 6;
+        }
+        killTimer = 7.0f;
+        gs.getGameInfoSystem().setup(position.x, position.y, killMsgs[killSeries], killMsgsScale[killSeries]);
+    }
+
+    public void takeDamage(int amount) {
+        hp -= amount;
+        if (hp <= 0) {
+            hp = maxHp;
+            lives--;
+            gs.getGameInfoSystem().setup(position.x, position.y, "DESTROYED", 8);
+        }
+    }
 
     public Shuttle(GameScreen gs, float x, float y) {
         this.gs = gs;
@@ -60,12 +96,9 @@ public class Shuttle {
         for (int i = 0; i < gs.getAlienEmitter().getActiveList().size(); i++) {
             Alien a = gs.getAlienEmitter().getActiveList().get(i);
             float d = Vector2.dst(position.x, position.y, a.getPosition().x, a.getPosition().y);
-            if (d < 2000) {
+            if (d < 2000.0f) {
                 float sc = (1.0f - d / 2000f) * 2 + 2.0f;
-                tmp.set(a.getPosition());
-                tmp.sub(position);
-                tmp.nor();
-                tmp.scl(d / 2000.0f * 300);
+                tmp.set(a.getPosition()).sub(position).nor().scl(d / 2000.0f * 300.0f);
                 batch.setColor(1, 0, 0, 1);
                 batch.draw(starTex, position.x + tmp.x, position.y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
                 batch.setColor(1, 1, 1, 1);
@@ -75,14 +108,9 @@ public class Shuttle {
         for (int i = 0; i < gs.getConsumableEmitter().getActiveList().size(); i++) {
             Consumable c = gs.getConsumableEmitter().getActiveList().get(i);
             float d = Vector2.dst(position.x, position.y, c.getPosition().x, c.getPosition().y);
-            if (d < 2000) {
-                float sc = (1.0f - d / 2000f) * 2 + 2.0f;
-
-                tmp.set(c.getPosition());
-                tmp.sub(position);
-                tmp.nor();
-                tmp.scl(d / 2000.0f * 300);
-
+            if (d < 2000.0f) {
+                float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f;
+                tmp.set(c.getPosition()).sub(position).nor().scl(d / 2000.0f * 300.0f);
                 batch.setColor(0, 1, 0, 1);
                 batch.draw(starTex, position.x + tmp.x, position.y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
                 batch.setColor(1, 1, 1, 1);
@@ -100,12 +128,27 @@ public class Shuttle {
         tmpString.append("\nSCORE: ").append(scoreView);
         tmpString.append("\nHP: ").append(hp).append("/").append(maxHp).append(" x").append(lives);
         tmpString.append("\nFUEL: ").append((int) fuel).append("/").append((int) maxFuel);
-        tmpString.append("\nSPEED: ").append(velocity.len());
+        // tmpString.append("\nSPEED: ").append(velocity.len());
 
         font.draw(batch, tmpString, 20, 1900);
     }
 
+    public void slowDown(float amount) {
+        velocity.scl(1.0f - amount / velocity.len());
+    }
+
     public void update(float dt) {
+        if (killTimer > 0.0f) {
+            killTimer -= dt;
+            if (killTimer <= 0.0f) {
+                killSeries = 0;
+            }
+        }
+        if (zigzagEffect > 0.0f) {
+            zigzagEffect -= dt;
+            angle += zigzagEffect * 25.0f;
+            velocity.add(MathUtils.random(-30 * zigzagEffect, 30 * zigzagEffect), MathUtils.random(-30 * zigzagEffect, 30 * zigzagEffect));
+        }
         if (angle < 0.0f) {
             angle += 360.0f;
         }
@@ -113,13 +156,21 @@ public class Shuttle {
             angle -= 360.0f;
         }
         if (scoreView < score) {
-            int scoreDelta = (int) ((score - scoreView) * 0.1f);
+            int scoreDelta = (int) (Math.abs(score - scoreView) * 0.1f);
             if (scoreDelta < 5) {
                 scoreDelta = 5;
             }
-            scoreView += scoreDelta;
+            if (scoreView < score) {
+                scoreView += scoreDelta;
+                if (scoreView > score) {
+                    scoreView = score;
+                }
+            }
             if (scoreView > score) {
-                scoreView = score;
+                scoreView -= scoreDelta;
+                if (scoreView < score) {
+                    scoreView = score;
+                }
             }
         }
         velocity.scl(0.99f);
@@ -137,22 +188,25 @@ public class Shuttle {
             float radialSpeed = 135.0f;
             tmp.set(Gdx.input.getX(), Gdx.input.getY());
             ScreenManager.getInstance().getViewport().unproject(tmp);
-            float angleToTarget = tmp.sub(position).angle();
-            if (angle > angleToTarget) {
-                if (Math.abs(angle - angleToTarget) <= 180.0f) {
-                    angle -= radialSpeed * dt;
-                } else {
-                    angle += radialSpeed * dt;
+            if (zigzagEffect < 0.05f) {
+                float angleToTarget = tmp.sub(position).angle();
+                if (angle > angleToTarget) {
+                    if (Math.abs(angle - angleToTarget) <= 180.0f) {
+                        angle -= radialSpeed * dt;
+                    } else {
+                        angle += radialSpeed * dt;
+                    }
+                }
+                if (angle < angleToTarget) {
+                    if (Math.abs(angle - angleToTarget) <= 180.0f) {
+                        angle += radialSpeed * dt;
+                    } else {
+                        angle -= radialSpeed * dt;
+                    }
                 }
             }
-            if (angle < angleToTarget) {
-                if (Math.abs(angle - angleToTarget) <= 180.0f) {
-                    angle += radialSpeed * dt;
-                } else {
-                    angle -= radialSpeed * dt;
-                }
-            }
-            velocity.add(speedRang.acceleration * (float) Math.cos(Math.toRadians(angle)) * dt, speedRang.acceleration * (float) Math.sin(Math.toRadians(angle)) * dt);
+            float acc = speedRang.acceleration * (1.0f - 0.1f * (float) (maxHp - hp) / maxHp);
+            velocity.add(acc * (float) Math.cos(Math.toRadians(angle)) * dt, acc * (float) Math.sin(Math.toRadians(angle)) * dt);
         }
     }
 
@@ -240,6 +294,70 @@ public class Shuttle {
                         0.0f
                 );
             }
+            if(velocity.len() > 1200.0f) {
+                gs.getParticleEmitter().setup(
+                        position.x + 90 * (float) Math.cos(Math.toRadians(angle)),
+                        position.y + 90 * (float) Math.sin(Math.toRadians(angle)),
+                        MathUtils.random(-dxy, dxy),
+                        MathUtils.random(-dxy, dxy),
+                        5.9f,
+                        16.0f,
+                        15.0f,
+                        1,
+                        0.6f,
+                        0,
+                        1,
+                        0,
+                        0,
+                        0,
+                        0.0f
+                );
+            }
+        }
+    }
+
+    public void takeEffect(Consumable.Type type) {
+        switch (type) {
+            case Astronaut:
+                addScore(10000);
+                gs.getGameInfoSystem().setup(position.x, position.y, "+10000", 3.0f);
+                break;
+            case Crate:
+                int x = MathUtils.random(0, 5);
+                if (x == 0) {
+                    hp++;
+                    if (hp > maxHp) {
+                        hp = maxHp;
+                    }
+                    gs.getGameInfoSystem().setup(position.x, position.y, "REPAIR +1", 3.0f);
+                }
+                if (x == 1) {
+                    fuel += 15;
+                    if (fuel > maxFuel) {
+                        fuel = maxFuel;
+                    }
+                    gs.getGameInfoSystem().setup(position.x, position.y, "FUEL +15", 3.0f);
+                }
+                if (x == 2) {
+                    velocity.add(1500 * (float) Math.cos(Math.toRadians(angle)), 1500 * (float) Math.sin(Math.toRadians(angle)));
+                    gs.getGameInfoSystem().setup(position.x, position.y, "TURBO X5", 5.0f);
+                }
+                if (x > 2) {
+                    gs.getGameInfoSystem().setup(position.x, position.y, "TRASH", 2.0f);
+                }
+                break;
+        }
+    }
+
+    public void badEffect(Consumable.Type type) {
+        switch (type) {
+            case Astronaut:
+                addScore(-50000);
+                gs.getGameInfoSystem().setup(position.x, position.y, "Murder!\n-50000", 8.0f);
+                break;
+            case Crate:
+                gs.getGameInfoSystem().setup(position.x, position.y, "Be easy!", 3.0f);
+                break;
         }
     }
 
@@ -256,7 +374,7 @@ public class Shuttle {
     }
 
     public enum SpeedRang {
-        NONE(0, 0, 0, 0, 0, 0.5f, 480.0f), WHITE(1, 1, 1, 1, 0.1f, 0.8f, 520.0f), GREEN(2, 0, 1, 0, 0.1f, 1.0f, 560.0f), YELLOW(3, 1, 1, 0, 0.1f, 1.6f, 600.0f), RED(4, 1, 0, 0, 0.1f, 3.0f, 600.0f);
+        NONE(0, 0, 0, 0, 0, 0.5f, 540.0f), WHITE(1, 1, 1, 1, 0.1f, 0.8f, 560.0f), GREEN(2, 0, 1, 0, 0.1f, 1.0f, 580.0f), YELLOW(3, 1, 1, 0, 0.1f, 1.6f, 600.0f), RED(4, 1, 0, 0, 0.1f, 3.0f, 600.0f);
         private int level;
         private float fr;
         private float fg;

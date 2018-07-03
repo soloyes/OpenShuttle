@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
@@ -21,6 +22,8 @@ import com.shuttle.game.AsteroidEmitter;
 import com.shuttle.game.Background;
 import com.shuttle.game.Consumable;
 import com.shuttle.game.ConsumableEmitter;
+import com.shuttle.game.FlyingText;
+import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.ParticleEmitter;
 import com.shuttle.game.Rules;
 import com.shuttle.game.Shuttle;
@@ -38,12 +41,21 @@ public class GameScreen extends BaseScreen {
     private Vector2 tmp;
     private boolean pause;
     private ShaderProgram shaderProgram;
+    private GameInfoSystem gameInfoSystem;
+
+    public Shuttle getPlayer() {
+        return player;
+    }
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
         this.batch = batch;
         this.camera = camera;
         this.tmp = new Vector2(0, 0);
+    }
+
+    public GameInfoSystem getGameInfoSystem() {
+        return gameInfoSystem;
     }
 
     @Override
@@ -79,10 +91,11 @@ public class GameScreen extends BaseScreen {
         }
 
         particleEmitter = new ParticleEmitter();
-        alienEmitter = new AlienEmitter();
+        alienEmitter = new AlienEmitter(this);
         consumableEmitter = new ConsumableEmitter();
         asteroidEmitter = new AsteroidEmitter();
         background = new Background();
+        gameInfoSystem = new GameInfoSystem();
         player = new Shuttle(
                 this,
                 ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
@@ -168,6 +181,7 @@ public class GameScreen extends BaseScreen {
         player.render(batch);
         particleEmitter.render(batch);
         player.drawRadar(batch, player.getPosition().x, player.getPosition().y);
+        gameInfoSystem.render(batch);
         batch.end();
 
         ScreenManager.getInstance().resetCamera();
@@ -189,6 +203,7 @@ public class GameScreen extends BaseScreen {
             consumableEmitter.update(dt);
             asteroidEmitter.update(dt);
             particleEmitter.update(dt);
+            gameInfoSystem.update(dt);
             checkCollision(dt);
         }
         cameraUpdate();
@@ -198,17 +213,17 @@ public class GameScreen extends BaseScreen {
     public void cameraUpdate() {
         camera.position.set(player.getPosition().x, player.getPosition().y, 0);
 
-        if (camera.position.x < 540) {
-            camera.position.x = 540;
+        if (camera.position.x < Rules.WORLD_WIDTH / 2) {
+            camera.position.x = Rules.WORLD_WIDTH / 2;
         }
-        if (camera.position.y < 960) {
-            camera.position.y = 960;
+        if (camera.position.y < Rules.WORLD_HEIGHT / 2) {
+            camera.position.y = Rules.WORLD_HEIGHT / 2;
         }
-        if (camera.position.x > Rules.SPACE_WIDTH - 540) {
-            camera.position.x = Rules.SPACE_WIDTH - 540;
+        if (camera.position.x > Rules.SPACE_WIDTH - Rules.WORLD_WIDTH / 2) {
+            camera.position.x = Rules.SPACE_WIDTH - Rules.WORLD_WIDTH / 2;
         }
-        if (camera.position.y > Rules.SPACE_HEIGHT - 960) {
-            camera.position.y = Rules.SPACE_HEIGHT - 960;
+        if (camera.position.y > Rules.SPACE_HEIGHT - Rules.WORLD_HEIGHT / 2) {
+            camera.position.y = Rules.SPACE_HEIGHT - Rules.WORLD_HEIGHT / 2;
         }
 
         camera.update();
@@ -218,17 +233,19 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < consumableEmitter.getActiveList().size(); i++) {
             Consumable a = consumableEmitter.getActiveList().get(i);
             if (player.getPosition().dst(a.getPosition()) < 60) {
-                a.deactivate();
-                player.addScore(1000);
+                if (player.getSpeedRang().getLevel() < Shuttle.SpeedRang.GREEN.getLevel()) {
+                    a.deactivate();
+                    player.takeEffect(a.getType());
+                } else {
+                    a.deactivate();
+                    player.badEffect(a.getType());
+                }
             }
 
             if (player.getPosition().dst(a.getPosition()) < player.getTakeRange()) {
-                particleEmitter.setupFromPointToPoint(a.getPosition().x, a.getPosition().y, player.getPosition().x, player.getPosition().y, 1400, 1, 2, 0, 1, 0, 0.3f, 0.5f, 1, 0.5f, 0.3f);
+                particleEmitter.setupFromPointToPoint(a.getPosition().x, a.getPosition().y, player.getPosition().x, player.getPosition().y, 140, 1, 2, 0, 1, 0, 0.3f, 0.5f, 1, 0.5f, 0.3f);
 
-                tmp.set(player.getPosition());
-                tmp.sub(a.getPosition());
-                tmp.nor();
-                tmp.scl(200.0f);
+                tmp.set(player.getPosition()).sub(a.getPosition()).nor().scl(200.0f);
                 a.getPosition().mulAdd(tmp, dt);
                 float dst = Vector2.dst(player.getPosition().x, player.getPosition().y, a.getPosition().x, a.getPosition().y);
                 float k = dst / player.getTakeRange();
@@ -240,7 +257,8 @@ public class GameScreen extends BaseScreen {
                 for (int j = 0; j < 24; j++) {
                     float ang = 6.28f / 24 * j;
                     float rad = 128 * k;
-                    particleEmitter.setup(a.getPosition().x + rad * (float) Math.cos(ang) + MathUtils.random(-10, 10), a.getPosition().y + rad * (float) Math.sin(ang) + MathUtils.random(-10, 10), MathUtils.random(-20, 20), MathUtils.random(-20, 20), 0.05f, 3, 3, 0, 1, 0, 0.2f, 0, 1, 0, 0.0f);
+
+                    particleEmitter.setup(a.getPosition().x + rad * (float) Math.cos(ang) + MathUtils.random(-10, 10), a.getPosition().y + rad * (float) Math.sin(ang) + MathUtils.random(-10, 10), 0, 0, 0.1f, 4, 4, 0, 1, 0, 0.2f, 0, 1, 0, 0.0f);
                 }
 
                 a.setDrawScale(k);
@@ -249,12 +267,26 @@ public class GameScreen extends BaseScreen {
 
         for (int i = 0; i < alienEmitter.getActiveList().size(); i++) {
             Alien a = alienEmitter.getActiveList().get(i);
-            if (player.getPosition().dst(a.getPosition()) < 160 && player.getSpeedRang().getLevel() > 0) {
-                a.destroy();
-                player.addScore(5000);
-                for (int j = 0; j < 30; j++) {
-                    particleEmitter.setup(a.getPosition().x + MathUtils.random(-30, 30), a.getPosition().y + MathUtils.random(-30, 30), MathUtils.random(-400, 400), MathUtils.random(-400, 400), 0.4f, 8, 4, 0, 1, 0, 1f, 0, 1, 0, 0.2f);
-
+            if (player.getPosition().dst(a.getPosition()) < 160) {
+                if (a.getLevel() < player.getSpeedRang().getLevel()) {
+                    a.destroy();
+                    int asc = (a.getMaxLevel() + 1) * 5000;
+                    player.addScore(asc);
+                    player.slowDown(a.getLevel() * 50.0f);
+                    for (int j = 0; j < 30; j++) {
+                        particleEmitter.setup(a.getPosition().x + MathUtils.random(-30, 30), a.getPosition().y + MathUtils.random(-30, 30), MathUtils.random(-400, 400), MathUtils.random(-400, 400), 0.4f, 8, 4, 0, 1, 0, 1f, 0, 1, 0, 0.2f);
+                    }
+                    player.killPlusPlus();
+                } else {
+                    if (player.addZigZag(0.5f * a.getLevel() + 0.2f)) {
+                        gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "BREAKED", 5);
+                        player.takeDamage(a.getLevel() + 1);
+                        tmp.set(player.getPosition()).sub(a.getPosition()).nor().scl(300 + a.getLevel() * 50);
+                        player.getVelocity().add(tmp);
+                        tmp.scl(-1);
+                        a.getVelocity().add(tmp);
+                        a.takeDamage(player.getSpeedRang().getLevel());
+                    }
                 }
             }
         }
@@ -302,6 +334,7 @@ public class GameScreen extends BaseScreen {
                     );
                 }
                 asteroidEmitter.boom(a.getPosition());
+                gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "OOOPS", 3);
             }
         }
     }

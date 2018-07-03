@@ -3,51 +3,58 @@ images1.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-crate
+aliens
   rotate: false
   xy: 2, 2
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
+Crate
+  rotate: false
+  xy: 2, 132
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-astronaut
-  rotate: false
-  xy: 260, 2
-  size: 128, 256
-  orig: 128, 256
-  offset: 0, 0
-  index: -1
 rocket
   rotate: false
-  xy: 2, 260
+  xy: 644, 2
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
+astronaut
+  rotate: false
+  xy: 260, 132
+  size: 128, 256
+  orig: 128, 256
+  offset: 0, 0
+  index: -1
 play
   rotate: false
-  xy: 260, 260
+  xy: 390, 132
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 exit
   rotate: false
-  xy: 2, 390
+  xy: 390, 262
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 alien
   rotate: false
-  xy: 132, 390
+  xy: 520, 132
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 star16
   rotate: false
-  xy: 390, 2
+  xy: 902, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
