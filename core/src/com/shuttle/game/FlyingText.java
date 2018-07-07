@@ -14,14 +14,11 @@ public class FlyingText {
     private Matrix4 matrix1;
     private Vector2 position;
     private BitmapFont font;
+    private String text;
+    private float random;
     private float scale;
     private float translation;
     private boolean active;
-    private String text;
-
-    public boolean isActive() {
-        return active;
-    }
 
     public FlyingText() {
         this.position = new Vector2(0, 0);
@@ -33,6 +30,25 @@ public class FlyingText {
         this.text = "";
     }
 
+    public void render(SpriteBatch batch) {
+        if (active) {
+            matrix4.set(matrix1);
+            matrix4.scl(scale);
+            batch.setTransformMatrix(matrix4);
+
+            if (translation > 0.0f) {
+                font.setColor(1, 1, 1, translation);
+            }
+            font.draw(batch,
+                    text,
+                    (position.x - (text.length() / 2) * 36) / scale + random,
+                    (position.y + 32) / scale + random
+            );
+            font.setColor(1, 1, 1, 1);
+            batch.setTransformMatrix(matrix1);
+        }
+    }
+
     public void setup(float x, float y, String text, float scale) {
         this.active = true;
         this.position.set(x, y);
@@ -41,26 +57,15 @@ public class FlyingText {
         this.text = text;
     }
 
-    public void render(SpriteBatch batch) {
+    public void update(float dt) {
         if (active) {
-            matrix4.set(matrix1);
-            matrix4.scl(scale);
-            batch.setTransformMatrix(matrix4);
+
             float r = 0.0f;
             if (translation > 0.0f) {
                 r = 3;
             }
-            if (translation > 0.0f) {
-                font.setColor(1, 1, 1, translation);
-            }
-            font.draw(batch, text, (position.x - (text.length() / 2) * 36) / scale + MathUtils.random(-translation * r, translation * r), (position.y + 32) / scale + MathUtils.random(-translation * r, translation * r));
-            font.setColor(1, 1, 1, 1);
-            batch.setTransformMatrix(matrix1);
-        }
-    }
+            random = MathUtils.random(-translation * r, translation * r);
 
-    public void update(float dt) {
-        if (active) {
             scale -= dt * 8.0f;
             if (scale < 2.0f) {
                 if (translation < 0.01f) {
@@ -75,5 +80,9 @@ public class FlyingText {
                 }
             }
         }
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }

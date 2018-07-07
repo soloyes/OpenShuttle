@@ -39,20 +39,20 @@ public class Shuttle {
     public Shuttle(GameScreen gs, float x, float y) {
         this.gs = gs;
         this.texture = Assets.getInstance().getAtlas().findRegion("rocket");
+        this.username = Gdx.files.local("username").readString();
         this.position = new Vector2(x, y);
         this.velocity = new Vector2();
         this.tmp = new Vector2();
         this.angle = 0.0f;
         this.width = texture.getRegionWidth();
         this.height = texture.getRegionHeight();
-        this.tmpString = new StringBuilder(200);
+        this.tmpString = new StringBuilder();
         this.maxFuel = Rules.PLAYER_MAX_FUEL;
         this.fuel = this.maxFuel;
         this.maxHp = Rules.PLAYER_MAX_HP;
         this.hp = this.maxHp;
-        this.lives = 3;
-        this.username = Gdx.files.local("username").readString();
-        this.takeRange = 500;
+        this.lives = Rules.PLAYER_INIT_LIVES;
+        this.takeRange = Rules.PLAYER_TAKE_RANGE;
         this.speedRang = SpeedRang.NONE;
         this.radar = new Radar(gs, this);
     }
@@ -135,7 +135,7 @@ public class Shuttle {
                     gs.getGameInfoSystem().setup(position.x, position.y, "REPAIR +1", 3.0f);
                 }
                 if (x == 1) {
-                    fuel += 15;
+                    fuel += Rules.CRATE_FUEL_ADD;
                     if (fuel > maxFuel) {
                         fuel = maxFuel;
                     }

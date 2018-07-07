@@ -23,5 +23,9 @@ public class Rules {
 
     public static float PLAYER_MAX_FUEL = 250.0f;
     public static int PLAYER_MAX_HP = 30;
+    public static int PLAYER_INIT_LIVES = 3;
+    public static int PLAYER_TAKE_RANGE = 500;
     public static int PLAYER_VELOCITY_NO_FUEL = 150;
+
+    public static int CRATE_FUEL_ADD = 50;
 }
