@@ -16,14 +16,6 @@ public class Consumable implements Poolable {
     private float angle, rotationSpeed;
     private float drawScale;
 
-    public Type getType() {
-        return type;
-    }
-
-    public void setDrawScale(float drawScale) {
-        this.drawScale = drawScale;
-    }
-
     public Consumable() {
         this.textures = new TextureRegion[2];
         this.textures[0] = Assets.getInstance().getAtlas().findRegion("astronaut");
@@ -39,6 +31,11 @@ public class Consumable implements Poolable {
     @Override
     public boolean isActive() {
         return active;
+    }
+
+    @Override
+    public Vector2 getPosition() {
+        return position;
     }
 
     public void deactivate() {
@@ -66,8 +63,12 @@ public class Consumable implements Poolable {
         angle += rotationSpeed * dt;
     }
 
-    public Vector2 getPosition() {
-        return position;
+    public Type getType() {
+        return type;
+    }
+
+    public void setDrawScale(float drawScale) {
+        this.drawScale = drawScale;
     }
 
     public enum Type {

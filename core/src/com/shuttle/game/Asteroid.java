@@ -36,6 +36,11 @@ public class Asteroid implements Poolable {
         return active;
     }
 
+    @Override
+    public Vector2 getPosition() {
+        return position;
+    }
+
     public void init(Vector2 position, Vector2 destanation, float acceleration, float size, boolean isFragment) {
         this.position.set(position);
         this.fragment = isFragment;
@@ -83,10 +88,6 @@ public class Asteroid implements Poolable {
 
     public int getHeight() {
         return height;
-    }
-
-    public Vector2 getPosition() {
-        return position;
     }
 
     public int getWidth() {

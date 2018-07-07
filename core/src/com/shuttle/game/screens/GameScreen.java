@@ -25,6 +25,7 @@ import com.shuttle.game.ConsumableEmitter;
 import com.shuttle.game.FlyingText;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.ParticleEmitter;
+import com.shuttle.game.Poolable;
 import com.shuttle.game.Rules;
 import com.shuttle.game.Shuttle;
 import com.shuttle.game.screens.group_screen.ConfigGroup;
@@ -43,19 +44,17 @@ public class GameScreen extends BaseScreen {
     private ShaderProgram shaderProgram;
     private GameInfoSystem gameInfoSystem;
 
-    public Shuttle getPlayer() {
-        return player;
-    }
+    ///
+    private Consumable tmpConsumable;
+    private Asteroid tmpAsteroid;
+    private Alien tmpAlien;
+    ///
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
         this.batch = batch;
         this.camera = camera;
         this.tmp = new Vector2(0, 0);
-    }
-
-    public GameInfoSystem getGameInfoSystem() {
-        return gameInfoSystem;
     }
 
     @Override
@@ -101,7 +100,6 @@ public class GameScreen extends BaseScreen {
                 ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
                 ScreenManager.getInstance().getViewport().getWorldHeight() / 2
         );
-        asteroidEmitter.setShuttle(player);
         font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class);
 
         Skin skin = Assets.getInstance().getAssetManager().get("uiskin/gameSkin.json");
@@ -231,111 +229,155 @@ public class GameScreen extends BaseScreen {
 
     public void checkCollision(float dt) {
         for (int i = 0; i < consumableEmitter.getActiveList().size(); i++) {
-            Consumable a = consumableEmitter.getActiveList().get(i);
-            if (player.getPosition().dst(a.getPosition()) < 60) {
+            tmpConsumable = consumableEmitter.getActiveList().get(i);
+            if (player.getPosition().dst(tmpConsumable.getPosition()) < 60) {
                 if (player.getSpeedRang().getLevel() < Shuttle.SpeedRang.GREEN.getLevel()) {
-                    a.deactivate();
-                    player.takeEffect(a.getType());
+                    tmpConsumable.deactivate();
+                    player.takeEffect(tmpConsumable.getType());
                 } else {
-                    a.deactivate();
-                    player.badEffect(a.getType());
+                    tmpConsumable.deactivate();
+                    player.badEffect(tmpConsumable.getType());
                 }
             }
 
-            if (player.getPosition().dst(a.getPosition()) < player.getTakeRange()) {
-                particleEmitter.setupFromPointToPoint(a.getPosition().x, a.getPosition().y, player.getPosition().x, player.getPosition().y, 140, 1, 2, 0, 1, 0, 0.3f, 0.5f, 1, 0.5f, 0.3f);
-
-                tmp.set(player.getPosition()).sub(a.getPosition()).nor().scl(200.0f);
-                a.getPosition().mulAdd(tmp, dt);
-                float dst = Vector2.dst(player.getPosition().x, player.getPosition().y, a.getPosition().x, a.getPosition().y);
+            if (player.getPosition().dst(tmpConsumable.getPosition()) < player.getTakeRange()) {
+                tmp.set(player.getPosition()).sub(tmpConsumable.getPosition()).nor().scl(200.0f);
+                tmpConsumable.getPosition().mulAdd(tmp, dt);
+                float dst = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpConsumable.getPosition().x, tmpConsumable.getPosition().y);
                 float k = dst / player.getTakeRange();
                 k += 0.2f;
                 if (k > 1.0f) {
                     k = 1.0f;
                 }
 
+                particleEmitter.setupFromPointToPoint(tmpConsumable.getPosition().x, tmpConsumable.getPosition().y, player.getPosition().x, player.getPosition().y, 140, 1, 2, 0, 1, 0, 0.3f, 0.5f, 1, 0.5f, 0.3f);
                 for (int j = 0; j < 24; j++) {
                     float ang = 6.28f / 24 * j;
                     float rad = 128 * k;
 
-                    particleEmitter.setup(a.getPosition().x + rad * (float) Math.cos(ang) + MathUtils.random(-10, 10), a.getPosition().y + rad * (float) Math.sin(ang) + MathUtils.random(-10, 10), 0, 0, 0.1f, 4, 4, 0, 1, 0, 0.2f, 0, 1, 0, 0.0f);
+                    particleEmitter.setup(tmpConsumable.getPosition().x + rad * (float) Math.cos(ang) + MathUtils.random(-10, 10), tmpConsumable.getPosition().y + rad * (float) Math.sin(ang) + MathUtils.random(-10, 10), 0, 0, 0.1f, 4, 4, 0, 1, 0, 0.2f, 0, 1, 0, 0.0f);
                 }
 
-                a.setDrawScale(k);
+                tmpConsumable.setDrawScale(k);
             }
         }
 
         for (int i = 0; i < alienEmitter.getActiveList().size(); i++) {
-            Alien a = alienEmitter.getActiveList().get(i);
-            if (player.getPosition().dst(a.getPosition()) < 160) {
-                if (a.getLevel() < player.getSpeedRang().getLevel()) {
-                    a.destroy();
-                    int asc = (a.getMaxLevel() + 1) * 5000;
+            tmpAlien = alienEmitter.getActiveList().get(i);
+            if (player.getPosition().dst(tmpAlien.getPosition()) < 160) {
+                if (tmpAlien.getLevel() < player.getSpeedRang().getLevel()) {
+                    tmpAlien.destroy();
+                    int asc = (tmpAlien.getMaxLevel() + 1) * 5000;
                     player.addScore(asc);
-                    player.slowDown(a.getLevel() * 50.0f);
-                    for (int j = 0; j < 30; j++) {
-                        particleEmitter.setup(a.getPosition().x + MathUtils.random(-30, 30), a.getPosition().y + MathUtils.random(-30, 30), MathUtils.random(-400, 400), MathUtils.random(-400, 400), 0.4f, 8, 4, 0, 1, 0, 1f, 0, 1, 0, 0.2f);
-                    }
+                    player.slowDown(tmpAlien.getLevel() * 50.0f);
+                    showSpray(tmpAlien);
                     player.killPlusPlus();
                 } else {
-                    if (player.addZigZag(0.5f * a.getLevel() + 0.2f)) {
+                    if (player.addZigZag(0.5f * tmpAlien.getLevel() + 0.2f)) {
                         gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "BREAKED", 5);
-                        player.takeDamage(a.getLevel() + 1);
-                        tmp.set(player.getPosition()).sub(a.getPosition()).nor().scl(300 + a.getLevel() * 50);
+                        player.takeDamage(tmpAlien.getLevel() + 1);
+                        tmp.set(player.getPosition()).sub(tmpAlien.getPosition()).nor().scl(300 + tmpAlien.getLevel() * 50);
                         player.getVelocity().add(tmp);
                         tmp.scl(-1);
-                        a.getVelocity().add(tmp);
-                        a.takeDamage(player.getSpeedRang().getLevel());
+                        tmpAlien.getVelocity().add(tmp);
+                        tmpAlien.takeDamage(player.getSpeedRang().getLevel());
                     }
                 }
             }
         }
 
         for (int i = 0; i < asteroidEmitter.getActiveList().size(); i++) {
-            Asteroid a = asteroidEmitter.getActiveList().get(i);
-            if (!a.isFragment() && player.getPosition().dst(a.getPosition()) < 128) {
-                a.destroy();
-                float dxy = 180;
-                int dustCover = 0;
-                switch (player.getSpeedRang()) {
-                    case NONE:
-                        dustCover += 32;
-                        break;
-                    case WHITE:
-                        dustCover += 64;
-                        break;
-                    case GREEN:
-                        dustCover += 96;
-                        break;
-                    case YELLOW:
-                        dustCover += 128;
-                        break;
-                    case RED:
-                        dustCover += 140;
-                        break;
-                }
-                for (int j = 0; j < dustCover; j++) {
-                    particleEmitter.setup(
-                            a.getPosition().x,
-                            a.getPosition().y,
-                            MathUtils.random(-dxy, dxy),
-                            MathUtils.random(-dxy, dxy),
-                            1f,
-                            6.0f,
-                            1.0f,
-                            0.17f,
-                            0.17f,
-                            0.17f,
-                            1,
-                            0,
-                            0,
-                            0,
-                            0
-                    );
-                }
-                asteroidEmitter.boom(a.getPosition());
+            tmpAsteroid = asteroidEmitter.getActiveList().get(i);
+            if (!tmpAsteroid.isFragment() && player.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
+                tmpAsteroid.destroy();
+                showDust(tmpAsteroid);
+                asteroidEmitter.boom(
+                        tmpAsteroid.getPosition(),
+                        Shuttle.SpeedRang.NONE
+                );
                 gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "OOOPS", 3);
             }
+
+            for (int j = 0; j < alienEmitter.getActiveList().size(); j++) {
+                tmpAlien = alienEmitter.getActiveList().get(j);
+                if (!tmpAsteroid.isFragment() && tmpAlien.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
+                    tmpAsteroid.destroy();
+                    showDust(tmpAsteroid);
+                    asteroidEmitter.boom(
+                            tmpAsteroid.getPosition(),
+                            Shuttle.SpeedRang.NONE
+                    );
+                    gameInfoSystem.setup(tmpAlien.getPosition().x, tmpAlien.getPosition().y, "BOOOOM", 3);
+                    if (tmpAlien.getLevel() == 0) {
+                        tmpAlien.destroy();
+                        showSpray(tmpAlien);
+                    } else {
+                        tmpAlien.takeDamage(1);
+                    }
+                }
+            }
+
+            for (int j = 0; j < consumableEmitter.getActiveList().size(); j++) {
+                tmpConsumable = consumableEmitter.getActiveList().get(j);
+                if (!tmpAsteroid.isFragment() && tmpConsumable.getPosition().dst(tmpAsteroid.getPosition()) < 128){
+                    tmpAsteroid.destroy();
+                    tmpConsumable.deactivate();
+                    asteroidEmitter.boom(
+                            tmpAsteroid.getPosition(),
+                            Shuttle.SpeedRang.NONE
+                    );
+                    showDust(tmpAsteroid);
+                    showSpray(tmpConsumable);
+                    gameInfoSystem.setup(tmpConsumable.getPosition().x, tmpConsumable.getPosition().y, "SO SAD", 3);
+                }
+            }
+        }
+    }
+
+    private void showSpray(Poolable a) {
+        for (int j = 0; j < 30; j++) {
+            particleEmitter.setup(a.getPosition().x + MathUtils.random(-30, 30), a.getPosition().y + MathUtils.random(-30, 30), MathUtils.random(-400, 400), MathUtils.random(-400, 400), 0.4f, 8, 4, 0, 1, 0, 1f, 0, 1, 0, 0.2f);
+        }
+    }
+
+    private void showDust(Asteroid a) {
+        float dxy = 180;
+        int dustCover = 0;
+        switch (player.getSpeedRang()) {
+            case NONE:
+                dustCover += 32;
+                break;
+            case WHITE:
+                dustCover += 64;
+                break;
+            case GREEN:
+                dustCover += 96;
+                break;
+            case YELLOW:
+                dustCover += 128;
+                break;
+            case RED:
+                dustCover += 140;
+                break;
+        }
+        for (int j = 0; j < dustCover; j++) {
+            particleEmitter.setup(
+                    a.getPosition().x,
+                    a.getPosition().y,
+                    MathUtils.random(-dxy, dxy),
+                    MathUtils.random(-dxy, dxy),
+                    1f,
+                    6.0f,
+                    1.0f,
+                    0.17f,
+                    0.17f,
+                    0.17f,
+                    1,
+                    0,
+                    0,
+                    0,
+                    0
+            );
         }
     }
 
@@ -353,7 +395,15 @@ public class GameScreen extends BaseScreen {
         return consumableEmitter;
     }
 
+    public GameInfoSystem getGameInfoSystem() {
+        return gameInfoSystem;
+    }
+
     public ParticleEmitter getParticleEmitter() {
         return particleEmitter;
+    }
+
+    public Shuttle getPlayer() {
+        return player;
     }
 }

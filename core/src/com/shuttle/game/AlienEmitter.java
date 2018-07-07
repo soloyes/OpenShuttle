@@ -10,7 +10,7 @@ public class AlienEmitter extends ObjectPool<Alien> {
 
     public AlienEmitter(GameScreen gs) {
         this.gs = gs;
-        for (int i = 0; i < 60; i++) {
+        for (int i = 0; i < Rules.ALIENS_AT_START; i++) {
             createAlien();
         }
     }
@@ -32,7 +32,7 @@ public class AlienEmitter extends ObjectPool<Alien> {
 
     public void update(float dt) {
         time += dt;
-        if (time > 5.0f) {
+        if (time > Rules.ALIENS_RESPAWN_TIME) {
             time = 0.0f;
             createAlien();
         }

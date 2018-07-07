@@ -15,24 +15,23 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
     private float acceleration;
     private float size;
     private float count;
-    private Shuttle shuttle;
 
     @Override
     protected Asteroid newObject() {
         return new Asteroid();
     }
 
-    public void boom(Vector2 position) {
-        fragmentSetup();
+    public void boom(Vector2 position, Shuttle.SpeedRang rang) {
+        fragmentSetup(rang);
         this.position = position;
         this.boom = true;
     }
 
-    private void fragmentSetup() {
+    private void fragmentSetup(Shuttle.SpeedRang rang) {
         acceleration = 1f;
         size = 1f;
         count = 1f;
-        switch (shuttle.getSpeedRang()) {
+        switch (rang) {
             case NONE:
                 acceleration = 1f;
                 size = 1f;
@@ -69,7 +68,7 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
 
     public void update(float dt) {
         time += dt;
-        if (time > 5f) {
+        if (time > Rules.ASTEROIDS_RESPAWN_TIME) {
             time = 0.0f;
             createAsteroid(128, 128);
         }
@@ -137,10 +136,6 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
     public void createFragment() {
         destanation = new Vector2(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
         getActiveElement().init(position, destanation, acceleration, size, true);
-    }
-
-    public void setShuttle(Shuttle shuttle) {
-        this.shuttle = shuttle;
     }
 
     private enum Side {

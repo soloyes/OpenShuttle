@@ -7,6 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.screens.GameScreen;
 
 public class Alien implements Poolable {
+    //                       0     1     2     3
+    // float[] probabilities = {0.4f, 0.7f, 0.9f, 1.0f};
+    float[] probabilities = {1.0f, 0.6f, 0.3f, 0.1f};
     private GameScreen gs;
     private TextureRegion[] regions;
     private Vector2 position;
@@ -16,26 +19,6 @@ public class Alien implements Poolable {
     private int maxLevel;
     private boolean active;
     private int width, height;
-    //                       0     1     2     3
-    // float[] probabilities = {0.4f, 0.7f, 0.9f, 1.0f};
-    float[] probabilities = {1.0f, 0.6f, 0.3f, 0.1f};
-
-    public int getLevel() {
-        return level;
-    }
-
-    public Vector2 getVelocity() {
-        return velocity;
-    }
-
-    public boolean takeDamage(int dmg) {
-        level -= dmg;
-        return level < 0;
-    }
-
-    public int getMaxLevel() {
-        return maxLevel;
-    }
 
     public Alien(GameScreen gs) {
         this.gs = gs;
@@ -52,6 +35,15 @@ public class Alien implements Poolable {
     @Override
     public boolean isActive() {
         return active;
+    }
+
+    @Override
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public void destroy() {
+        active = false;
     }
 
     public void init(float x, float y) {
@@ -71,8 +63,9 @@ public class Alien implements Poolable {
         batch.draw(regions[level], position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, 1 + level * 0.15f, 1 + level * 0.15f, 0);
     }
 
-    public void destroy() {
-        active = false;
+    public boolean takeDamage(int dmg) {
+        level -= dmg;
+        return level < 0;
     }
 
     public void update(float dt) {
@@ -88,7 +81,15 @@ public class Alien implements Poolable {
         }
     }
 
-    public Vector2 getPosition() {
-        return position;
+    public int getLevel() {
+        return level;
+    }
+
+    public int getMaxLevel() {
+        return maxLevel;
+    }
+
+    public Vector2 getVelocity() {
+        return velocity;
     }
 }

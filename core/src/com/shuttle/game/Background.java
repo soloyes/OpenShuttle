@@ -11,8 +11,8 @@ public class Background {
 
     public Background() {
         starTexture = Assets.getInstance().getAtlas().findRegion("star16");
-        stars = new Star[3200];
-        for (int i = 0; i < 3200; i++) {
+        stars = new Star[Rules.STARS];
+        for (int i = 0; i < Rules.STARS; i++) {
             stars[i] = new Star();
         }
     }
