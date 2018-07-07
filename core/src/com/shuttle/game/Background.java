@@ -8,12 +8,31 @@ import com.badlogic.gdx.math.Vector2;
 public class Background {
     private TextureRegion starTexture;
     private Star[] stars;
+    private float[] randomSpeed;
+    private float[] randomSize;
+    private float[] randomYPosition;
+    private float shuffleTime;
 
     public Background() {
         starTexture = Assets.getInstance().getAtlas().findRegion("star16");
+
+        shuffleTime = 0;
+        randomSpeed = new float[Rules.STARS];
+        randomSize = new float[Rules.STARS];
+        randomYPosition = new float[Rules.STARS];
         stars = new Star[Rules.STARS];
+
+        shuffle();
         for (int i = 0; i < Rules.STARS; i++) {
-            stars[i] = new Star();
+            stars[i] = new Star(i);
+        }
+    }
+
+    private void shuffle() {
+        for (int i = 0; i < Rules.STARS; i++) {
+            randomSize[i] = MathUtils.random(0.5f, 1.5f);
+            randomSpeed[i] = MathUtils.random(5.0f, 60.0f);
+            randomYPosition[i] = MathUtils.random(0, Rules.SPACE_HEIGHT);
         }
     }
 
@@ -27,6 +46,12 @@ public class Background {
     }
 
     public void update(float dt) {
+        shuffleTime += dt;
+        if (shuffleTime > Rules.STARS_SHUFFLE_TIME) {
+            shuffleTime = 0;
+            shuffle();
+        }
+
         for (int i = 0; i < stars.length; i++) {
             stars[i].update(dt);
         }
@@ -36,21 +61,25 @@ public class Background {
         private Vector2 position;
         private float speed;
         private float size;
+        private int i;
 
-        public Star() {
+        public Star(int i) {
+            this.i = i;
             position = new Vector2(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
-            speed = MathUtils.random(5.0f, 60.0f);
-            size = MathUtils.random(0.5f, 1.5f);
+            speed = randomSpeed[i];
+            size = randomSize[i];
         }
 
         public void update(float dt) {
             position.x -= speed * dt;
             if (position.x < -20) {
                 position.x = Rules.SPACE_WIDTH;
-                position.y = MathUtils.random(0, Rules.SPACE_HEIGHT);
-                speed = MathUtils.random(5.0f, 60.0f);
-                size = MathUtils.random(0.5f, 1.5f);
+                position.y = randomYPosition[getI()];
             }
+        }
+
+        public int getI() {
+            return i;
         }
     }
 }

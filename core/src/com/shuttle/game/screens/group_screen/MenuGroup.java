@@ -50,7 +50,9 @@ public class MenuGroup extends Group {
             userName.setText(file.readString());
         }
 
+        //todo: delete soon
         this.userName.setText("Player");
+        //
         isEmptyUserName = userName.getText().isEmpty();
 
         this.addActor(userName);

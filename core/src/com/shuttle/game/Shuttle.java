@@ -26,8 +26,8 @@ public class Shuttle {
     private StringBuilder tmpString;
     private int takeRange;
     private SpeedRang speedRang;
-    private FileHandle fileHandle;
     private float zigzagEffect;
+    private String username;
 
     private int killSeries;
     private float killTimer;
@@ -80,7 +80,7 @@ public class Shuttle {
         this.maxHp = 10;
         this.hp = this.maxHp;
         this.lives = 3;
-        this.fileHandle = Gdx.files.local("username");
+        this.username = Gdx.files.local("username").readString();
         this.takeRange = 500;
         this.speedRang = SpeedRang.NONE;
     }
@@ -124,7 +124,7 @@ public class Shuttle {
 
     public void renderGUI(SpriteBatch batch, BitmapFont font) {
         tmpString.setLength(0);
-        tmpString.append("NAME: ").append(fileHandle.readString());
+        tmpString.append("NAME: ").append(username);
         tmpString.append("\nSCORE: ").append(scoreView);
         tmpString.append("\nHP: ").append(hp).append("/").append(maxHp).append(" x").append(lives);
         tmpString.append("\nFUEL: ").append((int) fuel).append("/").append((int) maxFuel);

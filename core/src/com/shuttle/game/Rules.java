@@ -2,6 +2,7 @@ package com.shuttle.game;
 
 public class Rules {
     public static final int STARS = 3200;
+    public static final int STARS_SHUFFLE_TIME = 120;
 
     public static final int WORLD_WIDTH = 1080;
     public static final int WORLD_HEIGHT = 1920;
