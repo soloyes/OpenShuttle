@@ -272,6 +272,10 @@ public class GameScreen extends BaseScreen {
                     showSpray(tmpAlien);
                     player.killPlusPlus();
                 } else {
+                    if (tmpAlien.getLevel() == 3) {
+                        player.getRadar().setActive(false);
+                    }
+
                     if (player.addZigZag(0.5f * tmpAlien.getLevel() + 0.2f)) {
                         gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "BREAKED", 5);
                         player.takeDamage(tmpAlien.getLevel() + 1);
@@ -296,6 +300,7 @@ public class GameScreen extends BaseScreen {
                         tmpAsteroid.getPosition(),
                         Shuttle.SpeedRang.NONE
                 );
+                player.takeDamage(player.getSpeedRang().getLevel() + 1);
                 gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "SCREECH", 3);
             }
 

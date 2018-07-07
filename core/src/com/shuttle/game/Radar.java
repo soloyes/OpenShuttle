@@ -50,14 +50,26 @@ public class Radar implements Poolable {
     }
 
     public void drawRadar(SpriteBatch batch) {
-
         for (int i = 0; i < gs.getAlienEmitter().getActiveList().size(); i++) {
             tmpAlien = gs.getAlienEmitter().getActiveList().get(i);
             float d = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpAlien.getPosition().x, tmpAlien.getPosition().y);
             if (d < 2000.0f) {
                 float sc = (1.0f - d / 2000f) * 2 + 2.0f;
                 tmp.set(tmpAlien.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
-                batch.setColor(1, 0, 0, 1);
+                switch (tmpAlien.getLevel()){
+                    case 0:
+                        batch.setColor(1.0f, 0.8f, 0.69f, 1);
+                        break;
+                    case 1:
+                        batch.setColor(0.36f, 1.0f, 0.34f, 1);
+                        break;
+                    case 2:
+                        batch.setColor(0.99f, 1.0f, 0.34f, 1);
+                        break;
+                    case 3:
+                        batch.setColor(0.91f, 0.07f, 0.14f, 1);
+                        break;
+                }
                 batch.draw(starTex, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
                 batch.setColor(1, 1, 1, 1);
             }

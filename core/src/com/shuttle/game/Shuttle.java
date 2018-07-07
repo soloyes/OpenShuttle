@@ -48,7 +48,7 @@ public class Shuttle {
         this.tmpString = new StringBuilder(200);
         this.maxFuel = Rules.PLAYER_MAX_FUEL;
         this.fuel = this.maxFuel;
-        this.maxHp = 10;
+        this.maxHp = Rules.PLAYER_MAX_HP;
         this.hp = this.maxHp;
         this.lives = 3;
         this.username = Gdx.files.local("username").readString();
@@ -170,32 +170,27 @@ public class Shuttle {
         if (angle > 360.0f) {
             angle -= 360.0f;
         }
-        if (scoreView < score) {
-            int scoreDelta = (int) (Math.abs(score - scoreView) * 0.1f);
-            if (scoreDelta < 5) {
-                scoreDelta = 5;
-            }
             if (scoreView < score) {
-                scoreView += scoreDelta;
+                scoreView += 500;
                 if (scoreView > score) {
                     scoreView = score;
                 }
             }
             if (scoreView > score) {
-                scoreView -= scoreDelta;
+                scoreView -= 500;
                 if (scoreView < score) {
                     scoreView = score;
                 }
             }
-        }
+
         velocity.scl(0.99f);
         position.mulAdd(velocity, dt);
         speedRang = SpeedRang.getRangFromVelocity(velocity.len());
         fuel -= speedRang.fuelPerSec * dt;
         if (fuel < 0.0f) {
             fuel = 0.0f;
-            if (velocity.len() > 100) {
-                velocity.nor().scl(100);
+            if (velocity.len() > Rules.PLAYER_VELOCITY_NO_FUEL) {
+                velocity.nor().scl(Rules.PLAYER_VELOCITY_NO_FUEL);
             }
         }
         createFXs();
@@ -224,9 +219,9 @@ public class Shuttle {
             velocity.add(acc * (float) Math.cos(Math.toRadians(angle)) * dt, acc * (float) Math.sin(Math.toRadians(angle)) * dt);
         }
 
-        if (!radar.isActive()){
+        if (!radar.isActive()) {
             radar.update(dt);
-            if (position.dst(radar.getPosition()) < 128){
+            if (position.dst(radar.getPosition()) < 128) {
                 radar.setActive(true);
             }
         }
@@ -339,7 +334,11 @@ public class Shuttle {
     }
 
     public enum SpeedRang {
-        NONE(0, 0, 0, 0, 0, 0.5f, 540.0f), WHITE(1, 1, 1, 1, 0.1f, 0.8f, 560.0f), GREEN(2, 0, 1, 0, 0.1f, 1.0f, 580.0f), YELLOW(3, 1, 1, 0, 0.1f, 1.6f, 600.0f), RED(4, 1, 0, 0, 0.1f, 3.0f, 600.0f);
+        NONE(0, 0, 0, 0, 0, 0.5f, 540.0f),
+        WHITE(1, 1, 1, 1, 0.1f, 0.8f, 560.0f),
+        GREEN(2, 0, 1, 0, 0.1f, 1.0f, 580.0f),
+        YELLOW(3, 1, 1, 0, 0.1f, 1.6f, 600.0f),
+        RED(4, 1, 0, 0, 0.1f, 3.0f, 600.0f);
         private int level;
         private float fr;
         private float fg;
