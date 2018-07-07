@@ -11,12 +11,9 @@ public class Background {
     private float[] randomSpeed;
     private float[] randomSize;
     private float[] randomYPosition;
-    private float shuffleTime;
 
     public Background() {
         starTexture = Assets.getInstance().getAtlas().findRegion("star16");
-
-        shuffleTime = 0;
         randomSpeed = new float[Rules.STARS];
         randomSize = new float[Rules.STARS];
         randomYPosition = new float[Rules.STARS];
@@ -46,12 +43,6 @@ public class Background {
     }
 
     public void update(float dt) {
-        shuffleTime += dt;
-        if (shuffleTime > Rules.STARS_SHUFFLE_TIME) {
-            shuffleTime = 0;
-            shuffle();
-        }
-
         for (int i = 0; i < stars.length; i++) {
             stars[i].update(dt);
         }

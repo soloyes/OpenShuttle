@@ -6,9 +6,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+import lombok.Data;
+
 /**
  * @author Shuttle on 6/30/18.
  */
+@Data
 public class Asteroid implements Poolable {
     private TextureRegion[] textureRegions;
     private Vector2 position;
@@ -84,17 +87,5 @@ public class Asteroid implements Poolable {
 
     public void destroy() {
         active = false;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public boolean isFragment() {
-        return fragment;
     }
 }

@@ -6,6 +6,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.screens.GameScreen;
 
+import lombok.Data;
+
+@Data
 public class Alien implements Poolable {
     //                       0     1     2     3
     // float[] probabilities = {0.4f, 0.7f, 0.9f, 1.0f};
@@ -19,6 +22,9 @@ public class Alien implements Poolable {
     private int maxLevel;
     private boolean active;
     private int width, height;
+    private float hungryTimer;
+    private boolean hungry;
+    private float slimTimer;
 
     public Alien(GameScreen gs) {
         this.gs = gs;
@@ -47,6 +53,11 @@ public class Alien implements Poolable {
     }
 
     public void init(float x, float y) {
+
+        this.hungryTimer = 0;
+        this.slimTimer = 0;
+        this.hungry = true;
+
         position.set(x, y);
         active = true;
         float rnd = MathUtils.random(0.0f, 1.0f);
@@ -63,33 +74,37 @@ public class Alien implements Poolable {
         batch.draw(regions[level], position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, 1 + level * 0.15f, 1 + level * 0.15f, 0);
     }
 
+    public void update(float dt) {
+        slimTimer += dt;
+        hungryTimer += dt;
+        if (slimTimer > Rules.ALIENS_SLIM_TIME) {
+            slimTimer = 0;
+            if (level > 0) {
+                takeDamage(1);
+            }
+        }
+
+        if (hungryTimer > Rules.ALIENS_HUNGRY_TIME) {
+            hungryTimer = 0;
+            hungry = true;
+        }
+
+        velocity.scl(0.99f);
+        position.mulAdd(velocity, dt);
+        if (hungry) {
+            if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
+                tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(50.0f);
+                velocity.mulAdd(tmp, dt);
+            }
+            if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
+                tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
+                velocity.mulAdd(tmp, dt);
+            }
+        }
+    }
+
     public boolean takeDamage(int dmg) {
         level -= dmg;
         return level < 0;
-    }
-
-    public void update(float dt) {
-        velocity.scl(0.99f);
-        position.mulAdd(velocity, dt);
-        if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-            tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(50.0f);
-            velocity.mulAdd(tmp, dt);
-        }
-        if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
-            tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
-            velocity.mulAdd(tmp, dt);
-        }
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public int getMaxLevel() {
-        return maxLevel;
-    }
-
-    public Vector2 getVelocity() {
-        return velocity;
     }
 }

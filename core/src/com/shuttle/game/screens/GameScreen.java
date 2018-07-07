@@ -43,7 +43,6 @@ public class GameScreen extends BaseScreen {
     private boolean pause;
     private ShaderProgram shaderProgram;
     private GameInfoSystem gameInfoSystem;
-
     ///
     private Consumable tmpConsumable;
     private Asteroid tmpAsteroid;
@@ -281,6 +280,8 @@ public class GameScreen extends BaseScreen {
                         tmp.scl(-1);
                         tmpAlien.getVelocity().add(tmp);
                         tmpAlien.takeDamage(player.getSpeedRang().getLevel());
+                        tmpAlien.setHungry(false);
+                        tmpAlien.setSlimTimer(0);
                     }
                 }
             }
@@ -295,7 +296,7 @@ public class GameScreen extends BaseScreen {
                         tmpAsteroid.getPosition(),
                         Shuttle.SpeedRang.NONE
                 );
-                gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "OOOPS", 3);
+                gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "SCREECH", 3);
             }
 
             for (int j = 0; j < alienEmitter.getActiveList().size(); j++) {
@@ -319,7 +320,7 @@ public class GameScreen extends BaseScreen {
 
             for (int j = 0; j < consumableEmitter.getActiveList().size(); j++) {
                 tmpConsumable = consumableEmitter.getActiveList().get(j);
-                if (!tmpAsteroid.isFragment() && tmpConsumable.getPosition().dst(tmpAsteroid.getPosition()) < 128){
+                if (!tmpAsteroid.isFragment() && tmpConsumable.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
                     tmpAsteroid.destroy();
                     tmpConsumable.deactivate();
                     asteroidEmitter.boom(

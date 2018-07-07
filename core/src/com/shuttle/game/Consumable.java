@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+import lombok.Data;
+
+@Data
 public class Consumable implements Poolable {
     private Type type;
     private TextureRegion texture;
@@ -61,14 +64,6 @@ public class Consumable implements Poolable {
         drawScale = 1.0f;
         position.mulAdd(velocity, dt);
         angle += rotationSpeed * dt;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setDrawScale(float drawScale) {
-        this.drawScale = drawScale;
     }
 
     public enum Type {
