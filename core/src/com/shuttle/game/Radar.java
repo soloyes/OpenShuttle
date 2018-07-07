@@ -81,9 +81,8 @@ public class Radar implements Poolable {
             if (d < 2000.0f) {
                 float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f;
                 tmp.set(tmpConsumable.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
-                batch.setColor(0, 1, 0, 1);
-                batch.draw(starTex, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
                 batch.setColor(1, 1, 1, 1);
+                batch.draw(starTex, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
             }
         }
     }
