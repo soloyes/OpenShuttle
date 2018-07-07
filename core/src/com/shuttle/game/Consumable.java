@@ -22,23 +22,13 @@ public class Consumable implements Poolable {
     public Consumable() {
         this.textures = new TextureRegion[2];
         this.textures[0] = Assets.getInstance().getAtlas().findRegion("astronaut");
-        this.textures[1] = Assets.getInstance().getAtlas().findRegion("Crate");
+        this.textures[1] = Assets.getInstance().getAtlas().findRegion("crate");
         this.position = new Vector2(0, 0);
         this.velocity = new Vector2(0, 0);
         this.width = textures[0].getRegionWidth();
         this.height = textures[0].getRegionHeight();
         this.texture = textures[0];
         this.active = false;
-    }
-
-    @Override
-    public boolean isActive() {
-        return active;
-    }
-
-    @Override
-    public Vector2 getPosition() {
-        return position;
     }
 
     public void deactivate() {

@@ -10,10 +10,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 
+import lombok.Data;
+
+@Data
 public class Shuttle {
     private GameScreen gs;
     private TextureRegion texture;
-    private TextureRegion starTex;
     private int width, height;
     private Vector2 position;
     private Vector2 velocity;
@@ -28,14 +30,31 @@ public class Shuttle {
     private SpeedRang speedRang;
     private float zigzagEffect;
     private String username;
-
     private int killSeries;
     private float killTimer;
     private String[] killMsgs = {"", "KILLED", "DOUBLE KILL", "MULTI KILL", "ULATRA KILL", "RAMPAGE", "HOLY S**T"};
     private int[] killMsgsScale = {0, 4, 5, 6, 7, 10, 15};
+    private Radar radar;
 
-    public Vector2 getVelocity() {
-        return velocity;
+    public Shuttle(GameScreen gs, float x, float y) {
+        this.gs = gs;
+        this.texture = Assets.getInstance().getAtlas().findRegion("rocket");
+        this.position = new Vector2(x, y);
+        this.velocity = new Vector2();
+        this.tmp = new Vector2();
+        this.angle = 0.0f;
+        this.width = texture.getRegionWidth();
+        this.height = texture.getRegionHeight();
+        this.tmpString = new StringBuilder(200);
+        this.maxFuel = Rules.PLAYER_MAX_FUEL;
+        this.fuel = this.maxFuel;
+        this.maxHp = 10;
+        this.hp = this.maxHp;
+        this.lives = 3;
+        this.username = Gdx.files.local("username").readString();
+        this.takeRange = 500;
+        this.speedRang = SpeedRang.NONE;
+        this.radar = new Radar(gs, this);
     }
 
     public boolean addZigZag(float amount) {
@@ -44,6 +63,22 @@ public class Shuttle {
             return true;
         }
         return false;
+    }
+
+    public void badEffect(Consumable.Type type) {
+        switch (type) {
+            case Astronaut:
+                addScore(-50000);
+                gs.getGameInfoSystem().setup(position.x, position.y, "Murder!\n-50000", 8.0f);
+                break;
+            case Crate:
+                gs.getGameInfoSystem().setup(position.x, position.y, "Be easy!", 3.0f);
+                break;
+        }
+    }
+
+    public void addScore(int amount) {
+        score += amount;
     }
 
     public void killPlusPlus() {
@@ -55,71 +90,9 @@ public class Shuttle {
         gs.getGameInfoSystem().setup(position.x, position.y, killMsgs[killSeries], killMsgsScale[killSeries]);
     }
 
-    public void takeDamage(int amount) {
-        hp -= amount;
-        if (hp <= 0) {
-            hp = maxHp;
-            lives--;
-            gs.getGameInfoSystem().setup(position.x, position.y, "DESTROYED", 8);
-        }
-    }
-
-    public Shuttle(GameScreen gs, float x, float y) {
-        this.gs = gs;
-        this.texture = Assets.getInstance().getAtlas().findRegion("rocket");
-        this.position = new Vector2(x, y);
-        this.velocity = new Vector2(0.0f, 0.0f);
-        this.tmp = new Vector2(0.0f, 0.0f);
-        this.angle = 0.0f;
-        this.starTex = Assets.getInstance().getAtlas().findRegion("star16");
-        this.width = texture.getRegionWidth();
-        this.height = texture.getRegionHeight();
-        this.tmpString = new StringBuilder(200);
-        this.maxFuel = 120.0f;
-        this.fuel = this.maxFuel;
-        this.maxHp = 10;
-        this.hp = this.maxHp;
-        this.lives = 3;
-        this.username = Gdx.files.local("username").readString();
-        this.takeRange = 500;
-        this.speedRang = SpeedRang.NONE;
-    }
-
-    public void addScore(int amount) {
-        score += amount;
-    }
-
-    public void drawRadar(SpriteBatch batch, float sx, float sy) {
-        //batch.setColor(1, 1f, 1, 1);
-        // batch.draw(starTex, sx, sy, 8f, 8f, 16, 16, 5, 5, 0);
-
-        for (int i = 0; i < gs.getAlienEmitter().getActiveList().size(); i++) {
-            Alien a = gs.getAlienEmitter().getActiveList().get(i);
-            float d = Vector2.dst(position.x, position.y, a.getPosition().x, a.getPosition().y);
-            if (d < 2000.0f) {
-                float sc = (1.0f - d / 2000f) * 2 + 2.0f;
-                tmp.set(a.getPosition()).sub(position).nor().scl(d / 2000.0f * 300.0f);
-                batch.setColor(1, 0, 0, 1);
-                batch.draw(starTex, position.x + tmp.x, position.y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
-                batch.setColor(1, 1, 1, 1);
-            }
-        }
-
-        for (int i = 0; i < gs.getConsumableEmitter().getActiveList().size(); i++) {
-            Consumable c = gs.getConsumableEmitter().getActiveList().get(i);
-            float d = Vector2.dst(position.x, position.y, c.getPosition().x, c.getPosition().y);
-            if (d < 2000.0f) {
-                float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f;
-                tmp.set(c.getPosition()).sub(position).nor().scl(d / 2000.0f * 300.0f);
-                batch.setColor(0, 1, 0, 1);
-                batch.draw(starTex, position.x + tmp.x, position.y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
-                batch.setColor(1, 1, 1, 1);
-            }
-        }
-    }
-
     public void render(SpriteBatch batch) {
         batch.draw(texture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, 1, 1, angle);
+        radar.render(batch);
     }
 
     public void renderGUI(SpriteBatch batch, BitmapFont font) {
@@ -135,6 +108,48 @@ public class Shuttle {
 
     public void slowDown(float amount) {
         velocity.scl(1.0f - amount / velocity.len());
+    }
+
+    public void takeDamage(int amount) {
+        hp -= amount;
+        if (hp <= 0) {
+            hp = maxHp;
+            lives--;
+            gs.getGameInfoSystem().setup(position.x, position.y, "DESTROYED", 8);
+        }
+    }
+
+    public void takeEffect(Consumable.Type type) {
+        switch (type) {
+            case Astronaut:
+                addScore(10000);
+                gs.getGameInfoSystem().setup(position.x, position.y, "+10000", 3.0f);
+                break;
+            case Crate:
+                int x = MathUtils.random(0, 5);
+                if (x == 0) {
+                    hp++;
+                    if (hp > maxHp) {
+                        hp = maxHp;
+                    }
+                    gs.getGameInfoSystem().setup(position.x, position.y, "REPAIR +1", 3.0f);
+                }
+                if (x == 1) {
+                    fuel += 15;
+                    if (fuel > maxFuel) {
+                        fuel = maxFuel;
+                    }
+                    gs.getGameInfoSystem().setup(position.x, position.y, "FUEL +15", 3.0f);
+                }
+                if (x == 2) {
+                    velocity.add(1500 * (float) Math.cos(Math.toRadians(angle)), 1500 * (float) Math.sin(Math.toRadians(angle)));
+                    gs.getGameInfoSystem().setup(position.x, position.y, "TURBO X5", 5.0f);
+                }
+                if (x > 2) {
+                    gs.getGameInfoSystem().setup(position.x, position.y, "TRASH", 2.0f);
+                }
+                break;
+        }
     }
 
     public void update(float dt) {
@@ -207,6 +222,13 @@ public class Shuttle {
             }
             float acc = speedRang.acceleration * (1.0f - 0.1f * (float) (maxHp - hp) / maxHp);
             velocity.add(acc * (float) Math.cos(Math.toRadians(angle)) * dt, acc * (float) Math.sin(Math.toRadians(angle)) * dt);
+        }
+
+        if (!radar.isActive()){
+            radar.update(dt);
+            if (position.dst(radar.getPosition()) < 128){
+                radar.setActive(true);
+            }
         }
     }
 
@@ -294,7 +316,7 @@ public class Shuttle {
                         0.0f
                 );
             }
-            if(velocity.len() > 1200.0f) {
+            if (velocity.len() > 1200.0f) {
                 gs.getParticleEmitter().setup(
                         position.x + 90 * (float) Math.cos(Math.toRadians(angle)),
                         position.y + 90 * (float) Math.sin(Math.toRadians(angle)),
@@ -314,63 +336,6 @@ public class Shuttle {
                 );
             }
         }
-    }
-
-    public void takeEffect(Consumable.Type type) {
-        switch (type) {
-            case Astronaut:
-                addScore(10000);
-                gs.getGameInfoSystem().setup(position.x, position.y, "+10000", 3.0f);
-                break;
-            case Crate:
-                int x = MathUtils.random(0, 5);
-                if (x == 0) {
-                    hp++;
-                    if (hp > maxHp) {
-                        hp = maxHp;
-                    }
-                    gs.getGameInfoSystem().setup(position.x, position.y, "REPAIR +1", 3.0f);
-                }
-                if (x == 1) {
-                    fuel += 15;
-                    if (fuel > maxFuel) {
-                        fuel = maxFuel;
-                    }
-                    gs.getGameInfoSystem().setup(position.x, position.y, "FUEL +15", 3.0f);
-                }
-                if (x == 2) {
-                    velocity.add(1500 * (float) Math.cos(Math.toRadians(angle)), 1500 * (float) Math.sin(Math.toRadians(angle)));
-                    gs.getGameInfoSystem().setup(position.x, position.y, "TURBO X5", 5.0f);
-                }
-                if (x > 2) {
-                    gs.getGameInfoSystem().setup(position.x, position.y, "TRASH", 2.0f);
-                }
-                break;
-        }
-    }
-
-    public void badEffect(Consumable.Type type) {
-        switch (type) {
-            case Astronaut:
-                addScore(-50000);
-                gs.getGameInfoSystem().setup(position.x, position.y, "Murder!\n-50000", 8.0f);
-                break;
-            case Crate:
-                gs.getGameInfoSystem().setup(position.x, position.y, "Be easy!", 3.0f);
-                break;
-        }
-    }
-
-    public Vector2 getPosition() {
-        return position;
-    }
-
-    public SpeedRang getSpeedRang() {
-        return speedRang;
-    }
-
-    public int getTakeRange() {
-        return takeRange;
     }
 
     public enum SpeedRang {

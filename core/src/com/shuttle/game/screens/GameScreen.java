@@ -177,7 +177,7 @@ public class GameScreen extends BaseScreen {
         consumableEmitter.render(batch);
         player.render(batch);
         particleEmitter.render(batch);
-        player.drawRadar(batch, player.getPosition().x, player.getPosition().y);
+        //player.drawRadar(batch, player.getPosition().x, player.getPosition().y);
         gameInfoSystem.render(batch);
         batch.end();
 

@@ -29,23 +29,13 @@ public class Alien implements Poolable {
     public Alien(GameScreen gs) {
         this.gs = gs;
         this.regions = Assets.getInstance().getAtlas().findRegion("aliens").split(128, 128)[0];
-        this.position = new Vector2(0, 0);
-        this.velocity = new Vector2(0, 0);
+        this.position = new Vector2();
+        this.velocity = new Vector2();
+        this.tmp = new Vector2();
         this.width = 128;
         this.height = 128;
-        this.active = false;
         this.level = 1;
-        this.tmp = new Vector2(0, 0);
-    }
-
-    @Override
-    public boolean isActive() {
-        return active;
-    }
-
-    @Override
-    public Vector2 getPosition() {
-        return position;
+        this.active = false;
     }
 
     public void destroy() {
