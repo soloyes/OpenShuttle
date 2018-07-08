@@ -8,12 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.Alien;
 import com.shuttle.game.AlienEmitter;
 import com.shuttle.game.Assets;
@@ -22,14 +16,16 @@ import com.shuttle.game.AsteroidEmitter;
 import com.shuttle.game.Background;
 import com.shuttle.game.Consumable;
 import com.shuttle.game.ConsumableEmitter;
-import com.shuttle.game.FlyingText;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.ParticleEmitter;
 import com.shuttle.game.Poolable;
 import com.shuttle.game.Rules;
 import com.shuttle.game.Shuttle;
-import com.shuttle.game.screens.group_screen.ConfigGroup;
+import com.shuttle.game.screens.group_screen.PauseGroup;
 
+import lombok.Data;
+
+@Data
 public class GameScreen extends BaseScreen {
     private Shuttle player;
     private Background background;
@@ -40,9 +36,9 @@ public class GameScreen extends BaseScreen {
     private BitmapFont font64;
     private Camera camera;
     private Vector2 tmp;
-    private boolean pause;
     private ShaderProgram shaderProgram;
     private GameInfoSystem gameInfoSystem;
+    private PauseGroup pauseGroup;
     ///
     private Consumable tmpConsumable;
     private Asteroid tmpAsteroid;
@@ -77,7 +73,6 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void createGUI() {
-        pause = false;
         shaderProgram = new ShaderProgram(
                 Gdx.files.internal("shaders/default.vert"),
                 Gdx.files.internal("shaders/default.frag")
@@ -100,62 +95,8 @@ public class GameScreen extends BaseScreen {
                 ScreenManager.getInstance().getViewport().getWorldHeight() / 2
         );
         font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class);
-
-        Skin skin = Assets.getInstance().getAssetManager().get("uiskin/gameSkin.json");
-        Button pauseBtn = new Button(skin, "default");
-        pauseBtn.setOrigin(Align.center);
-        pauseBtn.setSize(128f, 128f);
-        pauseBtn.setPosition(
-                ScreenManager.getInstance().getViewport().getWorldWidth() - pauseBtn.getWidth() - 20,
-                ScreenManager.getInstance().getViewport().getWorldHeight() - pauseBtn.getHeight() - 20
-        );
-
-        final ConfigGroup configGroup = new ConfigGroup();
-        configGroup.setVisible(false);
-        final Button buttonMenu = new Button(skin, "default");
-        buttonMenu.setVisible(false);
-        final Button buttonRestart = new Button(skin, "default");
-        buttonRestart.setVisible(false);
-
-        buttonMenu.setOrigin(Align.center);
-        buttonRestart.setOrigin(Align.center);
-
-        buttonMenu.setSize(128f, 128f);
-        buttonRestart.setSize(128f, 128f);
-
-        buttonRestart.setPosition(
-                ScreenManager.getInstance().getViewport().getWorldWidth() - buttonRestart.getWidth(),
-                0
-        );
-
-        buttonMenu.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
-            }
-        });
-
-        buttonRestart.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
-            }
-        });
-
-        pauseBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                pause = !pause;
-                configGroup.setVisible(pause);
-                buttonMenu.setVisible(pause);
-                buttonRestart.setVisible(pause);
-            }
-        });
-
-        stage.addActor(pauseBtn);
-        stage.addActor(configGroup);
-        stage.addActor(buttonMenu);
-        stage.addActor(buttonRestart);
+        pauseGroup = new PauseGroup();
+        stage.addActor(pauseGroup);
     }
 
     @Override
@@ -163,7 +104,7 @@ public class GameScreen extends BaseScreen {
         super.render(delta);
         update(delta);
         batch.setProjectionMatrix(camera.combined);
-        if (pause) {
+        if (pauseGroup.isPause()) {
             batch.setShader(shaderProgram);
         } else {
             batch.setShader(null);
@@ -177,7 +118,6 @@ public class GameScreen extends BaseScreen {
         consumableEmitter.render(batch);
         player.render(batch);
         particleEmitter.render(batch);
-        //player.drawRadar(batch, player.getPosition().x, player.getPosition().y);
         gameInfoSystem.render(batch);
         batch.end();
 
@@ -193,7 +133,7 @@ public class GameScreen extends BaseScreen {
 
     public void update(float dt) {
         cameraUpdate();
-        if (!pause) {
+        if (!pauseGroup.isPause()) {
             background.update(dt);
             player.update(dt);
             alienEmitter.update(dt);
@@ -249,7 +189,7 @@ public class GameScreen extends BaseScreen {
                     k = 1.0f;
                 }
 
-                particleEmitter.setupFromPointToPoint(tmpConsumable.getPosition().x, tmpConsumable.getPosition().y, player.getPosition().x, player.getPosition().y, 140, 1, 2, 0, 1, 0, 0.3f, 0.5f, 1, 0.5f, 0.3f);
+                particleEmitter.setupFromPointToPoint(tmpConsumable.getPosition().x, tmpConsumable.getPosition().y, player.getPosition().x, player.getPosition().y, 1, 2, 0, 1, 0, 0.3f, 0.5f, 1, 0.5f, 0.3f);
                 for (int j = 0; j < 24; j++) {
                     float ang = 6.28f / 24 * j;
                     float rad = 128 * k;
@@ -391,25 +331,5 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         shaderProgram.dispose();
-    }
-
-    public AlienEmitter getAlienEmitter() {
-        return alienEmitter;
-    }
-
-    public ConsumableEmitter getConsumableEmitter() {
-        return consumableEmitter;
-    }
-
-    public GameInfoSystem getGameInfoSystem() {
-        return gameInfoSystem;
-    }
-
-    public ParticleEmitter getParticleEmitter() {
-        return particleEmitter;
-    }
-
-    public Shuttle getPlayer() {
-        return player;
     }
 }

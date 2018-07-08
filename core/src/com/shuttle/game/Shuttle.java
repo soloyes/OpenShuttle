@@ -1,7 +1,6 @@
 package com.shuttle.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -32,7 +31,7 @@ public class Shuttle {
     private String username;
     private int killSeries;
     private float killTimer;
-    private String[] killMsgs = {"", "KILLED", "DOUBLE KILL", "MULTI KILL", "ULATRA KILL", "RAMPAGE", "HOLY S**T"};
+    private String[] killMsgs = {"", "KILLED", "DOUBLE KILL", "MULTI KILL", "ULTRA KILL", "RAMPAGE", "HOLY S**T"};
     private int[] killMsgsScale = {0, 4, 5, 6, 7, 10, 15};
     private Radar radar;
 
@@ -170,18 +169,18 @@ public class Shuttle {
         if (angle > 360.0f) {
             angle -= 360.0f;
         }
-            if (scoreView < score) {
-                scoreView += 500;
-                if (scoreView > score) {
-                    scoreView = score;
-                }
-            }
+        if (scoreView < score) {
+            scoreView += 500;
             if (scoreView > score) {
-                scoreView -= 500;
-                if (scoreView < score) {
-                    scoreView = score;
-                }
+                scoreView = score;
             }
+        }
+        if (scoreView > score) {
+            scoreView -= 500;
+            if (scoreView < score) {
+                scoreView = score;
+            }
+        }
 
         velocity.scl(0.99f);
         position.mulAdd(velocity, dt);
@@ -203,15 +202,75 @@ public class Shuttle {
                 if (angle > angleToTarget) {
                     if (Math.abs(angle - angleToTarget) <= 180.0f) {
                         angle -= radialSpeed * dt;
+                        gs.getParticleEmitter().setupFromPointToPoint(
+                                position.x - 80 * (float) Math.cos(Math.toRadians(90 - angle)),
+                                position.y + 80 * (float) Math.sin(Math.toRadians(90 - angle)),
+                                position.x - 35 * (float) Math.cos(Math.toRadians(90 - angle)),
+                                position.y + 35 * (float) Math.sin(Math.toRadians(90 - angle)),
+                                2.0f,
+                                0.0f,
+                                0.5f,
+                                0.5f,
+                                0.5f,
+                                0.5f,
+                                0,
+                                0,
+                                0,
+                                0);
                     } else {
                         angle += radialSpeed * dt;
+                        gs.getParticleEmitter().setupFromPointToPoint(
+                                position.x + 80 * (float) Math.cos(Math.toRadians(90 - angle)),
+                                position.y - 80 * (float) Math.sin(Math.toRadians(90 - angle)),
+                                position.x + 35 * (float) Math.cos(Math.toRadians(90 - angle)),
+                                position.y - 35 * (float) Math.sin(Math.toRadians(90 - angle)),
+                                2.0f,
+                                0.0f,
+                                0.5f,
+                                0.5f,
+                                0.5f,
+                                0.5f,
+                                0,
+                                0,
+                                0,
+                                0);
                     }
                 }
                 if (angle < angleToTarget) {
                     if (Math.abs(angle - angleToTarget) <= 180.0f) {
                         angle += radialSpeed * dt;
+                        gs.getParticleEmitter().setupFromPointToPoint(
+                                position.x + 80 * (float) Math.cos(Math.toRadians(90 - angle)),
+                                position.y - 80 * (float) Math.sin(Math.toRadians(90 - angle)),
+                                position.x + 35 * (float) Math.cos(Math.toRadians(90 - angle)),
+                                position.y - 35 * (float) Math.sin(Math.toRadians(90 - angle)),
+                                2.0f,
+                                0.0f,
+                                0.5f,
+                                0.5f,
+                                0.5f,
+                                0.5f,
+                                0,
+                                0,
+                                0,
+                                0);
                     } else {
                         angle -= radialSpeed * dt;
+                        gs.getParticleEmitter().setupFromPointToPoint(
+                                position.x - 80 * (float) Math.cos(Math.toRadians(90 - angle)),
+                                position.y + 80 * (float) Math.sin(Math.toRadians(90 - angle)),
+                                position.x - 35 * (float) Math.cos(Math.toRadians(90 - angle)),
+                                position.y + 35 * (float) Math.sin(Math.toRadians(90 - angle)),
+                                2.0f,
+                                0.0f,
+                                0.5f,
+                                0.5f,
+                                0.5f,
+                                0.5f,
+                                0,
+                                0,
+                                0,
+                                0);
                     }
                 }
             }

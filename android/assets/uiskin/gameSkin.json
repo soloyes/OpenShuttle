@@ -308,7 +308,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {
 		up: button-c1
 		down: button-pressed-c1
-		over: button-over-c1
+		over: button-c1
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {

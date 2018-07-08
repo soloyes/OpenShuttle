@@ -13,7 +13,7 @@ public class Rules {
     //public static final int SPACE_WIDTH = 1080;
     //public static final int SPACE_HEIGHT = 1920;
     //
-    public static final int CONSUMABLES_AT_START = 6;
+    public static final int CONSUMABLES_AT_START = 10;
     public static final float CONSUMABLES_RESPAWN_TIME = 6.0f;
     public static final int ALIENS_AT_START = 0;
     public static final float ALIENS_RESPAWN_TIME = 5.0f;
@@ -22,10 +22,10 @@ public class Rules {
     public static float ASTEROIDS_RESPAWN_TIME = 4.0f;
 
     public static float PLAYER_MAX_FUEL = 250.0f;
-    public static int PLAYER_MAX_HP = 30;
+    public static int PLAYER_MAX_HP = 25;
     public static int PLAYER_INIT_LIVES = 3;
     public static int PLAYER_TAKE_RANGE = 500;
     public static int PLAYER_VELOCITY_NO_FUEL = 150;
 
-    public static int CRATE_FUEL_ADD = 50;
+    public static int CRATE_FUEL_ADD = 30;
 }

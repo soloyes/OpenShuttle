@@ -1,10 +1,13 @@
-package com.shuttle.game.screens.group_screen;
+package com.shuttle.game.screens;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.Assets;
 import com.shuttle.game.Background;
 import com.shuttle.game.screens.BaseScreen;
+import com.shuttle.game.screens.group_screen.ConfigGroup;
+import com.shuttle.game.screens.group_screen.MenuBar;
+import com.shuttle.game.screens.group_screen.MenuGroup;
 
 /**
  * @author Shuttle on 3/24/18.

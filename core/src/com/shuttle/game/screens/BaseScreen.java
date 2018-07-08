@@ -15,6 +15,9 @@ public abstract class BaseScreen implements Screen {
     protected GamePreferences preferences;
     protected SpriteBatch batch;
 
+    public BaseScreen() {
+    }
+
     public BaseScreen(SpriteBatch batch) {
         this.stage = new Stage(ScreenManager.getInstance().getViewport(), batch);
         this.preferences = new GamePreferences();

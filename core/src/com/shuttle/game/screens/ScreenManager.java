@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.*;
 import com.shuttle.game.Assets;
 import com.shuttle.game.ShuttleGame;
-import com.shuttle.game.screens.group_screen.MenuScreen;
 
 public class ScreenManager {
     private static ScreenManager ourInstance = new ScreenManager();

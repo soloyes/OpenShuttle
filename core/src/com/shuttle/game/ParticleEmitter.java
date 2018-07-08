@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
 
 /**
  * Created by FlameXander on 02.07.2017.
@@ -55,7 +53,7 @@ public class ParticleEmitter extends ObjectPool<Particle> {
         getActiveElement().init(x, y, vx, vy, timeMax, size1, size2, r1, g1, b1, a1, r2, g2, b2, a2);
     }
 
-    public void setupFromPointToPoint(float x1, float y1, float x2, float y2, float velocity, float size1, float size2, float r1, float g1, float b1, float a1, float r2, float g2, float b2, float a2) {
+    public void setupFromPointToPoint(float x1, float y1, float x2, float y2, float size1, float size2, float r1, float g1, float b1, float a1, float r2, float g2, float b2, float a2) {
         float dst = Vector2.dst(x1, y1, x2, y2) / 10.0f;
         tmp.set(x2, y2);
         tmp.sub(x1, y1);
