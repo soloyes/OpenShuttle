@@ -1,4 +1,4 @@
-package com.shuttle.game.screens.group_screen;
+package com.shuttle.game.screens.group;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
@@ -46,7 +46,7 @@ public class ConfigGroup extends Group {
         );
 
         Label.LabelStyle style96 = new Label.LabelStyle(
-                Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class),
+                Assets.getInstance().getAssetManager().get("fonts/gomarice96.ttf", BitmapFont.class),
                 new Color(0.8f, 0.43f, 0.33f, 1f)
         );
         /////////

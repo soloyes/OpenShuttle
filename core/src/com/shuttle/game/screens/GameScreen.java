@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.Alien;
 import com.shuttle.game.bot.AlienEmitter;
+import com.shuttle.game.conf.Results;
+import com.shuttle.game.screens.group.ResultGroup;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.bot.Asteroid;
 import com.shuttle.game.bot.AsteroidEmitter;
@@ -20,7 +22,12 @@ import com.shuttle.game.bot.ParticleEmitter;
 import com.shuttle.game.bot.Poolable;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.Shuttle;
-import com.shuttle.game.screens.group_screen.PauseGroup;
+import com.shuttle.game.screens.group.PauseGroup;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import lombok.Data;
 
@@ -334,5 +341,6 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         shaderProgram.dispose();
+        player.writeResult();
     }
 }

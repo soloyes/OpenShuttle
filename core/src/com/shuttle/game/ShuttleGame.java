@@ -9,7 +9,7 @@ import com.shuttle.game.screens.ScreenManager;
 public class ShuttleGame extends Game {
     private SpriteBatch batch;
     private ScreenManager.ScreenType screenType;
-    private FileHandle file;
+    private FileHandle usernameFile;
 
     @Override
     public void create() {
@@ -19,14 +19,15 @@ public class ShuttleGame extends Game {
             screenType = ScreenManager.ScreenType.MENU;
         }
         ScreenManager.getInstance().changeScreen(screenType);
-        this.file = Gdx.files.local("username");
-        file.writeString("", false);
+        this.usernameFile = Gdx.files.local("username");
+        usernameFile.writeString("", false);
     }
 
     @Override
     public void dispose() {
         batch.dispose();
-        file.delete();
+        usernameFile.delete();
+        getScreen().dispose();
     }
 
     @Override

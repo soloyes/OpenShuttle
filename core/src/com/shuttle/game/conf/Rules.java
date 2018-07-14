@@ -35,7 +35,7 @@ public class Rules {
 
     //250.0f
     public static final float PLAYER_MAX_FUEL = 250.0f;
-    //
+    //25
     public static final int PLAYER_MAX_HP = 25;
     //3
     public static final int PLAYER_INIT_LIVES = 3;

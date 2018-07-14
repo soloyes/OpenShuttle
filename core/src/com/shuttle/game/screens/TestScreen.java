@@ -1,78 +1,38 @@
 package com.shuttle.game.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.shuttle.game.utils.Assets;
-import com.shuttle.game.bot.ParticleEmitter;
+import com.shuttle.game.conf.Results;
+import com.shuttle.game.screens.group.ResultGroup;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * @author Shuttle on 6/28/18.
  */
 public class TestScreen extends BaseScreen {
-    private TextureRegion texture;
-    private ShaderProgram shaderProgram;
-    private ParticleEmitter particleEmitter;
-
+    private ResultGroup resultGroup;
+    private Results results;
     public TestScreen(SpriteBatch batch) {
         super(batch);
-        shaderProgram = new ShaderProgram(Gdx.files.internal("shaders/default.vert"), Gdx.files.internal("shaders/default.frag"));
-
-        //ShaderProgram.pedantic = false;
     }
 
     @Override
     public void createGUI() {
-        //particleEmitter = new ParticleEmitter();
-        this.texture = Assets.getInstance().getAtlas().findRegion("rocket");
-        if (!shaderProgram.isCompiled()) {
-            System.err.println(shaderProgram.getLog());
-            System.exit(0);
-        }
+        resultGroup = new ResultGroup();
+        stage.addActor(resultGroup);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
         update(delta);
-        batch.setShader(shaderProgram);
-        batch.begin();
-
-        batch.draw(texture, 450, 450);
-       // particleEmitter.render(batch);
-        batch.end();
-        batch.setShader(null);
-        batch.begin();
-        batch.draw(texture, 500, 500);
-        batch.end();
+        stage.draw();
     }
 
     private void update(float delta) {
-//        particleEmitter.update(delta);
-//        float dxy = 180;
-//        particleEmitter.setup(
-//                500,
-//                500,
-//                MathUtils.random(-dxy, dxy),
-//                MathUtils.random(-dxy, dxy),
-//                0.4f,
-//                3.0f,
-//                2.0f,
-//                1f,
-//                0f,
-//                0f,
-//                1,
-//                0,
-//                1,
-//                0,
-//                0.0f
-//        );
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-        shaderProgram.dispose();
+        stage.act();
     }
 }

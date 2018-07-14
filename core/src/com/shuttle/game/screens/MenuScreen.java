@@ -2,9 +2,10 @@ package com.shuttle.game.screens;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.Background;
-import com.shuttle.game.screens.group_screen.ConfigGroup;
-import com.shuttle.game.screens.group_screen.MenuBar;
-import com.shuttle.game.screens.group_screen.MenuGroup;
+import com.shuttle.game.screens.group.ConfigGroup;
+import com.shuttle.game.screens.group.MenuBar;
+import com.shuttle.game.screens.group.MenuGroup;
+import com.shuttle.game.screens.group.ResultGroup;
 
 /**
  * @author Shuttle on 3/24/18.
@@ -27,10 +28,12 @@ public class MenuScreen extends BaseScreen {
         background = new Background();
         MenuGroup menuGroup = new MenuGroup();
         MenuBar menuBar = new MenuBar();
+        ResultGroup resultGroup = new ResultGroup();
         menuBar.setGroup(menuGroup);
         stage.addActor(menuGroup);
         stage.addActor(new ConfigGroup());
         stage.addActor(menuBar);
+        stage.addActor(resultGroup);
     }
 
     @Override
@@ -45,5 +48,6 @@ public class MenuScreen extends BaseScreen {
 
     public void update(float delta) {
         background.update(delta);
+        stage.act();
     }
 }

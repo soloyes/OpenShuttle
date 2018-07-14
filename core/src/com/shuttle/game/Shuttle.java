@@ -7,10 +7,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.Consumable;
+import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import lombok.Data;
 
@@ -37,6 +42,7 @@ public class Shuttle {
     private String[] killMsgs = {"", "KILLED", "DOUBLE KILL", "MULTI KILL", "ULTRA KILL", "RAMPAGE", "HOLY S**T"};
     private int[] killMsgsScale = {0, 4, 5, 6, 7, 10, 15};
     private Radar radar;
+    private Results results;
 
     public Shuttle(GameScreen gs, float x, float y) {
         this.gs = gs;
@@ -57,6 +63,7 @@ public class Shuttle {
         this.takeRange = Rules.PLAYER_TAKE_RANGE;
         this.speedRang = SpeedRang.NONE;
         this.radar = new Radar(gs, this);
+        this.results = new Results();
     }
 
     public boolean addZigZag(float amount) {
@@ -131,6 +138,7 @@ public class Shuttle {
         }
         if (lives == 0) {
             Rules.GAME_OVER = true;
+            writeResult();
         }
     }
 
@@ -354,6 +362,16 @@ public class Shuttle {
                 );
             }
         }
+    }
+
+    public void writeResult() {
+        results.setResult(
+                username +
+                        " " +
+                        scoreView +
+                        " " +
+                        new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date())
+        );
     }
 
     public enum SpeedRang {

@@ -49,6 +49,10 @@ public class Assets {
                 break;
             case TEST:
                 assetManager.load("pics/game.pack", TextureAtlas.class);
+                assetManager.load("uiskin/gameSkin.json", Skin.class);
+                createStdFont(32);
+                createStdFont(64);
+                createStdFont(96);
                 break;
         }
     }
