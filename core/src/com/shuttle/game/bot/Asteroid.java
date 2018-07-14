@@ -1,10 +1,13 @@
-package com.shuttle.game;
+package com.shuttle.game.bot;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.Regions;
+import com.shuttle.game.conf.Rules;
 
 import lombok.Data;
 

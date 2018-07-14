@@ -1,4 +1,4 @@
-package com.shuttle.game;
+package com.shuttle.game.utils;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 

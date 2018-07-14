@@ -1,25 +1,24 @@
 package com.shuttle.game.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.Alien;
-import com.shuttle.game.AlienEmitter;
-import com.shuttle.game.Assets;
-import com.shuttle.game.Asteroid;
-import com.shuttle.game.AsteroidEmitter;
+import com.shuttle.game.bot.Alien;
+import com.shuttle.game.bot.AlienEmitter;
+import com.shuttle.game.utils.Assets;
+import com.shuttle.game.bot.Asteroid;
+import com.shuttle.game.bot.AsteroidEmitter;
 import com.shuttle.game.Background;
-import com.shuttle.game.Consumable;
-import com.shuttle.game.ConsumableEmitter;
+import com.shuttle.game.bot.Consumable;
+import com.shuttle.game.bot.ConsumableEmitter;
 import com.shuttle.game.GameInfoSystem;
-import com.shuttle.game.ParticleEmitter;
-import com.shuttle.game.Poolable;
-import com.shuttle.game.Rules;
+import com.shuttle.game.bot.ParticleEmitter;
+import com.shuttle.game.bot.Poolable;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.Shuttle;
 import com.shuttle.game.screens.group_screen.PauseGroup;
 
@@ -34,6 +33,7 @@ public class GameScreen extends BaseScreen {
     private AlienEmitter alienEmitter;
     private AsteroidEmitter asteroidEmitter;
     private BitmapFont font64;
+    private BitmapFont font128;
     private Camera camera;
     private Vector2 tmp;
     private ShaderProgram shaderProgram;
@@ -55,20 +55,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        if (preferences.isMusicEnabled()) {
-            Assets.getInstance()
-                    .getAssetManager()
-                    .get("music/game.ogg", Music.class)
-                    .setVolume(preferences.getMusicVolume());
-            Assets.getInstance()
-                    .getAssetManager()
-                    .get("music/game.ogg", Music.class)
-                    .play();
-            Assets.getInstance()
-                    .getAssetManager()
-                    .get("music/game.ogg", Music.class)
-                    .setLooping(true);
-        }
+        boomBox.play("music/game.ogg");
     }
 
     @Override
@@ -95,6 +82,7 @@ public class GameScreen extends BaseScreen {
                 ScreenManager.getInstance().getViewport().getWorldHeight() / 2
         );
         font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class);
+        font128 = Assets.getInstance().getAssetManager().get("fonts/gomarice128.ttf", BitmapFont.class);
         pauseGroup = new PauseGroup();
         stage.addActor(pauseGroup);
     }
@@ -102,33 +90,47 @@ public class GameScreen extends BaseScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        update(delta);
-        batch.setProjectionMatrix(camera.combined);
-        if (pauseGroup.isPause()) {
-            batch.setShader(shaderProgram);
-        } else {
-            batch.setShader(null);
-        }
+            if (!Rules.GAME_OVER) {
+                update(delta);
+                batch.setProjectionMatrix(camera.combined);
+                if (pauseGroup.isPause()) {
+                    batch.setShader(shaderProgram);
+                } else {
+                    batch.setShader(null);
+                }
 
-        //BEGIN
-        batch.begin();
-        background.render(batch);
-        asteroidEmitter.render(batch);
-        alienEmitter.render(batch);
-        consumableEmitter.render(batch);
-        player.render(batch);
-        particleEmitter.render(batch);
-        gameInfoSystem.render(batch);
-        batch.end();
+                //BEGIN
+                batch.begin();
+                background.render(batch);
+                asteroidEmitter.render(batch);
+                alienEmitter.render(batch);
+                consumableEmitter.render(batch);
+                player.render(batch);
+                particleEmitter.render(batch);
+                gameInfoSystem.render(batch);
+                batch.end();
 
-        ScreenManager.getInstance().resetCamera();
-        //BEGIN
-        batch.begin();
-        player.renderGUI(batch, font64);
-        batch.end();
+                ScreenManager.getInstance().resetCamera();
+                //BEGIN
+                batch.begin();
+                player.renderGUI(batch, font64, Rules.GAME_OVER);
+                batch.end();
 
-        batch.setShader(null);
-        stage.draw();
+                batch.setShader(null);
+                stage.draw();
+            }
+            else {
+                gameInfoSystem.update(delta);
+                batch.setShader(shaderProgram);
+                batch.begin();
+                background.render(batch);
+                gameInfoSystem.render(batch);
+                player.renderGUI(batch, font128, Rules.GAME_OVER);
+                batch.end();
+                batch.setShader(null);
+                pauseGroup.setGameOver();
+                stage.draw();
+            }
     }
 
     public void update(float dt) {
@@ -145,6 +147,7 @@ public class GameScreen extends BaseScreen {
         }
         cameraUpdate();
         stage.act();
+
     }
 
     public void cameraUpdate() {
@@ -217,8 +220,8 @@ public class GameScreen extends BaseScreen {
                     }
 
                     if (player.addZigZag(0.5f * tmpAlien.getLevel() + 0.2f)) {
-                        gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "BREAKED", 5);
                         player.takeDamage(tmpAlien.getLevel() + 1);
+                        gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "BREAKED", 5);
                         tmp.set(player.getPosition()).sub(tmpAlien.getPosition()).nor().scl(300 + tmpAlien.getLevel() * 50);
                         player.getVelocity().add(tmp);
                         tmp.scl(-1);

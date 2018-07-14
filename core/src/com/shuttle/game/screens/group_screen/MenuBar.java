@@ -1,20 +1,16 @@
 package com.shuttle.game.screens.group_screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.shuttle.game.Assets;
+import com.shuttle.game.screens.BaseScreen;
+import com.shuttle.game.utils.Assets;
 import com.shuttle.game.screens.ScreenManager;
-
-import java.awt.Menu;
 
 /**
  * @author Shuttle on 3/24/18.

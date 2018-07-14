@@ -9,12 +9,17 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.shuttle.game.Assets;
+import com.shuttle.game.screens.BaseScreen;
+import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.utils.Assets;
 import com.shuttle.game.screens.ScreenManager;
+
+import lombok.Data;
 
 /**
  * @author Shuttle on 6/23/18.
  */
+@Data
 public class MenuGroup extends Group {
     private BitmapFont font96;
     private boolean isEmptyUserName;
@@ -65,17 +70,5 @@ public class MenuGroup extends Group {
         if (isEmptyUserName) {
             font96.draw(batch, "Empty username", 0, 900, 1080, 1, false);
         }
-    }
-
-    public FileHandle getFile() {
-        return file;
-    }
-
-    public TextField getUserName() {
-        return userName;
-    }
-
-    public boolean isEmptyUserName() {
-        return isEmptyUserName;
     }
 }

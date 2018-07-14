@@ -1,24 +1,28 @@
-package com.shuttle.game;
+package com.shuttle.game.bot;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.shuttle.game.conf.Rules;
+import com.shuttle.game.screens.GameScreen;
 
-public class ConsumableEmitter extends ObjectPool<Consumable> {
+public class AlienEmitter extends ObjectPool<Alien> {
+    private GameScreen gs;
     private float time;
 
-    public ConsumableEmitter() {
-        for (int i = 0; i < Rules.CONSUMABLES_AT_START; i++) {
-            createBot();
+    public AlienEmitter(GameScreen gs) {
+        this.gs = gs;
+        for (int i = 0; i < Rules.ALIENS_AT_START; i++) {
+            createAlien();
         }
     }
 
-    public void createBot() {
+    public void createAlien() {
         getActiveElement().init(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
     }
 
     @Override
-    protected Consumable newObject() {
-        return new Consumable();
+    protected Alien newObject() {
+        return new Alien(gs);
     }
 
     public void render(SpriteBatch batch) {
@@ -29,9 +33,9 @@ public class ConsumableEmitter extends ObjectPool<Consumable> {
 
     public void update(float dt) {
         time += dt;
-        if (time > Rules.CONSUMABLES_RESPAWN_TIME) {
+        if (time > Rules.ALIENS_RESPAWN_TIME) {
             time = 0.0f;
-            createBot();
+            createAlien();
         }
         for (int i = 0; i < activeList.size(); i++) {
             activeList.get(i).update(dt);

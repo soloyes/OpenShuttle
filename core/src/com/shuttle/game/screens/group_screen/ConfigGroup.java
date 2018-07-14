@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.shuttle.game.Assets;
+import com.shuttle.game.utils.Assets;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.screens.ScreenManager;
 

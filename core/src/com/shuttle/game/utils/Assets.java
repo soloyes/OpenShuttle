@@ -1,4 +1,4 @@
-package com.shuttle.game;
+package com.shuttle.game.utils;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
@@ -45,6 +45,7 @@ public class Assets {
                 createStdFont(32);
                 createStdFont(64);
                 createStdFont(96);
+                createStdFont(128);
                 break;
             case TEST:
                 assetManager.load("pics/game.pack", TextureAtlas.class);

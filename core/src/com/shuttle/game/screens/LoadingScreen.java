@@ -4,7 +4,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.shuttle.game.Assets;
+import com.shuttle.game.utils.Assets;
 
 /**
  * Created by FlameXander on 12.03.2018.

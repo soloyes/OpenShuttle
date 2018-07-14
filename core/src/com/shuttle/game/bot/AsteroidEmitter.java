@@ -1,8 +1,10 @@
-package com.shuttle.game;
+package com.shuttle.game.bot;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.Shuttle;
+import com.shuttle.game.conf.Rules;
 
 /**
  * @author Shuttle on 6/30/18.

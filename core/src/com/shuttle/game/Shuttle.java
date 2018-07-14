@@ -6,8 +6,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.bot.Consumable;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
+import com.shuttle.game.utils.Assets;
 
 import lombok.Data;
 
@@ -94,15 +97,25 @@ public class Shuttle {
         radar.render(batch);
     }
 
-    public void renderGUI(SpriteBatch batch, BitmapFont font) {
+    public void renderGUI(SpriteBatch batch, BitmapFont font, boolean game_over) {
         tmpString.setLength(0);
-        tmpString.append("NAME: ").append(username);
-        tmpString.append("\nSCORE: ").append(scoreView);
-        tmpString.append("\nHP: ").append(hp).append("/").append(maxHp).append(" x").append(lives);
-        tmpString.append("\nFUEL: ").append((int) fuel).append("/").append((int) maxFuel);
-        // tmpString.append("\nSPEED: ").append(velocity.len());
-
-        font.draw(batch, tmpString, 20, 1900);
+        if (!game_over) {
+            tmpString.append("NAME: ").append(username);
+            tmpString.append("\nSCORE: ").append(scoreView);
+            tmpString.append("\nHP: ").append(hp).append("/").append(maxHp).append(" x").append(lives);
+            tmpString.append("\nFUEL: ").append((int) fuel).append("/").append((int) maxFuel);
+            // tmpString.append("\nSPEED: ").append(velocity.len());
+            font.draw(batch, tmpString, 20, 1900);
+        } else {
+            tmpString.append("Game Over!");
+            tmpString.append("\nSCORE: ").append(scoreView);
+            font.draw(
+                    batch,
+                    tmpString,
+                    ScreenManager.getInstance().getViewport().getWorldWidth() - font.getRegion().getRegionWidth(),
+                    ScreenManager.getInstance().getViewport().getWorldHeight() / 2
+            );
+        }
     }
 
     public void slowDown(float amount) {
@@ -116,29 +129,32 @@ public class Shuttle {
             lives--;
             gs.getGameInfoSystem().setup(position.x, position.y, "DESTROYED", 8);
         }
+        if (lives == 0) {
+            Rules.GAME_OVER = true;
+        }
     }
 
     public void takeEffect(Consumable.Type type) {
         switch (type) {
             case Astronaut:
-                addScore(10000);
-                gs.getGameInfoSystem().setup(position.x, position.y, "+10000", 3.0f);
+                addScore(Rules.PLAYER_SCORE_ADD);
+                gs.getGameInfoSystem().setup(position.x, position.y, "+" + Rules.PLAYER_SCORE_ADD, 3.0f);
                 break;
             case Crate:
                 int x = MathUtils.random(0, 5);
                 if (x == 0) {
-                    hp++;
+                    hp += Rules.CRATE_REPAIR_ADD;
                     if (hp > maxHp) {
                         hp = maxHp;
                     }
-                    gs.getGameInfoSystem().setup(position.x, position.y, "REPAIR +1", 3.0f);
+                    gs.getGameInfoSystem().setup(position.x, position.y, "REPAIR +" + Rules.CRATE_REPAIR_ADD, 3.0f);
                 }
                 if (x == 1) {
                     fuel += Rules.CRATE_FUEL_ADD;
                     if (fuel > maxFuel) {
                         fuel = maxFuel;
                     }
-                    gs.getGameInfoSystem().setup(position.x, position.y, "FUEL +15", 3.0f);
+                    gs.getGameInfoSystem().setup(position.x, position.y, "FUEL +" + Rules.CRATE_FUEL_ADD, 3.0f);
                 }
                 if (x == 2) {
                     velocity.add(1500 * (float) Math.cos(Math.toRadians(angle)), 1500 * (float) Math.sin(Math.toRadians(angle)));
@@ -202,75 +218,23 @@ public class Shuttle {
                 if (angle > angleToTarget) {
                     if (Math.abs(angle - angleToTarget) <= 180.0f) {
                         angle -= radialSpeed * dt;
-                        gs.getParticleEmitter().setupFromPointToPoint(
-                                position.x - 80 * (float) Math.cos(Math.toRadians(90 - angle)),
-                                position.y + 80 * (float) Math.sin(Math.toRadians(90 - angle)),
-                                position.x - 35 * (float) Math.cos(Math.toRadians(90 - angle)),
-                                position.y + 35 * (float) Math.sin(Math.toRadians(90 - angle)),
-                                2.0f,
-                                0.0f,
-                                0.5f,
-                                0.5f,
-                                0.5f,
-                                0.5f,
-                                0,
-                                0,
-                                0,
-                                0);
+                        if (Math.abs(angle - angleToTarget) > 5.0f)
+                            gs.getParticleEmitter().setupFromPointToPoint(position.x - 80 * (float) Math.cos(Math.toRadians(90 - angle)), position.y + 80 * (float) Math.sin(Math.toRadians(90 - angle)), position.x - 35 * (float) Math.cos(Math.toRadians(90 - angle)), position.y + 35 * (float) Math.sin(Math.toRadians(90 - angle)), 2.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0, 0, 0);
                     } else {
                         angle += radialSpeed * dt;
-                        gs.getParticleEmitter().setupFromPointToPoint(
-                                position.x + 80 * (float) Math.cos(Math.toRadians(90 - angle)),
-                                position.y - 80 * (float) Math.sin(Math.toRadians(90 - angle)),
-                                position.x + 35 * (float) Math.cos(Math.toRadians(90 - angle)),
-                                position.y - 35 * (float) Math.sin(Math.toRadians(90 - angle)),
-                                2.0f,
-                                0.0f,
-                                0.5f,
-                                0.5f,
-                                0.5f,
-                                0.5f,
-                                0,
-                                0,
-                                0,
-                                0);
+                        if (Math.abs(angle - angleToTarget) > 5.0f)
+                            gs.getParticleEmitter().setupFromPointToPoint(position.x + 80 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - 80 * (float) Math.sin(Math.toRadians(90 - angle)), position.x + 35 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - 35 * (float) Math.sin(Math.toRadians(90 - angle)), 2.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0, 0, 0);
                     }
                 }
                 if (angle < angleToTarget) {
                     if (Math.abs(angle - angleToTarget) <= 180.0f) {
                         angle += radialSpeed * dt;
-                        gs.getParticleEmitter().setupFromPointToPoint(
-                                position.x + 80 * (float) Math.cos(Math.toRadians(90 - angle)),
-                                position.y - 80 * (float) Math.sin(Math.toRadians(90 - angle)),
-                                position.x + 35 * (float) Math.cos(Math.toRadians(90 - angle)),
-                                position.y - 35 * (float) Math.sin(Math.toRadians(90 - angle)),
-                                2.0f,
-                                0.0f,
-                                0.5f,
-                                0.5f,
-                                0.5f,
-                                0.5f,
-                                0,
-                                0,
-                                0,
-                                0);
+                        if (Math.abs(angle - angleToTarget) > 5.0f)
+                            gs.getParticleEmitter().setupFromPointToPoint(position.x + 80 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - 80 * (float) Math.sin(Math.toRadians(90 - angle)), position.x + 35 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - 35 * (float) Math.sin(Math.toRadians(90 - angle)), 2.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0, 0, 0);
                     } else {
                         angle -= radialSpeed * dt;
-                        gs.getParticleEmitter().setupFromPointToPoint(
-                                position.x - 80 * (float) Math.cos(Math.toRadians(90 - angle)),
-                                position.y + 80 * (float) Math.sin(Math.toRadians(90 - angle)),
-                                position.x - 35 * (float) Math.cos(Math.toRadians(90 - angle)),
-                                position.y + 35 * (float) Math.sin(Math.toRadians(90 - angle)),
-                                2.0f,
-                                0.0f,
-                                0.5f,
-                                0.5f,
-                                0.5f,
-                                0.5f,
-                                0,
-                                0,
-                                0,
-                                0);
+                        if (Math.abs(angle - angleToTarget) > 5.0f)
+                            gs.getParticleEmitter().setupFromPointToPoint(position.x - 80 * (float) Math.cos(Math.toRadians(90 - angle)), position.y + 80 * (float) Math.sin(Math.toRadians(90 - angle)), position.x - 35 * (float) Math.cos(Math.toRadians(90 - angle)), position.y + 35 * (float) Math.sin(Math.toRadians(90 - angle)), 2.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0, 0, 0);
                     }
                 }
             }

@@ -1,6 +1,7 @@
-package com.shuttle.game;
+package com.shuttle.game.bot;
 
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.bot.Poolable;
 
 import lombok.Data;
 
