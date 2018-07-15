@@ -9,8 +9,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.Alien;
 import com.shuttle.game.bot.AlienEmitter;
-import com.shuttle.game.conf.Results;
-import com.shuttle.game.screens.group.ResultGroup;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.bot.Asteroid;
 import com.shuttle.game.bot.AsteroidEmitter;
@@ -23,11 +21,6 @@ import com.shuttle.game.bot.Poolable;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.Shuttle;
 import com.shuttle.game.screens.group.PauseGroup;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import lombok.Data;
 
@@ -222,18 +215,20 @@ public class GameScreen extends BaseScreen {
                     showSpray(tmpAlien);
                     player.killPlusPlus();
                 } else {
-                    if (tmpAlien.getLevel() == 3) {
+                    if (tmpAlien.getLevel() >= 3) {
                         player.getRadar().setActive(false);
                     }
 
                     if (player.addZigZag(0.5f * tmpAlien.getLevel() + 0.2f)) {
                         player.takeDamage(tmpAlien.getLevel() + 1);
-                        gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "BREAKED", 5);
+                        gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "BRAKED", 5);
                         tmp.set(player.getPosition()).sub(tmpAlien.getPosition()).nor().scl(300 + tmpAlien.getLevel() * 50);
                         player.getVelocity().add(tmp);
                         tmp.scl(-1);
                         tmpAlien.getVelocity().add(tmp);
-                        tmpAlien.takeDamage(player.getSpeedRang().getLevel());
+                        if (tmpAlien.getLevel() != 4) {
+                            tmpAlien.takeDamage(player.getSpeedRang().getLevel());
+                        }
                         tmpAlien.setHungry(false);
                         tmpAlien.setSlimTimer(0);
                     }
@@ -290,12 +285,6 @@ public class GameScreen extends BaseScreen {
         }
     }
 
-    private void showSpray(Poolable a) {
-        for (int j = 0; j < 30; j++) {
-            particleEmitter.setup(a.getPosition().x + MathUtils.random(-30, 30), a.getPosition().y + MathUtils.random(-30, 30), MathUtils.random(-400, 400), MathUtils.random(-400, 400), 0.4f, 8, 4, 0, 1, 0, 1f, 0, 1, 0, 0.2f);
-        }
-    }
-
     private void showDust(Asteroid a) {
         float dxy = 180;
         int dustCover = 0;
@@ -342,5 +331,11 @@ public class GameScreen extends BaseScreen {
         super.dispose();
         shaderProgram.dispose();
         player.writeResult();
+    }
+
+    public void showSpray(Poolable poolable) {
+        for (int j = 0; j < 30; j++) {
+            particleEmitter.setup(poolable.getPosition().x + MathUtils.random(-30, 30), poolable.getPosition().y + MathUtils.random(-30, 30), MathUtils.random(-400, 400), MathUtils.random(-400, 400), 0.4f, 8, 4, 0, 1, 0, 1f, 0, 1, 0, 0.2f);
+        }
     }
 }

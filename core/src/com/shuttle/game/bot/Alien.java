@@ -1,9 +1,11 @@
 package com.shuttle.game.bot;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
@@ -12,14 +14,13 @@ import lombok.Data;
 
 @Data
 public class Alien implements Poolable {
-    //                       0     1     2     3
-    // float[] probabilities = {0.4f, 0.7f, 0.9f, 1.0f};
-    float[] probabilities = {1.0f, 0.6f, 0.3f, 0.1f};
+    float[] probabilities = {1.0f, 0.8f, 0.5f, 0.3f, 0.05f};
     private GameScreen gs;
     private TextureRegion[] regions;
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 tmp;
+    private Vector2 tmp1;
     private int level;
     private int maxLevel;
     private boolean active;
@@ -27,6 +28,9 @@ public class Alien implements Poolable {
     private float hungryTimer;
     private boolean hungry;
     private float slimTimer;
+    private float scaleX;
+    private float scaleY;
+    private boolean touched;
 
     public Alien(GameScreen gs) {
         this.gs = gs;
@@ -34,18 +38,15 @@ public class Alien implements Poolable {
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.tmp = new Vector2();
+        this.tmp1 = new Vector2();
         this.width = 128;
         this.height = 128;
         this.level = 1;
         this.active = false;
     }
 
-    public void destroy() {
-        active = false;
-    }
-
     public void init(float x, float y) {
-
+        this.touched = false;
         this.hungryTimer = 0;
         this.slimTimer = 0;
         this.hungry = true;
@@ -63,10 +64,29 @@ public class Alien implements Poolable {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(regions[level], position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, 1 + level * 0.15f, 1 + level * 0.15f, 0);
+        if (!touched) {
+            this.scaleX = this.scaleY = 1 + level * 0.15f;
+        }
+        batch.draw(regions[level], position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, scaleX, scaleY, 0);
     }
 
     public void update(float dt) {
+        if (Gdx.input.isTouched() && level == 4) {
+            tmp1.set(Gdx.input.getX(), Gdx.input.getY());
+            ScreenManager.getInstance().getViewport().unproject(tmp1);
+            if (tmp1.dst(position) < 128f) {
+                hungry = false;
+                touched = true;
+            }
+        }
+        if (touched) {
+            slimTimer = 0;
+            scaleX = scaleY += 0.01f;
+            if (scaleX >= 2.0f) {
+                destroy();
+            }
+        }
+
         slimTimer += dt;
         hungryTimer += dt;
         if (slimTimer > Rules.ALIENS_SLIM_TIME) {
@@ -85,7 +105,13 @@ public class Alien implements Poolable {
         position.mulAdd(velocity, dt);
         if (hungry) {
             if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-                tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(50.0f);
+                float v;
+                if (getLevel() == 4) {
+                    v = 500.00f;
+                } else {
+                    v = 50.0f;
+                }
+                tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(v);
                 velocity.mulAdd(tmp, dt);
             }
             if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
@@ -93,6 +119,10 @@ public class Alien implements Poolable {
                 velocity.mulAdd(tmp, dt);
             }
         }
+    }
+
+    public void destroy() {
+        active = false;
     }
 
     public boolean takeDamage(int dmg) {

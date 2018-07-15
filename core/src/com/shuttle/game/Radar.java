@@ -74,6 +74,9 @@ public class Radar implements Poolable {
                     case 3:
                         batch.setColor(0.91f, 0.07f, 0.14f, 1);
                         break;
+                    case 4:
+                        batch.setColor(0.67f, 0.05f, 0.54f, 1);
+                        break;
                 }
                 batch.draw(starTex, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
                 batch.setColor(1, 1, 1, 1);
