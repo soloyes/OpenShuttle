@@ -23,7 +23,7 @@ public class Consumable implements Poolable {
     public Consumable() {
         this.textures = new TextureRegion[2];
         this.textures[0] = Assets.getInstance().getAtlas().findRegion("astronaut");
-        this.textures[1] = Assets.getInstance().getAtlas().findRegion("crate");
+        this.textures[1] = Assets.getInstance().getAtlas().findRegion("Crate");
         this.position = new Vector2(0, 0);
         this.velocity = new Vector2(0, 0);
         this.width = textures[0].getRegionWidth();

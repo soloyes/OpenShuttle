@@ -11,11 +11,17 @@ import com.shuttle.game.utils.Assets;
  * Created by FlameXander on 02.07.2017.
  */
 public class ParticleEmitter extends ObjectPool<Particle> {
-    private TextureRegion oneParticle;
+    private TextureRegion particleTexture;
+    private ParticleEffectBuilder builder;
     private Vector2 tmp;
 
+    public ParticleEffectBuilder getBuilder() {
+        return builder;
+    }
+
     public ParticleEmitter() {
-        this.oneParticle = Assets.getInstance().getAtlas().findRegion("star16");
+        this.particleTexture = Assets.getInstance().getAtlas().findRegion("star16");
+        this.builder = new ParticleEffectBuilder(this);
         this.tmp = new Vector2(0, 0);
     }
 
@@ -25,33 +31,24 @@ public class ParticleEmitter extends ObjectPool<Particle> {
     }
 
     public void render(SpriteBatch batch) {
-        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        for (int i = 0; i < activeList.size(); i++) {
-            Particle o = activeList.get(i);
-            float t = o.getTime() / o.getDuration();
-            float scale = lerp(o.getSize1(), o.getSize2(), t);
-            batch.setColor(lerp(o.getR1(), o.getR2(), t), lerp(o.getG1(), o.getG2(), t), lerp(o.getB1(), o.getB2(), t), lerp(o.getA1(), o.getA2(), t));
-            batch.draw(oneParticle, o.getPosition().x - 8, o.getPosition().y - 8, 8, 8, 16, 16, scale, scale, 0);
-        }
-        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
-        for (int i = 0; i < activeList.size(); i++) {
-            Particle o = activeList.get(i);
-            float t = o.getTime() / o.getDuration();
-            float scale = lerp(o.getSize1(), o.getSize2(), t);
-            batch.setColor(lerp(o.getR1(), o.getR2(), t), lerp(o.getG1(), o.getG2(), t), lerp(o.getB1(), o.getB2(), t), lerp(o.getA1(), o.getA2(), t));
-            batch.draw(oneParticle, o.getPosition().x - 8, o.getPosition().y - 8, 8, 8, 16, 16, scale, scale, 0);
+        for (int pass = 0; pass < 2; pass++) {
+            if (pass == 0) {
+                batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            } else {
+                batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
+            }
+            for (int i = 0; i < activeList.size(); i++) {
+                Particle particle = activeList.get(i);
+                batch.setColor(particle.getCurrentR(), particle.getCurrentG(), particle.getCurrentB(), particle.getCurrentA());
+                batch.draw(particleTexture, particle.getPosition().x - 8, particle.getPosition().y - 8, 8, 8, 16, 16, particle.getCurrentSize(), particle.getCurrentSize(), 0);
+            }
         }
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
-    public float lerp(float value1, float value2, float point) {
-        return value1 + (value2 - value1) * point;
-    }
-
-    public void setup(float x, float y, float vx, float vy, float timeMax, float size1, float size2, float r1, float g1, float b1, float a1, float r2, float g2, float b2, float a2) {
-        getActiveElement().init(x, y, vx, vy, timeMax, size1, size2, r1, g1, b1, a1, r2, g2, b2, a2);
+    public void setup(float x, float y, float vx, float vy, float duration, float startSize, float endSize, float startR, float startG, float startB, float startA, float endR, float endG, float endB, float endA) {
+        getActiveElement().init(x, y, vx, vy, duration, startSize, endSize, startR, startG, startB, startA, startR, startG, startB, startA);
     }
 
     public void setupFromPointToPoint(float x1, float y1, float x2, float y2, float size1, float size2, float r1, float g1, float b1, float a1, float r2, float g2, float b2, float a2) {

@@ -3,6 +3,7 @@ package com.shuttle.game.bot;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.ColorLevels;
 import com.shuttle.game.Shuttle;
 import com.shuttle.game.conf.Rules;
 
@@ -23,13 +24,13 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
         return new Asteroid();
     }
 
-    public void boom(Vector2 position, Shuttle.SpeedRang rang) {
+    public void boom(Vector2 position, ColorLevels rang) {
         fragmentSetup(rang);
         this.position = position;
         this.boom = true;
     }
 
-    private void fragmentSetup(Shuttle.SpeedRang rang) {
+    private void fragmentSetup(ColorLevels rang) {
         acceleration = 1f;
         size = 1f;
         count = 1f;

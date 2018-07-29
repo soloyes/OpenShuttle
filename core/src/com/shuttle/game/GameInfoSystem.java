@@ -8,7 +8,7 @@ public class GameInfoSystem {
     public GameInfoSystem() {
         this.elems = new FlyingText[20];
         for (int i = 0; i < elems.length; i++) {
-            elems[i] = new FlyingText();
+            this.elems[i] = new FlyingText();
         }
     }
 

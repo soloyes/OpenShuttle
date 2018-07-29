@@ -12,6 +12,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.ShuttleMath;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,28 +24,40 @@ import lombok.Data;
 public class Shuttle {
     private GameScreen gs;
     private TextureRegion texture;
-    private int width, height;
-    private Vector2 position;
-    private Vector2 velocity;
-    private int score, scoreView;
-    private float angle;
-    private float fuel, maxFuel;
-    private int hp, maxHp;
-    private int lives;
+    private Vector2 position, velocity;
     private Vector2 tmp;
     private StringBuilder tmpString;
-    private int takeRange;
-    private SpeedRang speedRang;
-    private float zigzagEffect;
     private String username;
-    private int killSeries;
-    private float killTimer;
-    private String[] killMsgs = {"", "KILLED", "DOUBLE KILL", "MULTI KILL", "ULTRA KILL", "RAMPAGE", "HOLY S**T"};
-    private int[] killMsgsScale = {0, 4, 5, 6, 7, 10, 15};
     private Radar radar;
     private Results results;
+    private Joystick joystick;
+    private int width, height;
+    private int score, scoreView;
+    private float angle, radialSpeed;
+    private float fuel, maxFuel;
+    private float enginePower;
+    private int hp, maxHp;
+    private int lives;
+    private int takeRange;
+    private float zigzagEffect;
+    private int killSeries;
+    private float killTimer;
+    private float power, maxPower;
+    private ColorLevels shieldLevel;
 
-    public Shuttle(GameScreen gs, float x, float y) {
+    public int getPushPower() {
+        return (int) power;
+    }
+
+    public void decreasePower(int amount) {
+        power -= amount;
+    }
+
+    public void resetPower() {
+        power = 0.0f;
+    }
+
+    public Shuttle(GameScreen gs, Joystick joystick, float x, float y) {
         this.gs = gs;
         this.texture = Assets.getInstance().getAtlas().findRegion("rocket");
         this.username = Gdx.files.local("username").readString();
@@ -61,9 +74,13 @@ public class Shuttle {
         this.hp = this.maxHp;
         this.lives = Rules.PLAYER_INIT_LIVES;
         this.takeRange = Rules.PLAYER_TAKE_RANGE;
-        this.speedRang = SpeedRang.NONE;
         this.radar = new Radar(gs, this);
         this.results = new Results();
+        this.joystick = joystick;
+        this.maxPower = 5.0f;
+        this.radialSpeed = 135.0f;
+        this.shieldLevel = ColorLevels.NONE;
+        this.enginePower = 400.0f;
     }
 
     public boolean addZigZag(float amount) {
@@ -92,11 +109,8 @@ public class Shuttle {
 
     public void killPlusPlus() {
         killSeries++;
-        if (killSeries > 6) {
-            killSeries = 6;
-        }
         killTimer = 7.0f;
-        gs.getGameInfoSystem().setup(position.x, position.y, killMsgs[killSeries], killMsgsScale[killSeries]);
+        gs.getGameInfoSystem().setup(position.x, position.y, KillingSpree.getKillingSpreeFromKillsCount(killSeries).getText(), KillingSpree.getKillingSpreeFromKillsCount(killSeries).getTextSizeModifier());
     }
 
     public void render(SpriteBatch batch) {
@@ -182,17 +196,17 @@ public class Shuttle {
                 killSeries = 0;
             }
         }
+        power += dt / 4.0f;
+        if (power >= maxPower) {
+            power = maxPower;
+        }
+        shieldLevel = ColorLevels.getFromLevel((int) (power));
         if (zigzagEffect > 0.0f) {
             zigzagEffect -= dt;
             angle += zigzagEffect * 25.0f;
             velocity.add(MathUtils.random(-30 * zigzagEffect, 30 * zigzagEffect), MathUtils.random(-30 * zigzagEffect, 30 * zigzagEffect));
         }
-        if (angle < 0.0f) {
-            angle += 360.0f;
-        }
-        if (angle > 360.0f) {
-            angle -= 360.0f;
-        }
+        angle = ShuttleMath.checkAngleBetween0And360(angle);
         if (scoreView < score) {
             scoreView += 500;
             if (scoreView > score) {
@@ -205,11 +219,9 @@ public class Shuttle {
                 scoreView = score;
             }
         }
-
         velocity.scl(0.99f);
         position.mulAdd(velocity, dt);
-        speedRang = SpeedRang.getRangFromVelocity(velocity.len());
-        fuel -= speedRang.fuelPerSec * dt;
+        fuel -= 1.0f * dt;
         if (fuel < 0.0f) {
             fuel = 0.0f;
             if (velocity.len() > Rules.PLAYER_VELOCITY_NO_FUEL) {
@@ -217,39 +229,19 @@ public class Shuttle {
             }
         }
         createFXs();
-        if (Gdx.input.isTouched()) {
-            float radialSpeed = 135.0f;
+        if (joystick.isActive()) {
             tmp.set(Gdx.input.getX(), Gdx.input.getY());
             ScreenManager.getInstance().getViewport().unproject(tmp);
             if (zigzagEffect < 0.05f) {
-                float angleToTarget = tmp.sub(position).angle();
-                if (angle > angleToTarget) {
-                    if (Math.abs(angle - angleToTarget) <= 180.0f) {
-                        angle -= radialSpeed * dt;
-                        if (Math.abs(angle - angleToTarget) > 5.0f)
-                            gs.getParticleEmitter().setupFromPointToPoint(position.x - 80 * (float) Math.cos(Math.toRadians(90 - angle)), position.y + 80 * (float) Math.sin(Math.toRadians(90 - angle)), position.x - 35 * (float) Math.cos(Math.toRadians(90 - angle)), position.y + 35 * (float) Math.sin(Math.toRadians(90 - angle)), 2.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0, 0, 0);
-                    } else {
-                        angle += radialSpeed * dt;
-                        if (Math.abs(angle - angleToTarget) > 5.0f)
-                            gs.getParticleEmitter().setupFromPointToPoint(position.x + 80 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - 80 * (float) Math.sin(Math.toRadians(90 - angle)), position.x + 35 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - 35 * (float) Math.sin(Math.toRadians(90 - angle)), 2.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0, 0, 0);
-                    }
-                }
-                if (angle < angleToTarget) {
-                    if (Math.abs(angle - angleToTarget) <= 180.0f) {
-                        angle += radialSpeed * dt;
-                        if (Math.abs(angle - angleToTarget) > 5.0f)
-                            gs.getParticleEmitter().setupFromPointToPoint(position.x + 80 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - 80 * (float) Math.sin(Math.toRadians(90 - angle)), position.x + 35 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - 35 * (float) Math.sin(Math.toRadians(90 - angle)), 2.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0, 0, 0);
-                    } else {
-                        angle -= radialSpeed * dt;
-                        if (Math.abs(angle - angleToTarget) > 5.0f)
-                            gs.getParticleEmitter().setupFromPointToPoint(position.x - 80 * (float) Math.cos(Math.toRadians(90 - angle)), position.y + 80 * (float) Math.sin(Math.toRadians(90 - angle)), position.x - 35 * (float) Math.cos(Math.toRadians(90 - angle)), position.y + 35 * (float) Math.sin(Math.toRadians(90 - angle)), 2.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0, 0, 0);
-                    }
+                float dir = ShuttleMath.getRotationDirection(angle, joystick.getAngle());
+                angle += dir * radialSpeed * dt;
+                if (Math.abs(angle - joystick.getAngle()) > 5.0f) {
+                    gs.getParticleEmitter().setupFromPointToPoint(position.x + dir * 80 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - dir * 80 * (float) Math.sin(Math.toRadians(90 - angle)), position.x + dir * 35 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - dir * 35 * (float) Math.sin(Math.toRadians(90 - angle)), 2.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0, 0, 0);
                 }
             }
-            float acc = speedRang.acceleration * (1.0f - 0.1f * (float) (maxHp - hp) / maxHp);
-            velocity.add(acc * (float) Math.cos(Math.toRadians(angle)) * dt, acc * (float) Math.sin(Math.toRadians(angle)) * dt);
+            float acceleration = joystick.getPower() * enginePower;
+            velocity.add(acceleration * (float) Math.cos(Math.toRadians(angle)) * dt, acceleration * (float) Math.sin(Math.toRadians(angle)) * dt);
         }
-
         if (!radar.isActive()) {
             radar.update(dt);
             if (position.dst(radar.getPosition()) < 128) {
@@ -259,163 +251,18 @@ public class Shuttle {
     }
 
     public void createFXs() {
-        int dxy = 90;
-        if (fuel > 0.1f) {
-            if (velocity.len() > 80) {
-                gs.getParticleEmitter().setup(
-                        position.x - 90 * (float) Math.cos(Math.toRadians(angle)),
-                        position.y - 90 * (float) Math.sin(Math.toRadians(angle)),
-                        MathUtils.random(-dxy, dxy),
-                        MathUtils.random(-dxy, dxy),
-                        0.3f + speedRang.level * 0.1f,
-                        4.0f + speedRang.level * 1.5f,
-                        0.4f,
-                        1,
-                        0.6f - speedRang.level * 0.15f,
-                        0,
-                        1,
-                        1,
-                        0,
-                        0,
-                        0.5f
-                );
-                if (MathUtils.random(0, 100) < 6 + speedRang.level * 2) {
-                    dxy = 180;
-                    for (int i = 0; i < speedRang.level + 1; i++) {
-                        gs.getParticleEmitter().setup(
-                                position.x - 90 * (float) Math.cos(Math.toRadians(angle)),
-                                position.y - 90 * (float) Math.sin(Math.toRadians(angle)),
-                                MathUtils.random(-dxy, dxy),
-                                MathUtils.random(-dxy, dxy),
-                                0.3f,
-                                8.0f + speedRang.level * 2,
-                                0.0f,
-                                1,
-                                0.4f,
-                                0,
-                                1,
-                                0,
-                                0,
-                                0,
-                                0.2f
-                        );
-                    }
-                }
-            }
+        if (fuel > 0.1f && velocity.len() > 80) {
+            gs.getParticleEmitter().getBuilder().buildShuttleEngineFire(position, angle, 90, 1.0f);
         } else {
-            gs.getParticleEmitter().setup(
-                    position.x - 90 * (float) Math.cos(Math.toRadians(angle)),
-                    position.y - 90 * (float) Math.sin(Math.toRadians(angle)),
-                    MathUtils.random(-dxy, dxy),
-                    MathUtils.random(-dxy, dxy),
-                    0.2f,
-                    3.0f,
-                    2.4f,
-                    0.2f,
-                    0.2f,
-                    1.0f,
-                    0.4f,
-                    0,
-                    0,
-                    0,
-                    0.2f
-            );
+            gs.getParticleEmitter().getBuilder().buildShuttleLowLevelEngineFire(position, angle, 90);
         }
-        if (velocity.len() > 300) {
-            dxy = 20;
-            for (int i = -45; i <= 45; i += 3) {
-                gs.getParticleEmitter().setup(
-                        position.x + 90 * (float) Math.cos(Math.toRadians(angle + i)),
-                        position.y + 90 * (float) Math.sin(Math.toRadians(angle + i)),
-                        MathUtils.random(-dxy, dxy),
-                        MathUtils.random(-dxy, dxy),
-                        0.4f,
-                        3.0f,
-                        2.0f,
-                        speedRang.fr,
-                        speedRang.fg,
-                        speedRang.fb,
-                        speedRang.fa,
-                        0,
-                        0,
-                        0,
-                        0.0f
-                );
-            }
-            if (velocity.len() > 1200.0f) {
-                gs.getParticleEmitter().setup(
-                        position.x + 90 * (float) Math.cos(Math.toRadians(angle)),
-                        position.y + 90 * (float) Math.sin(Math.toRadians(angle)),
-                        MathUtils.random(-dxy, dxy),
-                        MathUtils.random(-dxy, dxy),
-                        5.9f,
-                        16.0f,
-                        15.0f,
-                        1,
-                        0.6f,
-                        0,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0.0f
-                );
-            }
+        gs.getParticleEmitter().getBuilder().buildShuttleShield(position, angle, 90, 60, shieldLevel.getR(), shieldLevel.getG(), shieldLevel.getB());
+        if (velocity.len() > 1200.0f) {
+            gs.getParticleEmitter().getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
         }
     }
 
     public void writeResult() {
-        results.setResult(
-                username +
-                        " " +
-                        scoreView +
-                        " " +
-                        new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date())
-        );
-    }
-
-    public enum SpeedRang {
-        NONE(0, 0, 0, 0, 0, 0.5f, 540.0f),
-        WHITE(1, 1, 1, 1, 0.1f, 0.8f, 560.0f),
-        GREEN(2, 0, 1, 0, 0.1f, 1.0f, 580.0f),
-        YELLOW(3, 1, 1, 0, 0.1f, 1.6f, 600.0f),
-        RED(4, 1, 0, 0, 0.1f, 3.0f, 600.0f);
-        private int level;
-        private float fr;
-        private float fg;
-        private float fb;
-        private float fa;
-        private float fuelPerSec;
-        private float acceleration;
-
-        SpeedRang(int level, float fr, float fg, float fb, float fa, float fuelPerSec, float acceleration) {
-            this.level = level;
-            this.fr = fr;
-            this.fg = fg;
-            this.fb = fb;
-            this.fa = fa;
-            this.fuelPerSec = fuelPerSec;
-            this.acceleration = acceleration;
-        }
-
-        private static SpeedRang getRangFromVelocity(float velLength) {
-            if (velLength > 960) {
-                return RED;
-            }
-            if (velLength > 900) {
-                return YELLOW;
-            }
-            if (velLength > 800) {
-                return GREEN;
-            }
-            if (velLength > 600) {
-                return WHITE;
-            }
-            return NONE;
-        }
-
-        public int getLevel() {
-            return level;
-        }
+        results.setResult(username + " " + scoreView + " " + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()));
     }
 }

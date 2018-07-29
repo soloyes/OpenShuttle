@@ -20,7 +20,6 @@ public class Alien implements Poolable {
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 tmp;
-    private Vector2 tmp1;
     private int level;
     private int maxLevel;
     private boolean active;
@@ -38,7 +37,6 @@ public class Alien implements Poolable {
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.tmp = new Vector2();
-        this.tmp1 = new Vector2();
         this.width = 128;
         this.height = 128;
         this.level = 1;
@@ -72,9 +70,9 @@ public class Alien implements Poolable {
 
     public void update(float dt) {
         if (Gdx.input.isTouched() && level == 4) {
-            tmp1.set(Gdx.input.getX(), Gdx.input.getY());
-            ScreenManager.getInstance().getViewport().unproject(tmp1);
-            if (tmp1.dst(position) < 128f) {
+            tmp.set(Gdx.input.getX(), Gdx.input.getY());
+            ScreenManager.getInstance().getViewport().unproject(tmp);
+            if (tmp.dst(position) < 128f) {
                 hungry = false;
                 touched = true;
             }

@@ -1,7 +1,7 @@
 
-game.png
+images1.png
 format: RGBA8888
-filter: Nearest,Nearest
+filter: Linear,Linear
 repeat: none
 radar
   rotate: false
@@ -10,7 +10,7 @@ radar
   orig: 512, 512
   offset: 0, 0
   index: -1
-crate
+Crate
   rotate: false
   xy: 516, 2
   size: 256, 256
@@ -24,6 +24,13 @@ astronaut
   orig: 128, 256
   offset: 0, 0
   index: -1
+joystick
+  rotate: false
+  xy: 516, 260
+  size: 200, 250
+  orig: 200, 250
+  offset: 0, 0
+  index: -1
 aliens
   rotate: false
   xy: 2, 516
@@ -33,28 +40,28 @@ aliens
   index: -1
 rocket
   rotate: false
-  xy: 516, 260
+  xy: 718, 260
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-alien
-  rotate: false
-  xy: 774, 260
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-exit
+play
   rotate: false
   xy: 2, 646
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-play
+exit
   rotate: false
   xy: 2, 776
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+alien
+  rotate: false
+  xy: 132, 646
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

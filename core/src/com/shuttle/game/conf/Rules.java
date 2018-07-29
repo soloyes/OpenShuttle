@@ -2,9 +2,9 @@ package com.shuttle.game.conf;
 
 public class Rules {
     //3200
-    public static final int STARS = 3200;
+    public static final int STARS_COUNT = 3200;
     //TEST
-    //public static final int STARS = 200;
+    //public static final int STARS_COUNT = 200;
     //1080
     public static final int WORLD_WIDTH = 1080;
     //1920
