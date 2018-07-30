@@ -56,7 +56,7 @@ public class Shuttle {
         this.width = texture.getRegionWidth();
         this.height = texture.getRegionHeight();
         this.tmpString = new StringBuilder();
-        this.maxFuel = 10;
+        this.maxFuel = Rules.PLAYER_MAX_FUEL;
         this.fuel = this.maxFuel;
         this.maxHp = Rules.PLAYER_MAX_HP;
         this.hp = this.maxHp;
