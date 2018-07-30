@@ -45,18 +45,6 @@ public class Shuttle {
     private float power, maxPower;
     private ColorLevels shieldLevel;
 
-    public int getPushPower() {
-        return (int) power;
-    }
-
-    public void decreasePower(int amount) {
-        power -= amount;
-    }
-
-    public void resetPower() {
-        power = 0.0f;
-    }
-
     public Shuttle(GameScreen gs, Joystick joystick, float x, float y) {
         this.gs = gs;
         this.texture = Assets.getInstance().getAtlas().findRegion("rocket");
@@ -68,7 +56,7 @@ public class Shuttle {
         this.width = texture.getRegionWidth();
         this.height = texture.getRegionHeight();
         this.tmpString = new StringBuilder();
-        this.maxFuel = Rules.PLAYER_MAX_FUEL;
+        this.maxFuel = 10;
         this.fuel = this.maxFuel;
         this.maxHp = Rules.PLAYER_MAX_HP;
         this.hp = this.maxHp;
@@ -81,6 +69,18 @@ public class Shuttle {
         this.radialSpeed = 135.0f;
         this.shieldLevel = ColorLevels.NONE;
         this.enginePower = 400.0f;
+    }
+
+    public int getPushPower() {
+        return (int) power;
+    }
+
+    public void decreasePower(int amount) {
+        power -= amount;
+    }
+
+    public void resetPower() {
+        power = 0.0f;
     }
 
     public boolean addZigZag(float amount) {
@@ -149,10 +149,10 @@ public class Shuttle {
             hp = maxHp;
             lives--;
             gs.getGameInfoSystem().setup(position.x, position.y, "DESTROYED", 8);
-        }
-        if (lives == 0) {
-            Rules.GAME_OVER = true;
-            writeResult();
+            if (lives == 0) {
+                Rules.GAME_OVER = true;
+                writeResult();
+            }
         }
     }
 
@@ -190,45 +190,16 @@ public class Shuttle {
     }
 
     public void update(float dt) {
-        if (killTimer > 0.0f) {
-            killTimer -= dt;
-            if (killTimer <= 0.0f) {
-                killSeries = 0;
-            }
-        }
-        power += dt / 4.0f;
-        if (power >= maxPower) {
-            power = maxPower;
-        }
-        shieldLevel = ColorLevels.getFromLevel((int) (power));
-        if (zigzagEffect > 0.0f) {
-            zigzagEffect -= dt;
-            angle += zigzagEffect * 25.0f;
-            velocity.add(MathUtils.random(-30 * zigzagEffect, 30 * zigzagEffect), MathUtils.random(-30 * zigzagEffect, 30 * zigzagEffect));
-        }
+        checkKillingSpreeSeries(dt);
+        checkPower(dt);
+        checkZigZagEffect(dt);
         angle = ShuttleMath.checkAngleBetween0And360(angle);
-        if (scoreView < score) {
-            scoreView += 500;
-            if (scoreView > score) {
-                scoreView = score;
-            }
-        }
-        if (scoreView > score) {
-            scoreView -= 500;
-            if (scoreView < score) {
-                scoreView = score;
-            }
-        }
+        checkScore();
+        checkFuel(dt);
+        createFXs();
+
         velocity.scl(0.99f);
         position.mulAdd(velocity, dt);
-        fuel -= 1.0f * dt;
-        if (fuel < 0.0f) {
-            fuel = 0.0f;
-            if (velocity.len() > Rules.PLAYER_VELOCITY_NO_FUEL) {
-                velocity.nor().scl(Rules.PLAYER_VELOCITY_NO_FUEL);
-            }
-        }
-        createFXs();
         if (joystick.isActive()) {
             tmp.set(Gdx.input.getX(), Gdx.input.getY());
             ScreenManager.getInstance().getViewport().unproject(tmp);
@@ -242,6 +213,18 @@ public class Shuttle {
             float acceleration = joystick.getPower() * enginePower;
             velocity.add(acceleration * (float) Math.cos(Math.toRadians(angle)) * dt, acceleration * (float) Math.sin(Math.toRadians(angle)) * dt);
         }
+        checkRadar(dt);
+    }
+
+    private void checkFuel(float dt) {
+        fuel -= 1.0f * dt;
+        if (fuel < 0.0f) {
+            fuel = 0.0f;
+            velocity.scl(0.97f);
+        }
+    }
+
+    private void checkRadar(float dt) {
         if (!radar.isActive()) {
             radar.update(dt);
             if (position.dst(radar.getPosition()) < 128) {
@@ -250,7 +233,47 @@ public class Shuttle {
         }
     }
 
-    public void createFXs() {
+    private void checkPower(float dt) {
+        power += dt / 4.0f;
+        if (power >= maxPower) {
+            power = maxPower;
+        }
+        shieldLevel = ColorLevels.getFromLevel((int) (power));
+    }
+
+    private void checkZigZagEffect(float dt) {
+        if (zigzagEffect > 0.0f) {
+            zigzagEffect -= dt;
+            angle += zigzagEffect * 25.0f;
+            velocity.add(MathUtils.random(-30 * zigzagEffect, 30 * zigzagEffect), MathUtils.random(-30 * zigzagEffect, 30 * zigzagEffect));
+        }
+    }
+
+    private void checkKillingSpreeSeries(float dt) {
+        if (killTimer > 0.0f) {
+            killTimer -= dt;
+            if (killTimer <= 0.0f) {
+                killSeries = 0;
+            }
+        }
+    }
+
+    private void checkScore() {
+        if (scoreView < score) {
+            scoreView += 500;
+            if (scoreView > score) {
+                scoreView = score;
+            }
+        }
+        if (scoreView > score) {
+            scoreView -= 500;
+            if (scoreView < score) {
+                scoreView = score;
+            }
+        }
+    }
+
+    private void createFXs() {
         if (fuel > 0.1f && velocity.len() > 80) {
             gs.getParticleEmitter().getBuilder().buildShuttleEngineFire(position, angle, 90, 1.0f);
         } else {
