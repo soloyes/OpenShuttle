@@ -10,7 +10,7 @@ radar
   orig: 512, 512
   offset: 0, 0
   index: -1
-Crate
+crate
   rotate: false
   xy: 516, 2
   size: 256, 256
