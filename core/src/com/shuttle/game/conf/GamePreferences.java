@@ -10,6 +10,7 @@ public class GamePreferences {
     private static final String PREF_MUSIC_VOLUME = "volume";
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
+    private static final String PREF_JOYSTICK_ENABLED = "joystick.enabled";
     private static final String PREF_SOUND_VOLUME = "sound";
     private static final String PREFS_NAME = "shuttleGame_preferences";
     private Preferences preferences;
@@ -25,6 +26,9 @@ public class GamePreferences {
             setMusicEnabled(true);
         }
         if (!getPrefs().contains(PREF_SOUND_ENABLED)) {
+            setSoundEnabled(true);
+        }
+        if (!getPrefs().contains(PREF_JOYSTICK_ENABLED)) {
             setSoundEnabled(true);
         }
     }
@@ -50,6 +54,15 @@ public class GamePreferences {
 
     public void setSoundVolume(float volume) {
         getPrefs().putFloat(PREF_SOUND_VOLUME, volume);
+        getPrefs().flush();
+    }
+
+    public boolean isJoyStickEnabled() {
+        return getPrefs().getBoolean(PREF_JOYSTICK_ENABLED);
+    }
+
+    public void setJoyStickEnabled(boolean joyStickEnabled) {
+        getPrefs().putBoolean(PREF_JOYSTICK_ENABLED, joyStickEnabled);
         getPrefs().flush();
     }
 

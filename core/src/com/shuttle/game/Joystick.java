@@ -11,7 +11,6 @@ import com.shuttle.game.utils.Assets;
 /**
  * Created by FlameXander on 30.09.2017.
  */
-
 public class Joystick extends InputAdapter {
     private TextureRegion background;
     private TextureRegion stick;
@@ -20,14 +19,6 @@ public class Joystick extends InputAdapter {
     private int lastId;
     private Vector2 vs;
     private Vector2 tmp;
-
-    public boolean isActive() {
-        return lastId > -1;
-    }
-
-    public float getPower() {
-        return vs.len() / 75.0f;
-    }
 
     public Joystick() {
         TextureRegion texture = Assets.getInstance().getAtlas().findRegion("joystick");
@@ -39,16 +30,6 @@ public class Joystick extends InputAdapter {
         this.vs = new Vector2(0, 0);
         this.tmp = new Vector2(0, 0);
         this.lastId = -1;
-    }
-
-    public void render(SpriteBatch batch) {
-        if (lastId != -1) {
-            batch.setColor(1, 1, 1, 0.5f);
-            batch.draw(background, rectangle.x, rectangle.y);
-            batch.setColor(1, 1, 1, 0.7f);
-            batch.draw(stick, joyCenterX + vs.x - 25, joyCenterY + vs.y - 25);
-            batch.setColor(1, 1, 1, 1f);
-        }
     }
 
     @Override
@@ -75,8 +56,8 @@ public class Joystick extends InputAdapter {
         return true;
     }
 
-    public float getAngle() {
-        return vs.angle();
+    public void setLastId(int lastId) {
+        this.lastId = lastId;
     }
 
     @Override
@@ -91,5 +72,27 @@ public class Joystick extends InputAdapter {
             }
         }
         return true;
+    }
+
+    public void render(SpriteBatch batch) {
+        if (lastId != -1) {
+            batch.setColor(1, 1, 1, 0.5f);
+            batch.draw(background, rectangle.x, rectangle.y);
+            batch.setColor(1, 1, 1, 0.7f);
+            batch.draw(stick, joyCenterX + vs.x - 25, joyCenterY + vs.y - 25);
+            batch.setColor(1, 1, 1, 1f);
+        }
+    }
+
+    public float getAngle() {
+        return vs.angle();
+    }
+
+    public float getPower() {
+        return vs.len() / 75.0f;
+    }
+
+    public boolean isActive() {
+        return lastId > -1;
     }
 }

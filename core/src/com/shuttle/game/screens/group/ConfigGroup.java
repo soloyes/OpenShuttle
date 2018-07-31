@@ -114,11 +114,23 @@ public class ConfigGroup extends Group {
             }
         });
 
+        final CheckBox joyStickCheckBox = new CheckBox("JoyStick", checkBoxStyle32);
+        joyStickCheckBox.setChecked(preferences.isJoyStickEnabled());
+        joyStickCheckBox.addListener(new ClickListener() {
+            @Override
+            public boolean handle(Event event) {
+                boolean enabled = joyStickCheckBox.isChecked();
+                preferences.setJoyStickEnabled(enabled);
+                return false;
+            }
+        });
+
         Label titleLabel = new Label("Preferences", style96);
         Label volumeMusicLabel = new Label("Music Volume ", style64);
         Label volumeSoundLabel = new Label("Sound Volume ", style64);
         Label musicOnOffLabel = new Label("Music ", style64);
         Label soundOnOffLabel = new Label("Sound Effect ", style64);
+        Label joyStickOnOffLabel = new Label("JoyStick ", style64);
 
         table.add(titleLabel).colspan(2);
         table.row();
@@ -133,6 +145,9 @@ public class ConfigGroup extends Group {
         table.row();
         table.add(soundOnOffLabel).left();
         table.add(soundCheckBox);
+        table.row();
+        table.add(joyStickOnOffLabel).left();
+        table.add(joyStickCheckBox);
 
         this.addActor(table);
     }

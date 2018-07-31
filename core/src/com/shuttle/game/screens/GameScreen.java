@@ -78,6 +78,8 @@ public class GameScreen extends BaseScreen {
                 ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
                 ScreenManager.getInstance().getViewport().getWorldHeight() / 2
         );
+        player.setPreferences(preferences);
+
         font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class);
         font128 = Assets.getInstance().getAssetManager().get("fonts/gomarice128.ttf", BitmapFont.class);
     }

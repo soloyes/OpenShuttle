@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.Consumable;
+import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
@@ -44,6 +45,7 @@ public class Shuttle {
     private float killTimer;
     private float power, maxPower;
     private ColorLevels shieldLevel;
+    private GamePreferences preferences;
 
     public Shuttle(GameScreen gs, Joystick joystick, float x, float y) {
         this.gs = gs;
@@ -71,18 +73,6 @@ public class Shuttle {
         this.enginePower = 400.0f;
     }
 
-    public int getPushPower() {
-        return (int) power;
-    }
-
-    public void decreasePower(int amount) {
-        power -= amount;
-    }
-
-    public void resetPower() {
-        power = 0.0f;
-    }
-
     public boolean addZigZag(float amount) {
         if (zigzagEffect < 0.1f) {
             zigzagEffect += amount;
@@ -105,6 +95,10 @@ public class Shuttle {
 
     public void addScore(int amount) {
         score += amount;
+    }
+
+    public void decreasePower(int amount) {
+        power -= amount;
     }
 
     public void killPlusPlus() {
@@ -139,6 +133,10 @@ public class Shuttle {
         }
     }
 
+    public void resetPower() {
+        power = 0.0f;
+    }
+
     public void slowDown(float amount) {
         velocity.scl(1.0f - amount / velocity.len());
     }
@@ -154,6 +152,10 @@ public class Shuttle {
                 writeResult();
             }
         }
+    }
+
+    public void writeResult() {
+        results.setResult(username + " " + scoreView + " " + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()));
     }
 
     public void takeEffect(Consumable.Type type) {
@@ -200,35 +202,30 @@ public class Shuttle {
 
         velocity.scl(0.99f);
         position.mulAdd(velocity, dt);
-        if (joystick.isActive()) {
-            tmp.set(Gdx.input.getX(), Gdx.input.getY());
-            ScreenManager.getInstance().getViewport().unproject(tmp);
-            if (zigzagEffect < 0.05f) {
-                float dir = ShuttleMath.getRotationDirection(angle, joystick.getAngle());
-                angle += dir * radialSpeed * dt;
-                if (Math.abs(angle - joystick.getAngle()) > 5.0f) {
-                    gs.getParticleEmitter().setupFromPointToPoint(position.x + dir * 80 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - dir * 80 * (float) Math.sin(Math.toRadians(90 - angle)), position.x + dir * 35 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - dir * 35 * (float) Math.sin(Math.toRadians(90 - angle)), 2.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0, 0, 0);
-                }
-            }
-            float acceleration = joystick.getPower() * enginePower;
-            velocity.add(acceleration * (float) Math.cos(Math.toRadians(angle)) * dt, acceleration * (float) Math.sin(Math.toRadians(angle)) * dt);
+
+        if (!preferences.isJoyStickEnabled()){
+            joystick.setLastId(-1);
         }
+        if (joystick.isActive()) {
+            float angleToTarget = joystick.getAngle();
+            move(dt, angleToTarget);
+        } else {
+            if (Gdx.input.isTouched()) {
+                tmp.set(Gdx.input.getX(), Gdx.input.getY());
+                ScreenManager.getInstance().getViewport().unproject(tmp);
+                float angleToTarget = tmp.sub(position).angle();
+                move(dt, angleToTarget);
+            }
+        }
+
         checkRadar(dt);
     }
 
-    private void checkFuel(float dt) {
-        fuel -= 1.0f * dt;
-        if (fuel < 0.0f) {
-            fuel = 0.0f;
-            velocity.scl(0.97f);
-        }
-    }
-
-    private void checkRadar(float dt) {
-        if (!radar.isActive()) {
-            radar.update(dt);
-            if (position.dst(radar.getPosition()) < 128) {
-                radar.setActive(true);
+    private void checkKillingSpreeSeries(float dt) {
+        if (killTimer > 0.0f) {
+            killTimer -= dt;
+            if (killTimer <= 0.0f) {
+                killSeries = 0;
             }
         }
     }
@@ -249,15 +246,6 @@ public class Shuttle {
         }
     }
 
-    private void checkKillingSpreeSeries(float dt) {
-        if (killTimer > 0.0f) {
-            killTimer -= dt;
-            if (killTimer <= 0.0f) {
-                killSeries = 0;
-            }
-        }
-    }
-
     private void checkScore() {
         if (scoreView < score) {
             scoreView += 500;
@@ -273,6 +261,14 @@ public class Shuttle {
         }
     }
 
+    private void checkFuel(float dt) {
+        fuel -= 1.0f * dt;
+        if (fuel < 0.0f) {
+            fuel = 0.0f;
+            velocity.scl(0.97f);
+        }
+    }
+
     private void createFXs() {
         if (fuel > 0.1f && velocity.len() > 80) {
             gs.getParticleEmitter().getBuilder().buildShuttleEngineFire(position, angle, 90, 1.0f);
@@ -285,7 +281,31 @@ public class Shuttle {
         }
     }
 
-    public void writeResult() {
-        results.setResult(username + " " + scoreView + " " + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()));
+    private void move(float dt, float angleToTarget) {
+        if (zigzagEffect < 0.05f) {
+            float dir = ShuttleMath.getRotationDirection(
+                    angle,
+                    angleToTarget
+            );
+            angle += dir * radialSpeed * dt;
+            if (Math.abs(angle - angleToTarget) > 5.0f) {
+                gs.getParticleEmitter().setupFromPointToPoint(position.x + dir * 80 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - dir * 80 * (float) Math.sin(Math.toRadians(90 - angle)), position.x + dir * 35 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - dir * 35 * (float) Math.sin(Math.toRadians(90 - angle)), 2.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0, 0, 0);
+            }
+        }
+        float acceleration = /*joystick.getPower()*/1 * enginePower;
+        velocity.add(acceleration * (float) Math.cos(Math.toRadians(angle)) * dt, acceleration * (float) Math.sin(Math.toRadians(angle)) * dt);
+    }
+
+    private void checkRadar(float dt) {
+        if (!radar.isActive()) {
+            radar.update(dt);
+            if (position.dst(radar.getPosition()) < 128) {
+                radar.setActive(true);
+            }
+        }
+    }
+
+    public int getPushPower() {
+        return (int) power;
     }
 }
