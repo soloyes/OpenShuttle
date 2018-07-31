@@ -283,16 +283,19 @@ public class Shuttle {
 
     private void move(float dt, float angleToTarget) {
         if (zigzagEffect < 0.05f) {
-            float dir = ShuttleMath.getRotationDirection(
-                    angle,
-                    angleToTarget
-            );
-            angle += dir * radialSpeed * dt;
-            if (Math.abs(angle - angleToTarget) > 5.0f) {
-                gs.getParticleEmitter().setupFromPointToPoint(position.x + dir * 80 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - dir * 80 * (float) Math.sin(Math.toRadians(90 - angle)), position.x + dir * 35 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - dir * 35 * (float) Math.sin(Math.toRadians(90 - angle)), 2.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0, 0, 0);
+            if(Math.abs(angle - angleToTarget) > 2.0f) {
+                float dir = ShuttleMath.getRotationDirection(
+                        angle,
+                        angleToTarget
+                );
+                angle += dir * radialSpeed * dt;
+                if (Math.abs(angle - angleToTarget) > 5.0f) {
+                    gs.getParticleEmitter().setupFromPointToPoint(position.x + dir * 80 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - dir * 80 * (float) Math.sin(Math.toRadians(90 - angle)), position.x + dir * 35 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - dir * 35 * (float) Math.sin(Math.toRadians(90 - angle)), 2.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0, 0, 0);
+                }
             }
         }
-        float acceleration = /*joystick.getPower()*/1 * enginePower;
+        float acceleration =
+                (joystick.isActive() ? joystick.getPower() : 1) * enginePower;
         velocity.add(acceleration * (float) Math.cos(Math.toRadians(angle)) * dt, acceleration * (float) Math.sin(Math.toRadians(angle)) * dt);
     }
 
