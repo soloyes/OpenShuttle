@@ -35,8 +35,6 @@ public class GameScreen extends BaseScreen {
     private ConsumableEmitter consumableEmitter;
     private AlienEmitter alienEmitter;
     private AsteroidEmitter asteroidEmitter;
-    private BitmapFont font64;
-    private BitmapFont font128;
     private Camera camera;
     private Vector2 tmp;
     private ShaderProgram shaderProgram;
@@ -79,9 +77,6 @@ public class GameScreen extends BaseScreen {
                 ScreenManager.getInstance().getViewport().getWorldHeight() / 2
         );
         player.setPreferences(preferences);
-
-        font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class);
-        font128 = Assets.getInstance().getAssetManager().get("fonts/gomarice128.ttf", BitmapFont.class);
     }
 
     @Override
@@ -116,8 +111,10 @@ public class GameScreen extends BaseScreen {
             ScreenManager.getInstance().resetCamera();
             //BEGIN
             batch.begin();
-            player.renderGUI(batch, font64, Rules.GAME_OVER);
-            joystick.render(batch);
+            player.getScore().render(batch);
+            if(!pauseGroup.isPause()) {
+                joystick.render(batch);
+            }
             batch.end();
 
             batch.setShader(null);
@@ -129,7 +126,7 @@ public class GameScreen extends BaseScreen {
             batch.begin();
             background.render(batch);
             gameInfoSystem.render(batch);
-            player.renderGUI(batch, font128, Rules.GAME_OVER);
+            player.getScore().render(batch);
             batch.end();
             batch.setShader(null);
             pauseGroup.setGameOver();
@@ -213,7 +210,7 @@ public class GameScreen extends BaseScreen {
                 if (tmpAlien.getLevel() < player.getPushPower()) {
                     tmpAlien.destroy();
                     int asc = (tmpAlien.getMaxLevel() + 1) * 5000;
-                    player.addScore(asc);
+                    player.getScore().addScore(asc);
                     player.slowDown(tmpAlien.getLevel() * 50.0f);
                     player.decreasePower(tmpAlien.getLevel());
                     showSpray(tmpAlien);
@@ -285,7 +282,7 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         shaderProgram.dispose();
-        player.writeResult();
+        player.getScore().writeResult();
     }
 
     public void showSpray(Poolable poolable) {

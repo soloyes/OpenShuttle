@@ -1,23 +1,17 @@
 package com.shuttle.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.Consumable;
 import com.shuttle.game.conf.GamePreferences;
-import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.ShuttleMath;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import lombok.Data;
 
@@ -27,13 +21,9 @@ public class Shuttle {
     private TextureRegion texture;
     private Vector2 position, velocity;
     private Vector2 tmp;
-    private StringBuilder tmpString;
-    private String username;
     private Radar radar;
-    private Results results;
     private Joystick joystick;
     private int width, height;
-    private int score, scoreView;
     private float angle, radialSpeed;
     private float fuel, maxFuel;
     private float enginePower;
@@ -46,18 +36,17 @@ public class Shuttle {
     private float power, maxPower;
     private ColorLevels shieldLevel;
     private GamePreferences preferences;
+    private Score score;
 
     public Shuttle(GameScreen gs, Joystick joystick, float x, float y) {
         this.gs = gs;
         this.texture = Assets.getInstance().getAtlas().findRegion("rocket");
-        this.username = Gdx.files.local("username").readString();
         this.position = new Vector2(x, y);
         this.velocity = new Vector2();
         this.tmp = new Vector2();
         this.angle = 0.0f;
         this.width = texture.getRegionWidth();
         this.height = texture.getRegionHeight();
-        this.tmpString = new StringBuilder();
         this.maxFuel = Rules.PLAYER_MAX_FUEL;
         this.fuel = this.maxFuel;
         this.maxHp = Rules.PLAYER_MAX_HP;
@@ -65,12 +54,12 @@ public class Shuttle {
         this.lives = Rules.PLAYER_INIT_LIVES;
         this.takeRange = Rules.PLAYER_TAKE_RANGE;
         this.radar = new Radar(gs, this);
-        this.results = new Results();
         this.joystick = joystick;
         this.maxPower = 5.0f;
         this.radialSpeed = 135.0f;
         this.shieldLevel = ColorLevels.NONE;
         this.enginePower = 400.0f;
+        this.score = new Score(this);
     }
 
     public boolean addZigZag(float amount) {
@@ -84,17 +73,13 @@ public class Shuttle {
     public void badEffect(Consumable.Type type) {
         switch (type) {
             case Astronaut:
-                addScore(-50000);
+                score.addScore(-50000);
                 gs.getGameInfoSystem().setup(position.x, position.y, "Murder!\n-50000", 8.0f);
                 break;
             case Crate:
                 gs.getGameInfoSystem().setup(position.x, position.y, "Be easy!", 3.0f);
                 break;
         }
-    }
-
-    public void addScore(int amount) {
-        score += amount;
     }
 
     public void decreasePower(int amount) {
@@ -110,27 +95,6 @@ public class Shuttle {
     public void render(SpriteBatch batch) {
         batch.draw(texture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, 1, 1, angle);
         radar.render(batch);
-    }
-
-    public void renderGUI(SpriteBatch batch, BitmapFont font, boolean game_over) {
-        tmpString.setLength(0);
-        if (!game_over) {
-            tmpString.append("NAME: ").append(username);
-            tmpString.append("\nSCORE: ").append(scoreView);
-            tmpString.append("\nHP: ").append(hp).append("/").append(maxHp).append(" x").append(lives);
-            tmpString.append("\nFUEL: ").append((int) fuel).append("/").append((int) maxFuel);
-            // tmpString.append("\nSPEED: ").append(velocity.len());
-            font.draw(batch, tmpString, 20, 1900);
-        } else {
-            tmpString.append("Game Over!");
-            tmpString.append("\nSCORE: ").append(scoreView);
-            font.draw(
-                    batch,
-                    tmpString,
-                    ScreenManager.getInstance().getViewport().getWorldWidth() - font.getRegion().getRegionWidth(),
-                    ScreenManager.getInstance().getViewport().getWorldHeight() / 2
-            );
-        }
     }
 
     public void resetPower() {
@@ -149,19 +113,15 @@ public class Shuttle {
             gs.getGameInfoSystem().setup(position.x, position.y, "DESTROYED", 8);
             if (lives == 0) {
                 Rules.GAME_OVER = true;
-                writeResult();
+                score.writeResult();
             }
         }
-    }
-
-    public void writeResult() {
-        results.setResult(username + " " + scoreView + " " + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()));
     }
 
     public void takeEffect(Consumable.Type type) {
         switch (type) {
             case Astronaut:
-                addScore(Rules.PLAYER_SCORE_ADD);
+                score.addScore(Rules.PLAYER_SCORE_ADD);
                 gs.getGameInfoSystem().setup(position.x, position.y, "+" + Rules.PLAYER_SCORE_ADD, 3.0f);
                 break;
             case Crate:
@@ -196,14 +156,14 @@ public class Shuttle {
         checkPower(dt);
         checkZigZagEffect(dt);
         angle = ShuttleMath.checkAngleBetween0And360(angle);
-        checkScore();
+        score.update();
         checkFuel(dt);
         createFXs();
 
         velocity.scl(0.99f);
         position.mulAdd(velocity, dt);
 
-        if (!preferences.isJoyStickEnabled()){
+        if (!preferences.isJoyStickEnabled()) {
             joystick.setLastId(-1);
         }
         if (joystick.isActive()) {
@@ -246,21 +206,6 @@ public class Shuttle {
         }
     }
 
-    private void checkScore() {
-        if (scoreView < score) {
-            scoreView += 500;
-            if (scoreView > score) {
-                scoreView = score;
-            }
-        }
-        if (scoreView > score) {
-            scoreView -= 500;
-            if (scoreView < score) {
-                scoreView = score;
-            }
-        }
-    }
-
     private void checkFuel(float dt) {
         fuel -= 1.0f * dt;
         if (fuel < 0.0f) {
@@ -283,7 +228,7 @@ public class Shuttle {
 
     private void move(float dt, float angleToTarget) {
         if (zigzagEffect < 0.05f) {
-            if(Math.abs(angle - angleToTarget) > 2.0f) {
+            if (Math.abs(angle - angleToTarget) > 2.0f) {
                 float dir = ShuttleMath.getRotationDirection(
                         angle,
                         angleToTarget
