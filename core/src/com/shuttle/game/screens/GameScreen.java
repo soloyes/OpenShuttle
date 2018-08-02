@@ -124,6 +124,7 @@ public class GameScreen extends BaseScreen {
             gameInfoSystem.update(delta);
             batch.setShader(shaderProgram);
             batch.begin();
+            background.update(delta);
             background.render(batch);
             gameInfoSystem.render(batch);
             player.getScore().render(batch);

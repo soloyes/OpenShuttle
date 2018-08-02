@@ -12,15 +12,15 @@ import com.shuttle.game.utils.Assets;
 public class LoadingScreen extends BaseScreen implements Screen {
     private SpriteBatch batch;
     private Texture texture;
+    private Pixmap pixmap;
 
     public LoadingScreen(SpriteBatch batch) {
         super(batch);
         this.batch = batch;
-        Pixmap pixmap = new Pixmap(1080, 60, Pixmap.Format.RGB888);
+        pixmap = new Pixmap(1080, 60, Pixmap.Format.RGB888);
         pixmap.setColor(0.8f, 0.43f, 0.33f, 1f);
         pixmap.fill();
         this.texture = new Texture(pixmap);
-        pixmap.dispose();
     }
 
     @Override
@@ -47,5 +47,6 @@ public class LoadingScreen extends BaseScreen implements Screen {
     @Override
     public void dispose() {
         texture.dispose();
+        pixmap.dispose();
     }
 }

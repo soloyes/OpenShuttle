@@ -19,7 +19,6 @@ public class ShuttleGame extends Game {
             screenType = ScreenManager.ScreenType.MENU;
         }
         ScreenManager.getInstance().changeScreen(screenType);
-        ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
         this.usernameFile = Gdx.files.local("username");
         usernameFile.writeString("", false);
     }

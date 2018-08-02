@@ -50,7 +50,8 @@ public class Background {
             if (position.x < -20) {
                 size = MathUtils.random(0.5f, 1.5f);
                 speed = MathUtils.random(5.0f, 60.0f);
-                position.y = MathUtils.random(0, Rules.SPACE_HEIGHT);
+                position.x = Rules.SPACE_WIDTH;
+                position.y = MathUtils.random(0.0f, Rules.SPACE_HEIGHT);
             }
         }
     }
