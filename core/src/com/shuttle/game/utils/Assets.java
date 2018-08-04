@@ -34,6 +34,7 @@ public class Assets {
                 assetManager.load("music/menu.ogg", Music.class);
                 assetManager.load("uiskin/gameSkin.json", Skin.class);
                 createStdFont(32);
+                createStdFont(48);
                 createStdFont(64);
                 createStdFont(96);
                 break;
@@ -43,6 +44,7 @@ public class Assets {
                 assetManager.load("uiskin/gameSkin.json", Skin.class);
                 assetManager.load("pics/asteroid.png", Texture.class);
                 createStdFont(32);
+                createStdFont(48);
                 createStdFont(64);
                 createStdFont(96);
                 createStdFont(128);

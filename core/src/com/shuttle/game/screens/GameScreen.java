@@ -12,6 +12,7 @@ import com.shuttle.game.ColorLevels;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.bot.Alien;
 import com.shuttle.game.bot.AlienEmitter;
+import com.shuttle.game.conf.GameLevel;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.bot.Asteroid;
 import com.shuttle.game.bot.AsteroidEmitter;
@@ -41,6 +42,7 @@ public class GameScreen extends BaseScreen {
     private GameInfoSystem gameInfoSystem;
     private PauseGroup pauseGroup;
     private Joystick joystick;
+    private GameLevel gameLevel;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -71,12 +73,9 @@ public class GameScreen extends BaseScreen {
         InputMultiplexer im = new InputMultiplexer(stage, joystick);
         Gdx.input.setInputProcessor(im);
 
-        player = new Shuttle(
-                this, joystick,
-                ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
-                ScreenManager.getInstance().getViewport().getWorldHeight() / 2
-        );
-        player.setPreferences(preferences);
+        player = new Shuttle(this, joystick, preferences);
+        gameLevel = new GameLevel();
+        gameLevel.commitLevel(preferences);
     }
 
     @Override

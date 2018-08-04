@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.Consumable;
 import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.conf.Levels;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
@@ -38,28 +39,33 @@ public class Shuttle {
     private GamePreferences preferences;
     private Score score;
 
-    public Shuttle(GameScreen gs, Joystick joystick, float x, float y) {
+    public Shuttle(GameScreen gs, Joystick joystick, GamePreferences preferences) {
         this.gs = gs;
+        this.joystick = joystick;
+        this.preferences = preferences;
         this.texture = Assets.getInstance().getAtlas().findRegion("rocket");
-        this.position = new Vector2(x, y);
+        this.position = new Vector2(
+                ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
+                ScreenManager.getInstance().getViewport().getWorldHeight() / 2
+        );
         this.velocity = new Vector2();
         this.tmp = new Vector2();
-        this.angle = 0.0f;
         this.width = texture.getRegionWidth();
         this.height = texture.getRegionHeight();
+        this.radialSpeed = Rules.PLAYER_RADIAL_SPEED;
+        this.enginePower = Rules.PLAYER_ENGINE_POWER;
+
+        this.score = new Score(this);
+
         this.maxFuel = Rules.PLAYER_MAX_FUEL;
         this.fuel = this.maxFuel;
         this.maxHp = Rules.PLAYER_MAX_HP;
         this.hp = this.maxHp;
         this.lives = Rules.PLAYER_INIT_LIVES;
         this.takeRange = Rules.PLAYER_TAKE_RANGE;
-        this.radar = new Radar(gs, this);
-        this.joystick = joystick;
-        this.maxPower = 5.0f;
-        this.radialSpeed = 135.0f;
+        this.radar = new Radar(gs, this, false);
+        this.maxPower = Rules.PLAYER_MAX_POWER;
         this.shieldLevel = ColorLevels.NONE;
-        this.enginePower = 400.0f;
-        this.score = new Score(this);
     }
 
     public boolean addZigZag(float amount) {

@@ -34,7 +34,7 @@ public class PauseGroup extends Group {
                 ScreenManager.getInstance().getViewport().getWorldHeight() - pauseBtn.getHeight() - 20
         );
 
-        configGroup = new ConfigGroup();
+        configGroup = new ConfigGroup(ScreenManager.ScreenType.GAME);
         configGroup.setVisible(false);
         buttonMenu = new Button(skin, "default");
         buttonMenu.setVisible(false);

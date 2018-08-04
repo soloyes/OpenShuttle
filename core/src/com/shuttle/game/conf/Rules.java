@@ -41,10 +41,14 @@ public class Rules {
     public static final int PLAYER_INIT_LIVES = 1;
     //500
     public static final int PLAYER_TAKE_RANGE = 500;
-    //150
-    public static final int PLAYER_VELOCITY_NO_FUEL = 150;
     //10000
     public static final int PLAYER_SCORE_ADD = 10000;
+    //135.0f
+    public static final float PLAYER_RADIAL_SPEED = 135.0f;
+    //400.0f
+    public static final float PLAYER_ENGINE_POWER = 400.0f;
+    //5.0f
+    public static final float PLAYER_MAX_POWER = 5.0f;
 
     //30
     public static final int CRATE_FUEL_ADD = 30;

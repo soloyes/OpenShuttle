@@ -29,12 +29,12 @@ public class Radar implements Poolable {
     private float scaleX;
     private float rotation;
 
-    public Radar(GameScreen gs, Shuttle player) {
+    public Radar(GameScreen gs, Shuttle player, boolean active) {
         this.backgroundTexture = Assets.getInstance().getAtlas().findRegion("radar");
         this.pointTexture = Assets.getInstance().getAtlas().findRegion("star16");
         this.gs = gs;
         this.player = player;
-        this.active = false;
+        this.active = active;
         this.position = new Vector2(
                 MathUtils.random(0, Rules.SPACE_WIDTH),
                 MathUtils.random(0, Rules.SPACE_HEIGHT)

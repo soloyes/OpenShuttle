@@ -12,8 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.shuttle.game.conf.Levels;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.screens.ScreenManager;
@@ -25,20 +27,26 @@ public class ConfigGroup extends Group {
     private Table table;
     private Array<Music> musicArray;
     private GamePreferences preferences = new GamePreferences();
+    private ScreenManager.ScreenType screenType;
 
-    public ConfigGroup() {
+    public ConfigGroup(ScreenManager.ScreenType screenType) {
         /////////
         this.setName(GroupType.CONFIG.name());
         this.setVisible(false);
+        this.screenType = screenType;
 
         Skin skin = Assets.getInstance().getAssetManager().get("uiskin/gameSkin.json");
 
-        CheckBox.CheckBoxStyle checkBoxStyle32 = new CheckBox.CheckBoxStyle(
+        CheckBox.CheckBoxStyle checkBoxStyle48 = new CheckBox.CheckBoxStyle(
                 skin.getDrawable("checkbox-c1"),
                 skin.getDrawable("checkbox-pressed-c1"),
-                Assets.getInstance().getAssetManager().get("fonts/gomarice32.ttf", BitmapFont.class),
+                Assets.getInstance().getAssetManager().get("fonts/gomarice48.ttf", BitmapFont.class),
                 new Color(0.8f, 0.43f, 0.33f, 1f)
         );
+        checkBoxStyle48.checkboxOn.setMinHeight(50);
+        checkBoxStyle48.checkboxOn.setMinWidth(50);
+        checkBoxStyle48.checkboxOff.setMinWidth(50);
+        checkBoxStyle48.checkboxOff.setMinHeight(50);
 
         Label.LabelStyle style64 = new Label.LabelStyle(
                 Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class),
@@ -52,14 +60,18 @@ public class ConfigGroup extends Group {
         /////////
 
         table = new Table();
-        table.setFillParent(true);
         table.setPosition(
                 ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
                 ScreenManager.getInstance().getViewport().getWorldHeight() / 2
         );
-        //table.setDebug(true);
 
-        final Slider musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, skin, "default-horizontal");
+        Slider.SliderStyle sliderStyle = new Slider.SliderStyle(skin.get("default-horizontal", Slider.SliderStyle.class));
+        sliderStyle.knob.setMinHeight(25);
+        sliderStyle.knobOver.setMinHeight(25);
+        sliderStyle.knob.setMinWidth(25);
+        sliderStyle.knobOver.setMinWidth(25);
+
+        final Slider musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, sliderStyle);
         musicSlider.setValue(preferences.getMusicVolume());
         musicSlider.addListener(new EventListener() {
             @Override
@@ -74,7 +86,7 @@ public class ConfigGroup extends Group {
             }
         });
 
-        final Slider soundSlider = new Slider(0.0f, 1.0f, 0.1f, false, skin, "default-horizontal");
+        final Slider soundSlider = new Slider(0.0f, 1.0f, 0.1f, false, sliderStyle);
         soundSlider.setValue(preferences.getSoundVolume());
         soundSlider.addListener(new EventListener() {
             @Override
@@ -84,7 +96,20 @@ public class ConfigGroup extends Group {
             }
         });
 
-        final CheckBox musicCheckBox = new CheckBox("Music", checkBoxStyle32);
+        final Label levelLabelDynamic = new Label(Levels.values()[(int) preferences.getLevel()].toString(), style64);
+
+        final Slider levelSlider = new Slider(0.0f, 2.0f, 1.0f, false, sliderStyle);
+        levelSlider.setValue(preferences.getLevel());
+        levelSlider.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                preferences.setLevel(levelSlider.getValue());
+                levelLabelDynamic.setText(Levels.getLabel((int) levelSlider.getValue()));
+                return false;
+            }
+        });
+
+        final CheckBox musicCheckBox = new CheckBox("Music", checkBoxStyle48);
         musicCheckBox.setChecked(preferences.isMusicEnabled());
         musicCheckBox.addListener(new ClickListener() {
             @Override
@@ -103,7 +128,7 @@ public class ConfigGroup extends Group {
             }
         });
 
-        final CheckBox soundCheckBox = new CheckBox("Sound", checkBoxStyle32);
+        final CheckBox soundCheckBox = new CheckBox("Sound", checkBoxStyle48);
         soundCheckBox.setChecked(preferences.isSoundEnabled());
         soundCheckBox.addListener(new ClickListener() {
             @Override
@@ -114,7 +139,7 @@ public class ConfigGroup extends Group {
             }
         });
 
-        final CheckBox joyStickCheckBox = new CheckBox("JoyStick", checkBoxStyle32);
+        final CheckBox joyStickCheckBox = new CheckBox("JoyStick", checkBoxStyle48);
         joyStickCheckBox.setChecked(preferences.isJoyStickEnabled());
         joyStickCheckBox.addListener(new ClickListener() {
             @Override
@@ -131,25 +156,41 @@ public class ConfigGroup extends Group {
         Label musicOnOffLabel = new Label("Music ", style64);
         Label soundOnOffLabel = new Label("Sound Effect ", style64);
         Label joyStickOnOffLabel = new Label("JoyStick ", style64);
+        Label levelLabel = new Label("Initial Level ", style64);
 
-        table.add(titleLabel).colspan(2);
+        table.add(titleLabel).colspan(3);
         table.row();
         table.add(volumeMusicLabel).left();
-        table.add(musicSlider);
+        table.add();
+        table.add(musicSlider).left().fillX();
         table.row();
         table.add(musicOnOffLabel).left();
-        table.add(musicCheckBox);
+        table.add();
+        table.add(musicCheckBox).left();
         table.row();
         table.add(volumeSoundLabel).left();
-        table.add(soundSlider);
+        table.add();
+        table.add(soundSlider).left().fillX();
         table.row();
         table.add(soundOnOffLabel).left();
-        table.add(soundCheckBox);
+        table.add();
+        table.add(soundCheckBox).left();
         table.row();
         table.add(joyStickOnOffLabel).left();
-        table.add(joyStickCheckBox);
+        table.add();
+        table.add(joyStickCheckBox).left();
 
+        switch (screenType) {
+            case MENU:
+                table.row();
+                table.add(levelLabel).left();
+                table.add(levelSlider).padRight(10);
+                table.add(levelLabelDynamic).left().width(200);
+                break;
+        }
+        //table.setDebug(true);
         this.addActor(table);
+
     }
 
     @Override

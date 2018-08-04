@@ -13,6 +13,7 @@ public class GamePreferences {
     private static final String PREF_JOYSTICK_ENABLED = "joystick.enabled";
     private static final String PREF_SOUND_VOLUME = "sound";
     private static final String PREFS_NAME = "shuttleGame_preferences";
+    private static final String PREF_LEVEL = "level";
     private Preferences preferences;
 
     public GamePreferences() {
@@ -31,12 +32,24 @@ public class GamePreferences {
         if (!getPrefs().contains(PREF_JOYSTICK_ENABLED)) {
             setSoundEnabled(true);
         }
+        if (!getPrefs().contains(PREF_LEVEL)) {
+            setLevel(1.0f);
+        }
     }
 
     public Preferences getPrefs() {
         if (preferences == null)
             preferences = Gdx.app.getPreferences(PREFS_NAME);
         return preferences;
+    }
+
+    public float getLevel() {
+        return getPrefs().getFloat(PREF_LEVEL);
+    }
+
+    public void setLevel(float level) {
+        getPrefs().putFloat(PREF_LEVEL, level);
+        getPrefs().flush();
     }
 
     public float getMusicVolume() {
