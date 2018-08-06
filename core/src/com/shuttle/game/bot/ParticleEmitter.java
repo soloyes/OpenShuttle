@@ -15,10 +15,6 @@ public class ParticleEmitter extends ObjectPool<Particle> {
     private ParticleEffectBuilder builder;
     private Vector2 tmp;
 
-    public ParticleEffectBuilder getBuilder() {
-        return builder;
-    }
-
     public ParticleEmitter() {
         this.particleTexture = Assets.getInstance().getAtlas().findRegion("star16");
         this.builder = new ParticleEffectBuilder(this);
@@ -31,17 +27,11 @@ public class ParticleEmitter extends ObjectPool<Particle> {
     }
 
     public void render(SpriteBatch batch) {
-        for (int pass = 0; pass < 2; pass++) {
-            if (pass == 0) {
-                batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-            } else {
-                batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
-            }
-            for (int i = 0; i < activeList.size(); i++) {
-                Particle particle = activeList.get(i);
-                batch.setColor(particle.getCurrentR(), particle.getCurrentG(), particle.getCurrentB(), particle.getCurrentA());
-                batch.draw(particleTexture, particle.getPosition().x - 8, particle.getPosition().y - 8, 8, 8, 16, 16, particle.getCurrentSize(), particle.getCurrentSize(), 0);
-            }
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
+        for (int i = 0; i < activeList.size(); i++) {
+            Particle particle = activeList.get(i);
+            batch.setColor(particle.getCurrentR(), particle.getCurrentG(), particle.getCurrentB(), particle.getCurrentA());
+            batch.draw(particleTexture, particle.getPosition().x - 8, particle.getPosition().y - 8, 8, 8, 16, 16, particle.getCurrentSize(), particle.getCurrentSize(), 0);
         }
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -69,5 +59,9 @@ public class ParticleEmitter extends ObjectPool<Particle> {
             activeList.get(i).update(dt);
         }
         checkPool();
+    }
+
+    public ParticleEffectBuilder getBuilder() {
+        return builder;
     }
 }

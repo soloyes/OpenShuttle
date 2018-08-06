@@ -31,34 +31,27 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
     }
 
     private void fragmentSetup(ColorLevels rang) {
-        acceleration = 1f;
-        size = 1f;
-        count = 1f;
+        acceleration = 1.0f;
         switch (rang) {
             case NONE:
-                acceleration = 1f;
-                size = 1f;
                 count = 1f;
+                size = MathUtils.random(0.25f, 0.5f);
                 break;
             case WHITE:
-                acceleration = 1.5f;
-                size = 0.8f;
                 count = 1.5f;
+                size = MathUtils.random(0.16f, 0.3f);
                 break;
             case GREEN:
-                acceleration = 2f;
-                size = 0.6f;
                 count = 2f;
+                size = MathUtils.random(0.125f, 0.25f);
                 break;
             case YELLOW:
-                acceleration = 2.5f;
-                size = 0.6f;
                 count = 2.5f;
+                size = MathUtils.random(0.1f, 0.2f);
                 break;
             case RED:
-                acceleration = 3f;
-                size = 0.4f;
                 count = 3f;
+                size = MathUtils.random(0.08f, 0.16f);
                 break;
         }
     }
@@ -138,7 +131,10 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
 
     public void createFragment() {
         destanation = new Vector2(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
-        getActiveElement().init(position, destanation, acceleration, size, true);
+        Asteroid tmpAsteroid = getActiveElement();
+        tmpAsteroid.init(position, destanation, acceleration, size, true);
+        tmpAsteroid.setSizeForHarvest(size);
+
     }
 
     private enum Side {

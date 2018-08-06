@@ -149,7 +149,7 @@ public class Shuttle {
 
     public void update(float dt) {
         checkKillingSpreeSeries(dt);
-        checkPower(dt);
+        checkPower();
         checkZigZagEffect(dt);
         angle = ShuttleMath.checkAngleBetween0And360(angle);
         score.update();
@@ -186,8 +186,7 @@ public class Shuttle {
         }
     }
 
-    private void checkPower(float dt) {
-        power += dt / 4.0f;
+    private void checkPower() {
         if (power >= maxPower) {
             power = maxPower;
         }

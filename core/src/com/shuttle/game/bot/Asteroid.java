@@ -24,6 +24,7 @@ public class Asteroid implements Poolable {
     private int width, height;
     private float rotation;
     private boolean fragment;
+    private float sizeForHarvest;
 
     public Asteroid() {
         this.textureRegions = Regions.split(
@@ -57,8 +58,8 @@ public class Asteroid implements Poolable {
             s = textureRegions[0].getRegionWidth();
         } else {
             s = MathUtils.random(
-                    textureRegions[0].getRegionWidth() * 0.25f,
-                    textureRegions[0].getRegionWidth() * 0.75f
+                    textureRegions[0].getRegionWidth(),
+                    textureRegions[0].getRegionWidth()
             );
         }
         this.width = this.height = (int) (s * size);

@@ -70,7 +70,7 @@ public class GameScreen extends BaseScreen {
         Gdx.input.setInputProcessor(im);
 
         player = new Shuttle(this, joystick, preferences);
-        Rules.StartLevel.values()[(int)preferences.getLevel()].setGameLevel(player);
+        Rules.StartLevel.values()[preferences.getLevel()].setGameLevel(player);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class GameScreen extends BaseScreen {
             //BEGIN
             batch.begin();
             player.getScore().render(batch);
-            if(!pauseGroup.isPause()) {
+            if (!pauseGroup.isPause()) {
                 joystick.render(batch);
             }
             batch.end();
@@ -235,12 +235,21 @@ public class GameScreen extends BaseScreen {
 
         for (int i = 0; i < asteroidEmitter.getActiveList().size(); i++) {
             Asteroid tmpAsteroid = asteroidEmitter.getActiveList().get(i);
-            if (!tmpAsteroid.isFragment() && player.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
-                tmpAsteroid.destroy();
-                particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, player.getShieldLevel().getLevel() * 32 + 32);
-                asteroidEmitter.boom(tmpAsteroid.getPosition(), ColorLevels.NONE);
-                player.takeDamage(player.getShieldLevel().getLevel() + 1);
-                gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "SCREECH", 3);
+            if (player.getPosition().dst(tmpAsteroid.getPosition()) < tmpAsteroid.getHeight()) {
+                if (!tmpAsteroid.isFragment()) {
+                    tmpAsteroid.destroy();
+                    particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, player.getShieldLevel().getLevel() * 16 + 32);
+                    asteroidEmitter.boom(tmpAsteroid.getPosition(), player.getShieldLevel());
+                    player.takeDamage(player.getShieldLevel().getLevel() + 1);
+                    gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "SCREECH", 3);
+                } else {
+                    System.out.println();
+                    System.out.println(player.getPower());
+                    System.out.println(tmpAsteroid.getSizeForHarvest());
+                    player.setPower(player.getPower() + tmpAsteroid.getSizeForHarvest());
+                    System.out.println(player.getPower());
+                    tmpAsteroid.destroy();
+                }
             }
 
             for (int j = 0; j < alienEmitter.getActiveList().size(); j++) {
@@ -273,16 +282,16 @@ public class GameScreen extends BaseScreen {
         }
     }
 
+    public void showSpray(Poolable poolable) {
+        for (int j = 0; j < 30; j++) {
+            particleEmitter.setup(poolable.getPosition().x + MathUtils.random(-30, 30), poolable.getPosition().y + MathUtils.random(-30, 30), MathUtils.random(-400, 400), MathUtils.random(-400, 400), 0.4f, 8, 4, 0, 1, 0, 1f, 0, 1, 0, 0.2f);
+        }
+    }
+
     @Override
     public void dispose() {
         super.dispose();
         shaderProgram.dispose();
         player.getScore().writeResult();
-    }
-
-    public void showSpray(Poolable poolable) {
-        for (int j = 0; j < 30; j++) {
-            particleEmitter.setup(poolable.getPosition().x + MathUtils.random(-30, 30), poolable.getPosition().y + MathUtils.random(-30, 30), MathUtils.random(-400, 400), MathUtils.random(-400, 400), 0.4f, 8, 4, 0, 1, 0, 1f, 0, 1, 0, 0.2f);
-        }
     }
 }

@@ -5,29 +5,29 @@ import com.shuttle.game.Shuttle;
 
 public class Rules {
     //3200
-    public static final int STARS_COUNT = 3200;
+    //public static final int STARS_COUNT = 3200;
     //TEST
-    //public static final int STARS_COUNT = 200;
+    public static final int STARS_COUNT = 200;
     //1080
     public static final int WORLD_WIDTH = 1080;
     //1920
     public static final int WORLD_HEIGHT = 1920;
     //*7
-    public static final int SPACE_WIDTH = WORLD_WIDTH * 7;
+    //public static final int SPACE_WIDTH = WORLD_WIDTH * 7;
     //*7
-    public static final int SPACE_HEIGHT = WORLD_WIDTH * 7;
+    //public static final int SPACE_HEIGHT = WORLD_WIDTH * 7;
     //TEST
-    //public static final int SPACE_WIDTH = 1080;
-    //public static final int SPACE_HEIGHT = 1920;
+    public static final int SPACE_WIDTH = 1080;
+    public static final int SPACE_HEIGHT = 1920;
     //
     //10
-    public static final int CONSUMABLES_AT_START = 10;
+    public static final int CONSUMABLES_AT_START = 0;
     //6.0f
-    public static final float CONSUMABLES_RESPAWN_TIME = 6.0f;
+    public static final float CONSUMABLES_RESPAWN_TIME = 60.0f;
     //0
     public static final int ALIENS_AT_START = 0;
     //5.0f
-    public static final float ALIENS_RESPAWN_TIME = 5.0f;
+    public static final float ALIENS_RESPAWN_TIME = 50.0f;
     //20.0f
     public static final float ALIENS_HUNGRY_TIME = 20.0f;
     //60.0f
