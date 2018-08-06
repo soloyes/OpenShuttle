@@ -12,10 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.shuttle.game.conf.Levels;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.screens.ScreenManager;
@@ -96,15 +95,15 @@ public class ConfigGroup extends Group {
             }
         });
 
-        final Label levelLabelDynamic = new Label(Levels.values()[(int) preferences.getLevel()].toString(), style64);
+        final Label levelLabelDynamic = new Label(Rules.StartLevel.values()[preferences.getLevel()].toString(), style64);
 
         final Slider levelSlider = new Slider(0.0f, 2.0f, 1.0f, false, sliderStyle);
         levelSlider.setValue(preferences.getLevel());
         levelSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                preferences.setLevel(levelSlider.getValue());
-                levelLabelDynamic.setText(Levels.getLabel((int) levelSlider.getValue()));
+                preferences.setLevel((int) levelSlider.getValue());
+                levelLabelDynamic.setText(Rules.StartLevel.values()[(int) levelSlider.getValue()].toString());
                 return false;
             }
         });
@@ -156,7 +155,7 @@ public class ConfigGroup extends Group {
         Label musicOnOffLabel = new Label("Music ", style64);
         Label soundOnOffLabel = new Label("Sound Effect ", style64);
         Label joyStickOnOffLabel = new Label("JoyStick ", style64);
-        Label levelLabel = new Label("Initial Level ", style64);
+        Label levelLabel = new Label("Initial StartLevel ", style64);
 
         table.add(titleLabel).colspan(3);
         table.row();

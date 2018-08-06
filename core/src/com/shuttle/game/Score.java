@@ -69,10 +69,10 @@ public class Score {
     }
 
     public void update() {
-        checkScore();
+        scoreTicTac();
     }
 
-    private void checkScore() {
+    private void scoreTicTac() {
         if (scoreView < score) {
             scoreView += 500;
             if (scoreView > score) {

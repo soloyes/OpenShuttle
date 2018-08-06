@@ -3,7 +3,6 @@ package com.shuttle.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
@@ -12,8 +11,6 @@ import com.shuttle.game.ColorLevels;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.bot.Alien;
 import com.shuttle.game.bot.AlienEmitter;
-import com.shuttle.game.conf.GameLevel;
-import com.shuttle.game.utils.Assets;
 import com.shuttle.game.bot.Asteroid;
 import com.shuttle.game.bot.AsteroidEmitter;
 import com.shuttle.game.Background;
@@ -42,7 +39,6 @@ public class GameScreen extends BaseScreen {
     private GameInfoSystem gameInfoSystem;
     private PauseGroup pauseGroup;
     private Joystick joystick;
-    private GameLevel gameLevel;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -74,8 +70,7 @@ public class GameScreen extends BaseScreen {
         Gdx.input.setInputProcessor(im);
 
         player = new Shuttle(this, joystick, preferences);
-        gameLevel = new GameLevel();
-        gameLevel.commitLevel(preferences);
+        Rules.StartLevel.values()[(int)preferences.getLevel()].setGameLevel(player);
     }
 
     @Override

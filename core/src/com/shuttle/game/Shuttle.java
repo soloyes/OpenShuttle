@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.Consumable;
 import com.shuttle.game.conf.GamePreferences;
-import com.shuttle.game.conf.Levels;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
@@ -23,6 +22,7 @@ public class Shuttle {
     private Vector2 position, velocity;
     private Vector2 tmp;
     private Radar radar;
+    private Gun gun;
     private Joystick joystick;
     private int width, height;
     private float angle, radialSpeed;
@@ -38,6 +38,7 @@ public class Shuttle {
     private ColorLevels shieldLevel;
     private GamePreferences preferences;
     private Score score;
+    private int playingLevel;
 
     public Shuttle(GameScreen gs, Joystick joystick, GamePreferences preferences) {
         this.gs = gs;
@@ -52,20 +53,9 @@ public class Shuttle {
         this.tmp = new Vector2();
         this.width = texture.getRegionWidth();
         this.height = texture.getRegionHeight();
-        this.radialSpeed = Rules.PLAYER_RADIAL_SPEED;
-        this.enginePower = Rules.PLAYER_ENGINE_POWER;
-
         this.score = new Score(this);
-
-        this.maxFuel = Rules.PLAYER_MAX_FUEL;
-        this.fuel = this.maxFuel;
-        this.maxHp = Rules.PLAYER_MAX_HP;
-        this.hp = this.maxHp;
-        this.lives = Rules.PLAYER_INIT_LIVES;
-        this.takeRange = Rules.PLAYER_TAKE_RANGE;
-        this.radar = new Radar(gs, this, false);
-        this.maxPower = Rules.PLAYER_MAX_POWER;
-        this.shieldLevel = ColorLevels.NONE;
+        this.radar = new Radar(gs, this);
+        this.gun = new Gun();
     }
 
     public boolean addZigZag(float amount) {

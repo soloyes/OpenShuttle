@@ -33,7 +33,7 @@ public class GamePreferences {
             setSoundEnabled(true);
         }
         if (!getPrefs().contains(PREF_LEVEL)) {
-            setLevel(1.0f);
+            setLevel(1);
         }
     }
 
@@ -43,12 +43,12 @@ public class GamePreferences {
         return preferences;
     }
 
-    public float getLevel() {
-        return getPrefs().getFloat(PREF_LEVEL);
+    public int getLevel() {
+        return getPrefs().getInteger(PREF_LEVEL);
     }
 
-    public void setLevel(float level) {
-        getPrefs().putFloat(PREF_LEVEL, level);
+    public void setLevel(int level) {
+        getPrefs().putInteger(PREF_LEVEL, level);
         getPrefs().flush();
     }
 
