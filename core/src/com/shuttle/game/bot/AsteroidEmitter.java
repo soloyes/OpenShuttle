@@ -3,8 +3,7 @@ package com.shuttle.game.bot;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.ColorLevels;
-import com.shuttle.game.Shuttle;
+import com.shuttle.game.GlobalInteractionLevels;
 import com.shuttle.game.conf.Rules;
 
 /**
@@ -15,45 +14,20 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
     private boolean boom;
     private Vector2 position;
     private Vector2 destanation;
-    private float acceleration;
     private float size;
     private float count;
+    private GlobalInteractionLevels rang;
 
     @Override
     protected Asteroid newObject() {
         return new Asteroid();
     }
 
-    public void boom(Vector2 position, ColorLevels rang) {
-        fragmentSetup(rang);
+    public void boom(Vector2 position, GlobalInteractionLevels rang) {
+        this.rang = rang;
+        this.count = rang.getFragmentAsteroidCount();
         this.position = position;
         this.boom = true;
-    }
-
-    private void fragmentSetup(ColorLevels rang) {
-        acceleration = 1.0f;
-        switch (rang) {
-            case NONE:
-                count = 1f;
-                size = MathUtils.random(0.25f, 0.5f);
-                break;
-            case WHITE:
-                count = 1.5f;
-                size = MathUtils.random(0.16f, 0.3f);
-                break;
-            case GREEN:
-                count = 2f;
-                size = MathUtils.random(0.125f, 0.25f);
-                break;
-            case YELLOW:
-                count = 2.5f;
-                size = MathUtils.random(0.1f, 0.2f);
-                break;
-            case RED:
-                count = 3f;
-                size = MathUtils.random(0.08f, 0.16f);
-                break;
-        }
     }
 
     public void render(SpriteBatch batch) {
@@ -71,6 +45,7 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
 
         if (boom) {
             for (int i = 0; i < MathUtils.random(2 * count, 4 * count); i++) {
+                size = MathUtils.random(rang.getFragmentAsteroidSize1(), rang.getFragmentAsteroidSize2());
                 createFragment();
             }
             boom = false;
@@ -82,7 +57,7 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
         checkPool();
     }
 
-    public void createAsteroid(int width, int height) {
+    private void createAsteroid(int width, int height) {
         position = new Vector2();
         destanation = new Vector2();
         Side side = Side.values()[MathUtils.random(0, 3)];
@@ -126,15 +101,14 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
                     MathUtils.random(0, Rules.SPACE_HEIGHT)
             );
         }
-        getActiveElement().init(position, destanation, 1, 1, false);
+        getActiveElement().init(position, destanation, 1, false);
     }
 
-    public void createFragment() {
+    private void createFragment() {
         destanation = new Vector2(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
         Asteroid tmpAsteroid = getActiveElement();
-        tmpAsteroid.init(position, destanation, acceleration, size, true);
+        tmpAsteroid.init(position, destanation, size, true);
         tmpAsteroid.setSizeForHarvest(size);
-
     }
 
     private enum Side {

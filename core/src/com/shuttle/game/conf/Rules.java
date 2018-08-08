@@ -1,6 +1,6 @@
 package com.shuttle.game.conf;
 
-import com.shuttle.game.ColorLevels;
+import com.shuttle.game.GlobalInteractionLevels;
 import com.shuttle.game.Shuttle;
 
 public class Rules {
@@ -62,7 +62,7 @@ public class Rules {
                 player.setLives(3);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
-                player.setShieldLevel(ColorLevels.NONE);
+                player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(true);
@@ -80,7 +80,7 @@ public class Rules {
                 player.setLives(2);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
-                player.setShieldLevel(ColorLevels.NONE);
+                player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);
@@ -98,7 +98,7 @@ public class Rules {
                 player.setLives(2);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
-                player.setShieldLevel(ColorLevels.NONE);
+                player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);

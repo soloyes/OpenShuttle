@@ -48,11 +48,15 @@ public class Asteroid implements Poolable {
         return position;
     }
 
-    public void init(Vector2 position, Vector2 destanation, float acceleration, float size, boolean isFragment) {
+    public void init(Vector2 position, Vector2 destanation, float size, boolean isFragment) {
         this.position.set(position);
         this.fragment = isFragment;
         destanation.sub(position).nor();
-        velocity.set(destanation).scl(acceleration * MathUtils.random(50, 300));
+        if (isFragment) {
+            velocity.set(destanation).scl(MathUtils.random(25, 150));
+        } else {
+            velocity.set(destanation).scl(MathUtils.random(50, 300));
+        }
         float s;
         if (!isFragment) {
             s = textureRegions[0].getRegionWidth();

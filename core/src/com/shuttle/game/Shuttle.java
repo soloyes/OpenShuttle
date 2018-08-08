@@ -35,7 +35,7 @@ public class Shuttle {
     private int killSeries;
     private float killTimer;
     private float power, maxPower;
-    private ColorLevels shieldLevel;
+    private GlobalInteractionLevels shieldLevel;
     private GamePreferences preferences;
     private Score score;
     private int playingLevel;
@@ -190,7 +190,7 @@ public class Shuttle {
         if (power >= maxPower) {
             power = maxPower;
         }
-        shieldLevel = ColorLevels.getFromLevel((int) (power));
+        shieldLevel = GlobalInteractionLevels.getFromLevel((int) (power));
     }
 
     private void checkZigZagEffect(float dt) {

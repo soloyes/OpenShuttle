@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.ColorLevels;
+import com.shuttle.game.GlobalInteractionLevels;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.bot.Alien;
 import com.shuttle.game.bot.AlienEmitter;
@@ -168,7 +168,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < consumableEmitter.getActiveList().size(); i++) {
             Consumable tmpConsumable = consumableEmitter.getActiveList().get(i);
             if (player.getPosition().dst(tmpConsumable.getPosition()) < 60) {
-                if (player.getShieldLevel().getLevel() < ColorLevels.GREEN.getLevel()) {
+                if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel()) {
                     tmpConsumable.deactivate();
                     player.takeEffect(tmpConsumable.getType());
                 } else {
@@ -243,11 +243,7 @@ public class GameScreen extends BaseScreen {
                     player.takeDamage(player.getShieldLevel().getLevel() + 1);
                     gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "SCREECH", 3);
                 } else {
-                    System.out.println();
-                    System.out.println(player.getPower());
-                    System.out.println(tmpAsteroid.getSizeForHarvest());
                     player.setPower(player.getPower() + tmpAsteroid.getSizeForHarvest());
-                    System.out.println(player.getPower());
                     tmpAsteroid.destroy();
                 }
             }
@@ -257,7 +253,7 @@ public class GameScreen extends BaseScreen {
                 if (!tmpAsteroid.isFragment() && tmpAlien.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
                     tmpAsteroid.destroy();
                     particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 32 + 32);
-                    asteroidEmitter.boom(tmpAsteroid.getPosition(), ColorLevels.NONE);
+                    asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE);
                     gameInfoSystem.setup(tmpAlien.getPosition().x, tmpAlien.getPosition().y, "BOOOOM", 3);
                     if (tmpAlien.getLevel() == 0) {
                         tmpAlien.destroy();
@@ -273,7 +269,7 @@ public class GameScreen extends BaseScreen {
                 if (!tmpAsteroid.isFragment() && tmpConsumable.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
                     tmpAsteroid.destroy();
                     tmpConsumable.deactivate();
-                    asteroidEmitter.boom(tmpAsteroid.getPosition(), ColorLevels.NONE); // !!!!!!!
+                    asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE); // !!!!!!!
                     particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 1 * 32 + 32);
                     showSpray(tmpConsumable);
                     gameInfoSystem.setup(tmpConsumable.getPosition().x, tmpConsumable.getPosition().y, "SO SAD", 3);
