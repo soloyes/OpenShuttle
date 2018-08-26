@@ -33,33 +33,34 @@ public class Assets {
                 assetManager.load("pics/game.pack", TextureAtlas.class);
                 assetManager.load("music/menu.ogg", Music.class);
                 assetManager.load("uiskin/gameSkin.json", Skin.class);
-                createStdFont(32);
-                createStdFont(48);
-                createStdFont(64);
-                createStdFont(96);
+                createStdFont(32, "");
+                createStdFont(48, "");
+                createStdFont(64, "");
+                createStdFont(96, "");
                 break;
             case GAME:
                 assetManager.load("pics/game.pack", TextureAtlas.class);
                 assetManager.load("music/game.ogg", Music.class);
                 assetManager.load("uiskin/gameSkin.json", Skin.class);
                 assetManager.load("pics/asteroid.png", Texture.class);
-                createStdFont(32);
-                createStdFont(48);
-                createStdFont(64);
-                createStdFont(96);
-                createStdFont(128);
+                createStdFont(32, "");
+                createStdFont(48, "");
+                createStdFont(64, "");
+                createStdFont(64, "colored");
+                createStdFont(96, "");
+                createStdFont(128, "");
                 break;
             case TEST:
                 assetManager.load("pics/game.pack", TextureAtlas.class);
                 assetManager.load("uiskin/gameSkin.json", Skin.class);
-                createStdFont(32);
-                createStdFont(64);
-                createStdFont(96);
+                createStdFont(32, "");
+                createStdFont(64, "");
+                createStdFont(96, "");
                 break;
         }
     }
 
-    public void createStdFont(int size) {
+    private void createStdFont(int size, String postfix) {
         FileHandleResolver resolver = new InternalFileHandleResolver();
         assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
         assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
@@ -72,7 +73,7 @@ public class Assets {
         fontParameter.fontParameters.shadowOffsetX = 3;
         fontParameter.fontParameters.shadowOffsetY = 3;
         fontParameter.fontParameters.shadowColor = Color.BLACK;
-        assetManager.load("fonts/gomarice" + size + ".ttf", BitmapFont.class, fontParameter);
+        assetManager.load("fonts/gomarice" + size + postfix + ".ttf", BitmapFont.class, fontParameter);
     }
 
     public void makeLinks() {

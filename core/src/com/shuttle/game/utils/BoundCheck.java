@@ -40,8 +40,8 @@ public class BoundCheck {
             alertTimer = 0;
             fuelTimer = 0;
             hpTimer = 0;
-            player.getScore().setFuelAlert(false);
-            player.getScore().setHpAlert(false);
+            player.getStanding().setFuelAlert(false);
+            player.getStanding().setHpAlert(false);
         }
     }
 
@@ -57,12 +57,12 @@ public class BoundCheck {
 
         if (hpTimer >= Rules.PLAYER_TIMER_HP_OUT_OF_MAP) {
             player.takeDamage(Rules.PLAYER_HP_OUT_OF_MAP);
-            player.getScore().setHpAlert(true);
+            player.getStanding().setHpAlert(true);
             hpTimer = 0.0f;
         }
         if (fuelTimer >= Rules.PLAYER_TIMER_FUEL_OUT_OF_MAP) {
-            player.setFuel(player.getFuel() - Rules.PLAYER_FUEL_OUT_OF_MAP);
-            player.getScore().setFuelAlert(true);
+            player.getStanding().setFuel(player.getStanding().getFuel() - Rules.PLAYER_FUEL_OUT_OF_MAP);
+            player.getStanding().setFuelAlert(true);
             fuelTimer = 0.0f;
         }
     }
@@ -73,7 +73,9 @@ public class BoundCheck {
         player.getGs().getGameInfoSystem().setup(
                 tmp.x - Rules.WORLD_WIDTH / 2,
                 tmp.y + Rules.WORLD_HEIGHT / 2,
-                "OUT OF RANGE!", 3
+                "OUT OF RANGE!",
+                3,
+                false
         );
     }
 }

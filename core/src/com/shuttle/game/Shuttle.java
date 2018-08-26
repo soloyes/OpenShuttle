@@ -27,10 +27,7 @@ public class Shuttle {
     private Joystick joystick;
     private int width, height;
     private float angle, radialSpeed;
-    private float fuel, maxFuel;
     private float enginePower;
-    private int hp, maxHp;
-    private int lives;
     private int takeRange;
     private float zigzagEffect;
     private int killSeries;
@@ -38,11 +35,11 @@ public class Shuttle {
     private float power, maxPower;
     private GlobalInteractionLevels shieldLevel;
     private GamePreferences preferences;
-    private Score score;
-    private int playingLevel;
+    private Standing standing;
     private BoundCheck boundCheck;
 
     public Shuttle(GameScreen gs, Joystick joystick, GamePreferences preferences) {
+        this.standing = new Standing(this);
         this.gs = gs;
         this.joystick = joystick;
         this.preferences = preferences;
@@ -55,7 +52,6 @@ public class Shuttle {
         this.tmp = new Vector2();
         this.width = texture.getRegionWidth();
         this.height = texture.getRegionHeight();
-        this.score = new Score(this);
         this.radar = new Radar(gs, this);
         this.gun = new Gun();
         this.boundCheck = new BoundCheck();
@@ -72,11 +68,11 @@ public class Shuttle {
     public void badEffect(Consumable.Type type) {
         switch (type) {
             case Astronaut:
-                score.addScore(-50000);
-                gs.getGameInfoSystem().setup(position.x, position.y, "Murder!\n-50000", 8.0f);
+                standing.increaseScore(-50000);
+                gs.getGameInfoSystem().setup(position.x, position.y, "Murder!\n-50000", 8.0f, false);
                 break;
             case Crate:
-                gs.getGameInfoSystem().setup(position.x, position.y, "Be easy!", 3.0f);
+                gs.getGameInfoSystem().setup(position.x, position.y, "Be easy!", 3.0f, false);
                 break;
         }
     }
@@ -88,7 +84,12 @@ public class Shuttle {
     public void killPlusPlus() {
         killSeries++;
         killTimer = 7.0f;
-        gs.getGameInfoSystem().setup(position.x, position.y, KillingSpree.getKillingSpreeFromKillsCount(killSeries).getText(), KillingSpree.getKillingSpreeFromKillsCount(killSeries).getTextSizeModifier());
+        gs.getGameInfoSystem().setup(
+                position.x, position.y,
+                KillingSpree.getKillingSpreeFromKillsCount(killSeries).getText(),
+                KillingSpree.getKillingSpreeFromKillsCount(killSeries).getTextSizeModifier(),
+                false
+        );
     }
 
     public void render(SpriteBatch batch) {
@@ -105,14 +106,14 @@ public class Shuttle {
     }
 
     public void takeDamage(int amount) {
-        hp -= amount;
-        if (hp <= 0) {
-            hp = maxHp;
-            lives--;
-            gs.getGameInfoSystem().setup(position.x, position.y, "DESTROYED", 8);
-            if (lives == 0) {
+        standing.decreaseHP(amount);
+        if (standing.getHp() <= 0) {
+            standing.setHp(standing.getMaxHp());
+            standing.decreaseLives(1);
+            gs.getGameInfoSystem().setup(position.x, position.y, "DESTROYED", 8.0f, false);
+            if (standing.getLives() == 0) {
                 Rules.GAME_OVER = true;
-                score.writeResult();
+                standing.writeResult();
             }
         }
     }
@@ -120,31 +121,25 @@ public class Shuttle {
     public void takeEffect(Consumable.Type type) {
         switch (type) {
             case Astronaut:
-                score.addScore(Rules.PLAYER_SCORE_ADD);
-                gs.getGameInfoSystem().setup(position.x, position.y, "+" + Rules.PLAYER_SCORE_ADD, 3.0f);
+                standing.increaseScore(Rules.PLAYER_SCORE_ADD);
+                gs.getGameInfoSystem().setup(position.x, position.y, "+" + Rules.PLAYER_SCORE_ADD, 3.0f, false);
                 break;
             case Crate:
                 int x = MathUtils.random(0, 5);
                 if (x == 0) {
-                    hp += Rules.CRATE_REPAIR_ADD;
-                    if (hp > maxHp) {
-                        hp = maxHp;
-                    }
-                    gs.getGameInfoSystem().setup(position.x, position.y, "REPAIR +" + Rules.CRATE_REPAIR_ADD, 3.0f);
+                    standing.increaseHP(Rules.CRATE_REPAIR_ADD);
+                    gs.getGameInfoSystem().setup(position.x, position.y, "REPAIR +" + Rules.CRATE_REPAIR_ADD, 3.0f, false);
                 }
                 if (x == 1) {
-                    fuel += Rules.CRATE_FUEL_ADD;
-                    if (fuel > maxFuel) {
-                        fuel = maxFuel;
-                    }
-                    gs.getGameInfoSystem().setup(position.x, position.y, "FUEL +" + Rules.CRATE_FUEL_ADD, 3.0f);
+                    standing.increaseFuel(Rules.CRATE_FUEL_ADD);
+                    gs.getGameInfoSystem().setup(position.x, position.y, "FUEL +" + Rules.CRATE_FUEL_ADD, 3.0f, false);
                 }
                 if (x == 2) {
                     velocity.add(1500 * (float) Math.cos(Math.toRadians(angle)), 1500 * (float) Math.sin(Math.toRadians(angle)));
-                    gs.getGameInfoSystem().setup(position.x, position.y, "TURBO X5", 5.0f);
+                    gs.getGameInfoSystem().setup(position.x, position.y, "TURBO X5", 5.0f, false);
                 }
                 if (x > 2) {
-                    gs.getGameInfoSystem().setup(position.x, position.y, "TRASH", 2.0f);
+                    gs.getGameInfoSystem().setup(position.x, position.y, "TRASH", 2.0f, false);
                 }
                 break;
         }
@@ -155,7 +150,7 @@ public class Shuttle {
         checkPower();
         checkZigZagEffect(dt);
         angle = ShuttleMath.checkAngleBetween0And360(angle);
-        score.update();
+        standing.update();
         checkFuel(dt);
         createFXs();
 
@@ -190,10 +185,6 @@ public class Shuttle {
         }
     }
 
-    private void checkBounds(float dt){
-        boundCheck.checkAndHandleBounds(this, dt);
-    }
-
     private void checkPower() {
         if (power >= maxPower) {
             power = maxPower;
@@ -210,15 +201,15 @@ public class Shuttle {
     }
 
     private void checkFuel(float dt) {
-        fuel -= 1.0f * dt;
-        if (fuel < 0.0f) {
-            fuel = 0.0f;
+        standing.decreaseFuel(1.0f * dt);
+        if (standing.getFuel() < 0.0f) {
+            standing.setFuel(0.0f);
             velocity.scl(0.97f);
         }
     }
 
     private void createFXs() {
-        if (fuel > 0.1f && velocity.len() > 80) {
+        if (standing.getFuel() > 0.1f && velocity.len() > 80) {
             gs.getParticleEmitter().getBuilder().buildShuttleEngineFire(position, angle, 90, 1.0f);
         } else {
             gs.getParticleEmitter().getBuilder().buildShuttleLowLevelEngineFire(position, angle, 90);
@@ -254,6 +245,10 @@ public class Shuttle {
                 radar.setActive(true);
             }
         }
+    }
+
+    private void checkBounds(float dt) {
+        boundCheck.checkAndHandleBounds(this, dt);
     }
 
     public int getPushPower() {

@@ -52,6 +52,8 @@ public class Rules {
     public static final float PLAYER_TIMER_FUEL_OUT_OF_MAP = 2.5f;
     //3.0f
     public static final float PLAYER_FUEL_OUT_OF_MAP = 3.0f;
+    //5000
+    public static final int PLAYER_SCORE_TO_LIVE = 5000;
     //30
     public static final int CRATE_FUEL_ADD = 30;
     //1
@@ -63,11 +65,11 @@ public class Rules {
         LOW {
             @Override
             public void setGameLevel(Shuttle player) {
-                player.setMaxFuel(250);
-                player.setFuel(250);
-                player.setHp(25);
-                player.setMaxHp(25);
-                player.setLives(3);
+                player.getStanding().setMaxFuel(250);
+                player.getStanding().setFuel(250);
+                player.getStanding().setHp(25);
+                player.getStanding().setMaxHp(25);
+                player.getStanding().setLives(3);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
@@ -75,17 +77,17 @@ public class Rules {
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(true);
                 player.getGun().setActive(true);
-                player.setPlayingLevel(27);
+                player.getStanding().setPlayingLevel(27);
             }
         },
         MEDIUM {
             @Override
             public void setGameLevel(Shuttle player) {
-                player.setMaxFuel(200);
-                player.setFuel(200);
-                player.setHp(20);
-                player.setMaxHp(20);
-                player.setLives(2);
+                player.getStanding().setMaxFuel(200);
+                player.getStanding().setFuel(200);
+                player.getStanding().setHp(20);
+                player.getStanding().setMaxHp(20);
+                player.getStanding().setLives(2);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
@@ -93,17 +95,17 @@ public class Rules {
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);
                 player.getGun().setActive(false);
-                player.setPlayingLevel(21);
+                player.getStanding().setPlayingLevel(21);
             }
         },
         HIGH {
             @Override
             public void setGameLevel(Shuttle player) {
-                player.setMaxFuel(150);
-                player.setFuel(150);
-                player.setHp(15);
-                player.setMaxHp(15);
-                player.setLives(2);
+                player.getStanding().setMaxFuel(150);
+                player.getStanding().setFuel(150);
+                player.getStanding().setHp(15);
+                player.getStanding().setMaxHp(15);
+                player.getStanding().setLives(2);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
@@ -111,7 +113,7 @@ public class Rules {
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);
                 player.getGun().setActive(false);
-                player.setPlayingLevel(15);
+                player.getStanding().setPlayingLevel(15);
             }
         };
 

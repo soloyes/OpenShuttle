@@ -105,7 +105,7 @@ public class GameScreen extends BaseScreen {
             ScreenManager.getInstance().resetCamera();
             //BEGIN
             batch.begin();
-            player.getScore().render(batch);
+            player.getStanding().render(batch);
             if (!pauseGroup.isPause()) {
                 joystick.render(batch);
             }
@@ -121,7 +121,7 @@ public class GameScreen extends BaseScreen {
             background.update(delta);
             background.render(batch);
             gameInfoSystem.render(batch);
-            player.getScore().render(batch);
+            player.getStanding().render(batch);
             batch.end();
             batch.setShader(null);
             pauseGroup.setGameOver();
@@ -205,7 +205,7 @@ public class GameScreen extends BaseScreen {
                 if (tmpAlien.getLevel() < player.getPushPower()) {
                     tmpAlien.destroy();
                     int asc = (tmpAlien.getMaxLevel() + 1) * 5000;
-                    player.getScore().addScore(asc);
+                    player.getStanding().increaseScore(asc);
                     player.slowDown(tmpAlien.getLevel() * 50.0f);
                     player.decreasePower(tmpAlien.getLevel());
                     showSpray(tmpAlien);
@@ -217,7 +217,13 @@ public class GameScreen extends BaseScreen {
 
                     if (player.addZigZag(0.5f * tmpAlien.getLevel() + 0.2f)) {
                         player.takeDamage(tmpAlien.getLevel() + 1);
-                        gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "BRAKED", 5);
+                        gameInfoSystem.setup(
+                                player.getPosition().x,
+                                player.getPosition().y,
+                                "BRAKED",
+                                5.0f,
+                                false
+                        );
                         tmp.set(player.getPosition()).sub(tmpAlien.getPosition()).nor().scl(300 + tmpAlien.getLevel() * 50);
                         player.getVelocity().add(tmp);
                         player.resetPower();
@@ -241,7 +247,7 @@ public class GameScreen extends BaseScreen {
                     particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, player.getShieldLevel().getLevel() * 16 + 32);
                     asteroidEmitter.boom(tmpAsteroid.getPosition(), player.getShieldLevel());
                     player.takeDamage(player.getShieldLevel().getLevel() + 1);
-                    gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "SCREECH", 3);
+                    gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "SCREECH", 3.0f, false);
                 } else {
                     player.setPower(player.getPower() + tmpAsteroid.getSizeForHarvest());
                     tmpAsteroid.destroy();
@@ -254,7 +260,7 @@ public class GameScreen extends BaseScreen {
                     tmpAsteroid.destroy();
                     particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 32 + 32);
                     asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE);
-                    gameInfoSystem.setup(tmpAlien.getPosition().x, tmpAlien.getPosition().y, "BOOOOM", 3);
+                    gameInfoSystem.setup(tmpAlien.getPosition().x, tmpAlien.getPosition().y, "BOOOOM", 3.0f,false);
                     if (tmpAlien.getLevel() == 0) {
                         tmpAlien.destroy();
                         showSpray(tmpAlien);
@@ -270,9 +276,15 @@ public class GameScreen extends BaseScreen {
                     tmpAsteroid.destroy();
                     tmpConsumable.destroy();
                     asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE); // !!!!!!!
-                    particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 1 * 32 + 32);
+                    particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 32 + 32);
                     showSpray(tmpConsumable);
-                    gameInfoSystem.setup(tmpConsumable.getPosition().x, tmpConsumable.getPosition().y, "SO SAD", 3);
+                    gameInfoSystem.setup(
+                            tmpConsumable.getPosition().x,
+                            tmpConsumable.getPosition().y,
+                            "SO SAD",
+                            3.0f,
+                            false
+                    );
                 }
             }
         }
@@ -288,6 +300,6 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         shaderProgram.dispose();
-        player.getScore().writeResult();
+        player.getStanding().writeResult();
     }
 }

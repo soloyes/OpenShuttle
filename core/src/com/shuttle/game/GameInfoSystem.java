@@ -18,10 +18,10 @@ public class GameInfoSystem {
         }
     }
 
-    public void setup(float x, float y, String text, float scale) {
+    public void setup(float x, float y, String text, float scale, boolean colored) {
         for (int i = 0; i < elems.length; i++) {
             if (!elems[i].isActive()) {
-                elems[i].setup(x, y, text, scale);
+                elems[i].setup(x, y, text, scale, colored);
                 break;
             }
         }

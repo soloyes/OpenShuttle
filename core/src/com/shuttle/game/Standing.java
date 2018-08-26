@@ -12,10 +12,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import lombok.Data;
+
 /**
  * @author Shuttle on 8/2/18.
  */
-public class Score {
+@Data
+public class Standing {
     private StringBuilder tmpString;
     private String username;
     private int score, scoreView;
@@ -23,21 +26,68 @@ public class Score {
     private BitmapFont font64;
     private BitmapFont font128;
     private Shuttle player;
+    private float fuel, maxFuel;
+    private int hp, maxHp;
+    private int lives;
+    private int playingLevel;
     private boolean hpAlert;
     private boolean fuelAlert;
+    //Score to lives with formula scoreToLive*n*(28 - level)
+    private int n;
 
-    public Score(Shuttle player) {
+    public Standing(Shuttle player) {
         this.tmpString = new StringBuilder();
         this.username = Gdx.files.local("username").readString();
         this.results = new Results();
-        this.font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class);
+        this.font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64colored.ttf", BitmapFont.class);
         this.font128 = Assets.getInstance().getAssetManager().get("fonts/gomarice128.ttf", BitmapFont.class);
         this.player = player;
+        this.n = 1;
+        //Able to change color for part of the text
         font64.getData().markupEnabled = true;
     }
 
-    public void addScore(int amount) {
+    public void decreaseFuel(float amount) {
+        fuel -= amount;
+    }
+
+    public void decreaseHP(int amount) {
+        hp -= amount;
+    }
+
+    public void decreaseLives(int amount) {
+        lives -= amount;
+    }
+
+    public void increaseFuel(int amount) {
+        fuel += amount;
+        if (fuel > maxFuel) {
+            fuel = maxFuel;
+        }
+    }
+
+    public void increaseHP(int amount) {
+        hp += amount;
+        if (hp > maxHp) {
+            hp = maxHp;
+        }
+    }
+
+    public void increaseScore(int amount) {
         score += amount;
+        double tmp = Rules.PLAYER_SCORE_TO_LIVE * n * (28 - playingLevel);
+        System.out.println(tmp);
+        if (score - tmp >= 0) {
+            n++;
+            lives++;
+            player.getGs().getGameInfoSystem().setup(
+                    player.getPosition().x,
+                    player.getPosition().y,
+                    "[GREEN]1UP[]",
+                    4.0f,
+                    true
+            );
+        }
     }
 
     public void render(SpriteBatch batch) {
@@ -54,30 +104,30 @@ public class Score {
             if (hpAlert) {
                 tmpString
                         .append("[RED]")
-                        .append(player.getHp())
+                        .append(hp)
                         .append("[]");
             } else {
-                tmpString.append(player.getHp());
+                tmpString.append(hp);
             }
             tmpString
                     .append("/")
-                    .append(player.getMaxHp())
+                    .append(maxHp)
                     .append(" x")
-                    .append(player.getLives());
+                    .append(lives);
 
             tmpString
                     .append("\nFUEL: ");
             if (fuelAlert) {
                 tmpString
                         .append("[RED]")
-                        .append((int) player.getFuel())
+                        .append((int) fuel)
                         .append("[]");
             } else {
-                tmpString.append((int) player.getFuel());
+                tmpString.append((int) fuel);
             }
             tmpString
                     .append("/")
-                    .append((int) player.getMaxFuel());
+                    .append((int) maxFuel);
             font64.draw(batch, tmpString, 20, 1900);
         } else {
             tmpString.append("Game Over!");
@@ -112,13 +162,5 @@ public class Score {
 
     public void writeResult() {
         results.setResult(username + " " + scoreView + " " + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()));
-    }
-
-    public void setFuelAlert(boolean fuelAlert) {
-        this.fuelAlert = fuelAlert;
-    }
-
-    public void setHpAlert(boolean hpAlert) {
-        this.hpAlert = hpAlert;
     }
 }
