@@ -169,10 +169,10 @@ public class GameScreen extends BaseScreen {
             Consumable tmpConsumable = consumableEmitter.getActiveList().get(i);
             if (player.getPosition().dst(tmpConsumable.getPosition()) < 60) {
                 if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel()) {
-                    tmpConsumable.deactivate();
+                    tmpConsumable.destroy();
                     player.takeEffect(tmpConsumable.getType());
                 } else {
-                    tmpConsumable.deactivate();
+                    tmpConsumable.destroy();
                     player.badEffect(tmpConsumable.getType());
                 }
             }
@@ -268,7 +268,7 @@ public class GameScreen extends BaseScreen {
                 Consumable tmpConsumable = consumableEmitter.getActiveList().get(j);
                 if (!tmpAsteroid.isFragment() && tmpConsumable.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
                     tmpAsteroid.destroy();
-                    tmpConsumable.deactivate();
+                    tmpConsumable.destroy();
                     asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE); // !!!!!!!
                     particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 1 * 32 + 32);
                     showSpray(tmpConsumable);

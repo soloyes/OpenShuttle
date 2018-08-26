@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.bot.AbstractPoolable;
 import com.shuttle.game.bot.Alien;
 import com.shuttle.game.bot.Consumable;
 import com.shuttle.game.bot.Poolable;
@@ -17,7 +18,7 @@ import lombok.Data;
  * @author Shuttle on 7/7/18.
  */
 @Data
-public class Radar implements Poolable {
+public class Radar {
     private GameScreen gs;
     private TextureRegion backgroundTexture;
     private TextureRegion pointTexture;

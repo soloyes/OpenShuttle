@@ -11,6 +11,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.ShuttleMath;
 
 import lombok.Data;
@@ -39,6 +40,7 @@ public class Shuttle {
     private GamePreferences preferences;
     private Score score;
     private int playingLevel;
+    private BoundCheck boundCheck;
 
     public Shuttle(GameScreen gs, Joystick joystick, GamePreferences preferences) {
         this.gs = gs;
@@ -56,6 +58,7 @@ public class Shuttle {
         this.score = new Score(this);
         this.radar = new Radar(gs, this);
         this.gun = new Gun();
+        this.boundCheck = new BoundCheck();
     }
 
     public boolean addZigZag(float amount) {
@@ -175,6 +178,7 @@ public class Shuttle {
         }
 
         checkRadar(dt);
+        checkBounds(dt);
     }
 
     private void checkKillingSpreeSeries(float dt) {
@@ -184,6 +188,10 @@ public class Shuttle {
                 killSeries = 0;
             }
         }
+    }
+
+    private void checkBounds(float dt){
+        boundCheck.checkAndHandleBounds(this, dt);
     }
 
     private void checkPower() {

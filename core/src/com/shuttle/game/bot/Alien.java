@@ -9,11 +9,12 @@ import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.utils.BoundCheck;
 
 import lombok.Data;
 
 @Data
-public class Alien implements Poolable {
+public class Alien extends AbstractPoolable {
     float[] probabilities = {1.0f, 0.8f, 0.5f, 0.3f, 0.05f};
     private GameScreen gs;
     private TextureRegion[] regions;
@@ -23,13 +24,13 @@ public class Alien implements Poolable {
     private int level;
     private int maxLevel;
     private boolean active;
-    private int width, height;
     private float hungryTimer;
     private boolean hungry;
     private float slimTimer;
     private float scaleX;
     private float scaleY;
     private boolean touched;
+    private BoundCheck boundCheck;
 
     public Alien(GameScreen gs) {
         this.gs = gs;
@@ -41,6 +42,7 @@ public class Alien implements Poolable {
         this.height = 128;
         this.level = 1;
         this.active = false;
+        this.boundCheck = new BoundCheck();
     }
 
     public void init(float x, float y) {
@@ -69,6 +71,8 @@ public class Alien implements Poolable {
     }
 
     public void update(float dt) {
+        boundCheck.checkAndHandleBounds(this);
+
         if (Gdx.input.isTouched() && level == 4) {
             tmp.set(Gdx.input.getX(), Gdx.input.getY());
             ScreenManager.getInstance().getViewport().unproject(tmp);
@@ -119,12 +123,12 @@ public class Alien implements Poolable {
         }
     }
 
+    @Override
     public void destroy() {
         active = false;
     }
 
-    public boolean takeDamage(int dmg) {
+    public void takeDamage(int dmg) {
         level -= dmg;
-        return level < 0;
     }
 }

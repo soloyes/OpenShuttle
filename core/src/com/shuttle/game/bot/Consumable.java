@@ -9,14 +9,13 @@ import com.shuttle.game.utils.Assets;
 import lombok.Data;
 
 @Data
-public class Consumable implements Poolable {
+public class Consumable extends AbstractPoolable {
     private Type type;
     private TextureRegion texture;
     private TextureRegion[] textures;
     private Vector2 position;
     private Vector2 velocity;
     private boolean active;
-    private int width, height;
     private float angle, rotationSpeed;
     private float drawScale;
 
@@ -33,7 +32,8 @@ public class Consumable implements Poolable {
         this.active = false;
     }
 
-    public void deactivate() {
+    @Override
+    public void destroy() {
         active = false;
     }
 

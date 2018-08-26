@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Regions;
 import com.shuttle.game.conf.Rules;
 
@@ -15,16 +16,16 @@ import lombok.Data;
  * @author Shuttle on 6/30/18.
  */
 @Data
-public class Asteroid implements Poolable {
+public class Asteroid extends AbstractPoolable{
     private TextureRegion[] textureRegions;
     private Vector2 position;
     private Vector2 velocity;
     private float frame;
     private boolean active;
-    private int width, height;
     private float rotation;
     private boolean fragment;
     private float sizeForHarvest;
+    private BoundCheck boundCheck;
 
     public Asteroid() {
         this.textureRegions = Regions.split(
@@ -36,6 +37,7 @@ public class Asteroid implements Poolable {
         this.velocity = new Vector2();
         this.rotation = MathUtils.random(365f);
         this.active = false;
+        this.boundCheck = new BoundCheck();
     }
 
     @Override
@@ -87,12 +89,10 @@ public class Asteroid implements Poolable {
     }
 
     private void checkAndHandleBounds() {
-        if (position.x + width / 2 < 0) destroy();
-        if (position.x - width / 2 > Rules.SPACE_WIDTH) destroy();
-        if (position.y + height / 2 < 0) destroy();
-        if (position.y - height / 2 > Rules.SPACE_HEIGHT) destroy();
+        boundCheck.checkAndHandleBounds(this);
     }
 
+    @Override
     public void destroy() {
         active = false;
     }

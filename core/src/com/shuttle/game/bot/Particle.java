@@ -9,7 +9,7 @@ import lombok.Data;
  * Created by FlameXander on 02.07.2017.
  */
 @Data
-public class Particle implements Poolable {
+public class Particle extends AbstractPoolable {
     private Vector2 position;
     private Vector2 velocity;
     private boolean active;
@@ -66,11 +66,12 @@ public class Particle implements Poolable {
         calculateCurrentValues();
         position.mulAdd(velocity, dt);
         if (time > duration) {
-            deactivate();
+            destroy();
         }
     }
 
-    public void deactivate() {
+    @Override
+    public void destroy() {
         active = false;
     }
 }
