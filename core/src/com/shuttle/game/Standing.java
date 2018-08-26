@@ -39,11 +39,11 @@ public class Standing {
         this.tmpString = new StringBuilder();
         this.username = Gdx.files.local("username").readString();
         this.results = new Results();
-        this.font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64colored.ttf", BitmapFont.class);
+        this.font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64Coloured.ttf", BitmapFont.class);
         this.font128 = Assets.getInstance().getAssetManager().get("fonts/gomarice128.ttf", BitmapFont.class);
         this.player = player;
         this.n = 1;
-        //Able to change color for part of the text
+        //Able to change colour for part of the text
         font64.getData().markupEnabled = true;
     }
 
@@ -76,7 +76,6 @@ public class Standing {
     public void increaseScore(int amount) {
         score += amount;
         double tmp = Rules.PLAYER_SCORE_TO_LIVE * n * (28 - playingLevel);
-        System.out.println(tmp);
         if (score - tmp >= 0) {
             n++;
             lives++;

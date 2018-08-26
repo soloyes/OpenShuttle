@@ -46,7 +46,7 @@ public class Assets {
                 createStdFont(32, "");
                 createStdFont(48, "");
                 createStdFont(64, "");
-                createStdFont(64, "colored");
+                createStdFont(64, "Coloured");
                 createStdFont(96, "");
                 createStdFont(128, "");
                 break;
