@@ -3,10 +3,13 @@ package com.shuttle.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.BoomBox;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,8 +37,10 @@ public class Standing {
     private boolean fuelAlert;
     //Score to lives with formula scoreToLive*n*(28 - level)
     private int n;
+    private BoomBox boomBox;
 
     public Standing(Shuttle player) {
+        this.boomBox = new BoomBox(new GamePreferences());
         this.tmpString = new StringBuilder();
         this.username = Gdx.files.local("username").readString();
         this.results = new Results();
@@ -57,6 +62,14 @@ public class Standing {
 
     public void decreaseLives(int amount) {
         lives -= amount;
+        if (lives == 0) {
+            Rules.GAME_OVER = true;
+            writeResult();
+        }
+    }
+
+    public void writeResult() {
+        results.setResult(username + " " + scoreView + " " + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()));
     }
 
     public void increaseFuel(int amount) {
@@ -77,7 +90,8 @@ public class Standing {
         score += amount;
         double tmp = Rules.PLAYER_SCORE_TO_LIVE * n * (28 - playingLevel);
         if (score - tmp >= 0) {
-            n++;
+            //todo: to be Balanced
+            n += 3;
             lives++;
             player.getGs().getGameInfoSystem().setup(
                     player.getPosition().x,
@@ -86,6 +100,7 @@ public class Standing {
                     4.0f,
                     true
             );
+            boomBox.playSound(MSConstants.UP);
         }
     }
 
@@ -157,9 +172,5 @@ public class Standing {
                 scoreView = score;
             }
         }
-    }
-
-    public void writeResult() {
-        results.setResult(username + " " + scoreView + " " + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()));
     }
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.screens.ScreenManager;
 
 public class Assets {
@@ -30,9 +32,11 @@ public class Assets {
     public void loadAssets(ScreenManager.ScreenType type) {
         switch (type) {
             case MENU:
+                assetManager.load(MSConstants.MENU_MUSIC, Music.class);
                 assetManager.load("pics/game.pack", TextureAtlas.class);
-                assetManager.load("music/menu.ogg", Music.class);
                 assetManager.load("uiskin/gameSkin.json", Skin.class);
+
+                assetManager.load(MSConstants.BUTTON_SOUND, Sound.class);
                 createStdFont(32, "");
                 createStdFont(48, "");
                 createStdFont(64, "");
@@ -40,7 +44,21 @@ public class Assets {
                 break;
             case GAME:
                 assetManager.load("pics/game.pack", TextureAtlas.class);
-                assetManager.load("music/game.ogg", Music.class);
+                assetManager.load(MSConstants.MENU_MUSIC, Music.class);
+                assetManager.load(MSConstants.GAME_MUSIC, Music.class);
+                assetManager.load(MSConstants.BUTTON_SOUND, Sound.class);
+                assetManager.load(MSConstants.PAUSE_SOUND, Sound.class);
+                assetManager.load(MSConstants.E_ALIEN_DESTROY, Sound.class);
+                assetManager.load(MSConstants.F_ALIEN_DESTROY, Sound.class);
+                assetManager.load(MSConstants.GET_ASTRONAUT, Sound.class);
+                assetManager.load(MSConstants.KILL_ASTRONAUT, Sound.class);
+                assetManager.load(MSConstants.KILL_CRATE, Sound.class);
+                assetManager.load(MSConstants.LOST_RADAR, Sound.class);
+                assetManager.load(MSConstants.TURBO, Sound.class);
+                assetManager.load(MSConstants.UP, Sound.class);
+                assetManager.load(MSConstants.GET_FUEL, Sound.class);
+                assetManager.load(MSConstants.GET_TRASH, Sound.class);
+                assetManager.load(MSConstants.GET_RADAR, Sound.class);
                 assetManager.load("uiskin/gameSkin.json", Skin.class);
                 assetManager.load("pics/asteroid.png", Texture.class);
                 createStdFont(32, "");

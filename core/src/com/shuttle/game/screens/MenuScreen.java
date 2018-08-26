@@ -2,6 +2,7 @@ package com.shuttle.game.screens;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.Background;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.screens.group.ConfigGroup;
 import com.shuttle.game.screens.group.MenuBar;
 import com.shuttle.game.screens.group.MenuGroup;
@@ -20,7 +21,7 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        boomBox.play("music/menu.ogg");
+        boomBox.stopAllMusicAndPlay(MSConstants.MENU_MUSIC);
     }
 
     @Override

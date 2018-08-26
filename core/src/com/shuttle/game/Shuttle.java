@@ -7,10 +7,12 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.Consumable;
 import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.ShuttleMath;
 
@@ -37,8 +39,10 @@ public class Shuttle {
     private GamePreferences preferences;
     private Standing standing;
     private BoundCheck boundCheck;
+    private BoomBox boomBox;
 
     public Shuttle(GameScreen gs, Joystick joystick, GamePreferences preferences) {
+        this.boomBox = new BoomBox(new GamePreferences());
         this.standing = new Standing(this);
         this.gs = gs;
         this.joystick = joystick;
@@ -70,9 +74,11 @@ public class Shuttle {
             case Astronaut:
                 standing.increaseScore(-50000);
                 gs.getGameInfoSystem().setup(position.x, position.y, "Murder!\n-50000", 8.0f, false);
+                boomBox.playSound(MSConstants.KILL_ASTRONAUT);
                 break;
             case Crate:
                 gs.getGameInfoSystem().setup(position.x, position.y, "Be easy!", 3.0f, false);
+                boomBox.playSound(MSConstants.KILL_CRATE);
                 break;
         }
     }
@@ -110,10 +116,14 @@ public class Shuttle {
         if (standing.getHp() <= 0) {
             standing.setHp(standing.getMaxHp());
             standing.decreaseLives(1);
-            gs.getGameInfoSystem().setup(position.x, position.y, "DESTROYED", 8.0f, false);
-            if (standing.getLives() == 0) {
-                Rules.GAME_OVER = true;
-                standing.writeResult();
+            if (standing.getLives() != 0) {
+                gs.getGameInfoSystem().setup(
+                        position.x,
+                        position.y,
+                        "DESTROYED",
+                        8.0f,
+                        false
+                );
             }
         }
     }
@@ -123,6 +133,7 @@ public class Shuttle {
             case Astronaut:
                 standing.increaseScore(Rules.PLAYER_SCORE_ADD);
                 gs.getGameInfoSystem().setup(position.x, position.y, "+" + Rules.PLAYER_SCORE_ADD, 3.0f, false);
+                boomBox.playSound(MSConstants.GET_ASTRONAUT);
                 break;
             case Crate:
                 int x = MathUtils.random(0, 5);
@@ -133,13 +144,16 @@ public class Shuttle {
                 if (x == 1) {
                     standing.increaseFuel(Rules.CRATE_FUEL_ADD);
                     gs.getGameInfoSystem().setup(position.x, position.y, "FUEL +" + Rules.CRATE_FUEL_ADD, 3.0f, false);
+                    boomBox.playSound(MSConstants.GET_FUEL);
                 }
                 if (x == 2) {
                     velocity.add(1500 * (float) Math.cos(Math.toRadians(angle)), 1500 * (float) Math.sin(Math.toRadians(angle)));
                     gs.getGameInfoSystem().setup(position.x, position.y, "TURBO X5", 5.0f, false);
+                    boomBox.playSound(MSConstants.TURBO);
                 }
                 if (x > 2) {
                     gs.getGameInfoSystem().setup(position.x, position.y, "TRASH", 2.0f, false);
+                    boomBox.playSound(MSConstants.GET_TRASH);
                 }
                 break;
         }
@@ -243,6 +257,7 @@ public class Shuttle {
             radar.update(dt);
             if (position.dst(radar.getPosition()) < 128) {
                 radar.setActive(true);
+                boomBox.playSound(MSConstants.GET_RADAR);
             }
         }
     }

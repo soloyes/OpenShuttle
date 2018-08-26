@@ -1,19 +1,19 @@
 package com.shuttle.game.screens.group;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
+import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.screens.ScreenManager;
-
-import java.util.Arrays;
+import com.shuttle.game.utils.BoomBox;
 
 /**
  * @author Shuttle on 3/24/18.
@@ -23,12 +23,15 @@ public class MenuBar extends Group {
     private Button buttonPlay;
     private Button buttonConfig;
     private Button buttonResults;
-    private Skin skin;
     private MenuGroup group;
+    private BoomBox boomBox;
+    private GamePreferences preferences;
 
     public MenuBar() {
+        Skin skin = Assets.getInstance().getAssetManager().get("uiskin/gameSkin.json");
+        this.preferences = new GamePreferences();
+        this.boomBox = new BoomBox(preferences);
         this.setName(GroupType.MENU_BAR.name());
-        this.skin = Assets.getInstance().getAssetManager().get("uiskin/gameSkin.json");
         this.buttonPlay = new Button(skin, "default");
         this.buttonExit = new Button(skin, "default");
         this.buttonConfig = new Button(skin, "default");
@@ -67,6 +70,13 @@ public class MenuBar extends Group {
         buttonPlay.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
+                if (preferences.isSoundEnabled()) {
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.BUTTON_SOUND));
+                    sound.play(preferences.getSoundVolume());
+                }
+                //
+
                 if (!group.isEmptyUserName()) {
                     ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
                     group.getFile().writeString(group.getUserName().getText(), false);
@@ -95,6 +105,7 @@ public class MenuBar extends Group {
                         actorArray[i].setVisible(false);
                     }
                 }
+                boomBox.playSound(MSConstants.BUTTON_SOUND);
             }
         });
 
@@ -119,6 +130,7 @@ public class MenuBar extends Group {
                         actorArray[i].setVisible(false);
                     }
                 }
+                boomBox.playSound(MSConstants.BUTTON_SOUND);
             }
         });
 

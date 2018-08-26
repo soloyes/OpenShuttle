@@ -1,7 +1,7 @@
 package com.shuttle.game.utils;
 
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
 import com.shuttle.game.conf.GamePreferences;
 
@@ -10,19 +10,37 @@ import com.shuttle.game.conf.GamePreferences;
  */
 public class BoomBox {
     private GamePreferences preferences;
+    private Array<Music> musicArray;
 
     public BoomBox(GamePreferences preferences) {
         this.preferences = preferences;
+        musicArray = new Array<Music>();
     }
 
-    public void play(String music){
+    public long playSound(String sound) {
+        if (preferences.isSoundEnabled()) {
+            return Assets.getInstance()
+                    .getAssetManager()
+                    .get(sound, Sound.class)
+                    .play(preferences.getSoundVolume());
+        }
+        return -1;
+    }
 
-        Array<Music> musicArray = new Array<Music>();
+    public void stopAllMusicAndPlay(String music) {
+        stopAllMusic();
+        playMusic(music);
+    }
+
+    public void stopAllMusic() {
+        musicArray.clear();
         Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
         for (int i = 0; i < musicArray.size; i++) {
             musicArray.get(i).stop();
         }
+    }
 
+    public void playMusic(String music) {
         if (preferences.isMusicEnabled()) {
             Assets.getInstance()
                     .getAssetManager()
@@ -36,6 +54,24 @@ public class BoomBox {
                     .getAssetManager()
                     .get(music, Music.class)
                     .setLooping(true);
+        }
+    }
+
+    public void stopAllMusicAndPlayOnce(String music) {
+        if (!Assets.getInstance()
+                .getAssetManager()
+                .get(music, Music.class)
+                .isPlaying()) {
+            stopAllMusic();
+            playMusic(music);
+        }
+    }
+
+    public void setAllMusicVolume(float volume) {
+        musicArray.clear();
+        Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
+        for (int i = 0; i < musicArray.size; i++) {
+            musicArray.get(i).setVolume(volume);
         }
     }
 }

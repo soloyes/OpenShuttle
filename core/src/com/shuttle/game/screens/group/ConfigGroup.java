@@ -4,6 +4,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -12,12 +13,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.screens.ScreenManager;
+import com.shuttle.game.utils.BoomBox;
 
 /**
  * @author Shuttle on 6/23/18.
@@ -27,9 +31,11 @@ public class ConfigGroup extends Group {
     private Array<Music> musicArray;
     private GamePreferences preferences = new GamePreferences();
     private ScreenManager.ScreenType screenType;
+    private BoomBox boomBox;
 
     public ConfigGroup(ScreenManager.ScreenType screenType) {
         /////////
+        this.boomBox = new BoomBox(preferences);
         this.setName(GroupType.CONFIG.name());
         this.setVisible(false);
         this.screenType = screenType;
@@ -110,31 +116,23 @@ public class ConfigGroup extends Group {
 
         final CheckBox musicCheckBox = new CheckBox("Music", checkBoxStyle48);
         musicCheckBox.setChecked(preferences.isMusicEnabled());
-        musicCheckBox.addListener(new ClickListener() {
+        musicCheckBox.addListener(new ChangeListener() {
             @Override
-            public boolean handle(Event event) {
-                musicArray = new Array<Music>();
-                Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
+            public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = musicCheckBox.isChecked();
-                for (int i = 0; i < musicArray.size; i++) {
-                    if (enabled) {
-                        musicArray.get(i).setVolume(preferences.getMusicVolume());
-                        musicArray.get(i).play();
-                    } else musicArray.get(i).stop();
-                }
                 preferences.setMusicEnabled(enabled);
-                return false;
+                boomBox.setAllMusicVolume(preferences.getMusicVolume());
+                boomBox.stopAllMusicAndPlay(MSConstants.MENU_MUSIC);
             }
         });
 
         final CheckBox soundCheckBox = new CheckBox("Sound", checkBoxStyle48);
         soundCheckBox.setChecked(preferences.isSoundEnabled());
-        soundCheckBox.addListener(new ClickListener() {
+        soundCheckBox.addListener(new ChangeListener() {
             @Override
-            public boolean handle(Event event) {
+            public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = soundCheckBox.isChecked();
                 preferences.setSoundEnabled(enabled);
-                return false;
             }
         });
 

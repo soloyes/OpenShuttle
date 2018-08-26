@@ -19,6 +19,7 @@ import com.shuttle.game.bot.ConsumableEmitter;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.bot.ParticleEmitter;
 import com.shuttle.game.bot.Poolable;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.Shuttle;
 import com.shuttle.game.screens.group.PauseGroup;
@@ -50,7 +51,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        boomBox.play("music/game.ogg");
+        boomBox.stopAllMusicAndPlay(MSConstants.GAME_MUSIC);
         shaderProgram = new ShaderProgram(
                 Gdx.files.internal("shaders/default.vert"),
                 Gdx.files.internal("shaders/default.frag")
@@ -115,6 +116,7 @@ public class GameScreen extends BaseScreen {
 
             stage.draw();
         } else {
+            boomBox.stopAllMusicAndPlayOnce(MSConstants.MENU_MUSIC);
             gameInfoSystem.update(delta);
             batch.setShader(shaderProgram);
             batch.begin();
@@ -210,9 +212,11 @@ public class GameScreen extends BaseScreen {
                     player.decreasePower(tmpAlien.getLevel());
                     showSpray(tmpAlien);
                     player.killPlusPlus();
+                    boomBox.playSound(MSConstants.E_ALIEN_DESTROY);
                 } else {
                     if (tmpAlien.getLevel() >= 3) {
                         player.getRadar().setActive(false);
+                        boomBox.playSound(MSConstants.LOST_RADAR);
                     }
 
                     if (player.addZigZag(0.5f * tmpAlien.getLevel() + 0.2f)) {

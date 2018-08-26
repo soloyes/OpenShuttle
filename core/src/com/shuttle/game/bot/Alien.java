@@ -5,10 +5,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 
 import lombok.Data;
@@ -31,8 +34,10 @@ public class Alien extends AbstractPoolable {
     private float scaleY;
     private boolean touched;
     private BoundCheck boundCheck;
+    private BoomBox boomBox;
 
     public Alien(GameScreen gs) {
+        this.boomBox = new BoomBox(new GamePreferences());
         this.gs = gs;
         this.regions = Assets.getInstance().getAtlas().findRegion("aliens").split(128, 128)[0];
         this.position = new Vector2();
@@ -86,6 +91,7 @@ public class Alien extends AbstractPoolable {
             scaleX = scaleY += 0.01f;
             if (scaleX >= 2.0f) {
                 destroy();
+                boomBox.playSound(MSConstants.F_ALIEN_DESTROY);
             }
         }
 

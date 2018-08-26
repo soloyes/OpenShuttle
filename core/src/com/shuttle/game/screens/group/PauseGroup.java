@@ -1,14 +1,19 @@
 package com.shuttle.game.screens.group;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.screens.ScreenManager;
+import com.shuttle.game.utils.BoomBox;
 
 import lombok.Data;
 
@@ -17,16 +22,20 @@ import lombok.Data;
  */
 @Data
 public class PauseGroup extends Group {
-    private boolean pause;
-    private Button pauseBtn;
     private final Button buttonMenu;
     private final Button buttonRestart;
+    private final Button pauseBtn;
     private final ConfigGroup configGroup;
+    private BoomBox boomBox;
+    private GamePreferences preferences;
+    private boolean pause;
 
     public PauseGroup() {
-        pause = false;
+        this.preferences = new GamePreferences();
+        this.boomBox = new BoomBox(preferences);
+        this.pause = false;
         Skin skin = Assets.getInstance().getAssetManager().get("uiskin/gameSkin.json");
-        pauseBtn = new Button(skin, "default");
+        this.pauseBtn = new Button(skin, "default");
         pauseBtn.setOrigin(Align.center);
         pauseBtn.setSize(128f, 128f);
         pauseBtn.setPosition(
@@ -34,11 +43,11 @@ public class PauseGroup extends Group {
                 ScreenManager.getInstance().getViewport().getWorldHeight() - pauseBtn.getHeight() - 20
         );
 
-        configGroup = new ConfigGroup(ScreenManager.ScreenType.GAME);
+        this.configGroup = new ConfigGroup(ScreenManager.ScreenType.GAME);
         configGroup.setVisible(false);
-        buttonMenu = new Button(skin, "default");
+        this.buttonMenu = new Button(skin, "default");
         buttonMenu.setVisible(false);
-        buttonRestart = new Button(skin, "default");
+        this.buttonRestart = new Button(skin, "default");
         buttonRestart.setVisible(false);
 
         buttonMenu.setOrigin(Align.center);
@@ -55,6 +64,12 @@ public class PauseGroup extends Group {
         buttonMenu.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+                //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
+                if (preferences.isSoundEnabled()) {
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.BUTTON_SOUND));
+                    sound.play(preferences.getSoundVolume());
+                }
+                //
                 ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
                 Rules.GAME_OVER = false;
             }
@@ -63,6 +78,12 @@ public class PauseGroup extends Group {
         buttonRestart.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+                //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
+                if (preferences.isSoundEnabled()) {
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.BUTTON_SOUND));
+                    sound.play(preferences.getSoundVolume());
+                }
+                //
                 ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
                 Rules.GAME_OVER = false;
             }
@@ -72,9 +93,15 @@ public class PauseGroup extends Group {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
                 pause = !pause;
+                if (pause) {
+                    boomBox.stopAllMusicAndPlay(MSConstants.MENU_MUSIC);
+                } else {
+                    boomBox.stopAllMusicAndPlay(MSConstants.GAME_MUSIC);
+                }
                 configGroup.setVisible(pause);
                 buttonMenu.setVisible(pause);
                 buttonRestart.setVisible(pause);
+                boomBox.playSound(MSConstants.PAUSE_SOUND);
             }
         });
 
@@ -84,7 +111,7 @@ public class PauseGroup extends Group {
         this.addActor(buttonRestart);
     }
 
-    public void setGameOver(){
+    public void setGameOver() {
         pauseBtn.setVisible(false);
         configGroup.setVisible(false);
         buttonMenu.setVisible(true);
