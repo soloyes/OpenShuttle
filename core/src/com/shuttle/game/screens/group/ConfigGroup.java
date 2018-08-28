@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.shuttle.game.conf.MSConstants;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.conf.GamePreferences;
@@ -40,12 +41,12 @@ public class ConfigGroup extends Group {
         this.setVisible(false);
         this.screenType = screenType;
 
-        Skin skin = Assets.getInstance().getAssetManager().get("uiskin/gameSkin.json");
+        Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
 
         CheckBox.CheckBoxStyle checkBoxStyle48 = new CheckBox.CheckBoxStyle(
                 skin.getDrawable("checkbox-c1"),
                 skin.getDrawable("checkbox-pressed-c1"),
-                Assets.getInstance().getAssetManager().get("fonts/gomarice48.ttf", BitmapFont.class),
+                Assets.getInstance().getAssetManager().get(PaintConstants.FONT48, BitmapFont.class),
                 new Color(0.8f, 0.43f, 0.33f, 1f)
         );
         checkBoxStyle48.checkboxOn.setMinHeight(50);
@@ -54,12 +55,12 @@ public class ConfigGroup extends Group {
         checkBoxStyle48.checkboxOff.setMinHeight(50);
 
         Label.LabelStyle style64 = new Label.LabelStyle(
-                Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf", BitmapFont.class),
+                Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
                 new Color(0.8f, 0.43f, 0.33f, 1f)
         );
 
         Label.LabelStyle style96 = new Label.LabelStyle(
-                Assets.getInstance().getAssetManager().get("fonts/gomarice96.ttf", BitmapFont.class),
+                Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class),
                 new Color(0.8f, 0.43f, 0.33f, 1f)
         );
         /////////

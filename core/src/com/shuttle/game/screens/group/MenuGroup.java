@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.screens.ScreenManager;
 
@@ -28,8 +29,8 @@ public class MenuGroup extends Group {
     public MenuGroup() {
         this.setName(GroupType.MENU.name());
         this.setVisible(true);
-        this.skin = Assets.getInstance().getAssetManager().get("uiskin/gameSkin.json");
-        this.font96 = Assets.getInstance().getAssetManager().get("fonts/gomarice96.ttf", BitmapFont.class);
+        this.skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
+        this.font96 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
         this.file = Gdx.files.local("username");
         this.userName = new TextField(
                 "",

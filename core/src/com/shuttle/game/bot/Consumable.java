@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.BoundCheck;
 
 import lombok.Data;
 
@@ -18,18 +20,17 @@ public class Consumable extends AbstractPoolable {
     private boolean active;
     private float angle, rotationSpeed;
     private float drawScale;
+    private BoundCheck boundCheck;
 
     public Consumable() {
         this.textures = new TextureRegion[2];
-        this.textures[0] = Assets.getInstance().getAtlas().findRegion("astronaut");
-        this.textures[1] = Assets.getInstance().getAtlas().findRegion("crate");
-
+        this.textures[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.ASTRONAUT_REGION);
+        this.textures[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_REGION);
         this.position = new Vector2(0, 0);
         this.velocity = new Vector2(0, 0);
-        this.width = textures[0].getRegionWidth();
-        this.height = textures[0].getRegionHeight();
         this.texture = textures[0];
         this.active = false;
+        this.boundCheck = new BoundCheck();
     }
 
     @Override
@@ -53,13 +54,14 @@ public class Consumable extends AbstractPoolable {
     }
 
     public void update(float dt) {
+        boundCheck.checkAndHandleBounds(this);
         drawScale = 1.0f;
         position.mulAdd(velocity, dt);
         angle += rotationSpeed * dt;
     }
 
     public enum Type {
-        Astronaut(0), Crate(1);
+        ASTRONAUT(0), CRATE(1);
         private int textureIndex;
 
         Type(int textureIndex) {

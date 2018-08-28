@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.conf.Rules;
@@ -39,12 +40,15 @@ public class Alien extends AbstractPoolable {
     public Alien(GameScreen gs) {
         this.boomBox = new BoomBox(new GamePreferences());
         this.gs = gs;
-        this.regions = Assets.getInstance().getAtlas().findRegion("aliens").split(128, 128)[0];
+        this.regions = Assets.getInstance()
+                .getAtlas()
+                .findRegion(PaintConstants.ALIEN_REGION)
+                .split(PaintConstants.ALIEN_WIDTH, PaintConstants.ALIEN_HEIGHT)[0];
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.tmp = new Vector2();
-        this.width = 128;
-        this.height = 128;
+        this.width = PaintConstants.ALIEN_WIDTH;
+        this.height = PaintConstants.ALIEN_HEIGHT;
         this.level = 1;
         this.active = false;
         this.boundCheck = new BoundCheck();
@@ -115,9 +119,9 @@ public class Alien extends AbstractPoolable {
             if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
                 float v;
                 if (getLevel() == 4) {
-                    v = 500.00f;
+                    v = Rules.ALIENS_F_VELOCITY;
                 } else {
-                    v = 50.0f;
+                    v = Rules.ALIENS_E_VELOCITY;
                 }
                 tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(v);
                 velocity.mulAdd(tmp, dt);

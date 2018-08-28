@@ -3,7 +3,8 @@ package com.shuttle.game.bot;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.GlobalInteractionLevels;
+import com.shuttle.game.conf.GlobalInteractionLevels;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 
 /**
@@ -40,7 +41,7 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
         time += dt;
         if (time > Rules.ASTEROIDS_RESPAWN_TIME) {
             time = 0.0f;
-            createAsteroid(128, 128);
+            createAsteroid();
         }
 
         if (boom) {
@@ -57,14 +58,14 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
         checkPool();
     }
 
-    private void createAsteroid(int width, int height) {
+    private void createAsteroid() {
         position = new Vector2();
         destanation = new Vector2();
         Side side = Side.values()[MathUtils.random(0, 3)];
         if (side == Side.NORTH) {
             position.set(
                     MathUtils.random(Rules.SPACE_WIDTH / 3, 2 * Rules.SPACE_WIDTH / 3),
-                    Rules.SPACE_HEIGHT + height / 2
+                    Rules.SPACE_HEIGHT + PaintConstants.ASTEROID_HEIGHT / 2
             );
             destanation.set(
                     MathUtils.random(0, Rules.SPACE_WIDTH),
@@ -74,7 +75,7 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
         if (side == Side.SOUTH) {
             position.set(
                     MathUtils.random(Rules.SPACE_WIDTH / 3, 2 * Rules.SPACE_WIDTH / 3),
-                    -height / 2
+                    -PaintConstants.ASTEROID_HEIGHT / 2
             );
             destanation.set(
                     MathUtils.random(0, Rules.SPACE_WIDTH),
@@ -83,7 +84,7 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
         }
         if (side == Side.WEST) {
             position.set(
-                    -width / 2,
+                    -PaintConstants.ASTEROID_WIDTH / 2,
                     MathUtils.random(Rules.SPACE_HEIGHT / 3, 2 * Rules.SPACE_HEIGHT / 3)
             );
             destanation.set(
@@ -93,7 +94,7 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
         }
         if (side == Side.EAST) {
             position.set(
-                    Rules.SPACE_WIDTH + width / 2,
+                    Rules.SPACE_WIDTH + PaintConstants.ASTEROID_WIDTH / 2,
                     MathUtils.random(Rules.SPACE_HEIGHT / 3, 2 * Rules.SPACE_HEIGHT / 3)
             );
             destanation.set(

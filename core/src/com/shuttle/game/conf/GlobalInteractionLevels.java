@@ -1,4 +1,4 @@
-package com.shuttle.game;
+package com.shuttle.game.conf;
 
 public enum GlobalInteractionLevels {
     NONE(0, 0, 0, 0, 0, 1.0f, 0.5f, 0.6f),

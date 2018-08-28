@@ -11,7 +11,7 @@ public class AlienEmitter extends ObjectPool<Alien> {
 
     public AlienEmitter(GameScreen gs) {
         this.gs = gs;
-        for (int i = 0; i < Rules.ALIENS_AT_START; i++) {
+        for (int i = 0; i <= Rules.ALIENS_AT_START; i++) {
             createAlien();
         }
     }

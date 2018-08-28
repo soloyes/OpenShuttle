@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.shuttle.game.conf.MSConstants;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.screens.ScreenManager;
 
 public class Assets {
@@ -33,8 +34,8 @@ public class Assets {
         switch (type) {
             case MENU:
                 assetManager.load(MSConstants.MENU_MUSIC, Music.class);
-                assetManager.load("pics/game.pack", TextureAtlas.class);
-                assetManager.load("uiskin/gameSkin.json", Skin.class);
+                assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
+                assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
 
                 assetManager.load(MSConstants.BUTTON_SOUND, Sound.class);
                 createStdFont(32, "");
@@ -43,7 +44,7 @@ public class Assets {
                 createStdFont(96, "");
                 break;
             case GAME:
-                assetManager.load("pics/game.pack", TextureAtlas.class);
+                assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
                 assetManager.load(MSConstants.MENU_MUSIC, Music.class);
                 assetManager.load(MSConstants.GAME_MUSIC, Music.class);
                 assetManager.load(MSConstants.BUTTON_SOUND, Sound.class);
@@ -59,8 +60,8 @@ public class Assets {
                 assetManager.load(MSConstants.GET_FUEL, Sound.class);
                 assetManager.load(MSConstants.GET_TRASH, Sound.class);
                 assetManager.load(MSConstants.GET_RADAR, Sound.class);
-                assetManager.load("uiskin/gameSkin.json", Skin.class);
-                assetManager.load("pics/asteroid.png", Texture.class);
+                assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
+                assetManager.load(PaintConstants.ASTEROID_REGION, Texture.class);
                 createStdFont(32, "");
                 createStdFont(48, "");
                 createStdFont(64, "");
@@ -69,8 +70,8 @@ public class Assets {
                 createStdFont(128, "");
                 break;
             case TEST:
-                assetManager.load("pics/game.pack", TextureAtlas.class);
-                assetManager.load("uiskin/gameSkin.json", Skin.class);
+                assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
+                assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 createStdFont(32, "");
                 createStdFont(64, "");
                 createStdFont(96, "");
@@ -95,7 +96,7 @@ public class Assets {
     }
 
     public void makeLinks() {
-        atlas = assetManager.get("pics/game.pack", TextureAtlas.class);
+        atlas = assetManager.get(PaintConstants.GAME_PACK, TextureAtlas.class);
     }
 
     public AssetManager getAssetManager() {

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 
 /**
@@ -16,7 +17,7 @@ public class ParticleEmitter extends ObjectPool<Particle> {
     private Vector2 tmp;
 
     public ParticleEmitter() {
-        this.particleTexture = Assets.getInstance().getAtlas().findRegion("star16");
+        this.particleTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STAR16_REGION);
         this.builder = new ParticleEffectBuilder(this);
         this.tmp = new Vector2(0, 0);
     }

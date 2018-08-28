@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.screens.ScreenManager;
@@ -34,7 +35,7 @@ public class PauseGroup extends Group {
         this.preferences = new GamePreferences();
         this.boomBox = new BoomBox(preferences);
         this.pause = false;
-        Skin skin = Assets.getInstance().getAssetManager().get("uiskin/gameSkin.json");
+        Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.pauseBtn = new Button(skin, "default");
         pauseBtn.setOrigin(Align.center);
         pauseBtn.setSize(128f, 128f);

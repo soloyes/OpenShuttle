@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.ScreenManager;
@@ -44,8 +45,8 @@ public class Standing {
         this.tmpString = new StringBuilder();
         this.username = Gdx.files.local("username").readString();
         this.results = new Results();
-        this.font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64Coloured.ttf", BitmapFont.class);
-        this.font128 = Assets.getInstance().getAssetManager().get("fonts/gomarice128.ttf", BitmapFont.class);
+        this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64_C, BitmapFont.class);
+        this.font128 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT128, BitmapFont.class);
         this.player = player;
         this.n = 1;
         //Able to change colour for part of the text

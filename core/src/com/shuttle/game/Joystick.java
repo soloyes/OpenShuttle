@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 
@@ -21,7 +22,7 @@ public class Joystick extends InputAdapter {
     private Vector2 tmp;
 
     public Joystick() {
-        TextureRegion texture = Assets.getInstance().getAtlas().findRegion("joystick");
+        TextureRegion texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.JOYSTICK_REGION);
         this.background = new TextureRegion(texture, 0, 0, 200, 200);
         this.stick = new TextureRegion(texture, 0, 200, 50, 50);
         this.rectangle = new Rectangle(50, 50, 200, 200);
@@ -54,10 +55,6 @@ public class Joystick extends InputAdapter {
             vs.y = 0;
         }
         return true;
-    }
-
-    public void setLastId(int lastId) {
-        this.lastId = lastId;
     }
 
     @Override
@@ -94,5 +91,9 @@ public class Joystick extends InputAdapter {
 
     public boolean isActive() {
         return lastId > -1;
+    }
+
+    public void setLastId(int lastId) {
+        this.lastId = lastId;
     }
 }

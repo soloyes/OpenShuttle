@@ -4,10 +4,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.AbstractPoolable;
 import com.shuttle.game.bot.Alien;
 import com.shuttle.game.bot.Consumable;
-import com.shuttle.game.bot.Poolable;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
@@ -31,8 +30,8 @@ public class Radar {
     private float rotation;
 
     public Radar(GameScreen gs, Shuttle player) {
-        this.backgroundTexture = Assets.getInstance().getAtlas().findRegion("radar");
-        this.pointTexture = Assets.getInstance().getAtlas().findRegion("star16");
+        this.backgroundTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_REGION);
+        this.pointTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STAR16_REGION);
         this.gs = gs;
         this.player = player;
         this.position = new Vector2(
@@ -40,7 +39,8 @@ public class Radar {
                 MathUtils.random(0, Rules.SPACE_HEIGHT)
         );
         this.tmp = new Vector2();
-        this.width = this.height = 128;
+        this.width = PaintConstants.RADAR_WIDTH;
+        this.height = PaintConstants.RADAR_HEIGHT;
         this.scaleX = 1;
     }
 
@@ -76,7 +76,7 @@ public class Radar {
                         batch.setColor(0.67f, 0.05f, 0.54f, 1);
                         break;
                 }
-                batch.draw(pointTexture, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
+                batch.draw(pointTexture, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8.0f, 8.0f, 16.0f, 16.0f, sc, sc, 0);
                 batch.setColor(1, 1, 1, 1);
             }
         }

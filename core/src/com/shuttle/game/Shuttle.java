@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.Consumable;
 import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
@@ -71,12 +72,12 @@ public class Shuttle {
 
     public void badEffect(Consumable.Type type) {
         switch (type) {
-            case Astronaut:
+            case ASTRONAUT:
                 standing.increaseScore(-50000);
                 gs.getGameInfoSystem().setup(position.x, position.y, "Murder!\n-50000", 8.0f, false);
                 boomBox.playSound(MSConstants.KILL_ASTRONAUT);
                 break;
-            case Crate:
+            case CRATE:
                 gs.getGameInfoSystem().setup(position.x, position.y, "Be easy!", 3.0f, false);
                 boomBox.playSound(MSConstants.KILL_CRATE);
                 break;
@@ -130,29 +131,60 @@ public class Shuttle {
 
     public void takeEffect(Consumable.Type type) {
         switch (type) {
-            case Astronaut:
+            case ASTRONAUT:
                 standing.increaseScore(Rules.PLAYER_SCORE_ADD);
                 gs.getGameInfoSystem().setup(position.x, position.y, "+" + Rules.PLAYER_SCORE_ADD, 3.0f, false);
                 boomBox.playSound(MSConstants.GET_ASTRONAUT);
                 break;
-            case Crate:
+            case CRATE:
                 int x = MathUtils.random(0, 5);
                 if (x == 0) {
                     standing.increaseHP(Rules.CRATE_REPAIR_ADD);
-                    gs.getGameInfoSystem().setup(position.x, position.y, "REPAIR +" + Rules.CRATE_REPAIR_ADD, 3.0f, false);
+                    gs.getGameInfoSystem()
+                            .setup(
+                                    position.x,
+                                    position.y,
+                                    GameInfoSystem.GameInfoSystemPreset.REPAIR,
+                                    3.0f,
+                                    false
+                            );
                 }
                 if (x == 1) {
                     standing.increaseFuel(Rules.CRATE_FUEL_ADD);
-                    gs.getGameInfoSystem().setup(position.x, position.y, "FUEL +" + Rules.CRATE_FUEL_ADD, 3.0f, false);
+                    gs.getGameInfoSystem()
+                            .setup(
+                                    position.x,
+                                    position.y,
+                                    GameInfoSystem.GameInfoSystemPreset.FUEL,
+                                    3.0f,
+                                    false
+                            );
                     boomBox.playSound(MSConstants.GET_FUEL);
                 }
                 if (x == 2) {
-                    velocity.add(1500 * (float) Math.cos(Math.toRadians(angle)), 1500 * (float) Math.sin(Math.toRadians(angle)));
-                    gs.getGameInfoSystem().setup(position.x, position.y, "TURBO X5", 5.0f, false);
+                    velocity.add(
+                            3 * Rules.PLAYER_ENGINE_POWER * (float) Math.cos(Math.toRadians(angle)),
+                            3 * Rules.PLAYER_ENGINE_POWER * (float) Math.sin(Math.toRadians(angle))
+                    );
+                    gs.getGameInfoSystem()
+                            .setup(
+                                    position.x,
+                                    position.y,
+                                    GameInfoSystem.GameInfoSystemPreset.TURBO,
+                                    5.0f,
+                                    false
+                            );
                     boomBox.playSound(MSConstants.TURBO);
                 }
                 if (x > 2) {
-                    gs.getGameInfoSystem().setup(position.x, position.y, "TRASH", 2.0f, false);
+                    gs.getGameInfoSystem()
+                            .setup(
+                                    position.x,
+                                    position.y,
+                                    GameInfoSystem.GameInfoSystemPreset.TRASH,
+                                    2.0f,
+                                    false
+                            );
                     boomBox.playSound(MSConstants.GET_TRASH);
                 }
                 break;

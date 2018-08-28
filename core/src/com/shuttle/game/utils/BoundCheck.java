@@ -2,6 +2,7 @@ package com.shuttle.game.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.Shuttle;
 import com.shuttle.game.bot.AbstractPoolable;
 import com.shuttle.game.conf.Rules;
@@ -73,7 +74,7 @@ public class BoundCheck {
         player.getGs().getGameInfoSystem().setup(
                 tmp.x - Rules.WORLD_WIDTH / 2,
                 tmp.y + Rules.WORLD_HEIGHT / 2,
-                "OUT OF RANGE!",
+                GameInfoSystem.GameInfoSystemPreset.OUT,
                 3,
                 false
         );

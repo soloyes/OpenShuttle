@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.BoomBox;
@@ -28,7 +29,7 @@ public class MenuBar extends Group {
     private GamePreferences preferences;
 
     public MenuBar() {
-        Skin skin = Assets.getInstance().getAssetManager().get("uiskin/gameSkin.json");
+        Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.preferences = new GamePreferences();
         this.boomBox = new BoomBox(preferences);
         this.setName(GroupType.MENU_BAR.name());

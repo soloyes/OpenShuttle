@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 
 public class FlyingText {
@@ -23,9 +24,9 @@ public class FlyingText {
 
     public FlyingText() {
         this.position = new Vector2(0, 0);
-        this.font64Coloured = Assets.getInstance().getAssetManager().get("fonts/gomarice64Coloured.ttf");
+        this.font64Coloured = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64_C);
         this.font64Coloured.getData().markupEnabled = true;
-        this.font64 = Assets.getInstance().getAssetManager().get("fonts/gomarice64.ttf");
+        this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64);
         this.scale = 1.0f;
         this.matrix4 = new Matrix4();
         this.matrix1 = new Matrix4();
@@ -35,7 +36,7 @@ public class FlyingText {
 
     public void render(SpriteBatch batch) {
         if (active) {
-            if (colored){
+            if (colored) {
                 font = font64Coloured;
             } else {
                 font = font64;

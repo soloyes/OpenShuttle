@@ -1,6 +1,5 @@
 package com.shuttle.game.conf;
 
-import com.shuttle.game.GlobalInteractionLevels;
 import com.shuttle.game.Shuttle;
 
 public class Rules {
@@ -20,20 +19,31 @@ public class Rules {
     //public static final int SPACE_WIDTH = 1080;
     //public static final int SPACE_HEIGHT = 1920;
     //
+    //CONSUMABLE//
     //10
-    public static final int CONSUMABLES_AT_START = 10;
+    public static final int CONSUMABLES_AT_START = 0;
     //6.0f
-    public static final float CONSUMABLES_RESPAWN_TIME = 6.0f;
+    public static final float CONSUMABLES_RESPAWN_TIME = 600.0f;
+    //
+    //ALIEN//
     //0
     public static final int ALIENS_AT_START = 0;
     //5.0f
-    public static final float ALIENS_RESPAWN_TIME = 5.0f;
+    public static final float ALIENS_RESPAWN_TIME = 500.0f;
     //20.0f
     public static final float ALIENS_HUNGRY_TIME = 20.0f;
     //60.0f
     public static final float ALIENS_SLIM_TIME = 6.0f;
+    //50.0f
+    public static final float ALIENS_E_VELOCITY = 50.0f;
+    //500.0f
+    public static final float ALIENS_F_VELOCITY = 500.0f;
+    //
+    //ASTEROID
     //4.0f
-    public static final float ASTEROIDS_RESPAWN_TIME = 4.0f;
+    public static final float ASTEROIDS_RESPAWN_TIME = 400.0f;
+    //
+    //PLAYER
     //500
     public static final int PLAYER_TAKE_RANGE = 500;
     //10000
@@ -41,7 +51,7 @@ public class Rules {
     //135.0f
     public static final float PLAYER_RADIAL_SPEED = 135.0f;
     //400.0f
-    public static final float PLAYER_ENGINE_POWER = 400.0f;
+    public static final float PLAYER_ENGINE_POWER = 500.0f;
     //5.0f
     public static final float PLAYER_MAX_POWER = 5.0f;
     //5.0f
@@ -52,12 +62,15 @@ public class Rules {
     public static final float PLAYER_TIMER_FUEL_OUT_OF_MAP = 2.5f;
     //3.0f
     public static final float PLAYER_FUEL_OUT_OF_MAP = 3.0f;
-    //5000
-    public static final int PLAYER_SCORE_TO_LIVE = 5000;
+    //20000
+    public static final int PLAYER_SCORE_TO_LIVE = 20000;
     //30
+    //
+    //CRATE
     public static final int CRATE_FUEL_ADD = 30;
     //1
     public static final int CRATE_REPAIR_ADD = 1;
+    //
     //false
     public static boolean GAME_OVER = false;
 

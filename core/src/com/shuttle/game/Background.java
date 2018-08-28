@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 
@@ -12,7 +13,7 @@ public class Background {
     private Star[] stars;
 
     public Background() {
-        this.starTexture = Assets.getInstance().getAtlas().findRegion("star16");
+        this.starTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STAR16_REGION);
         this.stars = new Star[Rules.STARS_COUNT];
         for (int i = 0; i < Rules.STARS_COUNT; i++) {
             this.stars[i] = new Star();

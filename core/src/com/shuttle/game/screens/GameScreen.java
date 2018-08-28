@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.GlobalInteractionLevels;
+import com.shuttle.game.PlayerPointer;
+import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.bot.Alien;
 import com.shuttle.game.bot.AlienEmitter;
@@ -40,6 +41,7 @@ public class GameScreen extends BaseScreen {
     private GameInfoSystem gameInfoSystem;
     private PauseGroup pauseGroup;
     private Joystick joystick;
+    private PlayerPointer pointer;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -71,6 +73,7 @@ public class GameScreen extends BaseScreen {
         Gdx.input.setInputProcessor(im);
 
         player = new Shuttle(this, joystick, preferences);
+        pointer = new PlayerPointer(player);
         Rules.StartLevel.values()[preferences.getLevel()].setGameLevel(player);
     }
 
@@ -101,6 +104,7 @@ public class GameScreen extends BaseScreen {
             player.render(batch);
             particleEmitter.render(batch);
             gameInfoSystem.render(batch);
+            pointer.render(batch);
             batch.end();
 
             ScreenManager.getInstance().resetCamera();
@@ -142,6 +146,7 @@ public class GameScreen extends BaseScreen {
             particleEmitter.update(dt);
             gameInfoSystem.update(dt);
             checkCollision(dt);
+            pointer.update(dt);
         }
         cameraUpdate();
         stage.act();
@@ -215,8 +220,10 @@ public class GameScreen extends BaseScreen {
                     boomBox.playSound(MSConstants.E_ALIEN_DESTROY);
                 } else {
                     if (tmpAlien.getLevel() >= 3) {
+                        if (player.getRadar().isActive()) {
+                            boomBox.playSound(MSConstants.LOST_RADAR);
+                        }
                         player.getRadar().setActive(false);
-                        boomBox.playSound(MSConstants.LOST_RADAR);
                     }
 
                     if (player.addZigZag(0.5f * tmpAlien.getLevel() + 0.2f)) {
@@ -224,7 +231,7 @@ public class GameScreen extends BaseScreen {
                         gameInfoSystem.setup(
                                 player.getPosition().x,
                                 player.getPosition().y,
-                                "BRAKED",
+                                GameInfoSystem.GameInfoSystemPreset.BRAKED,
                                 5.0f,
                                 false
                         );
@@ -246,12 +253,12 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < asteroidEmitter.getActiveList().size(); i++) {
             Asteroid tmpAsteroid = asteroidEmitter.getActiveList().get(i);
             if (player.getPosition().dst(tmpAsteroid.getPosition()) < tmpAsteroid.getHeight()) {
-                if (!tmpAsteroid.isFragment()) {
+                if (!tmpAsteroid.isFragmented()) {
                     tmpAsteroid.destroy();
                     particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, player.getShieldLevel().getLevel() * 16 + 32);
                     asteroidEmitter.boom(tmpAsteroid.getPosition(), player.getShieldLevel());
                     player.takeDamage(player.getShieldLevel().getLevel() + 1);
-                    gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, "SCREECH", 3.0f, false);
+                    gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, GameInfoSystem.GameInfoSystemPreset.SCREECH, 3.0f, false);
                 } else {
                     player.setPower(player.getPower() + tmpAsteroid.getSizeForHarvest());
                     tmpAsteroid.destroy();
@@ -260,11 +267,11 @@ public class GameScreen extends BaseScreen {
 
             for (int j = 0; j < alienEmitter.getActiveList().size(); j++) {
                 Alien tmpAlien = alienEmitter.getActiveList().get(j);
-                if (!tmpAsteroid.isFragment() && tmpAlien.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
+                if (!tmpAsteroid.isFragmented() && tmpAlien.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
                     tmpAsteroid.destroy();
                     particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 32 + 32);
                     asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE);
-                    gameInfoSystem.setup(tmpAlien.getPosition().x, tmpAlien.getPosition().y, "BOOOOM", 3.0f,false);
+                    gameInfoSystem.setup(tmpAlien.getPosition().x, tmpAlien.getPosition().y, GameInfoSystem.GameInfoSystemPreset.BOOM, 3.0f,false);
                     if (tmpAlien.getLevel() == 0) {
                         tmpAlien.destroy();
                         showSpray(tmpAlien);
@@ -276,16 +283,16 @@ public class GameScreen extends BaseScreen {
 
             for (int j = 0; j < consumableEmitter.getActiveList().size(); j++) {
                 Consumable tmpConsumable = consumableEmitter.getActiveList().get(j);
-                if (!tmpAsteroid.isFragment() && tmpConsumable.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
+                if (!tmpAsteroid.isFragmented() && tmpConsumable.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
                     tmpAsteroid.destroy();
                     tmpConsumable.destroy();
-                    asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE); // !!!!!!!
+                    asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE);
                     particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 32 + 32);
                     showSpray(tmpConsumable);
                     gameInfoSystem.setup(
                             tmpConsumable.getPosition().x,
                             tmpConsumable.getPosition().y,
-                            "SO SAD",
+                            GameInfoSystem.GameInfoSystemPreset.SAD,
                             3.0f,
                             false
                     );
