@@ -9,6 +9,7 @@ import com.shuttle.game.bot.Consumable;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
@@ -48,15 +49,15 @@ public class Shuttle {
         this.gs = gs;
         this.joystick = joystick;
         this.preferences = preferences;
-        this.texture = Assets.getInstance().getAtlas().findRegion("rocket");
+        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_REGION);
         this.position = new Vector2(
                 ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
                 ScreenManager.getInstance().getViewport().getWorldHeight() / 2
         );
         this.velocity = new Vector2();
         this.tmp = new Vector2();
-        this.width = texture.getRegionWidth();
-        this.height = texture.getRegionHeight();
+        this.width = PaintConstants.SHUTTLE_WIDTH;
+        this.height = PaintConstants.SHUTTLE_HEIGHT;
         this.radar = new Radar(gs, this);
         this.gun = new Gun();
         this.boundCheck = new BoundCheck();

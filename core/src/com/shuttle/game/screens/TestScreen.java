@@ -12,9 +12,7 @@ import com.badlogic.gdx.math.Circle;
  * @author Shuttle on 6/28/18.
  */
 public class TestScreen extends BaseScreen {
-
     Texture texture;
-    ShapeRenderer shapeRenderer;
     private ShaderProgram shaderProgram;
 
     public TestScreen(SpriteBatch batch) {
@@ -34,24 +32,15 @@ public class TestScreen extends BaseScreen {
             System.err.println(shaderProgram.getLog());
             System.exit(0);
         }
-
-        shapeRenderer = new ShapeRenderer(5000, shaderProgram);
-        shapeRenderer.setAutoShapeType(true);
-        shapeRenderer.setColor(Color.BLUE);
-        shapeRenderer.setProjectionMatrix(ScreenManager.getInstance().getViewport().getCamera().combined);
+        ShaderProgram.pedantic = false;
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.circle(50, 50,50);
-        shapeRenderer.end();
+        batch.setShader(shaderProgram);
         batch.begin();
-        batch.draw(texture, 0 ,0);
+        batch.draw(texture, 0, 0);
         batch.end();
-    }
-
-    private void update(float delta) {
     }
 }

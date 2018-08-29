@@ -45,21 +45,21 @@ rocket
   orig: 256, 128
   offset: 0, 0
   index: -1
-play
+fuel
   rotate: false
   xy: 2, 646
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-exit
+HP
   rotate: false
   xy: 2, 776
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-alien
+shuttle
   rotate: false
   xy: 132, 646
   size: 128, 128

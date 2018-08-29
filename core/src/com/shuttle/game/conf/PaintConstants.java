@@ -4,6 +4,13 @@ package com.shuttle.game.conf;
  * @author Shuttle on 8/28/18.
  */
 public class PaintConstants {
+
+    public static final String SHUTTLE_REGION = "shuttle";
+
+    public static final int SHUTTLE_WIDTH = 256;
+
+    public static final int SHUTTLE_HEIGHT = 256;
+
     public static final int ALIEN_WIDTH = 128;
 
     public static final int ALIEN_HEIGHT = 128;
