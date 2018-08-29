@@ -21,15 +21,15 @@ public class Rules {
     //
     //CONSUMABLE//
     //10
-    public static final int CONSUMABLES_AT_START = 0;
+    public static final int CONSUMABLES_AT_START = 5;
     //6.0f
-    public static final float CONSUMABLES_RESPAWN_TIME = 600.0f;
+    public static final float CONSUMABLES_RESPAWN_TIME = 6.0f;
     //
     //ALIEN//
     //0
     public static final int ALIENS_AT_START = 0;
     //5.0f
-    public static final float ALIENS_RESPAWN_TIME = 500.0f;
+    public static final float ALIENS_RESPAWN_TIME = 5.0f;
     //20.0f
     public static final float ALIENS_HUNGRY_TIME = 20.0f;
     //60.0f
@@ -41,7 +41,7 @@ public class Rules {
     //
     //ASTEROID
     //4.0f
-    public static final float ASTEROIDS_RESPAWN_TIME = 400.0f;
+    public static final float ASTEROIDS_RESPAWN_TIME = 4.0f;
     //
     //PLAYER
     //500

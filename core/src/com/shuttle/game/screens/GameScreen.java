@@ -24,6 +24,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.Shuttle;
 import com.shuttle.game.screens.group.PauseGroup;
+import com.shuttle.game.utils.Shake;
 
 import lombok.Data;
 
@@ -42,12 +43,14 @@ public class GameScreen extends BaseScreen {
     private PauseGroup pauseGroup;
     private Joystick joystick;
     private PlayerPointer pointer;
+    private Shake shake;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
         this.batch = batch;
         this.camera = camera;
         this.tmp = new Vector2(0, 0);
+        this.shake = new Shake();
     }
 
     @Override
@@ -149,6 +152,9 @@ public class GameScreen extends BaseScreen {
             pointer.update(dt);
         }
         cameraUpdate();
+        if (!pauseGroup.isPause()) {
+            shake.update(dt, camera);
+        }
         stage.act();
     }
 
@@ -226,6 +232,7 @@ public class GameScreen extends BaseScreen {
                         player.getRadar().setActive(false);
                     }
 
+                    shake.shake((tmpAlien.getLevel() + 1) / 3.0f, 35, (int) (player.getVelocity().len() / 10));
                     if (player.addZigZag(0.5f * tmpAlien.getLevel() + 0.2f)) {
                         player.takeDamage(tmpAlien.getLevel() + 1);
                         gameInfoSystem.setup(
@@ -259,6 +266,7 @@ public class GameScreen extends BaseScreen {
                     asteroidEmitter.boom(tmpAsteroid.getPosition(), player.getShieldLevel());
                     player.takeDamage(player.getShieldLevel().getLevel() + 1);
                     gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, GameInfoSystem.GameInfoSystemPreset.SCREECH, 3.0f, false);
+                    shake.shake(1, 35, (int) (tmpAsteroid.getVelocity().len() / 5));
                 } else {
                     player.setPower(player.getPower() + tmpAsteroid.getSizeForHarvest());
                     tmpAsteroid.destroy();
@@ -271,7 +279,7 @@ public class GameScreen extends BaseScreen {
                     tmpAsteroid.destroy();
                     particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 32 + 32);
                     asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE);
-                    gameInfoSystem.setup(tmpAlien.getPosition().x, tmpAlien.getPosition().y, GameInfoSystem.GameInfoSystemPreset.BOOM, 3.0f,false);
+                    gameInfoSystem.setup(tmpAlien.getPosition().x, tmpAlien.getPosition().y, GameInfoSystem.GameInfoSystemPreset.BOOM, 3.0f, false);
                     if (tmpAlien.getLevel() == 0) {
                         tmpAlien.destroy();
                         showSpray(tmpAlien);
