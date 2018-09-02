@@ -1,9 +1,10 @@
-package com.shuttle.game;
+package com.shuttle.game.player;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.bot.Alien;
 import com.shuttle.game.bot.Consumable;
 import com.shuttle.game.conf.PaintConstants;

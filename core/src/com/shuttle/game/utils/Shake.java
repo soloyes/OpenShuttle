@@ -22,7 +22,6 @@ public class Shake {
      * @param d duration of the shake in seconds
      */
     public void shake(float d, int frequency, int amplitude) {
-        System.out.println(d);
         this.shakeDuration = d;
         this.amplitude = amplitude;
         this.frequency = frequency;

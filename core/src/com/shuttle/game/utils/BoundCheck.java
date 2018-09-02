@@ -3,7 +3,7 @@ package com.shuttle.game.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.GameInfoSystem;
-import com.shuttle.game.Shuttle;
+import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.bot.AbstractPoolable;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.ScreenManager;

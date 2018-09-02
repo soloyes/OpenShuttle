@@ -1,10 +1,15 @@
-package com.shuttle.game;
+package com.shuttle.game.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.GameInfoSystem;
+import com.shuttle.game.Gun;
+import com.shuttle.game.Joystick;
+import com.shuttle.game.KillingSpree;
+import com.shuttle.game.Standing;
 import com.shuttle.game.bot.Consumable;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.GlobalInteractionLevels;
@@ -43,6 +48,9 @@ public class Shuttle {
     private BoundCheck boundCheck;
     private BoomBox boomBox;
 
+    private LifeShield lifeShield;
+    private RamShield ramShield;
+
     public Shuttle(GameScreen gs, Joystick joystick, GamePreferences preferences) {
         this.boomBox = new BoomBox(new GamePreferences());
         this.standing = new Standing(this);
@@ -61,6 +69,8 @@ public class Shuttle {
         this.radar = new Radar(gs, this);
         this.gun = new Gun();
         this.boundCheck = new BoundCheck();
+        this.lifeShield = new LifeShield(this);
+        this.ramShield = new RamShield(this);
     }
 
     public boolean addZigZag(float amount) {
@@ -102,6 +112,8 @@ public class Shuttle {
 
     public void render(SpriteBatch batch) {
         batch.draw(texture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, 1, 1, angle);
+        lifeShield.render(batch);
+        ramShield.render(batch);
         radar.render(batch);
     }
 
@@ -200,6 +212,8 @@ public class Shuttle {
         standing.update();
         checkFuel(dt);
         createFXs();
+        lifeShield.update(dt);
+        ramShield.update(dt);
 
         velocity.scl(0.99f);
         position.mulAdd(velocity, dt);
@@ -261,7 +275,7 @@ public class Shuttle {
         } else {
             gs.getParticleEmitter().getBuilder().buildShuttleLowLevelEngineFire(position, angle, 90);
         }
-        gs.getParticleEmitter().getBuilder().buildShuttleShield(position, angle, 90, 60, shieldLevel.getR(), shieldLevel.getG(), shieldLevel.getB());
+        //gs.getParticleEmitter().getBuilder().buildShuttleShield(position, angle, 90, 60, shieldLevel.getR(), shieldLevel.getG(), shieldLevel.getB());
         if (velocity.len() > 1200.0f) {
             gs.getParticleEmitter().getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
         }

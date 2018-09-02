@@ -11,6 +11,19 @@ public class PaintConstants {
 
     public static final int SHUTTLE_HEIGHT = 256;
 
+    public static final String SHUTTLE_LIFE_SHIELD = "lifeShield";
+
+    public static final int SHUTTLE_LIFE_SHIELD_WIDTH = 256;
+
+    public static final int SHUTTLE_LIFE_SHIELD_HEIGHT = 256;
+
+    public static final String SHUTTLE_RAM_SHIELD = "ramShield";
+
+    public static final int SHUTTLE_RAM_SHIELD_WIDTH = 256;
+
+    public static final int SHUTTLE_RAM_SHIELD_HEIGHT = 256;
+
+
     public static final int ALIEN_WIDTH = 128;
 
     public static final int ALIEN_HEIGHT = 128;

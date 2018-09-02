@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.PlayerPointer;
+import com.shuttle.game.player.PlayerPointer;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.bot.Alien;
@@ -22,7 +22,7 @@ import com.shuttle.game.bot.ParticleEmitter;
 import com.shuttle.game.bot.Poolable;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.Shuttle;
+import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.group.PauseGroup;
 import com.shuttle.game.utils.Shake;
 
@@ -217,6 +217,7 @@ public class GameScreen extends BaseScreen {
             if (player.getPosition().dst(tmpAlien.getPosition()) < 160) {
                 if (tmpAlien.getLevel() < player.getPushPower()) {
                     tmpAlien.destroy();
+                    player.getRamShield().blink();
                     int asc = (tmpAlien.getMaxLevel() + 1) * 5000;
                     player.getStanding().increaseScore(asc);
                     player.slowDown(tmpAlien.getLevel() * 50.0f);
@@ -232,7 +233,8 @@ public class GameScreen extends BaseScreen {
                         player.getRadar().setActive(false);
                     }
 
-                    shake.shake((tmpAlien.getLevel() + 1) / 3.0f, 35, (int) (player.getVelocity().len() / 10));
+                    player.getLifeShield().blink();
+                    //shake.shake((tmpAlien.getLevel() + 1) / 3.0f, 35, (int) (player.getVelocity().len() / 10));
                     if (player.addZigZag(0.5f * tmpAlien.getLevel() + 0.2f)) {
                         player.takeDamage(tmpAlien.getLevel() + 1);
                         gameInfoSystem.setup(
@@ -262,11 +264,12 @@ public class GameScreen extends BaseScreen {
             if (player.getPosition().dst(tmpAsteroid.getPosition()) < tmpAsteroid.getHeight()) {
                 if (!tmpAsteroid.isFragmented()) {
                     tmpAsteroid.destroy();
+                    player.getLifeShield().blink();
                     particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, player.getShieldLevel().getLevel() * 16 + 32);
                     asteroidEmitter.boom(tmpAsteroid.getPosition(), player.getShieldLevel());
                     player.takeDamage(player.getShieldLevel().getLevel() + 1);
                     gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, GameInfoSystem.GameInfoSystemPreset.SCREECH, 3.0f, false);
-                    shake.shake(1, 35, (int) (tmpAsteroid.getVelocity().len() / 5));
+                    //shake.shake(1, 35, (int) (tmpAsteroid.getVelocity().len() / 5));
                 } else {
                     player.setPower(player.getPower() + tmpAsteroid.getSizeForHarvest());
                     tmpAsteroid.destroy();

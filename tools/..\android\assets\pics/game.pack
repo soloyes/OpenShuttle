@@ -38,21 +38,28 @@ aliens
   orig: 640, 128
   offset: 0, 0
   index: -1
-rocket
+lifeShield
   rotate: false
   xy: 718, 260
-  size: 256, 128
-  orig: 256, 128
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: -1
 fuel
+  rotate: false
+  xy: 848, 260
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+HP
   rotate: false
   xy: 2, 646
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-HP
+ramShield
   rotate: false
   xy: 2, 776
   size: 128, 128
