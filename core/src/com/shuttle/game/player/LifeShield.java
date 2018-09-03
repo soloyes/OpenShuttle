@@ -28,7 +28,6 @@ public class LifeShield {
 
     public void render(SpriteBatch batch) {
         Color color = batch.getColor();
-
         color.a = alpha;
         batch.setColor(color);
         batch.draw(
@@ -46,9 +45,13 @@ public class LifeShield {
     }
 
     public void update(float dt) {
-        alpha -= dt;
-        if (alpha <= 0.0f) {
+        if (player.getStanding().getLives() == 1) {
             alpha = 0.0f;
+        } else {
+            alpha -= dt;
+            if (alpha <= 0.0f) {
+                alpha = 0.0f;
+            }
         }
     }
 }

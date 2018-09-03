@@ -9,7 +9,6 @@ import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.Gun;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.KillingSpree;
-import com.shuttle.game.Standing;
 import com.shuttle.game.bot.Consumable;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.GlobalInteractionLevels;
@@ -50,6 +49,7 @@ public class Shuttle {
 
     private LifeShield lifeShield;
     private RamShield ramShield;
+    private Scratch scratch;
 
     public Shuttle(GameScreen gs, Joystick joystick, GamePreferences preferences) {
         this.boomBox = new BoomBox(new GamePreferences());
@@ -69,8 +69,10 @@ public class Shuttle {
         this.radar = new Radar(gs, this);
         this.gun = new Gun();
         this.boundCheck = new BoundCheck();
+
         this.lifeShield = new LifeShield(this);
         this.ramShield = new RamShield(this);
+        this.scratch = new Scratch(this);
     }
 
     public boolean addZigZag(float amount) {
@@ -112,6 +114,7 @@ public class Shuttle {
 
     public void render(SpriteBatch batch) {
         batch.draw(texture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, 1, 1, angle);
+        scratch.render(batch);
         lifeShield.render(batch);
         ramShield.render(batch);
         radar.render(batch);
@@ -212,6 +215,8 @@ public class Shuttle {
         standing.update();
         checkFuel(dt);
         createFXs();
+
+        scratch.update(dt);
         lifeShield.update(dt);
         ramShield.update(dt);
 

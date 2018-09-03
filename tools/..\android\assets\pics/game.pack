@@ -31,9 +31,16 @@ joystick
   orig: 200, 250
   offset: 0, 0
   index: -1
-aliens
+scratch
   rotate: false
   xy: 2, 516
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
+aliens
+  rotate: false
+  xy: 2, 646
   size: 640, 128
   orig: 640, 128
   offset: 0, 0
@@ -54,21 +61,21 @@ fuel
   index: -1
 HP
   rotate: false
-  xy: 2, 646
+  xy: 2, 776
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 ramShield
   rotate: false
-  xy: 2, 776
+  xy: 132, 776
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 shuttle
   rotate: false
-  xy: 132, 646
+  xy: 262, 776
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

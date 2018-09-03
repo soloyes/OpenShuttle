@@ -23,6 +23,12 @@ public class PaintConstants {
 
     public static final int SHUTTLE_RAM_SHIELD_HEIGHT = 256;
 
+    public static final String SHUTTLE_SCRATCH = "scratch";
+
+    public static final int SHUTTLE_SCRATCH_WIDTH = 256;
+
+    public static final int SHUTTLE_SCRATCH_HEIGHT = 256;
+
 
     public static final int ALIEN_WIDTH = 128;
 

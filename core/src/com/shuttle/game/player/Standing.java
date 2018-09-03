@@ -1,4 +1,4 @@
-package com.shuttle.game;
+package com.shuttle.game.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;

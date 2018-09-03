@@ -15,14 +15,14 @@ public class RamShield {
     private int width, height;
     private float alpha;
     private float fromAlpha = 0.1f;
-    private Color color;
+    private Color tmpColor;
 
     public RamShield(Shuttle player) {
         this.player = player;
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_RAM_SHIELD);
         this.width = PaintConstants.SHUTTLE_RAM_SHIELD_WIDTH;
         this.height = PaintConstants.SHUTTLE_RAM_SHIELD_HEIGHT;
-        this.color = new Color();
+        this.tmpColor = new Color();
     }
 
     public void blink() {
@@ -30,10 +30,8 @@ public class RamShield {
     }
 
     public void render(SpriteBatch batch) {
-        Color tmpColor = batch.getColor();
-        float a = tmpColor.a;
-        color.a = alpha;
-        batch.setColor(color);
+        tmpColor.a = alpha;
+        batch.setColor(tmpColor);
         batch.draw(
                 texture,
                 player.getPosition().x - width / 2,
@@ -51,23 +49,23 @@ public class RamShield {
 
     public void update(float dt) {
         fromAlpha += dt;
-        if (fromAlpha >= 0.25)
-            fromAlpha = 0.25f;
+        if (fromAlpha >= 0.2)
+            fromAlpha = 0.2f;
         switch (player.getShieldLevel()) {
             case NONE:
                 fromAlpha = 0.0f;
                 break;
             case WHITE:
-                color.set(Color.WHITE);
+                tmpColor.set(Color.WHITE);
                 break;
             case GREEN:
-                color.set(Color.GREEN);
+                tmpColor.set(Color.GREEN);
                 break;
             case YELLOW:
-                color.set(Color.MAGENTA);
+                tmpColor.set(Color.YELLOW);
                 break;
             case RED:
-                color.set(Color.RED);
+                tmpColor.set(Color.RED);
         }
 
         alpha -= dt;

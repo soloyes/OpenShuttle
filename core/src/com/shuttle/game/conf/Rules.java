@@ -82,7 +82,7 @@ public class Rules {
                 player.getStanding().setFuel(250);
                 player.getStanding().setHp(25);
                 player.getStanding().setMaxHp(25);
-                player.getStanding().setLives(3);
+                player.getStanding().setLives(1);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
