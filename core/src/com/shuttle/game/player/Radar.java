@@ -1,10 +1,10 @@
 package com.shuttle.game.player;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.bot.Alien;
 import com.shuttle.game.bot.Consumable;
 import com.shuttle.game.conf.PaintConstants;
@@ -62,19 +62,19 @@ public class Radar {
                 tmp.set(tmpAlien.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
                 switch (tmpAlien.getLevel()){
                     case 0:
-                        batch.setColor(1.0f, 0.8f, 0.69f, 1);
+                        batch.setColor(Color.TAN);
                         break;
                     case 1:
-                        batch.setColor(0.36f, 1.0f, 0.34f, 1);
+                        batch.setColor(Color.GREEN);
                         break;
                     case 2:
-                        batch.setColor(0.99f, 1.0f, 0.34f, 1);
+                        batch.setColor(Color.YELLOW);
                         break;
                     case 3:
-                        batch.setColor(0.91f, 0.07f, 0.14f, 1);
+                        batch.setColor(Color.RED);
                         break;
                     case 4:
-                        batch.setColor(0.67f, 0.05f, 0.54f, 1);
+                        batch.setColor(Color.PURPLE);
                         break;
                 }
                 batch.draw(pointTexture, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8.0f, 8.0f, 16.0f, 16.0f, sc, sc, 0);
