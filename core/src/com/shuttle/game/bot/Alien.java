@@ -37,7 +37,11 @@ public class Alien extends AbstractPoolable {
     private boolean touched;
     private BoundCheck boundCheck;
     private BoomBox boomBox;
+
     private float frame;
+    private float rotation;
+    private float angle;
+    private int clockwise;
 
     public Alien(GameScreen gs) {
         this.boomBox = new BoomBox(new GamePreferences());
@@ -52,7 +56,6 @@ public class Alien extends AbstractPoolable {
         this.tmp = new Vector2();
         this.width = PaintConstants.ANOMALY_WIDTH;
         this.height = PaintConstants.ANOMALY_HEIGHT;
-        this.level = 1;
         this.active = false;
         this.boundCheck = new BoundCheck();
     }
@@ -62,7 +65,8 @@ public class Alien extends AbstractPoolable {
         this.hungryTimer = 0;
         this.slimTimer = 0;
         this.hungry = true;
-
+        this.angle = MathUtils.random(365);
+        this.clockwise = MathUtils.randomSign();
         position.set(x, y);
         active = true;
         float rnd = MathUtils.random(0.0f, 1.0f);
@@ -78,13 +82,27 @@ public class Alien extends AbstractPoolable {
         if (!touched) {
             this.scaleX = this.scaleY = 1 + level * 0.15f;
         }
-        batch.draw(textureRegions[(int) (frame % textureRegions.length)], position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, scaleX, scaleY, 0);
+        batch.draw(
+                textureRegions[(int) (frame % textureRegions.length)],
+                position.x - width / 2,
+                position.y - height / 2,
+                width / 2,
+                height / 2,
+                width,
+                height,
+                scaleX,
+                scaleY,
+                clockwise * rotation
+        );
     }
 
     public void update(float dt) {
         frame += 24 * dt;
+        rotation += 48*dt;
         if (frame >= textureRegions.length)
             frame = 0.0f;
+        if (rotation >= 365)
+            rotation = 0;
 
         boundCheck.checkAndHandleBounds(this);
 
