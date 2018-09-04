@@ -102,9 +102,10 @@ public class GameScreen extends BaseScreen {
             batch.begin();
             background.render(batch);
             asteroidEmitter.render(batch);
-            alienEmitter.render(batch);
-            consumableEmitter.render(batch);
             player.render(batch);
+            consumableEmitter.render(batch);
+            alienEmitter.render(batch);
+            player.getRamShield().render(batch);
             particleEmitter.render(batch);
             gameInfoSystem.render(batch);
             pointer.render(batch);
@@ -180,7 +181,7 @@ public class GameScreen extends BaseScreen {
     public void checkCollision(float dt) {
         for (int i = 0; i < consumableEmitter.getActiveList().size(); i++) {
             Consumable tmpConsumable = consumableEmitter.getActiveList().get(i);
-            if (player.getPosition().dst(tmpConsumable.getPosition()) < 60) {
+            if (player.getPosition().dst(tmpConsumable.getPosition()) < 200) {
                 if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel()) {
                     tmpConsumable.destroy();
                     player.takeEffect(tmpConsumable.getType());
@@ -214,11 +215,11 @@ public class GameScreen extends BaseScreen {
 
         for (int i = 0; i < alienEmitter.getActiveList().size(); i++) {
             Alien tmpAlien = alienEmitter.getActiveList().get(i);
-            if (player.getPosition().dst(tmpAlien.getPosition()) < 160) {
+            if (player.getPosition().dst(tmpAlien.getPosition()) < 60) {
                 if (tmpAlien.getLevel() < player.getPushPower()) {
                     tmpAlien.destroy();
-                    player.getRamShield().blink();
-                    int asc = (tmpAlien.getMaxLevel() + 1) * 5000;
+                    player.getRamShield().blink(1.0f);
+                    int asc = (tmpAlien.getLevel() + 1) * 5000;
                     player.getStanding().increaseScore(asc);
                     player.slowDown(tmpAlien.getLevel() * 50.0f);
                     player.decreasePower(tmpAlien.getLevel());
@@ -233,7 +234,7 @@ public class GameScreen extends BaseScreen {
                         player.getRadar().setActive(false);
                     }
 
-                    player.getLifeShield().blink();
+                    //player.getLifeShield().blink();
                     //shake.shake((tmpAlien.getLevel() + 1) / 3.0f, 35, (int) (player.getVelocity().len() / 10));
                     if (player.addZigZag(0.5f * tmpAlien.getLevel() + 0.2f)) {
                         player.takeDamage(tmpAlien.getLevel() + 1);
@@ -264,13 +265,14 @@ public class GameScreen extends BaseScreen {
             if (player.getPosition().dst(tmpAsteroid.getPosition()) < tmpAsteroid.getHeight()) {
                 if (!tmpAsteroid.isFragmented()) {
                     tmpAsteroid.destroy();
-                    player.getLifeShield().blink();
+                    player.getLifeShield().blink(1.0f);
                     particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, player.getShieldLevel().getLevel() * 16 + 32);
                     asteroidEmitter.boom(tmpAsteroid.getPosition(), player.getShieldLevel());
                     player.takeDamage(player.getShieldLevel().getLevel() + 1);
                     gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, GameInfoSystem.GameInfoSystemPreset.SCREECH, 3.0f, false);
                     //shake.shake(1, 35, (int) (tmpAsteroid.getVelocity().len() / 5));
                 } else {
+                    player.getRamShield().blink(0.5f);
                     player.setPower(player.getPower() + tmpAsteroid.getSizeForHarvest());
                     tmpAsteroid.destroy();
                 }
@@ -313,8 +315,8 @@ public class GameScreen extends BaseScreen {
     }
 
     public void showSpray(Poolable poolable) {
-        for (int j = 0; j < 30; j++) {
-            particleEmitter.setup(poolable.getPosition().x + MathUtils.random(-30, 30), poolable.getPosition().y + MathUtils.random(-30, 30), MathUtils.random(-400, 400), MathUtils.random(-400, 400), 0.4f, 8, 4, 0, 1, 0, 1f, 0, 1, 0, 0.2f);
+        for (int j = 0; j < 60; j++) {
+            particleEmitter.setup(poolable.getPosition().x + MathUtils.random(-30, 30), poolable.getPosition().y + MathUtils.random(-30, 30), MathUtils.random(-400, 400), MathUtils.random(-400, 400), 0.3f, 8, 1, 0, 0.6f, 0, 1f, 0, 1, 0, 0.0f);
         }
     }
 

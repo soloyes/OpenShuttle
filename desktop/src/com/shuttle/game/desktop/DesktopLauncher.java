@@ -11,9 +11,11 @@ public class DesktopLauncher {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.width = 540;
         config.height = 960;
+        //todo: need to fix speed shuttle on 5-10FPS.
+        //config.foregroundFPS = 30;
 
         //todo: this is for easy operate during test needed Screen, just run game with key from enum ScreenManager.ScreenType
-        ScreenManager.ScreenType screenType = ScreenManager.ScreenType.MENU;;
+        ScreenManager.ScreenType screenType = ScreenManager.ScreenType.MENU;
         if (arg.length > 0){
             for (ScreenManager.ScreenType t: ScreenManager.ScreenType.values()) {
                 if (arg[0].equals(t.name())){

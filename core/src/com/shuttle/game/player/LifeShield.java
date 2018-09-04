@@ -22,8 +22,8 @@ public class LifeShield {
         this.height = PaintConstants.SHUTTLE_LIFE_SHIELD_HEIGHT;
     }
 
-    public void blink() {
-        alpha = 1.0f;
+    public void blink(float alpha) {
+        this.alpha = alpha;
     }
 
     public void render(SpriteBatch batch) {
@@ -42,6 +42,7 @@ public class LifeShield {
                 1,
                 player.getAngle()
         );
+        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     public void update(float dt) {

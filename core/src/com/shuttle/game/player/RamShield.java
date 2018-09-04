@@ -3,6 +3,7 @@ package com.shuttle.game.player;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 
@@ -14,7 +15,7 @@ public class RamShield {
     private Shuttle player;
     private int width, height;
     private float alpha;
-    private float fromAlpha = 0.1f;
+    private float fromAlpha;
     private Color tmpColor;
 
     public RamShield(Shuttle player) {
@@ -25,8 +26,10 @@ public class RamShield {
         this.tmpColor = new Color();
     }
 
-    public void blink() {
-        alpha = 1.0f;
+    public void blink(float alpha) {
+        this.alpha = alpha;
+        if (player.getShieldLevel() == GlobalInteractionLevels.NONE)
+            this.alpha = 0.0f;
     }
 
     public void render(SpriteBatch batch) {
@@ -49,7 +52,7 @@ public class RamShield {
 
     public void update(float dt) {
         fromAlpha += dt;
-        if (fromAlpha >= 0.2)
+        if (fromAlpha >= 0.2f)
             fromAlpha = 0.2f;
         switch (player.getShieldLevel()) {
             case NONE:

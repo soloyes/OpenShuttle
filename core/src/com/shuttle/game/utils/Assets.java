@@ -62,6 +62,7 @@ public class Assets {
                 assetManager.load(MSConstants.GET_RADAR, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 assetManager.load(PaintConstants.ASTEROID_REGION, Texture.class);
+                assetManager.load(PaintConstants.ANOMALY_REGION, Texture.class);
                 createStdFont(32, "");
                 createStdFont(48, "");
                 createStdFont(64, "");

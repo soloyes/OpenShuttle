@@ -1,6 +1,7 @@
 package com.shuttle.game.bot;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -14,6 +15,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
+import com.shuttle.game.utils.Regions;
 
 import lombok.Data;
 
@@ -21,12 +23,11 @@ import lombok.Data;
 public class Alien extends AbstractPoolable {
     float[] probabilities = {1.0f, 0.8f, 0.5f, 0.3f, 0.05f};
     private GameScreen gs;
-    private TextureRegion[] regions;
+    private TextureRegion[] textureRegions;
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 tmp;
     private int level;
-    private int maxLevel;
     private boolean active;
     private float hungryTimer;
     private boolean hungry;
@@ -36,19 +37,21 @@ public class Alien extends AbstractPoolable {
     private boolean touched;
     private BoundCheck boundCheck;
     private BoomBox boomBox;
+    private float frame;
 
     public Alien(GameScreen gs) {
         this.boomBox = new BoomBox(new GamePreferences());
         this.gs = gs;
-        this.regions = Assets.getInstance()
-                .getAtlas()
-                .findRegion(PaintConstants.ALIEN_REGION)
-                .split(PaintConstants.ALIEN_WIDTH, PaintConstants.ALIEN_HEIGHT)[0];
+        this.textureRegions = Regions.split(new TextureRegion(Assets.getInstance().getAssetManager().get(PaintConstants.ANOMALY_REGION, Texture.class)),
+                3,
+                4,
+                12
+        );
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.tmp = new Vector2();
-        this.width = PaintConstants.ALIEN_WIDTH;
-        this.height = PaintConstants.ALIEN_HEIGHT;
+        this.width = PaintConstants.ANOMALY_WIDTH;
+        this.height = PaintConstants.ANOMALY_HEIGHT;
         this.level = 1;
         this.active = false;
         this.boundCheck = new BoundCheck();
@@ -66,7 +69,6 @@ public class Alien extends AbstractPoolable {
         for (int i = probabilities.length - 1; i >= 0; i--) {
             if (rnd < probabilities[i]) {
                 level = i;
-                maxLevel = level;
                 break;
             }
         }
@@ -76,10 +78,14 @@ public class Alien extends AbstractPoolable {
         if (!touched) {
             this.scaleX = this.scaleY = 1 + level * 0.15f;
         }
-        batch.draw(regions[level], position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, scaleX, scaleY, 0);
+        batch.draw(textureRegions[(int) (frame % textureRegions.length)], position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, scaleX, scaleY, 0);
     }
 
     public void update(float dt) {
+        frame += 24 * dt;
+        if (frame >= textureRegions.length)
+            frame = 0.0f;
+
         boundCheck.checkAndHandleBounds(this);
 
         if (Gdx.input.isTouched() && level == 4) {

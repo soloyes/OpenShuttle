@@ -116,7 +116,7 @@ public class Shuttle {
         batch.draw(texture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, 1, 1, angle);
         scratch.render(batch);
         lifeShield.render(batch);
-        ramShield.render(batch);
+        //ramShield.render(batch);
         radar.render(batch);
     }
 
@@ -260,6 +260,7 @@ public class Shuttle {
 
     private void checkZigZagEffect(float dt) {
         if (zigzagEffect > 0.0f) {
+            lifeShield.blink(1.0f);
             zigzagEffect -= dt;
             angle += zigzagEffect * 25.0f;
             velocity.add(MathUtils.random(-30 * zigzagEffect, 30 * zigzagEffect), MathUtils.random(-30 * zigzagEffect, 30 * zigzagEffect));

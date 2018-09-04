@@ -30,17 +30,25 @@ public class PaintConstants {
     public static final int SHUTTLE_SCRATCH_HEIGHT = 256;
 
 
+    public static final String ALIEN_REGION = "aliens";
+
     public static final int ALIEN_WIDTH = 128;
 
     public static final int ALIEN_HEIGHT = 128;
 
-    public static final String ALIEN_REGION = "aliens";
+
+    public static final String ANOMALY_REGION = "pics/enemyV1.png";
+
+    public static final int ANOMALY_WIDTH = 128;
+
+    public static final int ANOMALY_HEIGHT = 128;
+
+
+    public static final String ASTEROID_REGION = "pics/asteroid.png";
 
     public static final int ASTEROID_WIDTH = 128;
 
     public static final int ASTEROID_HEIGHT = 128;
-
-    public static final String ASTEROID_REGION = "pics/asteroid.png";
 
     public static final String ASTRONAUT_REGION = "astronaut";
 
