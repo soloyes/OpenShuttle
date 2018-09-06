@@ -46,10 +46,11 @@ public class Shuttle {
     private Standing standing;
     private BoundCheck boundCheck;
     private BoomBox boomBox;
-
     private LifeShield lifeShield;
     private RamShield ramShield;
     private Scratch scratch;
+    private Vector2 textureVector;
+    private Vector2 tmp2;
 
     public Shuttle(GameScreen gs, Joystick joystick, GamePreferences preferences) {
         this.boomBox = new BoomBox(new GamePreferences());
@@ -64,6 +65,10 @@ public class Shuttle {
         );
         this.velocity = new Vector2();
         this.tmp = new Vector2();
+
+        this.textureVector = new Vector2();
+        this.tmp2 = new Vector2();
+
         this.width = PaintConstants.SHUTTLE_WIDTH;
         this.height = PaintConstants.SHUTTLE_HEIGHT;
         this.radar = new Radar(gs, this);
@@ -95,6 +100,15 @@ public class Shuttle {
                 boomBox.playSound(MSConstants.KILL_CRATE);
                 break;
         }
+    }
+
+    public boolean canCatch(Consumable consumable) {
+        tmp2.set(consumable.getPosition());
+        tmp2.sub(position);
+
+        float dif = angle - tmp2.angle();
+
+        return dif >= -110 && dif <= -40 || dif <= 110 && dif >= 40;
     }
 
     public void decreasePower(int amount) {

@@ -181,13 +181,18 @@ public class GameScreen extends BaseScreen {
     public void checkCollision(float dt) {
         for (int i = 0; i < consumableEmitter.getActiveList().size(); i++) {
             Consumable tmpConsumable = consumableEmitter.getActiveList().get(i);
-            if (player.getPosition().dst(tmpConsumable.getPosition()) < 200) {
+            if (player.getPosition().dst(tmpConsumable.getPosition()) < 128) {
                 if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel()) {
                     tmpConsumable.destroy();
                     player.takeEffect(tmpConsumable.getType());
                 } else {
-                    tmpConsumable.destroy();
-                    player.badEffect(tmpConsumable.getType());
+                    if (!player.canCatch(tmpConsumable)) {
+                        tmpConsumable.destroy();
+                        player.badEffect(tmpConsumable.getType());
+                    } else {
+                        tmpConsumable.destroy();
+                        player.takeEffect(tmpConsumable.getType());
+                    }
                 }
             }
 
@@ -215,7 +220,7 @@ public class GameScreen extends BaseScreen {
 
         for (int i = 0; i < alienEmitter.getActiveList().size(); i++) {
             Alien tmpAlien = alienEmitter.getActiveList().get(i);
-            if (player.getPosition().dst(tmpAlien.getPosition()) < 60) {
+            if (player.getPosition().dst(tmpAlien.getPosition()) < 100 && tmpAlien.isBorn()) {
                 if (tmpAlien.getLevel() < player.getPushPower()) {
                     tmpAlien.destroy();
                     player.getRamShield().blink(1.0f);

@@ -1,6 +1,7 @@
 package com.shuttle.game.bot;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -24,6 +25,7 @@ public class Alien extends AbstractPoolable {
     float[] probabilities = {1.0f, 0.8f, 0.5f, 0.3f, 0.05f};
     private GameScreen gs;
     private TextureRegion[] textureRegions;
+    private TextureRegion glowRegion;
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 tmp;
@@ -35,9 +37,12 @@ public class Alien extends AbstractPoolable {
     private float scaleX;
     private float scaleY;
     private boolean touched;
+    private boolean born;
+    private int glowWidth, glowHeight;
+    private boolean oscillator;
     private BoundCheck boundCheck;
     private BoomBox boomBox;
-
+    private Color tmpColor;
     private float frame;
     private float rotation;
     private float angle;
@@ -51,13 +56,16 @@ public class Alien extends AbstractPoolable {
                 4,
                 12
         );
+        this.glowRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.ANOMALY_GLOW);
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.tmp = new Vector2();
         this.width = PaintConstants.ANOMALY_WIDTH;
         this.height = PaintConstants.ANOMALY_HEIGHT;
-        this.active = false;
+        this.glowWidth = PaintConstants.ANOMALY_GLOW_WIDTH;
+        this.glowHeight = PaintConstants.ANOMALY_GLOW_HEIGHT;
         this.boundCheck = new BoundCheck();
+        this.tmpColor = new Color();
     }
 
     public void init(float x, float y) {
@@ -67,8 +75,12 @@ public class Alien extends AbstractPoolable {
         this.hungry = true;
         this.angle = MathUtils.random(365);
         this.clockwise = MathUtils.randomSign();
-        position.set(x, y);
-        active = true;
+        this.position.set(x, y);
+        this.active = true;
+        this.born = false;
+        this.oscillator = true;
+        this.scaleX = this.scaleY = 0.0f;
+        this.tmpColor.a = PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX;
         float rnd = MathUtils.random(0.0f, 1.0f);
         for (int i = probabilities.length - 1; i >= 0; i--) {
             if (rnd < probabilities[i]) {
@@ -79,9 +91,22 @@ public class Alien extends AbstractPoolable {
     }
 
     public void render(SpriteBatch batch) {
-        if (!touched) {
-            this.scaleX = this.scaleY = 1 + level * 0.15f;
-        }
+        batch.setColor(tmpColor);
+
+        batch.draw(
+                glowRegion,
+                position.x - glowWidth / 2,
+                position.y - glowHeight / 2,
+                glowWidth / 2,
+                glowHeight / 2,
+                glowWidth,
+                glowHeight,
+                scaleX,
+                scaleY,
+                clockwise * rotation
+        );
+        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+
         batch.draw(
                 textureRegions[(int) (frame % textureRegions.length)],
                 position.x - width / 2,
@@ -97,72 +122,109 @@ public class Alien extends AbstractPoolable {
     }
 
     public void update(float dt) {
+        scaleAndBorn(dt);
+
+        if (oscillator) {
+            tmpColor.a -= dt / 3;
+            if (tmpColor.a <= 0.0f) oscillator = false;
+        } else {
+            tmpColor.a += dt / 3;
+            if (tmpColor.a >= PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX) oscillator = true;
+        }
+
+        switch (level) {
+            case 0:
+                tmpColor.set(Color.TAN.r, Color.TAN.g, Color.TAN.b, tmpColor.a);
+                break;
+            case 1:
+                tmpColor.set(Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, tmpColor.a);
+                break;
+            case 2:
+                tmpColor.set(Color.YELLOW.r, Color.YELLOW.g, Color.YELLOW.b, tmpColor.a);
+                break;
+            case 3:
+                tmpColor.set(Color.RED.r, Color.RED.g, Color.RED.b, tmpColor.a);
+                break;
+            case 4:
+                tmpColor.set(Color.MAGENTA.r, Color.MAGENTA.g, Color.MAGENTA.b, tmpColor.a);
+        }
+
         frame += 24 * dt;
-        rotation += 48*dt;
+        rotation += 48 * dt;
         if (frame >= textureRegions.length)
             frame = 0.0f;
         if (rotation >= 365)
             rotation = 0;
 
-        boundCheck.checkAndHandleBounds(this);
+        if (born) {
+            boundCheck.checkAndHandleBounds(this);
 
-        if (Gdx.input.isTouched() && level == 4) {
-            tmp.set(Gdx.input.getX(), Gdx.input.getY());
-            ScreenManager.getInstance().getViewport().unproject(tmp);
-            if (tmp.dst(position) < 128f) {
-                hungry = false;
-                touched = true;
+            if (Gdx.input.isTouched() && level == 4) {
+                tmp.set(Gdx.input.getX(), Gdx.input.getY());
+                ScreenManager.getInstance().getViewport().unproject(tmp);
+                if (tmp.dst(position) < 128f) {
+                    hungry = false;
+                    touched = true;
+                }
+            }
+
+            slimTimer += dt;
+            hungryTimer += dt;
+            if (slimTimer > Rules.ALIENS_SLIM_TIME) {
+                slimTimer = 0;
+                if (level > 0) {
+                    takeDamage(1);
+                }
+            }
+
+            if (hungryTimer > Rules.ALIENS_HUNGRY_TIME) {
+                hungryTimer = 0;
+                hungry = true;
+            }
+
+            velocity.scl(0.99f);
+            position.mulAdd(velocity, dt);
+            if (hungry) {
+                if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
+                    float v;
+                    if (getLevel() == 4) {
+                        v = Rules.ALIENS_F_VELOCITY;
+                    } else {
+                        v = Rules.ALIENS_E_VELOCITY;
+                    }
+                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(v);
+                    velocity.mulAdd(tmp, dt);
+                }
+                if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
+                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
+                    velocity.mulAdd(tmp, dt);
+                }
             }
         }
+    }
+
+    private void scaleAndBorn(float dt) {
+        scaleX = scaleY += dt;
         if (touched) {
             slimTimer = 0;
-            scaleX = scaleY += 0.01f;
             if (scaleX >= 2.0f) {
                 destroy();
                 boomBox.playSound(MSConstants.F_ALIEN_DESTROY);
             }
-        }
-
-        slimTimer += dt;
-        hungryTimer += dt;
-        if (slimTimer > Rules.ALIENS_SLIM_TIME) {
-            slimTimer = 0;
-            if (level > 0) {
-                takeDamage(1);
+        } else {
+            if (scaleX > 1 + level * 0.15f) {
+                scaleX = scaleY = 1 + level * 0.15f;
+                born = true;
             }
         }
+    }
 
-        if (hungryTimer > Rules.ALIENS_HUNGRY_TIME) {
-            hungryTimer = 0;
-            hungry = true;
-        }
-
-        velocity.scl(0.99f);
-        position.mulAdd(velocity, dt);
-        if (hungry) {
-            if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-                float v;
-                if (getLevel() == 4) {
-                    v = Rules.ALIENS_F_VELOCITY;
-                } else {
-                    v = Rules.ALIENS_E_VELOCITY;
-                }
-                tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(v);
-                velocity.mulAdd(tmp, dt);
-            }
-            if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
-                tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
-                velocity.mulAdd(tmp, dt);
-            }
-        }
+    public void takeDamage(int dmg) {
+        level -= dmg;
     }
 
     @Override
     public void destroy() {
         active = false;
-    }
-
-    public void takeDamage(int dmg) {
-        level -= dmg;
     }
 }

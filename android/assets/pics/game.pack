@@ -24,6 +24,13 @@ astronaut
   orig: 128, 256
   offset: 0, 0
   index: -1
+glowV1
+  rotate: false
+  xy: 2, 516
+  size: 255, 255
+  orig: 255, 255
+  offset: 0, 0
+  index: -1
 joystick
   rotate: false
   xy: 516, 260
@@ -33,14 +40,7 @@ joystick
   index: -1
 scratch
   rotate: false
-  xy: 2, 516
-  size: 640, 128
-  orig: 640, 128
-  offset: 0, 0
-  index: -1
-aliens
-  rotate: false
-  xy: 2, 646
+  xy: 259, 516
   size: 640, 128
   orig: 640, 128
   offset: 0, 0
@@ -61,21 +61,21 @@ fuel
   index: -1
 HP
   rotate: false
-  xy: 2, 776
+  xy: 2, 773
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 ramShield
   rotate: false
-  xy: 132, 776
+  xy: 259, 646
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 shuttle
   rotate: false
-  xy: 262, 776
+  xy: 259, 776
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

@@ -23,13 +23,13 @@ public class Rules {
     //10
     public static final int CONSUMABLES_AT_START = 0;
     //6.0f
-    public static final float CONSUMABLES_RESPAWN_TIME = 10.0f;
+    public static final float CONSUMABLES_RESPAWN_TIME = 6.0f;
     //
     //ALIEN//
     //0
     public static final int ALIENS_AT_START = 0;
     //5.0f
-    public static final float ALIENS_RESPAWN_TIME = 10.0f;
+    public static final float ALIENS_RESPAWN_TIME = 5.0f;
     //20.0f
     public static final float ALIENS_HUNGRY_TIME = 20.0f;
     //60.0f
