@@ -10,7 +10,7 @@ public class MSConstants {
     public final static String PAUSE_SOUND = SOUND_FOLDER + "pause.ogg";
     public final static String GET_RADAR = SOUND_FOLDER + "get_radar.ogg";
     public final static String UP = SOUND_FOLDER + "up.ogg";
-    public final static String E_ALIEN_DESTROY = SOUND_FOLDER + "e_alien_destroy.ogg";
+    public final static String E_ANOMALY_DESTROY = SOUND_FOLDER + "anomaly_destroy.ogg";
     public final static String F_ALIEN_DESTROY = SOUND_FOLDER + "f_alien_destroy.ogg";
     public final static String GET_ASTRONAUT = SOUND_FOLDER + "get_astronaut.ogg";
     public final static String KILL_ASTRONAUT = SOUND_FOLDER + "kill_astronaut.ogg";

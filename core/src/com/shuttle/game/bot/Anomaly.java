@@ -21,7 +21,7 @@ import com.shuttle.game.utils.Regions;
 import lombok.Data;
 
 @Data
-public class Alien extends AbstractPoolable {
+public class Anomaly extends AbstractPoolable {
     float[] probabilities = {1.0f, 0.8f, 0.5f, 0.3f, 0.05f};
     private GameScreen gs;
     private TextureRegion[] textureRegions;
@@ -42,13 +42,13 @@ public class Alien extends AbstractPoolable {
     private boolean oscillator;
     private BoundCheck boundCheck;
     private BoomBox boomBox;
-    private Color tmpColor;
+    private Color color;
     private float frame;
     private float rotation;
     private float angle;
     private int clockwise;
 
-    public Alien(GameScreen gs) {
+    public Anomaly(GameScreen gs) {
         this.boomBox = new BoomBox(new GamePreferences());
         this.gs = gs;
         this.textureRegions = Regions.split(new TextureRegion(Assets.getInstance().getAssetManager().get(PaintConstants.ANOMALY_REGION, Texture.class)),
@@ -65,7 +65,7 @@ public class Alien extends AbstractPoolable {
         this.glowWidth = PaintConstants.ANOMALY_GLOW_WIDTH;
         this.glowHeight = PaintConstants.ANOMALY_GLOW_HEIGHT;
         this.boundCheck = new BoundCheck();
-        this.tmpColor = new Color();
+        this.color = new Color();
     }
 
     public void init(float x, float y) {
@@ -80,7 +80,7 @@ public class Alien extends AbstractPoolable {
         this.born = false;
         this.oscillator = true;
         this.scaleX = this.scaleY = 0.0f;
-        this.tmpColor.a = PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX;
+        this.color.a = PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX;
         float rnd = MathUtils.random(0.0f, 1.0f);
         for (int i = probabilities.length - 1; i >= 0; i--) {
             if (rnd < probabilities[i]) {
@@ -91,8 +91,7 @@ public class Alien extends AbstractPoolable {
     }
 
     public void render(SpriteBatch batch) {
-        batch.setColor(tmpColor);
-
+        batch.setColor(color);
         batch.draw(
                 glowRegion,
                 position.x - glowWidth / 2,
@@ -105,7 +104,6 @@ public class Alien extends AbstractPoolable {
                 scaleY,
                 clockwise * rotation
         );
-        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 
         batch.draw(
                 textureRegions[(int) (frame % textureRegions.length)],
@@ -119,34 +117,27 @@ public class Alien extends AbstractPoolable {
                 scaleY,
                 clockwise * rotation
         );
+        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     public void update(float dt) {
         scaleAndBorn(dt);
 
-        if (oscillator) {
-            tmpColor.a -= dt / 3;
-            if (tmpColor.a <= 0.0f) oscillator = false;
-        } else {
-            tmpColor.a += dt / 3;
-            if (tmpColor.a >= PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX) oscillator = true;
-        }
-
         switch (level) {
             case 0:
-                tmpColor.set(Color.TAN.r, Color.TAN.g, Color.TAN.b, tmpColor.a);
+                color.set(Color.TAN.r, Color.TAN.g, Color.TAN.b, color.a);
                 break;
             case 1:
-                tmpColor.set(Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, tmpColor.a);
+                color.set(Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, color.a);
                 break;
             case 2:
-                tmpColor.set(Color.YELLOW.r, Color.YELLOW.g, Color.YELLOW.b, tmpColor.a);
+                color.set(Color.YELLOW.r, Color.YELLOW.g, Color.YELLOW.b, color.a);
                 break;
             case 3:
-                tmpColor.set(Color.RED.r, Color.RED.g, Color.RED.b, tmpColor.a);
+                color.set(Color.RED.r, Color.RED.g, Color.RED.b, color.a);
                 break;
             case 4:
-                tmpColor.set(Color.MAGENTA.r, Color.MAGENTA.g, Color.MAGENTA.b, tmpColor.a);
+                color.set(Color.MAGENTA.r, Color.MAGENTA.g, Color.MAGENTA.b, color.a);
         }
 
         frame += 24 * dt;
@@ -157,6 +148,21 @@ public class Alien extends AbstractPoolable {
             rotation = 0;
 
         if (born) {
+
+            if (oscillator) {
+                color.a -= dt / 2;
+                if (color.a <= 0.0f) {
+                    color.a = 0.0f;
+                    oscillator = false;
+                }
+            } else {
+                color.a += dt / 2;
+                if (color.a >= PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX) {
+                    color.a = PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX;
+                    oscillator = true;
+                }
+            }
+
             boundCheck.checkAndHandleBounds(this);
 
             if (Gdx.input.isTouched() && level == 4) {
@@ -170,14 +176,14 @@ public class Alien extends AbstractPoolable {
 
             slimTimer += dt;
             hungryTimer += dt;
-            if (slimTimer > Rules.ALIENS_SLIM_TIME) {
+            if (slimTimer > Rules.ANOMALIES_SLIM_TIME) {
                 slimTimer = 0;
                 if (level > 0) {
                     takeDamage(1);
                 }
             }
 
-            if (hungryTimer > Rules.ALIENS_HUNGRY_TIME) {
+            if (hungryTimer > Rules.ANOMALIES_HUNGRY_TIME) {
                 hungryTimer = 0;
                 hungry = true;
             }
@@ -190,7 +196,7 @@ public class Alien extends AbstractPoolable {
                     if (getLevel() == 4) {
                         v = Rules.ALIENS_F_VELOCITY;
                     } else {
-                        v = Rules.ALIENS_E_VELOCITY;
+                        v = Rules.ANOMALIES_VELOCITY;
                     }
                     tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(v);
                     velocity.mulAdd(tmp, dt);

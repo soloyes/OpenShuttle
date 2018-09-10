@@ -5,13 +5,13 @@ import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 
-public class AlienEmitter extends ObjectPool<Alien> {
+public class AnomalyEmitter extends ObjectPool<Anomaly> {
     private GameScreen gs;
     private float time;
 
-    public AlienEmitter(GameScreen gs) {
+    public AnomalyEmitter(GameScreen gs) {
         this.gs = gs;
-        for (int i = 0; i <= Rules.ALIENS_AT_START; i++) {
+        for (int i = 0; i <= Rules.ANOMALIES_AT_START; i++) {
             createAlien();
         }
     }
@@ -21,8 +21,8 @@ public class AlienEmitter extends ObjectPool<Alien> {
     }
 
     @Override
-    protected Alien newObject() {
-        return new Alien(gs);
+    protected Anomaly newObject() {
+        return new Anomaly(gs);
     }
 
     public void render(SpriteBatch batch) {
@@ -33,7 +33,7 @@ public class AlienEmitter extends ObjectPool<Alien> {
 
     public void update(float dt) {
         time += dt;
-        if (time > Rules.ALIENS_RESPAWN_TIME) {
+        if (time > Rules.ANOMALIES_RESPAWN_TIME) {
             time = 0.0f;
             createAlien();
         }

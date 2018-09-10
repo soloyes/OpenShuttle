@@ -17,18 +17,18 @@ crate
   orig: 256, 256
   offset: 0, 0
   index: -1
+glowV1
+  rotate: false
+  xy: 2, 516
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 astronaut
   rotate: false
   xy: 774, 2
   size: 128, 256
   orig: 128, 256
-  offset: 0, 0
-  index: -1
-glowV1
-  rotate: false
-  xy: 2, 516
-  size: 255, 255
-  orig: 255, 255
   offset: 0, 0
   index: -1
 joystick
@@ -40,7 +40,7 @@ joystick
   index: -1
 scratch
   rotate: false
-  xy: 259, 516
+  xy: 260, 516
   size: 640, 128
   orig: 640, 128
   offset: 0, 0
@@ -61,21 +61,21 @@ fuel
   index: -1
 HP
   rotate: false
-  xy: 2, 773
+  xy: 2, 774
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 ramShield
   rotate: false
-  xy: 259, 646
+  xy: 260, 646
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 shuttle
   rotate: false
-  xy: 259, 776
+  xy: 260, 776
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.Alien;
+import com.shuttle.game.bot.Anomaly;
 import com.shuttle.game.bot.Consumable;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
@@ -54,13 +54,13 @@ public class Radar {
     }
 
     public void drawRadar(SpriteBatch batch) {
-        for (int i = 0; i < gs.getAlienEmitter().getActiveList().size(); i++) {
-            Alien tmpAlien = gs.getAlienEmitter().getActiveList().get(i);
-            float d = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpAlien.getPosition().x, tmpAlien.getPosition().y);
+        for (int i = 0; i < gs.getAnomalyEmitter().getActiveList().size(); i++) {
+            Anomaly tmpAnomaly = gs.getAnomalyEmitter().getActiveList().get(i);
+            float d = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpAnomaly.getPosition().x, tmpAnomaly.getPosition().y);
             if (d < 2000.0f) {
                 float sc = (1.0f - d / 2000f) * 2 + 2.0f;
-                tmp.set(tmpAlien.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
-                switch (tmpAlien.getLevel()){
+                tmp.set(tmpAnomaly.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
+                switch (tmpAnomaly.getLevel()){
                     case 0:
                         batch.setColor(Color.TAN);
                         break;

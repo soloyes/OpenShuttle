@@ -1,6 +1,7 @@
 package com.shuttle.game;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
@@ -21,6 +22,7 @@ public class FlyingText {
     private float translation;
     private boolean active;
     private boolean colored;
+    private GlyphLayout glyphLayout;
 
     public FlyingText() {
         this.position = new Vector2(0, 0);
@@ -32,6 +34,7 @@ public class FlyingText {
         this.matrix1 = new Matrix4();
         this.active = false;
         this.text = "";
+        this.glyphLayout = new GlyphLayout();
     }
 
     public void render(SpriteBatch batch) {
@@ -48,11 +51,13 @@ public class FlyingText {
             if (translation > 0.0f) {
                 font.setColor(1, 1, 1, translation);
             }
+            glyphLayout.setText(font, text);
             font.draw(batch,
-                    text,
-                    (position.x - (text.length() / 2) * 36) / scale + random,
-                    (position.y + 32) / scale + random
+                    glyphLayout,
+                    (position.x - glyphLayout.width) / scale + random,
+                    (position.y + glyphLayout.height) / scale + random
             );
+
             font.setColor(1, 1, 1, 1);
             batch.setTransformMatrix(matrix1);
         }

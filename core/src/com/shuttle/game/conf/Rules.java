@@ -25,17 +25,22 @@ public class Rules {
     //6.0f
     public static final float CONSUMABLES_RESPAWN_TIME = 6.0f;
     //
-    //ALIEN//
+    //ANOMALY//
     //0
-    public static final int ALIENS_AT_START = 0;
+    public static final int ANOMALIES_AT_START = 0;
     //5.0f
-    public static final float ALIENS_RESPAWN_TIME = 5.0f;
+    public static final float ANOMALIES_RESPAWN_TIME = 5.0f;
     //20.0f
-    public static final float ALIENS_HUNGRY_TIME = 20.0f;
+    public static final float ANOMALIES_HUNGRY_TIME = 20.0f;
     //60.0f
-    public static final float ALIENS_SLIM_TIME = 6.0f;
+    public static final float ANOMALIES_SLIM_TIME = 6.0f;
     //50.0f
-    public static final float ALIENS_E_VELOCITY = 50.0f;
+    public static final float ANOMALIES_VELOCITY = 50.0f;
+    //10
+    public static int ANOMALIES_SHUTTLE_HUNT_TIMER = 60;
+    //10
+    public static int ANOMALIES_ASTRONAUTS_HUNT_TIMER = 10;
+    //ALIEN
     //500.0f
     public static final float ALIENS_F_VELOCITY = 500.0f;
     //
@@ -82,7 +87,7 @@ public class Rules {
                 player.getStanding().setFuel(250);
                 player.getStanding().setHp(25);
                 player.getStanding().setMaxHp(25);
-                player.getStanding().setLives(1);
+                player.getStanding().setLives(3);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);

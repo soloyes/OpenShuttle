@@ -49,7 +49,7 @@ public class Assets {
                 assetManager.load(MSConstants.GAME_MUSIC, Music.class);
                 assetManager.load(MSConstants.BUTTON_SOUND, Sound.class);
                 assetManager.load(MSConstants.PAUSE_SOUND, Sound.class);
-                assetManager.load(MSConstants.E_ALIEN_DESTROY, Sound.class);
+                assetManager.load(MSConstants.E_ANOMALY_DESTROY, Sound.class);
                 assetManager.load(MSConstants.F_ALIEN_DESTROY, Sound.class);
                 assetManager.load(MSConstants.GET_ASTRONAUT, Sound.class);
                 assetManager.load(MSConstants.KILL_ASTRONAUT, Sound.class);
