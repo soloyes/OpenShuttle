@@ -6,7 +6,7 @@ public class Rules {
     //3200
     //public static final int STARS_COUNT = 3200;
     //TEST
-    public static final int STARS_COUNT = 200;
+    public static final int STARS_COUNT = 400;
     //1080
     public static final int WORLD_WIDTH = 1080;
     //1920
@@ -16,8 +16,8 @@ public class Rules {
     //*7
     //public static final int SPACE_HEIGHT = WORLD_WIDTH * 7;
     //TEST
-    public static final int SPACE_WIDTH = 1080;
-    public static final int SPACE_HEIGHT = 1920;
+    public static final int SPACE_WIDTH = 1080 * 2;
+    public static final int SPACE_HEIGHT = 1920 * 2;
     //
     //CONSUMABLE//
     //10
@@ -29,11 +29,13 @@ public class Rules {
     //0
     public static final int ANOMALIES_AT_START = 0;
     //5.0f
-    public static final float ANOMALIES_RESPAWN_TIME = 5.0f;
+    public static final float ANOMALIES_CORROSIVE_RESPAWN_TIME = 5.0f;
+    //15
+    public static final float ANOMALIES_ELECTRIC_RESPAWN_TIME = 15.0f;
     //20.0f
-    public static final float ANOMALIES_HUNGRY_TIME = 20.0f;
+    public static final float ANOMALIES_HUNGRY_TIME = 3.0f;
     //60.0f
-    public static final float ANOMALIES_SLIM_TIME = 6.0f;
+    public static final float ANOMALIES_SLIM_TIME = 10.0f;
     //50.0f
     public static final float ANOMALIES_VELOCITY = 50.0f;
     //10

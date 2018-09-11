@@ -32,7 +32,7 @@ public class AnomalyTimer {
 
         if (counter >= Rules.ANOMALIES_SHUTTLE_HUNT_TIMER * 0.6f) {
             sb.append((int) counter);
-        } else if (counter >= Rules.ANOMALIES_SHUTTLE_HUNT_TIMER * 0.3f){
+        } else if (counter >= Rules.ANOMALIES_SHUTTLE_HUNT_TIMER * 0.3f) {
             sb.append("[YELLOW]").append((int) counter).append("[]");
         } else {
             sb.append("[RED]").append((int) counter).append("[]");

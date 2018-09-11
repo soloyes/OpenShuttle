@@ -16,9 +16,12 @@ public class PaintConstants {
     public static final String SHUTTLE_SCRATCH = "scratch";
     public static final int SHUTTLE_SCRATCH_WIDTH = 256;
     public static final int SHUTTLE_SCRATCH_HEIGHT = 256;
-    public static final String ANOMALY_REGION = "pics/enemyV1.png";
-    public static final int ANOMALY_WIDTH = 160;
-    public static final int ANOMALY_HEIGHT = 160;
+    public static final String ANOMALY_CORROSIVE_REGION = "pics/corrosive.png";
+    public static final int ANOMALY_CORROSIVE_WIDTH = 160;
+    public static final int ANOMALY_CORROSIVE_HEIGHT = 160;
+    public static final String ANOMALY_ELECTRIC_REGION = "pics/electric.png";
+    public static final int ANOMALY_ELECTRIC_WIDTH = 160;
+    public static final int ANOMALY_ELECTRIC_HEIGHT = 160;
     public static final String ANOMALY_GLOW = "glowV1";
     public static final int ANOMALY_GLOW_WIDTH = 96;
     public static final int ANOMALY_GLOW_HEIGHT = 96;

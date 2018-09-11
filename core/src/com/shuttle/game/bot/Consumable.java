@@ -15,12 +15,6 @@ public class Consumable extends AbstractPoolable {
     private Type type;
     private TextureRegion texture;
     private TextureRegion[] textures;
-    private Vector2 position;
-    private Vector2 velocity;
-    private boolean active;
-    private float angle, rotationSpeed;
-    private float drawScale;
-    private BoundCheck boundCheck;
 
     public Consumable() {
         this.textures = new TextureRegion[2];
@@ -31,11 +25,7 @@ public class Consumable extends AbstractPoolable {
         this.texture = textures[0];
         this.active = false;
         this.boundCheck = new BoundCheck();
-    }
-
-    @Override
-    public void destroy() {
-        active = false;
+        this.level = 0;
     }
 
     public void init(float x, float y) {
@@ -50,12 +40,12 @@ public class Consumable extends AbstractPoolable {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(texture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, drawScale, drawScale, angle);
+        batch.draw(texture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, scaleX, scaleY, angle);
     }
 
     public void update(float dt) {
         boundCheck.checkAndHandleBounds(this);
-        drawScale = 1.0f;
+        scaleX = scaleY = 1.0f;
         position.mulAdd(velocity, dt);
         angle += rotationSpeed * dt;
     }

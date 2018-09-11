@@ -1,16 +1,14 @@
-package com.shuttle.game.bot;
+package com.shuttle.game.bot.anomaly;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.bot.AbstractPoolable;
 import com.shuttle.game.conf.GamePreferences;
-import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
@@ -21,37 +19,25 @@ import com.shuttle.game.utils.Regions;
 import lombok.Data;
 
 @Data
-public class Anomaly extends AbstractPoolable {
-    float[] probabilities = {1.0f, 0.8f, 0.5f, 0.3f, 0.05f};
+public class CorrosiveAnomaly extends AbstractPoolable {
+    float[] probabilities = {1.0f, 0.8f, 0.5f, 0.3f};
     private GameScreen gs;
     private TextureRegion[] textureRegions;
     private TextureRegion glowRegion;
-    private Vector2 position;
-    private Vector2 velocity;
     private Vector2 tmp;
-    private int level;
-    private boolean active;
     private float hungryTimer;
     private boolean hungry;
     private float slimTimer;
-    private float scaleX;
-    private float scaleY;
-    private boolean touched;
     private boolean born;
     private int glowWidth, glowHeight;
     private boolean oscillator;
-    private BoundCheck boundCheck;
     private BoomBox boomBox;
     private Color color;
-    private float frame;
-    private float rotation;
-    private float angle;
-    private int clockwise;
 
-    public Anomaly(GameScreen gs) {
+    public CorrosiveAnomaly(GameScreen gs) {
         this.boomBox = new BoomBox(new GamePreferences());
         this.gs = gs;
-        this.textureRegions = Regions.split(new TextureRegion(Assets.getInstance().getAssetManager().get(PaintConstants.ANOMALY_REGION, Texture.class)),
+        this.textureRegions = Regions.split(new TextureRegion(Assets.getInstance().getAssetManager().get(PaintConstants.ANOMALY_CORROSIVE_REGION, Texture.class)),
                 3,
                 4,
                 12
@@ -60,8 +46,8 @@ public class Anomaly extends AbstractPoolable {
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.tmp = new Vector2();
-        this.width = PaintConstants.ANOMALY_WIDTH;
-        this.height = PaintConstants.ANOMALY_HEIGHT;
+        this.width = PaintConstants.ANOMALY_CORROSIVE_WIDTH;
+        this.height = PaintConstants.ANOMALY_CORROSIVE_HEIGHT;
         this.glowWidth = PaintConstants.ANOMALY_GLOW_WIDTH;
         this.glowHeight = PaintConstants.ANOMALY_GLOW_HEIGHT;
         this.boundCheck = new BoundCheck();
@@ -69,7 +55,6 @@ public class Anomaly extends AbstractPoolable {
     }
 
     public void init(float x, float y) {
-        this.touched = false;
         this.hungryTimer = 0;
         this.slimTimer = 0;
         this.hungry = true;
@@ -82,7 +67,7 @@ public class Anomaly extends AbstractPoolable {
         this.scaleX = this.scaleY = 0.0f;
         this.color.a = PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX;
         float rnd = MathUtils.random(0.0f, 1.0f);
-        for (int i = probabilities.length - 1; i >= 0; i--) {
+        for (int i = probabilities.length - 1; i > 0; i--) {
             if (rnd < probabilities[i]) {
                 level = i;
                 break;
@@ -102,7 +87,7 @@ public class Anomaly extends AbstractPoolable {
                 glowHeight,
                 scaleX,
                 scaleY,
-                clockwise * rotation
+                clockwise * angle
         );
 
         batch.draw(
@@ -115,7 +100,7 @@ public class Anomaly extends AbstractPoolable {
                 height,
                 scaleX,
                 scaleY,
-                clockwise * rotation
+                clockwise * angle
         );
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
@@ -136,16 +121,14 @@ public class Anomaly extends AbstractPoolable {
             case 3:
                 color.set(Color.RED.r, Color.RED.g, Color.RED.b, color.a);
                 break;
-            case 4:
-                color.set(Color.MAGENTA.r, Color.MAGENTA.g, Color.MAGENTA.b, color.a);
         }
 
         frame += 24 * dt;
-        rotation += 48 * dt;
+        angle += 48 * dt;
         if (frame >= textureRegions.length)
             frame = 0.0f;
-        if (rotation >= 365)
-            rotation = 0;
+        if (angle >= 365)
+            angle = 0;
 
         if (born) {
 
@@ -165,22 +148,16 @@ public class Anomaly extends AbstractPoolable {
 
             boundCheck.checkAndHandleBounds(this);
 
-            if (Gdx.input.isTouched() && level == 4) {
-                tmp.set(Gdx.input.getX(), Gdx.input.getY());
-                ScreenManager.getInstance().getViewport().unproject(tmp);
-                if (tmp.dst(position) < 128f) {
-                    hungry = false;
-                    touched = true;
-                }
-            }
-
             slimTimer += dt;
-            hungryTimer += dt;
             if (slimTimer > Rules.ANOMALIES_SLIM_TIME) {
                 slimTimer = 0;
                 if (level > 0) {
                     takeDamage(1);
                 }
+            }
+
+            if (!hungry) {
+                hungryTimer += dt;
             }
 
             if (hungryTimer > Rules.ANOMALIES_HUNGRY_TIME) {
@@ -192,13 +169,7 @@ public class Anomaly extends AbstractPoolable {
             position.mulAdd(velocity, dt);
             if (hungry) {
                 if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-                    float v;
-                    if (getLevel() == 4) {
-                        v = Rules.ALIENS_F_VELOCITY;
-                    } else {
-                        v = Rules.ANOMALIES_VELOCITY;
-                    }
-                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(v);
+                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(Rules.ANOMALIES_VELOCITY);
                     velocity.mulAdd(tmp, dt);
                 }
                 if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
@@ -211,26 +182,13 @@ public class Anomaly extends AbstractPoolable {
 
     private void scaleAndBorn(float dt) {
         scaleX = scaleY += dt;
-        if (touched) {
-            slimTimer = 0;
-            if (scaleX >= 2.0f) {
-                destroy();
-                boomBox.playSound(MSConstants.F_ALIEN_DESTROY);
-            }
-        } else {
-            if (scaleX > 1 + level * 0.15f) {
-                scaleX = scaleY = 1 + level * 0.15f;
-                born = true;
-            }
+        if (scaleX > 1 + level * 0.15f) {
+            scaleX = scaleY = 1 + level * 0.15f;
+            born = true;
         }
     }
 
     public void takeDamage(int dmg) {
         level -= dmg;
-    }
-
-    @Override
-    public void destroy() {
-        active = false;
     }
 }

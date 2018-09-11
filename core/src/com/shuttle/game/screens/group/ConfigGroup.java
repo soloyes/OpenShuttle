@@ -94,11 +94,11 @@ public class ConfigGroup extends Group {
 
         final Slider soundSlider = new Slider(0.0f, 1.0f, 0.1f, false, sliderStyle);
         soundSlider.setValue(preferences.getSoundVolume());
-        soundSlider.addListener(new EventListener() {
+        soundSlider.addListener(new ChangeListener() {
             @Override
-            public boolean handle(Event event) {
+            public void changed(ChangeEvent event, Actor actor) {
                 preferences.setSoundVolume(soundSlider.getValue());
-                return false;
+                boomBox.playSound(MSConstants.BUTTON_SOUND);
             }
         });
 
@@ -154,7 +154,7 @@ public class ConfigGroup extends Group {
         Label musicOnOffLabel = new Label("Music ", style64);
         Label soundOnOffLabel = new Label("Sound Effect ", style64);
         Label joyStickOnOffLabel = new Label("JoyStick ", style64);
-        Label levelLabel = new Label("Initial StartLevel ", style64);
+        Label levelLabel = new Label("Level ", style64);
 
         table.add(titleLabel).colspan(3);
         table.row();

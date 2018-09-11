@@ -49,8 +49,8 @@ public class Assets {
                 assetManager.load(MSConstants.GAME_MUSIC, Music.class);
                 assetManager.load(MSConstants.BUTTON_SOUND, Sound.class);
                 assetManager.load(MSConstants.PAUSE_SOUND, Sound.class);
-                assetManager.load(MSConstants.E_ANOMALY_DESTROY, Sound.class);
-                assetManager.load(MSConstants.F_ALIEN_DESTROY, Sound.class);
+                assetManager.load(MSConstants.ANOMALY_CORROSIVE_DESTROY, Sound.class);
+                assetManager.load(MSConstants.ANOMALY_ELECTRIC_DESTROY, Sound.class);
                 assetManager.load(MSConstants.GET_ASTRONAUT, Sound.class);
                 assetManager.load(MSConstants.KILL_ASTRONAUT, Sound.class);
                 assetManager.load(MSConstants.KILL_CRATE, Sound.class);
@@ -62,7 +62,8 @@ public class Assets {
                 assetManager.load(MSConstants.GET_RADAR, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 assetManager.load(PaintConstants.ASTEROID_REGION, Texture.class);
-                assetManager.load(PaintConstants.ANOMALY_REGION, Texture.class);
+                assetManager.load(PaintConstants.ANOMALY_CORROSIVE_REGION, Texture.class);
+                assetManager.load(PaintConstants.ANOMALY_ELECTRIC_REGION, Texture.class);
                 createStdFont(32, "");
                 createStdFont(48, "");
                 createStdFont(64, "");

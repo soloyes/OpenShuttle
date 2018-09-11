@@ -7,12 +7,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.Anomaly;
+import com.shuttle.game.bot.AbstractPoolable;
+import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
+import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
+import com.shuttle.game.bot.anomaly.ElectricalAnomalyEmitter;
 import com.shuttle.game.conf.AnomalyTimer;
 import com.shuttle.game.player.PlayerPointer;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.Joystick;
-import com.shuttle.game.bot.AnomalyEmitter;
+import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
 import com.shuttle.game.bot.Asteroid;
 import com.shuttle.game.bot.AsteroidEmitter;
 import com.shuttle.game.Background;
@@ -35,7 +38,8 @@ public class GameScreen extends BaseScreen {
     private Background background;
     private ParticleEmitter particleEmitter;
     private ConsumableEmitter consumableEmitter;
-    private AnomalyEmitter anomalyEmitter;
+    private CorrosiveAnomalyEmitter corrosiveAnomalyEmitter;
+    private ElectricalAnomalyEmitter electricalAnomalyEmitter;
     private AsteroidEmitter asteroidEmitter;
     private Camera camera;
     private Vector2 tmp;
@@ -68,7 +72,8 @@ public class GameScreen extends BaseScreen {
             System.exit(0);
         }
         particleEmitter = new ParticleEmitter();
-        anomalyEmitter = new AnomalyEmitter(this);
+        corrosiveAnomalyEmitter = new CorrosiveAnomalyEmitter(this);
+        electricalAnomalyEmitter = new ElectricalAnomalyEmitter(this);
         consumableEmitter = new ConsumableEmitter();
         asteroidEmitter = new AsteroidEmitter();
         background = new Background();
@@ -81,7 +86,7 @@ public class GameScreen extends BaseScreen {
         pointer = new PlayerPointer(player);
         Rules.StartLevel.values()[preferences.getLevel()].setGameLevel(player);
 
-        this.anomalyTimer = new AnomalyTimer();
+        anomalyTimer = new AnomalyTimer();
     }
 
     @Override
@@ -108,18 +113,19 @@ public class GameScreen extends BaseScreen {
             asteroidEmitter.render(batch);
             player.render(batch);
             consumableEmitter.render(batch);
-            anomalyEmitter.render(batch);
+            corrosiveAnomalyEmitter.render(batch);
+            electricalAnomalyEmitter.render(batch);
             player.getRamShield().render(batch);
             particleEmitter.render(batch);
             gameInfoSystem.render(batch);
             pointer.render(batch);
-            anomalyTimer.render(batch);
             batch.end();
 
             ScreenManager.getInstance().resetCamera();
             //BEGIN
             batch.begin();
             player.getStanding().render(batch);
+            anomalyTimer.render(batch);
             if (!pauseGroup.isPause()) {
                 joystick.render(batch);
             }
@@ -149,14 +155,15 @@ public class GameScreen extends BaseScreen {
         if (!pauseGroup.isPause()) {
             background.update(dt);
             player.update(dt);
-            anomalyEmitter.update(dt);
+            corrosiveAnomalyEmitter.update(dt);
+            electricalAnomalyEmitter.update(dt);
             consumableEmitter.update(dt);
             asteroidEmitter.update(dt);
             particleEmitter.update(dt);
             gameInfoSystem.update(dt);
+            anomalyTimer.update(dt);
             checkCollision(dt);
             pointer.update(dt);
-            anomalyTimer.update(dt);
         }
         cameraUpdate();
         if (!pauseGroup.isPause()) {
@@ -220,53 +227,35 @@ public class GameScreen extends BaseScreen {
                     particleEmitter.setup(tmpConsumable.getPosition().x + rad * (float) Math.cos(ang) + MathUtils.random(-10, 10), tmpConsumable.getPosition().y + rad * (float) Math.sin(ang) + MathUtils.random(-10, 10), 0, 0, 0.1f, 4, 4, 0, 1, 0, 0.2f, 0, 1, 0, 0.0f);
                 }
 
-                tmpConsumable.setDrawScale(k);
+                tmpConsumable.setScaleX(k);
+                tmpConsumable.setScaleY(k);
             }
         }
 
-        for (int i = 0; i < anomalyEmitter.getActiveList().size(); i++) {
-            Anomaly tmpAnomaly = anomalyEmitter.getActiveList().get(i);
+        for (int i = 0; i < corrosiveAnomalyEmitter.getActiveList().size(); i++) {
+            CorrosiveAnomaly tmpAnomaly = corrosiveAnomalyEmitter.getActiveList().get(i);
             if (player.getPosition().dst(tmpAnomaly.getPosition()) < 100 && tmpAnomaly.isBorn()) {
                 if (tmpAnomaly.getLevel() < player.getPushPower()) {
-                    tmpAnomaly.destroy();
-                    player.getRamShield().blink(1.0f);
-                    int asc = (tmpAnomaly.getLevel() + 1) * 5000;
-                    player.getStanding().increaseScore(asc);
-                    player.slowDown(tmpAnomaly.getLevel() * 50.0f);
-                    player.decreasePower(tmpAnomaly.getLevel());
-                    showSpray(tmpAnomaly);
-                    player.killPlusPlus();
-                    boomBox.playSound(MSConstants.E_ANOMALY_DESTROY);
+                    damageToAnomaly(tmpAnomaly);
+                    boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
                 } else {
-                    if (tmpAnomaly.getLevel() >= 3) {
-                        if (player.getRadar().isActive()) {
-                            boomBox.playSound(MSConstants.LOST_RADAR);
-                        }
-                        player.getRadar().setActive(false);
+                    damageToPlayer(tmpAnomaly);
+                    if (tmpAnomaly.getLevel() != 4) {
+                        tmpAnomaly.takeDamage(player.getPushPower());
                     }
+                    tmpAnomaly.setHungry(false);
+                    tmpAnomaly.setSlimTimer(0);
+                }
+            }
+        }
 
-                    //player.getLifeShield().blink();
-                    //shake.shake((tmpAnomaly.getLevel() + 1) / 3.0f, 35, (int) (player.getVelocity().len() / 10));
-                    if (player.addZigZag(0.5f * tmpAnomaly.getLevel() + 0.2f)) {
-                        player.takeDamage(tmpAnomaly.getLevel() + 1);
-                        gameInfoSystem.setup(
-                                player.getPosition().x,
-                                player.getPosition().y,
-                                GameInfoSystem.GameInfoSystemPreset.BRAKED,
-                                5.0f,
-                                false
-                        );
-                        tmp.set(player.getPosition()).sub(tmpAnomaly.getPosition()).nor().scl(300 + tmpAnomaly.getLevel() * 50);
-                        player.getVelocity().add(tmp);
-                        player.resetPower();
-                        tmp.scl(-1);
-                        tmpAnomaly.getVelocity().add(tmp);
-                        if (tmpAnomaly.getLevel() != 4) {
-                            tmpAnomaly.takeDamage(player.getPushPower());
-                        }
-                        tmpAnomaly.setHungry(false);
-                        tmpAnomaly.setSlimTimer(0);
-                    }
+        for (int i = 0; i < electricalAnomalyEmitter.getActiveList().size(); i++) {
+            ElectricalAnomaly tmpAnomaly = electricalAnomalyEmitter.getActiveList().get(i);
+            if (player.getPosition().dst(tmpAnomaly.getPosition()) < 100 && tmpAnomaly.isBorn()) {
+                if (tmpAnomaly.getLevel() < player.getPushPower()) {
+                    damageToPlayer(tmpAnomaly);
+                } else {
+                    damageToPlayer(tmpAnomaly);
                 }
             }
         }
@@ -289,18 +278,18 @@ public class GameScreen extends BaseScreen {
                 }
             }
 
-            for (int j = 0; j < anomalyEmitter.getActiveList().size(); j++) {
-                Anomaly tmpAnomaly = anomalyEmitter.getActiveList().get(j);
-                if (!tmpAsteroid.isFragmented() && tmpAnomaly.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
+            for (int j = 0; j < corrosiveAnomalyEmitter.getActiveList().size(); j++) {
+                CorrosiveAnomaly tmpCorrosiveAnomaly = corrosiveAnomalyEmitter.getActiveList().get(j);
+                if (!tmpAsteroid.isFragmented() && tmpCorrosiveAnomaly.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
                     tmpAsteroid.destroy();
                     particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 32 + 32);
                     asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE);
-                    gameInfoSystem.setup(tmpAnomaly.getPosition().x, tmpAnomaly.getPosition().y, GameInfoSystem.GameInfoSystemPreset.BOOM, 3.0f, false);
-                    if (tmpAnomaly.getLevel() == 0) {
-                        tmpAnomaly.destroy();
-                        showSpray(tmpAnomaly);
+                    gameInfoSystem.setup(tmpCorrosiveAnomaly.getPosition().x, tmpCorrosiveAnomaly.getPosition().y, GameInfoSystem.GameInfoSystemPreset.BOOM, 3.0f, false);
+                    if (tmpCorrosiveAnomaly.getLevel() == 0) {
+                        tmpCorrosiveAnomaly.destroy();
+                        showSpray(tmpCorrosiveAnomaly);
                     } else {
-                        tmpAnomaly.takeDamage(1);
+                        tmpCorrosiveAnomaly.takeDamage(1);
                     }
                 }
             }
@@ -325,13 +314,51 @@ public class GameScreen extends BaseScreen {
         }
     }
 
-    public void showSpray(Poolable poolable) {
+    private void damageToAnomaly(AbstractPoolable anomaly) {
+        anomaly.destroy();
+        player.getRamShield().blink(1.0f);
+        int asc = (anomaly.getLevel() + 1) * 5000;
+        player.getStanding().increaseScore(asc);
+        player.slowDown(anomaly.getLevel() * 50.0f);
+        player.decreasePower(anomaly.getLevel());
+        showSpray(anomaly);
+        player.killPlusPlus();
+    }
+
+    private void damageToPlayer(AbstractPoolable anomaly) {
+        if (anomaly.getLevel() >= 3) {
+            if (player.getRadar().isActive()) {
+                boomBox.playSound(MSConstants.LOST_RADAR);
+            }
+            player.getRadar().setActive(false);
+        }
+
+        //player.getLifeShield().blink();
+        //shake.shake((tmpAnomaly.getLevel() + 1) / 3.0f, 35, (int) (player.getVelocity().len() / 10));
+        if (player.addZigZag(0.5f * anomaly.getLevel() + 0.2f)) {
+            player.takeDamage(anomaly.getLevel() + 1);
+            gameInfoSystem.setup(
+                    player.getPosition().x,
+                    player.getPosition().y,
+                    GameInfoSystem.GameInfoSystemPreset.BRAKED,
+                    5.0f,
+                    false
+            );
+            tmp.set(player.getPosition()).sub(anomaly.getPosition()).nor().scl(300 + anomaly.getLevel() * 50);
+            player.getVelocity().add(tmp);
+            player.resetPower();
+            tmp.scl(-1);
+            anomaly.getVelocity().add(tmp);
+        }
+    }
+
+    public void showSpray(AbstractPoolable poolable) {
         float R = 0, G = 0.6f, B = 0;
         for (int j = 0; j < 60; j++) {
-            if (poolable instanceof Anomaly) {
-                R = ((Anomaly) (poolable)).getColor().r;
-                G = ((Anomaly) (poolable)).getColor().g;
-                B = ((Anomaly) (poolable)).getColor().b;
+            if (poolable instanceof CorrosiveAnomaly) {
+                R = ((CorrosiveAnomaly) (poolable)).getColor().r;
+                G = ((CorrosiveAnomaly) (poolable)).getColor().g;
+                B = ((CorrosiveAnomaly) (poolable)).getColor().b;
             }
             particleEmitter.setup(
                     poolable.getPosition().x + MathUtils.random(-30, 30),
