@@ -111,7 +111,7 @@ public class ElectricalAnomaly extends AbstractPoolable {
             if (hungry) {
                 if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
 
-                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(Rules.ALIENS_F_VELOCITY);
+                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(Rules.ANOMALY_ELECTRIC_VELOCITY);
                     velocity.mulAdd(tmp, dt);
                 }
                 if (gs.getPlayer().getPosition().dst(position) < 240 * level) {

@@ -55,7 +55,7 @@ public class Radar {
         }
     }
 
-    public void drawRadar(SpriteBatch batch) {
+    private void drawRadar(SpriteBatch batch) {
         for (int i = 0; i < gs.getCorrosiveAnomalyEmitter().getActiveList().size(); i++) {
             CorrosiveAnomaly tmpAnomaly = gs.getCorrosiveAnomalyEmitter().getActiveList().get(i);
             float d = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpAnomaly.getPosition().x, tmpAnomaly.getPosition().y);

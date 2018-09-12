@@ -13,8 +13,8 @@ public class FlyingText {
     private Matrix4 matrix4;
     private Matrix4 matrix1;
     private Vector2 position;
-    private BitmapFont font64Coloured;
-    private BitmapFont font64;
+    private BitmapFont font32Coloured;
+    private BitmapFont font32;
     private BitmapFont font;
     private String text;
     private float random;
@@ -26,9 +26,9 @@ public class FlyingText {
 
     public FlyingText() {
         this.position = new Vector2(0, 0);
-        this.font64Coloured = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64_C);
-        this.font64Coloured.getData().markupEnabled = true;
-        this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64);
+        this.font32Coloured = Assets.getInstance().getAssetManager().get(PaintConstants.FONT32_C);
+        this.font32Coloured.getData().markupEnabled = true;
+        this.font32 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT32);
         this.scale = 1.0f;
         this.matrix4 = new Matrix4();
         this.matrix1 = new Matrix4();
@@ -40,9 +40,9 @@ public class FlyingText {
     public void render(SpriteBatch batch) {
         if (active) {
             if (colored) {
-                font = font64Coloured;
+                font = font32Coloured;
             } else {
-                font = font64;
+                font = font32;
             }
             matrix4.set(matrix1);
             matrix4.scl(scale);

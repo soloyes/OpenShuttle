@@ -25,26 +25,36 @@ public class Rules {
     //6.0f
     public static final float CONSUMABLES_RESPAWN_TIME = 6.0f;
     //
-    //ANOMALY//
+    //ANOMALY
     //0
     public static final int ANOMALIES_AT_START = 0;
     //5.0f
     public static final float ANOMALIES_CORROSIVE_RESPAWN_TIME = 5.0f;
+    //30
+    public static final float ANOMALIES_ELECTRIC_RESPAWN_TIME = 30.0f;
     //15
-    public static final float ANOMALIES_ELECTRIC_RESPAWN_TIME = 15.0f;
-    //20.0f
-    public static final float ANOMALIES_HUNGRY_TIME = 3.0f;
-    //60.0f
+    public static final float ANOMALIES_RADIATION_RESPAWN_TIME = 15.0f;
+    //
+    public static final float ANOMALIES_RADIATION_LIVE_TIME = 120.0f;
+    //6
+    public static final int ANOMALIES_RADIATION_MAX_COUNT = 6;
+    //0.1f
+    public static final float ANOMALIES_RADIATION_FUEL_DECREASE = 0.1f;
+    //1.0f
+    public static final float ANOMALIES_RADIATION_HUNGRY_TIME = 1.0f;
+    //
+    //10.0f
+    public static final float ANOMALIES_CORROSIVE_HUNGRY_TIME = 10.0f;
+    //30.0f
     public static final float ANOMALIES_SLIM_TIME = 10.0f;
     //50.0f
     public static final float ANOMALIES_VELOCITY = 50.0f;
-    //10
+    //60
     public static int ANOMALIES_SHUTTLE_HUNT_TIMER = 60;
     //10
     public static int ANOMALIES_ASTRONAUTS_HUNT_TIMER = 10;
-    //ALIEN
     //500.0f
-    public static final float ALIENS_F_VELOCITY = 500.0f;
+    public static final float ANOMALY_ELECTRIC_VELOCITY = 500.0f;
     //
     //ASTEROID
     //4.0f
@@ -57,7 +67,7 @@ public class Rules {
     public static final int PLAYER_SCORE_ADD = 10000;
     //135.0f
     public static final float PLAYER_RADIAL_SPEED = 135.0f;
-    //400.0f
+    //500.0f
     public static final float PLAYER_ENGINE_POWER = 500.0f;
     //5.0f
     public static final float PLAYER_MAX_POWER = 5.0f;
@@ -71,12 +81,14 @@ public class Rules {
     public static final float PLAYER_FUEL_OUT_OF_MAP = 3.0f;
     //20000
     public static final int PLAYER_SCORE_TO_LIVE = 20000;
-    //30
+    //1.0f
+    public static final float PLAYER_FUEL_CONSUMPTION = 1.0f;
     //
     //CRATE
-    public static final int CRATE_FUEL_ADD = 30;
+    //50
+    public static final int CRATE_FUEL_ADD = 50;
     //1
-    public static final int CRATE_REPAIR_ADD = 1;
+    public static final int CRATE_REPAIR_ADD = 2;
     //
     //false
     public static boolean GAME_OVER = false;

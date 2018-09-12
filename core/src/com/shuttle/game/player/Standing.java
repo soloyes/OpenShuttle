@@ -35,7 +35,8 @@ public class Standing {
     private int lives;
     private int playingLevel;
     private boolean hpAlert;
-    private boolean fuelAlert;
+    private boolean fuelAlertOutOfBounds;
+    private boolean fuelAlertRadiationAnomaly;
     //Score to lives with formula scoreToLive*n*(28 - level)
     private int n;
     private BoomBox boomBox;
@@ -55,6 +56,9 @@ public class Standing {
 
     public void decreaseFuel(float amount) {
         fuel -= amount;
+        if (fuel <= 0.0f){
+            fuel = 0.0f;
+        }
     }
 
     public void decreaseHP(int amount) {
@@ -132,7 +136,7 @@ public class Standing {
 
             tmpString
                     .append("\nFUEL: ");
-            if (fuelAlert) {
+            if (fuelAlertOutOfBounds || fuelAlertRadiationAnomaly) {
                 tmpString
                         .append("[RED]")
                         .append((int) fuel)

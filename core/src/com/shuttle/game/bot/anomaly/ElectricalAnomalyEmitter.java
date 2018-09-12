@@ -15,12 +15,14 @@ public class ElectricalAnomalyEmitter extends ObjectPool<ElectricalAnomaly> {
 
     public ElectricalAnomalyEmitter(GameScreen gs) {
         this.gs = gs;
-        for (int i = 0; i <= Rules.ANOMALIES_AT_START; i++) {
-            createAnomaly();
+        if (Rules.ANOMALIES_AT_START != 0) {
+            for (int i = 0; i <= Rules.ANOMALIES_AT_START; i++) {
+                createAnomaly();
+            }
         }
     }
 
-    public void createAnomaly() {
+    private void createAnomaly() {
         getActiveElement().init(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
     }
 

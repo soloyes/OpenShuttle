@@ -8,8 +8,10 @@ public class ConsumableEmitter extends ObjectPool<Consumable> {
     private float time;
 
     public ConsumableEmitter() {
-        for (int i = 0; i <= Rules.CONSUMABLES_AT_START; i++) {
-            createBot();
+        if (Rules.CONSUMABLES_AT_START != 0) {
+            for (int i = 0; i <= Rules.CONSUMABLES_AT_START; i++) {
+                createBot();
+            }
         }
     }
 

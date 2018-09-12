@@ -37,7 +37,7 @@ public class GamePreferences {
         }
     }
 
-    public Preferences getPrefs() {
+    private Preferences getPrefs() {
         if (preferences == null)
             preferences = Gdx.app.getPreferences(PREFS_NAME);
         return preferences;

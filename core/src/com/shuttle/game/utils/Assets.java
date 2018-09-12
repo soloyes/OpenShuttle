@@ -64,7 +64,9 @@ public class Assets {
                 assetManager.load(PaintConstants.ASTEROID_REGION, Texture.class);
                 assetManager.load(PaintConstants.ANOMALY_CORROSIVE_REGION, Texture.class);
                 assetManager.load(PaintConstants.ANOMALY_ELECTRIC_REGION, Texture.class);
+                assetManager.load(PaintConstants.ANOMALY_RADIATION_REGION, Texture.class);
                 createStdFont(32, "");
+                createStdFont(32, "Coloured");
                 createStdFont(48, "");
                 createStdFont(64, "");
                 createStdFont(64, "Coloured");

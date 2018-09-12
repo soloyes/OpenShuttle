@@ -11,6 +11,8 @@ import com.shuttle.game.bot.AbstractPoolable;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
 import com.shuttle.game.bot.anomaly.ElectricalAnomalyEmitter;
+import com.shuttle.game.bot.anomaly.RadiationAnomaly;
+import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
 import com.shuttle.game.conf.AnomalyTimer;
 import com.shuttle.game.player.PlayerPointer;
 import com.shuttle.game.conf.GlobalInteractionLevels;
@@ -23,7 +25,6 @@ import com.shuttle.game.bot.Consumable;
 import com.shuttle.game.bot.ConsumableEmitter;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.bot.ParticleEmitter;
-import com.shuttle.game.bot.Poolable;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
@@ -40,6 +41,7 @@ public class GameScreen extends BaseScreen {
     private ConsumableEmitter consumableEmitter;
     private CorrosiveAnomalyEmitter corrosiveAnomalyEmitter;
     private ElectricalAnomalyEmitter electricalAnomalyEmitter;
+    private RadiationAnomalyEmitter radiationAnomalyEmitter;
     private AsteroidEmitter asteroidEmitter;
     private Camera camera;
     private Vector2 tmp;
@@ -74,6 +76,7 @@ public class GameScreen extends BaseScreen {
         particleEmitter = new ParticleEmitter();
         corrosiveAnomalyEmitter = new CorrosiveAnomalyEmitter(this);
         electricalAnomalyEmitter = new ElectricalAnomalyEmitter(this);
+        radiationAnomalyEmitter = new RadiationAnomalyEmitter(this);
         consumableEmitter = new ConsumableEmitter();
         asteroidEmitter = new AsteroidEmitter();
         background = new Background();
@@ -115,6 +118,7 @@ public class GameScreen extends BaseScreen {
             consumableEmitter.render(batch);
             corrosiveAnomalyEmitter.render(batch);
             electricalAnomalyEmitter.render(batch);
+            radiationAnomalyEmitter.render(batch);
             player.getRamShield().render(batch);
             particleEmitter.render(batch);
             gameInfoSystem.render(batch);
@@ -157,6 +161,7 @@ public class GameScreen extends BaseScreen {
             player.update(dt);
             corrosiveAnomalyEmitter.update(dt);
             electricalAnomalyEmitter.update(dt);
+            radiationAnomalyEmitter.update(dt);
             consumableEmitter.update(dt);
             asteroidEmitter.update(dt);
             particleEmitter.update(dt);
@@ -172,7 +177,7 @@ public class GameScreen extends BaseScreen {
         stage.act();
     }
 
-    public void cameraUpdate() {
+    private void cameraUpdate() {
         camera.position.set(player.getPosition().x, player.getPosition().y, 0);
 
         if (camera.position.x < Rules.WORLD_WIDTH / 2) {
@@ -191,7 +196,7 @@ public class GameScreen extends BaseScreen {
         camera.update();
     }
 
-    public void checkCollision(float dt) {
+    private void checkCollision(float dt) {
         for (int i = 0; i < consumableEmitter.getActiveList().size(); i++) {
             Consumable tmpConsumable = consumableEmitter.getActiveList().get(i);
             if (player.getPosition().dst(tmpConsumable.getPosition()) < 128) {
@@ -259,6 +264,31 @@ public class GameScreen extends BaseScreen {
                 }
             }
         }
+
+        //
+        boolean tmp = false;
+        for (int i = 0; i < radiationAnomalyEmitter.getActiveList().size(); i++) {
+            RadiationAnomaly tmpAnomaly = radiationAnomalyEmitter.getActiveList().get(i);
+            if (player.getPosition().dst(tmpAnomaly.getPosition()) < 50 && tmpAnomaly.isBorn()) {
+                tmpAnomaly.setHungry(true);
+                tmpAnomaly.setGlued(true);
+            } else {
+                tmpAnomaly.setHungry(false);
+                tmpAnomaly.setHungryTimer(0.0f);
+                tmpAnomaly.setGlued(false);
+            }
+
+            if (tmpAnomaly.isHungry()) {
+                tmpAnomaly.addHungryTimer(dt);
+                if (tmpAnomaly.getHungryTimer() >= Rules.ANOMALIES_RADIATION_HUNGRY_TIME) {
+                    tmpAnomaly.setHungryTimer(0.0f);
+                    player.getStanding().decreaseFuel(Rules.ANOMALIES_RADIATION_FUEL_DECREASE);
+                }
+            }
+            tmp |= tmpAnomaly.isGlued();
+        }
+        player.getStanding().setFuelAlertRadiationAnomaly(tmp);
+        //
 
         for (int i = 0; i < asteroidEmitter.getActiveList().size(); i++) {
             Asteroid tmpAsteroid = asteroidEmitter.getActiveList().get(i);
@@ -352,7 +382,7 @@ public class GameScreen extends BaseScreen {
         }
     }
 
-    public void showSpray(AbstractPoolable poolable) {
+    private void showSpray(AbstractPoolable poolable) {
         float R = 0, G = 0.6f, B = 0;
         for (int j = 0; j < 60; j++) {
             if (poolable instanceof CorrosiveAnomaly) {

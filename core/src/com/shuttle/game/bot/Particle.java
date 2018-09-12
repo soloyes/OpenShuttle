@@ -52,7 +52,7 @@ public class Particle extends AbstractPoolable {
         calculateCurrentValues();
     }
 
-    public void calculateCurrentValues() {
+    private void calculateCurrentValues() {
         float percentage = time / duration;
         currentSize = MathUtils.lerp(startSize, endSize, percentage);
         currentR = MathUtils.lerp(startR, endR, percentage);

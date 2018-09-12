@@ -282,8 +282,8 @@ public class Shuttle {
     }
 
     private void checkFuel(float dt) {
-        standing.decreaseFuel(1.0f * dt);
-        if (standing.getFuel() < 0.0f) {
+        standing.decreaseFuel(Rules.PLAYER_FUEL_CONSUMPTION * dt);
+        if (standing.getFuel() <= 0.0f) {
             standing.setFuel(0.0f);
             velocity.scl(0.97f);
         }

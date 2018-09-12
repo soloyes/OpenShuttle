@@ -160,7 +160,7 @@ public class CorrosiveAnomaly extends AbstractPoolable {
                 hungryTimer += dt;
             }
 
-            if (hungryTimer > Rules.ANOMALIES_HUNGRY_TIME) {
+            if (hungryTimer > Rules.ANOMALIES_CORROSIVE_HUNGRY_TIME) {
                 hungryTimer = 0;
                 hungry = true;
             }

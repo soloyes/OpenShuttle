@@ -22,6 +22,9 @@ public class PaintConstants {
     public static final String ANOMALY_ELECTRIC_REGION = "pics/electric.png";
     public static final int ANOMALY_ELECTRIC_WIDTH = 160;
     public static final int ANOMALY_ELECTRIC_HEIGHT = 160;
+    public static final String ANOMALY_RADIATION_REGION = "pics/radiation.png";
+    public static final int ANOMALY_RADIATION_WIDTH = 128;
+    public static final int ANOMALY_RADIATION_HEIGHT = 128;
     public static final String ANOMALY_GLOW = "glowV1";
     public static final int ANOMALY_GLOW_WIDTH = 96;
     public static final int ANOMALY_GLOW_HEIGHT = 96;
@@ -39,6 +42,8 @@ public class PaintConstants {
     public static final int POINTER_WIDTH = 48;
     public static final int POINTER_HEIGHT = 48;
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
+    public static final String FONT32 = "fonts/gomarice32.ttf";
+    public static final String FONT32_C = "fonts/gomarice32Coloured.ttf";
     public static final String FONT48 = "fonts/gomarice48.ttf";
     public static final String FONT64 = "fonts/gomarice64.ttf";
     public static final String FONT64_C = "fonts/gomarice64Coloured.ttf";

@@ -41,7 +41,7 @@ public class BoundCheck {
             alertTimer = 0;
             fuelTimer = 0;
             hpTimer = 0;
-            player.getStanding().setFuelAlert(false);
+            player.getStanding().setFuelAlertOutOfBounds(false);
             player.getStanding().setHpAlert(false);
         }
     }
@@ -63,7 +63,7 @@ public class BoundCheck {
         }
         if (fuelTimer >= Rules.PLAYER_TIMER_FUEL_OUT_OF_MAP) {
             player.getStanding().setFuel(player.getStanding().getFuel() - Rules.PLAYER_FUEL_OUT_OF_MAP);
-            player.getStanding().setFuelAlert(true);
+            player.getStanding().setFuelAlertOutOfBounds(true);
             fuelTimer = 0.0f;
         }
     }
