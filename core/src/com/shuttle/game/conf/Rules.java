@@ -6,7 +6,7 @@ public class Rules {
     //3200
     //public static final int STARS_COUNT = 3200;
     //TEST
-    public static final int STARS_COUNT = 400;
+    public static final int STARS_COUNT = 700;
     //1080
     public static final int WORLD_WIDTH = 1080;
     //1920
@@ -16,8 +16,8 @@ public class Rules {
     //*7
     //public static final int SPACE_HEIGHT = WORLD_WIDTH * 7;
     //TEST
-    public static final int SPACE_WIDTH = 1080 * 2;
-    public static final int SPACE_HEIGHT = 1920 * 2;
+    public static final int SPACE_WIDTH = 1080 * 3;
+    public static final int SPACE_HEIGHT = 1920 * 3;
     //
     //CONSUMABLE//
     //10
@@ -32,16 +32,26 @@ public class Rules {
     public static final float ANOMALIES_CORROSIVE_RESPAWN_TIME = 5.0f;
     //30
     public static final float ANOMALIES_ELECTRIC_RESPAWN_TIME = 30.0f;
-    //15
-    public static final float ANOMALIES_RADIATION_RESPAWN_TIME = 15.0f;
-    //
+    //12
+    public static final float ANOMALIES_RADIATION_RESPAWN_TIME = 12.0f;
+    //120.0f
     public static final float ANOMALIES_RADIATION_LIVE_TIME = 120.0f;
-    //6
-    public static final int ANOMALIES_RADIATION_MAX_COUNT = 6;
-    //0.1f
-    public static final float ANOMALIES_RADIATION_FUEL_DECREASE = 0.1f;
+    //4
+    public static final int ANOMALIES_RADIATION_MAX_COUNT = 4;
+    //100
+    public static final int ANOMALIES_RADIATION_SCORE_DECREASE = 100;
     //1.0f
     public static final float ANOMALIES_RADIATION_HUNGRY_TIME = 1.0f;
+    //15
+    public static final float ANOMALIES_MAGNETIC_RESPAWN_TIME = 15.0f;
+    //120.0f
+    public static final float ANOMALIES_MAGNETIC_LIVE_TIME = 120.0f;
+    //6
+    public static final int ANOMALIES_MAGNETIC_MAX_COUNT = 6;
+    //0.1f
+    public static final float ANOMALIES_MAGNETIC_FUEL_DECREASE = 0.1f;
+    //1.0f
+    public static final float ANOMALIES_MAGNETIC_HUNGRY_TIME = 1.0f;
     //
     //10.0f
     public static final float ANOMALIES_CORROSIVE_HUNGRY_TIME = 10.0f;

@@ -36,7 +36,8 @@ public class Standing {
     private int playingLevel;
     private boolean hpAlert;
     private boolean fuelAlertOutOfBounds;
-    private boolean fuelAlertRadiationAnomaly;
+    private boolean scoreAlertRadiationAnomaly;
+    private boolean fuelAlertMagneticAnomaly;
     //Score to lives with formula scoreToLive*n*(28 - level)
     private int n;
     private BoomBox boomBox;
@@ -54,19 +55,29 @@ public class Standing {
         font64.getData().markupEnabled = true;
     }
 
-    public void decreaseFuel(float amount) {
-        fuel -= amount;
-        if (fuel <= 0.0f){
+    public void changeFuel(float amount) {
+        fuel += amount;
+        if (fuel <= 0.0f) {
             fuel = 0.0f;
         }
     }
 
-    public void decreaseHP(int amount) {
-        hp -= amount;
+    public void changeFuel(int amount) {
+        fuel += amount;
+        if (fuel > maxFuel) {
+            fuel = maxFuel;
+        }
     }
 
-    public void decreaseLives(int amount) {
-        lives -= amount;
+    public void changeHP(int amount) {
+        hp += amount;
+        if (hp > maxHp) {
+            hp = maxHp;
+        }
+    }
+
+    public void changeLives(int amount) {
+        lives += amount;
         if (lives == 0) {
             Rules.GAME_OVER = true;
             writeResult();
@@ -77,21 +88,7 @@ public class Standing {
         results.setResult(username + " " + scoreView + " " + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()));
     }
 
-    public void increaseFuel(int amount) {
-        fuel += amount;
-        if (fuel > maxFuel) {
-            fuel = maxFuel;
-        }
-    }
-
-    public void increaseHP(int amount) {
-        hp += amount;
-        if (hp > maxHp) {
-            hp = maxHp;
-        }
-    }
-
-    public void increaseScore(int amount) {
+    public void changeScore(int amount) {
         score += amount;
         double tmp = Rules.PLAYER_SCORE_TO_LIVE * n * (28 - playingLevel);
         if (score - tmp >= 0) {
@@ -116,8 +113,17 @@ public class Standing {
                     .append("NAME: ")
                     .append(username);
             tmpString
-                    .append("\nSCORE: ")
+                    .append("\nSCORE: ");
+            if (fuelAlertMagneticAnomaly){
+                tmpString
+                        .append("[RED]")
+                        .append(scoreView)
+                        .append("[]");
+            }
+            else {
+                tmpString
                     .append(scoreView);
+            }
             tmpString
                     .append("\nHP: ");
             if (hpAlert) {
@@ -136,7 +142,7 @@ public class Standing {
 
             tmpString
                     .append("\nFUEL: ");
-            if (fuelAlertOutOfBounds || fuelAlertRadiationAnomaly) {
+            if (fuelAlertOutOfBounds || scoreAlertRadiationAnomaly) {
                 tmpString
                         .append("[RED]")
                         .append((int) fuel)

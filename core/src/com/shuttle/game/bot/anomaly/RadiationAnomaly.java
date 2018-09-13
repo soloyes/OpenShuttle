@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.AbstractPoolable;
 import com.shuttle.game.conf.GamePreferences;
@@ -33,6 +34,7 @@ public class RadiationAnomaly extends AbstractPoolable {
     private BoomBox boomBox;
     private Color color;
     private float liveTime;
+    private float V;
 
     public RadiationAnomaly(GameScreen gs) {
         this.boomBox = new BoomBox(new GamePreferences());
@@ -64,6 +66,7 @@ public class RadiationAnomaly extends AbstractPoolable {
         this.level = 1;
         this.scaleX = scaleY = 1 + level * 0.15f;
         this.color.a = 0.0f;
+        this.V = MathUtils.random(Rules.ANOMALIES_VELOCITY, 3 * Rules.ANOMALIES_VELOCITY);
     }
 
     public void render(SpriteBatch batch) {
@@ -98,7 +101,11 @@ public class RadiationAnomaly extends AbstractPoolable {
 
             if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
 
-                tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(Rules.ANOMALIES_VELOCITY);
+                tmp.set(gs.getPlayer()
+                        .getPosition())
+                        .sub(position)
+                        .nor()
+                        .scl(V);
                 velocity.mulAdd(tmp, dt);
             }
             if (gs.getPlayer().getPosition().dst(position) < 240 * level) {

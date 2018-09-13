@@ -91,7 +91,7 @@ public class Shuttle {
     public void badEffect(Consumable.Type type) {
         switch (type) {
             case ASTRONAUT:
-                standing.increaseScore(-50000);
+                standing.changeScore(-50000);
                 gs.getGameInfoSystem().setup(position.x, position.y, "Murder!\n-50000", 8.0f, false);
                 boomBox.playSound(MSConstants.KILL_ASTRONAUT);
                 break;
@@ -143,10 +143,10 @@ public class Shuttle {
     }
 
     public void takeDamage(int amount) {
-        standing.decreaseHP(amount);
+        standing.changeHP(-amount);
         if (standing.getHp() <= 0) {
             standing.setHp(standing.getMaxHp());
-            standing.decreaseLives(1);
+            standing.changeLives(-1);
             if (standing.getLives() != 0) {
                 gs.getGameInfoSystem().setup(
                         position.x,
@@ -162,14 +162,14 @@ public class Shuttle {
     public void takeEffect(Consumable.Type type) {
         switch (type) {
             case ASTRONAUT:
-                standing.increaseScore(Rules.PLAYER_SCORE_ADD);
+                standing.changeScore(Rules.PLAYER_SCORE_ADD);
                 gs.getGameInfoSystem().setup(position.x, position.y, "+" + Rules.PLAYER_SCORE_ADD, 3.0f, false);
                 boomBox.playSound(MSConstants.GET_ASTRONAUT);
                 break;
             case CRATE:
                 int x = MathUtils.random(0, 5);
                 if (x == 0) {
-                    standing.increaseHP(Rules.CRATE_REPAIR_ADD);
+                    standing.changeHP(Rules.CRATE_REPAIR_ADD);
                     gs.getGameInfoSystem()
                             .setup(
                                     position.x,
@@ -180,7 +180,7 @@ public class Shuttle {
                             );
                 }
                 if (x == 1) {
-                    standing.increaseFuel(Rules.CRATE_FUEL_ADD);
+                    standing.changeFuel(Rules.CRATE_FUEL_ADD);
                     gs.getGameInfoSystem()
                             .setup(
                                     position.x,
@@ -282,7 +282,7 @@ public class Shuttle {
     }
 
     private void checkFuel(float dt) {
-        standing.decreaseFuel(Rules.PLAYER_FUEL_CONSUMPTION * dt);
+        standing.changeFuel(-Rules.PLAYER_FUEL_CONSUMPTION * dt);
         if (standing.getFuel() <= 0.0f) {
             standing.setFuel(0.0f);
             velocity.scl(0.97f);
