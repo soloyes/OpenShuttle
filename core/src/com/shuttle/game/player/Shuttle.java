@@ -111,8 +111,8 @@ public class Shuttle {
         return dif >= -110 && dif <= -40 || dif <= 110 && dif >= 40;
     }
 
-    public void decreasePower(int amount) {
-        power -= amount;
+    public void changePower(int amount) {
+        power += amount;
     }
 
     public void killPlusPlus() {
@@ -148,12 +148,14 @@ public class Shuttle {
             standing.setHp(standing.getMaxHp());
             standing.changeLives(-1);
             if (standing.getLives() != 0) {
+                gs.getShake().shake(1, 35, 50);
+                standing.setFuel(standing.getMaxFuel());
                 gs.getGameInfoSystem().setup(
                         position.x,
                         position.y,
-                        "DESTROYED",
+                        "[RED]DESTROYED[]",
                         8.0f,
-                        false
+                        true
                 );
             }
         }
@@ -310,7 +312,17 @@ public class Shuttle {
                 );
                 angle += dir * radialSpeed * dt;
                 if (Math.abs(angle - angleToTarget) > 5.0f) {
-                    gs.getParticleEmitter().setupFromPointToPoint(position.x + dir * 80 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - dir * 80 * (float) Math.sin(Math.toRadians(90 - angle)), position.x + dir * 35 * (float) Math.cos(Math.toRadians(90 - angle)), position.y - dir * 35 * (float) Math.sin(Math.toRadians(90 - angle)), 2.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0, 0, 0);
+                    gs.getParticleEmitter()
+                            .setupFromPointToPoint(
+                                    position.x + dir * 80 * (float) Math.cos(Math.toRadians(90 - angle)),
+                                    position.y - dir * 80 * (float) Math.sin(Math.toRadians(90 - angle)),
+                                    position.x + dir * 35 * (float) Math.cos(Math.toRadians(90 - angle)),
+                                    position.y - dir * 35 * (float) Math.sin(Math.toRadians(90 - angle)),
+                                    2.0f,
+                                    0.0f,
+                                    0.5f, 0.5f, 0.5f, 0.5f,
+                                    0, 0, 0, 0
+                            );
                 }
             }
         }

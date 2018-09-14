@@ -89,7 +89,7 @@ public class RadiationAnomaly extends AbstractPoolable {
     public void update(float dt) {
         scaleAndBorn(dt);
 
-        frame += 24 * dt;
+        frame += 12 * dt;
         if (frame >= textureRegions.length)
             frame = 0.0f;
 

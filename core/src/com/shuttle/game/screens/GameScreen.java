@@ -103,10 +103,10 @@ public class GameScreen extends BaseScreen {
     }
 
     @Override
-    public void render(float delta) {
-        super.render(delta);
+    public void render(float dt) {
+        super.render(dt);
         if (!Rules.GAME_OVER) {
-            update(delta);
+            update(dt);
             batch.setProjectionMatrix(camera.combined);
             if (pauseGroup.isPause()) {
                 batch.setShader(shaderProgram);
@@ -145,10 +145,10 @@ public class GameScreen extends BaseScreen {
             stage.draw();
         } else {
             boomBox.stopAllMusicAndPlayOnce(MSConstants.MENU_MUSIC);
-            gameInfoSystem.update(delta);
+            gameInfoSystem.update(dt);
             batch.setShader(shaderProgram);
             batch.begin();
-            background.update(delta);
+            background.update(dt);
             background.render(batch);
             gameInfoSystem.render(batch);
             player.getStanding().render(batch);
@@ -275,7 +275,7 @@ public class GameScreen extends BaseScreen {
         boolean tmp1 = false;
         for (int i = 0; i < radiationAnomalyEmitter.getActiveList().size(); i++) {
             RadiationAnomaly tmpAnomaly = radiationAnomalyEmitter.getActiveList().get(i);
-            if (player.getPosition().dst(tmpAnomaly.getPosition()) < 50 && tmpAnomaly.isBorn()) {
+            if (player.getPosition().dst(tmpAnomaly.getPosition()) < 70 && tmpAnomaly.isBorn()) {
                 tmpAnomaly.setHungry(true);
                 tmpAnomaly.setGlued(true);
             } else {
@@ -298,7 +298,7 @@ public class GameScreen extends BaseScreen {
         boolean tmp2 = false;
         for (int i = 0; i < magneticAnomalyEmitter.getActiveList().size(); i++) {
             MagneticAnomaly tmpAnomaly = magneticAnomalyEmitter.getActiveList().get(i);
-            if (player.getPosition().dst(tmpAnomaly.getPosition()) < 50 && tmpAnomaly.isBorn()) {
+            if (player.getPosition().dst(tmpAnomaly.getPosition()) < 70 && tmpAnomaly.isBorn()) {
                 tmpAnomaly.setHungry(true);
                 tmpAnomaly.setGlued(true);
             } else {
@@ -379,7 +379,7 @@ public class GameScreen extends BaseScreen {
         int asc = (anomaly.getLevel() + 1) * 5000;
         player.getStanding().changeScore(asc);
         player.slowDown(anomaly.getLevel() * 50.0f);
-        player.decreasePower(anomaly.getLevel());
+        player.changePower(-anomaly.getLevel());
         showSpray(anomaly);
         player.killPlusPlus();
     }

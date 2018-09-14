@@ -67,6 +67,8 @@ public class MagneticAnomaly extends AbstractPoolable {
         this.level = 1;
         this.scaleX = scaleY = 1 + level * 0.15f;
         this.color.a = 0.0f;
+        this.angle = MathUtils.random(365);
+        this.clockwise = MathUtils.randomSign();
     }
 
     public void render(SpriteBatch batch) {
@@ -90,8 +92,13 @@ public class MagneticAnomaly extends AbstractPoolable {
         scaleAndBorn(dt);
 
         frame += 24 * dt;
+        if(!hungry){
+            angle += 48 * dt;
+        }
         if (frame >= textureRegions.length)
             frame = 0.0f;
+        if (angle >= 365)
+            angle = 0;
 
         if (born) {
             boundCheck.checkAndHandleBounds(this);

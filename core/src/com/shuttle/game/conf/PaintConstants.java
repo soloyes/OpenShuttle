@@ -26,8 +26,8 @@ public class PaintConstants {
     public static final int ANOMALY_RADIATION_WIDTH = 128;
     public static final int ANOMALY_RADIATION_HEIGHT = 128;
     public static final String ANOMALY_MAGNETIC_REGION = "pics/magnetic.png";
-    public static final int ANOMALY_MAGNETIC_WIDTH = 128;
-    public static final int ANOMALY_MAGNETIC_HEIGHT = 128;
+    public static final int ANOMALY_MAGNETIC_WIDTH = 160;
+    public static final int ANOMALY_MAGNETIC_HEIGHT = 160;
     public static final String ANOMALY_GLOW = "glowV1";
     public static final int ANOMALY_GLOW_WIDTH = 96;
     public static final int ANOMALY_GLOW_HEIGHT = 96;

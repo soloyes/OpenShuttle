@@ -114,7 +114,7 @@ public class Standing {
                     .append(username);
             tmpString
                     .append("\nSCORE: ");
-            if (fuelAlertMagneticAnomaly){
+            if (scoreAlertRadiationAnomaly){
                 tmpString
                         .append("[RED]")
                         .append(scoreView)
@@ -142,7 +142,7 @@ public class Standing {
 
             tmpString
                     .append("\nFUEL: ");
-            if (fuelAlertOutOfBounds || scoreAlertRadiationAnomaly) {
+            if (fuelAlertOutOfBounds || fuelAlertMagneticAnomaly) {
                 tmpString
                         .append("[RED]")
                         .append((int) fuel)

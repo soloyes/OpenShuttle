@@ -6,7 +6,7 @@ public class Rules {
     //3200
     //public static final int STARS_COUNT = 3200;
     //TEST
-    public static final int STARS_COUNT = 700;
+    public static final int STARS_COUNT = 900;
     //1080
     public static final int WORLD_WIDTH = 1080;
     //1920
@@ -37,19 +37,19 @@ public class Rules {
     //120.0f
     public static final float ANOMALIES_RADIATION_LIVE_TIME = 120.0f;
     //4
-    public static final int ANOMALIES_RADIATION_MAX_COUNT = 4;
-    //100
-    public static final int ANOMALIES_RADIATION_SCORE_DECREASE = 100;
-    //1.0f
-    public static final float ANOMALIES_RADIATION_HUNGRY_TIME = 1.0f;
+    public static final int ANOMALIES_RADIATION_MAX_COUNT = 2;
+    //500
+    public static final int ANOMALIES_RADIATION_SCORE_DECREASE = 500;
+    //0.5f
+    public static final float ANOMALIES_RADIATION_HUNGRY_TIME = 0.5f;
     //15
     public static final float ANOMALIES_MAGNETIC_RESPAWN_TIME = 15.0f;
     //120.0f
     public static final float ANOMALIES_MAGNETIC_LIVE_TIME = 120.0f;
-    //6
-    public static final int ANOMALIES_MAGNETIC_MAX_COUNT = 6;
+    //2
+    public static final int ANOMALIES_MAGNETIC_MAX_COUNT = 2;
     //0.1f
-    public static final float ANOMALIES_MAGNETIC_FUEL_DECREASE = 0.1f;
+    public static final float ANOMALIES_MAGNETIC_FUEL_DECREASE = 0.5f;
     //1.0f
     public static final float ANOMALIES_MAGNETIC_HUNGRY_TIME = 1.0f;
     //
@@ -127,7 +127,7 @@ public class Rules {
             public void setGameLevel(Shuttle player) {
                 player.getStanding().setMaxFuel(200);
                 player.getStanding().setFuel(200);
-                player.getStanding().setHp(20);
+                player.getStanding().setHp(1);
                 player.getStanding().setMaxHp(20);
                 player.getStanding().setLives(2);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
