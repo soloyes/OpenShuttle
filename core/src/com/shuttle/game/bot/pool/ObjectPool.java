@@ -1,4 +1,4 @@
-package com.shuttle.game.bot;
+package com.shuttle.game.bot.pool;
 
 import java.util.ArrayList;
 import java.util.List;

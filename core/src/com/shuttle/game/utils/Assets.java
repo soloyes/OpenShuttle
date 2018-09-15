@@ -60,6 +60,7 @@ public class Assets {
                 assetManager.load(MSConstants.GET_FUEL, Sound.class);
                 assetManager.load(MSConstants.GET_TRASH, Sound.class);
                 assetManager.load(MSConstants.GET_RADAR, Sound.class);
+                assetManager.load(MSConstants.GET_FRAGMENT, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 assetManager.load(PaintConstants.ASTEROID_REGION, Texture.class);
                 assetManager.load(PaintConstants.ANOMALY_CORROSIVE_REGION, Texture.class);

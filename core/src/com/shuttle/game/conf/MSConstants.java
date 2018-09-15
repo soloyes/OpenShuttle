@@ -19,6 +19,7 @@ public class MSConstants {
     public final static String LOST_RADAR = SOUND_FOLDER + "lost_radar.ogg";
     public final static String GET_FUEL = SOUND_FOLDER + "get_fuel.ogg";
     public final static String GET_TRASH = SOUND_FOLDER + "get_trash.ogg";
+    public final static String GET_FRAGMENT = SOUND_FOLDER + "get_fragment.ogg";
     //
     private final static String MUSIC_FOLDER = "music/";
     public final static String MENU_MUSIC = MUSIC_FOLDER + "menu.ogg";

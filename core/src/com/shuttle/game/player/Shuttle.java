@@ -9,7 +9,7 @@ import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.Gun;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.KillingSpree;
-import com.shuttle.game.bot.Consumable;
+import com.shuttle.game.bot.consumable.Consumable;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
@@ -41,6 +41,10 @@ public class Shuttle {
     private int killSeries;
     private float killTimer;
     private float power, maxPower;
+    //pretty sound if collect much fragments in little time;
+    private float tmpDelay;
+    private boolean delay;
+    //
     private GlobalInteractionLevels shieldLevel;
     private GamePreferences preferences;
     private Standing standing;
@@ -164,8 +168,8 @@ public class Shuttle {
     public void takeEffect(Consumable.Type type) {
         switch (type) {
             case ASTRONAUT:
-                standing.changeScore(Rules.PLAYER_SCORE_ADD);
-                gs.getGameInfoSystem().setup(position.x, position.y, "+" + Rules.PLAYER_SCORE_ADD, 3.0f, false);
+                standing.changeScore(Rules.CONSUMABLE_BASE_SCORE_ADD);
+                gs.getGameInfoSystem().setup(position.x, position.y, "+" + Rules.CONSUMABLE_BASE_SCORE_ADD, 3.0f, false);
                 boomBox.playSound(MSConstants.GET_ASTRONAUT);
                 break;
             case CRATE:
@@ -256,6 +260,12 @@ public class Shuttle {
 
         checkRadar(dt);
         checkBounds(dt);
+
+        tmpDelay += dt;
+        if (tmpDelay >= 0.1f){
+            tmpDelay = 0.0f;
+            delay = true;
+        }
     }
 
     private void checkKillingSpreeSeries(float dt) {

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.player.Shuttle;
-import com.shuttle.game.bot.AbstractPoolable;
+import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.ScreenManager;
 
@@ -76,7 +76,7 @@ public class BoundCheck {
                 tmp.y + Rules.WORLD_HEIGHT / 2,
                 GameInfoSystem.GameInfoSystemPreset.OUT,
                 3,
-                false
+                true
         );
     }
 }

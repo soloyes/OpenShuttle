@@ -1,10 +1,11 @@
-package com.shuttle.game.bot;
+package com.shuttle.game.bot.asteroids;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.BoundCheck;
@@ -18,14 +19,8 @@ import lombok.Data;
 @Data
 public class Asteroid extends AbstractPoolable {
     private TextureRegion[] textureRegions;
-    private Vector2 position;
-    private Vector2 velocity;
-    private float frame;
-    private boolean active;
-    private float rotation;
     private boolean fragmented;
     private float sizeForHarvest;
-    private BoundCheck boundCheck;
 
     public Asteroid() {
         this.textureRegions = Regions.split(
@@ -35,7 +30,7 @@ public class Asteroid extends AbstractPoolable {
                 32);
         this.position = new Vector2();
         this.velocity = new Vector2();
-        this.rotation = MathUtils.random(365f);
+        this.rotationSpeed = MathUtils.random(365f);
         this.active = false;
         this.boundCheck = new BoundCheck();
     }
@@ -56,7 +51,7 @@ public class Asteroid extends AbstractPoolable {
     }
 
     public void init(Vector2 position, Vector2 destanation, float size, boolean isFragment) {
-        this.position.set(position);
+        init(position.x, position.y);
         this.fragmented = isFragment;
         destanation.sub(position).nor();
         if (isFragment) {
@@ -70,12 +65,17 @@ public class Asteroid extends AbstractPoolable {
         this.active = true;
     }
 
+    @Override
+    public void init(float x, float y) {
+        this.position.set(x, y);
+    }
+
     public void render(SpriteBatch batch) {
         batch.draw(
                 textureRegions[(int) frame],
                 position.x - width / 2,
                 position.y - height / 2,
-                width / 2, height / 2, width, height, 1, 1, rotation
+                width / 2, height / 2, width, height, 1, 1, rotationSpeed
         );
     }
 

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.AbstractPoolable;
+import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
 import com.shuttle.game.bot.anomaly.ElectricalAnomalyEmitter;
@@ -20,13 +20,13 @@ import com.shuttle.game.player.PlayerPointer;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
-import com.shuttle.game.bot.Asteroid;
-import com.shuttle.game.bot.AsteroidEmitter;
+import com.shuttle.game.bot.asteroids.Asteroid;
+import com.shuttle.game.bot.asteroids.AsteroidEmitter;
 import com.shuttle.game.Background;
-import com.shuttle.game.bot.Consumable;
-import com.shuttle.game.bot.ConsumableEmitter;
+import com.shuttle.game.bot.consumable.Consumable;
+import com.shuttle.game.bot.consumable.ConsumableEmitter;
 import com.shuttle.game.GameInfoSystem;
-import com.shuttle.game.bot.ParticleEmitter;
+import com.shuttle.game.bot.particle.ParticleEmitter;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
@@ -244,7 +244,7 @@ public class GameScreen extends BaseScreen {
         }
 
         for (int i = 0; i < corrosiveAnomalyEmitter.getActiveList().size(); i++) {
-            CorrosiveAnomaly tmpAnomaly = corrosiveAnomalyEmitter.getActiveList().get(i);
+            CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(i);
             if (player.getPosition().dst(tmpAnomaly.getPosition()) < 100 && tmpAnomaly.isBorn()) {
                 if (tmpAnomaly.getLevel() < player.getPushPower()) {
                     damageToAnomaly(tmpAnomaly);
@@ -261,7 +261,7 @@ public class GameScreen extends BaseScreen {
         }
 
         for (int i = 0; i < electricalAnomalyEmitter.getActiveList().size(); i++) {
-            ElectricalAnomaly tmpAnomaly = electricalAnomalyEmitter.getActiveList().get(i);
+            ElectricalAnomaly tmpAnomaly = (ElectricalAnomaly) electricalAnomalyEmitter.getActiveList().get(i);
             if (player.getPosition().dst(tmpAnomaly.getPosition()) < 100 && tmpAnomaly.isBorn()) {
                 if (tmpAnomaly.getLevel() < player.getPushPower()) {
                     damageToPlayer(tmpAnomaly);
@@ -274,7 +274,7 @@ public class GameScreen extends BaseScreen {
         //
         boolean tmp1 = false;
         for (int i = 0; i < radiationAnomalyEmitter.getActiveList().size(); i++) {
-            RadiationAnomaly tmpAnomaly = radiationAnomalyEmitter.getActiveList().get(i);
+            RadiationAnomaly tmpAnomaly = (RadiationAnomaly) radiationAnomalyEmitter.getActiveList().get(i);
             if (player.getPosition().dst(tmpAnomaly.getPosition()) < 70 && tmpAnomaly.isBorn()) {
                 tmpAnomaly.setHungry(true);
                 tmpAnomaly.setGlued(true);
@@ -297,7 +297,7 @@ public class GameScreen extends BaseScreen {
 
         boolean tmp2 = false;
         for (int i = 0; i < magneticAnomalyEmitter.getActiveList().size(); i++) {
-            MagneticAnomaly tmpAnomaly = magneticAnomalyEmitter.getActiveList().get(i);
+            MagneticAnomaly tmpAnomaly = (MagneticAnomaly) magneticAnomalyEmitter.getActiveList().get(i);
             if (player.getPosition().dst(tmpAnomaly.getPosition()) < 70 && tmpAnomaly.isBorn()) {
                 tmpAnomaly.setHungry(true);
                 tmpAnomaly.setGlued(true);
@@ -333,22 +333,27 @@ public class GameScreen extends BaseScreen {
                 } else {
                     player.getRamShield().blink(0.5f);
                     player.setPower(player.getPower() + tmpAsteroid.getSizeForHarvest());
+                    //pretty sound if collect much fragments
+                    if (player.isDelay()) {
+                        boomBox.playSound(MSConstants.GET_FRAGMENT);
+                        player.setDelay(false);
+                    }
                     tmpAsteroid.destroy();
                 }
             }
 
             for (int j = 0; j < corrosiveAnomalyEmitter.getActiveList().size(); j++) {
-                CorrosiveAnomaly tmpCorrosiveAnomaly = corrosiveAnomalyEmitter.getActiveList().get(j);
-                if (!tmpAsteroid.isFragmented() && tmpCorrosiveAnomaly.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
+                CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(j);
+                if (!tmpAsteroid.isFragmented() && tmpAnomaly.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
                     tmpAsteroid.destroy();
                     particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 32 + 32);
                     asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE);
-                    gameInfoSystem.setup(tmpCorrosiveAnomaly.getPosition().x, tmpCorrosiveAnomaly.getPosition().y, GameInfoSystem.GameInfoSystemPreset.BOOM, 3.0f, false);
-                    if (tmpCorrosiveAnomaly.getLevel() == 0) {
-                        tmpCorrosiveAnomaly.destroy();
-                        showSpray(tmpCorrosiveAnomaly);
+                    gameInfoSystem.setup(tmpAnomaly.getPosition().x, tmpAnomaly.getPosition().y, GameInfoSystem.GameInfoSystemPreset.BOOM, 3.0f, false);
+                    if (tmpAnomaly.getLevel() == 0) {
+                        tmpAnomaly.destroy();
+                        showSpray(tmpAnomaly);
                     } else {
-                        tmpCorrosiveAnomaly.takeDamage(1);
+                        tmpAnomaly.takeDamage(1);
                     }
                 }
             }
@@ -376,7 +381,7 @@ public class GameScreen extends BaseScreen {
     private void damageToAnomaly(AbstractPoolable anomaly) {
         anomaly.destroy();
         player.getRamShield().blink(1.0f);
-        int asc = (anomaly.getLevel() + 1) * 5000;
+        int asc = (anomaly.getLevel() + 1) * Rules.ANOMALIES_BASE_SCORE_ADD;
         player.getStanding().changeScore(asc);
         player.slowDown(anomaly.getLevel() * 50.0f);
         player.changePower(-anomaly.getLevel());

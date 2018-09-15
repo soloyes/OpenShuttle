@@ -1,48 +1,22 @@
 package com.shuttle.game.bot.anomaly;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
-import com.shuttle.game.bot.ObjectPool;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 
-public class CorrosiveAnomalyEmitter extends ObjectPool<CorrosiveAnomaly> {
-    private GameScreen gs;
-    private float time;
-
+/**
+ * @author Shuttle on 9/11/18.
+ */
+public class CorrosiveAnomalyEmitter extends AbstractAnomalyEmitter {
     public CorrosiveAnomalyEmitter(GameScreen gs) {
-        this.gs = gs;
-        if (Rules.ANOMALIES_AT_START != 0) {
-            for (int i = 0; i <= Rules.ANOMALIES_AT_START; i++) {
-                createAnomaly();
-            }
-        }
-    }
-
-    private void createAnomaly() {
-        getActiveElement().init(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
+        super.setGs(gs);
+        super.setRespawnTime(Rules.ANOMALIES_CORROSIVE_RESPAWN_TIME);
+        super.setAnomaliesAtStart(Rules.ANOMALIES_AT_START);
+        super.setAnomaliesMaxCount(Rules.ANOMALIES_CORROSIVE_MAX_COUNT);
+        emit();
     }
 
     @Override
     protected CorrosiveAnomaly newObject() {
-        return new CorrosiveAnomaly(gs);
-    }
-
-    public void render(SpriteBatch batch) {
-        for (int i = 0; i < activeList.size(); i++) {
-            activeList.get(i).render(batch);
-        }
-    }
-
-    public void update(float dt) {
-        time += dt;
-        if (time > Rules.ANOMALIES_CORROSIVE_RESPAWN_TIME) {
-            time = 0.0f;
-            createAnomaly();
-        }
-        for (int i = 0; i < activeList.size(); i++) {
-            activeList.get(i).update(dt);
-        }
-        checkPool();
+        return new CorrosiveAnomaly(super.getGs());
     }
 }

@@ -90,7 +90,7 @@ public class Standing {
 
     public void changeScore(int amount) {
         score += amount;
-        double tmp = Rules.PLAYER_SCORE_TO_LIVE * n * (28 - playingLevel);
+        double tmp = Rules.SCORE_TO_LIVE * n * (28 - playingLevel);
         if (score - tmp >= 0) {
             //todo: to be Balanced
             n += 3;

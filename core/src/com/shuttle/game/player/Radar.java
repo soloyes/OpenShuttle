@@ -6,9 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
-import com.shuttle.game.bot.Consumable;
+import com.shuttle.game.bot.consumable.Consumable;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
-import com.shuttle.game.bot.anomaly.ElectricalAnomalyEmitter;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
@@ -57,7 +56,7 @@ public class Radar {
 
     private void drawRadar(SpriteBatch batch) {
         for (int i = 0; i < gs.getCorrosiveAnomalyEmitter().getActiveList().size(); i++) {
-            CorrosiveAnomaly tmpAnomaly = gs.getCorrosiveAnomalyEmitter().getActiveList().get(i);
+            CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) gs.getCorrosiveAnomalyEmitter().getActiveList().get(i);
             float d = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpAnomaly.getPosition().x, tmpAnomaly.getPosition().y);
             if (d < 2000.0f) {
                 float sc = (1.0f - d / 2000f) * 2 + 2.0f;
@@ -92,7 +91,7 @@ public class Radar {
         }
 
         for (int i = 0; i < gs.getElectricalAnomalyEmitter().getActiveList().size(); i++) {
-            ElectricalAnomaly tmpAnomaly = gs.getElectricalAnomalyEmitter().getActiveList().get(i);
+            ElectricalAnomaly tmpAnomaly = (ElectricalAnomaly) gs.getElectricalAnomalyEmitter().getActiveList().get(i);
             float d = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpAnomaly.getPosition().x, tmpAnomaly.getPosition().y);
             if (d < 2000.0f) {
                 float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f;

@@ -48,7 +48,7 @@ public class GameInfoSystem {
         SCREECH("SCREECH"),
         BOOM("BOOOOM!"),
         SAD("SO SAD"),
-        OUT("OUT OF RANGE!"),
+        OUT("[YELLOW]OUT OF RANGE![]"),
         REPAIR("REPAIR +" + Rules.CRATE_REPAIR_ADD),
         FUEL("FUEL +" + Rules.CRATE_FUEL_ADD),
         TURBO("TURBO x3"),

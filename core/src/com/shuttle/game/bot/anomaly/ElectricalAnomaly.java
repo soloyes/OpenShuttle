@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.AbstractPoolable;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
@@ -25,16 +24,8 @@ import lombok.Data;
  * @author Shuttle on 9/11/18.
  */
 @Data
-public class ElectricalAnomaly extends AbstractPoolable {
-    private GameScreen gs;
-    private TextureRegion[] textureRegions;
-    private Vector2 tmp;
+public class ElectricalAnomaly extends AbstractAnomaly {
     private boolean touched;
-    private boolean born;
-    private boolean hungry;
-    private BoundCheck boundCheck;
-    private BoomBox boomBox;
-    private Color color;
 
     public ElectricalAnomaly(GameScreen gs) {
         this.boomBox = new BoomBox(new GamePreferences());
@@ -53,6 +44,7 @@ public class ElectricalAnomaly extends AbstractPoolable {
         this.color = new Color();
     }
 
+    @Override
     public void init(float x, float y) {
         this.touched = false;
         this.hungry = true;
@@ -128,6 +120,7 @@ public class ElectricalAnomaly extends AbstractPoolable {
             if (scaleX >= 2.0f) {
                 destroy();
                 boomBox.playSound(MSConstants.ANOMALY_ELECTRIC_DESTROY);
+                gs.getPlayer().getStanding().changeScore((getLevel() + 1) * Rules.ANOMALIES_BASE_SCORE_ADD);
             }
         } else {
             color.a += dt / 5;

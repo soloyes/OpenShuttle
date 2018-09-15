@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.AbstractPoolable;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
@@ -19,20 +18,12 @@ import com.shuttle.game.utils.Regions;
 import lombok.Data;
 
 @Data
-public class CorrosiveAnomaly extends AbstractPoolable {
+public class CorrosiveAnomaly extends AbstractAnomaly {
     float[] probabilities = {1.0f, 0.8f, 0.5f, 0.3f};
-    private GameScreen gs;
-    private TextureRegion[] textureRegions;
     private TextureRegion glowRegion;
-    private Vector2 tmp;
-    private float hungryTimer;
-    private boolean hungry;
     private float slimTimer;
-    private boolean born;
     private int glowWidth, glowHeight;
     private boolean oscillator;
-    private BoomBox boomBox;
-    private Color color;
 
     public CorrosiveAnomaly(GameScreen gs) {
         this.boomBox = new BoomBox(new GamePreferences());
@@ -54,6 +45,7 @@ public class CorrosiveAnomaly extends AbstractPoolable {
         this.color = new Color();
     }
 
+    @Override
     public void init(float x, float y) {
         this.hungryTimer = 0;
         this.slimTimer = 0;
@@ -149,7 +141,7 @@ public class CorrosiveAnomaly extends AbstractPoolable {
             boundCheck.checkAndHandleBounds(this);
 
             slimTimer += dt;
-            if (slimTimer > Rules.ANOMALIES_SLIM_TIME) {
+            if (slimTimer > Rules.ANOMALIES_CORROSIVE_SLIM_TIME) {
                 slimTimer = 0;
                 if (level > 0) {
                     takeDamage(1);
@@ -169,7 +161,7 @@ public class CorrosiveAnomaly extends AbstractPoolable {
             position.mulAdd(velocity, dt);
             if (hungry) {
                 if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(Rules.ANOMALIES_VELOCITY);
+                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(Rules.ANOMALIES_CORROSIVE_VELOCITY);
                     velocity.mulAdd(tmp, dt);
                 }
                 if (gs.getPlayer().getPosition().dst(position) < 240 * level) {

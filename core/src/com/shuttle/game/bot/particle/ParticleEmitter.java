@@ -1,10 +1,11 @@
-package com.shuttle.game.bot;
+package com.shuttle.game.bot.particle;
 
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.bot.pool.ObjectPool;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 

@@ -30,16 +30,16 @@ public class AnomalyTimer {
         sb.setLength(0);
         counter -= dt;
 
-        if (counter >= Rules.ANOMALIES_SHUTTLE_HUNT_TIMER * 0.6f) {
+        if (counter >= Rules.ANOMALIES_CORROSIVE_HUNT_TIME * 0.6f) {
             sb.append((int) counter);
-        } else if (counter >= Rules.ANOMALIES_SHUTTLE_HUNT_TIMER * 0.3f) {
+        } else if (counter >= Rules.ANOMALIES_CORROSIVE_HUNT_TIME * 0.3f) {
             sb.append("[YELLOW]").append((int) counter).append("[]");
         } else {
             sb.append("[RED]").append((int) counter).append("[]");
         }
 
         if (counter <= 0.0f) {
-            counter = Rules.ANOMALIES_SHUTTLE_HUNT_TIMER + 1;
+            counter = Rules.ANOMALIES_CORROSIVE_HUNT_TIME + 1;
         }
     }
 }

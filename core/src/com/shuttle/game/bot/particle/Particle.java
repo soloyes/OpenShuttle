@@ -1,7 +1,8 @@
-package com.shuttle.game.bot;
+package com.shuttle.game.bot.particle;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.bot.pool.AbstractPoolable;
 
 import lombok.Data;
 
@@ -10,9 +11,6 @@ import lombok.Data;
  */
 @Data
 public class Particle extends AbstractPoolable {
-    private Vector2 position;
-    private Vector2 velocity;
-    private boolean active;
     private float time, duration;
     private float startSize, currentSize, endSize;
     private float startR, startG, startB, startA;
@@ -26,14 +24,8 @@ public class Particle extends AbstractPoolable {
         this.endSize = 1.0f;
     }
 
-    @Override
-    public boolean isActive() {
-        return active;
-    }
-
     public void init(float x, float y, float vx, float vy, float duration, float startSize, float endSize, float startR, float startG, float startB, float startA, float endR, float endG, float endB, float endA) {
-        this.position.x = x;
-        this.position.y = y;
+        init(x, y);
         this.velocity.x = vx;
         this.velocity.y = vy;
         this.startR = startR;
@@ -50,6 +42,12 @@ public class Particle extends AbstractPoolable {
         this.endSize = endSize;
         this.active = true;
         calculateCurrentValues();
+    }
+
+    @Override
+    public void init(float x, float y) {
+        this.position.x = x;
+        this.position.y = y;
     }
 
     private void calculateCurrentValues() {
@@ -73,5 +71,15 @@ public class Particle extends AbstractPoolable {
     @Override
     public void destroy() {
         active = false;
+    }
+
+    @Override
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    @Override
+    public boolean isActive() {
+        return active;
     }
 }

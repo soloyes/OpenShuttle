@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.AbstractPoolable;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
@@ -22,17 +21,8 @@ import lombok.Data;
  * @author Shuttle on 9/12/18.
  */
 @Data
-public class MagneticAnomaly extends AbstractPoolable {
-    private GameScreen gs;
-    private TextureRegion[] textureRegions;
-    private Vector2 tmp;
-    private boolean born;
-    private boolean hungry;
+public class MagneticAnomaly extends AbstractAnomaly {
     private boolean glued;
-    private float hungryTimer;
-    private BoundCheck boundCheck;
-    private BoomBox boomBox;
-    private Color color;
     private float liveTime;
     private float V;
 
@@ -51,13 +41,10 @@ public class MagneticAnomaly extends AbstractPoolable {
         this.height = PaintConstants.ANOMALY_MAGNETIC_HEIGHT;
         this.boundCheck = new BoundCheck();
         this.color = new Color();
-        this.V = MathUtils.random(Rules.ANOMALIES_VELOCITY, 3 * Rules.ANOMALIES_VELOCITY);
+        this.V = MathUtils.random(Rules.ANOMALIES_MAGNETIC_VELOCITY, 3 * Rules.ANOMALIES_MAGNETIC_VELOCITY);
     }
 
-    public void addHungryTimer(float dt) {
-        hungryTimer += dt;
-    }
-
+    @Override
     public void init(float x, float y) {
         this.position.set(x, y);
         this.active = true;
@@ -92,7 +79,7 @@ public class MagneticAnomaly extends AbstractPoolable {
         scaleAndBorn(dt);
 
         frame += 24 * dt;
-        if(!hungry){
+        if (!hungry) {
             angle += 48 * dt;
         }
         if (frame >= textureRegions.length)
@@ -141,5 +128,9 @@ public class MagneticAnomaly extends AbstractPoolable {
                 destroy();
             }
         }
+    }
+
+    public void addHungryTimer(float dt) {
+        hungryTimer += dt;
     }
 }

@@ -1,9 +1,10 @@
-package com.shuttle.game.bot;
+package com.shuttle.game.bot.consumable;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.BoundCheck;
@@ -28,6 +29,12 @@ public class Consumable extends AbstractPoolable {
         this.level = 0;
     }
 
+    @Override
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    @Override
     public void init(float x, float y) {
         position.set(x, y);
         angle = MathUtils.random(0, 360);
