@@ -3,79 +3,93 @@ images1.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-radar
+scratch
   rotate: false
   xy: 2, 2
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
+radar
+  rotate: false
+  xy: 2, 132
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
+blackholeHole
+  rotate: false
+  xy: 2, 646
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+blackholeGlow
+  rotate: false
+  xy: 516, 132
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 crate
   rotate: false
-  xy: 516, 2
+  xy: 516, 390
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 glowV1
   rotate: false
-  xy: 2, 516
+  xy: 516, 648
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-astronaut
-  rotate: false
-  xy: 774, 2
-  size: 128, 256
-  orig: 128, 256
-  offset: 0, 0
-  index: -1
 joystick
   rotate: false
-  xy: 516, 260
+  xy: 260, 646
   size: 200, 250
   orig: 200, 250
   offset: 0, 0
   index: -1
-scratch
+astronaut
   rotate: false
-  xy: 260, 516
-  size: 640, 128
-  orig: 640, 128
+  xy: 774, 132
+  size: 128, 256
+  orig: 128, 256
   offset: 0, 0
   index: -1
 lifeShield
   rotate: false
-  xy: 718, 260
+  xy: 644, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 fuel
   rotate: false
-  xy: 848, 260
+  xy: 774, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 HP
   rotate: false
-  xy: 2, 774
+  xy: 774, 390
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 ramShield
   rotate: false
-  xy: 260, 646
+  xy: 774, 648
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 shuttle
   rotate: false
-  xy: 260, 776
+  xy: 774, 778
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

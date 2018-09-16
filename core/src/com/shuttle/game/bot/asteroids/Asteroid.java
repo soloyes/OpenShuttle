@@ -30,7 +30,7 @@ public class Asteroid extends AbstractPoolable {
                 32);
         this.position = new Vector2();
         this.velocity = new Vector2();
-        this.rotationSpeed = MathUtils.random(365f);
+        this.angle = MathUtils.random(365f);
         this.active = false;
         this.boundCheck = new BoundCheck();
     }
@@ -50,7 +50,7 @@ public class Asteroid extends AbstractPoolable {
         return active;
     }
 
-    public void init(Vector2 position, Vector2 destanation, float size, boolean isFragment) {
+    public void init(Vector2 position, Vector2 destanation, float scale, boolean isFragment) {
         init(position.x, position.y);
         this.fragmented = isFragment;
         destanation.sub(position).nor();
@@ -60,9 +60,12 @@ public class Asteroid extends AbstractPoolable {
             velocity.set(destanation).scl(MathUtils.random(50, 300));
         }
 
-        this.width = (int) (PaintConstants.ASTEROID_WIDTH * size);
-        this.height = (int) (PaintConstants.ASTEROID_WIDTH * size);
+        this.scaleX = this.saveScaleX= scale;
+        this.scaleY = this.saveScaleY = scale;
+        this.width = PaintConstants.ASTEROID_WIDTH;
+        this.height = PaintConstants.ASTEROID_HEIGHT;
         this.active = true;
+        this.interacting = true;
     }
 
     @Override
@@ -75,12 +78,12 @@ public class Asteroid extends AbstractPoolable {
                 textureRegions[(int) frame],
                 position.x - width / 2,
                 position.y - height / 2,
-                width / 2, height / 2, width, height, 1, 1, rotationSpeed
+                width / 2, height / 2, width, height, scaleX, scaleY, angle
         );
     }
 
     public void update(float dt) {
-        frame += 0.3f;
+        frame += 24 * dt;
         frame %= textureRegions.length - 1;
         position.mulAdd(velocity, dt);
         checkAndHandleBounds();

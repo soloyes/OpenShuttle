@@ -228,13 +228,13 @@ public class Shuttle {
     }
 
     public void update(float dt) {
+        createFXs();
         checkKillingSpreeSeries(dt);
         checkPower();
         checkZigZagEffect(dt);
         angle = ShuttleMath.checkAngleBetween0And360(angle);
         standing.update();
         checkFuel(dt);
-        createFXs();
 
         scratch.update(dt);
         lifeShield.update(dt);
@@ -262,10 +262,22 @@ public class Shuttle {
         checkBounds(dt);
 
         tmpDelay += dt;
-        if (tmpDelay >= 0.1f){
+        if (tmpDelay >= 0.1f) {
             tmpDelay = 0.0f;
             delay = true;
         }
+    }
+
+    private void createFXs() {
+        if (standing.getFuel() > 0.1f && velocity.len() > 80) {
+            gs.getParticleEmitter().getBuilder().buildShuttleEngineFire(position, angle, 70, 1.0f);
+        } else {
+            gs.getParticleEmitter().getBuilder().buildShuttleLowLevelEngineFire(position, angle, 70);
+        }
+        //gs.getParticleEmitter().getBuilder().buildShuttleShield(position, angle, 90, 60, shieldLevel.getR(), shieldLevel.getG(), shieldLevel.getB());
+        //if (velocity.len() > 1200.0f) {
+        //    gs.getParticleEmitter().getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
+        //}
     }
 
     private void checkKillingSpreeSeries(float dt) {
@@ -298,18 +310,6 @@ public class Shuttle {
         if (standing.getFuel() <= 0.0f) {
             standing.setFuel(0.0f);
             velocity.scl(0.97f);
-        }
-    }
-
-    private void createFXs() {
-        if (standing.getFuel() > 0.1f && velocity.len() > 80) {
-            gs.getParticleEmitter().getBuilder().buildShuttleEngineFire(position, angle, 90, 1.0f);
-        } else {
-            gs.getParticleEmitter().getBuilder().buildShuttleLowLevelEngineFire(position, angle, 90);
-        }
-        //gs.getParticleEmitter().getBuilder().buildShuttleShield(position, angle, 90, 60, shieldLevel.getR(), shieldLevel.getG(), shieldLevel.getB());
-        if (velocity.len() > 1200.0f) {
-            gs.getParticleEmitter().getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
         }
     }
 

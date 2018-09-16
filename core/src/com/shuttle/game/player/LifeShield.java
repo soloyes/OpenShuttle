@@ -23,7 +23,11 @@ public class LifeShield {
     }
 
     public void blink(float alpha) {
-        this.alpha = alpha;
+        if (player.getStanding().getLives() == 1) {
+            this.alpha = 0.0f;
+        } else {
+            this.alpha = alpha;
+        }
     }
 
     public void render(SpriteBatch batch) {
@@ -46,13 +50,9 @@ public class LifeShield {
     }
 
     public void update(float dt) {
-        if (player.getStanding().getLives() == 1) {
+        alpha -= dt;
+        if (alpha <= 0.0f) {
             alpha = 0.0f;
-        } else {
-            alpha -= dt;
-            if (alpha <= 0.0f) {
-                alpha = 0.0f;
-            }
         }
     }
 }

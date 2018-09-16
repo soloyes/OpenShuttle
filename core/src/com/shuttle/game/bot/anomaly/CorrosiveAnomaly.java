@@ -56,7 +56,6 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         this.active = true;
         this.born = false;
         this.oscillator = true;
-        this.scaleX = this.scaleY = 0.0f;
         this.color.a = PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX;
         float rnd = MathUtils.random(0.0f, 1.0f);
         for (int i = probabilities.length - 1; i > 0; i--) {
@@ -65,6 +64,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 break;
             }
         }
+        this.interacting = true;
     }
 
     public void render(SpriteBatch batch) {
@@ -175,7 +175,8 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     private void scaleAndBorn(float dt) {
         scaleX = scaleY += dt;
         if (scaleX > 1 + level * 0.15f) {
-            scaleX = scaleY = 1 + level * 0.15f;
+            scaleX = saveScaleX = 1 + level * 0.15f;
+            scaleY = saveScaleY = 1 + level * 0.15f;
             born = true;
         }
     }

@@ -6,7 +6,7 @@ public class Rules {
     //3200
     //public static final int STARS_COUNT = 3200;
     //TEST
-    public static final int STARS_COUNT = 900;
+    public static final int STARS_COUNT = 1500;
     //1080
     public static final int WORLD_WIDTH = 1080;
     //1920
@@ -82,7 +82,7 @@ public class Rules {
     //
     //ASTEROID
     //4.0f
-    public static final float ASTEROIDS_RESPAWN_TIME = 4.0f;
+    public static final float ASTEROID_RESPAWN_TIME = 4.0f;
     //
     //PLAYER
     //500
@@ -112,6 +112,11 @@ public class Rules {
     public static final int CRATE_FUEL_ADD = 50;
     //1
     public static final int CRATE_REPAIR_ADD = 2;
+    //BLACKHOLE
+    //250
+    public static final int BLACKHOLE_TAKE_RANGE = 250;
+    //20
+    public static int BLACKHOLE_EVENT_HORIZON = 20;
     //
     //false
     public static boolean GAME_OVER = false;

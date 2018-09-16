@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.BoundCheck;
 
@@ -42,17 +43,32 @@ public class Consumable extends AbstractPoolable {
         active = true;
         type = Type.values()[MathUtils.random(0, 1)];
         texture = textures[type.textureIndex];
-        width = texture.getRegionWidth();
-        height = texture.getRegionHeight();
+        switch (type) {
+            case CRATE:
+                width = PaintConstants.CRATE_WIDTH;
+                height = PaintConstants.CRATE_HEIGHT;
+                break;
+            case ASTRONAUT:
+                width = PaintConstants.ASTRONAUT_WIDTH;
+                height = PaintConstants.ASTRONAUT_HEIGHT;
+                break;
+        }
+        scaleX = saveScaleX = 1.0f;
+        scaleY = saveScaleY = 1.0f;
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(texture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, scaleX, scaleY, angle);
+        batch.draw(texture,
+                position.x - width / 2, position.y - height / 2,
+                width / 2, height / 2,
+                width, height,
+                scaleX, scaleY,
+                angle
+        );
     }
 
     public void update(float dt) {
         boundCheck.checkAndHandleBounds(this);
-        scaleX = scaleY = 1.0f;
         position.mulAdd(velocity, dt);
         angle += rotationSpeed * dt;
     }

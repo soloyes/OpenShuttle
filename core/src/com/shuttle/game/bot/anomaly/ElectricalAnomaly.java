@@ -54,8 +54,10 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.active = true;
         this.born = false;
         this.level = 4;
-        this.scaleX = scaleY = 1 + level * 0.15f;
         this.color.a = 0.0f;
+        this.scaleX = this.saveScaleX= 1 + level * 0.15f;
+        this.scaleY = this.saveScaleY = 1 + level * 0.15f;
+        this.interacting = true;
     }
 
     public void render(SpriteBatch batch) {
@@ -116,12 +118,9 @@ public class ElectricalAnomaly extends AbstractAnomaly {
 
     private void scaleAndBorn(float dt) {
         if (touched) {
-            scaleX = scaleY += dt;
-            if (scaleX >= 2.0f) {
-                destroy();
-                boomBox.playSound(MSConstants.ANOMALY_ELECTRIC_DESTROY);
-                gs.getPlayer().getStanding().changeScore((getLevel() + 1) * Rules.ANOMALIES_BASE_SCORE_ADD);
-            }
+            destroy();
+            boomBox.playSound(MSConstants.ANOMALY_ELECTRIC_DESTROY);
+            gs.getPlayer().getStanding().changeScore((getLevel() + 1) * Rules.ANOMALIES_BASE_SCORE_ADD);
         } else {
             color.a += dt / 5;
             if (color.a >= 1.0) {

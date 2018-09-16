@@ -27,9 +27,11 @@ public class RamShield {
     }
 
     public void blink(float alpha) {
-        this.alpha = alpha;
-        if (player.getShieldLevel() == GlobalInteractionLevels.NONE)
+        if (player.getShieldLevel() == GlobalInteractionLevels.NONE) {
             this.alpha = 0.0f;
+        } else {
+            this.alpha = alpha;
+        }
     }
 
     public void render(SpriteBatch batch) {

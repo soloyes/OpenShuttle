@@ -22,6 +22,8 @@ public abstract class AbstractPoolable implements Poolable {
     protected float angle, rotationSpeed;
     protected int clockwise;
     protected int level;
+    protected float saveScaleX, saveScaleY;
+    protected boolean interacting;
 
     @Override
     public void destroy() {

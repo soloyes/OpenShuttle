@@ -27,7 +27,7 @@ public class ParticleEffectBuilder {
     }
 
     public void buildShuttleEngineFire(Vector2 position, float angle, float radius, float level) {
-        particleEmitter.setup(position.x - radius * (float) Math.cos(Math.toRadians(angle)), position.y - 90 * (float) Math.sin(Math.toRadians(angle)), MathUtils.random(-90, 90), MathUtils.random(-90, 90), 0.3f + level * 0.1f, 4.0f + level * 1.5f, 0.4f, 1, 0.6f - level * 0.15f, 0, 1, 1, 0, 0, 0.5f);
+        particleEmitter.setup(position.x - radius * (float) Math.cos(Math.toRadians(angle)), position.y - radius * (float) Math.sin(Math.toRadians(angle)), MathUtils.random(-90, 90), MathUtils.random(-90, 90), 0.3f + level * 0.1f, 4.0f + level * 1.5f, 0.4f, 1, 0.6f - level * 0.15f, 0, 1, 1, 0, 0, 0.5f);
         if (MathUtils.random(0, 100) < 6 + level * 2) {
             for (int i = 0; i < level + 1; i++) {
                 particleEmitter.setup(position.x - radius * (float) Math.cos(Math.toRadians(angle)), position.y - radius * (float) Math.sin(Math.toRadians(angle)), MathUtils.random(-180, 180), MathUtils.random(-180, 180), 0.3f, 8.0f + level * 2, 0.0f, 1, 0.4f, 0, 1, 0, 0, 0, 0.2f);
@@ -36,6 +36,6 @@ public class ParticleEffectBuilder {
     }
 
     public void buildShuttleLowLevelEngineFire(Vector2 position, float angle, float radius) {
-        particleEmitter.setup(position.x - radius * (float) Math.cos(Math.toRadians(angle)), position.y - 90 * (float) Math.sin(Math.toRadians(angle)), MathUtils.random(-90, 90), MathUtils.random(-90, 90), 0.2f, 3.0f, 2.4f, 0.2f, 0.2f, 1.0f, 0.4f, 0, 0, 0, 0.2f);
+        particleEmitter.setup(position.x - radius * (float) Math.cos(Math.toRadians(angle)), position.y - radius * (float) Math.sin(Math.toRadians(angle)), MathUtils.random(-90, 90), MathUtils.random(-90, 90), 0.2f, 3.0f, 2.4f, 0.2f, 0.2f, 1.0f, 0.4f, 0, 0, 0, 0.2f);
     }
 }

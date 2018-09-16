@@ -17,6 +17,7 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
     private Vector2 position;
     private Vector2 destanation;
     private float size;
+    private float scale;
     private float count;
     private GlobalInteractionLevels rang;
 
@@ -40,14 +41,14 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
 
     public void update(float dt) {
         time += dt;
-        if (time > Rules.ASTEROIDS_RESPAWN_TIME) {
+        if (time > Rules.ASTEROID_RESPAWN_TIME) {
             time = 0.0f;
             createAsteroid();
         }
 
         if (boom) {
             for (int i = 0; i < MathUtils.random(2 * count, 4 * count); i++) {
-                size = MathUtils.random(rang.getFragmentAsteroidSize1(), rang.getFragmentAsteroidSize2());
+                size = scale = MathUtils.random(rang.getFragmentAsteroidSize1(), rang.getFragmentAsteroidSize2());
                 createFragment();
             }
             boom = false;
@@ -103,13 +104,13 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
                     MathUtils.random(0, Rules.SPACE_HEIGHT)
             );
         }
-        getActiveElement().init(position, destanation, 1, false);
+        getActiveElement().init(position, destanation, 1.0f, false);
     }
 
     private void createFragment() {
-        destanation = new Vector2(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
+        destanation.set(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
         Asteroid tmpAsteroid = getActiveElement();
-        tmpAsteroid.init(position, destanation, size, true);
+        tmpAsteroid.init(position, destanation, scale, true);
         tmpAsteroid.setSizeForHarvest(size);
     }
 
