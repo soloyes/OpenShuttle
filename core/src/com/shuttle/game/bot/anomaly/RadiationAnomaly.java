@@ -53,7 +53,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
         this.level = 1;
         this.scaleX = this.saveScaleX= 1 + level * 0.15f;
         this.scaleY = this.saveScaleY = 1 + level * 0.15f;
-        this.interacting = true;
+        this.taken = true;
         this.color.a = 0.0f;
         this.V = MathUtils.random(Rules.ANOMALIES_RADIATION_VELOCITY, 3 * Rules.ANOMALIES_RADIATION_VELOCITY);
     }

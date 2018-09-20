@@ -28,7 +28,7 @@ public class PaintConstants {
     public static final String ANOMALY_MAGNETIC_REGION = "pics/magnetic.png";
     public static final int ANOMALY_MAGNETIC_WIDTH = 160;
     public static final int ANOMALY_MAGNETIC_HEIGHT = 160;
-    public static final String ANOMALY_GLOW = "glowV1";
+    public static final String ANOMALY_GLOW = "glow";
     public static final int ANOMALY_GLOW_WIDTH = 96;
     public static final int ANOMALY_GLOW_HEIGHT = 96;
     public static final float ANOMALY_GLOW_OSCILLATOR_MAX = 0.5f;
@@ -38,11 +38,14 @@ public class PaintConstants {
     public static final String BLACKHOLE_HOLE_REGION = "blackholeHole";
     public static int BLACKHOLE_HOLE_WIDTH = 192;
     public static int BLACKHOLE_HOLE_HEIGHT = 192;
-    public static final String BLACKHOLE_GLOW_REGION = "blackholeGlow";
-    public static int BLACKHOLE_GLOW_WIDTH = 192;
-    public static int BLACKHOLE_GLOW_HEIGHT = 192;
+    public static final String BLACKHOLE_SPIRAL_REGION = "blackholeSpiral";
+    public static int BLACKHOLE_SPIRAL_WIDTH = 192;
+    public static int BLACKHOLE_SPIRAL_HEIGHT = 192;
+    public static final String BLACKHOLE_GLOW_REGION = "glow";
+    public static final int BLACKHOLE_GLOW_WIDTH = 160;
+    public static final int BLACKHOLE_GLOW_HEIGHT = 160;
     public static final String ASTRONAUT_REGION = "astronaut";
-    public static final int ASTRONAUT_WIDTH = 128;
+    public static final int ASTRONAUT_WIDTH = 256;
     public static final int ASTRONAUT_HEIGHT = 256;
     public static final String CRATE_REGION = "crate";
     public static final int CRATE_WIDTH = 128;

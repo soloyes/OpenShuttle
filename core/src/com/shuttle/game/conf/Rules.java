@@ -6,7 +6,7 @@ public class Rules {
     //3200
     //public static final int STARS_COUNT = 3200;
     //TEST
-    public static final int STARS_COUNT = 1500;
+    public static final int STARS_COUNT = 1600;
     //1080
     public static final int WORLD_WIDTH = 1080;
     //1920
@@ -19,7 +19,7 @@ public class Rules {
     public static final int SPACE_WIDTH = 1080 * 3;
     public static final int SPACE_HEIGHT = 1920 * 3;
     //
-    //CONSUMABLE//
+    //CONSUMABLE
     //10
     public static final int CONSUMABLE_AT_START = 0;
     //6.0f
@@ -32,12 +32,14 @@ public class Rules {
     public static final int ANOMALIES_AT_START = 0;
     //5000
     public static final int ANOMALIES_BASE_SCORE_ADD = 5000;
-    //30
+    //30.0f
     public static final float ANOMALIES_ELECTRIC_RESPAWN_TIME = 30.0f;
     //1
     public static final int ANOMALIES_ELECTRIC_MAX_COUNT = 1;
     //500.0f
     public static final float ANOMALY_ELECTRIC_VELOCITY = 500.0f;
+    //10.0f
+    public static float ANOMALIES_ELECTRIC_HUNGRY_TIME = 10.0f;
     //
     //12
     public static final float ANOMALIES_RADIATION_RESPAWN_TIME = 12.0f;
@@ -48,7 +50,7 @@ public class Rules {
     //500
     public static final int ANOMALIES_RADIATION_SCORE_DECREASE = 500;
     //0.5f
-    public static final float ANOMALIES_RADIATION_HUNGRY_TIME = 0.5f;
+    public static final float ANOMALIES_RADIATION_HUNGRY_TIME = 0.4f;
     //50.0f
     public static final float ANOMALIES_RADIATION_VELOCITY = 50.0f;
     //
@@ -59,9 +61,9 @@ public class Rules {
     //2
     public static final int ANOMALIES_MAGNETIC_MAX_COUNT = 2;
     //0.1f
-    public static final float ANOMALIES_MAGNETIC_FUEL_DECREASE = 0.5f;
+    public static final float ANOMALIES_MAGNETIC_FUEL_DECREASE = 0.3f;
     //1.0f
-    public static final float ANOMALIES_MAGNETIC_HUNGRY_TIME = 1.0f;
+    public static final float ANOMALIES_MAGNETIC_HUNGRY_TIME = 0.4f;
     //50.0f
     public static final float ANOMALIES_MAGNETIC_VELOCITY = 50.0f;
     //
@@ -117,6 +119,10 @@ public class Rules {
     public static final int BLACKHOLE_TAKE_RANGE = 250;
     //20
     public static int BLACKHOLE_EVENT_HORIZON = 20;
+    //200
+    public static int BLACKHOLE_VELOCITY_CONSUME_POOLABLE = 200;
+    //200
+    public static int BLACKHOLE_VELOCITY_CONSUME_PLAYER = 200;
     //
     //false
     public static boolean GAME_OVER = false;

@@ -6,20 +6,25 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 
+import lombok.Data;
+
 /**
  * @author Shuttle on 9/2/18.
  */
+@Data
 public class LifeShield {
     private TextureRegion texture;
     private Shuttle player;
     private int width, height;
     private float alpha;
+    private float scaleX, scaleY;
 
     public LifeShield(Shuttle player) {
         this.player = player;
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_LIFE_SHIELD);
         this.width = PaintConstants.SHUTTLE_LIFE_SHIELD_WIDTH;
         this.height = PaintConstants.SHUTTLE_LIFE_SHIELD_HEIGHT;
+        this.scaleX = this.scaleY = 1.0f;
     }
 
     public void blink(float alpha) {
@@ -42,8 +47,8 @@ public class LifeShield {
                 height / 2,
                 width,
                 height,
-                1,
-                1,
+                scaleX,
+                scaleY,
                 player.getAngle()
         );
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);

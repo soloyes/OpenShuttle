@@ -64,7 +64,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 break;
             }
         }
-        this.interacting = true;
+        this.taken = true;
     }
 
     public void render(SpriteBatch batch) {

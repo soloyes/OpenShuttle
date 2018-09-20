@@ -7,15 +7,19 @@ import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 
+import lombok.Data;
+
 /**
  * @author Shuttle on 9/2/18.
  */
+@Data
 public class RamShield {
     private TextureRegion texture;
     private Shuttle player;
     private int width, height;
     private float alpha;
     private float fromAlpha;
+    private float scaleX, scaleY;
     private Color tmpColor;
 
     public RamShield(Shuttle player) {
@@ -24,6 +28,7 @@ public class RamShield {
         this.width = PaintConstants.SHUTTLE_RAM_SHIELD_WIDTH;
         this.height = PaintConstants.SHUTTLE_RAM_SHIELD_HEIGHT;
         this.tmpColor = new Color();
+        this.scaleX = this.scaleY = 1.0f;
     }
 
     public void blink(float alpha) {
@@ -45,8 +50,8 @@ public class RamShield {
                 height / 2,
                 width,
                 height,
-                1,
-                1,
+                scaleX,
+                scaleY,
                 player.getAngle()
         );
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);

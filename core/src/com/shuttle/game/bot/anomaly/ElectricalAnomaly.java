@@ -48,6 +48,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
     public void init(float x, float y) {
         this.touched = false;
         this.hungry = true;
+        this.hungryTimer = 0;
         this.angle = MathUtils.random(365);
         this.clockwise = MathUtils.randomSign();
         this.position.set(x, y);
@@ -57,7 +58,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.color.a = 0.0f;
         this.scaleX = this.saveScaleX= 1 + level * 0.15f;
         this.scaleY = this.saveScaleY = 1 + level * 0.15f;
-        this.interacting = true;
+        this.taken = true;
     }
 
     public void render(SpriteBatch batch) {
@@ -98,6 +99,15 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                     hungry = false;
                     touched = true;
                 }
+            }
+
+            if (!hungry) {
+                hungryTimer += dt;
+            }
+
+            if (hungryTimer > Rules.ANOMALIES_ELECTRIC_HUNGRY_TIME) {
+                hungryTimer = 0;
+                hungry = true;
             }
 
             velocity.scl(0.99f);

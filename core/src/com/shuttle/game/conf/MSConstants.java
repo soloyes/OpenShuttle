@@ -20,6 +20,15 @@ public class MSConstants {
     public final static String GET_FUEL = SOUND_FOLDER + "get_fuel.ogg";
     public final static String GET_TRASH = SOUND_FOLDER + "get_trash.ogg";
     public final static String GET_FRAGMENT = SOUND_FOLDER + "get_fragment.ogg";
+    public final static String ANOMALY_CORROSIVE_ALIVE = SOUND_FOLDER + "anomaly_corrosive_alive.ogg";
+    public final static String ANOMALY_RADIATION_DEAD = SOUND_FOLDER + "anomaly_radiation_dead.ogg";
+
+    public final static String BLACKHOLE_TELEPORT = SOUND_FOLDER + "teleport.ogg";
+    public final static String PLAYER_KICKED_CORROSIVE = SOUND_FOLDER + "player_kicked_corrosive.ogg";
+    public final static String PLAYER_KICKED_ELECTRIC = SOUND_FOLDER + "player_kicked_electric.ogg";
+    public final static String ASTRONAUT_ALIVE = SOUND_FOLDER + "astronaut_alive.ogg";
+    public final static String ASTEROID_DESTROY = SOUND_FOLDER + "asteroid_destroy.ogg";
+
     //
     private final static String MUSIC_FOLDER = "music/";
     public final static String MENU_MUSIC = MUSIC_FOLDER + "menu.ogg";

@@ -61,6 +61,10 @@ public class Assets {
                 assetManager.load(MSConstants.GET_TRASH, Sound.class);
                 assetManager.load(MSConstants.GET_RADAR, Sound.class);
                 assetManager.load(MSConstants.GET_FRAGMENT, Sound.class);
+                assetManager.load(MSConstants.BLACKHOLE_TELEPORT, Sound.class);
+                assetManager.load(MSConstants.PLAYER_KICKED_CORROSIVE, Sound.class);
+                assetManager.load(MSConstants.PLAYER_KICKED_ELECTRIC, Sound.class);
+                assetManager.load(MSConstants.ASTEROID_DESTROY, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 assetManager.load(PaintConstants.ASTEROID_REGION, Texture.class);
                 assetManager.load(PaintConstants.ANOMALY_CORROSIVE_REGION, Texture.class);

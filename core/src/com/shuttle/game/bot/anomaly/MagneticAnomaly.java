@@ -54,7 +54,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
         this.level = 1;
         this.scaleX = this.saveScaleX = 1 + level * 0.15f;
         this.scaleY = this.saveScaleY = 1 + level * 0.15f;
-        this.interacting = true;
+        this.taken = true;
         this.color.a = 0.0f;
         this.angle = MathUtils.random(365);
         this.clockwise = MathUtils.randomSign();

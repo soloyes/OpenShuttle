@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
-import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 
 import lombok.Data;
@@ -19,20 +18,26 @@ import lombok.Data;
 public class Blackhole {
     private GameScreen gs;
     private TextureRegion texture;
+    private TextureRegion spiralRegion;
     private TextureRegion glowRegion;
     private Vector2 position, start, velocity;
     private int width, height;
+    private int spiralWidth, spiralHeight;
     private int glowWidth, glowHeight;
     private float scale;
+    private float spiralScale;
     private float glowScale;
+    private float glowB;
     private float rotation, angle, radialSpeed;
     private float takeRange;
     private int radius;
     private boolean oscillator;
+    private boolean spiralOscillator;
     private boolean glowOscillator;
 
     public Blackhole() {
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.BLACKHOLE_HOLE_REGION);
+        this.spiralRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BLACKHOLE_SPIRAL_REGION);
         this.glowRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BLACKHOLE_GLOW_REGION);
         this.start = new Vector2(
                 Rules.SPACE_WIDTH / 2,
@@ -42,25 +47,38 @@ public class Blackhole {
         this.velocity = new Vector2();
         this.width = PaintConstants.BLACKHOLE_HOLE_WIDTH;
         this.height = PaintConstants.BLACKHOLE_HOLE_HEIGHT;
+        this.spiralWidth = PaintConstants.BLACKHOLE_SPIRAL_WIDTH;
+        this.spiralHeight = PaintConstants.BLACKHOLE_SPIRAL_HEIGHT;
         this.glowWidth = PaintConstants.BLACKHOLE_GLOW_WIDTH;
         this.glowHeight = PaintConstants.BLACKHOLE_GLOW_HEIGHT;
         this.takeRange = Rules.BLACKHOLE_TAKE_RANGE;
         this.scale = 1.0f;
+        this.spiralScale = 1.0f;
         this.glowScale = 1.0f;
+        this.glowB = 0.0f;
         this.angle = MathUtils.random(365);
         this.rotation = MathUtils.random(365);
         this.radialSpeed = MathUtils.random(30, 50);
-        this.radius = MathUtils.random(Rules.SPACE_WIDTH / 4, 3 * Rules.SPACE_WIDTH / 4);
+        this.radius = MathUtils.random(0, Rules.SPACE_WIDTH / 2);
     }
 
     public void render(SpriteBatch batch) {
-        batch.setColor(0.05f, 0.05f, 0.4f, 1.0f);
+        batch.setColor(0.1f, 0.0f, glowB, 1.0f);
         batch.draw(
                 glowRegion,
                 position.x - glowWidth / 2, position.y - glowHeight / 2,
                 glowWidth / 2,
                 glowHeight / 2,
                 glowWidth, glowHeight, glowScale, glowScale,
+                0.0f
+        );
+        batch.setColor(0.05f, 0.05f, 0.4f, 1.0f);
+        batch.draw(
+                spiralRegion,
+                position.x - spiralWidth / 2, position.y - spiralHeight / 2,
+                spiralWidth / 2,
+                spiralHeight / 2,
+                spiralWidth, spiralHeight, spiralScale, spiralScale,
                 rotation * radialSpeed, true
         );
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -101,19 +119,32 @@ public class Blackhole {
             }
         }
 
-        if (glowOscillator) {
-            glowScale -= dt / 20;
-            if (glowScale <= 0.9f) {
-                glowScale = 0.9f;
-                glowOscillator = false;
+        if (spiralOscillator) {
+            spiralScale -= dt / 20;
+            if (spiralScale <= 0.9f) {
+                spiralScale = 0.9f;
+                spiralOscillator = false;
             }
         } else {
-            glowScale += dt / 20;
-            if (glowScale >= 1.0f) {
-                glowScale = 1.0f;
-                glowOscillator = true;
+            spiralScale += dt / 20;
+            if (spiralScale >= 1.0f) {
+                spiralScale = 1.0f;
+                spiralOscillator = true;
             }
         }
 
+        if (glowOscillator) {
+            glowB -= dt / 5;
+            if (glowB <= 0.0f) {
+                glowB = 0.0f;
+                glowOscillator = false;
+            }
+        } else {
+            glowB += dt / 5;
+            if (glowB >= 0.5f) {
+                glowB = 0.5f;
+                glowOscillator = true;
+            }
+        }
     }
 }

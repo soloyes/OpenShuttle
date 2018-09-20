@@ -65,7 +65,7 @@ public class Asteroid extends AbstractPoolable {
         this.width = PaintConstants.ASTEROID_WIDTH;
         this.height = PaintConstants.ASTEROID_HEIGHT;
         this.active = true;
-        this.interacting = true;
+        this.taken = true;
     }
 
     @Override

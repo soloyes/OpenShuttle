@@ -23,7 +23,7 @@ public abstract class AbstractPoolable implements Poolable {
     protected int clockwise;
     protected int level;
     protected float saveScaleX, saveScaleY;
-    protected boolean interacting;
+    protected boolean taken;
 
     @Override
     public void destroy() {

@@ -52,7 +52,9 @@ public class GameInfoSystem {
         REPAIR("REPAIR +" + Rules.CRATE_REPAIR_ADD),
         FUEL("FUEL +" + Rules.CRATE_FUEL_ADD),
         TURBO("TURBO x3"),
-        TRASH("TRASH");
+        TRASH("TRASH"),
+        LOST_FUEL("[RED]-FUEL[]"),
+        LOST_SCORE("[RED]-SCORE[]");
         private String value;
 
         GameInfoSystemPreset(String value) {

@@ -10,6 +10,7 @@ import com.shuttle.game.Gun;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.KillingSpree;
 import com.shuttle.game.bot.consumable.Consumable;
+import com.shuttle.game.bot.particle.ParticleEmitter;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
@@ -33,6 +34,7 @@ public class Shuttle {
     private Radar radar;
     private Gun gun;
     private Joystick joystick;
+    private ParticleEmitter engineParticleEmitter;
     private int width, height;
     private float angle, radialSpeed;
     private float enginePower;
@@ -55,11 +57,14 @@ public class Shuttle {
     private Scratch scratch;
     private Vector2 textureVector;
     private Vector2 tmp2;
+    private boolean taken;
+    private float scaleX, scaleY;
 
     public Shuttle(GameScreen gs, Joystick joystick, GamePreferences preferences) {
         this.boomBox = new BoomBox(new GamePreferences());
         this.standing = new Standing(this);
         this.gs = gs;
+        this.engineParticleEmitter = new ParticleEmitter();
         this.joystick = joystick;
         this.preferences = preferences;
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_REGION);
@@ -82,6 +87,8 @@ public class Shuttle {
         this.lifeShield = new LifeShield(this);
         this.ramShield = new RamShield(this);
         this.scratch = new Scratch(this);
+        this.taken = false;
+        this.scaleX = this.scaleY = 1.0f;
     }
 
     public boolean addZigZag(float amount) {
@@ -131,10 +138,17 @@ public class Shuttle {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(texture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, 1, 1, angle);
+        engineParticleEmitter.render(batch);
+        batch.draw(
+                texture,
+                position.x - width / 2, position.y - height / 2,
+                width / 2, height / 2,
+                width, height, scaleX, scaleY,
+                angle
+        );
         scratch.render(batch);
         lifeShield.render(batch);
-        //ramShield.render(batch);
+        //ramShield.render(batch); - render from GameScreen with layer's order
         radar.render(batch);
     }
 
@@ -173,7 +187,7 @@ public class Shuttle {
                 boomBox.playSound(MSConstants.GET_ASTRONAUT);
                 break;
             case CRATE:
-                int x = MathUtils.random(0, 5);
+                int x = MathUtils.random(0,3);
                 if (x == 0) {
                     standing.changeHP(Rules.CRATE_REPAIR_ADD);
                     gs.getGameInfoSystem()
@@ -228,7 +242,11 @@ public class Shuttle {
     }
 
     public void update(float dt) {
-        createFXs();
+        if (!taken) {
+            createFXs();
+        }
+        engineParticleEmitter.update(dt);
+
         checkKillingSpreeSeries(dt);
         checkPower();
         checkZigZagEffect(dt);
@@ -246,15 +264,18 @@ public class Shuttle {
         if (!preferences.isJoyStickEnabled()) {
             joystick.setLastId(-1);
         }
-        if (joystick.isActive()) {
-            float angleToTarget = joystick.getAngle();
-            move(dt, angleToTarget);
-        } else {
-            if (Gdx.input.isTouched()) {
-                tmp.set(Gdx.input.getX(), Gdx.input.getY());
-                ScreenManager.getInstance().getViewport().unproject(tmp);
-                float angleToTarget = tmp.sub(position).angle();
+
+        if (!taken) {
+            if (joystick.isActive()) {
+                float angleToTarget = joystick.getAngle();
                 move(dt, angleToTarget);
+            } else {
+                if (Gdx.input.isTouched()) {
+                    tmp.set(Gdx.input.getX(), Gdx.input.getY());
+                    ScreenManager.getInstance().getViewport().unproject(tmp);
+                    float angleToTarget = tmp.sub(position).angle();
+                    move(dt, angleToTarget);
+                }
             }
         }
 
@@ -270,14 +291,14 @@ public class Shuttle {
 
     private void createFXs() {
         if (standing.getFuel() > 0.1f && velocity.len() > 80) {
-            gs.getParticleEmitter().getBuilder().buildShuttleEngineFire(position, angle, 70, 1.0f);
+            engineParticleEmitter.getBuilder().buildShuttleEngineFire(position, angle, 70, 1.0f);
         } else {
-            gs.getParticleEmitter().getBuilder().buildShuttleLowLevelEngineFire(position, angle, 70);
+            engineParticleEmitter.getBuilder().buildShuttleLowLevelEngineFire(position, angle, 70);
         }
         //gs.getParticleEmitter().getBuilder().buildShuttleShield(position, angle, 90, 60, shieldLevel.getR(), shieldLevel.getG(), shieldLevel.getB());
-        //if (velocity.len() > 1200.0f) {
-        //    gs.getParticleEmitter().getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
-        //}
+        if (velocity.len() > 1200.0f) {
+            gs.getParticleEmitter().getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
+        }
     }
 
     private void checkKillingSpreeSeries(float dt) {

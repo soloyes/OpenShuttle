@@ -3,100 +3,100 @@ images1.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-scratch
-  rotate: false
-  xy: 2, 2
-  size: 640, 128
-  orig: 640, 128
-  offset: 0, 0
-  index: -1
 radar
   rotate: false
-  xy: 2, 132
+  xy: 2, 2
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
-blackholeHole
+astronaut
   rotate: false
-  xy: 2, 646
+  xy: 516, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackholeGlow
+blackholeSpiral
   rotate: false
-  xy: 516, 132
+  xy: 2, 516
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+blackholeHole
+  rotate: false
+  xy: 260, 516
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+glow
+  rotate: false
+  xy: 518, 516
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 crate
   rotate: false
-  xy: 516, 390
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-glowV1
-  rotate: false
-  xy: 516, 648
+  xy: 2, 774
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 joystick
   rotate: false
-  xy: 260, 646
+  xy: 774, 2
   size: 200, 250
   orig: 200, 250
   offset: 0, 0
   index: -1
-astronaut
+scratch
   rotate: false
-  xy: 774, 132
-  size: 128, 256
-  orig: 128, 256
+  xy: 260, 774
+  size: 640, 128
+  orig: 640, 128
   offset: 0, 0
   index: -1
 lifeShield
   rotate: false
-  xy: 644, 2
+  xy: 516, 260
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 fuel
   rotate: false
-  xy: 774, 2
+  xy: 646, 260
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 HP
   rotate: false
-  xy: 774, 390
+  xy: 776, 260
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 ramShield
   rotate: false
-  xy: 774, 648
+  xy: 776, 516
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 shuttle
   rotate: false
-  xy: 774, 778
+  xy: 2, 1032
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 star16
   rotate: false
-  xy: 904, 2
+  xy: 976, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

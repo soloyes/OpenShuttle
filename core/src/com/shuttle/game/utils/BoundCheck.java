@@ -52,7 +52,7 @@ public class BoundCheck {
         hpTimer += dt;
         //every second
         if (alertTimer >= 1.0f) {
-            alert(player);
+            alert(player, alertTimer);
             alertTimer = 0.0f;
         }
 
@@ -68,7 +68,7 @@ public class BoundCheck {
         }
     }
 
-    private void alert(Shuttle player) {
+    private void alert(Shuttle player, float duration) {
         tmp.set(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         ScreenManager.getInstance().getViewport().unproject(tmp);
         player.getGs().getGameInfoSystem().setup(
@@ -78,5 +78,6 @@ public class BoundCheck {
                 3,
                 true
         );
+        player.getGs().getShake().shake(duration, 35, 10);
     }
 }
