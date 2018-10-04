@@ -3,10 +3,15 @@ package com.shuttle.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
@@ -49,7 +54,7 @@ public class GameScreen extends BaseScreen {
     private AsteroidEmitter asteroidEmitter;
     private Camera camera;
     private Vector2 tmp;
-    private ShaderProgram shaderProgram;
+    private ShaderProgram shaderPause;
     private GameInfoSystem gameInfoSystem;
     private PauseGroup pauseGroup;
     private Joystick joystick;
@@ -57,6 +62,11 @@ public class GameScreen extends BaseScreen {
     private Shake shake;
     private AnomalyTimer anomalyTimer;
     private Blackhole blackhole;
+    private FrameBuffer fbo;
+    private TextureRegion fboTexRegion;
+    private ShaderProgram shaderBlackHole;
+    private float holeTime;
+    private OrthographicCamera cameraHelper;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -64,20 +74,41 @@ public class GameScreen extends BaseScreen {
         this.camera = camera;
         this.tmp = new Vector2(0, 0);
         this.shake = new Shake();
+        this.cameraHelper = new OrthographicCamera(1080, 1920);
     }
 
     @Override
     public void show() {
         super.show();
         boomBox.stopAllMusicAndPlay(MSConstants.GAME_MUSIC);
-        shaderProgram = new ShaderProgram(
-                Gdx.files.internal("shaders/default.vert"),
-                Gdx.files.internal("shaders/default.frag")
+        fbo = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(),
+                Gdx.graphics.getHeight(), false);
+        fboTexRegion = new TextureRegion(fbo.getColorBufferTexture());
+        fboTexRegion.flip(false, true);
+
+        shaderBlackHole = new ShaderProgram(
+                Gdx.files.internal("shaders/black_hole.vert").readString(),
+                Gdx.files.internal("shaders/black_hole.frag").readString()
         );
-        if (!shaderProgram.isCompiled()) {
-            System.err.println(shaderProgram.getLog());
+
+        shaderPause = new ShaderProgram(
+                Gdx.files.internal("shaders/grey_screen.vert"),
+                Gdx.files.internal("shaders/grey_screen.frag")
+        );
+
+        //todo: change logic in case shade not support. Move shader to other class
+        if (!shaderPause.isCompiled()) {
+            System.err.println(shaderPause.getLog());
             System.exit(0);
         }
+
+        ShaderProgram.pedantic = false;
+
+        if (!shaderBlackHole.isCompiled()) {
+            System.err.println(shaderBlackHole.getLog());
+            System.exit(0);
+        }
+
         particleEmitter = new ParticleEmitter();
         corrosiveAnomalyEmitter = new CorrosiveAnomalyEmitter(this);
         electricalAnomalyEmitter = new ElectricalAnomalyEmitter(this);
@@ -107,12 +138,17 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void render(float dt) {
-        super.render(dt);
+        //todo: refactor this
+        FitViewport v = (FitViewport) ScreenManager.getInstance().getViewport();
+
         if (!Rules.GAME_OVER) {
+            //FBO BEGIN
+            fbo.begin();
+            super.render(dt);
             update(dt);
             batch.setProjectionMatrix(camera.combined);
             if (pauseGroup.isPause()) {
-                batch.setShader(shaderProgram);
+                batch.setShader(shaderPause);
             } else {
                 batch.setShader(null);
             }
@@ -120,7 +156,9 @@ public class GameScreen extends BaseScreen {
             //BEGIN
             batch.begin();
             background.render(batch);
-            blackhole.render(batch);
+            if (preferences.getEffectsLevel() == 0) {
+                blackhole.render(batch);
+            }
             asteroidEmitter.render(batch);
             player.render(batch);
             consumableEmitter.render(batch);
@@ -130,12 +168,56 @@ public class GameScreen extends BaseScreen {
             magneticAnomalyEmitter.render(batch);
             player.getRamShield().render(batch);
             particleEmitter.render(batch);
-            gameInfoSystem.render(batch);
-            pointer.render(batch);
+            //pointer.render(batch);
             batch.end();
 
+            float shaderHoleX = (blackhole.getPosition().x - camera.position.x + Rules.WORLD_WIDTH / 2) / Rules.WORLD_WIDTH;
+            float shaderHoleY = (blackhole.getPosition().y - camera.position.y + Rules.WORLD_HEIGHT / 2) / Rules.WORLD_HEIGHT;
+
             ScreenManager.getInstance().resetCamera();
-            //BEGIN
+            //FBO END
+            fbo.end(v.getScreenX(), v.getScreenY(), v.getScreenWidth(), v.getScreenHeight());
+
+            if (preferences.getEffectsLevel() == 0) {
+                batch.setShader(null);
+                //BEGIN
+                batch.begin();
+                super.render(dt);
+                batch.draw(fboTexRegion, 0, 0, Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
+                batch.end();
+            } else {
+                batch.setShader(shaderBlackHole);
+                //BEGIN
+                batch.begin();
+                super.render(dt);
+                shaderBlackHole.setUniformf("resolution", Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
+
+                holeTime += dt;
+                shaderBlackHole.setUniformf(
+                        "time",
+                        holeTime
+                );
+                shaderBlackHole.setUniformf(
+                        "center",
+                        shaderHoleX,
+                        shaderHoleY
+                );
+
+                if (pauseGroup.isPause()) {
+                    shaderBlackHole.setUniformf("isGrey", 1.0f);
+                } else {
+                    shaderBlackHole.setUniformf("isGrey", -1.0f);
+                }
+                batch.draw(fboTexRegion, 0, 0, Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
+                batch.end();
+            }
+
+            if (pauseGroup.isPause()) {
+                batch.setShader(shaderPause);
+            } else {
+                batch.setShader(null);
+            }
+
             batch.begin();
             player.getStanding().render(batch);
             anomalyTimer.render(batch);
@@ -144,20 +226,26 @@ public class GameScreen extends BaseScreen {
             }
             batch.end();
 
-            batch.setShader(null);
-
-            stage.draw();
-        } else {
-            boomBox.stopAllMusicAndPlayOnce(MSConstants.MENU_MUSIC);
-            gameInfoSystem.update(dt);
-            batch.setShader(shaderProgram);
+            cameraHelperUpdate();
+            batch.setProjectionMatrix(cameraHelper.combined);
+            //BEGIN
             batch.begin();
-            background.update(dt);
+            gameInfoSystem.render(batch);
+            pointer.render(batch);
+            batch.end();
+
+            batch.setShader(null);
+            stage.draw();
+
+        } else {
+            super.render(dt);
+            boomBox.stopAllMusicAndPlayOnce(MSConstants.MENU_MUSIC);
+            batch.begin();
             background.render(batch);
+            gameInfoSystem.update(dt);
             gameInfoSystem.render(batch);
             player.getStanding().render(batch);
             batch.end();
-            batch.setShader(null);
             pauseGroup.setGameOver();
             stage.draw();
         }
@@ -178,33 +266,21 @@ public class GameScreen extends BaseScreen {
             blackhole.update(dt);
             gameInfoSystem.update(dt);
             anomalyTimer.update(dt);
-            checkCollision(dt);
             pointer.update(dt);
+            checkCollision(dt);
         }
-        cameraUpdate();
         if (!pauseGroup.isPause()) {
             shake.update(dt, camera);
         }
         stage.act();
     }
 
+    private void cameraHelperUpdate() {
+        cameraUpdater(cameraHelper);
+    }
+
     private void cameraUpdate() {
-        camera.position.set(player.getPosition().x, player.getPosition().y, 0);
-
-        if (camera.position.x < Rules.WORLD_WIDTH / 2) {
-            camera.position.x = Rules.WORLD_WIDTH / 2;
-        }
-        if (camera.position.y < Rules.WORLD_HEIGHT / 2) {
-            camera.position.y = Rules.WORLD_HEIGHT / 2;
-        }
-        if (camera.position.x > Rules.SPACE_WIDTH - Rules.WORLD_WIDTH / 2) {
-            camera.position.x = Rules.SPACE_WIDTH - Rules.WORLD_WIDTH / 2;
-        }
-        if (camera.position.y > Rules.SPACE_HEIGHT - Rules.WORLD_HEIGHT / 2) {
-            camera.position.y = Rules.SPACE_HEIGHT - Rules.WORLD_HEIGHT / 2;
-        }
-
-        camera.update();
+        cameraUpdater(camera);
     }
 
     private void checkCollision(float dt) {
@@ -286,7 +362,7 @@ public class GameScreen extends BaseScreen {
                         }
                         tmpAnomaly.setHungry(false);
                         tmpAnomaly.setSlimTimer(0);
-                        boomBox.playSound(MSConstants.PLAYER_KICKED_CORROSIVE);
+                        prettyKick(MSConstants.PLAYER_KICKED_CORROSIVE);
                     }
                 }
             }
@@ -304,7 +380,7 @@ public class GameScreen extends BaseScreen {
                     } else {
                         tmpAnomaly.setHungry(false);
                         damageToPlayer(tmpAnomaly);
-                        boomBox.playSound(MSConstants.PLAYER_KICKED_ELECTRIC);
+                        prettyKick(MSConstants.PLAYER_KICKED_ELECTRIC);
                     }
                 }
             }
@@ -402,9 +478,9 @@ public class GameScreen extends BaseScreen {
                         player.getRamShield().blink(0.5f);
                         player.setPower(player.getPower() + tmpAsteroid.getSizeForHarvest());
                         //pretty sound if collect much fragments in little time
-                        if (player.isDelay()) {
+                        if (player.isDelayFragment()) {
                             boomBox.playSound(MSConstants.GET_FRAGMENT);
-                            player.setDelay(false);
+                            player.setDelayFragment(false);
                         }
                         tmpAsteroid.destroy();
                     }
@@ -450,6 +526,24 @@ public class GameScreen extends BaseScreen {
         }
     }
 
+    private void cameraUpdater(Camera camera) {
+        camera.position.set(player.getPosition().x, player.getPosition().y, 0);
+
+        if (camera.position.x < Rules.WORLD_WIDTH / 2) {
+            camera.position.x = Rules.WORLD_WIDTH / 2;
+        }
+        if (camera.position.y < Rules.WORLD_HEIGHT / 2) {
+            camera.position.y = Rules.WORLD_HEIGHT / 2;
+        }
+        if (camera.position.x > Rules.SPACE_WIDTH - Rules.WORLD_WIDTH / 2) {
+            camera.position.x = Rules.SPACE_WIDTH - Rules.WORLD_WIDTH / 2;
+        }
+        if (camera.position.y > Rules.SPACE_HEIGHT - Rules.WORLD_HEIGHT / 2) {
+            camera.position.y = Rules.SPACE_HEIGHT - Rules.WORLD_HEIGHT / 2;
+        }
+        camera.update();
+    }
+
     private void collideBlackholePlayer(float dt) {
         if (player.getPosition().dst(blackhole.getPosition()) < Rules.BLACKHOLE_TAKE_RANGE) {
             player.setTaken(true);
@@ -466,6 +560,8 @@ public class GameScreen extends BaseScreen {
             player.getRamShield().setScaleY(scaleY);
             player.getLifeShield().setScaleX(scaleX);
             player.getLifeShield().setScaleY(scaleY);
+            player.getScratch().setScaleX(scaleX);
+            player.getScratch().setScaleY(scaleY);
             player.setAngle(player.getAngle() + 365 * dt);
             if (blackhole.getPosition().dst(player.getPosition()) <= Rules.BLACKHOLE_EVENT_HORIZON) {
                 player.getPosition().set(
@@ -478,8 +574,11 @@ public class GameScreen extends BaseScreen {
                 player.getRamShield().setScaleY(1.0f);
                 player.getLifeShield().setScaleX(1.0f);
                 player.getLifeShield().setScaleY(1.0f);
+                player.getScratch().setScaleX(1.0f);
+                player.getScratch().setScaleY(1.0f);
                 player.setTaken(false);
                 boomBox.playSound(MSConstants.BLACKHOLE_TELEPORT);
+                player.getStanding().changeLives(-1);
             }
         } else player.setTaken(false);
     }
@@ -507,7 +606,6 @@ public class GameScreen extends BaseScreen {
             }
         } else poolable.setTaken(false);
     }
-    ///
 
     private void damageToAnomaly(AbstractPoolable anomaly) {
         anomaly.destroy();
@@ -547,6 +645,14 @@ public class GameScreen extends BaseScreen {
             anomaly.getVelocity().add(tmp);
         }
     }
+    ///
+
+    private void prettyKick(String sound) {
+        if (player.isDelayAnomaly()) {
+            boomBox.playSound(sound);
+            player.setDelayAnomaly(false);
+        }
+    }
 
     private void showSpray(AbstractPoolable poolable) {
         float R = 0, G = 0.6f, B = 0;
@@ -574,7 +680,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void dispose() {
         super.dispose();
-        shaderProgram.dispose();
+        shaderPause.dispose();
         player.getStanding().writeResult();
     }
 }

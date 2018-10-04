@@ -14,6 +14,7 @@ public class GamePreferences {
     private static final String PREF_SOUND_VOLUME = "sound";
     private static final String PREFS_NAME = "shuttleGame_preferences";
     private static final String PREF_LEVEL = "level";
+    private static final String EFFECTS_LEVEL = "effects";
     private Preferences preferences;
 
     public GamePreferences() {
@@ -35,6 +36,9 @@ public class GamePreferences {
         if (!getPrefs().contains(PREF_LEVEL)) {
             setLevel(1);
         }
+        if (!getPrefs().contains(EFFECTS_LEVEL)) {
+            setLevel(1);
+        }
     }
 
     private Preferences getPrefs() {
@@ -49,6 +53,15 @@ public class GamePreferences {
 
     public void setLevel(int level) {
         getPrefs().putInteger(PREF_LEVEL, level);
+        getPrefs().flush();
+    }
+
+    public int getEffectsLevel() {
+        return getPrefs().getInteger(EFFECTS_LEVEL);
+    }
+
+    public void setEffectsLevel(int level) {
+        getPrefs().putInteger(EFFECTS_LEVEL, level);
         getPrefs().flush();
     }
 

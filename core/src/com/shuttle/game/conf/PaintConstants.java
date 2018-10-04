@@ -39,11 +39,11 @@ public class PaintConstants {
     public static int BLACKHOLE_HOLE_WIDTH = 192;
     public static int BLACKHOLE_HOLE_HEIGHT = 192;
     public static final String BLACKHOLE_SPIRAL_REGION = "blackholeSpiral";
-    public static int BLACKHOLE_SPIRAL_WIDTH = 192;
-    public static int BLACKHOLE_SPIRAL_HEIGHT = 192;
+    public static int BLACKHOLE_SPIRAL_WIDTH = 256;
+    public static int BLACKHOLE_SPIRAL_HEIGHT = 256;
     public static final String BLACKHOLE_GLOW_REGION = "glow";
-    public static final int BLACKHOLE_GLOW_WIDTH = 160;
-    public static final int BLACKHOLE_GLOW_HEIGHT = 160;
+    public static final int BLACKHOLE_GLOW_WIDTH = 192;
+    public static final int BLACKHOLE_GLOW_HEIGHT = 192;
     public static final String ASTRONAUT_REGION = "astronaut";
     public static final int ASTRONAUT_WIDTH = 256;
     public static final int ASTRONAUT_HEIGHT = 256;

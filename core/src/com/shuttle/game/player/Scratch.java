@@ -7,13 +7,17 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
 
+import lombok.Data;
+
 /**
  * @author Shuttle on 9/3/18.
  */
+@Data
 public class Scratch {
     private TextureRegion[] textures;
     private Shuttle player;
     private int width, height;
+    private float scaleX, scaleY;
     private float alpha;
     private int frame;
     private Color tmpColor;
@@ -29,6 +33,7 @@ public class Scratch {
         this.width = PaintConstants.SHUTTLE_SCRATCH_WIDTH;
         this.height = PaintConstants.SHUTTLE_SCRATCH_HEIGHT;
         this.tmpColor = new Color();
+        this.scaleX = this.scaleY = 1.0f;
     }
 
     public void render(SpriteBatch batch) {
@@ -42,8 +47,8 @@ public class Scratch {
                 height / 2,
                 width,
                 height,
-                1,
-                1,
+                scaleX,
+                scaleY,
                 player.getAngle()
         );
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);

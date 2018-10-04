@@ -1,12 +1,10 @@
 package com.shuttle.game.utils;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.ScreenManager;
 
 /**
  * @author Shuttle on 8/26/18.
@@ -69,11 +67,9 @@ public class BoundCheck {
     }
 
     private void alert(Shuttle player, float duration) {
-        tmp.set(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        ScreenManager.getInstance().getViewport().unproject(tmp);
         player.getGs().getGameInfoSystem().setup(
-                tmp.x - Rules.WORLD_WIDTH / 2,
-                tmp.y + Rules.WORLD_HEIGHT / 2,
+                player.getGs().getCamera().position.x,
+                player.getGs().getCamera().position.y,
                 GameInfoSystem.GameInfoSystemPreset.OUT,
                 3,
                 true

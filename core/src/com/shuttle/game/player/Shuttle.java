@@ -44,8 +44,12 @@ public class Shuttle {
     private float killTimer;
     private float power, maxPower;
     //pretty sound if collect much fragments in little time;
-    private float tmpDelay;
-    private boolean delay;
+    private float tmpDelayFragment;
+    private boolean delayFragment;
+    //
+    //pretty sound if collide with much anomalies in little time;
+    private float tmpDelayAnomaly;
+    private boolean delayAnomaly;
     //
     private GlobalInteractionLevels shieldLevel;
     private GamePreferences preferences;
@@ -187,7 +191,7 @@ public class Shuttle {
                 boomBox.playSound(MSConstants.GET_ASTRONAUT);
                 break;
             case CRATE:
-                int x = MathUtils.random(0,3);
+                int x = MathUtils.random(0, 3);
                 if (x == 0) {
                     standing.changeHP(Rules.CRATE_REPAIR_ADD);
                     gs.getGameInfoSystem()
@@ -282,10 +286,16 @@ public class Shuttle {
         checkRadar(dt);
         checkBounds(dt);
 
-        tmpDelay += dt;
-        if (tmpDelay >= 0.1f) {
-            tmpDelay = 0.0f;
-            delay = true;
+        tmpDelayFragment += dt;
+        if (tmpDelayFragment >= 0.1f) {
+            tmpDelayFragment = 0.0f;
+            delayFragment = true;
+        }
+
+        tmpDelayAnomaly += dt;
+        if (tmpDelayAnomaly >= 0.1f) {
+            tmpDelayAnomaly = 0.0f;
+            delayAnomaly = true;
         }
     }
 

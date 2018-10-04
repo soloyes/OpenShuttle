@@ -103,6 +103,8 @@ public class ConfigGroup extends Group {
         });
 
         final Label levelLabelDynamic = new Label(Rules.StartLevel.values()[preferences.getLevel()].toString(), style64);
+        final Label effectsLabelDynamic = new Label(Rules.EffectsLevel.values()[preferences.getEffectsLevel()].toString(), style64);
+
 
         final Slider levelSlider = new Slider(0.0f, 2.0f, 1.0f, false, sliderStyle);
         levelSlider.setValue(preferences.getLevel());
@@ -111,6 +113,17 @@ public class ConfigGroup extends Group {
             public boolean handle(Event event) {
                 preferences.setLevel((int) levelSlider.getValue());
                 levelLabelDynamic.setText(Rules.StartLevel.values()[(int) levelSlider.getValue()].toString());
+                return false;
+            }
+        });
+
+        final Slider effectsSlider = new Slider(0.0f, 1.0f, 1.0f, false, sliderStyle);
+        effectsSlider.setValue(preferences.getEffectsLevel());
+        effectsSlider.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                preferences.setEffectsLevel((int) effectsSlider.getValue());
+                effectsLabelDynamic.setText(Rules.EffectsLevel.values()[(int) effectsSlider.getValue()].toString());
                 return false;
             }
         });
@@ -156,6 +169,8 @@ public class ConfigGroup extends Group {
         Label joyStickOnOffLabel = new Label("JoyStick ", style64);
         Label levelLabel = new Label("Level ", style64);
 
+        Label effectsLabel = new Label("Effects ", style64);
+
         table.add(titleLabel).colspan(3);
         table.row();
         table.add(volumeMusicLabel).left();
@@ -184,6 +199,11 @@ public class ConfigGroup extends Group {
                 table.add(levelLabel).left();
                 table.add(levelSlider).padRight(10);
                 table.add(levelLabelDynamic).left().width(200);
+
+                table.row();
+                table.add(effectsLabel).left();
+                table.add(effectsSlider).padRight(10);
+                table.add(effectsLabelDynamic).left().width(200);
                 break;
         }
         //table.setDebug(true);

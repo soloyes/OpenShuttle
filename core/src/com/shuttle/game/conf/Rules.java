@@ -151,7 +151,7 @@ public class Rules {
             public void setGameLevel(Shuttle player) {
                 player.getStanding().setMaxFuel(200);
                 player.getStanding().setFuel(200);
-                player.getStanding().setHp(1);
+                player.getStanding().setHp(20);
                 player.getStanding().setMaxHp(20);
                 player.getStanding().setLives(2);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
@@ -184,5 +184,9 @@ public class Rules {
         };
 
         public abstract void setGameLevel(Shuttle player);
+    }
+
+    public enum EffectsLevel{
+        LOW, HIGH
     }
 }

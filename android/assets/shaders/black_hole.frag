@@ -1,0 +1,45 @@
+#ifdef GL_ES
+    #define LOWP lowp
+    precision highp float;
+#else
+    #define LOWP
+#endif
+varying vec2 v_texCoord0;
+varying vec4 v_color;
+uniform LOWP sampler2D u_texture;
+uniform LOWP vec2 center;
+uniform LOWP float time;
+uniform float isGrey;
+uniform vec2 resolution;
+
+void main (void)
+{
+    vec4 texColor = texture2D(u_texture, v_texCoord0);
+
+    vec2 sub2 = v_texCoord0 - center;
+
+    sub2.x *= resolution.x / resolution.y;
+
+    gl_FragColor = texture2D(u_texture, v_texCoord0);
+
+    float d = length(sub2);
+    float dmax = 0.07f;
+
+    if(d < dmax) {
+        float a = d * 90.0f + time * d;
+        float s = sin(a);
+        float c = cos(a);
+        mat2 m = mat2(c, -s, s, c);
+        sub2 = m * sub2;
+
+        gl_FragColor = texture2D(u_texture, v_texCoord0 + sub2);
+        gl_FragColor.b += (dmax - d) * 4.0f;
+        if(isGrey > 0.0f){
+            gl_FragColor = vec4(vec3(dot(gl_FragColor.rgb, vec3(0.299, 0.587, 0.114))), gl_FragColor.a);
+        }
+
+        if (d < 0.02) {
+            gl_FragColor.rgb *= d / 0.02;
+        }
+    }
+}
