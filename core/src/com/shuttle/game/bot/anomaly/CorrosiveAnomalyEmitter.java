@@ -8,15 +8,15 @@ import com.shuttle.game.screens.GameScreen;
  */
 public class CorrosiveAnomalyEmitter extends AbstractAnomalyEmitter {
     public CorrosiveAnomalyEmitter(GameScreen gs) {
-        super.setGs(gs);
+        super.gs = gs;
         super.setRespawnTime(Rules.ANOMALIES_CORROSIVE_RESPAWN_TIME);
-        super.setAnomaliesAtStart(Rules.ANOMALIES_AT_START);
+        super.setAnomaliesAtStart(Rules.ANOMALIES_CORROSIVE_AT_START);
         super.setAnomaliesMaxCount(Rules.ANOMALIES_CORROSIVE_MAX_COUNT);
         emit();
     }
 
     @Override
     protected CorrosiveAnomaly newObject() {
-        return new CorrosiveAnomaly(super.getGs());
+        return new CorrosiveAnomaly(gs);
     }
 }

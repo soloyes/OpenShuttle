@@ -8,15 +8,15 @@ import com.shuttle.game.screens.GameScreen;
  */
 public class MagneticAnomalyEmitter extends AbstractAnomalyEmitter {
     public MagneticAnomalyEmitter(GameScreen gs) {
-        super.setGs(gs);
+        super.gs = gs;
         super.setRespawnTime(Rules.ANOMALIES_MAGNETIC_RESPAWN_TIME);
-        super.setAnomaliesAtStart(Rules.ANOMALIES_AT_START);
+        super.setAnomaliesAtStart(Rules.ANOMALIES_MAGNETIC_AT_START);
         super.setAnomaliesMaxCount(Rules.ANOMALIES_MAGNETIC_MAX_COUNT);
         emit();
     }
 
     @Override
     protected MagneticAnomaly newObject() {
-        return new MagneticAnomaly(super.getGs());
+        return new MagneticAnomaly(gs);
     }
 }

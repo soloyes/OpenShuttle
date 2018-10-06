@@ -7,18 +7,20 @@ import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 9/2/18.
  */
-@Data
 public class RamShield {
     private TextureRegion texture;
     private Shuttle player;
     private int width, height;
     private float alpha;
     private float fromAlpha;
+    @Getter
+    @Setter
     private float scaleX, scaleY;
     private Color tmpColor;
 

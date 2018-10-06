@@ -13,17 +13,23 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.screens.ScreenManager;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 6/23/18.
  */
-@Data
 public class MenuGroup extends Group {
     private BitmapFont font96;
+    @Getter
+    @Setter
     private boolean isEmptyUserName;
+    @Getter
+    @Setter
     private TextField userName;
     private Skin skin;
+    @Getter
+    @Setter
     private FileHandle file;
 
     public MenuGroup() {

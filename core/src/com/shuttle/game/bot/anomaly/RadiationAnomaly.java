@@ -15,16 +15,18 @@ import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Regions;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 9/12/18.
  */
-@Data
 public class RadiationAnomaly extends AbstractAnomaly {
+    @Getter
+    @Setter
     private boolean glued;
     private float liveTime;
-    private float V;
+    private float v;
 
     public RadiationAnomaly(GameScreen gs) {
         this.boomBox = new BoomBox(new GamePreferences());
@@ -51,11 +53,11 @@ public class RadiationAnomaly extends AbstractAnomaly {
         this.hungryTimer = 0.0f;
         this.born = false;
         this.level = 1;
-        this.scaleX = this.saveScaleX= 1 + level * 0.15f;
+        this.scaleX = this.saveScaleX = 1 + level * 0.15f;
         this.scaleY = this.saveScaleY = 1 + level * 0.15f;
         this.taken = true;
         this.color.a = 0.0f;
-        this.V = MathUtils.random(Rules.ANOMALIES_RADIATION_VELOCITY, 3 * Rules.ANOMALIES_RADIATION_VELOCITY);
+        this.v = MathUtils.random(Rules.ANOMALIES_RADIATION_VELOCITY, 3 * Rules.ANOMALIES_RADIATION_VELOCITY);
     }
 
     public void render(SpriteBatch batch) {
@@ -94,7 +96,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
                         .getPosition())
                         .sub(position)
                         .nor()
-                        .scl(V);
+                        .scl(v);
                 velocity.mulAdd(tmp, dt);
             }
             if (gs.getPlayer().getPosition().dst(position) < 240 * level) {

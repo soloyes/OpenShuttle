@@ -11,15 +11,19 @@ import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Regions;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 6/30/18.
  */
-@Data
 public class Asteroid extends AbstractPoolable {
     private TextureRegion[] textureRegions;
+    @Getter
+    @Setter
     private boolean fragmented;
+    @Getter
+    @Setter
     private float sizeForHarvest;
 
     public Asteroid() {

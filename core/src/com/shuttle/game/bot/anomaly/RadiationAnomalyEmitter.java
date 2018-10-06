@@ -8,15 +8,15 @@ import com.shuttle.game.screens.GameScreen;
  */
 public class RadiationAnomalyEmitter extends AbstractAnomalyEmitter {
     public RadiationAnomalyEmitter(GameScreen gs) {
-        super.setGs(gs);
+        super.gs = gs;
         super.setRespawnTime(Rules.ANOMALIES_RADIATION_RESPAWN_TIME);
-        super.setAnomaliesAtStart(Rules.ANOMALIES_AT_START);
+        super.setAnomaliesAtStart(Rules.ANOMALIES_RADIATION_AT_START);
         super.setAnomaliesMaxCount(Rules.ANOMALIES_RADIATION_MAX_COUNT);
         emit();
     }
 
     @Override
     protected RadiationAnomaly newObject() {
-        return new RadiationAnomaly(super.getGs());
+        return new RadiationAnomaly(gs);
     }
 }

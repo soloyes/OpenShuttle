@@ -6,17 +6,24 @@ import com.shuttle.game.bot.pool.ObjectPool;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 9/15/18.
  */
-@Data
+
 public abstract class AbstractAnomalyEmitter extends ObjectPool<AbstractAnomaly> {
-    private GameScreen gs;
+    protected GameScreen gs;
     private float time;
+    @Getter
+    @Setter
     private float respawnTime;
+    @Getter
+    @Setter
     private int anomaliesAtStart;
+    @Getter
+    @Setter
     private int anomaliesMaxCount;
 
     protected abstract AbstractAnomaly newObject();
@@ -49,7 +56,7 @@ public abstract class AbstractAnomalyEmitter extends ObjectPool<AbstractAnomaly>
 
     protected void emit() {
         if (anomaliesAtStart != 0) {
-            for (int i = 0; i <= anomaliesAtStart; i++) {
+            for (int i = 0; i < anomaliesAtStart; i++) {
                 createAnomaly();
             }
         }

@@ -16,12 +16,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 8/2/18.
  */
-@Data
 public class Standing {
     private StringBuilder tmpString;
     private String username;
@@ -30,13 +30,29 @@ public class Standing {
     private BitmapFont font64;
     private BitmapFont font128;
     private Shuttle player;
+    @Getter
+    @Setter
     private float fuel, maxFuel;
+    @Getter
+    @Setter
     private int hp, maxHp;
+    @Getter
+    @Setter
     private int lives;
+    @Getter
+    @Setter
     private int playingLevel;
+    @Getter
+    @Setter
     private boolean hpAlert;
+    @Getter
+    @Setter
     private boolean fuelAlertOutOfBounds;
+    @Getter
+    @Setter
     private boolean scoreAlertRadiationAnomaly;
+    @Getter
+    @Setter
     private boolean fuelAlertMagneticAnomaly;
     //Score to lives with formula scoreToLive*n*(28 - level)
     private int n;
@@ -114,15 +130,14 @@ public class Standing {
                     .append(username);
             tmpString
                     .append("\nSCORE: ");
-            if (scoreAlertRadiationAnomaly){
+            if (scoreAlertRadiationAnomaly) {
                 tmpString
                         .append("[RED]")
                         .append(scoreView)
                         .append("[]");
-            }
-            else {
+            } else {
                 tmpString
-                    .append(scoreView);
+                        .append(scoreView);
             }
             tmpString
                     .append("\nHP: ");

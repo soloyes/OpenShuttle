@@ -287,13 +287,13 @@ public class Shuttle {
         checkBounds(dt);
 
         tmpDelayFragment += dt;
-        if (tmpDelayFragment >= 0.1f) {
+        if (tmpDelayFragment >= Rules.FRAGMENT_KICK_PRETTY_SOUND_DELAY) {
             tmpDelayFragment = 0.0f;
             delayFragment = true;
         }
 
         tmpDelayAnomaly += dt;
-        if (tmpDelayAnomaly >= 0.1f) {
+        if (tmpDelayAnomaly >= Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY) {
             tmpDelayAnomaly = 0.0f;
             delayAnomaly = true;
         }

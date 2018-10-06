@@ -18,12 +18,9 @@ import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Regions;
 
-import lombok.Data;
-
 /**
  * @author Shuttle on 9/11/18.
  */
-@Data
 public class ElectricalAnomaly extends AbstractAnomaly {
     private boolean touched;
 
@@ -56,7 +53,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.born = false;
         this.level = 4;
         this.color.a = 0.0f;
-        this.scaleX = this.saveScaleX= 1 + level * 0.15f;
+        this.scaleX = this.saveScaleX = 1 + level * 0.15f;
         this.scaleY = this.saveScaleY = 1 + level * 0.15f;
         this.taken = true;
     }

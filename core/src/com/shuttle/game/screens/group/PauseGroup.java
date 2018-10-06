@@ -16,12 +16,12 @@ import com.shuttle.game.utils.Assets;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.BoomBox;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 7/8/18.
  */
-@Data
 public class PauseGroup extends Group {
     private final Button buttonMenu;
     private final Button buttonRestart;
@@ -29,6 +29,8 @@ public class PauseGroup extends Group {
     private final ConfigGroup configGroup;
     private BoomBox boomBox;
     private GamePreferences preferences;
+    @Getter
+    @Setter
     private boolean pause;
 
     public PauseGroup() {

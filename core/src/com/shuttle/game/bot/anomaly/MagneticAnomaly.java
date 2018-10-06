@@ -15,16 +15,18 @@ import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Regions;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 9/12/18.
  */
-@Data
 public class MagneticAnomaly extends AbstractAnomaly {
+    @Getter
+    @Setter
     private boolean glued;
     private float liveTime;
-    private float V;
+    private float v;
 
     public MagneticAnomaly(GameScreen gs) {
         this.boomBox = new BoomBox(new GamePreferences());
@@ -41,7 +43,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
         this.height = PaintConstants.ANOMALY_MAGNETIC_HEIGHT;
         this.boundCheck = new BoundCheck();
         this.color = new Color();
-        this.V = MathUtils.random(Rules.ANOMALIES_MAGNETIC_VELOCITY, 3 * Rules.ANOMALIES_MAGNETIC_VELOCITY);
+        this.v = MathUtils.random(Rules.ANOMALIES_MAGNETIC_VELOCITY, 3 * Rules.ANOMALIES_MAGNETIC_VELOCITY);
     }
 
     @Override
@@ -101,7 +103,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
                         .getPosition())
                         .sub(position)
                         .nor()
-                        .scl(V);
+                        .scl(v);
                 velocity.mulAdd(tmp, dt);
             }
             if (gs.getPlayer().getPosition().dst(position) < 240 * level) {

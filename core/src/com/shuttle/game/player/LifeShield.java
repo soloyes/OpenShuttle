@@ -6,17 +6,19 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 9/2/18.
  */
-@Data
 public class LifeShield {
     private TextureRegion texture;
     private Shuttle player;
     private int width, height;
     private float alpha;
+    @Getter
+    @Setter
     private float scaleX, scaleY;
 
     public LifeShield(Shuttle player) {

@@ -39,27 +39,49 @@ import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.group.PauseGroup;
 import com.shuttle.game.utils.Shake;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
 public class GameScreen extends BaseScreen {
+    @Getter
+    @Setter
     private Shuttle player;
     private Background background;
+    @Getter
+    @Setter
     private ParticleEmitter particleEmitter;
+    @Getter
+    @Setter
     private ConsumableEmitter consumableEmitter;
+    @Getter
+    @Setter
     private CorrosiveAnomalyEmitter corrosiveAnomalyEmitter;
+    @Getter
+    @Setter
     private ElectricalAnomalyEmitter electricalAnomalyEmitter;
+    @Getter
+    @Setter
     private RadiationAnomalyEmitter radiationAnomalyEmitter;
+    @Getter
+    @Setter
     private MagneticAnomalyEmitter magneticAnomalyEmitter;
     private AsteroidEmitter asteroidEmitter;
+    @Getter
+    @Setter
     private Camera camera;
     private Vector2 tmp;
     private ShaderProgram shaderPause;
+    @Getter
+    @Setter
     private GameInfoSystem gameInfoSystem;
     private PauseGroup pauseGroup;
     private Joystick joystick;
     private PlayerPointer pointer;
+    @Getter
+    @Setter
     private Shake shake;
+    @Getter
+    @Setter
     private AnomalyTimer anomalyTimer;
     private Blackhole blackhole;
     private FrameBuffer fbo;
@@ -80,6 +102,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
+        anomalyTimer = new AnomalyTimer();
         boomBox.stopAllMusicAndPlay(MSConstants.GAME_MUSIC);
         fbo = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(),
                 Gdx.graphics.getHeight(), false);
@@ -126,7 +149,6 @@ public class GameScreen extends BaseScreen {
         pointer = new PlayerPointer(player);
         Rules.StartLevel.values()[preferences.getLevel()].setGameLevel(player);
 
-        anomalyTimer = new AnomalyTimer();
         blackhole = new Blackhole();
     }
 
@@ -269,6 +291,7 @@ public class GameScreen extends BaseScreen {
             pointer.update(dt);
             checkCollision(dt);
         }
+        cameraUpdate();
         if (!pauseGroup.isPause()) {
             shake.update(dt, camera);
         }

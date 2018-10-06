@@ -6,14 +6,15 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.BoundCheck;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
 public class Consumable extends AbstractPoolable {
+    @Getter
+    @Setter
     private Type type;
     private TextureRegion texture;
     private TextureRegion[] textures;

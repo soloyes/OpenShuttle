@@ -6,21 +6,23 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 9/15/18.
  */
-@Data
+
 public class Blackhole {
-    private GameScreen gs;
     private TextureRegion texture;
     private TextureRegion spiralRegion;
     private TextureRegion glowRegion;
-    private Vector2 position, start, velocity;
+    @Getter
+    @Setter
+    private Vector2 position;
+    private Vector2 start;
     private int width, height;
     private int spiralWidth, spiralHeight;
     private int glowWidth, glowHeight;
@@ -29,6 +31,8 @@ public class Blackhole {
     private float glowScale;
     private float glowB;
     private float rotation, angle, radialSpeed;
+    @Getter
+    @Setter
     private float takeRange;
     private int radius;
     private boolean oscillator;
@@ -44,7 +48,6 @@ public class Blackhole {
                 Rules.SPACE_HEIGHT / 2
         );
         this.position = new Vector2();
-        this.velocity = new Vector2();
         this.width = PaintConstants.BLACKHOLE_HOLE_WIDTH;
         this.height = PaintConstants.BLACKHOLE_HOLE_HEIGHT;
         this.spiralWidth = PaintConstants.BLACKHOLE_SPIRAL_WIDTH;

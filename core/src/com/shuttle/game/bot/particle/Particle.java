@@ -5,15 +5,21 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by FlameXander on 02.07.2017.
  */
-@Data
 public class Particle extends AbstractPoolable {
     private float time, duration;
-    private float startSize, currentSize, endSize;
+    private float startSize, endSize;
+    @Getter
+    @Setter
+    private float currentSize;
     private float startR, startG, startB, startA;
+    @Getter
+    @Setter
     private float currentR, currentG, currentB, currentA;
     private float endR, endG, endB, endA;
 

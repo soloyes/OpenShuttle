@@ -15,12 +15,14 @@ import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Regions;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
 public class CorrosiveAnomaly extends AbstractAnomaly {
-    float[] probabilities = {1.0f, 0.8f, 0.5f, 0.3f};
+    private float[] probabilities = {1.0f, 0.8f, 0.5f, 0.3f};
     private TextureRegion glowRegion;
+    @Getter
+    @Setter
     private float slimTimer;
     private int glowWidth, glowHeight;
     private boolean oscillator;
@@ -43,6 +45,8 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         this.glowHeight = PaintConstants.ANOMALY_GLOW_HEIGHT;
         this.boundCheck = new BoundCheck();
         this.color = new Color();
+
+        gs.getAnomalyTimer().getAnomalies().add(this);
     }
 
     @Override
@@ -140,7 +144,9 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
 
             boundCheck.checkAndHandleBounds(this);
 
-            slimTimer += dt;
+            if (activated) {
+                slimTimer += dt;
+            }
             if (slimTimer > Rules.ANOMALIES_CORROSIVE_SLIM_TIME) {
                 slimTimer = 0;
                 if (level > 0) {
@@ -158,15 +164,18 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
             }
 
             velocity.scl(0.99f);
-            position.mulAdd(velocity, dt);
-            if (hungry) {
-                if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(Rules.ANOMALIES_CORROSIVE_VELOCITY);
-                    velocity.mulAdd(tmp, dt);
-                }
-                if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
-                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
-                    velocity.mulAdd(tmp, dt);
+
+            if (activated) {
+                position.mulAdd(velocity, dt);
+                if (hungry) {
+                    if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
+                        tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(Rules.ANOMALIES_CORROSIVE_VELOCITY);
+                        velocity.mulAdd(tmp, dt);
+                    }
+                    if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
+                        tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
+                        velocity.mulAdd(tmp, dt);
+                    }
                 }
             }
         }
