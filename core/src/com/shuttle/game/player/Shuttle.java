@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.KillingSpree;
+import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.consumable.Consumable;
 import com.shuttle.game.bot.particle.ParticleEmitter;
 import com.shuttle.game.conf.GamePreferences;
@@ -21,6 +22,8 @@ import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.ShuttleMath;
+
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -223,7 +226,7 @@ public class Shuttle {
                 boomBox.playSound(MSConstants.GET_ASTRONAUT);
                 break;
             case CRATE:
-                int x = MathUtils.random(0, 3);
+                int x = MathUtils.random(0, 4);
                 if (x == 0) {
                     standing.changeHP(Rules.CRATE_REPAIR_ADD);
                     gs.getGameInfoSystem()
@@ -262,7 +265,18 @@ public class Shuttle {
                             );
                     boomBox.playSound(MSConstants.TURBO);
                 }
-                if (x > 2) {
+                if (x == 3) {
+                    List<AbstractAnomaly> anomalies = gs.getAnomalyStorage().getAnomaliesList(AbstractAnomaly.AnomalyType.CORROSIVE);
+                    for (int i = 0; i < anomalies.size(); i++) {
+                        if (boundCheck.checkAndHandleBoundsInCamera(anomalies.get(i), gs.getCamera())) {
+                            if (anomalies.get(i).isActive()) {
+                                anomalies.get(i).destroy();
+                                anomalies.get(i).showSpray(gs.getParticleEmitter());
+                            }
+                        }
+                    }
+                }
+                if (x > 4) {
                     gs.getGameInfoSystem()
                             .setup(
                                     position.x,

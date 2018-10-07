@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.shuttle.game.bot.anomaly.AnomalyStorage;
 import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
@@ -21,7 +22,7 @@ import com.shuttle.game.bot.anomaly.MagneticAnomaly;
 import com.shuttle.game.bot.anomaly.MagneticAnomalyEmitter;
 import com.shuttle.game.bot.anomaly.RadiationAnomaly;
 import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
-import com.shuttle.game.conf.AnomalyTimer;
+import com.shuttle.game.bot.anomaly.AnomalyTimer;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.player.PlayerPointer;
 import com.shuttle.game.conf.GlobalInteractionLevels;
@@ -66,6 +67,8 @@ public class GameScreen extends BaseScreen {
     @Getter
     @Setter
     private MagneticAnomalyEmitter magneticAnomalyEmitter;
+    @Getter
+    private AnomalyStorage anomalyStorage;
     private AsteroidEmitter asteroidEmitter;
     @Getter
     @Setter
@@ -103,7 +106,8 @@ public class GameScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        anomalyTimer = new AnomalyTimer();
+        anomalyStorage = new AnomalyStorage();
+        anomalyTimer = new AnomalyTimer(anomalyStorage);
         boomBox.stopAllMusicAndPlay(MSConstants.GAME_MUSIC);
         fbo = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(),
                 Gdx.graphics.getHeight(), false);
@@ -519,7 +523,7 @@ public class GameScreen extends BaseScreen {
                         gameInfoSystem.setup(tmpAnomaly.getPosition().x, tmpAnomaly.getPosition().y, GameInfoSystem.GameInfoSystemPreset.BOOM, 3.0f, false);
                         if (tmpAnomaly.getLevel() == 0) {
                             tmpAnomaly.destroy();
-                            showSpray(tmpAnomaly);
+                            tmpAnomaly.showSpray(particleEmitter);
                         } else {
                             tmpAnomaly.takeDamage(1);
                         }
@@ -533,7 +537,7 @@ public class GameScreen extends BaseScreen {
                         tmpConsumable.destroy();
                         asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE);
                         particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 32 + 32);
-                        showSpray(tmpConsumable);
+                        tmpConsumable.showSpray(particleEmitter);
                         gameInfoSystem.setup(
                                 tmpConsumable.getPosition().x,
                                 tmpConsumable.getPosition().y,
@@ -638,7 +642,7 @@ public class GameScreen extends BaseScreen {
         player.getStanding().changeScore(asc);
         player.slowDown(anomaly.getLevel() * 50.0f);
         player.changePower(-anomaly.getLevel());
-        showSpray(anomaly);
+        anomaly.showSpray(particleEmitter);
         player.killPlusPlus();
     }
     ///
@@ -675,29 +679,6 @@ public class GameScreen extends BaseScreen {
         if (player.isDelayAnomaly()) {
             boomBox.playSound(sound);
             player.setDelayAnomaly(false);
-        }
-    }
-
-    private void showSpray(AbstractPoolable poolable) {
-        float R = 0, G = 0.6f, B = 0;
-        for (int j = 0; j < 60; j++) {
-            if (poolable instanceof CorrosiveAnomaly) {
-                R = ((CorrosiveAnomaly) (poolable)).getColor().r;
-                G = ((CorrosiveAnomaly) (poolable)).getColor().g;
-                B = ((CorrosiveAnomaly) (poolable)).getColor().b;
-            }
-            particleEmitter.setup(
-                    poolable.getPosition().x + MathUtils.random(-30, 30),
-                    poolable.getPosition().y + MathUtils.random(-30, 30),
-                    MathUtils.random(-400, 400), MathUtils.random(-400, 400),
-                    0.4f,
-                    8,
-                    1,
-                    R, G, B,
-                    1f,
-                    R, G, B,
-                    0.0f
-            );
         }
     }
 

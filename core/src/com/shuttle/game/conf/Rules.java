@@ -68,7 +68,7 @@ public class Rules {
     public static final float ANOMALIES_MAGNETIC_VELOCITY = 50.0f;
     //
     //4.0f
-    public static final float ANOMALIES_CORROSIVE_RESPAWN_TIME = 5.0f;
+    public static final float ANOMALIES_CORROSIVE_RESPAWN_TIME = 2.0f;
     //10.0f
     public static final float ANOMALIES_CORROSIVE_HUNGRY_TIME = 10.0f;
     //100

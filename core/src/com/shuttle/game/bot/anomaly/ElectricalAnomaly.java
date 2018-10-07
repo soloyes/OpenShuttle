@@ -21,6 +21,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
 
     public ElectricalAnomaly(GameScreen gs) {
         super(gs);
+        this.type = AnomalyType.ELECTRICAL;
         this.textureRegions = Regions.split(new TextureRegion(Assets.getInstance().getAssetManager().get(PaintConstants.ANOMALY_ELECTRIC_REGION, Texture.class)),
                 4,
                 4,
@@ -28,6 +29,10 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         );
         this.width = PaintConstants.ANOMALY_ELECTRIC_WIDTH;
         this.height = PaintConstants.ANOMALY_ELECTRIC_HEIGHT;
+
+        gs
+                .getAnomalyStorage()
+                .insert(this, AnomalyType.ELECTRICAL);
     }
 
     @Override

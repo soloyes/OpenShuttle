@@ -1,6 +1,9 @@
 package com.shuttle.game.bot.pool;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
+import com.shuttle.game.bot.particle.ParticleEmitter;
 import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 
@@ -51,4 +54,27 @@ public abstract class AbstractPoolable implements Poolable {
     }
 
     public abstract Vector2 getPosition();
+
+    public void showSpray(ParticleEmitter particleEmitter) {
+        float R = 0, G = 0.6f, B = 0;
+        for (int j = 0; j < 60; j++) {
+            if (this instanceof CorrosiveAnomaly) {
+                R = ((CorrosiveAnomaly) (this)).getColor().r;
+                G = ((CorrosiveAnomaly) (this)).getColor().g;
+                B = ((CorrosiveAnomaly) (this)).getColor().b;
+            }
+            particleEmitter.setup(
+                    this.getPosition().x + MathUtils.random(-30, 30),
+                    this.getPosition().y + MathUtils.random(-30, 30),
+                    MathUtils.random(-400, 400), MathUtils.random(-400, 400),
+                    0.4f,
+                    8,
+                    1,
+                    R, G, B,
+                    1f,
+                    R, G, B,
+                    0.0f
+            );
+        }
+    }
 }

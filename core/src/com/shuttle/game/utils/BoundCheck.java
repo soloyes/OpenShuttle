@@ -1,7 +1,11 @@
 package com.shuttle.game.utils;
 
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.GameInfoSystem;
+import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.Rules;
@@ -13,16 +17,12 @@ public class BoundCheck {
     private float alertTimer;
     private float hpTimer;
     private float fuelTimer;
+    private Rectangle rectangle;
 
-    public void checkAndHandleBoundsAndDestroy(AbstractPoolable poolable) {
-        if (poolable.getPosition().x + poolable.getWidth() / 2 < 0)
-            poolable.destroy();
-        if (poolable.getPosition().x - poolable.getWidth() / 2 > Rules.SPACE_WIDTH)
-            poolable.destroy();
-        if (poolable.getPosition().y + poolable.getHeight() / 2 < 0)
-            poolable.destroy();
-        if (poolable.getPosition().y - poolable.getHeight() / 2 > Rules.SPACE_HEIGHT)
-            poolable.destroy();
+
+    //todo: Переписать под прямоугольники
+    public BoundCheck() {
+        this.rectangle = new Rectangle();
     }
 
     public boolean checkAndHandleBounds(AbstractPoolable poolable) {
@@ -86,5 +86,25 @@ public class BoundCheck {
                 true
         );
         player.getGs().getShake().shake(duration, 35, 10);
+    }
+
+    public void checkAndHandleBoundsAndDestroy(AbstractPoolable poolable) {
+        if (poolable.getPosition().x + poolable.getWidth() / 2 < 0)
+            poolable.destroy();
+        if (poolable.getPosition().x - poolable.getWidth() / 2 > Rules.SPACE_WIDTH)
+            poolable.destroy();
+        if (poolable.getPosition().y + poolable.getHeight() / 2 < 0)
+            poolable.destroy();
+        if (poolable.getPosition().y - poolable.getHeight() / 2 > Rules.SPACE_HEIGHT)
+            poolable.destroy();
+    }
+
+    public boolean checkAndHandleBoundsInCamera(AbstractPoolable poolable, Camera camera) {
+        rectangle.setPosition(
+                camera.position.x - Rules.WORLD_WIDTH / 2,
+                camera.position.y - Rules.WORLD_HEIGHT / 2
+        );
+        rectangle.setSize(Rules.WORLD_WIDTH, Rules.SPACE_HEIGHT);
+        return rectangle.contains(poolable.getPosition());
     }
 }

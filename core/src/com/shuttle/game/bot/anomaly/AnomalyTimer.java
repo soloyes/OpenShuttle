@@ -1,11 +1,14 @@
-package com.shuttle.game.conf;
+package com.shuttle.game.bot.anomaly;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
+import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,12 +22,12 @@ public class AnomalyTimer {
     private BitmapFont font64;
     private StringBuilder sb;
     @Getter
-    private List<AbstractAnomaly> anomalies;
+    private AnomalyStorage anomalyStorage;
 
-    public AnomalyTimer() {
+    public AnomalyTimer(AnomalyStorage anomalyStorage) {
         this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64_C, BitmapFont.class);
         this.sb = new StringBuilder();
-        this.anomalies = new LinkedList<AbstractAnomaly>();
+        this.anomalyStorage = anomalyStorage;
         this.counter = Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
     }
 
@@ -50,6 +53,7 @@ public class AnomalyTimer {
 
         if (counter <= 0.0f) {
             counter = Rules.ANOMALIES_CORROSIVE_HUNT_TIME + 1;
+            List<AbstractAnomaly> anomalies = anomalyStorage.getAnomaliesList(AbstractAnomaly.AnomalyType.CORROSIVE);
             for (int i = 0; i < anomalies.size(); i++) {
                 if (!anomalies.get(i).isActivated()) {
                     anomalies.get(i).setActivated(true);

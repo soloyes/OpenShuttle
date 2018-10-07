@@ -12,7 +12,6 @@ import lombok.Setter;
 /**
  * @author Shuttle on 9/15/18.
  */
-
 public abstract class AbstractAnomalyEmitter extends ObjectPool<AbstractAnomaly> {
     protected GameScreen gs;
     private float time;
@@ -56,7 +55,7 @@ public abstract class AbstractAnomalyEmitter extends ObjectPool<AbstractAnomaly>
 
     protected void emit() {
         if (anomaliesAtStart != 0) {
-            for (int i = 0; i < anomaliesAtStart; i++) {
+            for (int i = 0; i <= anomaliesAtStart; i++) {
                 createAnomaly();
             }
         }

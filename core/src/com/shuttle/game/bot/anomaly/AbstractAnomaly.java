@@ -33,6 +33,8 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
     @Getter
     @Setter
     protected Color color;
+    @Getter
+    protected AnomalyType type;
 
     @Override
     public Vector2 getPosition() {
@@ -51,5 +53,9 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
         this.tmp = new Vector2();
         this.color = new Color();
         this.boundCheck = new BoundCheck();
+    }
+
+    public enum AnomalyType {
+        CORROSIVE, ELECTRICAL, MAGNETIC, RADIATION;
     }
 }
