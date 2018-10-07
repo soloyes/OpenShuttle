@@ -77,7 +77,7 @@ public class Rules {
     //5.0f
     public static final float ANOMALIES_CORROSIVE_SLIM_TIME = 10.0f;
     //60
-    public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
+    public static int ANOMALIES_CORROSIVE_HUNT_TIME = 5;
     //60.0f
     public static final float ANOMALIES_CORROSIVE_VELOCITY = 60.0f;
     //60

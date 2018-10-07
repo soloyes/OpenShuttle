@@ -28,7 +28,6 @@ public class RadiationAnomaly extends AbstractAnomaly {
 
     public RadiationAnomaly(GameScreen gs) {
         super(gs);
-        this.type = AnomalyType.RADIATION;
         this.textureRegions = Regions.split(new TextureRegion(Assets.getInstance().getAssetManager().get(PaintConstants.ANOMALY_RADIATION_REGION, Texture.class)),
                 4,
                 4,
@@ -36,10 +35,6 @@ public class RadiationAnomaly extends AbstractAnomaly {
         );
         this.width = PaintConstants.ANOMALY_RADIATION_WIDTH;
         this.height = PaintConstants.ANOMALY_RADIATION_HEIGHT;
-
-        gs
-                .getAnomalyStorage()
-                .insert(this, AnomalyType.MAGNETIC);
     }
 
     @Override

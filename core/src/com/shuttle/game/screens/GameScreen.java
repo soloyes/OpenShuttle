@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.shuttle.game.bot.anomaly.AnomalyStorage;
 import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
@@ -68,7 +67,6 @@ public class GameScreen extends BaseScreen {
     @Setter
     private MagneticAnomalyEmitter magneticAnomalyEmitter;
     @Getter
-    private AnomalyStorage anomalyStorage;
     private AsteroidEmitter asteroidEmitter;
     @Getter
     @Setter
@@ -106,8 +104,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        anomalyStorage = new AnomalyStorage();
-        anomalyTimer = new AnomalyTimer(anomalyStorage);
+        anomalyTimer = new AnomalyTimer(this);
         boomBox.stopAllMusicAndPlay(MSConstants.GAME_MUSIC);
         fbo = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(),
                 Gdx.graphics.getHeight(), false);
@@ -499,7 +496,12 @@ public class GameScreen extends BaseScreen {
                         particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, player.getShieldLevel().getLevel() * 16 + 32);
                         asteroidEmitter.boom(tmpAsteroid.getPosition(), player.getShieldLevel());
                         player.takeDamage(player.getShieldLevel().getLevel() + 1);
-                        gameInfoSystem.setup(player.getPosition().x, player.getPosition().y, GameInfoSystem.GameInfoSystemPreset.SCREECH, 3.0f, false);
+                        gameInfoSystem.setup(
+                                player.getPosition().x, player.getPosition().y,
+                                GameInfoSystem.GameInfoSystemPreset.SCREECH,
+                                3.0f,
+                                true
+                        );
                         boomBox.playSound(MSConstants.ASTEROID_DESTROY);
                         //shake.shake(1, 35, (int) (tmpAsteroid.getVelocity().len() / 5));
                     } else {

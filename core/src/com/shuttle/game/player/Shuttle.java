@@ -235,7 +235,7 @@ public class Shuttle {
                                     position.y,
                                     GameInfoSystem.GameInfoSystemPreset.REPAIR,
                                     3.0f,
-                                    false
+                                    true
                             );
                 }
                 if (x == 1) {
@@ -246,7 +246,7 @@ public class Shuttle {
                                     position.y,
                                     GameInfoSystem.GameInfoSystemPreset.FUEL,
                                     3.0f,
-                                    false
+                                    true
                             );
                     boomBox.playSound(MSConstants.GET_FUEL);
                 }
@@ -261,29 +261,37 @@ public class Shuttle {
                                     position.y,
                                     GameInfoSystem.GameInfoSystemPreset.TURBO,
                                     5.0f,
-                                    false
+                                    true
                             );
                     boomBox.playSound(MSConstants.TURBO);
                 }
                 if (x == 3) {
-                    List<AbstractAnomaly> anomalies = gs.getAnomalyStorage().getAnomaliesList(AbstractAnomaly.AnomalyType.CORROSIVE);
+                    List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
                     for (int i = 0; i < anomalies.size(); i++) {
                         if (boundCheck.checkAndHandleBoundsInCamera(anomalies.get(i), gs.getCamera())) {
                             if (anomalies.get(i).isActive()) {
                                 anomalies.get(i).destroy();
                                 anomalies.get(i).showSpray(gs.getParticleEmitter());
+                                gs.getGameInfoSystem()
+                                        .setup(
+                                                position.x,
+                                                position.y,
+                                                GameInfoSystem.GameInfoSystemPreset.FLUSH,
+                                                8.0f,
+                                                true
+                                        );
                             }
                         }
                     }
                 }
-                if (x > 4) {
+                if (x > 3) {
                     gs.getGameInfoSystem()
                             .setup(
                                     position.x,
                                     position.y,
                                     GameInfoSystem.GameInfoSystemPreset.TRASH,
                                     2.0f,
-                                    false
+                                    true
                             );
                     boomBox.playSound(MSConstants.GET_TRASH);
                 }

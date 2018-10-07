@@ -45,14 +45,15 @@ public class GameInfoSystem {
 
     public enum GameInfoSystemPreset {
         BRAKED("BRAKED"),
-        SCREECH("SCREECH"),
+        SCREECH("[RED]SCREECH[]"),
         BOOM("BOOOOM!"),
         SAD("SO SAD"),
         OUT("[YELLOW]OUT OF RANGE![]"),
-        REPAIR("REPAIR +" + Rules.CRATE_REPAIR_ADD),
-        FUEL("FUEL +" + Rules.CRATE_FUEL_ADD),
-        TURBO("TURBO x3"),
-        TRASH("TRASH"),
+        REPAIR("REPAIR +[GREEN]" + Rules.CRATE_REPAIR_ADD),
+        FUEL("FUEL +[GREEN]" + Rules.CRATE_FUEL_ADD+"[]"),
+        TURBO("[GREEN]TURBO x3[]"),
+        TRASH("[YELLOW]TRASH[]"),
+        FLUSH("[GREEN]FLUSH[]"),
         LOST_FUEL("[RED]-FUEL[]"),
         LOST_SCORE("[RED]-SCORE[]");
         private String value;

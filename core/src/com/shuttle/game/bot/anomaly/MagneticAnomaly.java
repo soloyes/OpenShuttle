@@ -25,7 +25,6 @@ public class MagneticAnomaly extends AbstractAnomaly {
 
     public MagneticAnomaly(GameScreen gs) {
         super(gs);
-        this.type = AnomalyType.MAGNETIC;
         this.textureRegions = Regions.split(new TextureRegion(Assets.getInstance().getAssetManager().get(PaintConstants.ANOMALY_MAGNETIC_REGION, Texture.class)),
                 4,
                 4,
@@ -37,10 +36,6 @@ public class MagneticAnomaly extends AbstractAnomaly {
                 Rules.ANOMALIES_MAGNETIC_VELOCITY,
                 3 * Rules.ANOMALIES_MAGNETIC_VELOCITY
         );
-
-        gs
-                .getAnomalyStorage()
-                .insert(this, AnomalyType.MAGNETIC);
     }
 
     @Override

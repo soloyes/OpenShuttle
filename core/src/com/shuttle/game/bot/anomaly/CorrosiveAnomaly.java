@@ -25,7 +25,6 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
 
     public CorrosiveAnomaly(GameScreen gs) {
         super(gs);
-        this.type = AnomalyType.CORROSIVE;
         this.textureRegions = Regions.split(new TextureRegion(Assets.getInstance().getAssetManager().get(PaintConstants.ANOMALY_CORROSIVE_REGION, Texture.class)),
                 3,
                 4,
@@ -36,10 +35,6 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         this.height = PaintConstants.ANOMALY_CORROSIVE_HEIGHT;
         this.glowWidth = PaintConstants.ANOMALY_GLOW_WIDTH;
         this.glowHeight = PaintConstants.ANOMALY_GLOW_HEIGHT;
-
-        gs
-                .getAnomalyStorage()
-                .insert(this, AnomalyType.CORROSIVE);
     }
 
     @Override
