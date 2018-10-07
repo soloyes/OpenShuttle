@@ -25,7 +25,7 @@ import lombok.Setter;
 public class Standing {
     private StringBuilder tmpString;
     private String username;
-    private int score, scoreView;
+    private int score, scoreView,scoreToLive;
     private Results results;
     private BitmapFont font64;
     private BitmapFont font128;
@@ -106,8 +106,8 @@ public class Standing {
 
     public void changeScore(int amount) {
         score += amount;
-        double tmp = Rules.SCORE_TO_LIVE * n * (28 - playingLevel);
-        if (score - tmp >= 0) {
+        scoreToLive = Rules.SCORE_TO_LIVE * n * (28 - playingLevel);
+        if (score - scoreToLive >= 0) {
             //todo: to be Balanced
             n += 3;
             lives++;
@@ -134,10 +134,14 @@ public class Standing {
                 tmpString
                         .append("[RED]")
                         .append(scoreView)
-                        .append("[]");
+                        .append("[]")
+                        .append("/")
+                        .append(scoreToLive);
             } else {
                 tmpString
-                        .append(scoreView);
+                        .append(scoreView)
+                        .append("/")
+                        .append(scoreToLive);
             }
             tmpString
                     .append("\nHP: ");
