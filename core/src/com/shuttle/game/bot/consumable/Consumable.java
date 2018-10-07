@@ -69,7 +69,7 @@ public class Consumable extends AbstractPoolable {
     }
 
     public void update(float dt) {
-        boundCheck.checkAndHandleBounds(this);
+        boundCheck.checkAndHandleBoundsAndDestroy(this);
         position.mulAdd(velocity, dt);
         angle += rotationSpeed * dt;
     }

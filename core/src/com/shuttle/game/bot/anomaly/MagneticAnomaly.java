@@ -92,7 +92,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
             angle = 0;
 
         if (born) {
-            boundCheck.checkAndHandleBounds(this);
+            boundCheck.checkAndHandleBoundsAndDestroy(this);
 
             velocity.scl(0.99f);
             position.mulAdd(velocity, dt);

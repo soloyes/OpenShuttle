@@ -13,9 +13,8 @@ public class BoundCheck {
     private float alertTimer;
     private float hpTimer;
     private float fuelTimer;
-    private Vector2 tmp = new Vector2();
 
-    public void checkAndHandleBounds(AbstractPoolable poolable) {
+    public void checkAndHandleBoundsAndDestroy(AbstractPoolable poolable) {
         if (poolable.getPosition().x + poolable.getWidth() / 2 < 0)
             poolable.destroy();
         if (poolable.getPosition().x - poolable.getWidth() / 2 > Rules.SPACE_WIDTH)
@@ -24,6 +23,18 @@ public class BoundCheck {
             poolable.destroy();
         if (poolable.getPosition().y - poolable.getHeight() / 2 > Rules.SPACE_HEIGHT)
             poolable.destroy();
+    }
+
+    public boolean checkAndHandleBounds(AbstractPoolable poolable) {
+        if (poolable.getPosition().x + poolable.getWidth() / 2 < 0)
+            return true;
+        if (poolable.getPosition().x - poolable.getWidth() / 2 > Rules.SPACE_WIDTH)
+            return true;
+        if (poolable.getPosition().y + poolable.getHeight() / 2 < 0)
+            return true;
+        if (poolable.getPosition().y - poolable.getHeight() / 2 > Rules.SPACE_HEIGHT)
+            return true;
+        return false;
     }
 
     public void checkAndHandleBounds(Shuttle player, float dt) {

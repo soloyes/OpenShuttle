@@ -87,8 +87,6 @@ public class ElectricalAnomaly extends AbstractAnomaly {
 
         if (born) {
 
-            boundCheck.checkAndHandleBounds(this);
-
             if (Gdx.input.isTouched()) {
                 tmp.set(Gdx.input.getX(), Gdx.input.getY());
                 ScreenManager.getInstance().getViewport().unproject(tmp);
@@ -110,13 +108,19 @@ public class ElectricalAnomaly extends AbstractAnomaly {
             velocity.scl(0.99f);
             position.mulAdd(velocity, dt);
             if (hungry) {
-                if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-
-                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(Rules.ANOMALY_ELECTRIC_VELOCITY);
-                    velocity.mulAdd(tmp, dt);
+                boolean out = boundCheck.checkAndHandleBounds(this);
+                if (!out) {
+                    if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
+                        tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(Rules.ANOMALY_ELECTRIC_VELOCITY);
+                        velocity.mulAdd(tmp, dt);
+                    }
+                    if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
+                        tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
+                        velocity.mulAdd(tmp, dt);
+                    }
                 }
-                if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
-                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
+                else {
+                    tmp.set(Rules.SPACE_WIDTH, Rules.SPACE_HEIGHT).sub(position).nor().scl(Rules.ANOMALY_ELECTRIC_VELOCITY);
                     velocity.mulAdd(tmp, dt);
                 }
             }

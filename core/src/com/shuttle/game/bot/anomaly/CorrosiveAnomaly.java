@@ -142,7 +142,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 }
             }
 
-            boundCheck.checkAndHandleBounds(this);
+            boundCheck.checkAndHandleBoundsAndDestroy(this);
 
             if (activated) {
                 slimTimer += dt;

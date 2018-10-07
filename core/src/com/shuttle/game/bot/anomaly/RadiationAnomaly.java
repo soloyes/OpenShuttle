@@ -85,7 +85,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
             frame = 0.0f;
 
         if (born) {
-            boundCheck.checkAndHandleBounds(this);
+            boundCheck.checkAndHandleBoundsAndDestroy(this);
 
             velocity.scl(0.99f);
             position.mulAdd(velocity, dt);

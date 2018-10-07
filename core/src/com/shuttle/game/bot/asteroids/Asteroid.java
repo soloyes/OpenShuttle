@@ -94,6 +94,6 @@ public class Asteroid extends AbstractPoolable {
     }
 
     private void checkAndHandleBounds() {
-        boundCheck.checkAndHandleBounds(this);
+        boundCheck.checkAndHandleBoundsAndDestroy(this);
     }
 }
