@@ -19,34 +19,28 @@ public class BoundCheck {
     private float fuelTimer;
     private Rectangle rectangle;
 
-
-    //todo: Переписать под прямоугольники
     public BoundCheck() {
         this.rectangle = new Rectangle();
     }
 
     public boolean checkAndHandleBounds(AbstractPoolable poolable) {
-        if (poolable.getPosition().x + poolable.getWidth() / 2 < 0)
-            return true;
-        if (poolable.getPosition().x - poolable.getWidth() / 2 > Rules.SPACE_WIDTH)
-            return true;
-        if (poolable.getPosition().y + poolable.getHeight() / 2 < 0)
-            return true;
-        if (poolable.getPosition().y - poolable.getHeight() / 2 > Rules.SPACE_HEIGHT)
-            return true;
-        return false;
+        rectangle.set(
+                -poolable.getWidth() / 2, -poolable.getHeight() / 2,
+                Rules.SPACE_WIDTH + poolable.getWidth(),
+                Rules.SPACE_HEIGHT + poolable.getHeight()
+        );
+        return !rectangle.contains(poolable.getPosition());
     }
 
     public void checkAndHandleBounds(Shuttle player, float dt) {
-        if (player.getPosition().x + player.getWidth() / 2 < 0)
+        rectangle.set(
+                -player.getWidth() / 2, -player.getHeight() / 2,
+                Rules.SPACE_WIDTH + player.getWidth(),
+                Rules.SPACE_HEIGHT + player.getHeight()
+        );
+        if (!rectangle.contains(player.getPosition())) {
             checkCount(player, dt);
-        else if (player.getPosition().x - player.getWidth() / 2 > Rules.SPACE_WIDTH)
-            checkCount(player, dt);
-        else if (player.getPosition().y + player.getHeight() / 2 < 0)
-            checkCount(player, dt);
-        else if (player.getPosition().y - player.getHeight() / 2 > Rules.SPACE_HEIGHT)
-            checkCount(player, dt);
-        else {
+        } else {
             alertTimer = 0;
             fuelTimer = 0;
             hpTimer = 0;
@@ -89,22 +83,21 @@ public class BoundCheck {
     }
 
     public void checkAndHandleBoundsAndDestroy(AbstractPoolable poolable) {
-        if (poolable.getPosition().x + poolable.getWidth() / 2 < 0)
-            poolable.destroy();
-        if (poolable.getPosition().x - poolable.getWidth() / 2 > Rules.SPACE_WIDTH)
-            poolable.destroy();
-        if (poolable.getPosition().y + poolable.getHeight() / 2 < 0)
-            poolable.destroy();
-        if (poolable.getPosition().y - poolable.getHeight() / 2 > Rules.SPACE_HEIGHT)
+        rectangle.set(
+                -poolable.getWidth() / 2, -poolable.getHeight() / 2,
+                Rules.SPACE_WIDTH + poolable.getWidth(),
+                Rules.SPACE_HEIGHT + poolable.getHeight()
+        );
+        if (!rectangle.contains(poolable.getPosition()))
             poolable.destroy();
     }
 
     public boolean checkAndHandleBoundsInCamera(AbstractPoolable poolable, Camera camera) {
-        rectangle.setPosition(
+        rectangle.set(
                 camera.position.x - Rules.WORLD_WIDTH / 2,
-                camera.position.y - Rules.WORLD_HEIGHT / 2
+                camera.position.y - Rules.WORLD_HEIGHT / 2,
+                Rules.WORLD_WIDTH, Rules.SPACE_HEIGHT
         );
-        rectangle.setSize(Rules.WORLD_WIDTH, Rules.SPACE_HEIGHT);
         return rectangle.contains(poolable.getPosition());
     }
 }

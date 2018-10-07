@@ -1,9 +1,10 @@
 package com.shuttle.game.conf;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.player.Shuttle;
 
 public class Rules {
-    //SPACE
+    //
     public static int STARS_COUNT;
     //1080
     public static final int WORLD_WIDTH = 1080;
@@ -68,7 +69,7 @@ public class Rules {
     public static final float ANOMALIES_MAGNETIC_VELOCITY = 50.0f;
     //
     //4.0f
-    public static final float ANOMALIES_CORROSIVE_RESPAWN_TIME = 2.0f;
+    public static final float ANOMALIES_CORROSIVE_RESPAWN_TIME = 4.0f;
     //10.0f
     public static final float ANOMALIES_CORROSIVE_HUNGRY_TIME = 10.0f;
     //100
