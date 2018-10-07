@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.pool.AbstractPoolable;
@@ -72,6 +73,7 @@ public class GameScreen extends BaseScreen {
     @Setter
     private Camera camera;
     private Vector2 tmp;
+    private Vector3 tmp1;
     private ShaderProgram shaderPause;
     @Getter
     @Setter
@@ -97,6 +99,7 @@ public class GameScreen extends BaseScreen {
         this.batch = batch;
         this.camera = camera;
         this.tmp = new Vector2(0, 0);
+        this.tmp1 = new Vector3(0, 0, 0);
         this.shake = new Shake();
         this.cameraHelper = new OrthographicCamera(1080, 1920);
     }
@@ -192,7 +195,6 @@ public class GameScreen extends BaseScreen {
             magneticAnomalyEmitter.render(batch);
             player.getRamShield().render(batch);
             particleEmitter.render(batch);
-            //pointer.render(batch);
             batch.end();
 
             float shaderHoleX = (blackhole.getPosition().x - camera.position.x + Rules.WORLD_WIDTH / 2) / Rules.WORLD_WIDTH;
@@ -250,7 +252,7 @@ public class GameScreen extends BaseScreen {
             }
             batch.end();
 
-            cameraHelperUpdate();
+            //cameraHelperUpdate(dt);
             batch.setProjectionMatrix(cameraHelper.combined);
             //BEGIN
             batch.begin();
@@ -276,7 +278,7 @@ public class GameScreen extends BaseScreen {
     }
 
     public void update(float dt) {
-        cameraUpdate();
+        cameraUpdate(dt);
         if (!pauseGroup.isPause()) {
             background.update(dt);
             player.update(dt);
@@ -293,18 +295,33 @@ public class GameScreen extends BaseScreen {
             pointer.update(dt);
             checkCollision(dt);
         }
-        cameraUpdate();
+        cameraUpdate(dt);
         if (!pauseGroup.isPause()) {
             shake.update(dt, camera);
         }
         stage.act();
     }
 
-    private void cameraHelperUpdate() {
+    //todo: It is works, somehow...
+    //todo: Позиция camera почему-то обнулсяеся, поэтому хак - копипаста из cameraHelper
+    private void cameraUpdate(float dt) {
+        if (player.isCameraSmooth()) {
+            tmp1.set(player.getPosition().cpy().sub(cameraHelper.position.x, cameraHelper.position.y).nor(), 0.0f);
+            cameraHelper.position.mulAdd(tmp1, Rules.CAMERA_SMOOTH_VELOCITY * dt);
+            camera.position.set(cameraHelper.position);
+            if (
+                //parking
+                    player.getPosition().cpy().sub(
+                            cameraHelper.position.x, cameraHelper.position.y).len2() <
+                            tmp1.scl(Rules.CAMERA_SMOOTH_VELOCITY * dt).len2()
+                    ) {
+                player.setCameraSmooth(false);
+            }
+        } else {
+            cameraHelper.position.set(player.getPosition().x, player.getPosition().y, 0);
+            camera.position.set(player.getPosition().x, player.getPosition().y, 0);
+        }
         cameraUpdater(cameraHelper);
-    }
-
-    private void cameraUpdate() {
         cameraUpdater(camera);
     }
 
@@ -557,8 +574,6 @@ public class GameScreen extends BaseScreen {
     }
 
     private void cameraUpdater(Camera camera) {
-        camera.position.set(player.getPosition().x, player.getPosition().y, 0);
-
         if (camera.position.x < Rules.WORLD_WIDTH / 2) {
             camera.position.x = Rules.WORLD_WIDTH / 2;
         }
@@ -609,6 +624,7 @@ public class GameScreen extends BaseScreen {
                 player.setTaken(false);
                 boomBox.playSound(MSConstants.BLACKHOLE_TELEPORT);
                 player.getStanding().changeLives(-1);
+                player.setCameraSmooth(true);
             }
         } else player.setTaken(false);
     }

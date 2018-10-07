@@ -25,6 +25,7 @@ import com.shuttle.game.utils.ShuttleMath;
 
 import java.util.List;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -101,6 +102,9 @@ public class Shuttle {
     @Getter
     @Setter
     private float scaleX, scaleY;
+    @Getter
+    @Setter
+    private boolean cameraSmooth;
 
     public Shuttle(GameScreen gs, Joystick joystick) {
         this.boomBox = new BoomBox();
@@ -272,17 +276,17 @@ public class Shuttle {
                             if (anomalies.get(i).isActive()) {
                                 anomalies.get(i).destroy();
                                 anomalies.get(i).showSpray(gs.getParticleEmitter());
-                                gs.getGameInfoSystem()
-                                        .setup(
-                                                position.x,
-                                                position.y,
-                                                GameInfoSystem.GameInfoSystemPreset.FLUSH,
-                                                8.0f,
-                                                true
-                                        );
                             }
                         }
                     }
+                    gs.getGameInfoSystem()
+                            .setup(
+                                    position.x,
+                                    position.y,
+                                    GameInfoSystem.GameInfoSystemPreset.FLUSH,
+                                    8.0f,
+                                    true
+                            );
                 }
                 if (x > 3) {
                     gs.getGameInfoSystem()
@@ -316,6 +320,7 @@ public class Shuttle {
         lifeShield.update(dt);
         ramShield.update(dt);
 
+        //todo: change, coz fail on FPS ~ 10. Like with cameraSMOOOOF :)
         velocity.scl(0.99f);
         position.mulAdd(velocity, dt);
 
@@ -421,9 +426,14 @@ public class Shuttle {
                 }
             }
         }
+
+        //todo: fix parking to able work with low FPS
         float acceleration =
                 (joystick.isActive() ? joystick.getPower() : 1) * enginePower;
-        velocity.add(acceleration * (float) Math.cos(Math.toRadians(angle)) * dt, acceleration * (float) Math.sin(Math.toRadians(angle)) * dt);
+        velocity.add(
+                acceleration * (float) Math.cos(Math.toRadians(angle)) * dt,
+                acceleration * (float) Math.sin(Math.toRadians(angle)) * dt
+        );
     }
 
     private void checkRadar(float dt) {

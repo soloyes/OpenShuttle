@@ -1,6 +1,5 @@
 package com.shuttle.game.conf;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.player.Shuttle;
 
 public class Rules {
@@ -25,11 +24,11 @@ public class Rules {
     //ANOMALY
     //2
     public static final int ANOMALIES_CORROSIVE_AT_START = 2;
-    //2
+    //0
     public static final int ANOMALIES_ELECTRIC_AT_START = 0;
-    //2
+    //0
     public static final int ANOMALIES_MAGNETIC_AT_START = 0;
-    //2
+    //0
     public static final int ANOMALIES_RADIATION_AT_START = 0;
     //5000
     public static final int ANOMALIES_BASE_SCORE_ADD = 5000;
@@ -77,7 +76,7 @@ public class Rules {
     //5.0f
     public static final float ANOMALIES_CORROSIVE_SLIM_TIME = 10.0f;
     //60
-    public static int ANOMALIES_CORROSIVE_HUNT_TIME = 5;
+    public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
     //60.0f
     public static final float ANOMALIES_CORROSIVE_VELOCITY = 60.0f;
     //60
@@ -132,11 +131,15 @@ public class Rules {
     public static final float FRAGMENT_KICK_PRETTY_SOUND_DELAY = 0.1f;
     //0.5f
     public static final float ANOMALY_KICK_PRETTY_SOUND_DELAY = 0.5f;
+    //CAMERA
+    //1500.0f
+    public static final float CAMERA_SMOOTH_VELOCITY = 1500.0f;
     //SPACE
     //600
     private static final int STARS = 600;
-    //
+
     public static void setSpace(int n) {
+        n++;
         STARS_COUNT = STARS * n;
         SPACE_WIDTH = WORLD_WIDTH * n;
         SPACE_HEIGHT = WORLD_WIDTH * n;
