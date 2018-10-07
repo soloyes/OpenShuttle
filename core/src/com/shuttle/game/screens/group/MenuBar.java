@@ -26,12 +26,10 @@ public class MenuBar extends Group {
     private Button buttonResults;
     private MenuGroup group;
     private BoomBox boomBox;
-    private GamePreferences preferences;
 
     public MenuBar() {
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        this.preferences = new GamePreferences();
-        this.boomBox = new BoomBox(preferences);
+        this.boomBox = new BoomBox();
         this.setName(GroupType.MENU_BAR.name());
         this.buttonPlay = new Button(skin, "default");
         this.buttonExit = new Button(skin, "default");
@@ -72,9 +70,9 @@ public class MenuBar extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
-                if (preferences.isSoundEnabled()) {
+                if (GamePreferences.isSoundEnabled()) {
                     Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.BUTTON_SOUND));
-                    sound.play(preferences.getSoundVolume());
+                    sound.play(GamePreferences.getSoundVolume());
                 }
                 //
 

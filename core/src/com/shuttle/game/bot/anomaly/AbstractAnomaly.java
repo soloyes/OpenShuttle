@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.utils.BoomBox;
+import com.shuttle.game.utils.BoundCheck;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -40,4 +42,14 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
     abstract void render(SpriteBatch batch);
 
     abstract void update(float dt);
+
+    protected AbstractAnomaly(GameScreen gs) {
+        this.boomBox = new BoomBox();
+        this.gs = gs;
+        this.position = new Vector2();
+        this.velocity = new Vector2();
+        this.tmp = new Vector2();
+        this.color = new Color();
+        this.boundCheck = new BoundCheck();
+    }
 }

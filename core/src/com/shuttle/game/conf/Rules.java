@@ -3,22 +3,16 @@ package com.shuttle.game.conf;
 import com.shuttle.game.player.Shuttle;
 
 public class Rules {
-    //3200
-    //public static final int STARS_COUNT = 3200;
-    //TEST
-    public static final int STARS_COUNT = 1600;
+    //SPACE
+    public static int STARS_COUNT;
     //1080
     public static final int WORLD_WIDTH = 1080;
     //1920
     public static final int WORLD_HEIGHT = 1920;
-    //*7
-    //public static final int SPACE_WIDTH = WORLD_WIDTH * 7;
-    //*7
-    //public static final int SPACE_HEIGHT = WORLD_WIDTH * 7;
-    //TEST
-    public static final int SPACE_WIDTH = 1080 * 2;
-    public static final int SPACE_HEIGHT = 1920 * 2;
     //
+    public static int SPACE_WIDTH;
+    //
+    public static int SPACE_HEIGHT;
     //CONSUMABLE
     //2
     public static final int CONSUMABLE_AT_START = 2;
@@ -137,6 +131,15 @@ public class Rules {
     public static final float FRAGMENT_KICK_PRETTY_SOUND_DELAY = 0.1f;
     //0.5f
     public static final float ANOMALY_KICK_PRETTY_SOUND_DELAY = 0.5f;
+    //SPACE
+    //600
+    private static final int STARS = 600;
+    //
+    public static void setSpace(int n) {
+        STARS_COUNT = STARS * n;
+        SPACE_WIDTH = WORLD_WIDTH * n;
+        SPACE_HEIGHT = WORLD_WIDTH * n;
+    }
 
     public enum StartLevel {
         LOW {
@@ -153,7 +156,7 @@ public class Rules {
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(true);
-                player.getGun().setActive(true);
+                //player.getGun().setActive(true);
                 player.getStanding().setPlayingLevel(27);
             }
         },
@@ -171,7 +174,7 @@ public class Rules {
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);
-                player.getGun().setActive(false);
+                //player.getGun().setActive(false);
                 player.getStanding().setPlayingLevel(21);
             }
         },
@@ -189,7 +192,7 @@ public class Rules {
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);
-                player.getGun().setActive(false);
+                //player.getGun().setActive(false);
                 player.getStanding().setPlayingLevel(15);
             }
         };

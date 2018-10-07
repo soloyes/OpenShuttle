@@ -30,13 +30,13 @@ import com.shuttle.game.utils.BoomBox;
 public class ConfigGroup extends Group {
     private Table table;
     private Array<Music> musicArray;
-    private GamePreferences preferences = new GamePreferences();
+    //private GamePreferences preferences = new GamePreferences();
     private ScreenManager.ScreenType screenType;
     private BoomBox boomBox;
 
     public ConfigGroup(ScreenManager.ScreenType screenType) {
         /////////
-        this.boomBox = new BoomBox(preferences);
+        this.boomBox = new BoomBox();
         this.setName(GroupType.CONFIG.name());
         this.setVisible(false);
         this.screenType = screenType;
@@ -78,7 +78,7 @@ public class ConfigGroup extends Group {
         sliderStyle.knobOver.setMinWidth(25);
 
         final Slider musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, sliderStyle);
-        musicSlider.setValue(preferences.getMusicVolume());
+        musicSlider.setValue(GamePreferences.getMusicVolume());
         musicSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
@@ -87,76 +87,76 @@ public class ConfigGroup extends Group {
                 for (int i = 0; i < musicArray.size; i++) {
                     musicArray.get(i).setVolume(musicSlider.getValue());
                 }
-                preferences.setMusicVolume(musicSlider.getValue());
+                GamePreferences.setMusicVolume(musicSlider.getValue());
                 return false;
             }
         });
 
         final Slider soundSlider = new Slider(0.0f, 1.0f, 0.1f, false, sliderStyle);
-        soundSlider.setValue(preferences.getSoundVolume());
+        soundSlider.setValue(GamePreferences.getSoundVolume());
         soundSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                preferences.setSoundVolume(soundSlider.getValue());
+                GamePreferences.setSoundVolume(soundSlider.getValue());
                 boomBox.playSound(MSConstants.BUTTON_SOUND);
             }
         });
 
-        final Label levelLabelDynamic = new Label(Rules.StartLevel.values()[preferences.getLevel()].toString(), style64);
-        final Label effectsLabelDynamic = new Label(Rules.EffectsLevel.values()[preferences.getEffectsLevel()].toString(), style64);
+        final Label levelLabelDynamic = new Label(Rules.StartLevel.values()[GamePreferences.getLevel()].toString(), style64);
+        final Label effectsLabelDynamic = new Label(Rules.EffectsLevel.values()[GamePreferences.getEffectsLevel()].toString(), style64);
 
 
         final Slider levelSlider = new Slider(0.0f, 2.0f, 1.0f, false, sliderStyle);
-        levelSlider.setValue(preferences.getLevel());
+        levelSlider.setValue(GamePreferences.getLevel());
         levelSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                preferences.setLevel((int) levelSlider.getValue());
+                GamePreferences.setLevel((int) levelSlider.getValue());
                 levelLabelDynamic.setText(Rules.StartLevel.values()[(int) levelSlider.getValue()].toString());
                 return false;
             }
         });
 
         final Slider effectsSlider = new Slider(0.0f, 1.0f, 1.0f, false, sliderStyle);
-        effectsSlider.setValue(preferences.getEffectsLevel());
+        effectsSlider.setValue(GamePreferences.getEffectsLevel());
         effectsSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                preferences.setEffectsLevel((int) effectsSlider.getValue());
+                GamePreferences.setEffectsLevel((int) effectsSlider.getValue());
                 effectsLabelDynamic.setText(Rules.EffectsLevel.values()[(int) effectsSlider.getValue()].toString());
                 return false;
             }
         });
 
         final CheckBox musicCheckBox = new CheckBox("Music", checkBoxStyle48);
-        musicCheckBox.setChecked(preferences.isMusicEnabled());
+        musicCheckBox.setChecked(GamePreferences.isMusicEnabled());
         musicCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = musicCheckBox.isChecked();
-                preferences.setMusicEnabled(enabled);
-                boomBox.setAllMusicVolume(preferences.getMusicVolume());
+                GamePreferences.setMusicEnabled(enabled);
+                boomBox.setAllMusicVolume(GamePreferences.getMusicVolume());
                 boomBox.stopAllMusicAndPlay(MSConstants.MENU_MUSIC);
             }
         });
 
         final CheckBox soundCheckBox = new CheckBox("Sound", checkBoxStyle48);
-        soundCheckBox.setChecked(preferences.isSoundEnabled());
+        soundCheckBox.setChecked(GamePreferences.isSoundEnabled());
         soundCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = soundCheckBox.isChecked();
-                preferences.setSoundEnabled(enabled);
+                GamePreferences.setSoundEnabled(enabled);
             }
         });
 
         final CheckBox joyStickCheckBox = new CheckBox("JoyStick", checkBoxStyle48);
-        joyStickCheckBox.setChecked(preferences.isJoyStickEnabled());
+        joyStickCheckBox.setChecked(GamePreferences.isJoyStickEnabled());
         joyStickCheckBox.addListener(new ClickListener() {
             @Override
             public boolean handle(Event event) {
                 boolean enabled = joyStickCheckBox.isChecked();
-                preferences.setJoyStickEnabled(enabled);
+                GamePreferences.setJoyStickEnabled(enabled);
                 return false;
             }
         });

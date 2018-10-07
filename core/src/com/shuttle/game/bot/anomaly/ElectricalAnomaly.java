@@ -1,21 +1,16 @@
 package com.shuttle.game.bot.anomaly;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.BoomBox;
-import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Regions;
 
 /**
@@ -25,20 +20,14 @@ public class ElectricalAnomaly extends AbstractAnomaly {
     private boolean touched;
 
     public ElectricalAnomaly(GameScreen gs) {
-        this.boomBox = new BoomBox(new GamePreferences());
-        this.gs = gs;
+        super(gs);
         this.textureRegions = Regions.split(new TextureRegion(Assets.getInstance().getAssetManager().get(PaintConstants.ANOMALY_ELECTRIC_REGION, Texture.class)),
                 4,
                 4,
                 16
         );
-        this.position = new Vector2();
-        this.velocity = new Vector2();
-        this.tmp = new Vector2();
         this.width = PaintConstants.ANOMALY_ELECTRIC_WIDTH;
         this.height = PaintConstants.ANOMALY_ELECTRIC_HEIGHT;
-        this.boundCheck = new BoundCheck();
-        this.color = new Color();
     }
 
     @Override
@@ -118,8 +107,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                         tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
                         velocity.mulAdd(tmp, dt);
                     }
-                }
-                else {
+                } else {
                     tmp.set(Rules.SPACE_WIDTH, Rules.SPACE_HEIGHT).sub(position).nor().scl(Rules.ANOMALY_ELECTRIC_VELOCITY);
                     velocity.mulAdd(tmp, dt);
                 }

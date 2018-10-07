@@ -3,7 +3,6 @@ package com.shuttle.game.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Results;
@@ -59,7 +58,7 @@ public class Standing {
     private BoomBox boomBox;
 
     public Standing(Shuttle player) {
-        this.boomBox = new BoomBox(new GamePreferences());
+        this.boomBox = new BoomBox();
         this.tmpString = new StringBuilder();
         this.username = Gdx.files.local("username").readString();
         this.results = new Results();

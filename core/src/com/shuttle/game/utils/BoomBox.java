@@ -9,20 +9,20 @@ import com.shuttle.game.conf.GamePreferences;
  * @author Shuttle on 7/14/18.
  */
 public class BoomBox {
-    private GamePreferences preferences;
+    //private GamePreferences preferences;
     private Array<Music> musicArray;
 
-    public BoomBox(GamePreferences preferences) {
-        this.preferences = preferences;
+    public BoomBox() {
+        //this.preferences = preferences;
         musicArray = new Array<Music>();
     }
 
     public long playSound(String sound) {
-        if (preferences.isSoundEnabled()) {
+        if (GamePreferences.isSoundEnabled()) {
             return Assets.getInstance()
                     .getAssetManager()
                     .get(sound, Sound.class)
-                    .play(preferences.getSoundVolume());
+                    .play(GamePreferences.getSoundVolume());
         }
         return -1;
     }
@@ -41,11 +41,11 @@ public class BoomBox {
     }
 
     public void playMusic(String music) {
-        if (preferences.isMusicEnabled()) {
+        if (GamePreferences.isMusicEnabled()) {
             Assets.getInstance()
                     .getAssetManager()
                     .get(music, Music.class)
-                    .setVolume(preferences.getMusicVolume());
+                    .setVolume(GamePreferences.getMusicVolume());
             Assets.getInstance()
                     .getAssetManager()
                     .get(music, Music.class)

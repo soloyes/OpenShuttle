@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.GameInfoSystem;
-import com.shuttle.game.Gun;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.KillingSpree;
 import com.shuttle.game.bot.consumable.Consumable;
@@ -23,69 +22,102 @@ import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.ShuttleMath;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
 public class Shuttle {
-    private GameScreen gs;
+    private float zigzagEffect;
+    private float killTimer;
+    private int killSeries;
     private TextureRegion texture;
-    private Vector2 position, velocity;
-    private Vector2 tmp;
-    private Radar radar;
-    private Gun gun;
+    private Vector2 tmp1, tmp2;
     private Joystick joystick;
     private ParticleEmitter engineParticleEmitter;
+    private BoundCheck boundCheck;
+    private BoomBox boomBox;
+    @Getter
+    @Setter
+    private GameScreen gs;
+    @Getter
+    @Setter
+    private Vector2 position, velocity;
+    @Getter
+    @Setter
+    private Radar radar;
+    @Getter
+    @Setter
     private int width, height;
-    private float angle, radialSpeed;
+    @Getter
+    @Setter
+    private float angle;
+    @Getter
+    @Setter
+    private float radialSpeed;
+    @Getter
+    @Setter
     private float enginePower;
+    @Getter
+    @Setter
     private int takeRange;
-    private float zigzagEffect;
-    private int killSeries;
-    private float killTimer;
-    private float power, maxPower;
+    @Getter
+    @Setter
+    private float power;
+    @Getter
+    @Setter
+    private float maxPower;
     //pretty sound if collect much fragments in little time;
     private float tmpDelayFragment;
+    @Getter
+    @Setter
     private boolean delayFragment;
     //
     //pretty sound if collide with much anomalies in little time;
     private float tmpDelayAnomaly;
+    @Getter
+    @Setter
     private boolean delayAnomaly;
     //
+    @Getter
+    @Setter
     private GlobalInteractionLevels shieldLevel;
-    private GamePreferences preferences;
+    @Getter
+    @Setter
     private Standing standing;
-    private BoundCheck boundCheck;
-    private BoomBox boomBox;
+    @Getter
+    @Setter
     private LifeShield lifeShield;
+    @Getter
+    @Setter
     private RamShield ramShield;
+    @Getter
+    @Setter
     private Scratch scratch;
-    private Vector2 textureVector;
-    private Vector2 tmp2;
+    @Getter
+    @Setter
     private boolean taken;
+    @Getter
+    @Setter
     private float scaleX, scaleY;
 
-    public Shuttle(GameScreen gs, Joystick joystick, GamePreferences preferences) {
-        this.boomBox = new BoomBox(new GamePreferences());
+    public Shuttle(GameScreen gs, Joystick joystick) {
+        this.boomBox = new BoomBox();
         this.standing = new Standing(this);
         this.gs = gs;
         this.engineParticleEmitter = new ParticleEmitter();
         this.joystick = joystick;
-        this.preferences = preferences;
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_REGION);
         this.position = new Vector2(
                 ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
                 ScreenManager.getInstance().getViewport().getWorldHeight() / 2
         );
         this.velocity = new Vector2();
-        this.tmp = new Vector2();
+        this.tmp1 = new Vector2();
 
-        this.textureVector = new Vector2();
         this.tmp2 = new Vector2();
 
         this.width = PaintConstants.SHUTTLE_WIDTH;
         this.height = PaintConstants.SHUTTLE_HEIGHT;
         this.radar = new Radar(gs, this);
-        this.gun = new Gun();
         this.boundCheck = new BoundCheck();
 
         this.lifeShield = new LifeShield(this);
@@ -265,7 +297,7 @@ public class Shuttle {
         velocity.scl(0.99f);
         position.mulAdd(velocity, dt);
 
-        if (!preferences.isJoyStickEnabled()) {
+        if (!GamePreferences.isJoyStickEnabled()) {
             joystick.setLastId(-1);
         }
 
@@ -275,9 +307,9 @@ public class Shuttle {
                 move(dt, angleToTarget);
             } else {
                 if (Gdx.input.isTouched()) {
-                    tmp.set(Gdx.input.getX(), Gdx.input.getY());
-                    ScreenManager.getInstance().getViewport().unproject(tmp);
-                    float angleToTarget = tmp.sub(position).angle();
+                    tmp1.set(Gdx.input.getX(), Gdx.input.getY());
+                    ScreenManager.getInstance().getViewport().unproject(tmp1);
+                    float angleToTarget = tmp1.sub(position).angle();
                     move(dt, angleToTarget);
                 }
             }

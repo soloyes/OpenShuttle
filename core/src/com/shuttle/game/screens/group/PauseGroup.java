@@ -28,14 +28,12 @@ public class PauseGroup extends Group {
     private final Button pauseBtn;
     private final ConfigGroup configGroup;
     private BoomBox boomBox;
-    private GamePreferences preferences;
     @Getter
     @Setter
     private boolean pause;
 
     public PauseGroup() {
-        this.preferences = new GamePreferences();
-        this.boomBox = new BoomBox(preferences);
+        this.boomBox = new BoomBox();
         this.pause = false;
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.pauseBtn = new Button(skin, "default");
@@ -68,9 +66,9 @@ public class PauseGroup extends Group {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
                 //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
-                if (preferences.isSoundEnabled()) {
+                if (GamePreferences.isSoundEnabled()) {
                     Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.BUTTON_SOUND));
-                    sound.play(preferences.getSoundVolume());
+                    sound.play(GamePreferences.getSoundVolume());
                 }
                 //
                 ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
@@ -82,9 +80,9 @@ public class PauseGroup extends Group {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
                 //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
-                if (preferences.isSoundEnabled()) {
+                if (GamePreferences.isSoundEnabled()) {
                     Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.BUTTON_SOUND));
-                    sound.play(preferences.getSoundVolume());
+                    sound.play(GamePreferences.getSoundVolume());
                 }
                 //
                 ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);

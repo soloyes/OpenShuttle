@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.*;
+import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.ShuttleGame;
 
@@ -40,6 +42,9 @@ public class ScreenManager {
                 break;
             case GAME:
                 targetScreen = gameScreen;
+                //SPACE_WIDTH/SPACE_HEIGHT depends from game level
+                Rules.setSpace(Rules.EffectsLevel.values().length - GamePreferences.getLevel() + 2);
+                //
                 Assets.getInstance().loadAssets(ScreenType.GAME);
                 break;
             case TEST:
@@ -62,8 +67,8 @@ public class ScreenManager {
     public void init(ShuttleGame game, SpriteBatch batch) {
         this.game = game;
         this.batch = batch;
-        this.camera = new OrthographicCamera(1080, 1920);
-        this.viewport = new FitViewport(1080, 1920, camera);
+        this.camera = new OrthographicCamera(Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
+        this.viewport = new FitViewport(Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT, camera);
         this.gameScreen = new GameScreen(batch, camera);
         this.menuScreen = new MenuScreen(batch);
         this.testScreen = new TestScreen(batch);

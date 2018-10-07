@@ -1,18 +1,13 @@
 package com.shuttle.game.bot.anomaly;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.BoomBox;
-import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Regions;
 
 import lombok.Getter;
@@ -29,21 +24,18 @@ public class MagneticAnomaly extends AbstractAnomaly {
     private float v;
 
     public MagneticAnomaly(GameScreen gs) {
-        this.boomBox = new BoomBox(new GamePreferences());
-        this.gs = gs;
+        super(gs);
         this.textureRegions = Regions.split(new TextureRegion(Assets.getInstance().getAssetManager().get(PaintConstants.ANOMALY_MAGNETIC_REGION, Texture.class)),
                 4,
                 4,
                 16
         );
-        this.position = new Vector2();
-        this.velocity = new Vector2();
-        this.tmp = new Vector2();
         this.width = PaintConstants.ANOMALY_MAGNETIC_WIDTH;
         this.height = PaintConstants.ANOMALY_MAGNETIC_HEIGHT;
-        this.boundCheck = new BoundCheck();
-        this.color = new Color();
-        this.v = MathUtils.random(Rules.ANOMALIES_MAGNETIC_VELOCITY, 3 * Rules.ANOMALIES_MAGNETIC_VELOCITY);
+        this.v = MathUtils.random(
+                Rules.ANOMALIES_MAGNETIC_VELOCITY,
+                3 * Rules.ANOMALIES_MAGNETIC_VELOCITY
+        );
     }
 
     @Override

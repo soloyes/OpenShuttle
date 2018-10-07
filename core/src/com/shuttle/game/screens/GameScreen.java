@@ -22,6 +22,7 @@ import com.shuttle.game.bot.anomaly.MagneticAnomalyEmitter;
 import com.shuttle.game.bot.anomaly.RadiationAnomaly;
 import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
 import com.shuttle.game.conf.AnomalyTimer;
+import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.player.PlayerPointer;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.Joystick;
@@ -145,9 +146,9 @@ public class GameScreen extends BaseScreen {
         InputMultiplexer im = new InputMultiplexer(stage, joystick);
         Gdx.input.setInputProcessor(im);
 
-        player = new Shuttle(this, joystick, preferences);
+        player = new Shuttle(this, joystick);
         pointer = new PlayerPointer(player);
-        Rules.StartLevel.values()[preferences.getLevel()].setGameLevel(player);
+        Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel(player);
 
         blackhole = new Blackhole();
     }
@@ -178,7 +179,7 @@ public class GameScreen extends BaseScreen {
             //BEGIN
             batch.begin();
             background.render(batch);
-            if (preferences.getEffectsLevel() == 0) {
+            if (GamePreferences.getEffectsLevel() == 0) {
                 blackhole.render(batch);
             }
             asteroidEmitter.render(batch);
@@ -200,7 +201,7 @@ public class GameScreen extends BaseScreen {
             //FBO END
             fbo.end(v.getScreenX(), v.getScreenY(), v.getScreenWidth(), v.getScreenHeight());
 
-            if (preferences.getEffectsLevel() == 0) {
+            if (GamePreferences.getEffectsLevel() == 0) {
                 batch.setShader(null);
                 //BEGIN
                 batch.begin();

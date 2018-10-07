@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.utils.BoomBox;
 
 /**
@@ -13,7 +12,6 @@ import com.shuttle.game.utils.BoomBox;
  */
 public abstract class BaseScreen implements Screen {
     protected Stage stage;
-    protected GamePreferences preferences;
     protected SpriteBatch batch;
     protected BoomBox boomBox;
 
@@ -22,9 +20,8 @@ public abstract class BaseScreen implements Screen {
 
     public BaseScreen(SpriteBatch batch) {
         this.stage = new Stage(ScreenManager.getInstance().getViewport(), batch);
-        this.preferences = new GamePreferences();
         this.batch = batch;
-        this.boomBox = new BoomBox(preferences);
+        this.boomBox = new BoomBox();
     }
 
     @Override
