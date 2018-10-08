@@ -123,7 +123,7 @@ public class Rules {
     public static final int BLACKHOLE_VELOCITY_CONSUME_POOLABLE = 200;
     //200
     public static final int BLACKHOLE_VELOCITY_CONSUME_PLAYER = 200;
-    //
+    //GAME
     //false
     public static boolean GAME_OVER = false;
     //SOUND

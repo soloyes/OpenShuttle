@@ -87,6 +87,7 @@ public class GameScreen extends BaseScreen {
     @Getter
     @Setter
     private AnomalyTimer anomalyTimer;
+    @Getter
     private Blackhole blackhole;
     private FrameBuffer fbo;
     private TextureRegion fboTexRegion;
@@ -150,11 +151,10 @@ public class GameScreen extends BaseScreen {
         InputMultiplexer im = new InputMultiplexer(stage, joystick);
         Gdx.input.setInputProcessor(im);
 
+        blackhole = new Blackhole();
         player = new Shuttle(this, joystick);
         pointer = new PlayerPointer(player);
         Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel(player);
-
-        blackhole = new Blackhole();
     }
 
     @Override
@@ -200,6 +200,7 @@ public class GameScreen extends BaseScreen {
             float shaderHoleX = (blackhole.getPosition().x - camera.position.x + Rules.WORLD_WIDTH / 2) / Rules.WORLD_WIDTH;
             float shaderHoleY = (blackhole.getPosition().y - camera.position.y + Rules.WORLD_HEIGHT / 2) / Rules.WORLD_HEIGHT;
 
+            //
             ScreenManager.getInstance().resetCamera();
             //FBO END
             fbo.end(v.getScreenX(), v.getScreenY(), v.getScreenWidth(), v.getScreenHeight());
@@ -302,8 +303,8 @@ public class GameScreen extends BaseScreen {
         stage.act();
     }
 
-    //todo: It is works, somehow...
-    //todo: Позиция camera почему-то обнулсяеся, поэтому хак - копипаста из cameraHelper
+    //todo: It is works, somehow :)
+    //todo: Позиция обнулсяеся во время fbo.end(), поэтому хак - копипаста из cameraHelper
     private void cameraUpdate(float dt) {
         if (player.isCameraSmooth()) {
             tmp1.set(player.getPosition().cpy().sub(cameraHelper.position.x, cameraHelper.position.y).nor(), 0.0f);
@@ -562,7 +563,7 @@ public class GameScreen extends BaseScreen {
                                 tmpConsumable.getPosition().y,
                                 GameInfoSystem.GameInfoSystemPreset.SAD,
                                 3.0f,
-                                false
+                                true
                         );
                     }
                 }
@@ -609,10 +610,17 @@ public class GameScreen extends BaseScreen {
             player.getScratch().setScaleY(scaleY);
             player.setAngle(player.getAngle() + 365 * dt);
             if (blackhole.getPosition().dst(player.getPosition()) <= Rules.BLACKHOLE_EVENT_HORIZON) {
-                player.getPosition().set(
-                        MathUtils.random(0, Rules.SPACE_WIDTH),
-                        MathUtils.random(0, Rules.SPACE_HEIGHT)
-                );
+                float x = MathUtils.random(0, Rules.SPACE_WIDTH);
+                float y = MathUtils.random(0, Rules.SPACE_HEIGHT);
+                while (true) {
+                    //Prevent generation near blackhole
+                    if (blackhole.getPosition().cpy().sub(x, y).len() >= Rules.BLACKHOLE_TAKE_RANGE + 10) {
+                        break;
+                    }
+                    x = MathUtils.random(0, Rules.SPACE_WIDTH);
+                    y = MathUtils.random(0, Rules.SPACE_HEIGHT);
+                }
+                player.getPosition().set(x, y);
                 player.setScaleX(1.0f);
                 player.setScaleY(1.0f);
                 player.getRamShield().setScaleX(1.0f);
@@ -669,8 +677,9 @@ public class GameScreen extends BaseScreen {
         if (anomaly.getLevel() >= 3) {
             if (player.getRadar().isActive()) {
                 boomBox.playSound(MSConstants.LOST_RADAR);
+                player.getRadar().setActive(false);
+                player.getRadar().generatePosition();
             }
-            player.getRadar().setActive(false);
         }
 
         //player.getLifeShield().blink();

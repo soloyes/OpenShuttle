@@ -13,44 +13,64 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 7/7/18.
  */
-@Data
 public class Radar {
     private GameScreen gs;
     private TextureRegion backgroundTexture;
     private TextureRegion pointTexture;
+    @Getter
+    @Setter
     private Vector2 position;
     private Vector2 tmp;
+    @Getter
+    @Setter
     private boolean active;
     private int width, height;
     private Shuttle player;
-    private float scaleX;
+    private float scaleX, scaleY;
     private float rotation;
 
     public Radar(GameScreen gs, Shuttle player) {
+        this.gs = gs;
         this.backgroundTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_REGION);
         this.pointTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STAR16_REGION);
-        this.gs = gs;
         this.player = player;
-        this.position = new Vector2(
-                MathUtils.random(0, Rules.SPACE_WIDTH),
-                MathUtils.random(0, Rules.SPACE_HEIGHT)
-        );
+        this.position = new Vector2();
         this.tmp = new Vector2();
         this.width = PaintConstants.RADAR_WIDTH;
         this.height = PaintConstants.RADAR_HEIGHT;
-        this.scaleX = 1;
+        this.scaleX = this.scaleY = 1;
+        this.generatePosition();
+    }
+
+    //Prevent generation near blackhole
+    public final void generatePosition() {
+        float x = MathUtils.random(0, Rules.SPACE_WIDTH);
+        float y = MathUtils.random(0, Rules.SPACE_HEIGHT);
+        float r = gs.getBlackhole().getRadius();
+        float x0 = gs.getBlackhole().getCenter().x;
+        float y0 = gs.getBlackhole().getCenter().y;
+        while (true) {
+            float result = (float) Math.abs(Math.pow(x - x0, 2) + Math.pow(y - y0, 2) - Math.pow(r, 2));
+            if (result >= Rules.BLACKHOLE_TAKE_RANGE) {
+                break;
+            }
+            x = MathUtils.random(0, Rules.SPACE_WIDTH);
+            y = MathUtils.random(0, Rules.SPACE_HEIGHT);
+        }
+        position.set(x, y);
     }
 
     public void render(SpriteBatch batch) {
         if (active) {
             drawRadar(batch);
         } else {
-            batch.draw(backgroundTexture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, scaleX, 1, 0);
+            batch.draw(backgroundTexture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, scaleX, scaleY, 0);
         }
     }
 

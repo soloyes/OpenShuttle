@@ -22,7 +22,8 @@ public class Blackhole {
     @Getter
     @Setter
     private Vector2 position;
-    private Vector2 start;
+    @Getter
+    private Vector2 center;
     private int width, height;
     private int spiralWidth, spiralHeight;
     private int glowWidth, glowHeight;
@@ -34,6 +35,7 @@ public class Blackhole {
     @Getter
     @Setter
     private float takeRange;
+    @Getter
     private int radius;
     private boolean oscillator;
     private boolean spiralOscillator;
@@ -43,7 +45,7 @@ public class Blackhole {
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.BLACKHOLE_HOLE_REGION);
         this.spiralRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BLACKHOLE_SPIRAL_REGION);
         this.glowRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BLACKHOLE_GLOW_REGION);
-        this.start = new Vector2(
+        this.center = new Vector2(
                 Rules.SPACE_WIDTH / 2,
                 Rules.SPACE_HEIGHT / 2
         );
@@ -105,8 +107,8 @@ public class Blackhole {
         if (rotation >= 365) {
             rotation = 0;
         }
-        position.x = start.x + radius * MathUtils.cos(angle);
-        position.y = start.y + radius * MathUtils.sin(angle);
+        position.x = center.x + radius * MathUtils.cos(angle);
+        position.y = center.y + radius * MathUtils.sin(angle);
 
         if (oscillator) {
             scale -= dt / 10;
