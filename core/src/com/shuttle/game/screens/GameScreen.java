@@ -74,7 +74,6 @@ public class GameScreen extends BaseScreen {
     private Camera camera;
     private Vector2 tmp;
     private Vector3 tmp1;
-    private ShaderProgram shaderPause;
     @Getter
     @Setter
     private GameInfoSystem gameInfoSystem;
@@ -91,9 +90,12 @@ public class GameScreen extends BaseScreen {
     private Blackhole blackhole;
     private FrameBuffer fbo;
     private TextureRegion fboTexRegion;
-    private ShaderProgram shaderBlackHole;
     private float holeTime;
     private OrthographicCamera cameraHelper;
+
+    private ShaderManager shaderManager;
+    private ShaderProgram shaderBlackHole;
+    private ShaderProgram shaderPause;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -103,6 +105,7 @@ public class GameScreen extends BaseScreen {
         this.tmp1 = new Vector3(0, 0, 0);
         this.shake = new Shake();
         this.cameraHelper = new OrthographicCamera(1080, 1920);
+        this.shaderManager = new ShaderManager();
     }
 
     @Override
@@ -115,28 +118,8 @@ public class GameScreen extends BaseScreen {
         fboTexRegion = new TextureRegion(fbo.getColorBufferTexture());
         fboTexRegion.flip(false, true);
 
-        shaderBlackHole = new ShaderProgram(
-                Gdx.files.internal("shaders/black_hole.vert").readString(),
-                Gdx.files.internal("shaders/black_hole.frag").readString()
-        );
-
-        shaderPause = new ShaderProgram(
-                Gdx.files.internal("shaders/grey_screen.vert"),
-                Gdx.files.internal("shaders/grey_screen.frag")
-        );
-
-        //todo: change logic in case shade not support. Move shader to other class
-        if (!shaderPause.isCompiled()) {
-            System.err.println(shaderPause.getLog());
-            System.exit(0);
-        }
-
-        ShaderProgram.pedantic = false;
-
-        if (!shaderBlackHole.isCompiled()) {
-            System.err.println(shaderBlackHole.getLog());
-            System.exit(0);
-        }
+        shaderPause = shaderManager.getProgram(ShaderManager.ShaderType.PAUSE);
+        shaderBlackHole = shaderManager.getProgram(ShaderManager.ShaderType.BLACKHOLE);
 
         particleEmitter = new ParticleEmitter();
         corrosiveAnomalyEmitter = new CorrosiveAnomalyEmitter(this);
@@ -183,7 +166,7 @@ public class GameScreen extends BaseScreen {
             //BEGIN
             batch.begin();
             background.render(batch);
-            if (GamePreferences.getEffectsLevel() == 0) {
+            if (GamePreferences.getEffectsLevel() == 0 || shaderBlackHole == null) {
                 blackhole.render(batch);
             }
             asteroidEmitter.render(batch);
@@ -205,7 +188,7 @@ public class GameScreen extends BaseScreen {
             //FBO END
             fbo.end(v.getScreenX(), v.getScreenY(), v.getScreenWidth(), v.getScreenHeight());
 
-            if (GamePreferences.getEffectsLevel() == 0) {
+            if (GamePreferences.getEffectsLevel() == 0 || shaderBlackHole == null) {
                 batch.setShader(null);
                 //BEGIN
                 batch.begin();
@@ -521,7 +504,6 @@ public class GameScreen extends BaseScreen {
                                 true
                         );
                         boomBox.playSound(MSConstants.ASTEROID_DESTROY);
-                        //shake.shake(1, 35, (int) (tmpAsteroid.getVelocity().len() / 5));
                     } else {
                         player.getRamShield().blink(0.5f);
                         player.setPower(player.getPower() + tmpAsteroid.getSizeForHarvest());
@@ -590,6 +572,7 @@ public class GameScreen extends BaseScreen {
         camera.update();
     }
 
+    ///
     private void collideBlackholePlayer(float dt) {
         if (player.getPosition().dst(blackhole.getPosition()) < Rules.BLACKHOLE_TAKE_RANGE) {
             player.setTaken(true);
@@ -636,6 +619,7 @@ public class GameScreen extends BaseScreen {
             }
         } else player.setTaken(false);
     }
+    ///
 
     ///
     private void collideBlackholePoolable(AbstractPoolable poolable, float dt) {
@@ -660,6 +644,7 @@ public class GameScreen extends BaseScreen {
             }
         } else poolable.setTaken(false);
     }
+    ///
 
     private void damageToAnomaly(AbstractPoolable anomaly) {
         anomaly.destroy();
@@ -671,7 +656,6 @@ public class GameScreen extends BaseScreen {
         anomaly.showSpray(particleEmitter);
         player.killPlusPlus();
     }
-    ///
 
     private void damageToPlayer(AbstractPoolable anomaly) {
         if (anomaly.getLevel() >= 3) {
@@ -682,8 +666,6 @@ public class GameScreen extends BaseScreen {
             }
         }
 
-        //player.getLifeShield().blink();
-        //shake.shake((tmpAnomaly.getLevel() + 1) / 3.0f, 35, (int) (player.getVelocity().len() / 10));
         if (player.addZigZag(0.5f * anomaly.getLevel() + 0.2f)) {
             player.takeDamage(anomaly.getLevel() + 1);
             gameInfoSystem.setup(
@@ -700,7 +682,6 @@ public class GameScreen extends BaseScreen {
             anomaly.getVelocity().add(tmp);
         }
     }
-    ///
 
     private void prettyKick(String sound) {
         if (player.isDelayAnomaly()) {
@@ -712,7 +693,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void dispose() {
         super.dispose();
-        shaderPause.dispose();
+        shaderManager.dispose();
         player.getStanding().writeResult();
     }
 }
