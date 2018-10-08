@@ -614,7 +614,7 @@ public class GameScreen extends BaseScreen {
                 float y = MathUtils.random(0, Rules.SPACE_HEIGHT);
                 while (true) {
                     //Prevent generation near blackhole
-                    if (blackhole.getPosition().cpy().sub(x, y).len() >= Rules.BLACKHOLE_TAKE_RANGE + 10) {
+                    if (blackhole.getPosition().cpy().sub(x, y).len() >= Rules.BLACKHOLE_TAKE_RANGE + 50) {
                         break;
                     }
                     x = MathUtils.random(0, Rules.SPACE_WIDTH);

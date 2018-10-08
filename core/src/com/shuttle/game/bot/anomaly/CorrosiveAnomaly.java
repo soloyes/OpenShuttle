@@ -181,4 +181,11 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     public void takeDamage(int dmg) {
         level -= dmg;
     }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        scaleX = scaleY = 0;
+        born = false;
+    }
 }

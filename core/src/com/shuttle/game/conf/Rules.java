@@ -14,8 +14,8 @@ public class Rules {
     //
     public static int SPACE_HEIGHT;
     //CONSUMABLE
-    //2
-    public static final int CONSUMABLE_AT_START = 2;
+    //1
+    public static final int CONSUMABLE_AT_START = 1;
     //6.0f
     public static final float CONSUMABLE_RESPAWN_TIME = 6.0f;
     //10000
@@ -74,7 +74,7 @@ public class Rules {
     //100
     public static final int ANOMALIES_CORROSIVE_MAX_COUNT = 100;
     //5.0f
-    public static final float ANOMALIES_CORROSIVE_SLIM_TIME = 10.0f;
+    public static final float ANOMALIES_CORROSIVE_SLIM_TIME = 5.0f;
     //60
     public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
     //60.0f
@@ -142,7 +142,11 @@ public class Rules {
         n++;
         STARS_COUNT = STARS * n;
         SPACE_WIDTH = WORLD_WIDTH * n;
-        SPACE_HEIGHT = WORLD_WIDTH * n;
+        SPACE_HEIGHT = WORLD_HEIGHT * n;
+        //TEST
+//        STARS_COUNT = 300;
+//        SPACE_WIDTH = WORLD_WIDTH;
+//        SPACE_HEIGHT = WORLD_HEIGHT;
     }
 
     public enum StartLevel {
