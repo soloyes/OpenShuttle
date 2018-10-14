@@ -26,7 +26,6 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
     @Setter
     protected float hungryTimer;
     protected Vector2 tmp;
-    protected GameScreen gs;
     @Getter
     @Setter
     protected TextureRegion[] textureRegions;

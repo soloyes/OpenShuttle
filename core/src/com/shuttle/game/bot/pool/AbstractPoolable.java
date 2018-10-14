@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.particle.ParticleEmitter;
+import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 
@@ -15,6 +16,8 @@ import lombok.Setter;
  * @author Shuttle on 8/26/18.
  */
 public abstract class AbstractPoolable implements Poolable {
+    @Getter
+    protected GameScreen gs;
     protected Vector2 position;
     @Getter
     @Setter

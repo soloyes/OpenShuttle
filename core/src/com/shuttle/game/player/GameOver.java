@@ -2,6 +2,7 @@ package com.shuttle.game.player;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
@@ -25,20 +26,23 @@ import java.util.ArrayList;
 public class GameOver {
     private Label titleLabel;
     private Label resLabel;
-    private Label score;
     private ArrayList<AbstractPoolable> poolable;
     private GameScreen gs;
+    private GlyphLayout glyphLayout;
+    private BitmapFont font96;
 
     public GameOver(GameScreen gs) {
         this.gs = gs;
+        this.glyphLayout = new GlyphLayout();
         Label.LabelStyle style96 = new Label.LabelStyle(
                 Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class),
                 new Color(0.8f, 0.43f, 0.33f, 1f)
         );
-        
+        this.font96 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96);
+        font96.setColor(0.8f, 0.43f, 0.33f, 1f);
+
         this.titleLabel = new Label("GAME OVER", style96);
         this.resLabel = new Label("", style96);
-        this.score = new Label("SCORE: " + String.valueOf(gs.getPlayer().getStanding().getScore()), style96);
 
         titleLabel.setPosition(ScreenManager.getInstance().getViewport().getWorldWidth() / 2
                         - titleLabel.getWidth() / 2,
@@ -88,12 +92,12 @@ public class GameOver {
         magneticAnomaly.setScaleY(1.0f);
         magneticAnomaly.getColor().a = 1.0f;
 
-        Astronaut astronaut = new Astronaut();
+        Astronaut astronaut = new Astronaut(gs);
         astronaut.init(picx, 640);
         astronaut.setWidth(corrosiveAnomalyTAN.getWidth());
         astronaut.setHeight(corrosiveAnomalyTAN.getHeight());
 
-        Crate crate = new Crate();
+        Crate crate = new Crate(gs);
         crate.init(picx, 540);
         crate.setWidth(128);
         crate.setHeight(128);
@@ -102,8 +106,6 @@ public class GameOver {
         asteroid.setScaleX(1.0f);
         asteroid.setScaleY(1.0f);
         asteroid.init(picx, 440);
-
-        score.setPosition(ScreenManager.getInstance().getViewport().getWorldWidth() / 2 - score.getWidth() / 2, 240);
 
         poolable.add(corrosiveAnomalyTAN);
         poolable.add(corrosiveAnomalyGREEN);
@@ -174,7 +176,10 @@ public class GameOver {
                     poolable.get(i).getPosition().y - resLabel.getHeight() / 2
             );
             resLabel.draw(batch, batch.getColor().a);
-            score.draw(batch, batch.getColor().a);
+            font96.draw(batch, glyphLayout,
+                    ScreenManager.getInstance().getViewport().getWorldWidth() / 2 - glyphLayout.width / 2,
+                    340
+            );
         }
     }
 
@@ -182,5 +187,6 @@ public class GameOver {
         for (int i = 0; i < poolable.size(); i++) {
             poolable.get(i).basicUpdate(delta);
         }
+        glyphLayout.setText(font96, "SCORE: " + String.valueOf(gs.getPlayer().getStanding().getScore()));
     }
 }

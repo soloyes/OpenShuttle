@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -135,7 +136,7 @@ public class GameScreen extends BaseScreen {
         electricalAnomalyEmitter = new ElectricalAnomalyEmitter(this);
         radiationAnomalyEmitter = new RadiationAnomalyEmitter(this);
         magneticAnomalyEmitter = new MagneticAnomalyEmitter(this);
-        consumableEmitter = new ConsumableEmitter();
+        consumableEmitter = new ConsumableEmitter(this);
         asteroidEmitter = new AsteroidEmitter();
         background = new Background();
         gameInfoSystem = new GameInfoSystem();

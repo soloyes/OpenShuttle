@@ -2,30 +2,26 @@ package com.shuttle.game.bot.consumable;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.pool.AbstractPoolable;
+import com.shuttle.game.conf.Rules;
+import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 
-public class Consumable extends AbstractPoolable {
+public abstract class Consumable extends AbstractPoolable {
     protected TextureRegion texture;
 
-    public Consumable() {
+    public Consumable(GameScreen gs) {
+        this.gs = gs;
         this.position = new Vector2(0, 0);
         this.velocity = new Vector2(0, 0);
         this.active = false;
         this.boundCheck = new BoundCheck();
+        this.boomBox = new BoomBox();
     }
 
-    @Override
-    public void init(float x, float y) {
-        position.set(x, y);
-        angle = MathUtils.random(0, 360);
-        rotationSpeed = MathUtils.random(-20, 20);
-        active = true;
-        scaleX = saveScaleX = 1.0f;
-        scaleY = saveScaleY = 1.0f;
-    }
+    public abstract void init(float x, float y);
 
     @Override
     public void basicRender(SpriteBatch batch) {

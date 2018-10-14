@@ -11,6 +11,7 @@ public class DesktopLauncher {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.width = 540;
         config.height = 960;
+        config.vSyncEnabled = true;
         //todo: need to fix speed shuttle on 5-10FPS.
         //config.foregroundFPS = 30;
 
