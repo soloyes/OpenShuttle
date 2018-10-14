@@ -9,5 +9,4 @@ public interface Poolable {
     void destroy();
 
     boolean isActive();
-
 }

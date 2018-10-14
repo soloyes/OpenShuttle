@@ -276,6 +276,7 @@ public class Shuttle {
                             if (anomalies.get(i).isActive()) {
                                 anomalies.get(i).destroy();
                                 anomalies.get(i).showSpray(gs.getParticleEmitter());
+                                standing.addToStatistics(anomalies.get(i).getType(), anomalies.get(i).getLevel());
                             }
                         }
                     }
@@ -396,7 +397,9 @@ public class Shuttle {
     }
 
     private void checkFuel(float dt) {
-        standing.changeFuel(-Rules.PLAYER_FUEL_CONSUMPTION * dt);
+        if (!Rules.GAME_OVER){
+            standing.changeFuel(-Rules.PLAYER_FUEL_CONSUMPTION * dt);
+        }
         if (standing.getFuel() <= 0.0f) {
             standing.setFuel(0.0f);
             velocity.scl(0.97f);
@@ -439,7 +442,7 @@ public class Shuttle {
     private void checkRadar(float dt) {
         if (!radar.isActive()) {
             radar.update(dt);
-            if (position.dst(radar.getPosition()) < 128) {
+            if (position.dst(radar.getPosition()) < 128 && !Rules.GAME_OVER) {
                 radar.setActive(true);
                 boomBox.playSound(MSConstants.GET_RADAR);
             }

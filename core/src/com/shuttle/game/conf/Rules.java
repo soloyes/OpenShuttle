@@ -50,7 +50,7 @@ public class Rules {
     //500
     public static final int ANOMALIES_RADIATION_SCORE_DECREASE = 500;
     //0.4f
-    public static final float ANOMALIES_RADIATION_HUNGRY_TIME = 0.4f;
+    public static final float ANOMALIES_RADIATION_EAT_TIME = 0.4f;
     //50.0f
     public static final float ANOMALIES_RADIATION_VELOCITY = 50.0f;
     //
@@ -63,7 +63,7 @@ public class Rules {
     //0.3f
     public static final float ANOMALIES_MAGNETIC_FUEL_DECREASE = 0.3f;
     //0.4f
-    public static final float ANOMALIES_MAGNETIC_HUNGRY_TIME = 0.4f;
+    public static final float ANOMALIES_MAGNETIC_EAT_TIME = 0.4f;
     //50.0f
     public static final float ANOMALIES_MAGNETIC_VELOCITY = 50.0f;
     //
@@ -157,7 +157,7 @@ public class Rules {
                 player.getStanding().setFuel(250);
                 player.getStanding().setHp(25);
                 player.getStanding().setMaxHp(25);
-                player.getStanding().setLives(3);
+                player.getStanding().setLives(1);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
@@ -166,6 +166,7 @@ public class Rules {
                 player.getRadar().setActive(true);
                 //player.getGun().setActive(true);
                 player.getStanding().setPlayingLevel(27);
+                player.getStanding().setScoreToLive(SCORE_TO_LIVE);
             }
         },
         MEDIUM {
@@ -175,7 +176,7 @@ public class Rules {
                 player.getStanding().setFuel(200);
                 player.getStanding().setHp(20);
                 player.getStanding().setMaxHp(20);
-                player.getStanding().setLives(2);
+                player.getStanding().setLives(1);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
@@ -184,6 +185,7 @@ public class Rules {
                 player.getRadar().setActive(false);
                 //player.getGun().setActive(false);
                 player.getStanding().setPlayingLevel(21);
+                player.getStanding().setScoreToLive(SCORE_TO_LIVE * 7);
             }
         },
         HIGH {
@@ -193,7 +195,7 @@ public class Rules {
                 player.getStanding().setFuel(150);
                 player.getStanding().setHp(15);
                 player.getStanding().setMaxHp(15);
-                player.getStanding().setLives(2);
+                player.getStanding().setLives(1);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
@@ -202,6 +204,7 @@ public class Rules {
                 player.getRadar().setActive(false);
                 //player.getGun().setActive(false);
                 player.getStanding().setPlayingLevel(15);
+                player.getStanding().setScoreToLive(SCORE_TO_LIVE * 13);
             }
         };
 

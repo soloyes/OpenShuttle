@@ -25,16 +25,86 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
 
     public CorrosiveAnomaly(GameScreen gs) {
         super(gs);
-        this.textureRegions = Regions.split(new TextureRegion(Assets.getInstance().getAssetManager().get(PaintConstants.ANOMALY_CORROSIVE_REGION, Texture.class)),
+        this.textureRegions = Regions.split(
+                new TextureRegion(
+                        Assets.getInstance()
+                                .getAtlas()
+                                .findRegion(PaintConstants.ANOMALY_CORROSIVE_REGION)
+                ),
                 3,
                 4,
-                12
+                PaintConstants.ANOMALY_CORROSIVE_FRAMES
         );
         this.glowRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.ANOMALY_GLOW);
         this.width = PaintConstants.ANOMALY_CORROSIVE_WIDTH;
         this.height = PaintConstants.ANOMALY_CORROSIVE_HEIGHT;
         this.glowWidth = PaintConstants.ANOMALY_GLOW_WIDTH;
         this.glowHeight = PaintConstants.ANOMALY_GLOW_HEIGHT;
+        this.type = Type.CORROSIVE;
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        scaleX = scaleY = 0;
+        born = false;
+    }
+
+    @Override
+    public void basicRender(SpriteBatch batch) {
+        batch.draw(
+                glowRegion,
+                position.x - glowWidth / 2,
+                position.y - glowHeight / 2,
+                glowWidth / 2,
+                glowHeight / 2,
+                glowWidth,
+                glowHeight,
+                scaleX,
+                scaleY,
+                clockwise * angle
+        );
+
+        batch.draw(
+                textureRegions[(int) (frame % PaintConstants.ANOMALY_CORROSIVE_FRAMES)],
+                position.x - width / 2,
+                position.y - height / 2,
+                width / 2,
+                height / 2,
+                width,
+                height,
+                scaleX,
+                scaleY,
+                clockwise * angle
+        );
+    }
+
+    public void basicUpdate(float dt) {
+        frame += 24 * dt;
+        if (frame >= PaintConstants.ANOMALY_CORROSIVE_FRAMES) {
+            frame = 0.0f;
+        }
+
+        angle += 48 * dt;
+        if (angle >= 365) {
+            angle = 0;
+        }
+
+        switch (level) {
+            case 0:
+                color.set(Color.TAN.r, Color.TAN.g, Color.TAN.b, color.a);
+                break;
+            case 1:
+                color.set(Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, color.a);
+                break;
+            case 2:
+                color.set(Color.YELLOW.r, Color.YELLOW.g, Color.YELLOW.b, color.a);
+                break;
+            case 3:
+                color.set(Color.RED.r, Color.RED.g, Color.RED.b, color.a);
+                break;
+        }
+
     }
 
     @Override
@@ -59,63 +129,19 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         this.taken = true;
     }
 
+    @Override
     public void render(SpriteBatch batch) {
         batch.setColor(color);
-        batch.draw(
-                glowRegion,
-                position.x - glowWidth / 2,
-                position.y - glowHeight / 2,
-                glowWidth / 2,
-                glowHeight / 2,
-                glowWidth,
-                glowHeight,
-                scaleX,
-                scaleY,
-                clockwise * angle
-        );
-
-        batch.draw(
-                textureRegions[(int) (frame % textureRegions.length)],
-                position.x - width / 2,
-                position.y - height / 2,
-                width / 2,
-                height / 2,
-                width,
-                height,
-                scaleX,
-                scaleY,
-                clockwise * angle
-        );
+        basicRender(batch);
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
+    @Override
     public void update(float dt) {
         scaleAndBorn(dt);
-
-        switch (level) {
-            case 0:
-                color.set(Color.TAN.r, Color.TAN.g, Color.TAN.b, color.a);
-                break;
-            case 1:
-                color.set(Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, color.a);
-                break;
-            case 2:
-                color.set(Color.YELLOW.r, Color.YELLOW.g, Color.YELLOW.b, color.a);
-                break;
-            case 3:
-                color.set(Color.RED.r, Color.RED.g, Color.RED.b, color.a);
-                break;
-        }
-
-        frame += 24 * dt;
-        angle += 48 * dt;
-        if (frame >= textureRegions.length)
-            frame = 0.0f;
-        if (angle >= 365)
-            angle = 0;
+        basicUpdate(dt);
 
         if (born) {
-
             if (oscillator) {
                 color.a -= dt / 2;
                 if (color.a <= 0.0f) {
@@ -153,17 +179,15 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
 
             velocity.scl(0.99f);
 
-            if (activated) {
+            if (hungry && activated) {
                 position.mulAdd(velocity, dt);
-                if (hungry) {
-                    if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-                        tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(Rules.ANOMALIES_CORROSIVE_VELOCITY);
-                        velocity.mulAdd(tmp, dt);
-                    }
-                    if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
-                        tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
-                        velocity.mulAdd(tmp, dt);
-                    }
+                if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
+                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(Rules.ANOMALIES_CORROSIVE_VELOCITY);
+                    velocity.mulAdd(tmp, dt);
+                }
+                if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
+                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
+                    velocity.mulAdd(tmp, dt);
                 }
             }
         }
@@ -180,12 +204,5 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
 
     public void takeDamage(int dmg) {
         level -= dmg;
-    }
-
-    @Override
-    public void destroy() {
-        super.destroy();
-        scaleX = scaleY = 0;
-        born = false;
     }
 }

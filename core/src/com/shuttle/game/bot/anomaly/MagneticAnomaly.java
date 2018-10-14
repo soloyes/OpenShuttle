@@ -22,10 +22,21 @@ public class MagneticAnomaly extends AbstractAnomaly {
     private boolean glued;
     private float liveTime;
     private float v;
+    @Getter
+    @Setter
+    private boolean eat;
+    @Getter
+    @Setter
+    private float eatTimer;
 
     public MagneticAnomaly(GameScreen gs) {
         super(gs);
-        this.textureRegions = Regions.split(new TextureRegion(Assets.getInstance().getAssetManager().get(PaintConstants.ANOMALY_MAGNETIC_REGION, Texture.class)),
+        this.textureRegions = Regions.split(
+                new TextureRegion(
+                        Assets.getInstance()
+                                .getAtlas()
+                                .findRegion(PaintConstants.ANOMALY_MAGNETIC_REGION)
+                ),
                 4,
                 4,
                 16
@@ -36,13 +47,16 @@ public class MagneticAnomaly extends AbstractAnomaly {
                 Rules.ANOMALIES_MAGNETIC_VELOCITY,
                 3 * Rules.ANOMALIES_MAGNETIC_VELOCITY
         );
+        this.type = Type.MAGNETIC;
     }
 
     @Override
     public void init(float x, float y) {
         this.position.set(x, y);
         this.active = true;
-        this.hungry = false;
+        this.activated = true;
+        this.hungry = true;
+        this.eat = false;
         this.hungryTimer = 0.0f;
         this.born = false;
         this.level = 1;
@@ -54,8 +68,15 @@ public class MagneticAnomaly extends AbstractAnomaly {
         this.clockwise = MathUtils.randomSign();
     }
 
+    @Override
     public void render(SpriteBatch batch) {
         batch.setColor(1.0f, 1.0f, 1.0f, color.a);
+        basicRender(batch);
+        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    @Override
+    public void basicRender(SpriteBatch batch) {
         batch.draw(
                 textureRegions[(int) (frame % textureRegions.length)],
                 position.x - width / 2,
@@ -68,39 +89,43 @@ public class MagneticAnomaly extends AbstractAnomaly {
                 scaleY,
                 clockwise * angle
         );
-        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
-    public void update(float dt) {
-        scaleAndBorn(dt);
-
+    @Override
+    public void basicUpdate(float dt) {
         frame += 24 * dt;
-        if (!hungry) {
+        if (!eat) {
             angle += 48 * dt;
         }
         if (frame >= textureRegions.length)
             frame = 0.0f;
         if (angle >= 365)
             angle = 0;
+    }
+
+    @Override
+    public void update(float dt) {
+        scaleAndBorn(dt);
+        basicUpdate(dt);
 
         if (born) {
             boundCheck.checkAndHandleBoundsAndDestroy(this);
 
             velocity.scl(0.99f);
-            position.mulAdd(velocity, dt);
-
-            if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-
-                tmp.set(gs.getPlayer()
-                        .getPosition())
-                        .sub(position)
-                        .nor()
-                        .scl(v);
-                velocity.mulAdd(tmp, dt);
-            }
-            if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
-                tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
-                velocity.mulAdd(tmp, dt);
+            if (hungry && activated) {
+                position.mulAdd(velocity, dt);
+                if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
+                    tmp.set(gs.getPlayer()
+                            .getPosition())
+                            .sub(position)
+                            .nor()
+                            .scl(v);
+                    velocity.mulAdd(tmp, dt);
+                }
+                if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
+                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
+                    velocity.mulAdd(tmp, dt);
+                }
             }
         }
     }
@@ -126,7 +151,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
         }
     }
 
-    public void addHungryTimer(float dt) {
-        hungryTimer += dt;
+    public void addEatTimer(float dt) {
+        eatTimer += dt;
     }
 }

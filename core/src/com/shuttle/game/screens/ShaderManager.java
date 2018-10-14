@@ -46,7 +46,8 @@ public class ShaderManager {
                 if (shaderBlackHole.isCompiled()) {
                     return shaderBlackHole;
                 } else {
-                    GamePreferences.setEffectsLevel(0);
+                    //GamePreferences.setEffectsLevel(0);
+                    System.out.println(shaderBlackHole.getLog());
                     return null;
                 }
         }

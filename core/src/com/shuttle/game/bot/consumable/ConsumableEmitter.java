@@ -5,8 +5,13 @@ import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.bot.pool.ObjectPool;
 import com.shuttle.game.conf.Rules;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ConsumableEmitter extends ObjectPool<Consumable> {
-    private float time;
+    @Getter
+    @Setter
+    private float respawnTime;
 
     public ConsumableEmitter() {
         if (Rules.CONSUMABLE_AT_START != 0) {
@@ -22,7 +27,13 @@ public class ConsumableEmitter extends ObjectPool<Consumable> {
 
     @Override
     protected Consumable newObject() {
-        return new Consumable();
+        int i = MathUtils.random(0, 1);
+        switch (i) {
+            case 1:
+                return new Astronaut();
+            default:
+                return new Crate();
+        }
     }
 
     public void render(SpriteBatch batch) {
@@ -32,9 +43,9 @@ public class ConsumableEmitter extends ObjectPool<Consumable> {
     }
 
     public void update(float dt) {
-        time += dt;
-        if (time > Rules.CONSUMABLE_RESPAWN_TIME) {
-            time = 0.0f;
+        respawnTime += dt;
+        if (respawnTime > Rules.CONSUMABLE_RESPAWN_TIME && !Rules.GAME_OVER) {
+            respawnTime = 0.0f;
             createConsumable();
         }
         for (int i = 0; i < activeList.size(); i++) {

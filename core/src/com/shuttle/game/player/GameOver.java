@@ -1,0 +1,186 @@
+package com.shuttle.game.player;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
+import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
+import com.shuttle.game.bot.anomaly.MagneticAnomaly;
+import com.shuttle.game.bot.anomaly.RadiationAnomaly;
+import com.shuttle.game.bot.asteroids.Asteroid;
+import com.shuttle.game.bot.consumable.Astronaut;
+import com.shuttle.game.bot.consumable.Crate;
+import com.shuttle.game.bot.pool.AbstractPoolable;
+import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.screens.ScreenManager;
+import com.shuttle.game.utils.Assets;
+
+import java.util.ArrayList;
+
+/**
+ * @author Shuttle on 10/10/18.
+ */
+public class GameOver {
+    private Label titleLabel;
+    private Label resLabel;
+    private Label score;
+    private ArrayList<AbstractPoolable> poolable;
+    private GameScreen gs;
+
+    public GameOver(GameScreen gs) {
+        this.gs = gs;
+        Label.LabelStyle style96 = new Label.LabelStyle(
+                Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class),
+                new Color(0.8f, 0.43f, 0.33f, 1f)
+        );
+        
+        this.titleLabel = new Label("GAME OVER", style96);
+        this.resLabel = new Label("", style96);
+        this.score = new Label("SCORE: " + String.valueOf(gs.getPlayer().getStanding().getScore()), style96);
+
+        titleLabel.setPosition(ScreenManager.getInstance().getViewport().getWorldWidth() / 2
+                        - titleLabel.getWidth() / 2,
+                1440);
+
+        poolable = new ArrayList<AbstractPoolable>();
+        CorrosiveAnomaly corrosiveAnomalyTAN = new CorrosiveAnomaly(gs);
+        CorrosiveAnomaly corrosiveAnomalyGREEN = new CorrosiveAnomaly(gs);
+        CorrosiveAnomaly corrosiveAnomalyYELLOW = new CorrosiveAnomaly(gs);
+        CorrosiveAnomaly corrosiveAnomalyRED = new CorrosiveAnomaly(gs);
+        float picx = ScreenManager.getInstance().getViewport().getWorldWidth() / 4;
+        corrosiveAnomalyTAN.init(picx, 1340);
+        corrosiveAnomalyTAN.setLevel(0);
+        corrosiveAnomalyTAN.setScaleX(1.0f);
+        corrosiveAnomalyTAN.setScaleY(1.0f);
+
+        corrosiveAnomalyGREEN.init(picx, 1240);
+        corrosiveAnomalyGREEN.setLevel(1);
+        corrosiveAnomalyGREEN.setScaleX(1.0f);
+        corrosiveAnomalyGREEN.setScaleY(1.0f);
+
+        corrosiveAnomalyYELLOW.init(picx, 1140);
+        corrosiveAnomalyYELLOW.setLevel(2);
+        corrosiveAnomalyYELLOW.setScaleX(1.0f);
+        corrosiveAnomalyYELLOW.setScaleY(1.0f);
+
+        corrosiveAnomalyRED.init(picx, 1040);
+        corrosiveAnomalyRED.setLevel(3);
+        corrosiveAnomalyRED.setScaleX(1.0f);
+        corrosiveAnomalyRED.setScaleY(1.0f);
+
+        ElectricalAnomaly electricalAnomaly = new ElectricalAnomaly(gs);
+        electricalAnomaly.init(picx, 940);
+        electricalAnomaly.setScaleX(1.0f);
+        electricalAnomaly.setScaleY(1.0f);
+        electricalAnomaly.getColor().a = 1.0f;
+
+        RadiationAnomaly radiationAnomaly = new RadiationAnomaly(gs);
+        radiationAnomaly.init(picx, 840);
+        radiationAnomaly.setScaleX(1.0f);
+        radiationAnomaly.setScaleY(1.0f);
+        radiationAnomaly.getColor().a = 1.0f;
+
+        MagneticAnomaly magneticAnomaly = new MagneticAnomaly(gs);
+        magneticAnomaly.init(picx, 740);
+        magneticAnomaly.setScaleX(1.0f);
+        magneticAnomaly.setScaleY(1.0f);
+        magneticAnomaly.getColor().a = 1.0f;
+
+        Astronaut astronaut = new Astronaut();
+        astronaut.init(picx, 640);
+        astronaut.setWidth(corrosiveAnomalyTAN.getWidth());
+        astronaut.setHeight(corrosiveAnomalyTAN.getHeight());
+
+        Crate crate = new Crate();
+        crate.init(picx, 540);
+        crate.setWidth(128);
+        crate.setHeight(128);
+
+        Asteroid asteroid = new Asteroid();
+        asteroid.setScaleX(1.0f);
+        asteroid.setScaleY(1.0f);
+        asteroid.init(picx, 440);
+
+        score.setPosition(ScreenManager.getInstance().getViewport().getWorldWidth() / 2 - score.getWidth() / 2, 240);
+
+        poolable.add(corrosiveAnomalyTAN);
+        poolable.add(corrosiveAnomalyGREEN);
+        poolable.add(corrosiveAnomalyYELLOW);
+        poolable.add(corrosiveAnomalyRED);
+        poolable.add(electricalAnomaly);
+        poolable.add(magneticAnomaly);
+        poolable.add(radiationAnomaly);
+        poolable.add(astronaut);
+        poolable.add(crate);
+        poolable.add(asteroid);
+    }
+
+    public void draw(SpriteBatch batch) {
+        titleLabel.draw(batch, batch.getColor().a);
+        Color tmpColor = batch.getColor();
+        for (int i = 0; i < poolable.size(); i++) {
+            AbstractPoolable abstractPoolable = poolable.get(i);
+            if (abstractPoolable instanceof CorrosiveAnomaly) {
+                CorrosiveAnomaly tmpCorrosive = (CorrosiveAnomaly) abstractPoolable;
+                batch.setColor(
+                        tmpCorrosive.getColor().r,
+                        tmpCorrosive.getColor().g,
+                        tmpCorrosive.getColor().b,
+                        tmpColor.a
+                );
+                tmpCorrosive.basicRender(batch);
+                batch.setColor(tmpColor);
+            } else if (abstractPoolable instanceof ElectricalAnomaly) {
+                ElectricalAnomaly tmpElectrical = (ElectricalAnomaly) abstractPoolable;
+                batch.setColor(tmpColor);
+                tmpElectrical.basicRender(batch);
+                batch.setColor(tmpColor);
+            } else if (abstractPoolable instanceof MagneticAnomaly) {
+                MagneticAnomaly tmpMagnetic = (MagneticAnomaly) abstractPoolable;
+                batch.setColor(tmpColor);
+                tmpMagnetic.basicRender(batch);
+                batch.setColor(tmpColor);
+            } else if (abstractPoolable instanceof RadiationAnomaly) {
+                RadiationAnomaly tmpRadiation = (RadiationAnomaly) abstractPoolable;
+                batch.setColor(tmpColor);
+                tmpRadiation.basicRender(batch);
+                batch.setColor(tmpColor);
+            } else if (abstractPoolable instanceof Astronaut) {
+                Astronaut tmpAstronaut = (Astronaut) abstractPoolable;
+                batch.setColor(tmpColor);
+                tmpAstronaut.basicRender(batch);
+                batch.setColor(tmpColor);
+            } else if (abstractPoolable instanceof Crate) {
+                Crate tmpCrate = (Crate) abstractPoolable;
+                batch.setColor(tmpColor);
+                tmpCrate.basicRender(batch);
+                batch.setColor(tmpColor);
+            } else if (abstractPoolable instanceof Asteroid) {
+                Asteroid tmpAsteroid = (Asteroid) abstractPoolable;
+                batch.setColor(tmpColor);
+                tmpAsteroid.basicRender(batch);
+                batch.setColor(tmpColor);
+            }
+            resLabel.setText(
+                    gs.getPlayer()
+                            .getStanding()
+                            .getFromStatistics(poolable.get(i).getType(), poolable.get(i).getLevel())
+                            .toString()
+            );
+            resLabel.setPosition(
+                    3 * poolable.get(i).getPosition().x,
+                    poolable.get(i).getPosition().y - resLabel.getHeight() / 2
+            );
+            resLabel.draw(batch, batch.getColor().a);
+            score.draw(batch, batch.getColor().a);
+        }
+    }
+
+    public void update(float delta) {
+        for (int i = 0; i < poolable.size(); i++) {
+            poolable.get(i).basicUpdate(delta);
+        }
+    }
+}

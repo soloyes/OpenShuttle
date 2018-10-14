@@ -3,86 +3,142 @@ images1.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-radar
+screenGameOverBorder
   rotate: false
   xy: 2, 2
+  size: 1080, 1920
+  orig: 1080, 1920
+  offset: 0, 0
+  index: -1
+asteroid
+  rotate: false
+  xy: 2, 1924
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+magnetic
+  rotate: false
+  xy: 2, 2950
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+radiation
+  rotate: false
+  xy: 1084, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+electric
+  rotate: false
+  xy: 2110, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+corrosive
+  rotate: false
+  xy: 1084, 1028
+  size: 1024, 768
+  orig: 1024, 768
+  offset: 0, 0
+  index: -1
+radar
+  rotate: false
+  xy: 3136, 2
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
-crate
+astronaut
   rotate: false
-  xy: 516, 2
+  xy: 3650, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-astronaut
+blackholeSpiral
   rotate: false
-  xy: 774, 2
-  size: 128, 256
-  orig: 128, 256
+  xy: 3136, 516
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+blackholeHole
+  rotate: false
+  xy: 3394, 516
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+glow
+  rotate: false
+  xy: 3652, 516
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+crate
+  rotate: false
+  xy: 2110, 1028
+  size: 256, 256
+  orig: 256, 256
   offset: 0, 0
   index: -1
 joystick
   rotate: false
-  xy: 516, 260
+  xy: 3650, 260
   size: 200, 250
   orig: 200, 250
   offset: 0, 0
   index: -1
 scratch
   rotate: false
-  xy: 2, 516
-  size: 640, 128
-  orig: 640, 128
-  offset: 0, 0
-  index: -1
-aliens
-  rotate: false
-  xy: 2, 646
+  xy: 2368, 1028
   size: 640, 128
   orig: 640, 128
   offset: 0, 0
   index: -1
 lifeShield
   rotate: false
-  xy: 718, 260
+  xy: 3908, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 fuel
   rotate: false
-  xy: 848, 260
+  xy: 3852, 260
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 HP
   rotate: false
-  xy: 2, 776
+  xy: 3136, 774
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 ramShield
   rotate: false
-  xy: 132, 776
+  xy: 3394, 774
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 shuttle
   rotate: false
-  xy: 262, 776
+  xy: 3910, 516
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 star16
   rotate: false
-  xy: 904, 2
+  xy: 1028, 1924
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

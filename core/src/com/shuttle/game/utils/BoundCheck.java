@@ -79,7 +79,9 @@ public class BoundCheck {
                 3,
                 true
         );
-        player.getGs().getShake().shake(duration, 35, 10);
+        if (!Rules.GAME_OVER) {
+            player.getGs().getShake().shake(duration, 35, 10);
+        }
     }
 
     public void checkAndHandleBoundsAndDestroy(AbstractPoolable poolable) {

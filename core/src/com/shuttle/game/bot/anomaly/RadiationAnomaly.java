@@ -1,16 +1,13 @@
 package com.shuttle.game.bot.anomaly;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Regions;
 
 import lombok.Getter;
@@ -25,23 +22,37 @@ public class RadiationAnomaly extends AbstractAnomaly {
     private boolean glued;
     private float liveTime;
     private float v;
+    @Getter
+    @Setter
+    private boolean eat;
+    @Getter
+    @Setter
+    private float eatTimer;
 
     public RadiationAnomaly(GameScreen gs) {
         super(gs);
-        this.textureRegions = Regions.split(new TextureRegion(Assets.getInstance().getAssetManager().get(PaintConstants.ANOMALY_RADIATION_REGION, Texture.class)),
+        this.textureRegions = Regions.split(
+                new TextureRegion(
+                        Assets.getInstance()
+                                .getAtlas()
+                                .findRegion(PaintConstants.ANOMALY_RADIATION_REGION)
+                ),
                 4,
                 4,
                 16
         );
         this.width = PaintConstants.ANOMALY_RADIATION_WIDTH;
         this.height = PaintConstants.ANOMALY_RADIATION_HEIGHT;
+        this.type = Type.RADIATION;
     }
 
     @Override
     public void init(float x, float y) {
         this.position.set(x, y);
         this.active = true;
-        this.hungry = false;
+        this.activated = true;
+        this.hungry = true;
+        this.eat = false;
         this.hungryTimer = 0.0f;
         this.born = false;
         this.level = 1;
@@ -52,8 +63,15 @@ public class RadiationAnomaly extends AbstractAnomaly {
         this.v = MathUtils.random(Rules.ANOMALIES_RADIATION_VELOCITY, 3 * Rules.ANOMALIES_RADIATION_VELOCITY);
     }
 
+    @Override
     public void render(SpriteBatch batch) {
         batch.setColor(1.0f, 1.0f, 1.0f, color.a);
+        basicRender(batch);
+        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    @Override
+    public void basicRender(SpriteBatch batch) {
         batch.draw(
                 textureRegions[(int) (frame % textureRegions.length)],
                 position.x - width / 2,
@@ -66,34 +84,39 @@ public class RadiationAnomaly extends AbstractAnomaly {
                 scaleY,
                 clockwise * angle
         );
-        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
-    public void update(float dt) {
-        scaleAndBorn(dt);
-
+    @Override
+    public void basicUpdate(float dt) {
         frame += 12 * dt;
         if (frame >= textureRegions.length)
             frame = 0.0f;
+    }
+
+    @Override
+    public void update(float dt) {
+        scaleAndBorn(dt);
+        basicUpdate(dt);
 
         if (born) {
             boundCheck.checkAndHandleBoundsAndDestroy(this);
 
             velocity.scl(0.99f);
-            position.mulAdd(velocity, dt);
 
-            if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-
-                tmp.set(gs.getPlayer()
-                        .getPosition())
-                        .sub(position)
-                        .nor()
-                        .scl(v);
-                velocity.mulAdd(tmp, dt);
-            }
-            if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
-                tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
-                velocity.mulAdd(tmp, dt);
+            if (hungry && activated) {
+                position.mulAdd(velocity, dt);
+                if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
+                    tmp.set(gs.getPlayer()
+                            .getPosition())
+                            .sub(position)
+                            .nor()
+                            .scl(v);
+                    velocity.mulAdd(tmp, dt);
+                }
+                if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
+                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
+                    velocity.mulAdd(tmp, dt);
+                }
             }
         }
     }
@@ -119,7 +142,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
         }
     }
 
-    public void addHungryTimer(float dt) {
-        hungryTimer += dt;
+    public void addEatTimer(float dt) {
+        eatTimer += dt;
     }
 }

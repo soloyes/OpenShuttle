@@ -8,11 +8,16 @@ import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author Shuttle on 6/30/18.
  */
 public class AsteroidEmitter extends ObjectPool<Asteroid> {
-    private float time;
+    @Getter
+    @Setter
+    private float respawnTime;
     private boolean boom;
     private Vector2 position;
     private Vector2 destanation;
@@ -40,9 +45,9 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
     }
 
     public void update(float dt) {
-        time += dt;
-        if (time > Rules.ASTEROID_RESPAWN_TIME) {
-            time = 0.0f;
+        respawnTime += dt;
+        if (respawnTime > Rules.ASTEROID_RESPAWN_TIME) {
+            respawnTime = 0.0f;
             createAsteroid();
         }
 

@@ -66,11 +66,11 @@ public class Assets {
                 assetManager.load(MSConstants.PLAYER_KICKED_ELECTRIC, Sound.class);
                 assetManager.load(MSConstants.ASTEROID_DESTROY, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
-                assetManager.load(PaintConstants.ASTEROID_REGION, Texture.class);
-                assetManager.load(PaintConstants.ANOMALY_CORROSIVE_REGION, Texture.class);
-                assetManager.load(PaintConstants.ANOMALY_ELECTRIC_REGION, Texture.class);
-                assetManager.load(PaintConstants.ANOMALY_RADIATION_REGION, Texture.class);
-                assetManager.load(PaintConstants.ANOMALY_MAGNETIC_REGION, Texture.class);
+                //assetManager.load(PaintConstants.ASTEROID_REGION, Texture.class);
+                //assetManager.load(PaintConstants.ANOMALY_CORROSIVE_REGION, Texture.class);
+                //assetManager.load(PaintConstants.ANOMALY_ELECTRIC_REGION, Texture.class);
+                //assetManager.load(PaintConstants.ANOMALY_RADIATION_REGION, Texture.class);
+                //assetManager.load(PaintConstants.ANOMALY_MAGNETIC_REGION, Texture.class);
                 createStdFont(32, "");
                 createStdFont(32, "Coloured");
                 createStdFont(48, "");

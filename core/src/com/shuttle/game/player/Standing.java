@@ -3,17 +3,19 @@ package com.shuttle.game.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.BoomBox;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,10 +26,12 @@ import lombok.Setter;
 public class Standing {
     private StringBuilder tmpString;
     private String username;
-    private int score, scoreView,scoreToLive;
+    @Getter
+    private int score, scoreView;
+    @Setter
+    private int scoreToLive;
     private Results results;
     private BitmapFont font64;
-    private BitmapFont font128;
     private Shuttle player;
     @Getter
     @Setter
@@ -56,6 +60,8 @@ public class Standing {
     //Score to lives with formula scoreToLive*n*(28 - level)
     private int n;
     private BoomBox boomBox;
+    //Type, level, score
+    private Map<AbstractPoolable.Type, Map<Integer, Integer>> statistics;
 
     public Standing(Shuttle player) {
         this.boomBox = new BoomBox();
@@ -63,11 +69,27 @@ public class Standing {
         this.username = Gdx.files.local("username").readString();
         this.results = new Results();
         this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64_C, BitmapFont.class);
-        this.font128 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT128, BitmapFont.class);
         this.player = player;
         this.n = 1;
+        this.statistics = new HashMap<AbstractPoolable.Type, Map<Integer, Integer>>();
         //Able to change colour for part of the text
         font64.getData().markupEnabled = true;
+    }
+
+    public void addToStatistics(AbstractPoolable.Type type, Integer level) {
+        if (statistics.get(type) == null) {
+            Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+            map.put(level, 1);
+            statistics.put(type, map);
+
+        } else {
+            Map<Integer, Integer> map = statistics.get(type);
+            if (statistics.get(type).get(level) == null) {
+                map.put(level, 1);
+            } else {
+                map.put(level, statistics.get(type).get(level) + 1);
+            }
+        }
     }
 
     public void changeFuel(float amount) {
@@ -118,70 +140,71 @@ public class Standing {
                     true
             );
             boomBox.playSound(MSConstants.UP);
+            scoreToLive = Rules.SCORE_TO_LIVE * n * (28 - playingLevel);
         }
+    }
+
+    public Integer getFromStatistics(AbstractPoolable.Type type, Integer level) {
+        if (statistics.get(type) == null) {
+            return 0;
+        }
+        if (statistics.get(type).get(level) == null) {
+            return 0;
+        }
+        return statistics.get(type).get(level);
     }
 
     public void render(SpriteBatch batch) {
         tmpString.setLength(0);
-        if (!Rules.GAME_OVER) {
-            tmpString
-                    .append("NAME: ")
-                    .append(username);
-            tmpString
-                    .append("\nSCORE: ");
-            if (scoreAlertRadiationAnomaly) {
-                tmpString
-                        .append("[RED]")
-                        .append(scoreView)
-                        .append("[]")
-                        .append("/")
-                        .append(scoreToLive);
-            } else {
-                tmpString
-                        .append(scoreView)
-                        .append("/")
-                        .append(scoreToLive);
-            }
-            tmpString
-                    .append("\nHP: ");
-            if (hpAlert) {
-                tmpString
-                        .append("[RED]")
-                        .append(hp)
-                        .append("[]");
-            } else {
-                tmpString.append(hp);
-            }
-            tmpString
-                    .append("/")
-                    .append(maxHp)
-                    .append(" x")
-                    .append(lives);
 
+        tmpString
+                .append("NAME: ")
+                .append(username);
+        tmpString
+                .append("\nSCORE: ");
+        if (scoreAlertRadiationAnomaly) {
             tmpString
-                    .append("\nFUEL: ");
-            if (fuelAlertOutOfBounds || fuelAlertMagneticAnomaly) {
-                tmpString
-                        .append("[RED]")
-                        .append((int) fuel)
-                        .append("[]");
-            } else {
-                tmpString.append((int) fuel);
-            }
-            tmpString
+                    .append("[RED]")
+                    .append(scoreView)
+                    .append("[]")
                     .append("/")
-                    .append((int) maxFuel);
-            font64.draw(batch, tmpString, 20, 1900);
+                    .append(scoreToLive);
         } else {
-            tmpString.append("Game Over!");
-            tmpString.append("\nSCORE: ").append(scoreView);
-            font128.draw(
-                    batch,
-                    tmpString,
-                    ScreenManager.getInstance().getViewport().getWorldWidth() - font128.getRegion().getRegionWidth(),
-                    ScreenManager.getInstance().getViewport().getWorldHeight() / 2
-            );
+            tmpString
+                    .append(scoreView)
+                    .append("/")
+                    .append(scoreToLive);
         }
+        tmpString
+                .append("\nHP: ");
+        if (hpAlert) {
+            tmpString
+                    .append("[RED]")
+                    .append(hp)
+                    .append("[]");
+        } else {
+            tmpString.append(hp);
+        }
+        tmpString
+                .append("/")
+                .append(maxHp)
+                .append(" x")
+                .append(lives);
+
+        tmpString
+                .append("\nFUEL: ");
+        if (fuelAlertOutOfBounds || fuelAlertMagneticAnomaly) {
+            tmpString
+                    .append("[RED]")
+                    .append((int) fuel)
+                    .append("[]");
+        } else {
+            tmpString.append((int) fuel);
+        }
+        tmpString
+                .append("/")
+                .append((int) maxFuel);
+        font64.draw(batch, tmpString, 20, 1900);
     }
 
     public void update() {

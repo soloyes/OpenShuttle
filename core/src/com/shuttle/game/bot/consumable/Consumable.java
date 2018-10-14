@@ -5,35 +5,16 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.pool.AbstractPoolable;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.BoundCheck;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class Consumable extends AbstractPoolable {
-    @Getter
-    @Setter
-    private Type type;
-    private TextureRegion texture;
-    private TextureRegion[] textures;
+    protected TextureRegion texture;
 
     public Consumable() {
-        this.textures = new TextureRegion[2];
-        this.textures[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.ASTRONAUT_REGION);
-        this.textures[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_REGION);
         this.position = new Vector2(0, 0);
         this.velocity = new Vector2(0, 0);
-        this.texture = textures[0];
         this.active = false;
         this.boundCheck = new BoundCheck();
-        this.level = 0;
-    }
-
-    @Override
-    public Vector2 getPosition() {
-        return position;
     }
 
     @Override
@@ -42,23 +23,12 @@ public class Consumable extends AbstractPoolable {
         angle = MathUtils.random(0, 360);
         rotationSpeed = MathUtils.random(-20, 20);
         active = true;
-        type = Type.values()[MathUtils.random(0, 1)];
-        texture = textures[type.textureIndex];
-        switch (type) {
-            case CRATE:
-                width = PaintConstants.CRATE_WIDTH;
-                height = PaintConstants.CRATE_HEIGHT;
-                break;
-            case ASTRONAUT:
-                width = PaintConstants.ASTRONAUT_WIDTH;
-                height = PaintConstants.ASTRONAUT_HEIGHT;
-                break;
-        }
         scaleX = saveScaleX = 1.0f;
         scaleY = saveScaleY = 1.0f;
     }
 
-    public void render(SpriteBatch batch) {
+    @Override
+    public void basicRender(SpriteBatch batch) {
         batch.draw(texture,
                 position.x - width / 2, position.y - height / 2,
                 width / 2, height / 2,
@@ -68,18 +38,25 @@ public class Consumable extends AbstractPoolable {
         );
     }
 
+    @Override
     public void update(float dt) {
+        basicUpdate(dt);
         boundCheck.checkAndHandleBoundsAndDestroy(this);
         position.mulAdd(velocity, dt);
+    }
+
+    @Override
+    public void basicUpdate(float dt) {
         angle += rotationSpeed * dt;
     }
 
-    public enum Type {
-        ASTRONAUT(0), CRATE(1);
-        private int textureIndex;
+    @Override
+    public void render(SpriteBatch batch) {
+        basicRender(batch);
+    }
 
-        Type(int textureIndex) {
-            this.textureIndex = textureIndex;
-        }
+    @Override
+    public Vector2 getPosition() {
+        return position;
     }
 }

@@ -2,18 +2,13 @@ package com.shuttle.game.bot.anomaly;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
-
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
-import lombok.Getter;
 import lombok.Setter;
 
 /**

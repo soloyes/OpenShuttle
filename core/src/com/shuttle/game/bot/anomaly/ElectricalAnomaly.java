@@ -21,13 +21,19 @@ public class ElectricalAnomaly extends AbstractAnomaly {
 
     public ElectricalAnomaly(GameScreen gs) {
         super(gs);
-        this.textureRegions = Regions.split(new TextureRegion(Assets.getInstance().getAssetManager().get(PaintConstants.ANOMALY_ELECTRIC_REGION, Texture.class)),
+        this.textureRegions = Regions.split(
+                new TextureRegion(
+                        Assets.getInstance()
+                                .getAtlas()
+                                .findRegion(PaintConstants.ANOMALY_ELECTRIC_REGION)
+                ),
                 4,
                 4,
                 16
         );
         this.width = PaintConstants.ANOMALY_ELECTRIC_WIDTH;
         this.height = PaintConstants.ANOMALY_ELECTRIC_HEIGHT;
+        this.type = Type.ELECTRIC;
     }
 
     @Override
@@ -39,6 +45,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.clockwise = MathUtils.randomSign();
         this.position.set(x, y);
         this.active = true;
+        this.activated = true;
         this.born = false;
         this.level = 4;
         this.color.a = 0.0f;
@@ -47,8 +54,15 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.taken = true;
     }
 
+    @Override
     public void render(SpriteBatch batch) {
         batch.setColor(1.0f, 1.0f, 1.0f, color.a);
+        basicRender(batch);
+        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    @Override
+    public void basicRender(SpriteBatch batch) {
         batch.draw(
                 textureRegions[(int) (frame % textureRegions.length)],
                 position.x - width / 2,
@@ -61,22 +75,25 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                 scaleY,
                 clockwise * angle
         );
-        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
-    public void update(float dt) {
-        scaleAndBorn(dt);
-
+    @Override
+    public void basicUpdate(float dt) {
         frame += 24 * dt;
         angle += 48 * dt;
         if (frame >= textureRegions.length)
             frame = 0.0f;
         if (angle >= 365)
             angle = 0;
+    }
+
+    @Override
+    public void update(float dt) {
+        scaleAndBorn(dt);
+        basicUpdate(dt);
 
         if (born) {
-
-            if (Gdx.input.isTouched()) {
+            if (Gdx.input.isTouched() && !Rules.GAME_OVER) {
                 tmp.set(Gdx.input.getX(), Gdx.input.getY());
                 ScreenManager.getInstance().getViewport().unproject(tmp);
                 if (tmp.dst(position) < 128f) {
@@ -95,8 +112,8 @@ public class ElectricalAnomaly extends AbstractAnomaly {
             }
 
             velocity.scl(0.99f);
-            position.mulAdd(velocity, dt);
-            if (hungry) {
+            if (hungry && activated) {
+                position.mulAdd(velocity, dt);
                 boolean out = boundCheck.checkAndHandleBounds(this);
                 if (!out) {
                     if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
@@ -120,6 +137,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
             destroy();
             boomBox.playSound(MSConstants.ANOMALY_ELECTRIC_DESTROY);
             gs.getPlayer().getStanding().changeScore((getLevel() + 1) * Rules.ANOMALIES_BASE_SCORE_ADD);
+            gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
         } else {
             color.a += dt / 5;
             if (color.a >= 1.0) {

@@ -1,5 +1,6 @@
 package com.shuttle.game.bot.pool;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
@@ -34,6 +35,7 @@ public abstract class AbstractPoolable implements Poolable {
     @Getter
     @Setter
     protected float scaleX, scaleY;
+    @Setter
     protected float frame;
     protected float angle, rotationSpeed;
     protected int clockwise;
@@ -46,6 +48,9 @@ public abstract class AbstractPoolable implements Poolable {
     @Getter
     @Setter
     protected boolean taken;
+    @Getter
+    @Setter
+    protected Type type;
 
     @Override
     public void destroy() {
@@ -53,7 +58,13 @@ public abstract class AbstractPoolable implements Poolable {
         this.activated = false;
     }
 
-    public abstract Vector2 getPosition();
+    public abstract void basicRender(SpriteBatch batch);
+
+    public abstract void basicUpdate(float dt);
+
+    public abstract void render(SpriteBatch batch);
+
+    public abstract void update(float dt);
 
     public void showSpray(ParticleEmitter particleEmitter) {
         float R = 0, G = 0.6f, B = 0;
@@ -76,5 +87,11 @@ public abstract class AbstractPoolable implements Poolable {
                     0.0f
             );
         }
+    }
+
+    public abstract Vector2 getPosition();
+
+    public enum Type {
+        CORROSIVE, ELECTRIC, MAGNETIC, RADIATION, ASTEROID, ASTRONAUT, CRATE;
     }
 }

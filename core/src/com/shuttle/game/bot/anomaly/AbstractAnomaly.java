@@ -39,9 +39,9 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
         return position;
     }
 
-    abstract void render(SpriteBatch batch);
+    public abstract void render(SpriteBatch batch);
 
-    abstract void update(float dt);
+    public abstract void update(float dt);
 
     protected AbstractAnomaly(GameScreen gs) {
         this.boomBox = new BoomBox();

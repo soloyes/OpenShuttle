@@ -28,7 +28,11 @@ public class Asteroid extends AbstractPoolable {
 
     public Asteroid() {
         this.textureRegions = Regions.split(
-                new TextureRegion(Assets.getInstance().getAssetManager().get(PaintConstants.ASTEROID_REGION, Texture.class)),
+                new TextureRegion(
+                        Assets.getInstance()
+                                .getAtlas()
+                                .findRegion(PaintConstants.ASTEROID_REGION)
+                ),
                 8,
                 8,
                 32);
@@ -37,11 +41,40 @@ public class Asteroid extends AbstractPoolable {
         this.angle = MathUtils.random(365f);
         this.active = false;
         this.boundCheck = new BoundCheck();
+        this.type = Type.ASTEROID;
     }
 
     @Override
     public void destroy() {
         active = false;
+    }
+
+    @Override
+    public void basicRender(SpriteBatch batch) {
+        batch.draw(
+                textureRegions[(int) frame],
+                position.x - width / 2,
+                position.y - height / 2,
+                width / 2, height / 2, width, height, scaleX, scaleY, angle
+        );
+    }
+
+    @Override
+    public void basicUpdate(float dt) {
+        frame += 24 * dt;
+        frame %= textureRegions.length - 1;
+    }
+
+    @Override
+    public void render(SpriteBatch batch) {
+        basicRender(batch);
+    }
+
+    @Override
+    public void update(float dt) {
+        basicUpdate(dt);
+        position.mulAdd(velocity, dt);
+        checkAndHandleBounds();
     }
 
     @Override
@@ -54,6 +87,10 @@ public class Asteroid extends AbstractPoolable {
         return active;
     }
 
+    private void checkAndHandleBounds() {
+        boundCheck.checkAndHandleBoundsAndDestroy(this);
+    }
+
     public void init(Vector2 position, Vector2 destanation, float scale, boolean isFragment) {
         init(position.x, position.y);
         this.fragmented = isFragment;
@@ -63,37 +100,16 @@ public class Asteroid extends AbstractPoolable {
         } else {
             velocity.set(destanation).scl(MathUtils.random(50, 300));
         }
-
-        this.scaleX = this.saveScaleX= scale;
+        this.scaleX = this.saveScaleX = scale;
         this.scaleY = this.saveScaleY = scale;
-        this.width = PaintConstants.ASTEROID_WIDTH;
-        this.height = PaintConstants.ASTEROID_HEIGHT;
-        this.active = true;
-        this.taken = true;
     }
 
     @Override
     public void init(float x, float y) {
         this.position.set(x, y);
-    }
-
-    public void render(SpriteBatch batch) {
-        batch.draw(
-                textureRegions[(int) frame],
-                position.x - width / 2,
-                position.y - height / 2,
-                width / 2, height / 2, width, height, scaleX, scaleY, angle
-        );
-    }
-
-    public void update(float dt) {
-        frame += 24 * dt;
-        frame %= textureRegions.length - 1;
-        position.mulAdd(velocity, dt);
-        checkAndHandleBounds();
-    }
-
-    private void checkAndHandleBounds() {
-        boundCheck.checkAndHandleBoundsAndDestroy(this);
+        this.width = PaintConstants.ASTEROID_WIDTH;
+        this.height = PaintConstants.ASTEROID_HEIGHT;
+        this.active = true;
+        this.taken = false;
     }
 }
