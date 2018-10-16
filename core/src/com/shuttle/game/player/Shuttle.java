@@ -16,6 +16,7 @@ import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
@@ -218,6 +219,9 @@ public class Shuttle {
                         8.0f,
                         true
                 );
+                if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
+                    Gdx.input.vibrate(VConstants.PLAYER_LOST_LIVE);
+                }
             }
         }
     }
@@ -397,7 +401,7 @@ public class Shuttle {
     }
 
     private void checkFuel(float dt) {
-        if (!Rules.GAME_OVER){
+        if (!Rules.GAME_OVER) {
             standing.changeFuel(-Rules.PLAYER_FUEL_CONSUMPTION * dt);
         }
         if (standing.getFuel() <= 0.0f) {

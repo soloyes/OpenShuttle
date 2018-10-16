@@ -109,4 +109,18 @@ public class GamePreferences {
         getPrefs().putBoolean(PREF_SOUND_ENABLED, soundEffectsEnabled);
         getPrefs().flush();
     }
+
+    public enum EffectLevel {
+        LOW(0), MEDIUM(1), HIGH(2);
+
+        private int value;
+
+        EffectLevel(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 }

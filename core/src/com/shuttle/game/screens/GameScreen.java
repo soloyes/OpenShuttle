@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -27,6 +26,7 @@ import com.shuttle.game.bot.anomaly.RadiationAnomaly;
 import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
 import com.shuttle.game.bot.anomaly.AnomalyTimer;
 import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.player.PlayerPointer;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.Joystick;
@@ -41,7 +41,6 @@ import com.shuttle.game.bot.particle.ParticleEmitter;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
-import com.shuttle.game.player.GameOver;
 import com.shuttle.game.screens.group.PauseGroup;
 import com.shuttle.game.utils.Shake;
 
@@ -175,7 +174,7 @@ public class GameScreen extends BaseScreen {
         //BEGIN
         batch.begin();
         background.render(batch);
-        if (GamePreferences.getEffectsLevel() == 0 || shaderBlackHole == null) {
+        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.LOW.getValue() || shaderBlackHole == null) {
             blackhole.render(batch);
         }
         asteroidEmitter.render(batch);
@@ -200,7 +199,7 @@ public class GameScreen extends BaseScreen {
         //BEGIN
         batch.begin();
         super.render(dt);
-        if (GamePreferences.getEffectsLevel() == 0 || shaderBlackHole == null) {
+        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.LOW.getValue() || shaderBlackHole == null) {
             batch.setShader(null);
             //BEGIN
             batch.draw(fboTexRegion, 0, 0, Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
@@ -402,6 +401,9 @@ public class GameScreen extends BaseScreen {
                     if (tmpAnomaly.getLevel() < player.getPushPower()) {
                         damageToAnomaly(tmpAnomaly);
                         boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
+                        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
+                            Gdx.input.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY);
+                        }
                     } else {
                         damageToPlayer(tmpAnomaly);
                         if (tmpAnomaly.getLevel() != 4) {
@@ -410,6 +412,9 @@ public class GameScreen extends BaseScreen {
                         tmpAnomaly.setHungry(false);
                         tmpAnomaly.setSlimTimer(0);
                         prettyKick(MSConstants.PLAYER_KICKED_CORROSIVE);
+                        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
+                            Gdx.input.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
+                        }
                     }
                 }
             }
@@ -514,6 +519,9 @@ public class GameScreen extends BaseScreen {
                 if (player.getPosition().dst(tmpAsteroid.getPosition()) < tmpAsteroid.getHeight() * tmpAsteroid.getScaleX()) {
                     if (!tmpAsteroid.isFragmented()) {
                         tmpAsteroid.destroy();
+                        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
+                            Gdx.input.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
+                        }
                         player.getLifeShield().blink(1.0f);
                         particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, player.getShieldLevel().getLevel() * 16 + 32);
                         asteroidEmitter.boom(tmpAsteroid.getPosition(), player.getShieldLevel());
@@ -624,11 +632,8 @@ public class GameScreen extends BaseScreen {
             if (blackhole.getPosition().dst(player.getPosition()) <= Rules.BLACKHOLE_EVENT_HORIZON) {
                 float x = MathUtils.random(0, Rules.SPACE_WIDTH);
                 float y = MathUtils.random(0, Rules.SPACE_HEIGHT);
-                while (true) {
+                while (!(blackhole.getPosition().cpy().sub(x, y).len() >= Rules.BLACKHOLE_TAKE_RANGE + 50)) {
                     //Prevent generation near blackhole
-                    if (blackhole.getPosition().cpy().sub(x, y).len() >= Rules.BLACKHOLE_TAKE_RANGE + 50) {
-                        break;
-                    }
                     x = MathUtils.random(0, Rules.SPACE_WIDTH);
                     y = MathUtils.random(0, Rules.SPACE_HEIGHT);
                 }
@@ -643,7 +648,7 @@ public class GameScreen extends BaseScreen {
                 player.getScratch().setScaleY(1.0f);
                 player.setTaken(false);
                 boomBox.playSound(MSConstants.BLACKHOLE_TELEPORT);
-                player.getStanding().changeLives(-1);
+                player.takeDamage(player.getStanding().getHp());
                 player.setCameraSmooth(true);
             }
         } else player.setTaken(false);

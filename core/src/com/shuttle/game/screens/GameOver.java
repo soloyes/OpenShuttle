@@ -1,4 +1,4 @@
-package com.shuttle.game.player;
+package com.shuttle.game.screens;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -54,25 +54,27 @@ public class GameOver {
         CorrosiveAnomaly corrosiveAnomalyYELLOW = new CorrosiveAnomaly(gs);
         CorrosiveAnomaly corrosiveAnomalyRED = new CorrosiveAnomaly(gs);
         float picx = ScreenManager.getInstance().getViewport().getWorldWidth() / 4;
+        int[] levels = new int[]{0, 1, 2, 3};
+
         corrosiveAnomalyTAN.init(picx, 1340);
         corrosiveAnomalyTAN.setLevel(0);
-        corrosiveAnomalyTAN.setScaleX(1.0f);
-        corrosiveAnomalyTAN.setScaleY(1.0f);
+        corrosiveAnomalyTAN.setScaleX(1.0f + levels[0] * 0.15f);
+        corrosiveAnomalyTAN.setScaleY(1.0f + levels[0] * 0.15f);
 
         corrosiveAnomalyGREEN.init(picx, 1240);
         corrosiveAnomalyGREEN.setLevel(1);
-        corrosiveAnomalyGREEN.setScaleX(1.0f);
-        corrosiveAnomalyGREEN.setScaleY(1.0f);
+        corrosiveAnomalyGREEN.setScaleX(1.0f + levels[1] * 0.15f);
+        corrosiveAnomalyGREEN.setScaleY(1.0f + levels[1] * 0.15f);
 
         corrosiveAnomalyYELLOW.init(picx, 1140);
         corrosiveAnomalyYELLOW.setLevel(2);
-        corrosiveAnomalyYELLOW.setScaleX(1.0f);
-        corrosiveAnomalyYELLOW.setScaleY(1.0f);
+        corrosiveAnomalyYELLOW.setScaleX(1.0f + levels[2] * 0.15f);
+        corrosiveAnomalyYELLOW.setScaleY(1.0f + levels[2] * 0.15f);
 
         corrosiveAnomalyRED.init(picx, 1040);
         corrosiveAnomalyRED.setLevel(3);
-        corrosiveAnomalyRED.setScaleX(1.0f);
-        corrosiveAnomalyRED.setScaleY(1.0f);
+        corrosiveAnomalyRED.setScaleX(1.0f + levels[3] * 0.15f);
+        corrosiveAnomalyRED.setScaleY(1.0f + levels[3] * 0.15f);
 
         ElectricalAnomaly electricalAnomaly = new ElectricalAnomaly(gs);
         electricalAnomaly.init(picx, 940);

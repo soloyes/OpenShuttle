@@ -1,5 +1,6 @@
 package com.shuttle.game.bot.anomaly;
 
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -65,9 +66,11 @@ public class RadiationAnomaly extends AbstractAnomaly {
 
     @Override
     public void render(SpriteBatch batch) {
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
         batch.setColor(1.0f, 1.0f, 1.0f, color.a);
         basicRender(batch);
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     }
 
     @Override
@@ -130,7 +133,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
             }
         } else {
             liveTime += dt;
-            if (liveTime >= Rules.ANOMALIES_RADIATION_LIVE_TIME) {
+            if (liveTime >= Rules.ANOMALIES_RADIATION_LIVE_TIME && !Rules.GAME_OVER) {
                 color.a -= dt;
             }
             if (color.a <= 0.0f) {

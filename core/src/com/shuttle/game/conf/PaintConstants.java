@@ -2,8 +2,9 @@ package com.shuttle.game.conf;
 
 /**
  * @author Shuttle on 8/28/18.
+ * Object paint constants (PaintConstants)
  */
-public class PaintConstants {
+public final class PaintConstants {
     public static final String SHUTTLE_REGION = "shuttle";
     public static final int SHUTTLE_WIDTH = 256;
     public static final int SHUTTLE_HEIGHT = 256;

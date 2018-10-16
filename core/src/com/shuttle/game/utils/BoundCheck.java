@@ -1,11 +1,14 @@
 package com.shuttle.game.utils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
+import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.Rules;
@@ -81,6 +84,9 @@ public class BoundCheck {
         );
         if (!Rules.GAME_OVER) {
             player.getGs().getShake().shake(duration, 35, 10);
+            if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
+                Gdx.input.vibrate(VConstants.PLAYER_OUT_OF_SCREEN);
+            }
         }
     }
 

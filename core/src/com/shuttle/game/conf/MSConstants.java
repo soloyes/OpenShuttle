@@ -4,7 +4,7 @@ package com.shuttle.game.conf;
  * @author Shuttle on 8/26/18.
  * Music and Sound constants (MSConstants)
  */
-public class MSConstants {
+public final class MSConstants {
     private final static String SOUND_FOLDER = "sound/";
     public final static String BUTTON_SOUND = SOUND_FOLDER + "pressing_the_menu_buttons.ogg";
     public final static String PAUSE_SOUND = SOUND_FOLDER + "press_the_pause_button.ogg";

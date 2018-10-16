@@ -2,7 +2,11 @@ package com.shuttle.game.conf;
 
 import com.shuttle.game.player.Shuttle;
 
-public class Rules {
+/**
+ * @author Shuttle on 10/16/18.
+ * Game rules constants (Rules)
+ */
+public final class Rules {
     //
     public static int STARS_COUNT;
     //1080
@@ -74,13 +78,11 @@ public class Rules {
     //100
     public static final int ANOMALIES_CORROSIVE_MAX_COUNT = 100;
     //5.0f
-    public static final float ANOMALIES_CORROSIVE_SLIM_TIME = 5.0f;
+    public static final float ANOMALIES_CORROSIVE_SLIM_TIME = 15.0f;
     //60
     public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
     //60.0f
     public static final float ANOMALIES_CORROSIVE_VELOCITY = 60.0f;
-    //60
-    public static int ANOMALIES_ASTRONAUTS_HUNT_TIMER = 60;
     //
     //ASTEROID
     //4.0f
@@ -157,7 +159,7 @@ public class Rules {
                 player.getStanding().setFuel(250);
                 player.getStanding().setHp(25);
                 player.getStanding().setMaxHp(25);
-                player.getStanding().setLives(1);
+                player.getStanding().setLives(3);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
@@ -176,7 +178,7 @@ public class Rules {
                 player.getStanding().setFuel(200);
                 player.getStanding().setHp(20);
                 player.getStanding().setMaxHp(20);
-                player.getStanding().setLives(1);
+                player.getStanding().setLives(2);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
@@ -195,7 +197,7 @@ public class Rules {
                 player.getStanding().setFuel(150);
                 player.getStanding().setHp(15);
                 player.getStanding().setMaxHp(15);
-                player.getStanding().setLives(1);
+                player.getStanding().setLives(2);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
@@ -209,9 +211,5 @@ public class Rules {
         };
 
         public abstract void setGameLevel(Shuttle player);
-    }
-
-    public enum EffectsLevel {
-        LOW, HIGH
     }
 }

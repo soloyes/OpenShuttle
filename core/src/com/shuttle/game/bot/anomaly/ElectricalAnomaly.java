@@ -1,7 +1,7 @@
 package com.shuttle.game.bot.anomaly;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -49,15 +49,19 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.born = false;
         this.level = 4;
         this.color.a = 0.0f;
-        this.scaleX = this.saveScaleX = 1 + level * 0.15f;
-        this.scaleY = this.saveScaleY = 1 + level * 0.15f;
+        //this.scaleX = this.saveScaleX = 1 + level * 0.15f;
+        //this.scaleY = this.saveScaleY = 1 + level * 0.15f;
+        this.scaleX = this.saveScaleX = 1.0f;
+        this.scaleY = this.saveScaleY = 1.0f;
         this.taken = true;
     }
 
     @Override
     public void render(SpriteBatch batch) {
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
         batch.setColor(1.0f, 1.0f, 1.0f, color.a);
         basicRender(batch);
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 

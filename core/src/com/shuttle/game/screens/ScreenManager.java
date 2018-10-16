@@ -44,7 +44,7 @@ public class ScreenManager {
             case GAME:
                 targetScreen = gameScreen;
                 //SPACE_WIDTH/SPACE_HEIGHT depends from game level
-                Rules.setSpace(Rules.EffectsLevel.values().length - GamePreferences.getLevel() + 1);
+                Rules.setSpace(4 - GamePreferences.getLevel());
                 //
                 Assets.getInstance().loadAssets(ScreenType.GAME);
                 break;

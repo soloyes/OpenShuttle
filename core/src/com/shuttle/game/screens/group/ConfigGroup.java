@@ -103,7 +103,7 @@ public class ConfigGroup extends Group {
         });
 
         final Label levelLabelDynamic = new Label(Rules.StartLevel.values()[GamePreferences.getLevel()].toString(), style64);
-        final Label effectsLabelDynamic = new Label(Rules.EffectsLevel.values()[GamePreferences.getEffectsLevel()].toString(), style64);
+        final Label effectsLabelDynamic = new Label(GamePreferences.EffectLevel.values()[GamePreferences.getEffectsLevel()].toString(), style64);
 
 
         final Slider levelSlider = new Slider(0.0f, 2.0f, 1.0f, false, sliderStyle);
@@ -117,13 +117,13 @@ public class ConfigGroup extends Group {
             }
         });
 
-        final Slider effectsSlider = new Slider(0.0f, 1.0f, 1.0f, false, sliderStyle);
+        final Slider effectsSlider = new Slider(0.0f, GamePreferences.EffectLevel.values().length - 1, 1.0f, false, sliderStyle);
         effectsSlider.setValue(GamePreferences.getEffectsLevel());
         effectsSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 GamePreferences.setEffectsLevel((int) effectsSlider.getValue());
-                effectsLabelDynamic.setText(Rules.EffectsLevel.values()[(int) effectsSlider.getValue()].toString());
+                effectsLabelDynamic.setText(GamePreferences.EffectLevel.values()[(int) effectsSlider.getValue()].toString());
                 return false;
             }
         });
