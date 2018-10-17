@@ -277,8 +277,7 @@ public class Shuttle {
                     for (int i = 0; i < anomalies.size(); i++) {
                         if (boundCheck.checkAndHandleBoundsInCamera(anomalies.get(i), gs.getCamera())) {
                             if (anomalies.get(i).isActive()) {
-                                anomalies.get(i).destroy();
-                                anomalies.get(i).showSprayBoom(gs.getParticleEmitter());
+                                anomalies.get(i).setMarkedToBoom(true);
                                 standing.addToStatistics(anomalies.get(i).getType(), anomalies.get(i).getLevel());
                             }
                         }

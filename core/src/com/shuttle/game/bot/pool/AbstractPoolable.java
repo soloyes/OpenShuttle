@@ -58,6 +58,15 @@ public abstract class AbstractPoolable implements Poolable {
     @Getter
     @Setter
     protected Color color;
+    @Getter
+    @Setter
+    protected boolean markedToBoom;
+    @Getter
+    @Setter
+    protected float boomTimer;
+    @Getter
+    @Setter
+    protected float boomDelay;
 
     @Override
     public void destroy() {

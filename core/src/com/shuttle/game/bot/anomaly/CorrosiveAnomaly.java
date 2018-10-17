@@ -2,7 +2,6 @@ package com.shuttle.game.bot.anomaly;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -49,6 +48,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         super.destroy();
         scaleX = scaleY = 0;
         born = false;
+        markedToBoom = false;
     }
 
     @Override
@@ -112,6 +112,8 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     public void init(float x, float y) {
         this.hungryTimer = 0;
         this.slimTimer = 0;
+        this.boomTimer = 0;
+        this.boomDelay = MathUtils.random(Rules.ANOMALIES_BOOM_MIN_DELAY, Rules.ANOMALIES_BOOM_MAX_DELAY);
         this.hungry = true;
         this.angle = MathUtils.random(365);
         this.clockwise = MathUtils.randomSign();
@@ -178,6 +180,14 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
             if (hungryTimer > Rules.ANOMALIES_CORROSIVE_HUNGRY_TIME) {
                 hungryTimer = 0;
                 hungry = true;
+            }
+
+            if (markedToBoom) {
+                boomTimer += dt;
+                if (boomTimer >= boomDelay) {
+                    destroy();
+                    showSprayBoom(gs.getParticleEmitter());
+                }
             }
 
             velocity.scl(0.99f);

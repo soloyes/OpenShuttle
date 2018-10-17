@@ -26,6 +26,10 @@ public final class Rules {
     public static final int CONSUMABLE_BASE_SCORE_ADD = 10000;
     //
     //ANOMALY
+    //0.1f
+    public static final float ANOMALIES_BOOM_MIN_DELAY = 0.1f;
+    //0.25f
+    public static final float ANOMALIES_BOOM_MAX_DELAY = 0.25f;
     //2
     public static final int ANOMALIES_CORROSIVE_AT_START = 2;
     //0
