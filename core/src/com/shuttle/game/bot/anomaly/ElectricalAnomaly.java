@@ -1,6 +1,7 @@
 package com.shuttle.game.bot.anomaly;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -48,6 +49,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.activated = true;
         this.born = false;
         this.level = 4;
+        this.color = Color.PURPLE;
         this.color.a = 0.0f;
         //this.scaleX = this.saveScaleX = 1 + level * 0.15f;
         //this.scaleY = this.saveScaleY = 1 + level * 0.15f;
@@ -142,6 +144,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
             boomBox.playSound(MSConstants.ANOMALY_ELECTRIC_DESTROY);
             gs.getPlayer().getStanding().changeScore((getLevel() + 1) * Rules.ANOMALIES_BASE_SCORE_ADD);
             gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
+            this.showSprayBoom(gs.getParticleEmitter());
         } else {
             color.a += dt / 5;
             if (color.a >= 1.0) {

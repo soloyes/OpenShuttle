@@ -52,7 +52,7 @@ public class Radar {
     public final void generatePosition() {
         float x = MathUtils.random(0, Rules.SPACE_WIDTH);
         float y = MathUtils.random(0, Rules.SPACE_HEIGHT);
-        float r1 = gs.getBlackhole().getRadius();
+        float r1 = gs.getBlackhole().getRadius().len();
         float x0 = gs.getBlackhole().getCenter().x;
         float y0 = gs.getBlackhole().getCenter().y;
         while (true) {

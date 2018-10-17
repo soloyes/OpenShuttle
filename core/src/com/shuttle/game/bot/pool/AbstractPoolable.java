@@ -1,5 +1,6 @@
 package com.shuttle.game.bot.pool;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -54,6 +55,9 @@ public abstract class AbstractPoolable implements Poolable {
     @Getter
     @Setter
     protected Type type;
+    @Getter
+    @Setter
+    protected Color color;
 
     @Override
     public void destroy() {
@@ -69,21 +73,40 @@ public abstract class AbstractPoolable implements Poolable {
 
     public abstract void update(float dt);
 
-    public void showSpray(ParticleEmitter particleEmitter) {
-        float R = 0, G = 0.6f, B = 0;
+    public void showSprayBoom(ParticleEmitter particleEmitter) {
+        float R, G, B;
+        for (int j = 0; j < 8; j++) {
+            R = this.getColor().r;
+            G = this.getColor().g;
+            B = this.getColor().b;
+            particleEmitter.setup(
+                    this.getPosition().x,
+                    this.getPosition().y,
+                    MathUtils.random(-200, 200), MathUtils.random(-200, 200),
+                    0.4f,
+                    24,
+                    0,
+                    R, G, B,
+                    1f,
+                    R, G, B,
+                    0.0f
+            );
+        }
+    }
+
+    public void showSprayCollision(ParticleEmitter particleEmitter) {
+        float R, G, B;
         for (int j = 0; j < 60; j++) {
-            if (this instanceof CorrosiveAnomaly) {
-                R = ((CorrosiveAnomaly) (this)).getColor().r;
-                G = ((CorrosiveAnomaly) (this)).getColor().g;
-                B = ((CorrosiveAnomaly) (this)).getColor().b;
-            }
+            R = this.getColor().r;
+            G = this.getColor().g;
+            B = this.getColor().b;
             particleEmitter.setup(
                     this.getPosition().x + MathUtils.random(-30, 30),
                     this.getPosition().y + MathUtils.random(-30, 30),
-                    MathUtils.random(-400, 400), MathUtils.random(-400, 400),
+                    MathUtils.random(-600, 600), MathUtils.random(-600, 600),
                     0.4f,
                     8,
-                    1,
+                    0,
                     R, G, B,
                     1f,
                     R, G, B,

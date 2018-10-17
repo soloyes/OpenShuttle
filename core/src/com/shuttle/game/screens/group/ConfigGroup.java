@@ -106,7 +106,7 @@ public class ConfigGroup extends Group {
         final Label effectsLabelDynamic = new Label(GamePreferences.EffectLevel.values()[GamePreferences.getEffectsLevel()].toString(), style64);
 
 
-        final Slider levelSlider = new Slider(0.0f, 2.0f, 1.0f, false, sliderStyle);
+        final Slider levelSlider = new Slider(0.0f, Rules.StartLevel.values().length - 1, 1.0f, false, sliderStyle);
         levelSlider.setValue(GamePreferences.getLevel());
         levelSlider.addListener(new EventListener() {
             @Override

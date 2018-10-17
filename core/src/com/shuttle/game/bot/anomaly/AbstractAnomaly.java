@@ -29,9 +29,6 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
     @Getter
     @Setter
     protected TextureRegion[] textureRegions;
-    @Getter
-    @Setter
-    protected Color color;
 
     @Override
     public Vector2 getPosition() {

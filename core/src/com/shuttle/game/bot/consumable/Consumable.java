@@ -1,5 +1,6 @@
 package com.shuttle.game.bot.consumable;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -19,6 +20,7 @@ public abstract class Consumable extends AbstractPoolable {
         this.active = false;
         this.boundCheck = new BoundCheck();
         this.boomBox = new BoomBox();
+        this.color = Color.GREEN;
     }
 
     public abstract void init(float x, float y);

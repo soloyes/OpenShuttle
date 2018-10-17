@@ -26,7 +26,6 @@ import com.shuttle.game.utils.ShuttleMath;
 
 import java.util.List;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -279,7 +278,7 @@ public class Shuttle {
                         if (boundCheck.checkAndHandleBoundsInCamera(anomalies.get(i), gs.getCamera())) {
                             if (anomalies.get(i).isActive()) {
                                 anomalies.get(i).destroy();
-                                anomalies.get(i).showSpray(gs.getParticleEmitter());
+                                anomalies.get(i).showSprayBoom(gs.getParticleEmitter());
                                 standing.addToStatistics(anomalies.get(i).getType(), anomalies.get(i).getLevel());
                             }
                         }

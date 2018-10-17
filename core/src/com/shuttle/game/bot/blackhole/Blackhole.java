@@ -36,7 +36,7 @@ public class Blackhole {
     @Setter
     private float takeRange;
     @Getter
-    private int radius;
+    private Vector2 radius;
     private boolean oscillator;
     private boolean spiralOscillator;
     private boolean glowOscillator;
@@ -64,7 +64,8 @@ public class Blackhole {
         this.angle = MathUtils.random(365);
         this.rotation = MathUtils.random(365);
         this.radialSpeed = MathUtils.random(30, 50);
-        this.radius = MathUtils.random(0, Rules.SPACE_WIDTH / 2);
+        this.radius = new Vector2( MathUtils.random(Rules.SPACE_WIDTH / 6, Rules.SPACE_WIDTH / 3), 0);
+        setPosition();
     }
 
     public void render(SpriteBatch batch) {
@@ -107,8 +108,8 @@ public class Blackhole {
         if (rotation >= 365) {
             rotation = 0;
         }
-        position.x = center.x + radius * MathUtils.cos(angle);
-        position.y = center.y + radius * MathUtils.sin(angle);
+
+        setPosition();
 
         if (oscillator) {
             scale -= dt / 10;
@@ -151,5 +152,11 @@ public class Blackhole {
                 glowOscillator = true;
             }
         }
+    }
+
+    private void setPosition() {
+        float r = radius.len();
+        position.x = center.x + r * MathUtils.cos(angle);
+        position.y = center.y + r * MathUtils.sin(angle);
     }
 }

@@ -141,7 +141,6 @@ public final class Rules {
     private static final int STARS = 600;
 
     public static void setSpace(int n) {
-        n++;
         STARS_COUNT = STARS * n;
         SPACE_WIDTH = WORLD_WIDTH * n;
         SPACE_HEIGHT = WORLD_HEIGHT * n;
@@ -207,6 +206,25 @@ public final class Rules {
                 //player.getGun().setActive(false);
                 player.getStanding().setPlayingLevel(15);
                 player.getStanding().setScoreToLive(SCORE_TO_LIVE * 13);
+            }
+        },
+        EXTREME {
+            @Override
+            public void setGameLevel(Shuttle player) {
+                player.getStanding().setMaxFuel(100);
+                player.getStanding().setFuel(100);
+                player.getStanding().setHp(10);
+                player.getStanding().setMaxHp(10);
+                player.getStanding().setLives(2);
+                player.setTakeRange(PLAYER_TAKE_RANGE);
+                player.setMaxPower(PLAYER_MAX_POWER);
+                player.setShieldLevel(GlobalInteractionLevels.NONE);
+                player.setRadialSpeed(PLAYER_RADIAL_SPEED);
+                player.setEnginePower(PLAYER_ENGINE_POWER);
+                player.getRadar().setActive(false);
+                //player.getGun().setActive(false);
+                player.getStanding().setPlayingLevel(10);
+                player.getStanding().setScoreToLive(SCORE_TO_LIVE * 18);
             }
         };
 

@@ -123,6 +123,11 @@ public class GameOver {
 
     public void draw(SpriteBatch batch) {
         titleLabel.draw(batch, batch.getColor().a);
+        font96.getColor().a = batch.getColor().a;
+        font96.draw(batch, glyphLayout,
+                ScreenManager.getInstance().getViewport().getWorldWidth() / 2 - glyphLayout.width / 2,
+                340
+        );
         Color tmpColor = batch.getColor();
         for (int i = 0; i < poolable.size(); i++) {
             AbstractPoolable abstractPoolable = poolable.get(i);
@@ -135,38 +140,32 @@ public class GameOver {
                         tmpColor.a
                 );
                 tmpCorrosive.basicRender(batch);
-                batch.setColor(tmpColor);
             } else if (abstractPoolable instanceof ElectricalAnomaly) {
+                batch.setColor(tmpColor);
                 ElectricalAnomaly tmpElectrical = (ElectricalAnomaly) abstractPoolable;
-                batch.setColor(tmpColor);
                 tmpElectrical.basicRender(batch);
-                batch.setColor(tmpColor);
             } else if (abstractPoolable instanceof MagneticAnomaly) {
+                batch.setColor(tmpColor);
                 MagneticAnomaly tmpMagnetic = (MagneticAnomaly) abstractPoolable;
-                batch.setColor(tmpColor);
                 tmpMagnetic.basicRender(batch);
-                batch.setColor(tmpColor);
             } else if (abstractPoolable instanceof RadiationAnomaly) {
+                batch.setColor(tmpColor);
                 RadiationAnomaly tmpRadiation = (RadiationAnomaly) abstractPoolable;
-                batch.setColor(tmpColor);
                 tmpRadiation.basicRender(batch);
-                batch.setColor(tmpColor);
             } else if (abstractPoolable instanceof Astronaut) {
+                batch.setColor(tmpColor);
                 Astronaut tmpAstronaut = (Astronaut) abstractPoolable;
-                batch.setColor(tmpColor);
                 tmpAstronaut.basicRender(batch);
-                batch.setColor(tmpColor);
             } else if (abstractPoolable instanceof Crate) {
+                batch.setColor(tmpColor);
                 Crate tmpCrate = (Crate) abstractPoolable;
-                batch.setColor(tmpColor);
                 tmpCrate.basicRender(batch);
-                batch.setColor(tmpColor);
             } else if (abstractPoolable instanceof Asteroid) {
+                batch.setColor(tmpColor);
                 Asteroid tmpAsteroid = (Asteroid) abstractPoolable;
-                batch.setColor(tmpColor);
                 tmpAsteroid.basicRender(batch);
-                batch.setColor(tmpColor);
             }
+            batch.setColor(tmpColor);
             resLabel.setText(
                     gs.getPlayer()
                             .getStanding()
@@ -178,10 +177,6 @@ public class GameOver {
                     poolable.get(i).getPosition().y - resLabel.getHeight() / 2
             );
             resLabel.draw(batch, batch.getColor().a);
-            font96.draw(batch, glyphLayout,
-                    ScreenManager.getInstance().getViewport().getWorldWidth() / 2 - glyphLayout.width / 2,
-                    340
-            );
         }
     }
 

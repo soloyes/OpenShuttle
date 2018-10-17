@@ -42,6 +42,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.group.PauseGroup;
+import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Shake;
 
 import java.util.List;
@@ -110,7 +111,6 @@ public class GameScreen extends BaseScreen {
         this.camera = camera;
         this.tmp = new Vector2(0, 0);
         this.tmp1 = new Vector3(0, 0, 0);
-        this.shake = new Shake();
         this.cameraHelper = new OrthographicCamera(1080, 1920);
     }
 
@@ -145,9 +145,11 @@ public class GameScreen extends BaseScreen {
 
         blackhole = new Blackhole();
         player = new Shuttle(this, joystick);
+        BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         pointer = new PlayerPointer(player);
         Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel(player);
         gameOver = new GameOver(this);
+        shake = new Shake();
     }
 
     @Override
@@ -241,7 +243,7 @@ public class GameScreen extends BaseScreen {
         if (Rules.GAME_OVER) {
             boomBox.stopAllMusicAndPlayOnce(MSConstants.MENU_MUSIC);
             pauseGroup.setGameOver();
-            fadeInAlpha += dt / 3;
+            fadeInAlpha += dt / 2;
             if (fadeInAlpha >= 1.0f)
                 fadeInAlpha = 1.0f;
             batch.setColor(tmpColor.r, tmpColor.g, tmpColor.b, fadeInAlpha);
@@ -555,7 +557,7 @@ public class GameScreen extends BaseScreen {
                         gameInfoSystem.setup(tmpAnomaly.getPosition().x, tmpAnomaly.getPosition().y, GameInfoSystem.GameInfoSystemPreset.BOOM, 3.0f, false);
                         if (tmpAnomaly.getLevel() == 0) {
                             tmpAnomaly.destroy();
-                            tmpAnomaly.showSpray(particleEmitter);
+                            tmpAnomaly.showSprayCollision(particleEmitter);
                         } else {
                             tmpAnomaly.takeDamage(1);
                         }
@@ -569,7 +571,7 @@ public class GameScreen extends BaseScreen {
                         tmpConsumable.destroy();
                         asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE);
                         particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 32 + 32);
-                        tmpConsumable.showSpray(particleEmitter);
+                        tmpConsumable.showSprayCollision(particleEmitter);
                         gameInfoSystem.setup(
                                 tmpConsumable.getPosition().x,
                                 tmpConsumable.getPosition().y,
@@ -632,11 +634,7 @@ public class GameScreen extends BaseScreen {
             if (blackhole.getPosition().dst(player.getPosition()) <= Rules.BLACKHOLE_EVENT_HORIZON) {
                 float x = MathUtils.random(0, Rules.SPACE_WIDTH);
                 float y = MathUtils.random(0, Rules.SPACE_HEIGHT);
-                while (!(blackhole.getPosition().cpy().sub(x, y).len() >= Rules.BLACKHOLE_TAKE_RANGE + 50)) {
-                    //Prevent generation near blackhole
-                    x = MathUtils.random(0, Rules.SPACE_WIDTH);
-                    y = MathUtils.random(0, Rules.SPACE_HEIGHT);
-                }
+                BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
                 player.getPosition().set(x, y);
                 player.setScaleX(1.0f);
                 player.setScaleY(1.0f);
@@ -687,7 +685,7 @@ public class GameScreen extends BaseScreen {
         player.getStanding().changeScore(asc);
         player.slowDown(anomaly.getLevel() * 50.0f);
         player.changePower(-anomaly.getLevel());
-        anomaly.showSpray(particleEmitter);
+        anomaly.showSprayCollision(particleEmitter);
         player.killPlusPlus();
         player.getStanding().addToStatistics(anomaly.getType(), anomaly.getLevel());
     }
