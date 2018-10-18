@@ -106,6 +106,7 @@ public class Shuttle {
     @Getter
     @Setter
     private boolean cameraSmooth;
+    private boolean hpNotification;
 
     public Shuttle(GameScreen gs, Joystick joystick) {
         this.boomBox = new BoomBox();
@@ -223,6 +224,13 @@ public class Shuttle {
                     Gdx.input.vibrate(VConstants.PLAYER_LOST_LIVE);
                 }
             }
+            hpNotification = false;
+        }
+        //if hp is <= 10% of maxHP
+        float p = (standing.getHp() * 100) / standing.getMaxHp();
+        if (!hpNotification && p <= 10) {
+            hpNotification = true;
+            boomBox.playSound(MSConstants.PLAYER_LOW_LIFE);
         }
     }
 

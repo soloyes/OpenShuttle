@@ -66,6 +66,9 @@ public class Assets {
                 assetManager.load(MSConstants.PLAYER_KICKED_ELECTRIC, Sound.class);
                 assetManager.load(MSConstants.ASTEROID_DESTROY, Sound.class);
                 assetManager.load(MSConstants.ASTRONAUT_ALIVE, Sound.class);
+                assetManager.load(MSConstants.PLAYER_LOSE_FUEL, Sound.class);
+                assetManager.load(MSConstants.PLAYER_LOSE_SCORE, Sound.class);
+                assetManager.load(MSConstants.PLAYER_LOW_LIFE, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 createStdFont(32, "");
                 createStdFont(32, "Coloured");

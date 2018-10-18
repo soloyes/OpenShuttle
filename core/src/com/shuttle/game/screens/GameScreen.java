@@ -462,6 +462,7 @@ public class GameScreen extends BaseScreen {
                     if (tmpAnomaly.getEatTimer() >= Rules.ANOMALIES_RADIATION_EAT_TIME) {
                         tmpAnomaly.setEatTimer(0.0f);
                         player.getStanding().changeScore(-Rules.ANOMALIES_RADIATION_SCORE_DECREASE);
+                        boomBox.playSound(MSConstants.PLAYER_LOSE_SCORE);
                         gameInfoSystem.setup(
                                 player.getPosition().x,
                                 player.getPosition().y,
@@ -497,6 +498,7 @@ public class GameScreen extends BaseScreen {
                     if (tmpAnomaly.getEatTimer() >= Rules.ANOMALIES_MAGNETIC_EAT_TIME) {
                         tmpAnomaly.setEatTimer(0.0f);
                         player.getStanding().changeFuel(-Rules.ANOMALIES_MAGNETIC_FUEL_DECREASE);
+                        boomBox.playSound(MSConstants.PLAYER_LOSE_FUEL);
                         gameInfoSystem.setup(
                                 player.getPosition().x,
                                 player.getPosition().y,
