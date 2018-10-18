@@ -78,8 +78,8 @@ public class GameScreen extends BaseScreen {
     @Getter
     @Setter
     private Camera camera;
-    private Vector2 tmp;
-    private Vector3 tmp1;
+    private Vector2 tmpV2;
+    private Vector3 tmpV3;
     @Getter
     @Setter
     private GameInfoSystem gameInfoSystem;
@@ -109,8 +109,8 @@ public class GameScreen extends BaseScreen {
         super(batch);
         this.batch = batch;
         this.camera = camera;
-        this.tmp = new Vector2(0, 0);
-        this.tmp1 = new Vector3(0, 0, 0);
+        this.tmpV2 = new Vector2(0, 0);
+        this.tmpV3 = new Vector3(0, 0, 0);
         this.cameraHelper = new OrthographicCamera(1080, 1920);
     }
 
@@ -311,14 +311,14 @@ public class GameScreen extends BaseScreen {
     //todo: Позиция обнулсяеся во время fbo.end(), поэтому хак - копипаста из cameraHelper
     private void cameraUpdate(float dt) {
         if (player.isCameraSmooth()) {
-            tmp1.set(player.getPosition().cpy().sub(cameraHelper.position.x, cameraHelper.position.y).nor(), 0.0f);
-            cameraHelper.position.mulAdd(tmp1, Rules.CAMERA_SMOOTH_VELOCITY * dt);
+            tmpV3.set(player.getPosition(), 0.0f).sub(cameraHelper.position.x, cameraHelper.position.y, 0.0f).nor();
+            cameraHelper.position.mulAdd(tmpV3, Rules.CAMERA_SMOOTH_VELOCITY * dt);
             camera.position.set(cameraHelper.position);
             if (
                 //parking
-                    player.getPosition().cpy().sub(
+                    tmpV2.set(player.getPosition()).sub(
                             cameraHelper.position.x, cameraHelper.position.y).len2() <
-                            tmp1.scl(Rules.CAMERA_SMOOTH_VELOCITY * dt).len2()
+                            tmpV3.scl(Rules.CAMERA_SMOOTH_VELOCITY * dt).len2()
                     ) {
                 player.setCameraSmooth(false);
             }
@@ -352,12 +352,12 @@ public class GameScreen extends BaseScreen {
                     }
                 }
                 if (!player.isTaken()) {
-                    if (player.getPosition().dst(tmpConsumable.getPosition()) < player.getTakeRange()) {
-                        tmp.set(player.getPosition()).sub(tmpConsumable.getPosition()).nor().scl(200.0f);
-                        tmpConsumable.getPosition().mulAdd(tmp, dt);
+                    if (player.getPosition().dst(tmpConsumable.getPosition()) < Rules.PLAYER_TAKE_RANGE) {
+                        tmpV2.set(player.getPosition()).sub(tmpConsumable.getPosition()).nor().scl(200.0f);
+                        tmpConsumable.getPosition().mulAdd(tmpV2, dt);
                         float dst = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpConsumable.getPosition().x, tmpConsumable.getPosition().y);
-                        float scaleX = (dst / blackhole.getTakeRange()) * tmpConsumable.getSaveScaleX();
-                        float scaleY = (dst / blackhole.getTakeRange()) * tmpConsumable.getSaveScaleY();
+                        float scaleX = (dst / Rules.BLACKHOLE_TAKE_RANGE) * tmpConsumable.getSaveScaleX();
+                        float scaleY = (dst / Rules.BLACKHOLE_TAKE_RANGE) * tmpConsumable.getSaveScaleY();
                         if (scaleX >= tmpConsumable.getSaveScaleX()) {
                             scaleX = tmpConsumable.getSaveScaleX();
                         }
@@ -616,12 +616,12 @@ public class GameScreen extends BaseScreen {
         if (player.getPosition().dst(blackhole.getPosition()) < Rules.BLACKHOLE_TAKE_RANGE) {
             player.setTaken(true);
             player.getVelocity().scl(0.5f);
-            tmp.set(blackhole.getPosition()).sub(player.getPosition()).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER);
-            player.getPosition().mulAdd(tmp, dt);
-            float dst = blackhole.getPosition().dst(player.getPosition());
-            float scaleX = dst / blackhole.getTakeRange();
-            float scaleY = dst / blackhole.getTakeRange();
+            tmpV2.set(blackhole.getPosition()).sub(player.getPosition()).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER);
+            player.getPosition().mulAdd(tmpV2, dt);
 
+            float dst = blackhole.getPosition().dst(player.getPosition());
+            float scaleX = dst / Rules.BLACKHOLE_TAKE_RANGE;
+            float scaleY = dst / Rules.BLACKHOLE_TAKE_RANGE;
             player.setScaleX(scaleX);
             player.setScaleY(scaleY);
             player.getRamShield().setScaleX(scaleX);
@@ -632,10 +632,7 @@ public class GameScreen extends BaseScreen {
             player.getScratch().setScaleY(scaleY);
             player.setAngle(player.getAngle() + 365 * dt);
             if (blackhole.getPosition().dst(player.getPosition()) <= Rules.BLACKHOLE_EVENT_HORIZON) {
-                float x = MathUtils.random(0, Rules.SPACE_WIDTH);
-                float y = MathUtils.random(0, Rules.SPACE_HEIGHT);
                 BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
-                player.getPosition().set(x, y);
                 player.setScaleX(1.0f);
                 player.setScaleY(1.0f);
                 player.getRamShield().setScaleX(1.0f);
@@ -649,19 +646,21 @@ public class GameScreen extends BaseScreen {
                 player.takeDamage(player.getStanding().getHp());
                 player.setCameraSmooth(true);
             }
-        } else player.setTaken(false);
+        } else {
+            player.setTaken(false);
+        }
     }
     ///
 
     ///
     private void collideBlackholePoolable(AbstractPoolable poolable, float dt) {
-        if (blackhole.getPosition().dst(poolable.getPosition()) < blackhole.getTakeRange()) {
+        if (blackhole.getPosition().dst(poolable.getPosition()) < Rules.BLACKHOLE_TAKE_RANGE) {
             poolable.setTaken(true);
-            tmp.set(blackhole.getPosition()).sub(poolable.getPosition()).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_POOLABLE);
-            poolable.getPosition().mulAdd(tmp, dt);
+            tmpV2.set(blackhole.getPosition()).sub(poolable.getPosition()).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_POOLABLE);
+            poolable.getPosition().mulAdd(tmpV2, dt);
             float dst = blackhole.getPosition().dst(poolable.getPosition());
-            float scaleX = (dst / blackhole.getTakeRange()) * poolable.getSaveScaleX();
-            float scaleY = (dst / blackhole.getTakeRange()) * poolable.getSaveScaleY();
+            float scaleX = (dst / Rules.BLACKHOLE_TAKE_RANGE) * poolable.getSaveScaleX();
+            float scaleY = (dst / Rules.BLACKHOLE_TAKE_RANGE) * poolable.getSaveScaleY();
             if (scaleX >= poolable.getSaveScaleX()) {
                 scaleX = poolable.getSaveScaleX();
             }
@@ -708,11 +707,11 @@ public class GameScreen extends BaseScreen {
                     5.0f,
                     false
             );
-            tmp.set(player.getPosition()).sub(anomaly.getPosition()).nor().scl(300 + anomaly.getLevel() * 50);
-            player.getVelocity().add(tmp);
+            tmpV2.set(player.getPosition()).sub(anomaly.getPosition()).nor().scl(300 + anomaly.getLevel() * 50);
+            player.getVelocity().add(tmpV2);
             player.resetPower();
-            tmp.scl(-1);
-            anomaly.getVelocity().add(tmp);
+            tmpV2.scl(-1);
+            anomaly.getVelocity().add(tmpV2);
         }
     }
 
