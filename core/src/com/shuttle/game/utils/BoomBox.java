@@ -5,15 +5,16 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
 import com.shuttle.game.conf.GamePreferences;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Shuttle on 7/14/18.
  */
 public class BoomBox {
-    //private GamePreferences preferences;
     private Array<Music> musicArray;
 
     public BoomBox() {
-        //this.preferences = preferences;
         musicArray = new Array<Music>();
     }
 
@@ -27,12 +28,33 @@ public class BoomBox {
         return -1;
     }
 
-    public void stopAllMusicAndPlay(String music) {
-        stopAllMusic();
-        playMusic(music);
+    public void setMusicEffectVolume(String music, float volume) {
+        if (GamePreferences.isSoundEnabled()) {
+            volume *= GamePreferences.getSoundVolume();
+            Assets.getInstance()
+                    .getAssetManager()
+                    .get(music, Music.class)
+                    .setVolume(volume);
+        }
     }
 
-    public void stopAllMusic() {
+    public void stopAllMusicAndPlay(String music, String... musicEffect) {
+        Map<String, Float> musicWithVolumes = new HashMap<String, Float>();
+        for (int i = 0; i < musicEffect.length; i++) {
+            musicWithVolumes.put(musicEffect[i],
+                    Assets.getInstance()
+                            .getAssetManager()
+                            .get(musicEffect[i], Music.class).getVolume()
+            );
+        }
+        stopAllMusic();
+        playGameMusic(music);
+        for (Map.Entry<String, Float> m : musicWithVolumes.entrySet()) {
+            playEffectMusic(m.getKey(), m.getValue());
+        }
+    }
+
+    private void stopAllMusic() {
         musicArray.clear();
         Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
         for (int i = 0; i < musicArray.size; i++) {
@@ -40,12 +62,30 @@ public class BoomBox {
         }
     }
 
-    public void playMusic(String music) {
+    private void playGameMusic(String music) {
         if (GamePreferences.isMusicEnabled()) {
             Assets.getInstance()
                     .getAssetManager()
                     .get(music, Music.class)
                     .setVolume(GamePreferences.getMusicVolume());
+            Assets.getInstance()
+                    .getAssetManager()
+                    .get(music, Music.class)
+                    .play();
+            Assets.getInstance()
+                    .getAssetManager()
+                    .get(music, Music.class)
+                    .setLooping(true);
+        }
+    }
+
+    public void playEffectMusic(String music, float volume) {
+        if (GamePreferences.isSoundEnabled()) {
+            volume *= GamePreferences.getSoundVolume();
+            Assets.getInstance()
+                    .getAssetManager()
+                    .get(music, Music.class)
+                    .setVolume(volume);
             Assets.getInstance()
                     .getAssetManager()
                     .get(music, Music.class)
@@ -63,7 +103,7 @@ public class BoomBox {
                 .get(music, Music.class)
                 .isPlaying()) {
             stopAllMusic();
-            playMusic(music);
+            playGameMusic(music);
         }
     }
 

@@ -34,7 +34,7 @@ public class ConsumableEmitter extends ObjectPool<Consumable> {
 
     @Override
     protected Consumable newObject() {
-        int i = 0;//MathUtils.random(0, 1);
+        int i = MathUtils.random(0, 1);
         switch (i) {
             case 0:
                 return new Astronaut(gs);

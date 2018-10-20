@@ -150,10 +150,16 @@ public class Shuttle {
                 standing.changeScore(-50000);
                 gs.getGameInfoSystem().setup(position.x, position.y, "Murder!\n-50000", 8.0f, false);
                 boomBox.playSound(MSConstants.KILL_ASTRONAUT);
+                if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
+                    Gdx.input.vibrate(VConstants.PLAYER_ASTRONAUT_DESTROY);
+                }
                 break;
             case CRATE:
                 gs.getGameInfoSystem().setup(position.x, position.y, "Be easy!", 3.0f, false);
                 boomBox.playSound(MSConstants.KILL_CRATE);
+                if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
+                    Gdx.input.vibrate(VConstants.PLAYER_CRATE_DESTROY);
+                }
                 break;
         }
     }
@@ -223,6 +229,7 @@ public class Shuttle {
                 if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
                     Gdx.input.vibrate(VConstants.PLAYER_LOST_LIVE);
                 }
+                boomBox.playSound(MSConstants.PLAYER_DESTROYED);
             }
             hpNotification = false;
         }

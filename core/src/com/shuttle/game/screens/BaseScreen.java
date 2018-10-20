@@ -21,11 +21,11 @@ public abstract class BaseScreen implements Screen {
     public BaseScreen(SpriteBatch batch) {
         this.stage = new Stage(ScreenManager.getInstance().getViewport(), batch);
         this.batch = batch;
-        this.boomBox = new BoomBox();
     }
 
     @Override
     public void show() {
+        boomBox = new BoomBox();
         Gdx.input.setInputProcessor(stage);
         createGUI();
     }

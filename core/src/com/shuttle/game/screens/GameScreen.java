@@ -42,10 +42,13 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.group.PauseGroup;
+import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Shake;
 
 import java.util.List;
+
+import javax.print.attribute.standard.ReferenceUriSchemesSupported;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -121,7 +124,7 @@ public class GameScreen extends BaseScreen {
         gameOverDeactivate = false;
         shaderManager = new ShaderManager();
         anomalyTimer = new AnomalyTimer(this);
-        boomBox.stopAllMusicAndPlay(MSConstants.GAME_MUSIC);
+        boomBox.stopAllMusicAndPlay(MSConstants.GAME_MUSIC, MSConstants.BLACKHOLE_ROAR);
         fbo = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(),
                 Gdx.graphics.getHeight(), false);
         fboTexRegion = new TextureRegion(fbo.getColorBufferTexture());
@@ -150,6 +153,20 @@ public class GameScreen extends BaseScreen {
         Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel(player);
         gameOver = new GameOver(this);
         shake = new Shake();
+
+        calcMusicEffectVolume();
+    }
+
+    private void calcMusicEffectVolume() {
+        float v;
+        if (player.getPosition().dst(blackhole.getPosition()) >= Rules.BLACKHOLE_ROAR_RANGE) {
+            v = 0.0f;
+        } else if (player.getPosition().dst(blackhole.getPosition()) <= Rules.BLACKHOLE_TAKE_RANGE) {
+            v = 0.5f;
+        } else {
+            v = 1 - player.getPosition().dst(blackhole.getPosition()) / Rules.BLACKHOLE_ROAR_RANGE;
+        }
+        boomBox.setMusicEffectVolume(MSConstants.BLACKHOLE_ROAR, v);
     }
 
     @Override
@@ -332,6 +349,8 @@ public class GameScreen extends BaseScreen {
 
     private void checkCollision(float dt) {
         collideBlackholePlayer(dt);
+
+        calcMusicEffectVolume();
 
         for (int i = 0; i < consumableEmitter.getActiveList().size(); i++) {
             Consumable tmpConsumable = consumableEmitter.getActiveList().get(i);
@@ -615,7 +634,7 @@ public class GameScreen extends BaseScreen {
 
     ///
     private void collideBlackholePlayer(float dt) {
-        if (player.getPosition().dst(blackhole.getPosition()) < Rules.BLACKHOLE_TAKE_RANGE) {
+        if (player.getPosition().dst(blackhole.getPosition()) <= Rules.BLACKHOLE_TAKE_RANGE) {
             player.setTaken(true);
             player.getVelocity().scl(0.5f);
             tmpV2.set(blackhole.getPosition()).sub(player.getPosition()).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER);
@@ -645,7 +664,7 @@ public class GameScreen extends BaseScreen {
                 player.getScratch().setScaleY(1.0f);
                 player.setTaken(false);
                 boomBox.playSound(MSConstants.BLACKHOLE_TELEPORT);
-                player.takeDamage(player.getStanding().getHp());
+                player.takeDamage(Rules.BLACKHOLE_GET_DAMAGE);
                 player.setCameraSmooth(true);
             }
         } else {

@@ -32,9 +32,12 @@ public final class MSConstants {
     public final static String PLAYER_LOSE_SCORE = SOUND_FOLDER + "lose_score.ogg";
     public final static String PLAYER_LOSE_FUEL = SOUND_FOLDER + "lose_fuel.ogg";
     public final static String PLAYER_LOW_LIFE = SOUND_FOLDER + "low_life_warning.ogg";
-
+    public final static String PLAYER_DESTROYED = SOUND_FOLDER + "destroyed.ogg";
+    //
     //
     private final static String MUSIC_FOLDER = "music/";
     public final static String MENU_MUSIC = MUSIC_FOLDER + "menu.ogg";
     public final static String GAME_MUSIC = MUSIC_FOLDER + "game.ogg";
+    public final static String BLACKHOLE_ROAR = MUSIC_FOLDER + "the_roar_of_the_black_hole.ogg";
+    //
 }

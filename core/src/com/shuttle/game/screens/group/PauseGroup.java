@@ -97,7 +97,7 @@ public class PauseGroup extends Group {
                 if (pause) {
                     boomBox.stopAllMusicAndPlay(MSConstants.MENU_MUSIC);
                 } else {
-                    boomBox.stopAllMusicAndPlay(MSConstants.GAME_MUSIC);
+                    boomBox.stopAllMusicAndPlay(MSConstants.GAME_MUSIC, MSConstants.BLACKHOLE_ROAR);
                 }
                 configGroup.setVisible(pause);
                 buttonMenu.setVisible(pause);

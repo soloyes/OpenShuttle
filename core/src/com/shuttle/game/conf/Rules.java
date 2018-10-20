@@ -18,8 +18,8 @@ public final class Rules {
     //
     public static int SPACE_HEIGHT;
     //CONSUMABLE
-    //1
-    public static final int CONSUMABLE_AT_START = 0;
+    //2
+    public static final int CONSUMABLE_AT_START = 2;
     //6.0f
     public static final float CONSUMABLE_RESPAWN_TIME = 6.0f;
     //10000
@@ -123,12 +123,16 @@ public final class Rules {
     //BLACKHOLE
     //250
     public static final int BLACKHOLE_TAKE_RANGE = 250;
+    //1000
+    public static final int BLACKHOLE_ROAR_RANGE = 3000;
     //20
     public static final int BLACKHOLE_EVENT_HORIZON = 20;
     //200
     public static final int BLACKHOLE_VELOCITY_CONSUME_POOLABLE = 200;
     //200
     public static final int BLACKHOLE_VELOCITY_CONSUME_PLAYER = 200;
+    //5
+    public static final int BLACKHOLE_GET_DAMAGE = 5;
     //GAME
     //false
     public static boolean GAME_OVER;
@@ -144,18 +148,10 @@ public final class Rules {
     //600
     private static final int STARS = 600;
 
-    public static boolean isGameOver() {
-        return GAME_OVER;
-    }
-
     public static void setSpace(int n) {
         STARS_COUNT = STARS * n;
         SPACE_WIDTH = WORLD_WIDTH * n;
         SPACE_HEIGHT = WORLD_HEIGHT * n;
-        //TEST
-//        STARS_COUNT = 300;
-//        SPACE_WIDTH = WORLD_WIDTH;
-//        SPACE_HEIGHT = WORLD_HEIGHT;
     }
 
     public enum StartLevel {
