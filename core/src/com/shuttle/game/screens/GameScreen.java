@@ -26,6 +26,7 @@ import com.shuttle.game.bot.anomaly.RadiationAnomaly;
 import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
 import com.shuttle.game.bot.anomaly.AnomalyTimer;
 import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.player.PlayerPointer;
 import com.shuttle.game.conf.GlobalInteractionLevels;
@@ -42,13 +43,10 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.group.PauseGroup;
-import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Shake;
 
 import java.util.List;
-
-import javax.print.attribute.standard.ReferenceUriSchemesSupported;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -447,14 +445,11 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < electricalAnomalyEmitter.getActiveList().size(); i++) {
             ElectricalAnomaly tmpAnomaly = (ElectricalAnomaly) electricalAnomalyEmitter.getActiveList().get(i);
             if (!tmpAnomaly.isTaken()) {
-                if (player.getPosition().dst(tmpAnomaly.getPosition()) < 100 && tmpAnomaly.isBorn()) {
-                    if (tmpAnomaly.getLevel() < player.getPushPower()) {
-                        damageToPlayer(tmpAnomaly);
-                    } else {
-                        tmpAnomaly.setHungry(false);
-                        damageToPlayer(tmpAnomaly);
-                        prettyKick(MSConstants.PLAYER_KICKED_ELECTRIC);
-                    }
+                if (player.getPosition().dst(tmpAnomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 && tmpAnomaly.isBorn()) {
+                    tmpAnomaly.setHungry(false);
+                    damageToPlayer(tmpAnomaly);
+                    prettyKick(MSConstants.PLAYER_KICKED_ELECTRIC);
+                    tmpAnomaly.setV(tmpAnomaly.getV() * Rules.ANOMALY_ELECTRIC_VELOCITY_MULTIPLIER);
                 }
             }
             ///

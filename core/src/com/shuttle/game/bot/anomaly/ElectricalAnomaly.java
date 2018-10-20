@@ -14,11 +14,17 @@ import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author Shuttle on 9/11/18.
  */
 public class ElectricalAnomaly extends AbstractAnomaly {
     private boolean touched;
+    @Getter
+    @Setter
+    private float v;
 
     public ElectricalAnomaly(GameScreen gs) {
         super(gs);
@@ -35,6 +41,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.width = PaintConstants.ANOMALY_ELECTRIC_WIDTH;
         this.height = PaintConstants.ANOMALY_ELECTRIC_HEIGHT;
         this.type = Type.ELECTRIC;
+        this.v = Rules.ANOMALY_ELECTRIC_VELOCITY;
     }
 
     @Override
@@ -123,7 +130,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                 boolean out = boundCheck.checkAndHandleBounds(this);
                 if (!out) {
                     if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-                        tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(Rules.ANOMALY_ELECTRIC_VELOCITY);
+                        tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(v);
                         velocity.mulAdd(tmp, dt);
                     }
                     if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
@@ -131,7 +138,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                         velocity.mulAdd(tmp, dt);
                     }
                 } else {
-                    tmp.set(Rules.SPACE_WIDTH, Rules.SPACE_HEIGHT).sub(position).nor().scl(Rules.ANOMALY_ELECTRIC_VELOCITY);
+                    tmp.set(Rules.SPACE_WIDTH, Rules.SPACE_HEIGHT).sub(position).nor().scl(v);
                     velocity.mulAdd(tmp, dt);
                 }
             }

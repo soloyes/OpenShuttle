@@ -45,7 +45,9 @@ public final class Rules {
     //1
     public static final int ANOMALIES_ELECTRIC_MAX_COUNT = 1;
     //500.0f
-    public static final float ANOMALY_ELECTRIC_VELOCITY = 500.0f;
+    public static float ANOMALY_ELECTRIC_VELOCITY = 500.0f;
+    //0.5
+    public static final float ANOMALY_ELECTRIC_VELOCITY_MULTIPLIER = 0.5f;
     //10.0f
     public static float ANOMALIES_ELECTRIC_HUNGRY_TIME = 10.0f;
     //
