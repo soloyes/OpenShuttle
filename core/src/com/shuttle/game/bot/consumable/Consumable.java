@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.pool.AbstractPoolable;
-import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
@@ -15,8 +14,8 @@ public abstract class Consumable extends AbstractPoolable {
 
     public Consumable(GameScreen gs) {
         this.gs = gs;
-        this.position = new Vector2(0, 0);
-        this.velocity = new Vector2(0, 0);
+        this.position = new Vector2();
+        this.velocity = new Vector2();
         this.active = false;
         this.boundCheck = new BoundCheck();
         this.boomBox = new BoomBox();

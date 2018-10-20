@@ -95,6 +95,7 @@ public class GameOver {
         magneticAnomaly.getColor().a = 1.0f;
 
         Astronaut astronaut = new Astronaut(gs);
+        astronaut.setFake(true);
         astronaut.init(picx, 640);
         astronaut.setWidth(corrosiveAnomalyTAN.getWidth());
         astronaut.setHeight(corrosiveAnomalyTAN.getHeight());

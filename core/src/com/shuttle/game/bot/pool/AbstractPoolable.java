@@ -67,6 +67,9 @@ public abstract class AbstractPoolable implements Poolable {
     @Getter
     @Setter
     protected float boomDelay;
+    @Getter
+    @Setter
+    protected boolean fake;
 
     @Override
     public void destroy() {

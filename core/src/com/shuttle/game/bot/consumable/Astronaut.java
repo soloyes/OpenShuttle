@@ -23,10 +23,14 @@ public class Astronaut extends Consumable {
         position.set(x, y);
         angle = MathUtils.random(0, 360);
         rotationSpeed = MathUtils.random(-20, 20);
-        active = true;
         scaleX = saveScaleX = 1.0f;
         scaleY = saveScaleY = 1.0f;
-        if (boundCheck.checkAndHandleBoundsInCamera(this,gs.getCamera())){
+        active = true;
+        playSound();
+    }
+
+    private void playSound(){
+        if (!fake && boundCheck.checkAndHandleBoundsInCamera(this, gs.getCamera())){
             boomBox.playSound(MSConstants.ASTRONAUT_ALIVE);
         }
     }

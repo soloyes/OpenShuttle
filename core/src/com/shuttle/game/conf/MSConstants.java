@@ -29,8 +29,8 @@ public final class MSConstants {
     public final static String ASTRONAUT_ALIVE = SOUND_FOLDER + "the_appearance_of_the_astronaut.ogg";
     public final static String ASTEROID_DESTROY = SOUND_FOLDER + "asteroid_destroy.ogg";
 
-    public final static String PLAYER_LOSE_SCORE = SOUND_FOLDER + "lose_score_exp.ogg";
-    public final static String PLAYER_LOSE_FUEL = SOUND_FOLDER + "lose_score_fuel.ogg";
+    public final static String PLAYER_LOSE_SCORE = SOUND_FOLDER + "lose_score.ogg";
+    public final static String PLAYER_LOSE_FUEL = SOUND_FOLDER + "lose_fuel.ogg";
     public final static String PLAYER_LOW_LIFE = SOUND_FOLDER + "low_life_warning.ogg";
 
     //

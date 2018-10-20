@@ -3,6 +3,7 @@ package com.shuttle.game.bot.consumable;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.bot.pool.ObjectPool;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 
@@ -15,7 +16,7 @@ public class ConsumableEmitter extends ObjectPool<Consumable> {
     private float respawnTime;
     private GameScreen gs;
 
-    public ConsumableEmitter(GameScreen gs){
+    public ConsumableEmitter(GameScreen gs) {
         this.gs = gs;
         if (Rules.CONSUMABLE_AT_START != 0) {
             for (int i = 0; i <= Rules.CONSUMABLE_AT_START; i++) {
@@ -25,14 +26,17 @@ public class ConsumableEmitter extends ObjectPool<Consumable> {
     }
 
     public void createConsumable() {
-        getActiveElement().init(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
+        getActiveElement().init(
+                MathUtils.random(0, Rules.SPACE_WIDTH),
+                MathUtils.random(0, Rules.SPACE_HEIGHT)
+        );
     }
 
     @Override
     protected Consumable newObject() {
-        int i = MathUtils.random(0, 1);
+        int i = 0;//MathUtils.random(0, 1);
         switch (i) {
-            case 1:
+            case 0:
                 return new Astronaut(gs);
             default:
                 return new Crate(gs);

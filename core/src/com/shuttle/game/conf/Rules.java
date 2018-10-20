@@ -19,7 +19,7 @@ public final class Rules {
     public static int SPACE_HEIGHT;
     //CONSUMABLE
     //1
-    public static final int CONSUMABLE_AT_START = 1;
+    public static final int CONSUMABLE_AT_START = 0;
     //6.0f
     public static final float CONSUMABLE_RESPAWN_TIME = 6.0f;
     //10000
@@ -131,7 +131,7 @@ public final class Rules {
     public static final int BLACKHOLE_VELOCITY_CONSUME_PLAYER = 200;
     //GAME
     //false
-    public static boolean GAME_OVER = false;
+    public static boolean GAME_OVER;
     //SOUND
     //0.1f
     public static final float FRAGMENT_KICK_PRETTY_SOUND_DELAY = 0.1f;
@@ -143,6 +143,10 @@ public final class Rules {
     //SPACE
     //600
     private static final int STARS = 600;
+
+    public static boolean isGameOver() {
+        return GAME_OVER;
+    }
 
     public static void setSpace(int n) {
         STARS_COUNT = STARS * n;
