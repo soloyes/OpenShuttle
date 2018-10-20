@@ -106,7 +106,9 @@ public final class Rules {
     //5.0f
     public static final float PLAYER_TIMER_HP_OUT_OF_MAP = 5.0f;
     //1
-    public static int PLAYER_HP_OUT_OF_MAP = 1;
+    public static final int PLAYER_HP_OUT_OF_MAP = 1;
+    //0.2f
+    public static final float PLAYER_LOW_LIFE_HP_PERCENT = 0.2f;
     //2.5f
     public static final float PLAYER_TIMER_FUEL_OUT_OF_MAP = 2.5f;
     //3.0f
@@ -137,7 +139,7 @@ public final class Rules {
     public static final int BLACKHOLE_GET_DAMAGE = 5;
     //GAME
     //false
-    public static boolean GAME_OVER;
+    public static boolean GAME_OVER = false;
     //SOUND
     //0.1f
     public static final float FRAGMENT_KICK_PRETTY_SOUND_DELAY = 0.1f;

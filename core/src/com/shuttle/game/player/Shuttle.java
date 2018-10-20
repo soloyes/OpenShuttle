@@ -1,7 +1,6 @@
 package com.shuttle.game.player;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -233,9 +232,9 @@ public class Shuttle {
             }
             hpNotification = false;
         }
-        //if hp is <= 10% of maxHP
-        float p = (standing.getHp() * 100) / standing.getMaxHp();
-        if (!hpNotification && p <= 10) {
+        //if hp is <= X% of maxHP
+        float p = standing.getHp() / (float) standing.getMaxHp();
+        if (!hpNotification && p <= Rules.PLAYER_LOW_LIFE_HP_PERCENT) {
             hpNotification = true;
             boomBox.playSound(MSConstants.PLAYER_LOW_LIFE);
         }

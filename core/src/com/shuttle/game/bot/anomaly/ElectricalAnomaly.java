@@ -109,7 +109,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
             if (Gdx.input.isTouched() && !Rules.GAME_OVER) {
                 tmp.set(Gdx.input.getX(), Gdx.input.getY());
                 ScreenManager.getInstance().getViewport().unproject(tmp);
-                if (tmp.dst(position) < 128f) {
+                if (tmp.dst(position) < PaintConstants.ANOMALY_ELECTRIC_WIDTH) {
                     hungry = false;
                     touched = true;
                 }

@@ -353,7 +353,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < consumableEmitter.getActiveList().size(); i++) {
             Consumable tmpConsumable = consumableEmitter.getActiveList().get(i);
             if (!tmpConsumable.isTaken()) {
-                if (player.getPosition().dst(tmpConsumable.getPosition()) < 128) {
+                if (player.getPosition().dst(tmpConsumable.getPosition()) <= 128) {
                     if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel()) {
                         tmpConsumable.destroy();
                         player.takeEffect(tmpConsumable.getType());
@@ -369,7 +369,7 @@ public class GameScreen extends BaseScreen {
                     }
                 }
                 if (!player.isTaken()) {
-                    if (player.getPosition().dst(tmpConsumable.getPosition()) < Rules.PLAYER_TAKE_RANGE) {
+                    if (player.getPosition().dst(tmpConsumable.getPosition()) <= Rules.PLAYER_TAKE_RANGE) {
                         tmpV2.set(player.getPosition()).sub(tmpConsumable.getPosition()).nor().scl(200.0f);
                         tmpConsumable.getPosition().mulAdd(tmpV2, dt);
                         float dst = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpConsumable.getPosition().x, tmpConsumable.getPosition().y);
@@ -416,7 +416,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < corrosiveAnomalyEmitter.getActiveList().size(); i++) {
             CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(i);
             if (!tmpAnomaly.isTaken()) {
-                if (player.getPosition().dst(tmpAnomaly.getPosition()) < 100 && tmpAnomaly.isBorn()) {
+                if (player.getPosition().dst(tmpAnomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && tmpAnomaly.isBorn()) {
                     if (tmpAnomaly.getLevel() < player.getPushPower()) {
                         damageToAnomaly(tmpAnomaly);
                         boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
@@ -462,7 +462,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < radiationAnomalyEmitter.getActiveList().size(); i++) {
             RadiationAnomaly tmpAnomaly = (RadiationAnomaly) radiationAnomalyEmitter.getActiveList().get(i);
             if (!tmpAnomaly.isTaken()) {
-                if (player.getPosition().dst(tmpAnomaly.getPosition()) < 70 && tmpAnomaly.isBorn()) {
+                if (player.getPosition().dst(tmpAnomaly.getPosition()) < PaintConstants.ANOMALY_RADIATION_WIDTH / 3 && tmpAnomaly.isBorn()) {
                     tmpAnomaly.setEat(true);
                     tmpAnomaly.setGlued(true);
                 } else {
@@ -498,7 +498,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < magneticAnomalyEmitter.getActiveList().size(); i++) {
             MagneticAnomaly tmpAnomaly = (MagneticAnomaly) magneticAnomalyEmitter.getActiveList().get(i);
             if (!tmpAnomaly.isTaken()) {
-                if (player.getPosition().dst(tmpAnomaly.getPosition()) < 70 && tmpAnomaly.isBorn()) {
+                if (player.getPosition().dst(tmpAnomaly.getPosition()) < PaintConstants.ANOMALY_MAGNETIC_HEIGHT / 3 && tmpAnomaly.isBorn()) {
                     tmpAnomaly.setEat(true);
                     tmpAnomaly.setGlued(true);
                 } else {
@@ -566,7 +566,7 @@ public class GameScreen extends BaseScreen {
 
                 for (int j = 0; j < corrosiveAnomalyEmitter.getActiveList().size(); j++) {
                     CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(j);
-                    if (!tmpAsteroid.isFragmented() && tmpAnomaly.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
+                    if (!tmpAsteroid.isFragmented() && tmpAnomaly.getPosition().dst(tmpAsteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
                         tmpAsteroid.destroy();
                         particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 32 + 32);
                         asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE);
