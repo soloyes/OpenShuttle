@@ -421,7 +421,7 @@ public class GameScreen extends BaseScreen {
                         damageToAnomaly(tmpAnomaly);
                         boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
                         if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
-                            Gdx.input.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY);
+                            Gdx.input.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY * tmpAnomaly.getLevel());
                         }
                     } else {
                         damageToPlayer(tmpAnomaly);
@@ -448,6 +448,9 @@ public class GameScreen extends BaseScreen {
                 if (player.getPosition().dst(tmpAnomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 && tmpAnomaly.isBorn()) {
                     tmpAnomaly.setHungry(false);
                     damageToPlayer(tmpAnomaly);
+                    if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
+                        Gdx.input.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY * tmpAnomaly.getLevel());
+                    }
                     prettyKick(MSConstants.PLAYER_KICKED_ELECTRIC);
                     tmpAnomaly.setV(tmpAnomaly.getV() * Rules.ANOMALY_ELECTRIC_VELOCITY_MULTIPLIER);
                 }

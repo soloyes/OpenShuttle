@@ -12,7 +12,7 @@ public final class VConstants {
     //10
     public static final int PLAYER_OUT_OF_SCREEN = 10;
     //30
-    public static final int PLAYER_ANOMALY_CORROSIVE_DESTROY = 30;
+    public static final int PLAYER_ANOMALY_CORROSIVE_DESTROY = 10;
     //50
     public static final int PLAYER_ASTRONAUT_DESTROY = 50;
     //30
