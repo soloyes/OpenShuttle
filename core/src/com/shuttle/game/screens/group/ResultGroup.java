@@ -36,15 +36,18 @@ public class ResultGroup extends Group {
 
         Label titleLabel = new Label("Results:", style96);
 
-        table.add(titleLabel).colspan(3);
+        table.add(titleLabel).colspan(4);
 
         if (results.getResults() != null) {
             for (int i = 1; i < results.getResults().size(); i++) {
                 String[] result = results.getResults().get(i).split(" ");
-                table.row();
-                table.add(new Label(result[0], style64)).left();
-                table.add(new Label(" " + result[1] + " ", style64)).right();
-                table.add(new Label(result[2], style64)).right();
+                if (result.length == 4) {
+                    table.row();
+                    table.add(new Label(result[0], style64)).left();
+                    table.add(new Label(" " + result[1] + " ", style64)).right();
+                    table.add(new Label(result[2], style64)).right();
+                    table.add(new Label(" " + result[3], style64)).right();
+                }
             }
         }
 

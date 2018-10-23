@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.bot.pool.AbstractPoolable;
+import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Results;
@@ -122,7 +123,15 @@ public class Standing {
     }
 
     public void writeResult() {
-        results.setResult(username + " " + scoreView + " " + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()));
+        results.setResult(
+                username +
+                        " " +
+                        scoreView +
+                        " "
+                        + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()) +
+                        " " +
+                        Rules.StartLevel.values()[GamePreferences.getLevel()].name()
+        );
     }
 
     public void changeScore(int amount) {
