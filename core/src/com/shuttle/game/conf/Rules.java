@@ -113,6 +113,8 @@ public final class Rules {
     public static final float PLAYER_TIMER_FUEL_OUT_OF_MAP = 2.5f;
     //3.0f
     public static final float PLAYER_FUEL_OUT_OF_MAP = 3.0f;
+    //5.0f
+    public static final float PLAYER_KILL_TIMER = 5.0f;
     //20000
     //todo: need to be balanced
     public static final int SCORE_TO_LIVE = 20000;

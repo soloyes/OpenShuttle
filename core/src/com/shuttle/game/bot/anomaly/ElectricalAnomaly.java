@@ -22,9 +22,6 @@ import lombok.Setter;
  */
 public class ElectricalAnomaly extends AbstractAnomaly {
     private boolean touched;
-    @Getter
-    @Setter
-    private float v;
 
     public ElectricalAnomaly(GameScreen gs) {
         super(gs);
@@ -57,8 +54,6 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.level = 4;
         this.color = Color.PURPLE;
         this.color.a = 0.0f;
-        //this.scaleX = this.saveScaleX = 1 + level * 0.15f;
-        //this.scaleY = this.saveScaleY = 1 + level * 0.15f;
         this.scaleX = this.saveScaleX = 1.0f;
         this.scaleY = this.saveScaleY = 1.0f;
         this.taken = true;
@@ -130,7 +125,11 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                 boolean out = boundCheck.checkAndHandleBounds(this);
                 if (!out) {
                     if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-                        tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(v);
+                        tmp.set(gs.getPlayer()
+                                .getPosition())
+                                .sub(position)
+                                .nor()
+                                .scl(v);
                         velocity.mulAdd(tmp, dt);
                     }
                     if (gs.getPlayer().getPosition().dst(position) < 240 * level) {

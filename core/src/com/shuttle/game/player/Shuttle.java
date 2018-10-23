@@ -32,9 +32,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class Shuttle {
-    private float zigzagEffect;
-    private float killTimer;
-    private int killSeries;
     private TextureRegion texture;
     private Vector2 tmp1, tmp2;
     private Joystick joystick;
@@ -50,6 +47,24 @@ public class Shuttle {
     @Getter
     @Setter
     private Radar radar;
+    @Getter
+    @Setter
+    private GlobalInteractionLevels shieldLevel;
+    @Getter
+    @Setter
+    private Standing standing;
+    @Getter
+    @Setter
+    private LifeShield lifeShield;
+    @Getter
+    @Setter
+    private RamShield ramShield;
+    @Getter
+    @Setter
+    private Scratch scratch;
+    private float zigzagEffect;
+    private float killTimer;
+    private int killSeries;
     @Getter
     @Setter
     private int width, height;
@@ -82,22 +97,6 @@ public class Shuttle {
     @Getter
     @Setter
     private boolean delayAnomaly;
-    //
-    @Getter
-    @Setter
-    private GlobalInteractionLevels shieldLevel;
-    @Getter
-    @Setter
-    private Standing standing;
-    @Getter
-    @Setter
-    private LifeShield lifeShield;
-    @Getter
-    @Setter
-    private RamShield ramShield;
-    @Getter
-    @Setter
-    private Scratch scratch;
     @Getter
     @Setter
     private boolean taken;
@@ -177,7 +176,7 @@ public class Shuttle {
 
     public void killPlusPlus() {
         killSeries++;
-        killTimer = 7.0f;
+        killTimer = Rules.PLAYER_KILL_TIMER;
         gs.getGameInfoSystem().setup(
                 position.x, position.y,
                 KillingSpree.getKillingSpreeFromKillsCount(killSeries).getText(),
@@ -189,7 +188,7 @@ public class Shuttle {
     public void render(SpriteBatch batch) {
         engineParticleEmitter.render(batch);
         Color tmpColor = batch.getColor();
-        if(Rules.GAME_OVER){
+        if (Rules.GAME_OVER) {
             tmpColor.a = 0.3f;
             batch.setColor(tmpColor);
         }
@@ -200,7 +199,7 @@ public class Shuttle {
                 width, height, scaleX, scaleY,
                 angle
         );
-        if(Rules.GAME_OVER){
+        if (Rules.GAME_OVER) {
             tmpColor.a = 1.0f;
             batch.setColor(tmpColor);
         }
@@ -334,7 +333,7 @@ public class Shuttle {
         }
         engineParticleEmitter.update(dt);
 
-        checkKillingSpreeSeries(dt);
+        checkKillingSeries(dt);
         checkPower();
         checkZigZagEffect(dt);
         angle = ShuttleMath.checkAngleBetween0And360(angle);
@@ -368,7 +367,7 @@ public class Shuttle {
         }
 
         checkRadar(dt);
-        checkBounds(dt);
+        boundCheck.checkAndHandleBounds(this, dt);
 
         tmpDelayFragment += dt;
         if (tmpDelayFragment >= Rules.FRAGMENT_KICK_PRETTY_SOUND_DELAY) {
@@ -400,7 +399,7 @@ public class Shuttle {
         }
     }
 
-    private void checkKillingSpreeSeries(float dt) {
+    private void checkKillingSeries(float dt) {
         if (killTimer > 0.0f) {
             killTimer -= dt;
             if (killTimer <= 0.0f) {
@@ -476,10 +475,6 @@ public class Shuttle {
                 boomBox.playSound(MSConstants.GET_RADAR);
             }
         }
-    }
-
-    private void checkBounds(float dt) {
-        boundCheck.checkAndHandleBounds(this, dt);
     }
 
     public int getPushPower() {
