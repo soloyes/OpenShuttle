@@ -1,6 +1,7 @@
 package com.shuttle.game.player;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -189,6 +190,11 @@ public class Shuttle {
 
     public void render(SpriteBatch batch) {
         engineParticleEmitter.render(batch);
+        Color tmpColor = batch.getColor();
+        if(Rules.GAME_OVER){
+            tmpColor.a = 0.3f;
+            batch.setColor(tmpColor);
+        }
         batch.draw(
                 texture,
                 position.x - width / 2, position.y - height / 2,
@@ -196,6 +202,10 @@ public class Shuttle {
                 width, height, scaleX, scaleY,
                 angle
         );
+        if(Rules.GAME_OVER){
+            tmpColor.a = 1.0f;
+            batch.setColor(tmpColor);
+        }
         scratch.render(batch);
         lifeShield.render(batch);
         //ramShield.render(batch); - render from GameScreen with layer's order
