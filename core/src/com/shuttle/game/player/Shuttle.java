@@ -269,6 +269,7 @@ public class Shuttle {
                                     3.0f,
                                     true
                             );
+                    boomBox.playSound(MSConstants.PLAYER_REPAIR);
                 }
                 if (x == 1) {
                     standing.changeFuel(Rules.CRATE_FUEL_ADD);

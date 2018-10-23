@@ -72,6 +72,8 @@ public class Assets {
                 assetManager.load(MSConstants.PLAYER_LOSE_SCORE, Sound.class);
                 assetManager.load(MSConstants.PLAYER_LOW_LIFE, Sound.class);
                 assetManager.load(MSConstants.PLAYER_DESTROYED, Sound.class);
+                assetManager.load(MSConstants.PLAYER_REPAIR, Sound.class);
+                assetManager.load(MSConstants.PLAYER_OUT_OF_SCREEN, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 createStdFont(32, "");
                 createStdFont(32, "Coloured");

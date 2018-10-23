@@ -127,8 +127,10 @@ public final class Rules {
     //BLACKHOLE
     //250
     public static final int BLACKHOLE_TAKE_RANGE = 250;
-    //1000
-    public static final int BLACKHOLE_ROAR_RANGE = 3000;
+    //
+    public static int BLACKHOLE_ROAR_RANGE;
+    //600
+    private static int BLACKHOLE_ROAR_FACTOR = 600;
     //20
     public static final int BLACKHOLE_EVENT_HORIZON = 20;
     //200
@@ -153,9 +155,11 @@ public final class Rules {
     private static final int STARS = 600;
 
     public static void setSpace(int n) {
+        System.out.println(n);
         STARS_COUNT = STARS * n;
         SPACE_WIDTH = WORLD_WIDTH * n;
         SPACE_HEIGHT = WORLD_HEIGHT * n;
+        BLACKHOLE_ROAR_RANGE = n * BLACKHOLE_ROAR_FACTOR;
     }
 
     public enum StartLevel {

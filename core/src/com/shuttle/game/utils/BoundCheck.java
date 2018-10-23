@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.bot.pool.AbstractPoolable;
@@ -21,9 +22,11 @@ public class BoundCheck {
     private float hpTimer;
     private float fuelTimer;
     private Rectangle rectangle;
+    private BoomBox boomBox;
 
     public BoundCheck() {
         this.rectangle = new Rectangle();
+        this.boomBox = new BoomBox();
     }
 
     public boolean checkAndHandleBounds(AbstractPoolable poolable) {
@@ -75,14 +78,15 @@ public class BoundCheck {
     }
 
     private void alert(Shuttle player, float duration) {
-        player.getGs().getGameInfoSystem().setup(
-                player.getGs().getCamera().position.x,
-                player.getGs().getCamera().position.y,
-                GameInfoSystem.GameInfoSystemPreset.OUT,
-                3,
-                true
-        );
         if (!Rules.GAME_OVER) {
+            player.getGs().getGameInfoSystem().setup(
+                    player.getGs().getCamera().position.x,
+                    player.getGs().getCamera().position.y,
+                    GameInfoSystem.GameInfoSystemPreset.OUT,
+                    3,
+                    true
+            );
+            //boomBox.playSound(MSConstants.PLAYER_OUT_OF_SCREEN);
             player.getGs().getShake().shake(duration, 35, 10);
             if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
                 Gdx.input.vibrate(VConstants.PLAYER_OUT_OF_SCREEN);
