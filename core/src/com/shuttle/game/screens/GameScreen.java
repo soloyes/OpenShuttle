@@ -45,6 +45,7 @@ import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.group.PauseGroup;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Shake;
+import com.shuttle.game.utils.Vibrator;
 
 import java.util.List;
 
@@ -420,9 +421,7 @@ public class GameScreen extends BaseScreen {
                     if (tmpAnomaly.getLevel() < player.getPushPower()) {
                         damageToAnomaly(tmpAnomaly);
                         boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
-                        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
-                            Gdx.input.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY * tmpAnomaly.getLevel());
-                        }
+                        Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, tmpAnomaly.getLevel());
                     } else {
                         damageToPlayer(tmpAnomaly);
                         if (tmpAnomaly.getLevel() != 4) {
@@ -431,9 +430,7 @@ public class GameScreen extends BaseScreen {
                         tmpAnomaly.setHungry(false);
                         tmpAnomaly.setSlimTimer(0);
                         prettyKick(MSConstants.PLAYER_KICKED_CORROSIVE);
-                        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
-                            Gdx.input.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
-                        }
+                        Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
                     }
                 }
             }
@@ -448,9 +445,7 @@ public class GameScreen extends BaseScreen {
                 if (player.getPosition().dst(tmpAnomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 && tmpAnomaly.isBorn()) {
                     tmpAnomaly.setHungry(false);
                     damageToPlayer(tmpAnomaly);
-                    if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
-                        Gdx.input.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY * tmpAnomaly.getLevel());
-                    }
+                    Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, tmpAnomaly.getLevel());
                     prettyKick(MSConstants.PLAYER_KICKED_ELECTRIC);
                     tmpAnomaly.setV(tmpAnomaly.getV() * Rules.ANOMALY_ELECTRIC_DECREASE_FACTOR);
                 }
@@ -540,9 +535,7 @@ public class GameScreen extends BaseScreen {
                 if (player.getPosition().dst(tmpAsteroid.getPosition()) < tmpAsteroid.getHeight() * tmpAsteroid.getScaleX()) {
                     if (!tmpAsteroid.isFragmented()) {
                         tmpAsteroid.destroy();
-                        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
-                            Gdx.input.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
-                        }
+                        Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
                         player.getLifeShield().blink(1.0f);
                         particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, player.getShieldLevel().getLevel() * 16 + 32);
                         asteroidEmitter.boom(tmpAsteroid.getPosition(), player.getShieldLevel());

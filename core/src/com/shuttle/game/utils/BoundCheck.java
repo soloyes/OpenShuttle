@@ -29,13 +29,12 @@ public class BoundCheck {
         this.boomBox = new BoomBox();
     }
 
-    public boolean checkAndHandleBounds(AbstractPoolable poolable) {
-        rectangle.set(
-                -poolable.getWidth() / 2, -poolable.getHeight() / 2,
-                Rules.SPACE_WIDTH + poolable.getWidth(),
-                Rules.SPACE_HEIGHT + poolable.getHeight()
-        );
-        return !rectangle.contains(poolable.getPosition());
+    public static void avoidPosition(Vector2 from, Vector2 to, int near, int x1, int x2, int y1, int y2) {
+        Vector2 tmp = from.cpy();
+        while (tmp.sub(to).len() <= near) {
+            //Prevent generation near given position
+            to.set(MathUtils.random(x1, x2), MathUtils.random(y1, y2));
+        }
     }
 
     public void checkAndHandleBounds(Shuttle player, float dt) {
@@ -88,10 +87,17 @@ public class BoundCheck {
             );
             //boomBox.playSound(MSConstants.PLAYER_OUT_OF_SCREEN);
             player.getGs().getShake().shake(duration, 35, 10);
-            if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
-                Gdx.input.vibrate(VConstants.PLAYER_OUT_OF_SCREEN);
-            }
+            Vibrator.vibrate(VConstants.PLAYER_OUT_OF_SCREEN);
         }
+    }
+
+    public boolean checkAndHandleBounds(AbstractPoolable poolable) {
+        rectangle.set(
+                -poolable.getWidth() / 2, -poolable.getHeight() / 2,
+                Rules.SPACE_WIDTH + poolable.getWidth(),
+                Rules.SPACE_HEIGHT + poolable.getHeight()
+        );
+        return !rectangle.contains(poolable.getPosition());
     }
 
     public void checkAndHandleBoundsAndDestroy(AbstractPoolable poolable) {
@@ -111,13 +117,5 @@ public class BoundCheck {
                 Rules.WORLD_WIDTH, Rules.SPACE_HEIGHT
         );
         return rectangle.contains(poolable.getPosition());
-    }
-
-    public static void avoidPosition(Vector2 from, Vector2 to, int near, int x1, int x2, int y1, int y2) {
-        Vector2 tmp = from.cpy();
-        while (tmp.sub(to).len() <= near) {
-            //Prevent generation near given position
-            to.set(MathUtils.random(x1, x2), MathUtils.random(y1, y2));
-        }
     }
 }
