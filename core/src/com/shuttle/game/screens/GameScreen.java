@@ -452,7 +452,7 @@ public class GameScreen extends BaseScreen {
                         Gdx.input.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY * tmpAnomaly.getLevel());
                     }
                     prettyKick(MSConstants.PLAYER_KICKED_ELECTRIC);
-                    tmpAnomaly.setV(tmpAnomaly.getV() * Rules.ANOMALY_ELECTRIC_VELOCITY_MULTIPLIER);
+                    tmpAnomaly.setV(tmpAnomaly.getV() * Rules.ANOMALY_ELECTRIC_DECREASE_FACTOR);
                 }
             }
             ///
@@ -699,7 +699,7 @@ public class GameScreen extends BaseScreen {
     private void damageToAnomaly(AbstractPoolable anomaly) {
         anomaly.destroy();
         player.getRamShield().blink(1.0f);
-        int asc = (anomaly.getLevel() + 1) * Rules.ANOMALIES_BASE_SCORE_ADD;
+        int asc = (anomaly.getLevel()) * Rules.ANOMALIES_BASE_SCORE_ADD;
         player.getStanding().changeScore(asc);
         player.slowDown(anomaly.getLevel() * 50.0f);
         player.changePower(-anomaly.getLevel());

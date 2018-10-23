@@ -41,7 +41,6 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.width = PaintConstants.ANOMALY_ELECTRIC_WIDTH;
         this.height = PaintConstants.ANOMALY_ELECTRIC_HEIGHT;
         this.type = Type.ELECTRIC;
-        this.v = Rules.ANOMALY_ELECTRIC_VELOCITY;
     }
 
     @Override
@@ -63,6 +62,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.scaleX = this.saveScaleX = 1.0f;
         this.scaleY = this.saveScaleY = 1.0f;
         this.taken = true;
+        this.v = Rules.ANOMALY_ELECTRIC_VELOCITY;
     }
 
     @Override
@@ -149,9 +149,12 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         if (touched) {
             destroy();
             boomBox.playSound(MSConstants.ANOMALY_ELECTRIC_DESTROY);
-            gs.getPlayer().getStanding().changeScore((getLevel() + 1) * Rules.ANOMALIES_BASE_SCORE_ADD);
             gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
             this.showSprayBoom(gs.getParticleEmitter());
+            //score amount decrease when kicked
+            float asc = level * Rules.ANOMALIES_BASE_SCORE_ADD * (v / Rules.ANOMALY_ELECTRIC_VELOCITY);
+            System.out.println(asc);
+            gs.getPlayer().getStanding().changeScore((int) asc);
         } else {
             color.a += dt / 5;
             if (color.a >= 1.0) {

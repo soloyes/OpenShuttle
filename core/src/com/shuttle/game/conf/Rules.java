@@ -41,13 +41,13 @@ public final class Rules {
     //5000
     public static final int ANOMALIES_BASE_SCORE_ADD = 5000;
     //30.0f
-    public static final float ANOMALIES_ELECTRIC_RESPAWN_TIME = 30.0f;
+    public static final float ANOMALIES_ELECTRIC_RESPAWN_TIME = 10.0f;
     //1
     public static final int ANOMALIES_ELECTRIC_MAX_COUNT = 1;
-    //500.0f
-    public static float ANOMALY_ELECTRIC_VELOCITY = 500.0f;
+    //600.0f
+    public static float ANOMALY_ELECTRIC_VELOCITY = 600.0f;
     //0.5
-    public static final float ANOMALY_ELECTRIC_VELOCITY_MULTIPLIER = 0.5f;
+    public static final float ANOMALY_ELECTRIC_DECREASE_FACTOR = 0.5f;
     //10.0f
     public static float ANOMALIES_ELECTRIC_HUNGRY_TIME = 10.0f;
     //
@@ -155,7 +155,6 @@ public final class Rules {
     private static final int STARS = 600;
 
     public static void setSpace(int n) {
-        System.out.println(n);
         STARS_COUNT = STARS * n;
         SPACE_WIDTH = WORLD_WIDTH * n;
         SPACE_HEIGHT = WORLD_HEIGHT * n;
