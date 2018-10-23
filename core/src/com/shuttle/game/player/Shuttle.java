@@ -108,6 +108,7 @@ public class Shuttle {
     @Setter
     private boolean cameraSmooth;
     private boolean hpNotification;
+    private boolean engineStarted;
 
     public Shuttle(GameScreen gs, Joystick joystick) {
         this.boomBox = new BoomBox();
@@ -329,7 +330,7 @@ public class Shuttle {
 
     public void update(float dt) {
         if (!taken) {
-            createFXs();
+            startEngine();
         }
         engineParticleEmitter.update(dt);
 
@@ -382,11 +383,16 @@ public class Shuttle {
         }
     }
 
-    private void createFXs() {
+    private void startEngine() {
         if (standing.getFuel() > 0.1f && velocity.len() > 80) {
             engineParticleEmitter.getBuilder().buildShuttleEngineFire(position, angle, 70, 1.0f);
+            if (engineStarted) {
+                boomBox.playSound(MSConstants.PLAYER_START_ENGINE);
+                engineStarted = false;
+            }
         } else {
             engineParticleEmitter.getBuilder().buildShuttleLowLevelEngineFire(position, angle, 70);
+            engineStarted = true;
         }
         //gs.getParticleEmitter().getBuilder().buildShuttleShield(position, angle, 90, 60, shieldLevel.getR(), shieldLevel.getG(), shieldLevel.getB());
         if (velocity.len() > 1200.0f) {

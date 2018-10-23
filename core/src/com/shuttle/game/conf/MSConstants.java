@@ -35,6 +35,7 @@ public final class MSConstants {
     public final static String PLAYER_DESTROYED = SOUND_FOLDER + "destroyed.ogg";
     public final static String PLAYER_OUT_OF_SCREEN = SOUND_FOLDER + "out_of_screen.ogg";
     public final static String PLAYER_REPAIR = SOUND_FOLDER + "repair.ogg";
+    public final static String PLAYER_START_ENGINE = SOUND_FOLDER + "shuttle_move_full.ogg";
     //
     //
     private final static String MUSIC_FOLDER = "music/";

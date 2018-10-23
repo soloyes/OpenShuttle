@@ -41,7 +41,7 @@ public final class Rules {
     //5000
     public static final int ANOMALIES_BASE_SCORE_ADD = 5000;
     //30.0f
-    public static final float ANOMALIES_ELECTRIC_RESPAWN_TIME = 10.0f;
+    public static final float ANOMALIES_ELECTRIC_RESPAWN_TIME = 30.0f;
     //1
     public static final int ANOMALIES_ELECTRIC_MAX_COUNT = 1;
     //600.0f
@@ -129,8 +129,6 @@ public final class Rules {
     public static final int BLACKHOLE_TAKE_RANGE = 250;
     //
     public static int BLACKHOLE_ROAR_RANGE;
-    //600
-    private static int BLACKHOLE_ROAR_FACTOR = 600;
     //20
     public static final int BLACKHOLE_EVENT_HORIZON = 20;
     //200
@@ -150,6 +148,8 @@ public final class Rules {
     //CAMERA
     //1500.0f
     public static final float CAMERA_SMOOTH_VELOCITY = 1500.0f;
+    //600
+    private static int BLACKHOLE_ROAR_FACTOR = 600;
     //SPACE
     //600
     private static final int STARS = 600;
