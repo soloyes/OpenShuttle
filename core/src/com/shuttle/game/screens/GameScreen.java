@@ -87,7 +87,7 @@ public class GameScreen extends BaseScreen {
     private GameInfoSystem gameInfoSystem;
     private PauseGroup pauseGroup;
     private Joystick joystick;
-    private PlayerPointer pointer;
+    private PlayerPointer playerPointer;
     @Getter
     @Setter
     private Shake shake;
@@ -142,16 +142,17 @@ public class GameScreen extends BaseScreen {
         background = new Background();
         gameInfoSystem = new GameInfoSystem();
         joystick = new Joystick();
-        InputMultiplexer im = new InputMultiplexer(stage, joystick);
-        Gdx.input.setInputProcessor(im);
 
         blackhole = new Blackhole();
         player = new Shuttle(this, joystick);
         BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
-        pointer = new PlayerPointer(player);
+        playerPointer = new PlayerPointer(player);
         Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel(player);
         gameOver = new GameOver(this);
         shake = new Shake();
+
+        InputMultiplexer im = new InputMultiplexer(player, stage, joystick);
+        Gdx.input.setInputProcessor(im);
 
         calcMusicEffectVolume();
     }
@@ -272,7 +273,7 @@ public class GameScreen extends BaseScreen {
         batch.begin();
         if (!Rules.GAME_OVER) {
             gameInfoSystem.render(batch);
-            pointer.render(batch);
+            playerPointer.render(batch);
         }
         batch.end();
 
@@ -298,7 +299,7 @@ public class GameScreen extends BaseScreen {
             }
 
             gameInfoSystem.update(dt);
-            pointer.update(dt);
+            playerPointer.update(dt);
             if (!Rules.GAME_OVER) {
                 checkCollision(dt);
             } else {
@@ -536,6 +537,9 @@ public class GameScreen extends BaseScreen {
                     if (!tmpAsteroid.isFragmented()) {
                         tmpAsteroid.destroy();
                         Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
+                        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
+                            Gdx.input.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
+                        }
                         player.getLifeShield().blink(1.0f);
                         particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, player.getShieldLevel().getLevel() * 16 + 32);
                         asteroidEmitter.boom(tmpAsteroid.getPosition(), player.getShieldLevel());

@@ -1,13 +1,18 @@
 package com.shuttle.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
+
+import java.util.LinkedList;
 
 /**
  * Created by FlameXander on 30.09.2017.
@@ -17,9 +22,9 @@ public class Joystick extends InputAdapter {
     private TextureRegion stick;
     private Rectangle rectangle;
     private float joyCenterX, joyCenterY;
-    private int lastId;
     private Vector2 vs;
     private Vector2 tmp;
+    private LinkedList<Integer> pointer;
 
     public Joystick() {
         TextureRegion texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.JOYSTICK_REGION);
@@ -30,38 +35,37 @@ public class Joystick extends InputAdapter {
         this.joyCenterY = rectangle.y + rectangle.height / 2;
         this.vs = new Vector2(0, 0);
         this.tmp = new Vector2(0, 0);
-        this.lastId = -1;
+        this.pointer = new LinkedList<Integer>();
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        tmp.set(screenX, screenY);
+        this.pointer.add(pointer);
+        tmp.set(Gdx.input.getX(this.pointer.peekLast()), Gdx.input.getY(this.pointer.peekLast()));
         ScreenManager.getInstance().getViewport().unproject(tmp);
-        if (lastId == -1) {
-            lastId = pointer;
-            rectangle.x = tmp.x - rectangle.width / 2;
-            rectangle.y = tmp.y - rectangle.height / 2;
-            joyCenterX = rectangle.x + rectangle.width / 2;
-            joyCenterY = rectangle.y + rectangle.height / 2;
-        }
+        rectangle.x = tmp.x - rectangle.width / 2;
+        rectangle.y = tmp.y - rectangle.height / 2;
+        joyCenterX = rectangle.x + rectangle.width / 2;
+        joyCenterY = rectangle.y + rectangle.height / 2;
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if (lastId == pointer) {
-            lastId = -1;
+        if (this.pointer.size() == 0) {
             vs.x = 0;
             vs.y = 0;
+        } else {
+            this.pointer.remove(Integer.valueOf(pointer));
         }
         return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        tmp.set(screenX, screenY);
+        tmp.set(Gdx.input.getX(this.pointer.peekLast()), Gdx.input.getY(this.pointer.peekLast()));
         ScreenManager.getInstance().getViewport().unproject(tmp);
-        if (lastId > -1) {
+        if (this.pointer.size() != 0) {
             vs.x = tmp.x - joyCenterX;
             vs.y = tmp.y - joyCenterY;
             if (vs.len() > 75) {
@@ -72,7 +76,7 @@ public class Joystick extends InputAdapter {
     }
 
     public void render(SpriteBatch batch) {
-        if (lastId != -1) {
+        if (isActive()) {
             batch.setColor(1, 1, 1, 0.5f);
             batch.draw(background, rectangle.x, rectangle.y);
             batch.setColor(1, 1, 1, 0.7f);
@@ -81,19 +85,15 @@ public class Joystick extends InputAdapter {
         }
     }
 
+    public boolean isActive() {
+        return !Rules.GAME_OVER && GamePreferences.isJoyStickEnabled() && this.pointer.size() > 0;
+    }
+
     public float getAngle() {
         return vs.angle();
     }
 
     public float getPower() {
         return vs.len() / 75.0f;
-    }
-
-    public boolean isActive() {
-        return lastId > -1;
-    }
-
-    public void setLastId(int lastId) {
-        this.lastId = lastId;
     }
 }

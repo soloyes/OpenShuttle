@@ -83,10 +83,10 @@ public final class Rules {
     public static final float ANOMALIES_CORROSIVE_HUNGRY_TIME = 10.0f;
     //100
     public static final int ANOMALIES_CORROSIVE_MAX_COUNT = 100;
-    //5.0f
+    //15.0f
     public static final float ANOMALIES_CORROSIVE_SLIM_TIME = 15.0f;
     //60
-    public static int ANOMALIES_CORROSIVE_HUNT_TIME = 1;
+    public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
     //60.0f
     public static final float ANOMALIES_CORROSIVE_VELOCITY = 60.0f;
     //
