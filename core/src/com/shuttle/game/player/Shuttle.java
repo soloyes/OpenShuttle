@@ -328,11 +328,7 @@ public class Shuttle {
     }
 
     public void update(float dt) {
-        if (!taken) {
-            startEngine();
-        }
         engineParticleEmitter.update(dt);
-
         checkKillingSeries(dt);
         checkPower();
         checkZigZagEffect(dt);
@@ -344,10 +340,8 @@ public class Shuttle {
         lifeShield.update(dt);
         ramShield.update(dt);
 
-        //todo: change, coz fail on FPS ~ 10. Like with cameraSMOOOOF :)
-        velocity.scl(0.99f);
+        velocity.scl(/*FPS hack*/1.0f - dt/*FPS hack*/);
         position.mulAdd(velocity, dt);
-
         if (!GamePreferences.isJoyStickEnabled()) {
             joystick.setLastId(-1);
         }
@@ -380,22 +374,9 @@ public class Shuttle {
             tmpDelayAnomaly = 0.0f;
             delayAnomaly = true;
         }
-    }
 
-    private void startEngine() {
-        if (standing.getFuel() > 0.1f && velocity.len() > 80) {
-            engineParticleEmitter.getBuilder().buildShuttleEngineFire(position, angle, 70, 1.0f);
-            if (engineStarted) {
-                boomBox.playSound(MSConstants.PLAYER_START_ENGINE);
-                engineStarted = false;
-            }
-        } else {
-            engineParticleEmitter.getBuilder().buildShuttleLowLevelEngineFire(position, angle, 70);
-            engineStarted = true;
-        }
-        //gs.getParticleEmitter().getBuilder().buildShuttleShield(position, angle, 90, 60, shieldLevel.getR(), shieldLevel.getG(), shieldLevel.getB());
-        if (velocity.len() > 1200.0f) {
-            gs.getParticleEmitter().getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
+        if (!taken) {
+            startEngine(dt);
         }
     }
 
@@ -430,13 +411,13 @@ public class Shuttle {
         }
         if (standing.getFuel() <= 0.0f) {
             standing.setFuel(0.0f);
-            velocity.scl(0.97f);
+            velocity.scl(/*FPS hack*/1.0f - dt/*FPS hack*/);
         }
     }
 
     private void move(float dt, float angleToTarget) {
         if (zigzagEffect < 0.05f) {
-            if (Math.abs(angle - angleToTarget) > 2.0f) {
+            if (Math.abs(angle - angleToTarget) > /*FPS hack*/120.0f * dt/*FPS hack*/) {
                 float dir = ShuttleMath.getRotationDirection(
                         angle,
                         angleToTarget
@@ -458,7 +439,6 @@ public class Shuttle {
             }
         }
 
-        //todo: fix parking to able work with low FPS
         float acceleration =
                 (joystick.isActive() ? joystick.getPower() : 1) * enginePower;
         velocity.add(
@@ -473,6 +453,28 @@ public class Shuttle {
             if (position.dst(radar.getPosition()) < 128 && !Rules.GAME_OVER) {
                 radar.setActive(true);
                 boomBox.playSound(MSConstants.GET_RADAR);
+            }
+        }
+    }
+
+    private void startEngine(float dt) {
+        /*FPS hack*/
+        int j = (int) (60 * dt / 2);
+        /*FPS hack*/
+        for (int i = 0; i <= j; i++) {
+            if (standing.getFuel() > 0.1f && velocity.len() > 80) {
+                engineParticleEmitter.getBuilder().buildShuttleEngineFire(position, angle,  /*FPS hack*/70 - j * 0.5f /*FPS hack*/, 1.0f, 60 * dt);
+                if (engineStarted) {
+                    boomBox.playSound(MSConstants.PLAYER_START_ENGINE);
+                    engineStarted = false;
+                }
+            } else {
+                engineParticleEmitter.getBuilder().buildShuttleLowLevelEngineFire(position, angle, 70);
+                engineStarted = true;
+            }
+            //gs.getParticleEmitter().getBuilder().buildShuttleShield(position, angle, 90, 60, shieldLevel.getR(), shieldLevel.getG(), shieldLevel.getB());
+            if (velocity.len() > 1200.0f) {
+                gs.getParticleEmitter().getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
             }
         }
     }

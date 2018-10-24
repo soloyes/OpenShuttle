@@ -86,7 +86,7 @@ public final class Rules {
     //5.0f
     public static final float ANOMALIES_CORROSIVE_SLIM_TIME = 15.0f;
     //60
-    public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
+    public static int ANOMALIES_CORROSIVE_HUNT_TIME = 1;
     //60.0f
     public static final float ANOMALIES_CORROSIVE_VELOCITY = 60.0f;
     //
@@ -99,8 +99,8 @@ public final class Rules {
     public static final int PLAYER_TAKE_RANGE = 500;
     //135.0f
     public static final float PLAYER_RADIAL_SPEED = 135.0f;
-    //500.0f
-    public static final float PLAYER_ENGINE_POWER = 500.0f;
+    //700.0f
+    public static final float PLAYER_ENGINE_POWER = 700.0f;
     //5.0f
     public static final float PLAYER_MAX_POWER = 5.0f;
     //5.0f

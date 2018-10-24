@@ -129,7 +129,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 }
             }
 
-            velocity.scl(0.99f);
+            velocity.scl(/*hack*/1.0f - dt/*hack*/);
 
             if (hungry && activated) {
                 position.mulAdd(velocity, dt);

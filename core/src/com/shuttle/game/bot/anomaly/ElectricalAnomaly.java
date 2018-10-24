@@ -119,7 +119,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                 hungry = true;
             }
 
-            velocity.scl(0.99f);
+            velocity.scl(/*hack*/1.0f - dt/*hack*/);
             if (hungry && activated) {
                 position.mulAdd(velocity, dt);
                 boolean out = boundCheck.checkAndHandleBounds(this);
