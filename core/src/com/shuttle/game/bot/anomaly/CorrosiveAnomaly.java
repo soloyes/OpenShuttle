@@ -44,6 +44,125 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     }
 
     @Override
+    public void init(float x, float y) {
+        this.hungryTimer = 0;
+        this.slimTimer = 0;
+        this.boomTimer = 0;
+        this.boomDelay = MathUtils.random(Rules.ANOMALIES_BOOM_MIN_DELAY, Rules.ANOMALIES_BOOM_MAX_DELAY);
+        this.hungry = true;
+        this.angle = MathUtils.random(365);
+        this.clockwise = MathUtils.randomSign();
+        this.position.set(x, y);
+        this.active = true;
+        this.born = false;
+        this.oscillator = true;
+        this.color.a = PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX;
+        float rnd = MathUtils.random(0.0f, 1.0f);
+        for (int i = probabilities.length - 1; i > 0; i--) {
+            if (rnd < probabilities[i]) {
+                level = i;
+                break;
+            }
+        }
+        this.taken = true;
+        this.v = MathUtils.random(
+                Rules.ANOMALIES_CORROSIVE_VELOCITY,
+                3 * Rules.ANOMALIES_CORROSIVE_VELOCITY
+        );
+    }
+
+    @Override
+    public void render(SpriteBatch batch) {
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
+        batch.setColor(color);
+        basicRender(batch);
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    @Override
+    public void update(float dt) {
+        scaleAndBorn(dt);
+        basicUpdate(dt);
+
+        if (born) {
+            if (oscillator) {
+                color.a -= dt / 2;
+                if (color.a <= 0.0f) {
+                    color.a = 0.0f;
+                    oscillator = false;
+                }
+            } else {
+                color.a += dt / 2;
+                if (color.a >= PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX) {
+                    color.a = PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX;
+                    oscillator = true;
+                }
+            }
+
+            boundCheck.checkAndHandleBoundsAndDestroy(this);
+
+            if (activated) {
+                slimTimer += dt;
+            }
+            if (slimTimer > Rules.ANOMALIES_CORROSIVE_SLIM_TIME) {
+                slimTimer = 0;
+                if (level > 0) {
+                    takeDamage(1);
+                }
+            }
+
+            if (!hungry) {
+                hungryTimer += dt;
+            }
+
+            if (hungryTimer > Rules.ANOMALIES_CORROSIVE_HUNGRY_TIME) {
+                hungryTimer = 0;
+                hungry = true;
+            }
+
+            if (markedToBoom) {
+                boomTimer += dt;
+                if (boomTimer >= boomDelay) {
+                    destroy();
+                    showSprayBoom(gs.getParticleEmitter());
+                }
+            }
+
+            velocity.scl(/*hack*/1.0f - dt/*hack*/);
+
+            if (hungry && activated) {
+                position.mulAdd(velocity, dt);
+                if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
+                    tmp.set(gs.getPlayer()
+                            .getPosition())
+                            .sub(position)
+                            .nor()
+                            .scl(v);
+                    velocity.mulAdd(tmp, dt);
+                }
+                if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
+                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
+                    velocity.mulAdd(tmp, dt);
+                }
+            }
+        }
+    }
+
+    private void scaleAndBorn(float dt) {
+        scaleX = scaleY += dt;
+        if (scaleX > 1 + level * 0.15f) {
+            scaleX = saveScaleX = 1 + level * 0.15f;
+            scaleY = saveScaleY = 1 + level * 0.15f;
+            born = true;
+        }
+    }
+
+    public void takeDamage(int dmg) {
+        level -= dmg;
+    }
+
+    @Override
     public void destroy() {
         super.destroy();
         scaleX = scaleY = 0;
@@ -106,116 +225,5 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 break;
         }
 
-    }
-
-    @Override
-    public void init(float x, float y) {
-        this.hungryTimer = 0;
-        this.slimTimer = 0;
-        this.boomTimer = 0;
-        this.boomDelay = MathUtils.random(Rules.ANOMALIES_BOOM_MIN_DELAY, Rules.ANOMALIES_BOOM_MAX_DELAY);
-        this.hungry = true;
-        this.angle = MathUtils.random(365);
-        this.clockwise = MathUtils.randomSign();
-        this.position.set(x, y);
-        this.active = true;
-        this.born = false;
-        this.oscillator = true;
-        this.color.a = PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX;
-        float rnd = MathUtils.random(0.0f, 1.0f);
-        for (int i = probabilities.length - 1; i > 0; i--) {
-            if (rnd < probabilities[i]) {
-                level = i;
-                break;
-            }
-        }
-        this.taken = true;
-    }
-
-    @Override
-    public void render(SpriteBatch batch) {
-        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
-        batch.setColor(color);
-        basicRender(batch);
-        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-
-    @Override
-    public void update(float dt) {
-        scaleAndBorn(dt);
-        basicUpdate(dt);
-
-        if (born) {
-            if (oscillator) {
-                color.a -= dt / 2;
-                if (color.a <= 0.0f) {
-                    color.a = 0.0f;
-                    oscillator = false;
-                }
-            } else {
-                color.a += dt / 2;
-                if (color.a >= PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX) {
-                    color.a = PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX;
-                    oscillator = true;
-                }
-            }
-
-            boundCheck.checkAndHandleBoundsAndDestroy(this);
-
-            if (activated) {
-                slimTimer += dt;
-            }
-            if (slimTimer > Rules.ANOMALIES_CORROSIVE_SLIM_TIME) {
-                slimTimer = 0;
-                if (level > 0) {
-                    takeDamage(1);
-                }
-            }
-
-            if (!hungry) {
-                hungryTimer += dt;
-            }
-
-            if (hungryTimer > Rules.ANOMALIES_CORROSIVE_HUNGRY_TIME) {
-                hungryTimer = 0;
-                hungry = true;
-            }
-
-            if (markedToBoom) {
-                boomTimer += dt;
-                if (boomTimer >= boomDelay) {
-                    destroy();
-                    showSprayBoom(gs.getParticleEmitter());
-                }
-            }
-
-            velocity.scl(0.99f);
-
-            if (hungry && activated) {
-                position.mulAdd(velocity, dt);
-                if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(Rules.ANOMALIES_CORROSIVE_VELOCITY);
-                    velocity.mulAdd(tmp, dt);
-                }
-                if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
-                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
-                    velocity.mulAdd(tmp, dt);
-                }
-            }
-        }
-    }
-
-    private void scaleAndBorn(float dt) {
-        scaleX = scaleY += dt;
-        if (scaleX > 1 + level * 0.15f) {
-            scaleX = saveScaleX = 1 + level * 0.15f;
-            scaleY = saveScaleY = 1 + level * 0.15f;
-            born = true;
-        }
-    }
-
-    public void takeDamage(int dmg) {
-        level -= dmg;
     }
 }

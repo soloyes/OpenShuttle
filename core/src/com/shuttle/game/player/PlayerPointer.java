@@ -3,7 +3,6 @@ package com.shuttle.game.player;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
@@ -12,7 +11,7 @@ import com.shuttle.game.utils.Assets;
  * @author Shuttle on 8/28/18.
  */
 public class PlayerPointer {
-    private TextureRegion pointTexture;
+    private TextureRegion point;
     private Shuttle player;
     private Vector2 tmp;
     private float width;
@@ -20,7 +19,7 @@ public class PlayerPointer {
     private float blinkTimer;
 
     public PlayerPointer(Shuttle player) {
-        this.pointTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STAR16_REGION);
+        this.point = Assets.getInstance().getAtlas().findRegion(PaintConstants.STAR16_REGION);
         this.player = player;
         this.tmp = new Vector2();
         this.width = PaintConstants.POINTER_WIDTH;
@@ -54,7 +53,7 @@ public class PlayerPointer {
 
         if (lost) {
             if (blinkTimer <= 0.33f) {
-                batch.draw(pointTexture, tmp.x, tmp.y, width, height, width, height, 1.0f, 1.0f, 0.0f);
+                batch.draw(point, tmp.x, tmp.y, width, height, width, height, 1.0f, 1.0f, 0.0f);
             } else {
                 blinkTimer -= 0.33f;
             }

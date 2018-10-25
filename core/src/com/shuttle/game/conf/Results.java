@@ -23,19 +23,20 @@ public class Results {
 
     public List<String> getResults() {
         results = Arrays.asList(resultsFile.readString().split("\n"));
-        if (results.size() == 1){
+        if (results.size() == 1) {
             return null;
-        }
-        else {
+        } else {
             return results;
         }
     }
 
-    public void setResult(String result){
+    public void setResult(String result) {
         results = Arrays.asList(resultsFile.readString().split("\n"));
         boolean exists = false;
         for (int i = 1; i < results.size(); i++) {
-            if (results.get(i).split(" ")[0].equals(result.split(" ")[0])){
+            if (results.get(i).split(" ")[0].equals(result.split(" ")[0]) &&
+                    results.get(i).split(" ")[3].equals(result.split(" ")[3])
+                    ) {
                 exists = true;
                 results.set(i, result.replace("\n", ""));
                 break;
@@ -48,8 +49,8 @@ public class Results {
             resultsFile.writeString(results.get(i) + "\n", true);
         }
 
-        if (!exists){
-            resultsFile.writeString(result,true);
+        if (!exists) {
+            resultsFile.writeString(result, true);
         }
     }
 }

@@ -45,6 +45,7 @@ import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.group.PauseGroup;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Shake;
+import com.shuttle.game.utils.Vibrator;
 
 import java.util.List;
 
@@ -86,7 +87,7 @@ public class GameScreen extends BaseScreen {
     private GameInfoSystem gameInfoSystem;
     private PauseGroup pauseGroup;
     private Joystick joystick;
-    private PlayerPointer pointer;
+    private PlayerPointer playerPointer;
     @Getter
     @Setter
     private Shake shake;
@@ -141,16 +142,17 @@ public class GameScreen extends BaseScreen {
         background = new Background();
         gameInfoSystem = new GameInfoSystem();
         joystick = new Joystick();
-        InputMultiplexer im = new InputMultiplexer(stage, joystick);
-        Gdx.input.setInputProcessor(im);
 
         blackhole = new Blackhole();
         player = new Shuttle(this, joystick);
         BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
-        pointer = new PlayerPointer(player);
+        playerPointer = new PlayerPointer(player);
         Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel(player);
         gameOver = new GameOver(this);
         shake = new Shake();
+
+        InputMultiplexer im = new InputMultiplexer(player, stage, joystick);
+        Gdx.input.setInputProcessor(im);
 
         calcMusicEffectVolume();
     }
@@ -271,7 +273,7 @@ public class GameScreen extends BaseScreen {
         batch.begin();
         if (!Rules.GAME_OVER) {
             gameInfoSystem.render(batch);
-            pointer.render(batch);
+            playerPointer.render(batch);
         }
         batch.end();
 
@@ -297,7 +299,7 @@ public class GameScreen extends BaseScreen {
             }
 
             gameInfoSystem.update(dt);
-            pointer.update(dt);
+            playerPointer.update(dt);
             if (!Rules.GAME_OVER) {
                 checkCollision(dt);
             } else {
@@ -420,9 +422,7 @@ public class GameScreen extends BaseScreen {
                     if (tmpAnomaly.getLevel() < player.getPushPower()) {
                         damageToAnomaly(tmpAnomaly);
                         boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
-                        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
-                            Gdx.input.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY * tmpAnomaly.getLevel());
-                        }
+                        Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, tmpAnomaly.getLevel());
                     } else {
                         damageToPlayer(tmpAnomaly);
                         if (tmpAnomaly.getLevel() != 4) {
@@ -431,9 +431,7 @@ public class GameScreen extends BaseScreen {
                         tmpAnomaly.setHungry(false);
                         tmpAnomaly.setSlimTimer(0);
                         prettyKick(MSConstants.PLAYER_KICKED_CORROSIVE);
-                        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
-                            Gdx.input.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
-                        }
+                        Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
                     }
                 }
             }
@@ -448,11 +446,9 @@ public class GameScreen extends BaseScreen {
                 if (player.getPosition().dst(tmpAnomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 && tmpAnomaly.isBorn()) {
                     tmpAnomaly.setHungry(false);
                     damageToPlayer(tmpAnomaly);
-                    if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
-                        Gdx.input.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY * tmpAnomaly.getLevel());
-                    }
+                    Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, tmpAnomaly.getLevel());
                     prettyKick(MSConstants.PLAYER_KICKED_ELECTRIC);
-                    tmpAnomaly.setV(tmpAnomaly.getV() * Rules.ANOMALY_ELECTRIC_VELOCITY_MULTIPLIER);
+                    tmpAnomaly.setV(tmpAnomaly.getV() * Rules.ANOMALY_ELECTRIC_DECREASE_FACTOR);
                 }
             }
             ///
@@ -540,6 +536,7 @@ public class GameScreen extends BaseScreen {
                 if (player.getPosition().dst(tmpAsteroid.getPosition()) < tmpAsteroid.getHeight() * tmpAsteroid.getScaleX()) {
                     if (!tmpAsteroid.isFragmented()) {
                         tmpAsteroid.destroy();
+                        Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
                         if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
                             Gdx.input.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
                         }
@@ -699,7 +696,7 @@ public class GameScreen extends BaseScreen {
     private void damageToAnomaly(AbstractPoolable anomaly) {
         anomaly.destroy();
         player.getRamShield().blink(1.0f);
-        int asc = (anomaly.getLevel() + 1) * Rules.ANOMALIES_BASE_SCORE_ADD;
+        int asc = (anomaly.getLevel()) * Rules.ANOMALIES_BASE_SCORE_ADD;
         player.getStanding().changeScore(asc);
         player.slowDown(anomaly.getLevel() * 50.0f);
         player.changePower(-anomaly.getLevel());

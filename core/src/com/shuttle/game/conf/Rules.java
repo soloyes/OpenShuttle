@@ -44,10 +44,10 @@ public final class Rules {
     public static final float ANOMALIES_ELECTRIC_RESPAWN_TIME = 30.0f;
     //1
     public static final int ANOMALIES_ELECTRIC_MAX_COUNT = 1;
-    //500.0f
-    public static float ANOMALY_ELECTRIC_VELOCITY = 500.0f;
+    //600.0f
+    public static float ANOMALY_ELECTRIC_VELOCITY = 600.0f;
     //0.5
-    public static final float ANOMALY_ELECTRIC_VELOCITY_MULTIPLIER = 0.5f;
+    public static final float ANOMALY_ELECTRIC_DECREASE_FACTOR = 0.5f;
     //10.0f
     public static float ANOMALIES_ELECTRIC_HUNGRY_TIME = 10.0f;
     //
@@ -83,7 +83,7 @@ public final class Rules {
     public static final float ANOMALIES_CORROSIVE_HUNGRY_TIME = 10.0f;
     //100
     public static final int ANOMALIES_CORROSIVE_MAX_COUNT = 100;
-    //5.0f
+    //15.0f
     public static final float ANOMALIES_CORROSIVE_SLIM_TIME = 15.0f;
     //60
     public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
@@ -99,8 +99,8 @@ public final class Rules {
     public static final int PLAYER_TAKE_RANGE = 500;
     //135.0f
     public static final float PLAYER_RADIAL_SPEED = 135.0f;
-    //500.0f
-    public static final float PLAYER_ENGINE_POWER = 500.0f;
+    //700.0f
+    public static final float PLAYER_ENGINE_POWER = 700.0f;
     //5.0f
     public static final float PLAYER_MAX_POWER = 5.0f;
     //5.0f
@@ -113,6 +113,8 @@ public final class Rules {
     public static final float PLAYER_TIMER_FUEL_OUT_OF_MAP = 2.5f;
     //3.0f
     public static final float PLAYER_FUEL_OUT_OF_MAP = 3.0f;
+    //5.0f
+    public static final float PLAYER_KILL_TIMER = 5.0f;
     //20000
     //todo: need to be balanced
     public static final int SCORE_TO_LIVE = 20000;
@@ -129,8 +131,6 @@ public final class Rules {
     public static final int BLACKHOLE_TAKE_RANGE = 250;
     //
     public static int BLACKHOLE_ROAR_RANGE;
-    //600
-    private static int BLACKHOLE_ROAR_FACTOR = 600;
     //20
     public static final int BLACKHOLE_EVENT_HORIZON = 20;
     //200
@@ -150,12 +150,13 @@ public final class Rules {
     //CAMERA
     //1500.0f
     public static final float CAMERA_SMOOTH_VELOCITY = 1500.0f;
+    //600
+    private static int BLACKHOLE_ROAR_FACTOR = 600;
     //SPACE
     //600
     private static final int STARS = 600;
 
     public static void setSpace(int n) {
-        System.out.println(n);
         STARS_COUNT = STARS * n;
         SPACE_WIDTH = WORLD_WIDTH * n;
         SPACE_HEIGHT = WORLD_HEIGHT * n;

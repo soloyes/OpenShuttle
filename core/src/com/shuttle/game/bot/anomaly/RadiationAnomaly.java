@@ -22,7 +22,6 @@ public class RadiationAnomaly extends AbstractAnomaly {
     @Setter
     private boolean glued;
     private float liveTime;
-    private float v;
     @Getter
     @Setter
     private boolean eat;
@@ -61,7 +60,10 @@ public class RadiationAnomaly extends AbstractAnomaly {
         this.scaleY = this.saveScaleY = 1 + level * 0.15f;
         this.taken = true;
         this.color.a = 0.0f;
-        this.v = MathUtils.random(Rules.ANOMALIES_RADIATION_VELOCITY, 3 * Rules.ANOMALIES_RADIATION_VELOCITY);
+        this.v = MathUtils.random(
+                Rules.ANOMALIES_RADIATION_VELOCITY,
+                3 * Rules.ANOMALIES_RADIATION_VELOCITY
+        );
     }
 
     @Override
@@ -104,7 +106,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
         if (born) {
             boundCheck.checkAndHandleBoundsAndDestroy(this);
 
-            velocity.scl(0.99f);
+            velocity.scl(/*hack*/1.0f - dt/*hack*/);
 
             if (hungry && activated) {
                 position.mulAdd(velocity, dt);

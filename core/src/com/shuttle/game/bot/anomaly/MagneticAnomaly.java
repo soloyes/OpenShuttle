@@ -21,7 +21,6 @@ public class MagneticAnomaly extends AbstractAnomaly {
     @Setter
     private boolean glued;
     private float liveTime;
-    private float v;
     @Getter
     @Setter
     private boolean eat;
@@ -43,10 +42,6 @@ public class MagneticAnomaly extends AbstractAnomaly {
         );
         this.width = PaintConstants.ANOMALY_MAGNETIC_WIDTH;
         this.height = PaintConstants.ANOMALY_MAGNETIC_HEIGHT;
-        this.v = MathUtils.random(
-                Rules.ANOMALIES_MAGNETIC_VELOCITY,
-                3 * Rules.ANOMALIES_MAGNETIC_VELOCITY
-        );
         this.type = Type.MAGNETIC;
     }
 
@@ -66,6 +61,10 @@ public class MagneticAnomaly extends AbstractAnomaly {
         this.color.a = 0.0f;
         this.angle = MathUtils.random(365);
         this.clockwise = MathUtils.randomSign();
+        this.v = MathUtils.random(
+                Rules.ANOMALIES_MAGNETIC_VELOCITY,
+                3 * Rules.ANOMALIES_MAGNETIC_VELOCITY
+        );
     }
 
     @Override
@@ -111,7 +110,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
         if (born) {
             boundCheck.checkAndHandleBoundsAndDestroy(this);
 
-            velocity.scl(0.99f);
+            velocity.scl(/*hack*/1.0f - dt/*hack*/);
             if (hungry && activated) {
                 position.mulAdd(velocity, dt);
                 if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {

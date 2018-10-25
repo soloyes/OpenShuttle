@@ -52,13 +52,6 @@ public final class PaintConstants {
     public static final String CRATE_REGION = "crate";
     public static final int CRATE_WIDTH = 128;
     public static final int CRATE_HEIGHT = 128;
-    public static final String GAME_OVER_BORDER_REGION = "screenGameOverBorder";
-    //public static final int GAME_OVER_BORDER_WIDTH = Rules.S;
-    //public static final int GAME_OVER_BORDER_HEIGHT = Rules.WORLD_HEIGHT;
-    public static final String GAME_OVER_LINE_REGION = "screenGameOverLine";
-    public static final int GAME_OVER_LINE_WIDTH = Rules.WORLD_WIDTH;
-    public static final int GAME_OVER_LINE_HEIGHT = 203;
-
     public static final String STAR16_REGION = "star16";
     public static final String JOYSTICK_REGION = "joystick";
     public static final String RADAR_REGION = "radar";

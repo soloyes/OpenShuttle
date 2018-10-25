@@ -3,55 +3,47 @@ package com.shuttle.game.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.KillingSpree;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.consumable.Consumable;
-import com.shuttle.game.bot.particle.ParticleEmitter;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
-import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
-import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.ShuttleMath;
+import com.shuttle.game.utils.Vibrator;
 
 import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class Shuttle {
-    private float zigzagEffect;
-    private float killTimer;
-    private int killSeries;
-    private TextureRegion texture;
-    private Vector2 tmp1, tmp2;
-    private Joystick joystick;
-    private ParticleEmitter engineParticleEmitter;
+public class Shuttle extends AbstractShuttle {
     private BoundCheck boundCheck;
-    private BoomBox boomBox;
-    @Getter
-    @Setter
-    private GameScreen gs;
-    @Getter
-    @Setter
-    private Vector2 position, velocity;
     @Getter
     @Setter
     private Radar radar;
     @Getter
     @Setter
-    private int width, height;
+    private GlobalInteractionLevels shieldLevel;
+    @Getter
+    @Setter
+    private LifeShield lifeShield;
+    @Getter
+    @Setter
+    private RamShield ramShield;
+    @Getter
+    @Setter
+    private Scratch scratch;
+    private float zigzagEffect;
+    private float killTimer;
+    private int killSeries;
     @Getter
     @Setter
     private float angle;
@@ -81,22 +73,6 @@ public class Shuttle {
     @Getter
     @Setter
     private boolean delayAnomaly;
-    //
-    @Getter
-    @Setter
-    private GlobalInteractionLevels shieldLevel;
-    @Getter
-    @Setter
-    private Standing standing;
-    @Getter
-    @Setter
-    private LifeShield lifeShield;
-    @Getter
-    @Setter
-    private RamShield ramShield;
-    @Getter
-    @Setter
-    private Scratch scratch;
     @Getter
     @Setter
     private boolean taken;
@@ -107,28 +83,14 @@ public class Shuttle {
     @Setter
     private boolean cameraSmooth;
     private boolean hpNotification;
+    private boolean engineStarted;
 
     public Shuttle(GameScreen gs, Joystick joystick) {
-        this.boomBox = new BoomBox();
-        this.standing = new Standing(this);
-        this.gs = gs;
-        this.engineParticleEmitter = new ParticleEmitter();
+        super(gs);
         this.joystick = joystick;
-        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_REGION);
-        this.position = new Vector2(
-                ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
-                ScreenManager.getInstance().getViewport().getWorldHeight() / 2
-        );
-        this.velocity = new Vector2();
-        this.tmp1 = new Vector2();
-
-        this.tmp2 = new Vector2();
-
-        this.width = PaintConstants.SHUTTLE_WIDTH;
-        this.height = PaintConstants.SHUTTLE_HEIGHT;
+        this.standing = new Standing(this);
         this.radar = new Radar(gs, this);
         this.boundCheck = new BoundCheck();
-
         this.lifeShield = new LifeShield(this);
         this.ramShield = new RamShield(this);
         this.scratch = new Scratch(this);
@@ -150,16 +112,12 @@ public class Shuttle {
                 standing.changeScore(-50000);
                 gs.getGameInfoSystem().setup(position.x, position.y, "Murder!\n-50000", 8.0f, false);
                 boomBox.playSound(MSConstants.KILL_ASTRONAUT);
-                if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
-                    Gdx.input.vibrate(VConstants.PLAYER_ASTRONAUT_DESTROY);
-                }
+                Vibrator.vibrate(VConstants.PLAYER_ASTRONAUT_DESTROY);
                 break;
             case CRATE:
                 gs.getGameInfoSystem().setup(position.x, position.y, "Be easy!", 3.0f, false);
                 boomBox.playSound(MSConstants.KILL_CRATE);
-                if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
-                    Gdx.input.vibrate(VConstants.PLAYER_CRATE_DESTROY);
-                }
+                Vibrator.vibrate(VConstants.PLAYER_CRATE_DESTROY);
                 break;
         }
     }
@@ -179,7 +137,7 @@ public class Shuttle {
 
     public void killPlusPlus() {
         killSeries++;
-        killTimer = 7.0f;
+        killTimer = Rules.PLAYER_KILL_TIMER;
         gs.getGameInfoSystem().setup(
                 position.x, position.y,
                 KillingSpree.getKillingSpreeFromKillsCount(killSeries).getText(),
@@ -191,7 +149,7 @@ public class Shuttle {
     public void render(SpriteBatch batch) {
         engineParticleEmitter.render(batch);
         Color tmpColor = batch.getColor();
-        if(Rules.GAME_OVER){
+        if (Rules.GAME_OVER) {
             tmpColor.a = 0.3f;
             batch.setColor(tmpColor);
         }
@@ -202,7 +160,7 @@ public class Shuttle {
                 width, height, scaleX, scaleY,
                 angle
         );
-        if(Rules.GAME_OVER){
+        if (Rules.GAME_OVER) {
             tmpColor.a = 1.0f;
             batch.setColor(tmpColor);
         }
@@ -235,9 +193,7 @@ public class Shuttle {
                         8.0f,
                         true
                 );
-                if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
-                    Gdx.input.vibrate(VConstants.PLAYER_LOST_LIVE);
-                }
+                Vibrator.vibrate(VConstants.PLAYER_LOST_LIVE);
                 boomBox.playSound(MSConstants.PLAYER_DESTROYED);
             }
             hpNotification = false;
@@ -333,12 +289,8 @@ public class Shuttle {
     }
 
     public void update(float dt) {
-        if (!taken) {
-            createFXs();
-        }
         engineParticleEmitter.update(dt);
-
-        checkKillingSpreeSeries(dt);
+        checkKillingSeries(dt);
         checkPower();
         checkZigZagEffect(dt);
         angle = ShuttleMath.checkAngleBetween0And360(angle);
@@ -349,13 +301,8 @@ public class Shuttle {
         lifeShield.update(dt);
         ramShield.update(dt);
 
-        //todo: change, coz fail on FPS ~ 10. Like with cameraSMOOOOF :)
-        velocity.scl(0.99f);
+        velocity.scl(/*FPS hack*/1.0f - dt/*FPS hack*/);
         position.mulAdd(velocity, dt);
-
-        if (!GamePreferences.isJoyStickEnabled()) {
-            joystick.setLastId(-1);
-        }
 
         if (!taken) {
             if (joystick.isActive()) {
@@ -363,7 +310,11 @@ public class Shuttle {
                 move(dt, angleToTarget);
             } else {
                 if (Gdx.input.isTouched()) {
-                    tmp1.set(Gdx.input.getX(), Gdx.input.getY());
+                    if (pointer.size() == 0) {
+                        tmp1.set(Gdx.input.getX(), Gdx.input.getY());
+                    } else {
+                        tmp1.set(Gdx.input.getX(pointer.peekLast()), Gdx.input.getY(pointer.peekLast()));
+                    }
                     ScreenManager.getInstance().getViewport().unproject(tmp1);
                     float angleToTarget = tmp1.sub(position).angle();
                     move(dt, angleToTarget);
@@ -372,7 +323,7 @@ public class Shuttle {
         }
 
         checkRadar(dt);
-        checkBounds(dt);
+        boundCheck.checkAndHandleBounds(this, dt);
 
         tmpDelayFragment += dt;
         if (tmpDelayFragment >= Rules.FRAGMENT_KICK_PRETTY_SOUND_DELAY) {
@@ -385,21 +336,13 @@ public class Shuttle {
             tmpDelayAnomaly = 0.0f;
             delayAnomaly = true;
         }
-    }
 
-    private void createFXs() {
-        if (standing.getFuel() > 0.1f && velocity.len() > 80) {
-            engineParticleEmitter.getBuilder().buildShuttleEngineFire(position, angle, 70, 1.0f);
-        } else {
-            engineParticleEmitter.getBuilder().buildShuttleLowLevelEngineFire(position, angle, 70);
-        }
-        //gs.getParticleEmitter().getBuilder().buildShuttleShield(position, angle, 90, 60, shieldLevel.getR(), shieldLevel.getG(), shieldLevel.getB());
-        if (velocity.len() > 1200.0f) {
-            gs.getParticleEmitter().getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
+        if (!taken) {
+            startEngine(dt);
         }
     }
 
-    private void checkKillingSpreeSeries(float dt) {
+    private void checkKillingSeries(float dt) {
         if (killTimer > 0.0f) {
             killTimer -= dt;
             if (killTimer <= 0.0f) {
@@ -430,13 +373,13 @@ public class Shuttle {
         }
         if (standing.getFuel() <= 0.0f) {
             standing.setFuel(0.0f);
-            velocity.scl(0.97f);
+            velocity.scl(/*FPS hack*/1.0f - dt/*FPS hack*/);
         }
     }
 
     private void move(float dt, float angleToTarget) {
         if (zigzagEffect < 0.05f) {
-            if (Math.abs(angle - angleToTarget) > 2.0f) {
+            if (Math.abs(angle - angleToTarget) > /*FPS hack*/120.0f * dt/*FPS hack*/) {
                 float dir = ShuttleMath.getRotationDirection(
                         angle,
                         angleToTarget
@@ -458,7 +401,6 @@ public class Shuttle {
             }
         }
 
-        //todo: fix parking to able work with low FPS
         float acceleration =
                 (joystick.isActive() ? joystick.getPower() : 1) * enginePower;
         velocity.add(
@@ -477,8 +419,26 @@ public class Shuttle {
         }
     }
 
-    private void checkBounds(float dt) {
-        boundCheck.checkAndHandleBounds(this, dt);
+    private void startEngine(float dt) {
+        /*FPS hack*/
+        int j = (int) (60 * dt / 2);
+        /*FPS hack*/
+        for (int i = 0; i <= j; i++) {
+            if (standing.getFuel() > 0.1f && velocity.len() > 80) {
+                engineParticleEmitter.getBuilder().buildShuttleEngineFire(position, angle,  /*FPS hack*/70 - j * 0.5f /*FPS hack*/, 1.0f, 60 * dt);
+                if (engineStarted) {
+                    boomBox.playSound(MSConstants.PLAYER_START_ENGINE);
+                    engineStarted = false;
+                }
+            } else {
+                engineParticleEmitter.getBuilder().buildShuttleLowLevelEngineFire(position, angle, 70);
+                engineStarted = true;
+            }
+            //gs.getParticleEmitter().getBuilder().buildShuttleShield(position, angle, 90, 60, shieldLevel.getR(), shieldLevel.getG(), shieldLevel.getB());
+            if (velocity.len() > 1200.0f) {
+                gs.getParticleEmitter().getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
+            }
+        }
     }
 
     public int getPushPower() {

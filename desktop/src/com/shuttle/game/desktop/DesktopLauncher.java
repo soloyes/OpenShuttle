@@ -12,8 +12,7 @@ public class DesktopLauncher {
         config.width = 540;
         config.height = 960;
         config.vSyncEnabled = true;
-        //todo: need to fix speed shuttle on 5-10FPS.
-        //config.foregroundFPS = 30;
+        //config.foregroundFPS = 10;
 
         //todo: this is for easy operate during test needed Screen, just run game with key from enum ScreenManager.ScreenType
         ScreenManager.ScreenType screenType = ScreenManager.ScreenType.MENU;
