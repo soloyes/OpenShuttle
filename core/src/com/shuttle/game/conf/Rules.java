@@ -101,6 +101,12 @@ public final class Rules {
     public static final float PLAYER_RADIAL_SPEED = 135.0f;
     //700.0f
     public static final float PLAYER_ENGINE_POWER = 700.0f;
+    //3.0f
+    private static final float PLAYER_ENGINE_POWER_FACTOR = 3.0f;
+    //
+    public static final float PLAYER_TURBO_ENGINE_POWER = PLAYER_ENGINE_POWER * PLAYER_ENGINE_POWER_FACTOR;
+    //1200.0f
+    public static final float PLAYER_TURBO_THRESHOLD_VELOCITY = 1200.0f;
     //5.0f
     public static final float PLAYER_MAX_POWER = 5.0f;
     //5.0f

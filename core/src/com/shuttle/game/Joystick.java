@@ -41,7 +41,7 @@ public class Joystick extends InputAdapter {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         this.pointer.add(pointer);
-        tmp.set(Gdx.input.getX(this.pointer.peekLast()), Gdx.input.getY(this.pointer.peekLast()));
+        setTarget();
         ScreenManager.getInstance().getViewport().unproject(tmp);
         rectangle.x = tmp.x - rectangle.width / 2;
         rectangle.y = tmp.y - rectangle.height / 2;
@@ -63,7 +63,10 @@ public class Joystick extends InputAdapter {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        tmp.set(Gdx.input.getX(this.pointer.peekLast()), Gdx.input.getY(this.pointer.peekLast()));
+        if (this.pointer.size() == 0) {
+            this.pointer.add(pointer);
+        }
+        setTarget();
         ScreenManager.getInstance().getViewport().unproject(tmp);
         if (this.pointer.size() != 0) {
             vs.x = tmp.x - joyCenterX;
@@ -73,6 +76,14 @@ public class Joystick extends InputAdapter {
             }
         }
         return true;
+    }
+
+    private void setTarget() {
+        if (this.pointer.size() == 0) {
+            tmp.set(Gdx.input.getX(), Gdx.input.getY());
+        } else {
+            tmp.set(Gdx.input.getX(this.pointer.peekLast()), Gdx.input.getY(this.pointer.peekLast()));
+        }
     }
 
     public void render(SpriteBatch batch) {
@@ -86,7 +97,7 @@ public class Joystick extends InputAdapter {
     }
 
     public boolean isActive() {
-        return !Rules.GAME_OVER && GamePreferences.isJoyStickEnabled() && this.pointer.size() > 0;
+        return this.pointer.size() > 0 && GamePreferences.isJoyStickEnabled() && !Rules.GAME_OVER;
     }
 
     public float getAngle() {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.KillingSpree;
@@ -16,9 +17,11 @@ import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.BoundCheck;
+import com.shuttle.game.utils.Fibonacci;
 import com.shuttle.game.utils.ShuttleMath;
 import com.shuttle.game.utils.Vibrator;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import lombok.Getter;
@@ -84,6 +87,9 @@ public class Shuttle extends AbstractShuttle {
     private boolean cameraSmooth;
     private boolean hpNotification;
     private boolean engineStarted;
+    private LinkedList<Integer> shadowsCoordinates;
+    private LinkedList<Vector2> vector2List;
+    private LinkedList<Float> angleList;
 
     public Shuttle(GameScreen gs, Joystick joystick) {
         super(gs);
@@ -96,6 +102,12 @@ public class Shuttle extends AbstractShuttle {
         this.scratch = new Scratch(this);
         this.taken = false;
         this.scaleX = this.scaleY = 1.0f;
+        this.shadowsCoordinates = Fibonacci.generate((int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Rules.PLAYER_ENGINE_POWER));
+        this.vector2List = new LinkedList<Vector2>();
+        for (int i = 0; i < shadowsCoordinates.size(); i++) {
+            vector2List.add(new Vector2());
+        }
+        this.angleList = new LinkedList<Float>();
     }
 
     public boolean addZigZag(float amount) {
@@ -148,7 +160,23 @@ public class Shuttle extends AbstractShuttle {
 
     public void render(SpriteBatch batch) {
         engineParticleEmitter.render(batch);
+        makeShadow();
+
         Color tmpColor = batch.getColor();
+        for (int i = 0; i < vector2List.size(); i++) {
+            tmpColor.a = 1.0f - (0.5f / (i + 1));
+            batch.setColor(tmpColor);
+            batch.draw(
+                    texture,
+                    vector2List.get(i).x, vector2List.get(i).y,
+                    width / 2, height / 2,
+                    width, height, scaleX, scaleY,
+                    angleList.get(i)
+            );
+            tmpColor.a = 1.0f;
+            batch.setColor(tmpColor);
+        }
+
         if (Rules.GAME_OVER) {
             tmpColor.a = 0.3f;
             batch.setColor(tmpColor);
@@ -168,6 +196,23 @@ public class Shuttle extends AbstractShuttle {
         lifeShield.render(batch);
         //ramShield.render(batch); - render from GameScreen with layer's order
         radar.render(batch);
+    }
+
+    private void makeShadow() {
+        float v = velocity.len() - Rules.PLAYER_ENGINE_POWER;
+        if (v >= 0) {
+            if (v <= shadowsCoordinates.getLast()) {
+                shadowsCoordinates.removeLast();
+                Vector2 tmp = position.cpy();
+                tmp.set(tmp.x - (float) Math.cos(Math.toRadians(angle)) - width / 2, tmp.y - (float) Math.sin(Math.toRadians(angle)) - height / 2);
+                vector2List.add(tmp);
+                angleList.add(angle);
+            }
+        } else {
+            vector2List.clear();
+            angleList.clear();
+            shadowsCoordinates = Fibonacci.generate((int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Rules.PLAYER_ENGINE_POWER));
+        }
     }
 
     public void resetPower() {
@@ -214,7 +259,7 @@ public class Shuttle extends AbstractShuttle {
                 boomBox.playSound(MSConstants.GET_ASTRONAUT);
                 break;
             case CRATE:
-                int x = MathUtils.random(0, 4);
+                int x = 2;//MathUtils.random(0, 4);
                 if (x == 0) {
                     standing.changeHP(Rules.CRATE_REPAIR_ADD);
                     gs.getGameInfoSystem()
@@ -241,8 +286,8 @@ public class Shuttle extends AbstractShuttle {
                 }
                 if (x == 2) {
                     velocity.add(
-                            3 * Rules.PLAYER_ENGINE_POWER * (float) Math.cos(Math.toRadians(angle)),
-                            3 * Rules.PLAYER_ENGINE_POWER * (float) Math.sin(Math.toRadians(angle))
+                            Rules.PLAYER_TURBO_ENGINE_POWER * (float) Math.cos(Math.toRadians(angle)),
+                            Rules.PLAYER_TURBO_ENGINE_POWER * (float) Math.sin(Math.toRadians(angle))
                     );
                     gs.getGameInfoSystem()
                             .setup(
@@ -435,7 +480,7 @@ public class Shuttle extends AbstractShuttle {
                 engineStarted = true;
             }
             //gs.getParticleEmitter().getBuilder().buildShuttleShield(position, angle, 90, 60, shieldLevel.getR(), shieldLevel.getG(), shieldLevel.getB());
-            if (velocity.len() > 1200.0f) {
+            if (velocity.len() > Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                 gs.getParticleEmitter().getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
             }
         }
