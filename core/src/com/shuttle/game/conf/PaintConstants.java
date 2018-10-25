@@ -6,8 +6,13 @@ package com.shuttle.game.conf;
  */
 public final class PaintConstants {
     public static final String SHUTTLE_REGION = "shuttle";
+    public static final String SHUTTLE_BLUR_REGION_1 = "shuttleBlur1";
+    public static final String SHUTTLE_BLUR_REGION_2 = "shuttleBlur2";
+    public static final String SHUTTLE_BLUR_REGION_3 = "shuttleBlur3";
     public static final int SHUTTLE_WIDTH = 256;
     public static final int SHUTTLE_HEIGHT = 256;
+    public static final int SHUTTLE_BLUR_WIDTH = 256;
+    public static final int SHUTTLE_BLUR_HEIGHT = 256;
     public static final String SHUTTLE_LIFE_SHIELD = "lifeShield";
     public static final int SHUTTLE_LIFE_SHIELD_WIDTH = 256;
     public static final int SHUTTLE_LIFE_SHIELD_HEIGHT = 256;

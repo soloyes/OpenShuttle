@@ -78,18 +78,14 @@ public class Shuttle extends AbstractShuttle {
     private boolean delayAnomaly;
     @Getter
     @Setter
-    private boolean taken;
-    @Getter
-    @Setter
-    private float scaleX, scaleY;
-    @Getter
-    @Setter
     private boolean cameraSmooth;
     private boolean hpNotification;
     private boolean engineStarted;
     private LinkedList<Integer> shadowsCoordinates;
     private LinkedList<Vector2> vector2List;
     private LinkedList<Float> angleList;
+    private LinkedList<Float> alphaList;
+    private int F;
 
     public Shuttle(GameScreen gs, Joystick joystick) {
         super(gs);
@@ -100,14 +96,11 @@ public class Shuttle extends AbstractShuttle {
         this.lifeShield = new LifeShield(this);
         this.ramShield = new RamShield(this);
         this.scratch = new Scratch(this);
-        this.taken = false;
-        this.scaleX = this.scaleY = 1.0f;
-        this.shadowsCoordinates = Fibonacci.generate((int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Rules.PLAYER_ENGINE_POWER));
+        this.F = 2 * (int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Rules.PLAYER_ENGINE_POWER);
+        this.shadowsCoordinates = Fibonacci.generate(F);
         this.vector2List = new LinkedList<Vector2>();
-        for (int i = 0; i < shadowsCoordinates.size(); i++) {
-            vector2List.add(new Vector2());
-        }
         this.angleList = new LinkedList<Float>();
+        this.alphaList = new LinkedList<Float>();
     }
 
     public boolean addZigZag(float amount) {
@@ -160,17 +153,17 @@ public class Shuttle extends AbstractShuttle {
 
     public void render(SpriteBatch batch) {
         engineParticleEmitter.render(batch);
-        makeShadow();
-
         Color tmpColor = batch.getColor();
+
         for (int i = 0; i < vector2List.size(); i++) {
-            tmpColor.a = 1.0f - (0.5f / (i + 1));
+            tmpColor.a = alphaList.get(i);
             batch.setColor(tmpColor);
+            int t = i < 3 ? 3 : i < 7 ? 2 : i <= vector2List.size() ? 1 : 1;
             batch.draw(
-                    texture,
+                    textureRegion[t],
                     vector2List.get(i).x, vector2List.get(i).y,
-                    width / 2, height / 2,
-                    width, height, scaleX, scaleY,
+                    widthBlur / 2, heightBlur / 2,
+                    widthBlur, heightBlur, scaleXBlur, scaleYBlur,
                     angleList.get(i)
             );
             tmpColor.a = 1.0f;
@@ -182,7 +175,7 @@ public class Shuttle extends AbstractShuttle {
             batch.setColor(tmpColor);
         }
         batch.draw(
-                texture,
+                textureRegion[!Rules.GAME_OVER ? 0 : 1],
                 position.x - width / 2, position.y - height / 2,
                 width / 2, height / 2,
                 width, height, scaleX, scaleY,
@@ -192,26 +185,11 @@ public class Shuttle extends AbstractShuttle {
             tmpColor.a = 1.0f;
             batch.setColor(tmpColor);
         }
-        scratch.render(batch);
-        lifeShield.render(batch);
         //ramShield.render(batch); - render from GameScreen with layer's order
-        radar.render(batch);
-    }
-
-    private void makeShadow() {
-        float v = velocity.len() - Rules.PLAYER_ENGINE_POWER;
-        if (v >= 0) {
-            if (v <= shadowsCoordinates.getLast()) {
-                shadowsCoordinates.removeLast();
-                Vector2 tmp = position.cpy();
-                tmp.set(tmp.x - (float) Math.cos(Math.toRadians(angle)) - width / 2, tmp.y - (float) Math.sin(Math.toRadians(angle)) - height / 2);
-                vector2List.add(tmp);
-                angleList.add(angle);
-            }
-        } else {
-            vector2List.clear();
-            angleList.clear();
-            shadowsCoordinates = Fibonacci.generate((int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Rules.PLAYER_ENGINE_POWER));
+        if (!Rules.GAME_OVER) {
+            scratch.render(batch);
+            lifeShield.render(batch);
+            radar.render(batch);
         }
     }
 
@@ -259,7 +237,12 @@ public class Shuttle extends AbstractShuttle {
                 boomBox.playSound(MSConstants.GET_ASTRONAUT);
                 break;
             case CRATE:
-                int x = 2;//MathUtils.random(0, 4);
+                int x = MathUtils.random(0, 4);
+                /*Hack to pretty shadow effect. This effect should be finished firstly*/
+                if (velocity.len() >= Rules.PLAYER_ENGINE_POWER) {
+                    x++;
+                }
+                /*Hack*/
                 if (x == 0) {
                     standing.changeHP(Rules.CRATE_REPAIR_ADD);
                     gs.getGameInfoSystem()
@@ -334,6 +317,7 @@ public class Shuttle extends AbstractShuttle {
     }
 
     public void update(float dt) {
+        makeShadow(dt);
         engineParticleEmitter.update(dt);
         checkKillingSeries(dt);
         checkPower();
@@ -384,6 +368,35 @@ public class Shuttle extends AbstractShuttle {
 
         if (!taken) {
             startEngine(dt);
+        }
+    }
+
+    private void makeShadow(float dt) {
+        float v = velocity.len() - Rules.PLAYER_ENGINE_POWER;
+        if (v >= 0) {
+            if (v <= shadowsCoordinates.getLast()) {
+                shadowsCoordinates.removeLast();
+                Vector2 tmp = position.cpy();
+                tmp.set(tmp.x - (float) Math.cos(Math.toRadians(angle)) - width / 2, tmp.y - (float) Math.sin(Math.toRadians(angle)) - height / 2);
+                vector2List.add(tmp);
+                angleList.add(angle);
+                int i = vector2List.size() - 1;
+                alphaList.add(1.0f - (0.7f / (i / 2 + 1)));
+            }
+        } else {
+            for (int i = 0; i < alphaList.size(); i++) {
+                float t = alphaList.get(i) - dt;
+                if (t <= 0.0f) {
+                    t = 0.0f;
+                }
+                alphaList.set(i, t);
+                if (alphaList.get(alphaList.size() - 1) == 0.0f) {
+                    vector2List.clear();
+                    angleList.clear();
+                    alphaList.clear();
+                    shadowsCoordinates = Fibonacci.generate(F);
+                }
+            }
         }
     }
 
@@ -469,14 +482,14 @@ public class Shuttle extends AbstractShuttle {
         int j = (int) (60 * dt / 2);
         /*FPS hack*/
         for (int i = 0; i <= j; i++) {
-            if (standing.getFuel() > 0.1f && velocity.len() > 80) {
+            if (standing.getFuel() > 0.1f && velocity.len() > 80 && !Rules.GAME_OVER) {
                 engineParticleEmitter.getBuilder().buildShuttleEngineFire(position, angle,  /*FPS hack*/70 - j * 0.5f /*FPS hack*/, 1.0f, 60 * dt);
                 if (engineStarted) {
                     boomBox.playSound(MSConstants.PLAYER_START_ENGINE);
                     engineStarted = false;
                 }
             } else {
-                engineParticleEmitter.getBuilder().buildShuttleLowLevelEngineFire(position, angle, 70);
+                engineParticleEmitter.getBuilder().buildShuttleLowLevelEngineFire(position, angle, 80);
                 engineStarted = true;
             }
             //gs.getParticleEmitter().getBuilder().buildShuttleShield(position, angle, 90, 60, shieldLevel.getR(), shieldLevel.getG(), shieldLevel.getB());

@@ -94,37 +94,58 @@ scratch
   orig: 640, 128
   offset: 0, 0
   index: -1
-lifeShield
+shuttleBlur2
   rotate: false
   xy: 3594, 260
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-fuel
+lifeShield
   rotate: false
   xy: 3724, 260
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-HP
+shuttleBlur3
   rotate: false
   xy: 3854, 260
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-ramShield
+fuel
   rotate: false
   xy: 3080, 774
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-shuttle
+HP
   rotate: false
   xy: 3338, 774
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+shuttleBlur1
+  rotate: false
+  xy: 3854, 516
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+ramShield
+  rotate: false
+  xy: 3596, 774
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+shuttle
+  rotate: false
+  xy: 3726, 774
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

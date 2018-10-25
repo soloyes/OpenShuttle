@@ -77,8 +77,8 @@ public class MenuBar extends Group {
                 //
 
                 if (!group.isEmptyUserName()) {
+                    group.getFile().writeString(group.getUsername().getText(), false);
                     ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
-                    group.getFile().writeString(group.getUserName().getText(), false);
                 }
             }
         });

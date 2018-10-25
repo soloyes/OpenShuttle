@@ -26,7 +26,7 @@ public class MenuGroup extends Group {
     private boolean isEmptyUserName;
     @Getter
     @Setter
-    private TextField userName;
+    private TextField username;
     private Skin skin;
     @Getter
     @Setter
@@ -38,41 +38,38 @@ public class MenuGroup extends Group {
         this.skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.font96 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
         this.file = Gdx.files.local("username");
-        this.userName = new TextField(
+        this.username = new TextField(
                 "",
                 skin,
                 "login");
 
-        userName.setPosition(
+        username.setPosition(
                 ScreenManager.getInstance().getViewport().getWorldWidth() / 4,
                 ScreenManager.getInstance().getViewport().getWorldHeight() / 2
         );
-        userName.setMaxLength(10);
-        userName.setWidth(ScreenManager.getInstance().getViewport().getWorldWidth() / 2);
+        username.setMaxLength(10);
+        username.setWidth(ScreenManager.getInstance().getViewport().getWorldWidth() / 2);
 
-        userName.addListener(new ChangeListener() {
+        username.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                isEmptyUserName = userName.getText().isEmpty();
+                isEmptyUserName = username.getText().isEmpty();
             }
         });
 
         if (file.exists()) {
-            userName.setText(file.readString());
+            username.setText(file.readString());
         }
 
-        //todo: delete soon
-        this.userName.setText("Player");
-        //
-        isEmptyUserName = userName.getText().isEmpty();
+        isEmptyUserName = username.getText().isEmpty();
 
-        this.addActor(userName);
+        this.addActor(username);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         font96.draw(batch, "Shuttle", 0, 1800, 1080, 1, false);
-        userName.draw(batch, parentAlpha);
+        username.draw(batch, parentAlpha);
         if (isEmptyUserName) {
             font96.draw(batch, "Empty username", 0, 900, 1080, 1, false);
         }

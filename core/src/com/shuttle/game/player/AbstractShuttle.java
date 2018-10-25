@@ -30,7 +30,7 @@ public class AbstractShuttle implements InputProcessor {
     @Getter
     @Setter
     protected Standing standing;
-    protected TextureRegion texture;
+    protected TextureRegion[] textureRegion;
     protected Vector2 tmp1, tmp2;
     @Getter
     @Setter
@@ -38,13 +38,29 @@ public class AbstractShuttle implements InputProcessor {
     @Getter
     @Setter
     protected int width, height;
+    @Getter
+    @Setter
+    protected boolean taken;
+    @Getter
+    @Setter
+    protected float scaleX, scaleY;
+    @Getter
+    @Setter
+    protected float scaleXBlur, scaleYBlur;
+    @Getter
+    @Setter
+    protected int widthBlur, heightBlur;
 
     protected AbstractShuttle(GameScreen gs) {
         this.pointer = new LinkedList<Integer>();
         this.boomBox = new BoomBox();
         this.gs = gs;
         this.engineParticleEmitter = new ParticleEmitter();
-        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_REGION);
+        this.textureRegion = new TextureRegion[4];
+        this.textureRegion[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_REGION);
+        this.textureRegion[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_BLUR_REGION_1);
+        this.textureRegion[2] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_BLUR_REGION_2);
+        this.textureRegion[3] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_BLUR_REGION_3);
         this.position = new Vector2(
                 ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
                 ScreenManager.getInstance().getViewport().getWorldHeight() / 2
@@ -54,6 +70,11 @@ public class AbstractShuttle implements InputProcessor {
         this.tmp2 = new Vector2();
         this.width = PaintConstants.SHUTTLE_WIDTH;
         this.height = PaintConstants.SHUTTLE_HEIGHT;
+        this.widthBlur = PaintConstants.SHUTTLE_BLUR_WIDTH;
+        this.heightBlur = PaintConstants.SHUTTLE_BLUR_HEIGHT;
+        this.taken = false;
+        this.scaleX = this.scaleY = 1.0f;
+        this.scaleXBlur = this.scaleYBlur = 1.0f;
     }
 
     @Override
