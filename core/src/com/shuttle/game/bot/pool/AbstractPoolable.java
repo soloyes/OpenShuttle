@@ -39,6 +39,9 @@ public abstract class AbstractPoolable implements Poolable {
     @Getter
     @Setter
     protected float scaleX, scaleY;
+    @Getter
+    @Setter
+    protected float saveScaleX, saveScaleY;
     @Setter
     protected float frame;
     protected float angle, rotationSpeed;
@@ -46,9 +49,6 @@ public abstract class AbstractPoolable implements Poolable {
     @Getter
     @Setter
     protected int level;
-    @Getter
-    @Setter
-    protected float saveScaleX, saveScaleY;
     @Getter
     @Setter
     protected boolean taken;
@@ -131,6 +131,6 @@ public abstract class AbstractPoolable implements Poolable {
     public abstract Vector2 getPosition();
 
     public enum Type {
-        CORROSIVE, ELECTRIC, MAGNETIC, RADIATION, ASTEROID, ASTRONAUT, CRATE;
+        CORROSIVE, ELECTRIC, MAGNETIC, RADIATION, ASTEROID, ASTRONAUT, CRATE
     }
 }

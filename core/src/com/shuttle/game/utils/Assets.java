@@ -6,7 +6,6 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -34,7 +33,7 @@ public class Assets {
         switch (type) {
             case MENU:
                 assetManager.load(MSConstants.MENU_MUSIC, Music.class);
-                assetManager.load(MSConstants.BLACKHOLE_ROAR, Music.class);
+                assetManager.load(MSConstants.BLACKHOLE_ROAR_MUSIC, Music.class);
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
 
@@ -48,7 +47,10 @@ public class Assets {
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
                 assetManager.load(MSConstants.MENU_MUSIC, Music.class);
                 assetManager.load(MSConstants.GAME_MUSIC, Music.class);
-                assetManager.load(MSConstants.BLACKHOLE_ROAR, Music.class);
+                assetManager.load(MSConstants.BLACKHOLE_ROAR_MUSIC, Music.class);
+                assetManager.load(MSConstants.RADAR_WHITE_NOISE_MUSIC, Music.class);
+                assetManager.load(MSConstants.HUM_1, Music.class);
+                assetManager.load(MSConstants.HUM_2, Music.class);
                 assetManager.load(MSConstants.BUTTON_SOUND, Sound.class);
                 assetManager.load(MSConstants.PAUSE_SOUND, Sound.class);
                 assetManager.load(MSConstants.ANOMALY_CORROSIVE_DESTROY, Sound.class);
@@ -74,6 +76,9 @@ public class Assets {
                 assetManager.load(MSConstants.PLAYER_DESTROYED, Sound.class);
                 assetManager.load(MSConstants.PLAYER_REPAIR, Sound.class);
                 assetManager.load(MSConstants.PLAYER_OUT_OF_SCREEN, Sound.class);
+                assetManager.load(MSConstants.PLAYER_START_ENGINE, Sound.class);
+                assetManager.load(MSConstants.ANOMALY_BURSTING, Sound.class);
+                assetManager.load(MSConstants.ANOMALY_FLUSH, Sound.class);
                 assetManager.load(MSConstants.PLAYER_START_ENGINE, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 createStdFont(32, "");

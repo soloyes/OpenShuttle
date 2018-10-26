@@ -85,7 +85,7 @@ public class BoundCheck {
                     3,
                     true
             );
-            //boomBox.playSound(MSConstants.PLAYER_OUT_OF_SCREEN);
+            boomBox.playSound(MSConstants.PLAYER_OUT_OF_SCREEN);
             player.getGs().getShake().shake(duration, 35, 10);
             Vibrator.vibrate(VConstants.PLAYER_OUT_OF_SCREEN);
         }

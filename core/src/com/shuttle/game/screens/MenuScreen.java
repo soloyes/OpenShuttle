@@ -21,7 +21,7 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        boomBox.stopAllMusicAndPlay(MSConstants.MENU_MUSIC);
+        boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_MUSIC);
     }
 
     @Override

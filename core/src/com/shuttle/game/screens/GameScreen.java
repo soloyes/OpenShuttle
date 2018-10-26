@@ -85,6 +85,7 @@ public class GameScreen extends BaseScreen {
     @Getter
     @Setter
     private GameInfoSystem gameInfoSystem;
+    @Getter
     private PauseGroup pauseGroup;
     private Joystick joystick;
     private PlayerPointer playerPointer;
@@ -123,7 +124,7 @@ public class GameScreen extends BaseScreen {
         gameOverDeactivate = false;
         shaderManager = new ShaderManager();
         anomalyTimer = new AnomalyTimer(this);
-        boomBox.stopAllMusicAndPlay(MSConstants.GAME_MUSIC, MSConstants.BLACKHOLE_ROAR);
+        boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_MUSIC, MSConstants.BLACKHOLE_ROAR_MUSIC);
         fbo = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(),
                 Gdx.graphics.getHeight(), false);
         fboTexRegion = new TextureRegion(fbo.getColorBufferTexture());
@@ -145,7 +146,7 @@ public class GameScreen extends BaseScreen {
 
         blackhole = new Blackhole();
         player = new Shuttle(this, joystick);
-        BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+        BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), (int)Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         playerPointer = new PlayerPointer(player);
         Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel(player);
         gameOver = new GameOver(this);
@@ -166,7 +167,7 @@ public class GameScreen extends BaseScreen {
         } else {
             v = 1 - player.getPosition().dst(blackhole.getPosition()) / Rules.BLACKHOLE_ROAR_RANGE;
         }
-        boomBox.setMusicEffectVolume(MSConstants.BLACKHOLE_ROAR, v);
+        boomBox.setMusicEffectVolume(MSConstants.BLACKHOLE_ROAR_MUSIC, v);
     }
 
     @Override
@@ -258,7 +259,7 @@ public class GameScreen extends BaseScreen {
 
         Color tmpColor = batch.getColor();
         if (Rules.GAME_OVER) {
-            boomBox.stopAllMusicAndPlayOnce(MSConstants.MENU_MUSIC);
+            boomBox.stopAllMusicAndPlayThis(MSConstants.MENU_MUSIC);
             pauseGroup.setGameOver();
             fadeInAlpha += dt / 2;
             if (fadeInAlpha >= 1.0f)
@@ -301,6 +302,7 @@ public class GameScreen extends BaseScreen {
             gameInfoSystem.update(dt);
             playerPointer.update(dt);
             if (!Rules.GAME_OVER) {
+                boomBox.playRandomMusicEffects(dt);
                 checkCollision(dt);
             } else {
                 gameOver.update(dt);
@@ -648,7 +650,7 @@ public class GameScreen extends BaseScreen {
             player.getScratch().setScaleY(scaleY);
             player.setAngle(player.getAngle() + 365 * dt);
             if (blackhole.getPosition().dst(player.getPosition()) <= Rules.BLACKHOLE_EVENT_HORIZON) {
-                BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+                BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), (int)Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
                 player.setScaleX(1.0f);
                 player.setScaleY(1.0f);
                 player.getRamShield().setScaleX(1.0f);
@@ -693,16 +695,16 @@ public class GameScreen extends BaseScreen {
     }
     ///
 
-    private void damageToAnomaly(AbstractPoolable anomaly) {
-        anomaly.destroy();
+    private void damageToAnomaly(AbstractPoolable abstractPoolable) {
+        abstractPoolable.destroy();
         player.getRamShield().blink(1.0f);
-        int asc = (anomaly.getLevel()) * Rules.ANOMALIES_BASE_SCORE_ADD;
+        int asc = (abstractPoolable.getLevel()) * Rules.ANOMALIES_BASE_SCORE_ADD;
         player.getStanding().changeScore(asc);
-        player.slowDown(anomaly.getLevel() * 50.0f);
-        player.changePower(-anomaly.getLevel());
-        anomaly.showSprayCollision(particleEmitter);
-        player.killPlusPlus();
-        player.getStanding().addToStatistics(anomaly.getType(), anomaly.getLevel());
+        player.slowDown(abstractPoolable.getLevel() * 50.0f);
+        player.changePower(-abstractPoolable.getLevel());
+        abstractPoolable.showSprayCollision(particleEmitter);
+        player.killPlusPlus(abstractPoolable);
+        player.getStanding().addToStatistics(abstractPoolable.getType(), abstractPoolable.getLevel());
     }
 
     private void damageToPlayer(AbstractPoolable anomaly) {

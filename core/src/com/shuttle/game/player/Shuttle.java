@@ -10,6 +10,7 @@ import com.shuttle.game.Joystick;
 import com.shuttle.game.KillingSpree;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.consumable.Consumable;
+import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
@@ -144,15 +145,25 @@ public class Shuttle extends AbstractShuttle {
         power += amount;
     }
 
-    public void killPlusPlus() {
-        killSeries++;
-        killTimer = Rules.PLAYER_KILL_TIMER;
-        gs.getGameInfoSystem().setup(
-                position.x, position.y,
-                KillingSpree.getKillingSpreeFromKillsCount(killSeries).getText(),
-                KillingSpree.getKillingSpreeFromKillsCount(killSeries).getTextSizeModifier(),
-                false
-        );
+    public void killPlusPlus(AbstractPoolable abstractPoolable) {
+        if (abstractPoolable.getLevel() != 0) {
+            killSeries++;
+            killTimer = Rules.PLAYER_KILL_TIMER;
+            gs.getGameInfoSystem().setup(
+                    position.x, position.y,
+                    KillingSpree.getKillingSpreeFromKillsCount(killSeries).getText(),
+                    KillingSpree.getKillingSpreeFromKillsCount(killSeries).getTextSizeModifier(),
+                    false
+            );
+        } else {
+            gs.getGameInfoSystem().setup(
+                    position.x, position.y,
+                    KillingSpree.getKillingSpreeFromKillsCount(0).getText(),
+                    KillingSpree.getKillingSpreeFromKillsCount(0).getTextSizeModifier(),
+                    false
+            );
+        }
+
     }
 
     public void render(SpriteBatch batch) {
@@ -247,6 +258,11 @@ public class Shuttle extends AbstractShuttle {
                     x++;
                 }
                 /*Hack*/
+                /*Hack to prevent useless hp additions*/
+                if (x == 0 && standing.getHp() == standing.getMaxHp()) {
+                    x++;
+                }
+                /*Hack*/
                 if (x == 0) {
                     standing.changeHP(Rules.CRATE_REPAIR_ADD);
                     gs.getGameInfoSystem()
@@ -304,6 +320,7 @@ public class Shuttle extends AbstractShuttle {
                                     8.0f,
                                     true
                             );
+                    boomBox.playSound(MSConstants.ANOMALY_FLUSH);
                 }
                 if (x > 3) {
                     gs.getGameInfoSystem()
@@ -323,7 +340,7 @@ public class Shuttle extends AbstractShuttle {
     public void update(float dt) {
         makeShadow(dt);
         engineParticleEmitter.update(dt);
-        checkKillingSeries(dt);
+        checkSeries(dt);
         checkPower();
         checkZigZagEffect(dt);
         angle = ShuttleMath.checkAngleBetween0And360(angle);
@@ -405,7 +422,7 @@ public class Shuttle extends AbstractShuttle {
         }
     }
 
-    private void checkKillingSeries(float dt) {
+    private void checkSeries(float dt) {
         if (killTimer > 0.0f) {
             killTimer -= dt;
             if (killTimer <= 0.0f) {

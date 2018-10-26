@@ -24,12 +24,11 @@ public final class Rules {
     public static final float CONSUMABLE_RESPAWN_TIME = 6.0f;
     //10000
     public static final int CONSUMABLE_BASE_SCORE_ADD = 10000;
-    //
     //ANOMALY
-    //0.1f
-    public static final float ANOMALIES_BOOM_MIN_DELAY = 0.1f;
-    //0.25f
-    public static final float ANOMALIES_BOOM_MAX_DELAY = 0.25f;
+    //0.15f
+    public static final float ANOMALIES_BOOM_MIN_DELAY = 0.15f;
+    //0.3f
+    public static final float ANOMALIES_BOOM_MAX_DELAY = 0.3f;
     //2
     public static final int ANOMALIES_CORROSIVE_AT_START = 2;
     //0
@@ -89,11 +88,9 @@ public final class Rules {
     public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
     //60.0f
     public static final float ANOMALIES_CORROSIVE_VELOCITY = 60.0f;
-    //
     //ASTEROID
     //4.0f
     public static final float ASTEROID_RESPAWN_TIME = 4.0f;
-    //
     //PLAYER
     //500
     public static final int PLAYER_TAKE_RANGE = 500;
@@ -101,10 +98,6 @@ public final class Rules {
     public static final float PLAYER_RADIAL_SPEED = 135.0f;
     //700.0f
     public static final float PLAYER_ENGINE_POWER = 700.0f;
-    //3.0f
-    private static final float PLAYER_ENGINE_POWER_FACTOR = 3.0f;
-    //
-    public static final float PLAYER_TURBO_ENGINE_POWER = PLAYER_ENGINE_POWER * PLAYER_ENGINE_POWER_FACTOR;
     //1200.0f
     public static final float PLAYER_TURBO_THRESHOLD_VELOCITY = 1200.0f;
     //5.0f
@@ -133,12 +126,14 @@ public final class Rules {
     //2
     public static final int CRATE_REPAIR_ADD = 2;
     //BLACKHOLE
-    //250
-    public static final int BLACKHOLE_TAKE_RANGE = 250;
+    //750
+    private static int BLACKHOLE_ROAR_FACTOR = 750;
+    //
+    public static final float BLACKHOLE_TAKE_RANGE = BLACKHOLE_ROAR_FACTOR / 3;
     //
     public static int BLACKHOLE_ROAR_RANGE;
-    //500
-    public static int BLACKHOLE_NOIZE_RANGE = 500;
+    //
+    public static float BLACKHOLE_NOISE_RANGE = 2 * BLACKHOLE_TAKE_RANGE;
     //20
     public static final int BLACKHOLE_EVENT_HORIZON = 20;
     //200
@@ -155,16 +150,21 @@ public final class Rules {
     public static final float FRAGMENT_KICK_PRETTY_SOUND_DELAY = 0.1f;
     //0.5f
     public static final float ANOMALY_KICK_PRETTY_SOUND_DELAY = 0.5f;
+    //MUSIC
+    //2
+    public static final int MUSIC_EFFECT_PROBABILITY = 2;
     //CAMERA
     //1500.0f
     public static final float CAMERA_SMOOTH_VELOCITY = 1500.0f;
-    //600
-    private static int BLACKHOLE_ROAR_FACTOR = 600;
     //RADAR
     //0.4f
-    public static float RADAR_OSCILLATION_FACTOR = 0.3f;
+    public static float RADAR_OSCILLATION_FACTOR = 0.4f;
     //2.5f
     public static float RADAR_OSCILLATION_FREQUENCY = 2.5f;
+    //3.0f
+    private static final float PLAYER_ENGINE_POWER_FACTOR = 3.0f;
+    //
+    public static final float PLAYER_TURBO_ENGINE_POWER = PLAYER_ENGINE_POWER * PLAYER_ENGINE_POWER_FACTOR;
     //SPACE
     //600
     private static final int STARS = 600;
@@ -184,7 +184,7 @@ public final class Rules {
                 player.getStanding().setFuel(250);
                 player.getStanding().setHp(25);
                 player.getStanding().setMaxHp(25);
-                player.getStanding().setLives(3);
+                player.getStanding().setLives(1);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
@@ -192,8 +192,8 @@ public final class Rules {
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(true);
                 //player.getGun().setActive(true);
-                player.getStanding().setPlayingLevel(27);
-                player.getStanding().setScoreToLive(SCORE_TO_LIVE);
+                player.getStanding().setPlayingLevel(24);
+                player.getStanding().setScoreToLive(SCORE_TO_LIVE * 4);
             }
         },
         MEDIUM {
@@ -241,7 +241,7 @@ public final class Rules {
                 player.getStanding().setFuel(100);
                 player.getStanding().setHp(10);
                 player.getStanding().setMaxHp(10);
-                player.getStanding().setLives(2);
+                player.getStanding().setLives(3);
                 player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);

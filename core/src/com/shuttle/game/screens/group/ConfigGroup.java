@@ -136,7 +136,7 @@ public class ConfigGroup extends Group {
                 boolean enabled = musicCheckBox.isChecked();
                 GamePreferences.setMusicEnabled(enabled);
                 boomBox.setAllMusicVolume(GamePreferences.getMusicVolume());
-                boomBox.stopAllMusicAndPlay(MSConstants.MENU_MUSIC);
+                boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_MUSIC);
             }
         });
 

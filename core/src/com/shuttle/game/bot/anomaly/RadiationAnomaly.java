@@ -55,9 +55,9 @@ public class RadiationAnomaly extends AbstractAnomaly {
         this.eat = false;
         this.hungryTimer = 0.0f;
         this.born = false;
-        this.level = 1;
-        this.scaleX = this.saveScaleX = 1 + level * 0.15f;
-        this.scaleY = this.saveScaleY = 1 + level * 0.15f;
+        this.level = -2;
+        this.scaleX = this.saveScaleX = 1.0f;
+        this.scaleY = this.saveScaleY = 1.0f;
         this.taken = true;
         this.color.a = 0.0f;
         this.v = MathUtils.random(

@@ -9,14 +9,16 @@ import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.consumable.Consumable;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
 import com.shuttle.game.bot.pool.AbstractPoolable;
+import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.BoomBox;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 /**
@@ -40,6 +42,7 @@ public class Radar {
     private boolean oscillator;
     private float o;
     private Color color;
+    private BoomBox boomBox;
 
     public Radar(GameScreen gs, Shuttle player) {
         this.gs = gs;
@@ -55,6 +58,7 @@ public class Radar {
         this.oscillator = true;
         this.o = 0.0f;
         this.color = new Color(Color.valueOf(PaintConstants.BACKGROUND_COLOR_HEX));
+        this.boomBox = new BoomBox();
     }
 
     //Prevent generation near blackhole
@@ -113,9 +117,9 @@ public class Radar {
     }
 
     private Color setPointColor(AbstractPoolable abstractPoolable) {
-        float d1 = Vector2.dst(player.getPosition().x, player.getPosition().y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
+        float d = Vector2.dst(player.getPosition().x, player.getPosition().y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
         int c;
-        if (d1 <= Rules.BLACKHOLE_NOIZE_RANGE) {
+        if (d <= Rules.BLACKHOLE_NOISE_RANGE && !gs.getPauseGroup().isPause()) {
             c = MathUtils.random(-1, 4);
             if (MathUtils.random(0, 100) <= 60) {
                 return color;
@@ -139,6 +143,23 @@ public class Radar {
         }
     }
 
+    public void update(float dt) {
+        if (active) {
+            updateRadar(dt);
+            float d = Vector2.dst(player.getPosition().x, player.getPosition().y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
+            if (d < Rules.BLACKHOLE_NOISE_RANGE) {
+                if (!player.isTaken())
+                    boomBox.playMusicEffectInLoop(MSConstants.RADAR_WHITE_NOISE_MUSIC, GamePreferences.getSoundVolume());
+                else boomBox.stopMusicEffect(MSConstants.RADAR_WHITE_NOISE_MUSIC);
+            } else {
+                boomBox.stopMusicEffect(MSConstants.RADAR_WHITE_NOISE_MUSIC);
+            }
+        } else {
+            rotation += dt;
+            scaleX = (float) Math.sin(Math.toRadians(rotation * 100));
+        }
+    }
+
     private void updateRadar(float dt) {
         if (oscillator) {
             o += Rules.RADAR_OSCILLATION_FREQUENCY * dt;
@@ -152,15 +173,6 @@ public class Radar {
                 o = -Rules.RADAR_OSCILLATION_FACTOR;
                 oscillator = true;
             }
-        }
-    }
-
-    public void update(float dt) {
-        if (!active) {
-            rotation += dt;
-            scaleX = (float) Math.sin(Math.toRadians(rotation * 100));
-        } else {
-            updateRadar(dt);
         }
     }
 }

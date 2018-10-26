@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.conf.Rules;
@@ -20,6 +21,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     @Getter
     @Setter
     private float slimTimer;
+    private float slim;
     private int glowWidth, glowHeight;
     private boolean oscillator;
 
@@ -47,6 +49,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     public void init(float x, float y) {
         this.hungryTimer = 0;
         this.slimTimer = 0;
+        this.slim = Rules.ANOMALIES_CORROSIVE_SLIM_TIME + MathUtils.random(0,5);
         this.boomTimer = 0;
         this.boomDelay = MathUtils.random(Rules.ANOMALIES_BOOM_MIN_DELAY, Rules.ANOMALIES_BOOM_MAX_DELAY);
         this.hungry = true;
@@ -105,7 +108,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
             if (activated) {
                 slimTimer += dt;
             }
-            if (slimTimer > Rules.ANOMALIES_CORROSIVE_SLIM_TIME) {
+            if (slimTimer > slim) {
                 slimTimer = 0;
                 if (level > 0) {
                     takeDamage(1);
@@ -126,6 +129,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 if (boomTimer >= boomDelay) {
                     destroy();
                     showSprayBoom(gs.getParticleEmitter());
+                    boomBox.playSound(MSConstants.ANOMALY_BURSTING);
                 }
             }
 

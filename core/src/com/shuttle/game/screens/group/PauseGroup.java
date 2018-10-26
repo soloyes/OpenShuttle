@@ -95,9 +95,9 @@ public class PauseGroup extends Group {
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
                 pause = !pause;
                 if (pause) {
-                    boomBox.stopAllMusicAndPlay(MSConstants.MENU_MUSIC);
+                    boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_MUSIC);
                 } else {
-                    boomBox.stopAllMusicAndPlay(MSConstants.GAME_MUSIC, MSConstants.BLACKHOLE_ROAR);
+                    boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_MUSIC, MSConstants.BLACKHOLE_ROAR_MUSIC);
                 }
                 configGroup.setVisible(pause);
                 buttonMenu.setVisible(pause);
