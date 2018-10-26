@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.consumable.Consumable;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
+import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
@@ -15,6 +16,7 @@ import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 /**
@@ -37,6 +39,7 @@ public class Radar {
     private float rotation;
     private boolean oscillator;
     private float o;
+    private Color color;
 
     public Radar(GameScreen gs, Shuttle player) {
         this.gs = gs;
@@ -51,6 +54,7 @@ public class Radar {
         this.generatePosition();
         this.oscillator = true;
         this.o = 0.0f;
+        this.color = new Color(Color.valueOf(PaintConstants.BACKGROUND_COLOR_HEX));
     }
 
     //Prevent generation near blackhole
@@ -73,7 +77,9 @@ public class Radar {
 
     public void render(SpriteBatch batch) {
         if (active) {
-            drawRadar(batch);
+            if (!player.isTaken()) {
+                drawRadar(batch);
+            }
         } else {
             batch.draw(backgroundTexture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, scaleX, scaleY, 0);
         }
@@ -82,60 +88,55 @@ public class Radar {
     private void drawRadar(SpriteBatch batch) {
         for (int i = 0; i < gs.getCorrosiveAnomalyEmitter().getActiveList().size(); i++) {
             CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) gs.getCorrosiveAnomalyEmitter().getActiveList().get(i);
-            float d = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpAnomaly.getPosition().x, tmpAnomaly.getPosition().y);
-            if (d < 2000.0f) {
-                float sc = (1.0f - d / 2000f) * 2 + 2.0f + o;
-                tmp.set(tmpAnomaly.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
-                float d1 = Vector2.dst(player.getPosition().x, player.getPosition().y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
-                int c;
-                if (d1 <= Rules.BLACKHOLE_ROAR_RANGE) {
-                    c = MathUtils.random(0, 3);
-                    if (MathUtils.random(0, 100) <= 40) {
-                        break;
-                    }
-                } else {
-                    c = tmpAnomaly.getLevel();
-                }
-                switch (c) {
-                    case 0:
-                        batch.setColor(Color.TAN);
-                        break;
-                    case 1:
-                        batch.setColor(Color.GREEN);
-                        break;
-                    case 2:
-                        batch.setColor(Color.YELLOW);
-                        break;
-                    case 3:
-                        batch.setColor(Color.RED);
-                        break;
-                }
-                batch.draw(pointTexture, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8.0f, 8.0f, 16.0f, 16.0f, sc, sc, 0);
-            }
+            drawPoolables(batch, tmpAnomaly);
         }
-
         for (int i = 0; i < gs.getConsumableEmitter().getActiveList().size(); i++) {
             Consumable tmpConsumable = gs.getConsumableEmitter().getActiveList().get(i);
-            float d = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpConsumable.getPosition().x, tmpConsumable.getPosition().y);
-            if (d < 2000.0f) {
-                float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f + o;
-                tmp.set(tmpConsumable.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
-                batch.setColor(1, 1, 1, 1);
-                batch.draw(pointTexture, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
-            }
+            drawPoolables(batch, tmpConsumable);
         }
-
         for (int i = 0; i < gs.getElectricalAnomalyEmitter().getActiveList().size(); i++) {
             ElectricalAnomaly tmpAnomaly = (ElectricalAnomaly) gs.getElectricalAnomalyEmitter().getActiveList().get(i);
-            float d = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpAnomaly.getPosition().x, tmpAnomaly.getPosition().y);
-            if (d < 2000.0f) {
-                float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f + o;
-                tmp.set(tmpAnomaly.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
-                batch.setColor(Color.PURPLE);
-                batch.draw(pointTexture, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
-            }
+            drawPoolables(batch, tmpAnomaly);
         }
+
         batch.setColor(1, 1, 1, 1);
+    }
+
+    private void drawPoolables(SpriteBatch batch, AbstractPoolable abstractPoolable) {
+        float d = Vector2.dst(player.getPosition().x, player.getPosition().y, abstractPoolable.getPosition().x, abstractPoolable.getPosition().y);
+        if (d < 2000.0f) {
+            float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f + o;
+            tmp.set(abstractPoolable.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
+            batch.setColor(setPointColor(abstractPoolable));
+            batch.draw(pointTexture, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
+        }
+    }
+
+    private Color setPointColor(AbstractPoolable abstractPoolable) {
+        float d1 = Vector2.dst(player.getPosition().x, player.getPosition().y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
+        int c;
+        if (d1 <= Rules.BLACKHOLE_NOIZE_RANGE) {
+            c = MathUtils.random(-1, 4);
+            if (MathUtils.random(0, 100) <= 60) {
+                return color;
+            }
+        } else {
+            c = abstractPoolable.getLevel();
+        }
+        switch (c) {
+            case 0:
+                return Color.TAN;
+            case 1:
+                return Color.GREEN;
+            case 2:
+                return Color.YELLOW;
+            case 3:
+                return Color.RED;
+            case 4:
+                return Color.PURPLE;
+            default:
+                return Color.WHITE;
+        }
     }
 
     private void updateRadar(float dt) {

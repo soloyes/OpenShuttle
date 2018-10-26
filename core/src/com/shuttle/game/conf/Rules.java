@@ -137,6 +137,8 @@ public final class Rules {
     public static final int BLACKHOLE_TAKE_RANGE = 250;
     //
     public static int BLACKHOLE_ROAR_RANGE;
+    //500
+    public static int BLACKHOLE_NOIZE_RANGE = 500;
     //20
     public static final int BLACKHOLE_EVENT_HORIZON = 20;
     //200

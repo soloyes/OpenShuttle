@@ -20,6 +20,7 @@ public abstract class Consumable extends AbstractPoolable {
         this.boundCheck = new BoundCheck();
         this.boomBox = new BoomBox();
         this.color = Color.GREEN;
+        this.level = -1;
     }
 
     public abstract void init(float x, float y);

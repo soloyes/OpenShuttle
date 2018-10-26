@@ -2,9 +2,12 @@ package com.shuttle.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.BoomBox;
 
 /**
@@ -14,6 +17,7 @@ public abstract class BaseScreen implements Screen {
     protected Stage stage;
     protected SpriteBatch batch;
     protected BoomBox boomBox;
+    private Color color;
 
     public BaseScreen() {
     }
@@ -21,6 +25,7 @@ public abstract class BaseScreen implements Screen {
     public BaseScreen(SpriteBatch batch) {
         this.stage = new Stage(ScreenManager.getInstance().getViewport(), batch);
         this.batch = batch;
+        this.color = new Color(Color.valueOf(PaintConstants.BACKGROUND_COLOR_HEX));
     }
 
     @Override
@@ -34,7 +39,7 @@ public abstract class BaseScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        Gdx.gl.glClearColor(color.r, color.g, color.b, color.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
