@@ -158,6 +158,11 @@ public final class Rules {
     public static final float CAMERA_SMOOTH_VELOCITY = 1500.0f;
     //600
     private static int BLACKHOLE_ROAR_FACTOR = 600;
+    //RADAR
+    //0.4f
+    public static float RADAR_OSCILLATION_FACTOR = 0.3f;
+    //2.5f
+    public static float RADAR_OSCILLATION_FREQUENCY = 2.5f;
     //SPACE
     //600
     private static final int STARS = 600;

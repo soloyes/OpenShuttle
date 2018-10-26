@@ -14,6 +14,10 @@ import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
+import com.shuttle.game.player.layers.LifeShield;
+import com.shuttle.game.player.layers.RamShield;
+import com.shuttle.game.player.layers.Scratch;
+import com.shuttle.game.player.navigation.Radar;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.BoundCheck;
@@ -351,7 +355,8 @@ public class Shuttle extends AbstractShuttle {
             }
         }
 
-        checkRadar(dt);
+        checkRadar();
+        radar.update(dt);
         boundCheck.checkAndHandleBounds(this, dt);
 
         tmpDelayFragment += dt;
@@ -467,9 +472,8 @@ public class Shuttle extends AbstractShuttle {
         );
     }
 
-    private void checkRadar(float dt) {
+    private void checkRadar() {
         if (!radar.isActive()) {
-            radar.update(dt);
             if (position.dst(radar.getPosition()) < 128 && !Rules.GAME_OVER) {
                 radar.setActive(true);
                 boomBox.playSound(MSConstants.GET_RADAR);

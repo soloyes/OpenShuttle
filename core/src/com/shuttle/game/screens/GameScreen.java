@@ -28,7 +28,7 @@ import com.shuttle.game.bot.anomaly.AnomalyTimer;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.VConstants;
-import com.shuttle.game.player.PlayerPointer;
+import com.shuttle.game.player.navigation.PlayerPointer;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;

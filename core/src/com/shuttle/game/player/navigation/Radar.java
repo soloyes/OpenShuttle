@@ -1,4 +1,4 @@
-package com.shuttle.game.player;
+package com.shuttle.game.player.navigation;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,6 +10,7 @@ import com.shuttle.game.bot.consumable.Consumable;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
 
@@ -34,6 +35,8 @@ public class Radar {
     private Shuttle player;
     private float scaleX, scaleY;
     private float rotation;
+    private boolean oscillator;
+    private float o;
 
     public Radar(GameScreen gs, Shuttle player) {
         this.gs = gs;
@@ -46,6 +49,8 @@ public class Radar {
         this.height = PaintConstants.RADAR_HEIGHT;
         this.scaleX = this.scaleY = 1;
         this.generatePosition();
+        this.oscillator = true;
+        this.o = 0.0f;
     }
 
     //Prevent generation near blackhole
@@ -79,9 +84,19 @@ public class Radar {
             CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) gs.getCorrosiveAnomalyEmitter().getActiveList().get(i);
             float d = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpAnomaly.getPosition().x, tmpAnomaly.getPosition().y);
             if (d < 2000.0f) {
-                float sc = (1.0f - d / 2000f) * 2 + 2.0f;
+                float sc = (1.0f - d / 2000f) * 2 + 2.0f + o;
                 tmp.set(tmpAnomaly.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
-                switch (tmpAnomaly.getLevel()) {
+                float d1 = Vector2.dst(player.getPosition().x, player.getPosition().y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
+                int c;
+                if (d1 <= Rules.BLACKHOLE_ROAR_RANGE) {
+                    c = MathUtils.random(0, 3);
+                    if (MathUtils.random(0, 100) <= 40) {
+                        break;
+                    }
+                } else {
+                    c = tmpAnomaly.getLevel();
+                }
+                switch (c) {
                     case 0:
                         batch.setColor(Color.TAN);
                         break;
@@ -103,7 +118,7 @@ public class Radar {
             Consumable tmpConsumable = gs.getConsumableEmitter().getActiveList().get(i);
             float d = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpConsumable.getPosition().x, tmpConsumable.getPosition().y);
             if (d < 2000.0f) {
-                float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f;
+                float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f + o;
                 tmp.set(tmpConsumable.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
                 batch.setColor(1, 1, 1, 1);
                 batch.draw(pointTexture, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
@@ -114,7 +129,7 @@ public class Radar {
             ElectricalAnomaly tmpAnomaly = (ElectricalAnomaly) gs.getElectricalAnomalyEmitter().getActiveList().get(i);
             float d = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpAnomaly.getPosition().x, tmpAnomaly.getPosition().y);
             if (d < 2000.0f) {
-                float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f;
+                float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f + o;
                 tmp.set(tmpAnomaly.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
                 batch.setColor(Color.PURPLE);
                 batch.draw(pointTexture, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
@@ -123,8 +138,28 @@ public class Radar {
         batch.setColor(1, 1, 1, 1);
     }
 
+    private void updateRadar(float dt) {
+        if (oscillator) {
+            o += Rules.RADAR_OSCILLATION_FREQUENCY * dt;
+            if (o >= Rules.RADAR_OSCILLATION_FACTOR) {
+                o = Rules.RADAR_OSCILLATION_FACTOR;
+                oscillator = false;
+            }
+        } else {
+            o -= Rules.RADAR_OSCILLATION_FREQUENCY * dt;
+            if (o <= -Rules.RADAR_OSCILLATION_FACTOR) {
+                o = -Rules.RADAR_OSCILLATION_FACTOR;
+                oscillator = true;
+            }
+        }
+    }
+
     public void update(float dt) {
-        rotation += dt;
-        scaleX = (float) Math.sin(Math.toRadians(rotation * 100));
+        if (!active) {
+            rotation += dt;
+            scaleX = (float) Math.sin(Math.toRadians(rotation * 100));
+        } else {
+            updateRadar(dt);
+        }
     }
 }

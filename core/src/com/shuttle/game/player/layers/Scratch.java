@@ -1,9 +1,10 @@
-package com.shuttle.game.player;
+package com.shuttle.game.player.layers;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
 
