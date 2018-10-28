@@ -7,10 +7,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.VConstants;
+import com.shuttle.game.utils.MoveProcessor;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Regions;
+import com.shuttle.game.utils.Vibrator;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -43,13 +46,14 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         this.glowWidth = PaintConstants.ANOMALY_GLOW_WIDTH;
         this.glowHeight = PaintConstants.ANOMALY_GLOW_HEIGHT;
         this.type = Type.CORROSIVE;
+        this.moveProcessor = new MoveProcessor(gs);
     }
 
     @Override
     public void init(float x, float y) {
         this.hungryTimer = 0;
         this.slimTimer = 0;
-        this.slim = Rules.ANOMALIES_CORROSIVE_SLIM_TIME + MathUtils.random(0,5);
+        this.slim = Rules.ANOMALIES_CORROSIVE_SLIM_TIME + MathUtils.random(0, 5);
         this.boomTimer = 0;
         this.boomDelay = MathUtils.random(Rules.ANOMALIES_BOOM_MIN_DELAY, Rules.ANOMALIES_BOOM_MAX_DELAY);
         this.hungry = true;
@@ -67,11 +71,12 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 break;
             }
         }
-        this.taken = true;
+        this.taken = false;
         this.v = MathUtils.random(
                 Rules.ANOMALIES_CORROSIVE_VELOCITY,
                 3 * Rules.ANOMALIES_CORROSIVE_VELOCITY
         );
+        this.moveProcessor = new MoveProcessor(gs);
     }
 
     @Override
@@ -85,8 +90,8 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
 
     @Override
     public void update(float dt) {
-        scaleAndBorn(dt);
         basicUpdate(dt);
+        scaleAndBorn(dt);
 
         if (born) {
             if (oscillator) {
@@ -102,8 +107,6 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                     oscillator = true;
                 }
             }
-
-            boundCheck.checkAndHandleBoundsAndDestroy(this);
 
             if (activated) {
                 slimTimer += dt;
@@ -130,34 +133,27 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                     destroy();
                     showSprayBoom(gs.getParticleEmitter());
                     boomBox.playSound(MSConstants.ANOMALY_BURSTING);
+                    Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY);
                 }
             }
-
-            velocity.scl(/*hack*/1.0f - dt/*hack*/);
-
-            if (hungry && activated) {
-                position.mulAdd(velocity, dt);
-                if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-                    tmp.set(gs.getPlayer()
-                            .getPosition())
-                            .sub(position)
-                            .nor()
-                            .scl(v);
-                    velocity.mulAdd(tmp, dt);
-                }
-                if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
-                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
-                    velocity.mulAdd(tmp, dt);
-                }
-            }
+            moveProcessor.update(this, dt);
         }
+        boundCheck.checkAndHandleBoundsAndDestroy(this);
     }
 
     private void scaleAndBorn(float dt) {
-        scaleX = scaleY += dt;
-        if (scaleX > 1 + level * 0.15f) {
-            scaleX = saveScaleX = 1 + level * 0.15f;
-            scaleY = saveScaleY = 1 + level * 0.15f;
+        if (!taken) {
+            moveProcessor.archimedesInit(this);
+            scaleX = scaleY += dt;
+            saveScaleX = saveScaleY += dt;
+            if (scaleX >= 1 + level * 0.15f) {
+                scaleX = saveScaleX = 1 + level * 0.15f;
+                scaleY = saveScaleY = 1 + level * 0.15f;
+                if (!born) {
+                    born = true;
+                }
+            }
+        } else {
             born = true;
         }
     }
@@ -170,6 +166,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     public void destroy() {
         super.destroy();
         scaleX = scaleY = 0;
+        saveScaleX = saveScaleY = 0;
         born = false;
         markedToBoom = false;
     }

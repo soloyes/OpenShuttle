@@ -31,7 +31,7 @@ public class AbstractShuttle implements InputProcessor {
     @Setter
     protected Standing standing;
     protected TextureRegion[] textureRegion;
-    protected Vector2 tmp1, tmp2;
+    protected Vector2 tmpV2, tmp2V2;
     @Getter
     @Setter
     protected Vector2 position, velocity;
@@ -66,8 +66,8 @@ public class AbstractShuttle implements InputProcessor {
                 ScreenManager.getInstance().getViewport().getWorldHeight() / 2
         );
         this.velocity = new Vector2();
-        this.tmp1 = new Vector2();
-        this.tmp2 = new Vector2();
+        this.tmpV2 = new Vector2();
+        this.tmp2V2 = new Vector2();
         this.width = PaintConstants.SHUTTLE_WIDTH;
         this.height = PaintConstants.SHUTTLE_HEIGHT;
         this.widthBlur = PaintConstants.SHUTTLE_BLUR_WIDTH;

@@ -105,7 +105,7 @@ public class GameOver {
         crate.setWidth(128);
         crate.setHeight(128);
 
-        Asteroid asteroid = new Asteroid();
+        Asteroid asteroid = new Asteroid(gs);
         asteroid.setScaleX(1.0f);
         asteroid.setScaleY(1.0f);
         asteroid.init(picx, 440);

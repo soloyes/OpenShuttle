@@ -1,13 +1,13 @@
 package com.shuttle.game.bot.anomaly;
 
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.utils.MoveProcessor;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
 
@@ -44,6 +44,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
         this.width = PaintConstants.ANOMALY_RADIATION_WIDTH;
         this.height = PaintConstants.ANOMALY_RADIATION_HEIGHT;
         this.type = Type.RADIATION;
+        this.moveProcessor = new MoveProcessor(gs);
     }
 
     @Override
@@ -55,10 +56,10 @@ public class RadiationAnomaly extends AbstractAnomaly {
         this.eat = false;
         this.hungryTimer = 0.0f;
         this.born = false;
-        this.level = -2;
+        this.level = 2;
         this.scaleX = this.saveScaleX = 1.0f;
         this.scaleY = this.saveScaleY = 1.0f;
-        this.taken = true;
+        this.taken = false;
         this.color.a = 0.0f;
         this.v = MathUtils.random(
                 Rules.ANOMALIES_RADIATION_VELOCITY,
@@ -100,50 +101,38 @@ public class RadiationAnomaly extends AbstractAnomaly {
 
     @Override
     public void update(float dt) {
-        scaleAndBorn(dt);
         basicUpdate(dt);
+        scaleAndBorn(dt);
 
         if (born) {
-            boundCheck.checkAndHandleBoundsAndDestroy(this);
-
-            velocity.scl(/*hack*/1.0f - dt/*hack*/);
-
-            if (hungry && activated) {
-                position.mulAdd(velocity, dt);
-                if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-                    tmp.set(gs.getPlayer()
-                            .getPosition())
-                            .sub(position)
-                            .nor()
-                            .scl(v);
-                    velocity.mulAdd(tmp, dt);
-                }
-                if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
-                    tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
-                    velocity.mulAdd(tmp, dt);
-                }
-            }
+            moveProcessor.update(this, dt);
         }
+        boundCheck.checkAndHandleBoundsAndDestroy(this);
     }
 
     private void scaleAndBorn(float dt) {
-        if (!born) {
-            color.a += dt;
-            if (color.a >= 1.0) {
-                color.a = 1.0f;
-                born = true;
+        if (!taken) {
+            moveProcessor.archimedesInit(this);
+            if (!born) {
+                color.a += dt;
+                if (color.a >= 1.0) {
+                    color.a = 1.0f;
+                    born = true;
+                }
+            } else {
+                liveTime += dt;
+                if (liveTime >= Rules.ANOMALIES_RADIATION_LIVE_TIME && !Rules.GAME_OVER) {
+                    color.a -= dt;
+                }
+                if (color.a <= 0.0f) {
+                    color.a = 0.0f;
+                    liveTime = 0.0f;
+                    born = false;
+                    destroy();
+                }
             }
         } else {
-            liveTime += dt;
-            if (liveTime >= Rules.ANOMALIES_RADIATION_LIVE_TIME && !Rules.GAME_OVER) {
-                color.a -= dt;
-            }
-            if (color.a <= 0.0f) {
-                color.a = 0.0f;
-                liveTime = 0.0f;
-                born = false;
-                destroy();
-            }
+            born = true;
         }
     }
 

@@ -4,9 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.particle.ParticleEmitter;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.utils.MoveProcessor;
 import com.shuttle.game.utils.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 
@@ -71,6 +71,10 @@ public abstract class AbstractPoolable implements Poolable {
     @Setter
     //Should mean: is in pool?
     protected boolean fake;
+    protected MoveProcessor moveProcessor;
+    @Getter
+    @Setter
+    protected boolean born;
 
     @Override
     public void destroy() {
@@ -107,6 +111,8 @@ public abstract class AbstractPoolable implements Poolable {
         }
     }
 
+    public abstract Vector2 getPosition();
+
     public void showSprayCollision(ParticleEmitter particleEmitter) {
         float R, G, B;
         for (int j = 0; j < 60; j++) {
@@ -127,8 +133,6 @@ public abstract class AbstractPoolable implements Poolable {
             );
         }
     }
-
-    public abstract Vector2 getPosition();
 
     public enum Type {
         CORROSIVE, ELECTRIC, MAGNETIC, RADIATION, ASTEROID, ASTRONAUT, CRATE

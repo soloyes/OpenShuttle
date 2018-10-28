@@ -36,12 +36,7 @@ public abstract class Consumable extends AbstractPoolable {
         );
     }
 
-    @Override
-    public void update(float dt) {
-        basicUpdate(dt);
-        boundCheck.checkAndHandleBoundsAndDestroy(this);
-        position.mulAdd(velocity, dt);
-    }
+    public abstract void update(float dt);
 
     @Override
     public void basicUpdate(float dt) {

@@ -11,11 +11,9 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
+import com.shuttle.game.utils.MoveProcessor;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author Shuttle on 9/11/18.
@@ -38,6 +36,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.width = PaintConstants.ANOMALY_ELECTRIC_WIDTH;
         this.height = PaintConstants.ANOMALY_ELECTRIC_HEIGHT;
         this.type = Type.ELECTRIC;
+        this.moveProcessor = new MoveProcessor(gs);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.color.a = 0.0f;
         this.scaleX = this.saveScaleX = 1.0f;
         this.scaleY = this.saveScaleY = 1.0f;
-        this.taken = true;
+        this.taken = false;
         this.v = Rules.ANOMALY_ELECTRIC_VELOCITY;
     }
 
@@ -97,8 +96,8 @@ public class ElectricalAnomaly extends AbstractAnomaly {
 
     @Override
     public void update(float dt) {
-        scaleAndBorn(dt);
         basicUpdate(dt);
+        scaleAndBorn(dt);
 
         if (born) {
             if (Gdx.input.isTouched() && !Rules.GAME_OVER) {
@@ -119,46 +118,32 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                 hungry = true;
             }
 
-            velocity.scl(/*hack*/1.0f - dt/*hack*/);
-            if (hungry && activated) {
-                position.mulAdd(velocity, dt);
-                boolean out = boundCheck.checkAndHandleBounds(this);
-                if (!out) {
-                    if (gs.getPlayer().getPosition().dst(position) < 2400.0f + 200 * level) {
-                        tmp.set(gs.getPlayer()
-                                .getPosition())
-                                .sub(position)
-                                .nor()
-                                .scl(v);
-                        velocity.mulAdd(tmp, dt);
-                    }
-                    if (gs.getPlayer().getPosition().dst(position) < 240 * level) {
-                        tmp.set(gs.getPlayer().getPosition()).sub(position).nor().scl(250.0f - 20 * level);
-                        velocity.mulAdd(tmp, dt);
-                    }
-                } else {
-                    tmp.set(Rules.SPACE_WIDTH, Rules.SPACE_HEIGHT).sub(position).nor().scl(v);
-                    velocity.mulAdd(tmp, dt);
-                }
-            }
+            moveProcessor.update(this, dt);
         }
     }
 
     private void scaleAndBorn(float dt) {
-        if (touched) {
-            destroy();
-            boomBox.playSound(MSConstants.ANOMALY_ELECTRIC_DESTROY);
-            gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
-            this.showSprayBoom(gs.getParticleEmitter());
-            //score amount decrease when kicked
-            float asc = level * Rules.ANOMALIES_BASE_SCORE_ADD * (v / Rules.ANOMALY_ELECTRIC_VELOCITY);
-            gs.getPlayer().getStanding().changeScore((int) asc);
-        } else {
-            color.a += dt / 5;
-            if (color.a >= 1.0) {
-                color.a = 1.0f;
-                born = true;
+        if (!taken) {
+            moveProcessor.archimedesInit(this);
+            if (!touched) {
+                color.a += dt / 5;
+                if (color.a >= 1.0) {
+                    color.a = 1.0f;
+                    if (!born) {
+                        born = true;
+                    }
+                }
+            } else {
+                destroy();
+                boomBox.playSound(MSConstants.ANOMALY_ELECTRIC_DESTROY);
+                gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
+                this.showSprayBoom(gs.getParticleEmitter());
+                //score amount decrease when kicked
+                float asc = level * Rules.ANOMALIES_BASE_SCORE_ADD * (v / Rules.ANOMALY_ELECTRIC_VELOCITY);
+                gs.getPlayer().getStanding().changeScore((int) asc);
             }
+        } else {
+            born = true;
         }
     }
 }

@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.utils.MoveProcessor;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Regions;
@@ -25,7 +27,8 @@ public class Asteroid extends AbstractPoolable {
     @Setter
     private float sizeForHarvest;
 
-    public Asteroid() {
+    public Asteroid(GameScreen gs) {
+        this.gs = gs;
         this.textureRegions = Regions.split(
                 new TextureRegion(
                         Assets.getInstance()
@@ -38,9 +41,10 @@ public class Asteroid extends AbstractPoolable {
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.angle = MathUtils.random(365f);
-        this.active = false;
+        this.active = true;
         this.boundCheck = new BoundCheck();
         this.type = Type.ASTEROID;
+        this.moveProcessor = new MoveProcessor(gs);
     }
 
     @Override
@@ -72,8 +76,8 @@ public class Asteroid extends AbstractPoolable {
     @Override
     public void update(float dt) {
         basicUpdate(dt);
-        position.mulAdd(velocity, dt);
-        checkAndHandleBounds();
+        moveProcessor.update(this, dt);
+        boundCheck.checkAndHandleBoundsAndDestroy(this);
     }
 
     @Override
@@ -84,10 +88,6 @@ public class Asteroid extends AbstractPoolable {
     @Override
     public boolean isActive() {
         return active;
-    }
-
-    private void checkAndHandleBounds() {
-        boundCheck.checkAndHandleBoundsAndDestroy(this);
     }
 
     public void init(Vector2 position, Vector2 destanation, float scale, boolean isFragment) {

@@ -7,6 +7,7 @@ import com.shuttle.game.bot.pool.ObjectPool;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.screens.GameScreen;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,10 +26,15 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
     private float scale;
     private float count;
     private GlobalInteractionLevels rang;
+    private GameScreen gs;
+
+    public AsteroidEmitter(GameScreen gs) {
+        this.gs = gs;
+    }
 
     @Override
     protected Asteroid newObject() {
-        return new Asteroid();
+        return new Asteroid(gs);
     }
 
     public void boom(Vector2 position, GlobalInteractionLevels rang) {

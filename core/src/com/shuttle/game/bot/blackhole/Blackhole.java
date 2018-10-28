@@ -14,7 +14,6 @@ import lombok.Setter;
 /**
  * @author Shuttle on 9/15/18.
  */
-
 public class Blackhole {
     private TextureRegion texture;
     private TextureRegion spiralRegion;
@@ -64,8 +63,14 @@ public class Blackhole {
         this.angle = MathUtils.random(365);
         this.rotation = MathUtils.random(365);
         this.radialSpeed = MathUtils.random(30, 50);
-        this.radius = new Vector2( MathUtils.random(Rules.SPACE_WIDTH / 6, Rules.SPACE_WIDTH / 3), 0);
+        this.radius = new Vector2(MathUtils.random(Rules.SPACE_WIDTH / 6, Rules.SPACE_WIDTH / 3), 0);
         setPosition();
+    }
+
+    private void setPosition() {
+        float r = radius.len();
+        position.x = center.x + r * MathUtils.cos(angle);
+        position.y = center.y + r * MathUtils.sin(angle);
     }
 
     public void render(SpriteBatch batch) {
@@ -152,11 +157,5 @@ public class Blackhole {
                 glowOscillator = true;
             }
         }
-    }
-
-    private void setPosition() {
-        float r = radius.len();
-        position.x = center.x + r * MathUtils.cos(angle);
-        position.y = center.y + r * MathUtils.sin(angle);
     }
 }

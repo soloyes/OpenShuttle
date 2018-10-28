@@ -18,9 +18,6 @@ import lombok.Setter;
 public abstract class AbstractAnomaly extends AbstractPoolable {
     @Getter
     @Setter
-    protected boolean born;
-    @Getter
-    @Setter
     protected boolean hungry;
     @Getter
     @Setter

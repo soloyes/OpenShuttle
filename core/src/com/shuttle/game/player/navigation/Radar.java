@@ -120,7 +120,7 @@ public class Radar {
         float d = Vector2.dst(player.getPosition().x, player.getPosition().y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
         int c;
         if (d <= Rules.BLACKHOLE_NOISE_RANGE && !gs.getPauseGroup().isPause()) {
-            c = MathUtils.random(-1, 4);
+            c = MathUtils.random(0, 4);
             if (MathUtils.random(0, 100) <= 60) {
                 return color;
             }
@@ -148,9 +148,11 @@ public class Radar {
             updateRadar(dt);
             float d = Vector2.dst(player.getPosition().x, player.getPosition().y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
             if (d <= Rules.BLACKHOLE_NOISE_RANGE) {
-                if (!player.isTaken())
+                if (!player.isTaken() && !Rules.GAME_OVER) {
                     boomBox.playMusicEffectInLoop(MSConstants.RADAR_WHITE_NOISE_MUSIC, GamePreferences.getSoundVolume());
-                else boomBox.stopMusicEffect(MSConstants.RADAR_WHITE_NOISE_MUSIC);
+                } else {
+                    boomBox.stopMusicEffect(MSConstants.RADAR_WHITE_NOISE_MUSIC);
+                }
             } else {
                 boomBox.stopMusicEffect(MSConstants.RADAR_WHITE_NOISE_MUSIC);
             }
@@ -159,6 +161,7 @@ public class Radar {
             scaleX = (float) Math.sin(Math.toRadians(rotation * 100));
             boomBox.stopMusicEffect(MSConstants.RADAR_WHITE_NOISE_MUSIC);
         }
+
     }
 
     private void updateRadar(float dt) {

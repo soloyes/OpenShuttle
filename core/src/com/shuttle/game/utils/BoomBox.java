@@ -47,14 +47,16 @@ public class BoomBox {
     }
 
     public void playMusicEffectOnce(String musicEffect) {
-        if (!Assets.getInstance()
-                .getAssetManager()
-                .get(musicEffect, Music.class)
-                .isPlaying()) {
-            Assets.getInstance()
+        if (GamePreferences.isSoundEnabled()) {
+            if (!Assets.getInstance()
                     .getAssetManager()
                     .get(musicEffect, Music.class)
-                    .play();
+                    .isPlaying()) {
+                Assets.getInstance()
+                        .getAssetManager()
+                        .get(musicEffect, Music.class)
+                        .play();
+            }
         }
     }
 

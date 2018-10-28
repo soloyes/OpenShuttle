@@ -133,10 +133,10 @@ public class Shuttle extends AbstractShuttle {
     }
 
     public boolean canCatch(Consumable consumable) {
-        tmp2.set(consumable.getPosition());
-        tmp2.sub(position);
+        tmp2V2.set(consumable.getPosition());
+        tmp2V2.sub(position);
 
-        float dif = angle - tmp2.angle();
+        float dif = angle - tmp2V2.angle();
 
         return dif >= -110 && dif <= -40 || dif <= 110 && dif >= 40;
     }
@@ -352,7 +352,10 @@ public class Shuttle extends AbstractShuttle {
         ramShield.update(dt);
 
         velocity.scl(/*FPS hack*/1.0f - dt/*FPS hack*/);
-        position.mulAdd(velocity, dt);
+
+        if (!taken) {
+            position.mulAdd(velocity, dt);
+        }
 
         if (!taken) {
             if (joystick.isActive()) {
@@ -361,12 +364,12 @@ public class Shuttle extends AbstractShuttle {
             } else {
                 if (Gdx.input.isTouched()) {
                     if (pointer.size() == 0) {
-                        tmp1.set(Gdx.input.getX(), Gdx.input.getY());
+                        tmpV2.set(Gdx.input.getX(), Gdx.input.getY());
                     } else {
-                        tmp1.set(Gdx.input.getX(pointer.peekLast()), Gdx.input.getY(pointer.peekLast()));
+                        tmpV2.set(Gdx.input.getX(pointer.peekLast()), Gdx.input.getY(pointer.peekLast()));
                     }
-                    ScreenManager.getInstance().getViewport().unproject(tmp1);
-                    float angleToTarget = tmp1.sub(position).angle();
+                    ScreenManager.getInstance().getViewport().unproject(tmpV2);
+                    float angleToTarget = tmpV2.sub(position).angle();
                     move(dt, angleToTarget);
                 }
             }

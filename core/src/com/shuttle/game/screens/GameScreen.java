@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.blackhole.Blackhole;
+import com.shuttle.game.bot.consumable.Astronaut;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
@@ -80,8 +81,8 @@ public class GameScreen extends BaseScreen {
     @Getter
     @Setter
     private Camera camera;
-    private Vector2 tmpV2;
-    private Vector3 tmpV3;
+    private Vector2 tmp1V2;
+    private Vector3 tmp1V3;
     @Getter
     @Setter
     private GameInfoSystem gameInfoSystem;
@@ -112,8 +113,8 @@ public class GameScreen extends BaseScreen {
         super(batch);
         this.batch = batch;
         this.camera = camera;
-        this.tmpV2 = new Vector2(0, 0);
-        this.tmpV3 = new Vector3(0, 0, 0);
+        this.tmp1V2 = new Vector2(0, 0);
+        this.tmp1V3 = new Vector3(0, 0, 0);
         this.cameraHelper = new OrthographicCamera(1080, 1920);
     }
 
@@ -139,14 +140,14 @@ public class GameScreen extends BaseScreen {
         radiationAnomalyEmitter = new RadiationAnomalyEmitter(this);
         magneticAnomalyEmitter = new MagneticAnomalyEmitter(this);
         consumableEmitter = new ConsumableEmitter(this);
-        asteroidEmitter = new AsteroidEmitter();
+        asteroidEmitter = new AsteroidEmitter(this);
         background = new Background();
         gameInfoSystem = new GameInfoSystem();
         joystick = new Joystick();
 
         blackhole = new Blackhole();
         player = new Shuttle(this, joystick);
-        BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), (int)Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+        BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         playerPointer = new PlayerPointer(player);
         Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel(player);
         gameOver = new GameOver(this);
@@ -330,14 +331,14 @@ public class GameScreen extends BaseScreen {
     //todo: Позиция обнулсяеся во время fbo.end(), поэтому хак - копипаста из cameraHelper
     private void cameraUpdate(float dt) {
         if (player.isCameraSmooth()) {
-            tmpV3.set(player.getPosition(), 0.0f).sub(cameraHelper.position.x, cameraHelper.position.y, 0.0f).nor();
-            cameraHelper.position.mulAdd(tmpV3, Rules.CAMERA_SMOOTH_VELOCITY * dt);
+            tmp1V3.set(player.getPosition(), 0.0f).sub(cameraHelper.position.x, cameraHelper.position.y, 0.0f).nor();
+            cameraHelper.position.mulAdd(tmp1V3, Rules.CAMERA_SMOOTH_VELOCITY * dt);
             camera.position.set(cameraHelper.position);
             if (
                 //parking
-                    tmpV2.set(player.getPosition()).sub(
+                    tmp1V2.set(player.getPosition()).sub(
                             cameraHelper.position.x, cameraHelper.position.y).len2() <
-                            tmpV3.scl(Rules.CAMERA_SMOOTH_VELOCITY * dt).len2()
+                            tmp1V3.scl(Rules.CAMERA_SMOOTH_VELOCITY * dt).len2()
                     ) {
                 player.setCameraSmooth(false);
             }
@@ -351,7 +352,6 @@ public class GameScreen extends BaseScreen {
 
     private void checkCollision(float dt) {
         collideBlackholePlayer(dt);
-
         calcMusicEffectVolume();
 
         for (int i = 0; i < consumableEmitter.getActiveList().size(); i++) {
@@ -374,9 +374,9 @@ public class GameScreen extends BaseScreen {
                 }
                 if (!player.isTaken()) {
                     if (player.getPosition().dst(tmpConsumable.getPosition()) <= Rules.PLAYER_TAKE_RANGE) {
-                        tmpV2.set(player.getPosition()).sub(tmpConsumable.getPosition()).nor().scl(200.0f);
-                        tmpConsumable.getPosition().mulAdd(tmpV2, dt);
-                        float dst = Vector2.dst(player.getPosition().x, player.getPosition().y, tmpConsumable.getPosition().x, tmpConsumable.getPosition().y);
+                        tmp1V2.set(player.getPosition()).sub(tmpConsumable.getPosition()).nor().scl(200.0f);
+                        tmpConsumable.getPosition().mulAdd(tmp1V2, dt);
+                        float dst = player.getPosition().dst(tmpConsumable.getPosition());
                         float scaleX = (dst / Rules.BLACKHOLE_TAKE_RANGE) * tmpConsumable.getSaveScaleX();
                         float scaleY = (dst / Rules.BLACKHOLE_TAKE_RANGE) * tmpConsumable.getSaveScaleY();
                         if (scaleX >= tmpConsumable.getSaveScaleX()) {
@@ -413,7 +413,7 @@ public class GameScreen extends BaseScreen {
                 }
             }
             ///
-            collideBlackholePoolable(tmpConsumable, dt);
+            collideBlackholePoolable(tmpConsumable);
             ///
         }
 
@@ -438,7 +438,7 @@ public class GameScreen extends BaseScreen {
                 }
             }
             ///
-            collideBlackholePoolable(tmpAnomaly, dt);
+            collideBlackholePoolable(tmpAnomaly);
             ///
         }
 
@@ -454,7 +454,7 @@ public class GameScreen extends BaseScreen {
                 }
             }
             ///
-            collideBlackholePoolable(tmpAnomaly, dt);
+            collideBlackholePoolable(tmpAnomaly);
             ///
         }
 
@@ -490,7 +490,7 @@ public class GameScreen extends BaseScreen {
                 tmp1 |= tmpAnomaly.isGlued();
             }
             ///
-            collideBlackholePoolable(tmpAnomaly, dt);
+            collideBlackholePoolable(tmpAnomaly);
             ///
         }
         player.getStanding().setScoreAlertRadiationAnomaly(tmp1);
@@ -526,7 +526,7 @@ public class GameScreen extends BaseScreen {
                 tmp2 |= tmpAnomaly.isGlued();
             }
             ///
-            collideBlackholePoolable(tmpAnomaly, dt);
+            collideBlackholePoolable(tmpAnomaly);
             ///
         }
         player.getStanding().setFuelAlertMagneticAnomaly(tmp2);
@@ -601,7 +601,7 @@ public class GameScreen extends BaseScreen {
                 }
             }
             ///
-            collideBlackholePoolable(tmpAsteroid, dt);
+            collideBlackholePoolable(tmpAsteroid);
             ///
         }
     }
@@ -634,9 +634,8 @@ public class GameScreen extends BaseScreen {
         if (player.getPosition().dst(blackhole.getPosition()) <= Rules.BLACKHOLE_TAKE_RANGE) {
             player.setTaken(true);
             player.getVelocity().scl(0.5f);
-            tmpV2.set(blackhole.getPosition()).sub(player.getPosition()).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER);
-            player.getPosition().mulAdd(tmpV2, dt);
-
+            tmp1V2.set(blackhole.getPosition()).sub(player.getPosition()).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_POOLABLE);
+            player.getPosition().mulAdd(tmp1V2, dt);
             float dst = blackhole.getPosition().dst(player.getPosition());
             float scaleX = dst / Rules.BLACKHOLE_TAKE_RANGE;
             float scaleY = dst / Rules.BLACKHOLE_TAKE_RANGE;
@@ -650,7 +649,7 @@ public class GameScreen extends BaseScreen {
             player.getScratch().setScaleY(scaleY);
             player.setAngle(player.getAngle() + 365 * dt);
             if (blackhole.getPosition().dst(player.getPosition()) <= Rules.BLACKHOLE_EVENT_HORIZON) {
-                BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), (int)Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+                BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
                 player.setScaleX(1.0f);
                 player.setScaleY(1.0f);
                 player.getRamShield().setScaleX(1.0f);
@@ -665,35 +664,47 @@ public class GameScreen extends BaseScreen {
                 player.setCameraSmooth(true);
             }
         } else {
+            player.setScaleX(1.0f);
+            player.setScaleY(1.0f);
+            player.getRamShield().setScaleX(1.0f);
+            player.getRamShield().setScaleY(1.0f);
+            player.getLifeShield().setScaleX(1.0f);
+            player.getLifeShield().setScaleY(1.0f);
+            player.getScratch().setScaleX(1.0f);
+            player.getScratch().setScaleY(1.0f);
             player.setTaken(false);
         }
     }
     ///
 
     ///
-    private void collideBlackholePoolable(AbstractPoolable poolable, float dt) {
-        if (blackhole.getPosition().dst(poolable.getPosition()) < Rules.BLACKHOLE_TAKE_RANGE) {
-            poolable.setTaken(true);
-            tmpV2.set(blackhole.getPosition()).sub(poolable.getPosition()).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_POOLABLE);
-            poolable.getPosition().mulAdd(tmpV2, dt);
-            float dst = blackhole.getPosition().dst(poolable.getPosition());
-            float scaleX = (dst / Rules.BLACKHOLE_TAKE_RANGE) * poolable.getSaveScaleX();
-            float scaleY = (dst / Rules.BLACKHOLE_TAKE_RANGE) * poolable.getSaveScaleY();
-            if (scaleX >= poolable.getSaveScaleX()) {
-                scaleX = poolable.getSaveScaleX();
+    private void collideBlackholePoolable(AbstractPoolable abstractPoolable) {
+        float dst = blackhole.getPosition().dst(abstractPoolable.getPosition());
+        if (dst <= Rules.BLACKHOLE_TAKE_RANGE) {
+            abstractPoolable.setTaken(true);
+            abstractPoolable.getVelocity().scl(0.5f);
+            float scaleX = (dst / Rules.BLACKHOLE_TAKE_RANGE) * abstractPoolable.getSaveScaleX();
+            float scaleY = (dst / Rules.BLACKHOLE_TAKE_RANGE) * abstractPoolable.getSaveScaleY();
+            if (scaleX >= abstractPoolable.getSaveScaleX()) {
+                scaleX = abstractPoolable.getSaveScaleX();
             }
-            if (scaleY >= poolable.getSaveScaleY()) {
-                scaleY = poolable.getSaveScaleY();
+            if (scaleY >= abstractPoolable.getSaveScaleY()) {
+                scaleY = abstractPoolable.getSaveScaleY();
             }
-
-            poolable.setScaleX(scaleX);
-            poolable.setScaleY(scaleY);
-            if (blackhole.getPosition().dst(poolable.getPosition()) < Rules.BLACKHOLE_EVENT_HORIZON) {
-                poolable.destroy();
+            abstractPoolable.setScaleX(scaleX);
+            abstractPoolable.setScaleY(scaleY);
+            if (dst <= Rules.BLACKHOLE_EVENT_HORIZON) {
+                abstractPoolable.destroy();
             }
-        } else poolable.setTaken(false);
+        } else {
+            if (!(abstractPoolable instanceof Consumable)) {
+                abstractPoolable.setScaleX(abstractPoolable.getSaveScaleX());
+                abstractPoolable.setScaleY(abstractPoolable.getSaveScaleY());
+            }
+            abstractPoolable.setTaken(false);
+        }
     }
-    ///
+    //
 
     private void damageToAnomaly(AbstractPoolable abstractPoolable) {
         abstractPoolable.destroy();
@@ -725,11 +736,11 @@ public class GameScreen extends BaseScreen {
                     5.0f,
                     false
             );
-            tmpV2.set(player.getPosition()).sub(anomaly.getPosition()).nor().scl(300 + anomaly.getLevel() * 50);
-            player.getVelocity().add(tmpV2);
+            tmp1V2.set(player.getPosition()).sub(anomaly.getPosition()).nor().scl(300 + anomaly.getLevel() * 50);
+            player.getVelocity().add(tmp1V2);
             player.resetPower();
-            tmpV2.scl(-1);
-            anomaly.getVelocity().add(tmpV2);
+            tmp1V2.scl(-1);
+            anomaly.getVelocity().add(tmp1V2);
         }
     }
 
