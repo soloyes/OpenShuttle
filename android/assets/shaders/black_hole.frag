@@ -34,7 +34,7 @@ void main (void)
 
         gl_FragColor = texture2D(u_texture, v_texCoord0 + sub2);
         gl_FragColor.b += (dmax - d) * 4.0;
-        if(isGrey > 0.0f){
+        if(isGrey > 0.0){
             gl_FragColor = vec4(vec3(dot(gl_FragColor.rgb, vec3(0.299, 0.587, 0.114))), gl_FragColor.a);
         }
 
