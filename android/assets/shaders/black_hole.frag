@@ -23,17 +23,17 @@ void main (void)
     gl_FragColor = texture2D(u_texture, v_texCoord0);
 
     float d = length(sub2);
-    float dmax = 0.07f;
+    float dmax = 0.07;
 
     if(d < dmax) {
-        float a = d * 90.0f + time * d;
+        float a = d * 90.0 + time * d;
         float s = sin(a);
         float c = cos(a);
         mat2 m = mat2(c, -s, s, c);
         sub2 = m * sub2;
 
         gl_FragColor = texture2D(u_texture, v_texCoord0 + sub2);
-        gl_FragColor.b += (dmax - d) * 4.0f;
+        gl_FragColor.b += (dmax - d) * 4.0;
         if(isGrey > 0.0f){
             gl_FragColor = vec4(vec3(dot(gl_FragColor.rgb, vec3(0.299, 0.587, 0.114))), gl_FragColor.a);
         }

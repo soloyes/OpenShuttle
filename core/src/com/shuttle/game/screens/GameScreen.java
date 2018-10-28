@@ -377,8 +377,8 @@ public class GameScreen extends BaseScreen {
                         tmp1V2.set(player.getPosition()).sub(tmpConsumable.getPosition()).nor().scl(200.0f);
                         tmpConsumable.getPosition().mulAdd(tmp1V2, dt);
                         float dst = player.getPosition().dst(tmpConsumable.getPosition());
-                        float scaleX = (dst / Rules.BLACKHOLE_TAKE_RANGE) * tmpConsumable.getSaveScaleX();
-                        float scaleY = (dst / Rules.BLACKHOLE_TAKE_RANGE) * tmpConsumable.getSaveScaleY();
+                        float scaleX = (dst / Rules.PLAYER_TAKE_RANGE) * tmpConsumable.getSaveScaleX();
+                        float scaleY = (dst / Rules.PLAYER_TAKE_RANGE) * tmpConsumable.getSaveScaleY();
                         if (scaleX >= tmpConsumable.getSaveScaleX()) {
                             scaleX = tmpConsumable.getSaveScaleX();
                         }
