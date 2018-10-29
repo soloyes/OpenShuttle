@@ -122,7 +122,7 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
         destination.set(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
         Asteroid tmpAsteroid = getActiveElement();
         tmpAsteroid.init(position, destination, scale, true);
-        tmpAsteroid.setSizeForHarvest(size);
+        tmpAsteroid.setSizeForHarvest(size * Rules.ASTEROID_SIZE_FOR_HARVEST_FACTOR);
     }
 
     private enum Side {

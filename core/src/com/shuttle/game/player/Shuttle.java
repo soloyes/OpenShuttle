@@ -63,9 +63,6 @@ public class Shuttle extends AbstractShuttle {
     private float enginePower;
     @Getter
     @Setter
-    private int takeRange;
-    @Getter
-    @Setter
     private float power;
     @Getter
     @Setter

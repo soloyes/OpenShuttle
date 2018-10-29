@@ -16,6 +16,7 @@ import java.util.Map;
  * @author Shuttle on 7/14/18.
  */
 public class BoomBox {
+    protected static Array<Sound> soundIdList = new Array<Sound>();
     private static Array<Music> musicArray = new Array<Music>();
     private static ArrayList<String> musicEffects = new ArrayList<String>();
     private float t = 0.0f;
@@ -61,11 +62,12 @@ public class BoomBox {
     }
 
     public long playSound(String sound) {
+        Sound tmp = Assets.getInstance()
+                .getAssetManager()
+                .get(sound, Sound.class);
+        soundIdList.add(tmp);
         if (GamePreferences.isSoundEnabled()) {
-            return Assets.getInstance()
-                    .getAssetManager()
-                    .get(sound, Sound.class)
-                    .play(GamePreferences.getSoundVolume());
+            return tmp.play(GamePreferences.getSoundVolume());
         }
         return -1;
     }
@@ -146,6 +148,12 @@ public class BoomBox {
                 .isPlaying()) {
             stopAllMusic();
             playMusicInLoop(music);
+        }
+    }
+
+    public void stopAllSound() {
+        for (int i = 0; i < soundIdList.size; i++) {
+            soundIdList.get(i).stop();
         }
     }
 

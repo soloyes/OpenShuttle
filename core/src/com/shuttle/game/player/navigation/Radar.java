@@ -38,7 +38,7 @@ public class Radar {
     private boolean active;
     private int width, height;
     private float scaleX, scaleY;
-    private float rotation;
+    private float spin;
     private float dotSize;
     private Shuttle player;
     private Color color;
@@ -91,7 +91,7 @@ public class Radar {
                     position.x - width / 2, position.y - height / 2,
                     width / 2, height / 2,
                     width, height, scaleX, scaleY,
-                    rotation
+                    0.0f
             );
         }
     }
@@ -164,8 +164,8 @@ public class Radar {
                 boomBox.stopMusicEffect(MSConstants.RADAR_WHITE_NOISE_MUSIC);
             }
         } else {
-            rotation += dt;
-            scaleX = (float) Math.sin(Math.toRadians(rotation * 100));
+            spin += dt;
+            scaleX = (float) Math.sin(Math.toRadians(spin * 100));
             boomBox.stopMusicEffect(MSConstants.RADAR_WHITE_NOISE_MUSIC);
         }
 

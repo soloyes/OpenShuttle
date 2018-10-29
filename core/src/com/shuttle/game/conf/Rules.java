@@ -93,9 +93,17 @@ public final class Rules {
     //ASTEROID
     //4.0f
     public static final float ASTEROID_RESPAWN_TIME = 4.0f;
+    //0.3f
+    public static final float ASTEROID_BURN_TIME = 0.3f;
+    //0.5f
+    public static final float ASTEROID_SIZE_FOR_HARVEST_FACTOR = 0.5f;
     //PLAYER
+    //400
+    public static final int PLAYER_CONSUMABLE_TAKE_RANGE = 400;
+    //300
+    public static final int PLAYER_FRAGMENT_TAKE_RANGE = 300;
     //500
-    public static final int PLAYER_TAKE_RANGE = 500;
+    public static final int PLAYER_LASER_TAKE_RANGE = 500;
     //135.0f
     public static final float PLAYER_RADIAL_SPEED = 135.0f;
     //700.0f
@@ -116,6 +124,14 @@ public final class Rules {
     public static final float PLAYER_FUEL_OUT_OF_MAP = 3.0f;
     //5.0f
     public static final float PLAYER_KILL_TIMER = 5.0f;
+    //3.0f
+    private static final float PLAYER_ENGINE_POWER_FACTOR = 3.0f;
+    //
+    public static final float PLAYER_TURBO_ENGINE_POWER = PLAYER_ENGINE_POWER * PLAYER_ENGINE_POWER_FACTOR;
+    //200
+    public static final int PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY = 200;
+    //150
+    public static final int PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY = 150;
     //20000
     //todo: need to be balanced
     public static final int SCORE_TO_LIVE = 20000;
@@ -158,11 +174,7 @@ public final class Rules {
     //CAMERA
     //1500.0f
     public static final float CAMERA_SMOOTH_VELOCITY = 1500.0f;
-    //RADAR
-    //3.0f
-    private static final float PLAYER_ENGINE_POWER_FACTOR = 3.0f;
-    //
-    public static final float PLAYER_TURBO_ENGINE_POWER = PLAYER_ENGINE_POWER * PLAYER_ENGINE_POWER_FACTOR;
+
     //SPACE
     //600
     private static final int STARS = 600;
@@ -183,7 +195,6 @@ public final class Rules {
                 player.getStanding().setHp(25);
                 player.getStanding().setMaxHp(25);
                 player.getStanding().setLives(1);
-                player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
@@ -202,7 +213,6 @@ public final class Rules {
                 player.getStanding().setHp(20);
                 player.getStanding().setMaxHp(20);
                 player.getStanding().setLives(2);
-                player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
@@ -221,7 +231,6 @@ public final class Rules {
                 player.getStanding().setHp(15);
                 player.getStanding().setMaxHp(15);
                 player.getStanding().setLives(2);
-                player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
@@ -240,7 +249,6 @@ public final class Rules {
                 player.getStanding().setHp(10);
                 player.getStanding().setMaxHp(10);
                 player.getStanding().setLives(3);
-                player.setTakeRange(PLAYER_TAKE_RANGE);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);

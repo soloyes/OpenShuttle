@@ -26,6 +26,10 @@ public class Asteroid extends AbstractPoolable {
     @Getter
     @Setter
     private float sizeForHarvest;
+    //Burn with laser
+    @Getter
+    @Setter
+    private float timeToBurn;
 
     public Asteroid(GameScreen gs) {
         this.gs = gs;

@@ -64,7 +64,7 @@ public class RamShield {
             case NONE:
                 fromAlpha = 0.0f;
                 break;
-            case WHITE:
+            case TAN:
                 tmpColor.set(Color.TAN);
                 break;
             case GREEN:

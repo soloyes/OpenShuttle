@@ -103,6 +103,7 @@ public class PauseGroup extends Group {
                 buttonMenu.setVisible(pause);
                 buttonRestart.setVisible(pause);
                 boomBox.playSound(MSConstants.PAUSE_SOUND);
+                boomBox.stopAllSound();
             }
         });
 

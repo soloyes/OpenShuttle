@@ -10,13 +10,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.blackhole.Blackhole;
-import com.shuttle.game.bot.consumable.Astronaut;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
@@ -45,6 +43,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.group.PauseGroup;
 import com.shuttle.game.utils.BoundCheck;
+import com.shuttle.game.utils.Ray;
 import com.shuttle.game.utils.Shake;
 import com.shuttle.game.utils.Vibrator;
 
@@ -100,14 +99,15 @@ public class GameScreen extends BaseScreen {
     private Blackhole blackhole;
     private FrameBuffer fbo;
     private TextureRegion fboTexRegion;
-    private float holeTime;
     private OrthographicCamera cameraHelper;
     private ShaderManager shaderManager;
     private ShaderProgram shaderBlackHole;
     private ShaderProgram shaderPause;
+    private GameOver gameOver;
+    private Ray ray;
+    private float holeTime;
     private float fadeInAlpha;
     private boolean gameOverDeactivate;
-    private GameOver gameOver;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -155,7 +155,7 @@ public class GameScreen extends BaseScreen {
 
         InputMultiplexer im = new InputMultiplexer(player, stage, joystick);
         Gdx.input.setInputProcessor(im);
-
+        ray = new Ray(this);
         calcMusicEffectVolume();
     }
 
@@ -372,7 +372,10 @@ public class GameScreen extends BaseScreen {
                         }
                     }
                 }
-                harvest(tmpConsumable, dt);
+                ray.setCount(24);
+                ray.setSize(4);
+                ray.setPreset(Ray.Preset.GREEN);
+                ray.harvest(player, tmpConsumable, particleEmitter, dt);
             }
             ///
             collideBlackholePoolable(tmpConsumable);
@@ -528,9 +531,20 @@ public class GameScreen extends BaseScreen {
                     }
                 }
 
+                //
                 if (tmpAsteroid.isFragmented()) {
-                    harvest(tmpAsteroid, dt);
+                    ray.setCount(12);
+                    ray.setSize(2);
+                    ray.setPreset(Ray.Preset.GREY);
+                    ray.harvest(player, tmpAsteroid, particleEmitter, dt);
                 }
+                else {
+                    ray.setCount(5);
+                    ray.setSize(3);
+                    ray.setPreset(Ray.Preset.RED);
+                    ray.laser(player, tmpAsteroid, particleEmitter, dt);
+                }
+                //
 
                 for (int j = 0; j < corrosiveAnomalyEmitter.getActiveList().size(); j++) {
                     CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(j);
@@ -569,48 +583,6 @@ public class GameScreen extends BaseScreen {
             ///
             collideBlackholePoolable(tmpAsteroid);
             ///
-        }
-    }
-
-    private void harvest(AbstractPoolable abstractPoolable, float dt) {
-        if (!player.isTaken()) {
-            if (player.getPosition().dst(abstractPoolable.getPosition()) <= Rules.PLAYER_TAKE_RANGE) {
-                tmp1V2.set(player.getPosition()).sub(abstractPoolable.getPosition()).nor().scl(200.0f);
-                abstractPoolable.getPosition().mulAdd(tmp1V2, dt);
-                float dst = player.getPosition().dst(abstractPoolable.getPosition());
-                float scaleX = (dst / Rules.PLAYER_TAKE_RANGE) * abstractPoolable.getSaveScaleX();
-                float scaleY = (dst / Rules.PLAYER_TAKE_RANGE) * abstractPoolable.getSaveScaleY();
-                if (scaleX >= abstractPoolable.getSaveScaleX()) {
-                    scaleX = abstractPoolable.getSaveScaleX();
-                }
-                if (scaleY >= abstractPoolable.getSaveScaleY()) {
-                    scaleY = abstractPoolable.getSaveScaleY();
-                }
-
-                abstractPoolable.setScaleX(scaleX);
-                abstractPoolable.setScaleY(scaleY);
-
-                particleEmitter.setupFromPointToPoint(abstractPoolable.getPosition().x, abstractPoolable.getPosition().y, player.getPosition().x, player.getPosition().y, 1, 2, 0, 1, 0, 0.3f, 0.5f, 1, 0.5f, 0.3f);
-                for (int j = 0; j < 24; j++) {
-                    float ang = 6.28f / 24 * j;
-                    float radX = abstractPoolable.getWidth() / 2 * scaleX;
-                    float radY = abstractPoolable.getHeight() / 2 * scaleY;
-
-                    particleEmitter.setup(abstractPoolable.getPosition().x + radX * (float) Math.cos(ang) + MathUtils.random(-10, 10), abstractPoolable.getPosition().y + radY * (float) Math.sin(ang) + MathUtils.random(-10, 10), 0, 0, 0.1f, 4, 4, 0, 1, 0, 0.2f, 0, 1, 0, 0.0f);
-                }
-
-                abstractPoolable.setScaleX(scaleX);
-                abstractPoolable.setScaleY(scaleY);
-            }
-        } else {
-            abstractPoolable.setScaleX(abstractPoolable.getScaleX() + dt);
-            abstractPoolable.setScaleY(abstractPoolable.getScaleY() + dt);
-            if (abstractPoolable.getScaleX() >= abstractPoolable.getSaveScaleX()) {
-                abstractPoolable.setScaleX(abstractPoolable.getSaveScaleX());
-            }
-            if (abstractPoolable.getScaleY() >= abstractPoolable.getSaveScaleY()) {
-                abstractPoolable.setScaleY(abstractPoolable.getSaveScaleY());
-            }
         }
     }
 
