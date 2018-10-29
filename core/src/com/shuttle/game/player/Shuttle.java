@@ -119,8 +119,8 @@ public class Shuttle extends AbstractShuttle {
     public void badEffect(Consumable.Type type) {
         switch (type) {
             case ASTRONAUT:
-                standing.changeScore(-50000);
-                gs.getGameInfoSystem().setup(position.x, position.y, "Murder!\n-50000", 8.0f, false);
+                standing.changeScore(-Rules.CONSUMABLE_MURDER_SCORE_DECREASE);
+                gs.getGameInfoSystem().setup(position.x, position.y, "Murderer!\n-50000", 8.0f, false);
                 boomBox.playSound(MSConstants.KILL_ASTRONAUT);
                 Vibrator.vibrate(VConstants.PLAYER_ASTRONAUT_DESTROY);
                 break;

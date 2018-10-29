@@ -372,45 +372,7 @@ public class GameScreen extends BaseScreen {
                         }
                     }
                 }
-                if (!player.isTaken()) {
-                    if (player.getPosition().dst(tmpConsumable.getPosition()) <= Rules.PLAYER_TAKE_RANGE) {
-                        tmp1V2.set(player.getPosition()).sub(tmpConsumable.getPosition()).nor().scl(200.0f);
-                        tmpConsumable.getPosition().mulAdd(tmp1V2, dt);
-                        float dst = player.getPosition().dst(tmpConsumable.getPosition());
-                        float scaleX = (dst / Rules.PLAYER_TAKE_RANGE) * tmpConsumable.getSaveScaleX();
-                        float scaleY = (dst / Rules.PLAYER_TAKE_RANGE) * tmpConsumable.getSaveScaleY();
-                        if (scaleX >= tmpConsumable.getSaveScaleX()) {
-                            scaleX = tmpConsumable.getSaveScaleX();
-                        }
-                        if (scaleY >= tmpConsumable.getSaveScaleY()) {
-                            scaleY = tmpConsumable.getSaveScaleY();
-                        }
-
-                        tmpConsumable.setScaleX(scaleX);
-                        tmpConsumable.setScaleY(scaleY);
-
-                        particleEmitter.setupFromPointToPoint(tmpConsumable.getPosition().x, tmpConsumable.getPosition().y, player.getPosition().x, player.getPosition().y, 1, 2, 0, 1, 0, 0.3f, 0.5f, 1, 0.5f, 0.3f);
-                        for (int j = 0; j < 24; j++) {
-                            float ang = 6.28f / 24 * j;
-                            float radX = tmpConsumable.getWidth() / 2 * scaleX;
-                            float radY = tmpConsumable.getHeight() / 2 * scaleY;
-
-                            particleEmitter.setup(tmpConsumable.getPosition().x + radX * (float) Math.cos(ang) + MathUtils.random(-10, 10), tmpConsumable.getPosition().y + radY * (float) Math.sin(ang) + MathUtils.random(-10, 10), 0, 0, 0.1f, 4, 4, 0, 1, 0, 0.2f, 0, 1, 0, 0.0f);
-                        }
-
-                        tmpConsumable.setScaleX(scaleX);
-                        tmpConsumable.setScaleY(scaleY);
-                    }
-                } else {
-                    tmpConsumable.setScaleX(tmpConsumable.getScaleX() + dt);
-                    tmpConsumable.setScaleY(tmpConsumable.getScaleY() + dt);
-                    if (tmpConsumable.getScaleX() >= tmpConsumable.getSaveScaleX()) {
-                        tmpConsumable.setScaleX(tmpConsumable.getSaveScaleX());
-                    }
-                    if (tmpConsumable.getScaleY() >= tmpConsumable.getSaveScaleY()) {
-                        tmpConsumable.setScaleY(tmpConsumable.getSaveScaleY());
-                    }
-                }
+                harvest(tmpConsumable, dt);
             }
             ///
             collideBlackholePoolable(tmpConsumable);
@@ -566,6 +528,10 @@ public class GameScreen extends BaseScreen {
                     }
                 }
 
+                if (tmpAsteroid.isFragmented()) {
+                    harvest(tmpAsteroid, dt);
+                }
+
                 for (int j = 0; j < corrosiveAnomalyEmitter.getActiveList().size(); j++) {
                     CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(j);
                     if (!tmpAsteroid.isFragmented() && tmpAnomaly.getPosition().dst(tmpAsteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
@@ -603,6 +569,48 @@ public class GameScreen extends BaseScreen {
             ///
             collideBlackholePoolable(tmpAsteroid);
             ///
+        }
+    }
+
+    private void harvest(AbstractPoolable abstractPoolable, float dt) {
+        if (!player.isTaken()) {
+            if (player.getPosition().dst(abstractPoolable.getPosition()) <= Rules.PLAYER_TAKE_RANGE) {
+                tmp1V2.set(player.getPosition()).sub(abstractPoolable.getPosition()).nor().scl(200.0f);
+                abstractPoolable.getPosition().mulAdd(tmp1V2, dt);
+                float dst = player.getPosition().dst(abstractPoolable.getPosition());
+                float scaleX = (dst / Rules.PLAYER_TAKE_RANGE) * abstractPoolable.getSaveScaleX();
+                float scaleY = (dst / Rules.PLAYER_TAKE_RANGE) * abstractPoolable.getSaveScaleY();
+                if (scaleX >= abstractPoolable.getSaveScaleX()) {
+                    scaleX = abstractPoolable.getSaveScaleX();
+                }
+                if (scaleY >= abstractPoolable.getSaveScaleY()) {
+                    scaleY = abstractPoolable.getSaveScaleY();
+                }
+
+                abstractPoolable.setScaleX(scaleX);
+                abstractPoolable.setScaleY(scaleY);
+
+                particleEmitter.setupFromPointToPoint(abstractPoolable.getPosition().x, abstractPoolable.getPosition().y, player.getPosition().x, player.getPosition().y, 1, 2, 0, 1, 0, 0.3f, 0.5f, 1, 0.5f, 0.3f);
+                for (int j = 0; j < 24; j++) {
+                    float ang = 6.28f / 24 * j;
+                    float radX = abstractPoolable.getWidth() / 2 * scaleX;
+                    float radY = abstractPoolable.getHeight() / 2 * scaleY;
+
+                    particleEmitter.setup(abstractPoolable.getPosition().x + radX * (float) Math.cos(ang) + MathUtils.random(-10, 10), abstractPoolable.getPosition().y + radY * (float) Math.sin(ang) + MathUtils.random(-10, 10), 0, 0, 0.1f, 4, 4, 0, 1, 0, 0.2f, 0, 1, 0, 0.0f);
+                }
+
+                abstractPoolable.setScaleX(scaleX);
+                abstractPoolable.setScaleY(scaleY);
+            }
+        } else {
+            abstractPoolable.setScaleX(abstractPoolable.getScaleX() + dt);
+            abstractPoolable.setScaleY(abstractPoolable.getScaleY() + dt);
+            if (abstractPoolable.getScaleX() >= abstractPoolable.getSaveScaleX()) {
+                abstractPoolable.setScaleX(abstractPoolable.getSaveScaleX());
+            }
+            if (abstractPoolable.getScaleY() >= abstractPoolable.getSaveScaleY()) {
+                abstractPoolable.setScaleY(abstractPoolable.getSaveScaleY());
+            }
         }
     }
 

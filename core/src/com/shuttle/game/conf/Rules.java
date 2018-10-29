@@ -24,6 +24,8 @@ public final class Rules {
     public static final float CONSUMABLE_RESPAWN_TIME = 6.0f;
     //10000
     public static final int CONSUMABLE_BASE_SCORE_ADD = 10000;
+    //10000
+    public static final int CONSUMABLE_MURDER_SCORE_DECREASE = 50000;
     //ANOMALY
     //0.15f
     public static final float ANOMALIES_BOOM_MIN_DELAY = 0.15f;
