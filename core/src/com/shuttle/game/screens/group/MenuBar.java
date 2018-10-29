@@ -14,7 +14,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.screens.ScreenManager;
-import com.shuttle.game.utils.BoomBox;
+import com.shuttle.game.utils.effects.BoomBox;
 
 /**
  * @author Shuttle on 3/24/18.

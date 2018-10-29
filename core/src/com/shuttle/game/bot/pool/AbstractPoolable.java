@@ -6,8 +6,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.particle.ParticleEmitter;
 import com.shuttle.game.screens.GameScreen;
-import com.shuttle.game.utils.MoveProcessor;
-import com.shuttle.game.utils.BoomBox;
+import com.shuttle.game.utils.effects.MoveProcessor;
+import com.shuttle.game.utils.effects.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 
 import lombok.Getter;

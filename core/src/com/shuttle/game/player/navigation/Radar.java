@@ -16,8 +16,8 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.BoomBox;
-import com.shuttle.game.utils.Oscillator;
+import com.shuttle.game.utils.effects.BoomBox;
+import com.shuttle.game.utils.effects.Oscillator;
 
 import lombok.Getter;
 import lombok.Setter;

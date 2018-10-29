@@ -10,7 +10,7 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.BoomBox;
+import com.shuttle.game.utils.effects.BoomBox;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

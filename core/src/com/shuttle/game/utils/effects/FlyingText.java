@@ -1,4 +1,4 @@
-package com.shuttle.game;
+package com.shuttle.game.utils.effects;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;

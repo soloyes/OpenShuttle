@@ -43,9 +43,9 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.group.PauseGroup;
 import com.shuttle.game.utils.BoundCheck;
-import com.shuttle.game.utils.Ray;
-import com.shuttle.game.utils.Shake;
-import com.shuttle.game.utils.Vibrator;
+import com.shuttle.game.utils.effects.Ray;
+import com.shuttle.game.utils.effects.Shake;
+import com.shuttle.game.utils.effects.Vibrator;
 
 import java.util.List;
 

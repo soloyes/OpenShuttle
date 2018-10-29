@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.screens.GameScreen;
-import com.shuttle.game.utils.MoveProcessor;
+import com.shuttle.game.utils.effects.MoveProcessor;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Regions;

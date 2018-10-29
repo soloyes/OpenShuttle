@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.screens.GameScreen;
-import com.shuttle.game.utils.BoomBox;
+import com.shuttle.game.utils.effects.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 
 import lombok.Getter;

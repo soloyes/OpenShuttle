@@ -5,7 +5,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.MoveProcessor;
+import com.shuttle.game.utils.effects.MoveProcessor;
 
 /**
  * @author Shuttle on 10/11/18.

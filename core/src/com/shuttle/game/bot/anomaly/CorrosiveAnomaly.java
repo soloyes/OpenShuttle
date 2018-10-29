@@ -8,13 +8,13 @@ import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.VConstants;
-import com.shuttle.game.utils.MoveProcessor;
+import com.shuttle.game.utils.effects.MoveProcessor;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
-import com.shuttle.game.utils.Oscillator;
+import com.shuttle.game.utils.effects.Oscillator;
 import com.shuttle.game.utils.Regions;
-import com.shuttle.game.utils.Vibrator;
+import com.shuttle.game.utils.effects.Vibrator;
 
 import lombok.Getter;
 import lombok.Setter;
