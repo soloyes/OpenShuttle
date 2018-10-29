@@ -689,8 +689,6 @@ public class GameScreen extends BaseScreen {
     private void damageToAnomaly(AbstractPoolable abstractPoolable) {
         abstractPoolable.destroy();
         player.getRamShield().blink(1.0f);
-        int asc = (abstractPoolable.getLevel()) * Rules.ANOMALIES_BASE_SCORE_ADD;
-        player.getStanding().changeScore(asc);
         player.slowDown(abstractPoolable.getLevel() * 50.0f);
         player.changePower(-abstractPoolable.getLevel());
         abstractPoolable.showSprayCollision(particleEmitter);

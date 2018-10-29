@@ -17,8 +17,8 @@ public enum KillingSpree {
     }
 
     public static KillingSpree getKillingSpreeFromKillsCount(int killsCount) {
-        if (killsCount > 6) {
-            return values()[6];
+        if (killsCount > values().length - 1) {
+            return values()[values().length - 1];
         }
         return values()[killsCount];
     }

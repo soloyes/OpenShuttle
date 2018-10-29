@@ -39,8 +39,8 @@ public final class Rules {
     public static final int ANOMALIES_MAGNETIC_AT_START = 0;
     //0
     public static final int ANOMALIES_RADIATION_AT_START = 0;
-    //5000
-    public static final int ANOMALIES_BASE_SCORE_ADD = 5000;
+    //500
+    public static final int ANOMALIES_BASE_SCORE_ADD = 500;
     //30.0f
     public static final float ANOMALIES_ELECTRIC_RESPAWN_TIME = 30.0f;
     //1

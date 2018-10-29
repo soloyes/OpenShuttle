@@ -103,6 +103,7 @@ public class Shuttle extends AbstractShuttle {
         this.vector2List = new LinkedList<Vector2>();
         this.angleList = new LinkedList<Float>();
         this.alphaList = new LinkedList<Float>();
+        this.killSeries = 1;
     }
 
     public boolean addZigZag(float amount) {
@@ -152,6 +153,8 @@ public class Shuttle extends AbstractShuttle {
                     KillingSpree.getKillingSpreeFromKillsCount(killSeries).getTextSizeModifier(),
                     false
             );
+            int asc = (abstractPoolable.getLevel()) * Rules.ANOMALIES_BASE_SCORE_ADD * killSeries;
+            standing.changeScore(asc);
         } else {
             gs.getGameInfoSystem().setup(
                     position.x, position.y,
@@ -427,8 +430,8 @@ public class Shuttle extends AbstractShuttle {
     private void checkSeries(float dt) {
         if (killTimer > 0.0f) {
             killTimer -= dt;
-            if (killTimer <= 0.0f) {
-                killSeries = 0;
+            if (killTimer <= 1.0f) {
+                killSeries = 1;
             }
         }
     }
