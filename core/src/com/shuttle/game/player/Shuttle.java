@@ -178,7 +178,8 @@ public class Shuttle extends AbstractShuttle {
                     textureRegion[t],
                     vector2List.get(i).x, vector2List.get(i).y,
                     widthBlur / 2, heightBlur / 2,
-                    widthBlur, heightBlur, scaleXBlur, scaleYBlur,
+                    widthBlur, heightBlur,
+                    scaleXBlur, scaleYBlur,
                     angleList.get(i)
             );
             tmpColor.a = 1.0f;
@@ -193,7 +194,8 @@ public class Shuttle extends AbstractShuttle {
                 textureRegion[!Rules.GAME_OVER ? 0 : 1],
                 position.x - width / 2, position.y - height / 2,
                 width / 2, height / 2,
-                width, height, scaleX, scaleY,
+                width, height,
+                scaleX, scaleY,
                 angle
         );
         if (Rules.GAME_OVER) {

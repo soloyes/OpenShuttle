@@ -33,11 +33,9 @@ public class Asteroid extends AbstractPoolable {
                 new TextureRegion(
                         Assets.getInstance()
                                 .getAtlas()
-                                .findRegion(PaintConstants.ASTEROID_REGION)
-                ),
-                8,
-                8,
-                32);
+                                .findRegion(PaintConstants.ASTEROID_REGION)),
+                8, 8, 32
+        );
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.angle = MathUtils.random(365f);
@@ -58,7 +56,10 @@ public class Asteroid extends AbstractPoolable {
                 textureRegions[(int) frame],
                 position.x - width / 2,
                 position.y - height / 2,
-                width / 2, height / 2, width, height, scaleX, scaleY, angle
+                width / 2, height / 2,
+                width, height,
+                scaleX, scaleY,
+                angle
         );
     }
 

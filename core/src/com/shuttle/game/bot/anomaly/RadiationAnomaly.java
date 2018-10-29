@@ -35,11 +35,8 @@ public class RadiationAnomaly extends AbstractAnomaly {
                 new TextureRegion(
                         Assets.getInstance()
                                 .getAtlas()
-                                .findRegion(PaintConstants.ANOMALY_RADIATION_REGION)
-                ),
-                4,
-                4,
-                16
+                                .findRegion(PaintConstants.ANOMALY_RADIATION_REGION)),
+                4, 4, 16
         );
         this.width = PaintConstants.ANOMALY_RADIATION_WIDTH;
         this.height = PaintConstants.ANOMALY_RADIATION_HEIGHT;
@@ -80,14 +77,10 @@ public class RadiationAnomaly extends AbstractAnomaly {
     public void basicRender(SpriteBatch batch) {
         batch.draw(
                 textureRegions[(int) (frame % textureRegions.length)],
-                position.x - width / 2,
-                position.y - height / 2,
-                width / 2,
-                height / 2,
-                width,
-                height,
-                scaleX,
-                scaleY,
+                position.x - width / 2, position.y - height / 2,
+                width / 2, height / 2,
+                width, height,
+                scaleX, scaleY,
                 clockwise * angle
         );
     }

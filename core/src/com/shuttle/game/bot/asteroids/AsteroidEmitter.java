@@ -21,7 +21,7 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
     private float respawnTime;
     private boolean boom;
     private Vector2 position;
-    private Vector2 destanation;
+    private Vector2 destination;
     private float size;
     private float scale;
     private float count;
@@ -73,14 +73,14 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
 
     private void createAsteroid() {
         position = new Vector2();
-        destanation = new Vector2();
+        destination = new Vector2();
         Side side = Side.values()[MathUtils.random(0, 3)];
         if (side == Side.NORTH) {
             position.set(
                     MathUtils.random(Rules.SPACE_WIDTH / 3, 2 * Rules.SPACE_WIDTH / 3),
                     Rules.SPACE_HEIGHT + PaintConstants.ASTEROID_HEIGHT / 2
             );
-            destanation.set(
+            destination.set(
                     MathUtils.random(0, Rules.SPACE_WIDTH),
                     MathUtils.random(0, Rules.SPACE_HEIGHT / 2)
             );
@@ -90,7 +90,7 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
                     MathUtils.random(Rules.SPACE_WIDTH / 3, 2 * Rules.SPACE_WIDTH / 3),
                     -PaintConstants.ASTEROID_HEIGHT / 2
             );
-            destanation.set(
+            destination.set(
                     MathUtils.random(0, Rules.SPACE_WIDTH),
                     MathUtils.random(Rules.SPACE_HEIGHT / 2, Rules.SPACE_HEIGHT)
             );
@@ -100,7 +100,7 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
                     -PaintConstants.ASTEROID_WIDTH / 2,
                     MathUtils.random(Rules.SPACE_HEIGHT / 3, 2 * Rules.SPACE_HEIGHT / 3)
             );
-            destanation.set(
+            destination.set(
                     MathUtils.random(Rules.SPACE_WIDTH / 2, Rules.SPACE_WIDTH),
                     MathUtils.random(0, Rules.SPACE_HEIGHT)
             );
@@ -110,18 +110,18 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
                     Rules.SPACE_WIDTH + PaintConstants.ASTEROID_WIDTH / 2,
                     MathUtils.random(Rules.SPACE_HEIGHT / 3, 2 * Rules.SPACE_HEIGHT / 3)
             );
-            destanation.set(
+            destination.set(
                     MathUtils.random(0, Rules.SPACE_WIDTH / 2),
                     MathUtils.random(0, Rules.SPACE_HEIGHT)
             );
         }
-        getActiveElement().init(position, destanation, 1.0f, false);
+        getActiveElement().init(position, destination, 1.0f, false);
     }
 
     private void createFragment() {
-        destanation.set(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
+        destination.set(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
         Asteroid tmpAsteroid = getActiveElement();
-        tmpAsteroid.init(position, destanation, scale, true);
+        tmpAsteroid.init(position, destination, scale, true);
         tmpAsteroid.setSizeForHarvest(size);
     }
 

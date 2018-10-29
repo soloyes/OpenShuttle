@@ -22,9 +22,23 @@ public class Background {
 
     public void render(SpriteBatch batch) {
         for (int i = 0; i < stars.length; i++) {
-            batch.draw(starTexture, stars[i].position.x - 8, stars[i].position.y - 8, 8, 8, 16, 16, stars[i].size, stars[i].size, 0);
+            batch.draw(
+                    starTexture,
+                    stars[i].position.x - stars[i].width / 2, stars[i].position.y - stars[i].height / 2,
+                    stars[i].width / 2, stars[i].height / 2,
+                    stars[i].width, stars[i].height,
+                    stars[i].scale, stars[i].scale,
+                    0
+            );
             if (MathUtils.random(0, 300) < 2) {
-                batch.draw(starTexture, stars[i].position.x - 8, stars[i].position.y - 8, 8, 8, 16, 16, stars[i].size * 1.5f, stars[i].size * 1.5f, 0);
+                batch.draw(
+                        starTexture,
+                        stars[i].position.x - stars[i].width / 2, stars[i].position.y - stars[i].height / 2,
+                        stars[i].width / 2, stars[i].height / 2,
+                        stars[i].width, stars[i].height,
+                        stars[i].scale * PaintConstants.STAR16_BLINK_FACTOR, stars[i].scale * PaintConstants.STAR16_BLINK_FACTOR,
+                        0
+                );
             }
         }
     }
@@ -38,21 +52,23 @@ public class Background {
     private class Star {
         private Vector2 position;
         private float speed;
-        private float size;
+        private float scale;
+        private float width;
+        private float height;
 
         public Star() {
             this.position = new Vector2(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
             this.speed = MathUtils.random(5.0f, 60.0f);
-            this.size = MathUtils.random(0.5f, 1.5f);
+            this.scale = MathUtils.random(0.5f, 1.5f);
+            this.speed = MathUtils.random(5.0f, 60.0f);
+            this.width = PaintConstants.STAR16_WIDTH;
+            this.height = PaintConstants.STAR16_HEIGHT;
         }
 
         public void update(float dt) {
             position.x -= speed * dt;
-            if (position.x < -20) {
-                size = MathUtils.random(0.5f, 1.5f);
-                speed = MathUtils.random(5.0f, 60.0f);
+            if (position.x < -width) {
                 position.x = Rules.SPACE_WIDTH;
-                position.y = MathUtils.random(0.0f, Rules.SPACE_HEIGHT);
             }
         }
     }

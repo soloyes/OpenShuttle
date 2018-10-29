@@ -12,6 +12,7 @@ import com.shuttle.game.utils.MoveProcessor;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.utils.Oscillator;
 import com.shuttle.game.utils.Regions;
 import com.shuttle.game.utils.Vibrator;
 
@@ -26,7 +27,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     private float slimTimer;
     private float slim;
     private int glowWidth, glowHeight;
-    private boolean oscillator;
+    private Oscillator oscillator;
 
     public CorrosiveAnomaly(GameScreen gs) {
         super(gs);
@@ -47,6 +48,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         this.glowHeight = PaintConstants.ANOMALY_GLOW_HEIGHT;
         this.type = Type.CORROSIVE;
         this.moveProcessor = new MoveProcessor(gs);
+        this.oscillator = new Oscillator();
     }
 
     @Override
@@ -62,8 +64,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         this.position.set(x, y);
         this.active = true;
         this.born = false;
-        this.oscillator = true;
-        this.color.a = PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX;
+        this.color.a = PaintConstants.ANOMALY_CORROSIVE_GLOW_OSCILLATOR_MAX;
         float rnd = MathUtils.random(0.0f, 1.0f);
         for (int i = probabilities.length - 1; i > 0; i--) {
             if (rnd < probabilities[i]) {
@@ -94,20 +95,10 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         scaleAndBorn(dt);
 
         if (born) {
-            if (oscillator) {
-                color.a -= dt / 2;
-                if (color.a <= 0.0f) {
-                    color.a = 0.0f;
-                    oscillator = false;
-                }
-            } else {
-                color.a += dt / 2;
-                if (color.a >= PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX) {
-                    color.a = PaintConstants.ANOMALY_GLOW_OSCILLATOR_MAX;
-                    oscillator = true;
-                }
-            }
-
+            color.a = oscillator.oscillate(
+                    color.a, PaintConstants.ANOMALY_CORROSIVE_OSCILLATION_FREQUENCY,
+                    PaintConstants.ANOMALY_CORROSIVE_GLOW_OSCILLATOR_MIN, PaintConstants.ANOMALY_CORROSIVE_GLOW_OSCILLATOR_MAX, dt
+            );
             if (activated) {
                 slimTimer += dt;
             }
@@ -177,25 +168,18 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 glowRegion,
                 position.x - glowWidth / 2,
                 position.y - glowHeight / 2,
-                glowWidth / 2,
-                glowHeight / 2,
-                glowWidth,
-                glowHeight,
-                scaleX,
-                scaleY,
+                glowWidth / 2, glowHeight / 2,
+                glowWidth, glowHeight,
+                scaleX, scaleY,
                 clockwise * angle
         );
 
         batch.draw(
                 textureRegions[(int) (frame % PaintConstants.ANOMALY_CORROSIVE_FRAMES)],
-                position.x - width / 2,
-                position.y - height / 2,
-                width / 2,
-                height / 2,
-                width,
-                height,
-                scaleX,
-                scaleY,
+                position.x - width / 2, position.y - height / 2,
+                width / 2, height / 2,
+                width, height,
+                scaleX, scaleY,
                 clockwise * angle
         );
     }
@@ -225,6 +209,5 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 color.set(Color.RED.r, Color.RED.g, Color.RED.b, color.a);
                 break;
         }
-
     }
 }

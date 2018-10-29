@@ -164,12 +164,11 @@ public class ParticleEmitter extends ObjectPool<ParticleEmitter.Particle> {
         public void basicRender(SpriteBatch batch) {
             batch.draw(
                     particleTexture,
-                    this.getPosition().x - 8,
-                    this.getPosition().y - 8,
+                    this.getPosition().x - 8, this.getPosition().y - 8,
                     8, 8,
                     16, 16,
-                    this.getCurrentSize(),
-                    this.getCurrentSize(), 0
+                    this.getCurrentSize(), this.getCurrentSize(),
+                    0
             );
         }
     }

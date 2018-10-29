@@ -21,10 +21,10 @@ public class PlayerPointer {
 
     public PlayerPointer(Shuttle player) {
         this.point = Assets.getInstance().getAtlas().findRegion(PaintConstants.STAR16_REGION);
-        this.player = player;
-        this.tmp = new Vector2();
         this.width = PaintConstants.POINTER_WIDTH;
         this.height = PaintConstants.POINTER_HEIGHT;
+        this.player = player;
+        this.tmp = new Vector2();
     }
 
     public void render(SpriteBatch batch) {
@@ -53,10 +53,10 @@ public class PlayerPointer {
             tmp.set(0, Rules.SPACE_HEIGHT - height);
 
         if (lost) {
-            if (blinkTimer <= 0.33f) {
+            if (blinkTimer <= PaintConstants.POINTER_BLINK_FREQUENCY) {
                 batch.draw(point, tmp.x, tmp.y, width, height, width, height, 1.0f, 1.0f, 0.0f);
             } else {
-                blinkTimer -= 0.33f;
+                blinkTimer -= PaintConstants.POINTER_BLINK_FREQUENCY;
             }
 
         }

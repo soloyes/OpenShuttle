@@ -44,5 +44,4 @@ public class Astronaut extends Consumable {
         moveProcessor.update(this, dt);
         boundCheck.checkAndHandleBoundsAndDestroy(this);
     }
-
 }

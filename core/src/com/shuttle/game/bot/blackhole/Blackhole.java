@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.Oscillator;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -36,9 +37,9 @@ public class Blackhole {
     private float takeRange;
     @Getter
     private Vector2 radius;
-    private boolean oscillator;
-    private boolean spiralOscillator;
-    private boolean glowOscillator;
+    private Oscillator oscillator;
+    @Getter
+    private float shaderDiameter;
 
     public Blackhole() {
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.BLACKHOLE_HOLE_REGION);
@@ -60,10 +61,12 @@ public class Blackhole {
         this.spiralScale = 1.0f;
         this.glowScale = 1.0f;
         this.glowB = 0.0f;
+        this.shaderDiameter = PaintConstants.BLACKHOLE_SHADER_OSCILLATOR_MIN;
         this.angle = MathUtils.random(365);
         this.rotation = MathUtils.random(365);
         this.radialSpeed = MathUtils.random(30, 50);
         this.radius = new Vector2(MathUtils.random(Rules.SPACE_WIDTH / 6, Rules.SPACE_WIDTH / 3), 0);
+        this.oscillator = new Oscillator();
         setPosition();
     }
 
@@ -116,46 +119,15 @@ public class Blackhole {
 
         setPosition();
 
-        if (oscillator) {
-            scale -= dt / 10;
-            if (scale <= 0.8f) {
-                scale = 0.8f;
-                oscillator = false;
-            }
-        } else {
-            scale += dt / 10;
-            if (scale >= 1.0f) {
-                scale = 1.0f;
-                oscillator = true;
-            }
-        }
-
-        if (spiralOscillator) {
-            spiralScale -= dt / 20;
-            if (spiralScale <= 0.9f) {
-                spiralScale = 0.9f;
-                spiralOscillator = false;
-            }
-        } else {
-            spiralScale += dt / 20;
-            if (spiralScale >= 1.0f) {
-                spiralScale = 1.0f;
-                spiralOscillator = true;
-            }
-        }
-
-        if (glowOscillator) {
-            glowB -= dt / 5;
-            if (glowB <= 0.0f) {
-                glowB = 0.0f;
-                glowOscillator = false;
-            }
-        } else {
-            glowB += dt / 5;
-            if (glowB >= 0.5f) {
-                glowB = 0.5f;
-                glowOscillator = true;
-            }
-        }
+        scale = oscillator.oscillate(scale, PaintConstants.BLACKHOLE_OSCILLATION_FREQUENCY, PaintConstants.BLACKHOLE_HOLE_OSCILLATOR_MIN, PaintConstants.BLACKHOLE_HOLE_OSCILLATOR_MAX, dt);
+        spiralScale = oscillator.oscillate(spiralScale, PaintConstants.BLACKHOLE_SPIRAL_OSCILLATION_FREQUENCY, PaintConstants.BLACKHOLE_SPIRAL_OSCILLATOR_MIN, PaintConstants.BLACKHOLE_SPIRAL_OSCILLATOR_MAX, dt);
+        glowB = oscillator.oscillate(glowB, PaintConstants.BLACKHOLE_GLOW_OSCILLATION_FREQUENCY, PaintConstants.BLACKHOLE_GLOW_OSCILLATOR_MIN, PaintConstants.BLACKHOLE_GLOW_OSCILLATOR_MAX, dt);
+        shaderDiameter = oscillator.oscillate(
+                shaderDiameter,
+                PaintConstants.BLACKHOLE_SHADER_OSCILLATION_FREQUENCY,
+                PaintConstants.BLACKHOLE_SHADER_OSCILLATOR_MIN,
+                PaintConstants.BLACKHOLE_SHADER_OSCILLATOR_MAX,
+                dt / PaintConstants.BLACKHOLE_SHADER_OSCILLATION_FACATOR
+        );
     }
 }

@@ -9,6 +9,7 @@ varying vec4 v_color;
 uniform LOWP sampler2D u_texture;
 uniform LOWP vec2 center;
 uniform LOWP float time;
+uniform LOWP float dmax;
 uniform float isGrey;
 uniform vec2 resolution;
 
@@ -23,7 +24,7 @@ void main (void)
     gl_FragColor = texture2D(u_texture, v_texCoord0);
 
     float d = length(sub2);
-    float dmax = 0.07;
+    //float dmax = 0.07;
 
     if(d < dmax) {
         float a = d * 90.0 + time * d;

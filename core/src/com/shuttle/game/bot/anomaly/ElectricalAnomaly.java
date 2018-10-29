@@ -27,11 +27,8 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                 new TextureRegion(
                         Assets.getInstance()
                                 .getAtlas()
-                                .findRegion(PaintConstants.ANOMALY_ELECTRIC_REGION)
-                ),
-                4,
-                4,
-                16
+                                .findRegion(PaintConstants.ANOMALY_ELECTRIC_REGION)),
+                4, 4, 16
         );
         this.width = PaintConstants.ANOMALY_ELECTRIC_WIDTH;
         this.height = PaintConstants.ANOMALY_ELECTRIC_HEIGHT;
@@ -72,14 +69,10 @@ public class ElectricalAnomaly extends AbstractAnomaly {
     public void basicRender(SpriteBatch batch) {
         batch.draw(
                 textureRegions[(int) (frame % textureRegions.length)],
-                position.x - width / 2,
-                position.y - height / 2,
-                width / 2,
-                height / 2,
-                width,
-                height,
-                scaleX,
-                scaleY,
+                position.x - width / 2, position.y - height / 2,
+                width / 2, height / 2,
+                width, height,
+                scaleX, scaleY,
                 clockwise * angle
         );
     }

@@ -29,11 +29,7 @@ public class AnomalyTimer {
     }
 
     public void render(SpriteBatch batch) {
-        font64.draw(batch,
-                sb,
-                ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
-                ScreenManager.getInstance().getViewport().getWorldHeight() - 20
-        );
+        font64.draw(batch, sb, ScreenManager.getInstance().getViewport().getWorldWidth() / 2, ScreenManager.getInstance().getViewport().getWorldHeight() - 20);
     }
 
     public void update(float dt) {

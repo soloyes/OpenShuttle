@@ -157,10 +157,6 @@ public final class Rules {
     //1500.0f
     public static final float CAMERA_SMOOTH_VELOCITY = 1500.0f;
     //RADAR
-    //0.4f
-    public static float RADAR_OSCILLATION_FACTOR = 0.4f;
-    //2.5f
-    public static float RADAR_OSCILLATION_FREQUENCY = 2.5f;
     //3.0f
     private static final float PLAYER_ENGINE_POWER_FACTOR = 3.0f;
     //

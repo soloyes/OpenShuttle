@@ -42,14 +42,10 @@ public class Scratch {
         batch.setColor(tmpColor);
         batch.draw(
                 textures[frame],
-                player.getPosition().x - width / 2,
-                player.getPosition().y - height / 2,
-                width / 2,
-                height / 2,
-                width,
-                height,
-                scaleX,
-                scaleY,
+                player.getPosition().x - width / 2, player.getPosition().y - height / 2,
+                width / 2, height / 2,
+                width, height,
+                scaleX, scaleY,
                 player.getAngle()
         );
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);

@@ -227,10 +227,10 @@ public class GameScreen extends BaseScreen {
         } else {
             batch.setShader(shaderBlackHole);
             shaderBlackHole.setUniformf("resolution", Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
-
             holeTime += dt;
             shaderBlackHole.setUniformf("time", holeTime);
             shaderBlackHole.setUniformf("center", shaderHoleX, shaderHoleY);
+            shaderBlackHole.setUniformf("dmax", blackhole.getShaderDiameter());
 
             if (pauseGroup.isPause() || Rules.GAME_OVER) {
                 shaderBlackHole.setUniformf("isGrey", 1.0f);

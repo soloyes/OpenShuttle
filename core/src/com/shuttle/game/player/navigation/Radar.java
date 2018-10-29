@@ -17,6 +17,7 @@ import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.BoomBox;
+import com.shuttle.game.utils.Oscillator;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -36,13 +37,13 @@ public class Radar {
     @Setter
     private boolean active;
     private int width, height;
-    private Shuttle player;
     private float scaleX, scaleY;
     private float rotation;
-    private boolean oscillator;
-    private float o;
+    private float dotSize;
+    private Shuttle player;
     private Color color;
     private BoomBox boomBox;
+    private Oscillator oscillator;
 
     public Radar(GameScreen gs, Shuttle player) {
         this.gs = gs;
@@ -55,8 +56,8 @@ public class Radar {
         this.height = PaintConstants.RADAR_HEIGHT;
         this.scaleX = this.scaleY = 1;
         this.generatePosition();
-        this.oscillator = true;
-        this.o = 0.0f;
+        this.oscillator = new Oscillator();
+        this.dotSize = 0.0f;
         this.color = new Color(Color.valueOf(PaintConstants.BACKGROUND_COLOR_HEX));
         this.boomBox = new BoomBox();
     }
@@ -85,7 +86,13 @@ public class Radar {
                 drawRadar(batch);
             }
         } else {
-            batch.draw(backgroundTexture, position.x - width / 2, position.y - height / 2, width / 2, height / 2, width, height, scaleX, scaleY, 0);
+            batch.draw(
+                    backgroundTexture,
+                    position.x - width / 2, position.y - height / 2,
+                    width / 2, height / 2,
+                    width, height, scaleX, scaleY,
+                    rotation
+            );
         }
     }
 
@@ -109,7 +116,7 @@ public class Radar {
     private void drawPoolables(SpriteBatch batch, AbstractPoolable abstractPoolable) {
         float d = Vector2.dst(player.getPosition().x, player.getPosition().y, abstractPoolable.getPosition().x, abstractPoolable.getPosition().y);
         if (d < 2000.0f) {
-            float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f + o;
+            float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f + dotSize;
             tmp.set(abstractPoolable.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
             batch.setColor(setPointColor(abstractPoolable));
             batch.draw(pointTexture, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
@@ -165,18 +172,6 @@ public class Radar {
     }
 
     private void updateRadar(float dt) {
-        if (oscillator) {
-            o += Rules.RADAR_OSCILLATION_FREQUENCY * dt;
-            if (o >= Rules.RADAR_OSCILLATION_FACTOR) {
-                o = Rules.RADAR_OSCILLATION_FACTOR;
-                oscillator = false;
-            }
-        } else {
-            o -= Rules.RADAR_OSCILLATION_FREQUENCY * dt;
-            if (o <= -Rules.RADAR_OSCILLATION_FACTOR) {
-                o = -Rules.RADAR_OSCILLATION_FACTOR;
-                oscillator = true;
-            }
-        }
+        dotSize = oscillator.oscillate(dotSize, PaintConstants.RADAR_OSCILLATION_FREQUENCY, PaintConstants.RADAR_GLOW_OSCILLATOR_MIN, PaintConstants.RADAR_GLOW_OSCILLATOR_MAX, dt);
     }
 }
