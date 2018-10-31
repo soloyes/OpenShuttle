@@ -611,7 +611,7 @@ public class GameScreen extends BaseScreen {
 
     ///
     private void collideBlackholePlayer(float dt) {
-        if (player.getPosition().dst(blackhole.getPosition()) <= Rules.BLACKHOLE_TAKE_RANGE/10) {
+        if (player.getPosition().dst(blackhole.getPosition()) <= Rules.BLACKHOLE_TAKE_RANGE) {
             player.setTaken(true);
             player.getVelocity().scl(0.5f);
             tmp1V2.set(blackhole.getPosition()).sub(player.getPosition()).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_POOLABLE);
