@@ -254,7 +254,7 @@ public class Shuttle extends AbstractShuttle {
                 boomBox.playSound(MSConstants.GET_ASTRONAUT);
                 break;
             case CRATE:
-                int x = 3;MathUtils.random(0, 4);
+                int x = MathUtils.random(0, 4);
                 /*Hack to pretty shadow effect. This effect should be finished firstly*/
                 if (velocity.len() >= Rules.PLAYER_ENGINE_POWER) {
                     x++;

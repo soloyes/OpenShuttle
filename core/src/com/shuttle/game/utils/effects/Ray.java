@@ -103,11 +103,10 @@ public class Ray {
             float dst = player.getPosition().dst(asteroid.getPosition());
             float scaleX = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleX();
             float scaleY = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleY();
-
             particleEmitter.setupFromPointToPoint(
                     asteroid.getPosition().x, asteroid.getPosition().y,
                     player.getPosition().x, player.getPosition().y,
-                    0.5f, 0.5f,
+                    1.0f, 1.0f,
                     preset.startR, preset.startG, preset.startB, 0.3f,
                     preset.endA, preset.endG, preset.endB, 0.3f
             );
@@ -128,6 +127,7 @@ public class Ray {
                 boomBox.playSound(MSConstants.ASTEROID_DESTROY);
                 gs.getAsteroidEmitter().boom(asteroid.getPosition(), player.getShieldLevel());
                 asteroid.destroy();
+                asteroid.showSprayCollision(particleEmitter);
                 asteroid.setTimeToBurn(0.0f);
             }
         } else asteroid.setTimeToBurn(0.0f);

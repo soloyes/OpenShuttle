@@ -49,6 +49,7 @@ public class Asteroid extends AbstractPoolable {
         this.type = Type.ASTEROID;
         this.moveProcessor = new MoveProcessor(gs);
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        this.spreeColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override
@@ -112,6 +113,7 @@ public class Asteroid extends AbstractPoolable {
         this.scaleX = this.saveScaleX = scale;
         this.scaleY = this.saveScaleY = scale;
         this.color.set(1.0f, 1.0f, 1.0f, 1.0f);
+        this.spreeColor.set(1.0f, 1.0f, 1.0f, 1.0f);
         this.spiralRadius = MathUtils.random(20, 60);
     }
 
