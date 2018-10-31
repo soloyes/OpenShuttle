@@ -145,7 +145,6 @@ public class Shuttle extends AbstractShuttle {
 
     public void killPlusPlus(AbstractPoolable abstractPoolable) {
         if (abstractPoolable.getLevel() != 0) {
-            killSeries++;
             killTimer = Rules.PLAYER_KILL_TIMER;
             gs.getGameInfoSystem().setup(
                     position.x, position.y,
@@ -155,6 +154,7 @@ public class Shuttle extends AbstractShuttle {
             );
             int asc = (abstractPoolable.getLevel()) * Rules.ANOMALIES_BASE_SCORE_ADD * killSeries;
             standing.changeScore(asc);
+            killSeries++;
         } else {
             gs.getGameInfoSystem().setup(
                     position.x, position.y,
@@ -254,7 +254,8 @@ public class Shuttle extends AbstractShuttle {
                 boomBox.playSound(MSConstants.GET_ASTRONAUT);
                 break;
             case CRATE:
-                int x = MathUtils.random(0, 4);
+                int x = 2;
+                MathUtils.random(0, 4);
                 /*Hack to pretty shadow effect. This effect should be finished firstly*/
                 if (velocity.len() >= Rules.PLAYER_ENGINE_POWER) {
                     x++;
@@ -496,7 +497,7 @@ public class Shuttle extends AbstractShuttle {
 
     private void checkRadar() {
         if (!radar.isActive()) {
-            if (position.dst(radar.getPosition()) < 128 && !Rules.GAME_OVER) {
+            if (position.dst(radar.getPosition()) <= 128 && !Rules.GAME_OVER) {
                 radar.setActive(true);
                 boomBox.playSound(MSConstants.GET_RADAR);
             }
@@ -508,7 +509,7 @@ public class Shuttle extends AbstractShuttle {
         int j = (int) (60 * dt / 2);
         /*FPS hack*/
         for (int i = 0; i <= j; i++) {
-            if (standing.getFuel() > 0.1f && velocity.len() > 80 && !Rules.GAME_OVER) {
+            if (standing.getFuel() > 0.1f && velocity.len() >= 80 && !Rules.GAME_OVER) {
                 engineParticleEmitter.getBuilder().buildShuttleEngineFire(position, angle,  /*FPS hack*/70 - j * 0.5f /*FPS hack*/, 1.0f, 60 * dt);
                 if (engineStarted) {
                     boomBox.playSound(MSConstants.PLAYER_START_ENGINE);
@@ -518,9 +519,14 @@ public class Shuttle extends AbstractShuttle {
                 engineParticleEmitter.getBuilder().buildShuttleLowLevelEngineFire(position, angle, 80);
                 engineStarted = true;
             }
-            //gs.getParticleEmitter().getBuilder().buildShuttleShield(position, angle, 90, 60, shieldLevel.getR(), shieldLevel.getG(), shieldLevel.getB());
-            if (velocity.len() > Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
+            if (velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                 gs.getParticleEmitter().getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
+            }
+            if (velocity.len() >= Rules.PLAYER_ENGINE_POWER) {
+                gs.getParticleEmitter().getBuilder().buildShuttleShield(
+                        position, angle, 90, 45,
+                        GlobalInteractionLevels.RED.getR(), GlobalInteractionLevels.RED.getG(), GlobalInteractionLevels.RED.getB()
+                );
             }
         }
     }

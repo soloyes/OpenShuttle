@@ -386,7 +386,7 @@ public class GameScreen extends BaseScreen {
             CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(i);
             if (!tmpAnomaly.isTaken()) {
                 if (player.getPosition().dst(tmpAnomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && tmpAnomaly.isBorn()) {
-                    if (tmpAnomaly.getLevel() < player.getPushPower()) {
+                    if (tmpAnomaly.getLevel() < player.getPushPower() || player.getVelocity().len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                         damageToAnomaly(tmpAnomaly);
                         boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
                         Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, tmpAnomaly.getLevel());
@@ -690,7 +690,9 @@ public class GameScreen extends BaseScreen {
         abstractPoolable.destroy();
         player.getRamShield().blink(1.0f);
         player.slowDown(abstractPoolable.getLevel() * 50.0f);
-        player.changePower(-abstractPoolable.getLevel());
+        if (player.getVelocity().len() <= Rules.PLAYER_ENGINE_POWER) {
+            player.changePower(-abstractPoolable.getLevel());
+        }
         abstractPoolable.showSprayCollision(particleEmitter);
         player.killPlusPlus(abstractPoolable);
         player.getStanding().addToStatistics(abstractPoolable.getType(), abstractPoolable.getLevel());
