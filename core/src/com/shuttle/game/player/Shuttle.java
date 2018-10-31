@@ -254,8 +254,7 @@ public class Shuttle extends AbstractShuttle {
                 boomBox.playSound(MSConstants.GET_ASTRONAUT);
                 break;
             case CRATE:
-                int x = 2;
-                MathUtils.random(0, 4);
+                int x = 3;MathUtils.random(0, 4);
                 /*Hack to pretty shadow effect. This effect should be finished firstly*/
                 if (velocity.len() >= Rules.PLAYER_ENGINE_POWER) {
                     x++;
@@ -309,7 +308,7 @@ public class Shuttle extends AbstractShuttle {
                     List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
                     for (int i = 0; i < anomalies.size(); i++) {
                         if (boundCheck.checkAndHandleBoundsInCamera(anomalies.get(i), gs.getCamera())) {
-                            if (anomalies.get(i).isActive()) {
+                            if (!anomalies.get(i).isTaken()) {
                                 anomalies.get(i).setMarkedToBoom(true);
                                 standing.addToStatistics(anomalies.get(i).getType(), anomalies.get(i).getLevel());
                             }

@@ -64,6 +64,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
                 Rules.ANOMALIES_MAGNETIC_VELOCITY,
                 3 * Rules.ANOMALIES_MAGNETIC_VELOCITY
         );
+        this.spiralRadius = MathUtils.random(20, 60);
     }
 
     @Override

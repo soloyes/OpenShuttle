@@ -107,7 +107,7 @@ public class Ray {
             particleEmitter.setupFromPointToPoint(
                     asteroid.getPosition().x, asteroid.getPosition().y,
                     player.getPosition().x, player.getPosition().y,
-                    1, 2,
+                    0.5f, 0.5f,
                     preset.startR, preset.startG, preset.startB, 0.3f,
                     preset.endA, preset.endG, preset.endB, 0.3f
             );

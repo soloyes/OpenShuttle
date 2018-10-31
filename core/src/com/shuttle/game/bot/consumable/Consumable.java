@@ -3,6 +3,7 @@ package com.shuttle.game.bot.consumable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.screens.GameScreen;
@@ -19,7 +20,8 @@ public abstract class Consumable extends AbstractPoolable {
         this.active = false;
         this.boundCheck = new BoundCheck();
         this.boomBox = new BoomBox();
-        this.color = Color.GREEN;
+        this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        this.spreeColor = Color.GREEN;
         this.level = -1;
     }
 
@@ -27,6 +29,8 @@ public abstract class Consumable extends AbstractPoolable {
 
     @Override
     public void basicRender(SpriteBatch batch) {
+        Color tmpColor = batch.getColor();
+        batch.setColor(color);
         batch.draw(texture,
                 position.x - width / 2, position.y - height / 2,
                 width / 2, height / 2,
@@ -34,6 +38,7 @@ public abstract class Consumable extends AbstractPoolable {
                 scaleX, scaleY,
                 angle
         );
+        batch.setColor(tmpColor);
     }
 
     public abstract void update(float dt);

@@ -1,5 +1,6 @@
 package com.shuttle.game.bot.asteroids;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -47,6 +48,7 @@ public class Asteroid extends AbstractPoolable {
         this.boundCheck = new BoundCheck();
         this.type = Type.ASTEROID;
         this.moveProcessor = new MoveProcessor(gs);
+        this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override
@@ -56,6 +58,8 @@ public class Asteroid extends AbstractPoolable {
 
     @Override
     public void basicRender(SpriteBatch batch) {
+        Color tmpColor = batch.getColor();
+        batch.setColor(color);
         batch.draw(
                 textureRegions[(int) frame],
                 position.x - width / 2,
@@ -65,6 +69,7 @@ public class Asteroid extends AbstractPoolable {
                 scaleX, scaleY,
                 angle
         );
+        batch.setColor(tmpColor);
     }
 
     @Override
@@ -106,6 +111,8 @@ public class Asteroid extends AbstractPoolable {
         }
         this.scaleX = this.saveScaleX = scale;
         this.scaleY = this.saveScaleY = scale;
+        this.color.set(1.0f, 1.0f, 1.0f, 1.0f);
+        this.spiralRadius = MathUtils.random(20, 60);
     }
 
     @Override

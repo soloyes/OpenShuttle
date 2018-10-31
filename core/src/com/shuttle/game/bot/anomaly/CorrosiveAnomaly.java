@@ -78,6 +78,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 3 * Rules.ANOMALIES_CORROSIVE_VELOCITY
         );
         this.moveProcessor = new MoveProcessor(gs);
+        this.spiralRadius = MathUtils.random(20, 60);
     }
 
     @Override
@@ -198,15 +199,19 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         switch (level) {
             case 0:
                 color.set(Color.TAN.r, Color.TAN.g, Color.TAN.b, color.a);
+                spreeColor.set(color);
                 break;
             case 1:
                 color.set(Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, color.a);
+                spreeColor.set(color);
                 break;
             case 2:
                 color.set(Color.YELLOW.r, Color.YELLOW.g, Color.YELLOW.b, color.a);
+                spreeColor.set(color);
                 break;
             case 3:
                 color.set(Color.RED.r, Color.RED.g, Color.RED.b, color.a);
+                spreeColor.set(color);
                 break;
         }
     }

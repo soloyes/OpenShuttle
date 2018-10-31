@@ -48,12 +48,14 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.activated = true;
         this.born = false;
         this.level = 4;
-        this.color = Color.PURPLE;
+        this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        this.spreeColor = Color.PURPLE;
         this.color.a = 0.0f;
         this.scaleX = this.saveScaleX = 1.0f;
         this.scaleY = this.saveScaleY = 1.0f;
         this.taken = false;
         this.v = Rules.ANOMALY_ELECTRIC_VELOCITY;
+        this.spiralRadius = MathUtils.random(20, 60);
     }
 
     @Override

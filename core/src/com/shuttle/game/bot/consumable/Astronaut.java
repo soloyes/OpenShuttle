@@ -1,5 +1,6 @@
 package com.shuttle.game.bot.consumable;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
@@ -29,6 +30,8 @@ public class Astronaut extends Consumable {
         this.scaleY = this.saveScaleY = 1.0f;
         this.active = true;
         this.taken = false;
+        this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        this.spiralRadius = MathUtils.random(20, 60);
         playSound();
     }
 

@@ -60,6 +60,9 @@ public abstract class AbstractPoolable implements Poolable {
     protected Color color;
     @Getter
     @Setter
+    protected Color spreeColor;
+    @Getter
+    @Setter
     protected boolean markedToBoom;
     @Getter
     @Setter
@@ -75,6 +78,9 @@ public abstract class AbstractPoolable implements Poolable {
     @Getter
     @Setter
     protected boolean born;
+    @Getter
+    @Setter
+    protected int spiralRadius;
 
     @Override
     public void destroy() {
@@ -93,9 +99,9 @@ public abstract class AbstractPoolable implements Poolable {
     public void showSprayBoom(ParticleEmitter particleEmitter) {
         float R, G, B;
         for (int j = 0; j < 8; j++) {
-            R = this.getColor().r;
-            G = this.getColor().g;
-            B = this.getColor().b;
+            R = this.getSpreeColor().r;
+            G = this.getSpreeColor().g;
+            B = this.getSpreeColor().b;
             particleEmitter.setup(
                     this.getPosition().x,
                     this.getPosition().y,
@@ -116,9 +122,9 @@ public abstract class AbstractPoolable implements Poolable {
     public void showSprayCollision(ParticleEmitter particleEmitter) {
         float R, G, B;
         for (int j = 0; j < 60; j++) {
-            R = this.getColor().r;
-            G = this.getColor().g;
-            B = this.getColor().b;
+            R = this.getSpreeColor().r;
+            G = this.getSpreeColor().g;
+            B = this.getSpreeColor().b;
             particleEmitter.setup(
                     this.getPosition().x + MathUtils.random(-30, 30),
                     this.getPosition().y + MathUtils.random(-30, 30),

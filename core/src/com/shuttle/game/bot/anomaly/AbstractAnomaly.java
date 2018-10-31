@@ -46,6 +46,7 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
         this.velocity = new Vector2();
         this.tmp = new Vector2();
         this.color = new Color();
+        this.spreeColor = new Color();
         this.boundCheck = new BoundCheck();
     }
 }
