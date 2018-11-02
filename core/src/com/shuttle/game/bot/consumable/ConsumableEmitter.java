@@ -3,14 +3,13 @@ package com.shuttle.game.bot.consumable;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.bot.pool.ObjectPool;
-import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class ConsumableEmitter extends ObjectPool<Consumable> {
+public class ConsumableEmitter extends ObjectPool<AbstractConsumable> {
     @Getter
     @Setter
     private float respawnTime;
@@ -33,7 +32,7 @@ public class ConsumableEmitter extends ObjectPool<Consumable> {
     }
 
     @Override
-    protected Consumable newObject() {
+    protected AbstractConsumable newObject() {
         int i = MathUtils.random(0, 1);
         switch (i) {
             case 0:

@@ -5,11 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.Joystick;
-import com.shuttle.game.utils.effects.KillingSpree;
-import com.shuttle.game.bot.anomaly.AbstractAnomaly;
+import com.shuttle.game.bot.consumable.Astronaut;
 import com.shuttle.game.bot.consumable.Consumable;
+import com.shuttle.game.bot.consumable.Crate;
+import com.shuttle.game.utils.effects.KillingSpree;
+import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
@@ -27,7 +28,6 @@ import com.shuttle.game.utils.ShuttleMath;
 import com.shuttle.game.utils.effects.Vibrator;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -114,24 +114,12 @@ public class Shuttle extends AbstractShuttle {
         return false;
     }
 
-    public void badEffect(Consumable.Type type) {
-        switch (type) {
-            case ASTRONAUT:
-                standing.changeScore(-Rules.CONSUMABLE_MURDER_SCORE_DECREASE);
-                gs.getGameInfoSystem().setup(position.x, position.y, "Murderer!\n-50000", 8.0f, false);
-                boomBox.playSound(MSConstants.KILL_ASTRONAUT);
-                Vibrator.vibrate(VConstants.PLAYER_ASTRONAUT_DESTROY);
-                break;
-            case CRATE:
-                gs.getGameInfoSystem().setup(position.x, position.y, "Be easy!", 3.0f, false);
-                boomBox.playSound(MSConstants.KILL_CRATE);
-                Vibrator.vibrate(VConstants.PLAYER_CRATE_DESTROY);
-                break;
-        }
+    public void badEffect(Consumable consumable) {
+        consumable.badEffect(gs);
     }
 
-    public boolean canCatch(Consumable consumable) {
-        tmp2V2.set(consumable.getPosition());
+    public boolean canCatch(AbstractConsumable abstractConsumable) {
+        tmp2V2.set(abstractConsumable.getPosition());
         tmp2V2.sub(position);
 
         float dif = angle - tmp2V2.angle();
@@ -246,97 +234,8 @@ public class Shuttle extends AbstractShuttle {
         }
     }
 
-    public void takeEffect(Consumable.Type type) {
-        switch (type) {
-            case ASTRONAUT:
-                standing.changeScore(Rules.CONSUMABLE_BASE_SCORE_ADD);
-                gs.getGameInfoSystem().setup(position.x, position.y, "+" + Rules.CONSUMABLE_BASE_SCORE_ADD, 3.0f, false);
-                boomBox.playSound(MSConstants.GET_ASTRONAUT);
-                break;
-            case CRATE:
-                int x = MathUtils.random(0, 4);
-                /*Hack to pretty shadow effect. This effect should be finished firstly*/
-                if (velocity.len() >= Rules.PLAYER_ENGINE_POWER) {
-                    x++;
-                }
-                /*Hack*/
-                /*Hack to prevent useless hp additions*/
-                if (x == 0 && standing.getHp() == standing.getMaxHp()) {
-                    x++;
-                }
-                /*Hack*/
-                if (x == 0) {
-                    standing.changeHP(Rules.CRATE_REPAIR_ADD);
-                    gs.getGameInfoSystem()
-                            .setup(
-                                    position.x,
-                                    position.y,
-                                    GameInfoSystem.GameInfoSystemPreset.REPAIR,
-                                    3.0f,
-                                    true
-                            );
-                    boomBox.playSound(MSConstants.PLAYER_REPAIR);
-                }
-                if (x == 1) {
-                    standing.changeFuel(Rules.CRATE_FUEL_ADD);
-                    gs.getGameInfoSystem()
-                            .setup(
-                                    position.x,
-                                    position.y,
-                                    GameInfoSystem.GameInfoSystemPreset.FUEL,
-                                    3.0f,
-                                    true
-                            );
-                    boomBox.playSound(MSConstants.GET_FUEL);
-                }
-                if (x == 2) {
-                    velocity.add(
-                            Rules.PLAYER_TURBO_ENGINE_POWER * (float) Math.cos(Math.toRadians(angle)),
-                            Rules.PLAYER_TURBO_ENGINE_POWER * (float) Math.sin(Math.toRadians(angle))
-                    );
-                    gs.getGameInfoSystem()
-                            .setup(
-                                    position.x,
-                                    position.y,
-                                    GameInfoSystem.GameInfoSystemPreset.TURBO,
-                                    5.0f,
-                                    true
-                            );
-                    boomBox.playSound(MSConstants.TURBO);
-                }
-                if (x == 3) {
-                    List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
-                    for (int i = 0; i < anomalies.size(); i++) {
-                        if (boundCheck.checkAndHandleBoundsInCamera(anomalies.get(i), gs.getCamera())) {
-                            if (!anomalies.get(i).isTaken()) {
-                                anomalies.get(i).setMarkedToBoom(true);
-                                standing.addToStatistics(anomalies.get(i).getType(), anomalies.get(i).getLevel());
-                            }
-                        }
-                    }
-                    gs.getGameInfoSystem()
-                            .setup(
-                                    position.x,
-                                    position.y,
-                                    GameInfoSystem.GameInfoSystemPreset.FLUSH,
-                                    8.0f,
-                                    true
-                            );
-                    boomBox.playSound(MSConstants.ANOMALY_FLUSH);
-                }
-                if (x > 3) {
-                    gs.getGameInfoSystem()
-                            .setup(
-                                    position.x,
-                                    position.y,
-                                    GameInfoSystem.GameInfoSystemPreset.TRASH,
-                                    2.0f,
-                                    true
-                            );
-                    boomBox.playSound(MSConstants.GET_TRASH);
-                }
-                break;
-        }
+    public void takeEffect(Consumable consumable) {
+        consumable.consumed(gs);
     }
 
     public void update(float dt) {

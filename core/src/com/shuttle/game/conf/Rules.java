@@ -177,7 +177,7 @@ public final class Rules {
     //10000
     public static final int CONSUMABLE_MURDER_SCORE_DECREASE = 50000;
     //60
-    public static int ANOMALIES_CORROSIVE_HUNT_TIME = 1;
+    public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
 
     public static void setSpace(int n) {
         STARS_COUNT = STARS * n;

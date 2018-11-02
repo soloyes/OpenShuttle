@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.asteroids.Asteroid;
-import com.shuttle.game.bot.consumable.Consumable;
+import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
@@ -24,16 +24,16 @@ public class MoveProcessor {
         this.tmp = new Vector2();
     }
 
-    public void update(Consumable consumable, float dt) {
-        if (consumable.isTaken()) {
+    public void update(AbstractConsumable abstractConsumable, float dt) {
+        if (abstractConsumable.isTaken()) {
             //*Archimedes spiral*//
-            radius = radius - dt * consumable.getSpiralRadius();
-            consumable.getPosition().x = gs.getBlackhole().getPosition().x + radius * MathUtils.cos(angle);
-            consumable.getPosition().y = gs.getBlackhole().getPosition().y + radius * MathUtils.sin(angle);
+            radius = radius - dt * abstractConsumable.getSpiralRadius();
+            abstractConsumable.getPosition().x = gs.getBlackhole().getPosition().x + radius * MathUtils.cos(angle);
+            abstractConsumable.getPosition().y = gs.getBlackhole().getPosition().y + radius * MathUtils.sin(angle);
             angle += dt;
-            intoTheDark(consumable);
+            intoTheDark(abstractConsumable);
         } else {
-            archimedesInit(consumable);
+            archimedesInit(abstractConsumable);
         }
     }
 
