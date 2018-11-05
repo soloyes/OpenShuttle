@@ -34,6 +34,8 @@ public final class MSConstants {
     public final static String PLAYER_START_ENGINE = SOUND_FOLDER + "shuttle_move_full.ogg";
     public final static String ANOMALY_BURSTING = SOUND_FOLDER + "bursting.ogg";
     public final static String ANOMALY_FLUSH = SOUND_FOLDER + "flush.ogg";
+    public final static String FLAME = SOUND_FOLDER + "flame.ogg";
+    public final static String ASTEROID_SPLASH = SOUND_FOLDER + "splash.ogg";
     //
     private final static String MUSIC_FOLDER = "music/";
     public final static String MENU_MUSIC = MUSIC_FOLDER + "menu.ogg";
@@ -42,5 +44,12 @@ public final class MSConstants {
     public final static String RADAR_WHITE_NOISE_MUSIC = MUSIC_FOLDER + "white_noise.ogg";
     public final static String HUM_1 = MUSIC_FOLDER + "hum_1.ogg";
     public final static String HUM_2 = MUSIC_FOLDER + "hum_2.ogg";
+    public final static String HUM_3 = MUSIC_FOLDER + "hum_3.ogg";
+    public final static String HUM_4 = MUSIC_FOLDER + "hum_4.ogg";
+    public final static String HUM_5 = MUSIC_FOLDER + "hum_5.ogg";
+    public final static String POWERING_ENGINE = MUSIC_FOLDER + "engine_is_powering.ogg";
+    public final static String POWERING_ROCKET = MUSIC_FOLDER + "rocket_weapon_is_charging.ogg";
+    public final static String PEEP = MUSIC_FOLDER + "peep_signal.ogg";
+    public final static String LASER = MUSIC_FOLDER + "laser.ogg";
     //
 }

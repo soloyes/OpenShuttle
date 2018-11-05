@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.asteroids.Asteroid;
 import com.shuttle.game.bot.particle.ParticleEmitter;
 import com.shuttle.game.bot.pool.AbstractPoolable;
+import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
@@ -100,6 +101,7 @@ public class Ray {
 
     public void laser(Shuttle player, Asteroid asteroid, ParticleEmitter particleEmitter, float dt) {
         if (player.getPosition().dst(asteroid.getPosition()) <= Rules.PLAYER_LASER_TAKE_RANGE) {
+            boomBox.playMusicEffectInLoop(MSConstants.LASER, GamePreferences.getSoundVolume());
             float dst = player.getPosition().dst(asteroid.getPosition());
             float scaleX = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleX();
             float scaleY = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleY();
@@ -124,13 +126,16 @@ public class Ray {
             }
             asteroid.setTimeToBurn(asteroid.getTimeToBurn() + dt);
             if (asteroid.getTimeToBurn() >= 0.5f + Rules.ASTEROID_BURN_TIME * player.getShieldLevel().getLevel()) {
-                boomBox.playSound(MSConstants.ASTEROID_DESTROY);
+                boomBox.playSound(MSConstants.ASTEROID_SPLASH);
                 gs.getAsteroidEmitter().boom(asteroid.getPosition(), player.getShieldLevel());
                 asteroid.destroy();
                 asteroid.showSprayCollision(particleEmitter);
                 asteroid.setTimeToBurn(0.0f);
             }
-        } else asteroid.setTimeToBurn(0.0f);
+        } else {
+            asteroid.setTimeToBurn(0.0f);
+            boomBox.stopMusicEffect(MSConstants.LASER);
+        }
     }
 
     public enum Preset {

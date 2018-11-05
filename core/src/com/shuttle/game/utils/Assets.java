@@ -51,6 +51,13 @@ public class Assets {
                 assetManager.load(MSConstants.RADAR_WHITE_NOISE_MUSIC, Music.class);
                 assetManager.load(MSConstants.HUM_1, Music.class);
                 assetManager.load(MSConstants.HUM_2, Music.class);
+                assetManager.load(MSConstants.HUM_3, Music.class);
+                assetManager.load(MSConstants.HUM_4, Music.class);
+                assetManager.load(MSConstants.HUM_5, Music.class);
+                assetManager.load(MSConstants.POWERING_ENGINE, Music.class);
+                assetManager.load(MSConstants.POWERING_ROCKET, Music.class);
+                assetManager.load(MSConstants.PEEP, Music.class);
+                assetManager.load(MSConstants.LASER, Music.class);
                 assetManager.load(MSConstants.BUTTON_SOUND, Sound.class);
                 assetManager.load(MSConstants.PAUSE_SOUND, Sound.class);
                 assetManager.load(MSConstants.ANOMALY_CORROSIVE_DESTROY, Sound.class);
@@ -80,6 +87,8 @@ public class Assets {
                 assetManager.load(MSConstants.ANOMALY_BURSTING, Sound.class);
                 assetManager.load(MSConstants.ANOMALY_FLUSH, Sound.class);
                 assetManager.load(MSConstants.PLAYER_START_ENGINE, Sound.class);
+                assetManager.load(MSConstants.FLAME, Sound.class);
+                assetManager.load(MSConstants.ASTEROID_SPLASH, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 createStdFont(32, "");
                 createStdFont(32, "Coloured");

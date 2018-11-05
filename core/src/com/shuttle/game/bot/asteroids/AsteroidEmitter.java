@@ -5,9 +5,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.pool.ObjectPool;
 import com.shuttle.game.conf.GlobalInteractionLevels;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.utils.effects.BoomBox;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,9 +29,11 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
     private float count;
     private GlobalInteractionLevels rang;
     private GameScreen gs;
+    private BoomBox boomBox;
 
     public AsteroidEmitter(GameScreen gs) {
         this.gs = gs;
+        this.boomBox = new BoomBox();
     }
 
     @Override
@@ -42,6 +46,7 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
         this.count = rang.getFragmentAsteroidCount();
         this.position = position;
         this.boom = true;
+        this.boomBox.stopMusicEffect(MSConstants.LASER);
     }
 
     public void render(SpriteBatch batch) {

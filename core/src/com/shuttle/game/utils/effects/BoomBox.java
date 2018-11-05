@@ -24,6 +24,9 @@ public class BoomBox {
     static {
         musicEffects.add(MSConstants.HUM_1);
         musicEffects.add(MSConstants.HUM_2);
+        musicEffects.add(MSConstants.HUM_3);
+        musicEffects.add(MSConstants.HUM_4);
+        musicEffects.add(MSConstants.HUM_5);
     }
 
     public void playRandomMusicEffects(float dt) {
