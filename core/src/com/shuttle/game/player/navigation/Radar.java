@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
-import com.shuttle.game.bot.consumable.Consumable;
+import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.GamePreferences;
@@ -102,8 +102,8 @@ public class Radar {
             drawPoolables(batch, tmpAnomaly);
         }
         for (int i = 0; i < gs.getConsumableEmitter().getActiveList().size(); i++) {
-            Consumable tmpConsumable = gs.getConsumableEmitter().getActiveList().get(i);
-            drawPoolables(batch, tmpConsumable);
+            AbstractConsumable tmpAbstractConsumable = gs.getConsumableEmitter().getActiveList().get(i);
+            drawPoolables(batch, tmpAbstractConsumable);
         }
         for (int i = 0; i < gs.getElectricalAnomalyEmitter().getActiveList().size(); i++) {
             ElectricalAnomaly tmpAnomaly = (ElectricalAnomaly) gs.getElectricalAnomalyEmitter().getActiveList().get(i);

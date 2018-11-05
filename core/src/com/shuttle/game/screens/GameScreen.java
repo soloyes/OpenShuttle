@@ -34,7 +34,7 @@ import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
 import com.shuttle.game.bot.asteroids.Asteroid;
 import com.shuttle.game.bot.asteroids.AsteroidEmitter;
 import com.shuttle.game.Background;
-import com.shuttle.game.bot.consumable.Consumable;
+import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.consumable.ConsumableEmitter;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.bot.particle.ParticleEmitter;
@@ -355,30 +355,30 @@ public class GameScreen extends BaseScreen {
         calcMusicEffectVolume();
 
         for (int i = 0; i < consumableEmitter.getActiveList().size(); i++) {
-            Consumable tmpConsumable = consumableEmitter.getActiveList().get(i);
-            if (!tmpConsumable.isTaken()) {
-                if (player.getPosition().dst(tmpConsumable.getPosition()) <= 128) {
+            AbstractConsumable tmpAbstractConsumable = consumableEmitter.getActiveList().get(i);
+            if (!tmpAbstractConsumable.isTaken()) {
+                if (player.getPosition().dst(tmpAbstractConsumable.getPosition()) <= 128) {
                     if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel()) {
-                        tmpConsumable.destroy();
-                        player.takeEffect(tmpConsumable.getType());
-                        player.getStanding().addToStatistics(tmpConsumable.getType(), tmpConsumable.getLevel());
+                        tmpAbstractConsumable.destroy();
+                        player.takeEffect(tmpAbstractConsumable);
+                        player.getStanding().addToStatistics(tmpAbstractConsumable.getType(), tmpAbstractConsumable.getLevel());
                     } else {
-                        if (!player.canCatch(tmpConsumable)) {
-                            tmpConsumable.destroy();
-                            player.badEffect(tmpConsumable.getType());
+                        if (!player.canCatch(tmpAbstractConsumable)) {
+                            tmpAbstractConsumable.destroy();
+                            player.badEffect(tmpAbstractConsumable);
                         } else {
-                            tmpConsumable.destroy();
-                            player.takeEffect(tmpConsumable.getType());
+                            tmpAbstractConsumable.destroy();
+                            player.takeEffect(tmpAbstractConsumable);
                         }
                     }
                 }
                 ray.setCount(24);
                 ray.setSize(4);
                 ray.setPreset(Ray.Preset.GREEN);
-                ray.harvest(player, tmpConsumable, particleEmitter, dt);
+                ray.harvest(player, tmpAbstractConsumable, particleEmitter, dt);
             }
             ///
-            collideBlackholePoolable(tmpConsumable);
+            collideBlackholePoolable(tmpAbstractConsumable);
             ///
         }
 
@@ -537,8 +537,7 @@ public class GameScreen extends BaseScreen {
                     ray.setSize(2);
                     ray.setPreset(Ray.Preset.GREY);
                     ray.harvest(player, tmpAsteroid, particleEmitter, dt);
-                }
-                else {
+                } else {
                     ray.setCount(5);
                     ray.setSize(3);
                     ray.setPreset(Ray.Preset.RED);
@@ -563,16 +562,16 @@ public class GameScreen extends BaseScreen {
                 }
 
                 for (int j = 0; j < consumableEmitter.getActiveList().size(); j++) {
-                    Consumable tmpConsumable = consumableEmitter.getActiveList().get(j);
-                    if (!tmpAsteroid.isFragmented() && tmpConsumable.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
+                    AbstractConsumable tmpAbstractConsumable = consumableEmitter.getActiveList().get(j);
+                    if (!tmpAsteroid.isFragmented() && tmpAbstractConsumable.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
                         tmpAsteroid.destroy();
-                        tmpConsumable.destroy();
+                        tmpAbstractConsumable.destroy();
                         asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE);
                         particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 32 + 32);
-                        tmpConsumable.showSprayCollision(particleEmitter);
+                        tmpAbstractConsumable.showSprayCollision(particleEmitter);
                         gameInfoSystem.setup(
-                                tmpConsumable.getPosition().x,
-                                tmpConsumable.getPosition().y,
+                                tmpAbstractConsumable.getPosition().x,
+                                tmpAbstractConsumable.getPosition().y,
                                 GameInfoSystem.GameInfoSystemPreset.SAD,
                                 3.0f,
                                 true
@@ -677,7 +676,7 @@ public class GameScreen extends BaseScreen {
                 abstractPoolable.destroy();
             }
         } else {
-            if (!(abstractPoolable instanceof Consumable)) {
+            if (!(abstractPoolable instanceof AbstractConsumable)) {
                 abstractPoolable.setScaleX(abstractPoolable.getSaveScaleX());
                 abstractPoolable.setScaleY(abstractPoolable.getSaveScaleY());
             }

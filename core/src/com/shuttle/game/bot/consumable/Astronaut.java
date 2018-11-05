@@ -4,14 +4,18 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
+import com.shuttle.game.conf.VConstants;
+import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.effects.MoveProcessor;
+import com.shuttle.game.utils.effects.Vibrator;
 
 /**
  * @author Shuttle on 10/11/18.
  */
-public class Astronaut extends Consumable {
+public class Astronaut extends AbstractConsumable {
     public Astronaut(GameScreen gs) {
         super(gs);
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.ASTRONAUT_REGION);
@@ -46,5 +50,34 @@ public class Astronaut extends Consumable {
         basicUpdate(dt);
         moveProcessor.update(this, dt);
         boundCheck.checkAndHandleBoundsAndDestroy(this);
+    }
+
+    @Override
+    public void consumed(GameScreen gs) {
+        Standing standing = gs.getPlayer().getStanding();
+        standing.changeScore(Rules.CONSUMABLE_BASE_SCORE_ADD);
+        gs.getGameInfoSystem().setup(
+                position.x,
+                position.y,
+                "+" + Rules.CONSUMABLE_BASE_SCORE_ADD,
+                3.0f,
+                false
+        );
+        boomBox.playSound(MSConstants.GET_ASTRONAUT);
+    }
+
+    @Override
+    public void badEffect(GameScreen gs) {
+        Standing standing = gs.getPlayer().getStanding();
+        standing.changeScore(-Rules.CONSUMABLE_MURDER_SCORE_DECREASE);
+        gs.getGameInfoSystem().setup(
+                position.x,
+                position.y,
+                "Murderer!\n-50000",
+                8.0f,
+                false
+        );
+        boomBox.playSound(MSConstants.KILL_ASTRONAUT);
+        Vibrator.vibrate(VConstants.PLAYER_ASTRONAUT_DESTROY);
     }
 }

@@ -57,7 +57,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         this.slimTimer = 0;
         this.slim = Rules.ANOMALIES_CORROSIVE_SLIM_TIME + MathUtils.random(0, 5);
         this.boomTimer = 0;
-        this.boomDelay = MathUtils.random(Rules.ANOMALIES_BOOM_MIN_DELAY, Rules.ANOMALIES_BOOM_MAX_DELAY);
+        this.boomDelay = MathUtils.random(Rules.ANOMALIES_CORROSIVE_BOOM_MIN_DELAY, Rules.ANOMALIES_CORROSIVE_BOOM_MAX_DELAY);
         this.hungry = true;
         this.angle = MathUtils.random(365);
         this.clockwise = MathUtils.randomSign();

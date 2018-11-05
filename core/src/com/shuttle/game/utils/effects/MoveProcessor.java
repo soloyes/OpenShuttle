@@ -4,8 +4,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.asteroids.Asteroid;
-import com.shuttle.game.bot.consumable.Consumable;
+import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.pool.AbstractPoolable;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 
 /**
@@ -23,16 +24,16 @@ public class MoveProcessor {
         this.tmp = new Vector2();
     }
 
-    public void update(Consumable consumable, float dt) {
-        if (consumable.isTaken()) {
+    public void update(AbstractConsumable abstractConsumable, float dt) {
+        if (abstractConsumable.isTaken()) {
             //*Archimedes spiral*//
-            radius = radius - dt * consumable.getSpiralRadius();
-            consumable.getPosition().x = gs.getBlackhole().getPosition().x + radius * MathUtils.cos(angle);
-            consumable.getPosition().y = gs.getBlackhole().getPosition().y + radius * MathUtils.sin(angle);
+            radius = radius - dt * abstractConsumable.getSpiralRadius();
+            abstractConsumable.getPosition().x = gs.getBlackhole().getPosition().x + radius * MathUtils.cos(angle);
+            abstractConsumable.getPosition().y = gs.getBlackhole().getPosition().y + radius * MathUtils.sin(angle);
             angle += dt;
-            intoTheDark(consumable);
+            intoTheDark(abstractConsumable);
         } else {
-            archimedesInit(consumable);
+            archimedesInit(abstractConsumable);
         }
     }
 
@@ -60,22 +61,31 @@ public class MoveProcessor {
             if (abstractAnomaly.isHungry() && abstractAnomaly.isActivated()) {
                 abstractAnomaly.getPosition().mulAdd(abstractAnomaly.getVelocity(), dt);
                 float dst = gs.getPlayer().getPosition().dst(abstractAnomaly.getPosition());
-                if (dst < 2400.0f + 200 * abstractAnomaly.getLevel()) {
+                if (abstractAnomaly.getLevel() + 1 != gs.getPlayer().getShieldLevel().getLevel()) {
+                    if (dst < 2400.0f + 200 * abstractAnomaly.getLevel()) {
+                        tmp.set(gs.getPlayer()
+                                .getPosition())
+                                .sub(abstractAnomaly.getPosition())
+                                .nor()
+                                .scl(abstractAnomaly.getV());
+                        abstractAnomaly.getVelocity().mulAdd(tmp, dt);
+                    }
+                    if (dst < 240 * abstractAnomaly.getLevel()) {
+                        tmp.set(gs.getPlayer()
+                                .getPosition())
+                                .sub(abstractAnomaly.getPosition())
+                                .nor()
+                                .scl(250.0f - 20 * abstractAnomaly.getLevel()
+                                );
+                        abstractAnomaly.getVelocity().mulAdd(tmp, dt);
+                    }
+                    //Anomaly afraid related shield level
+                } else {
                     tmp.set(gs.getPlayer()
                             .getPosition())
                             .sub(abstractAnomaly.getPosition())
                             .nor()
-                            .scl(abstractAnomaly.getV()
-                            );
-                    abstractAnomaly.getVelocity().mulAdd(tmp, dt);
-                }
-                if (dst < 240 * abstractAnomaly.getLevel()) {
-                    tmp.set(gs.getPlayer()
-                            .getPosition())
-                            .sub(abstractAnomaly.getPosition())
-                            .nor()
-                            .scl(250.0f - 20 * abstractAnomaly.getLevel()
-                            );
+                            .scl(abstractAnomaly.getV() / Rules.ANOMALIES_CORROSIVE_AFRAID_FACTOR);
                     abstractAnomaly.getVelocity().mulAdd(tmp, dt);
                 }
             }

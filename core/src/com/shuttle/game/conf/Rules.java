@@ -7,8 +7,10 @@ import com.shuttle.game.player.Shuttle;
  * Game rules constants (Rules)
  */
 public final class Rules {
-    //
+    //SPACE
     public static int STARS_COUNT;
+    //600
+    private static final int STARS = 600;
     //1080
     public static final int WORLD_WIDTH = 1080;
     //1920
@@ -22,25 +24,9 @@ public final class Rules {
     public static final int CONSUMABLE_AT_START = 2;
     //6.0f
     public static final float CONSUMABLE_RESPAWN_TIME = 6.0f;
-    //10000
-    public static final int CONSUMABLE_BASE_SCORE_ADD = 10000;
-    //10000
-    public static final int CONSUMABLE_MURDER_SCORE_DECREASE = 50000;
     //ANOMALY
-    //0.15f
-    public static final float ANOMALIES_BOOM_MIN_DELAY = 0.15f;
-    //0.3f
-    public static final float ANOMALIES_BOOM_MAX_DELAY = 0.3f;
-    //2
-    public static final int ANOMALIES_CORROSIVE_AT_START = 2;
     //0
     public static final int ANOMALIES_ELECTRIC_AT_START = 0;
-    //0
-    public static final int ANOMALIES_MAGNETIC_AT_START = 0;
-    //0
-    public static final int ANOMALIES_RADIATION_AT_START = 0;
-    //500
-    public static final int ANOMALIES_BASE_SCORE_ADD = 500;
     //30.0f
     public static final float ANOMALIES_ELECTRIC_RESPAWN_TIME = 30.0f;
     //1
@@ -52,44 +38,54 @@ public final class Rules {
     //10.0f
     public static float ANOMALIES_ELECTRIC_HUNGRY_TIME = 10.0f;
     //
+    //0
+    public static final int ANOMALIES_RADIATION_AT_START = 0;
     //12
     public static final float ANOMALIES_RADIATION_RESPAWN_TIME = 12.0f;
-    //120.0f
-    public static final float ANOMALIES_RADIATION_LIVE_TIME = 120.0f;
     //2
     public static final int ANOMALIES_RADIATION_MAX_COUNT = 2;
-    //500
-    public static final int ANOMALIES_RADIATION_SCORE_DECREASE = 500;
-    //0.4f
-    public static final float ANOMALIES_RADIATION_EAT_TIME = 0.4f;
     //50.0f
     public static final float ANOMALIES_RADIATION_VELOCITY = 50.0f;
+    //500
+    public static final int ANOMALIES_RADIATION_SCORE_DECREASE = 500;
+    //120.0f
+    public static final float ANOMALIES_RADIATION_LIVE_TIME = 120.0f;
+    //0.4f
+    public static final float ANOMALIES_RADIATION_EAT_TIME = 0.4f;
     //
+    //0
+    public static final int ANOMALIES_MAGNETIC_AT_START = 0;
     //15
     public static final float ANOMALIES_MAGNETIC_RESPAWN_TIME = 15.0f;
-    //120.0f
-    public static final float ANOMALIES_MAGNETIC_LIVE_TIME = 120.0f;
     //2
     public static final int ANOMALIES_MAGNETIC_MAX_COUNT = 2;
-    //0.3f
-    public static final float ANOMALIES_MAGNETIC_FUEL_DECREASE = 0.3f;
-    //0.4f
-    public static final float ANOMALIES_MAGNETIC_EAT_TIME = 0.4f;
     //50.0f
     public static final float ANOMALIES_MAGNETIC_VELOCITY = 50.0f;
+    //0.3f
+    public static final float ANOMALIES_MAGNETIC_FUEL_DECREASE = 0.3f;
+    //120.0f
+    public static final float ANOMALIES_MAGNETIC_LIVE_TIME = 120.0f;
+    //0.4f
+    public static final float ANOMALIES_MAGNETIC_EAT_TIME = 0.4f;
     //
+    //2
+    public static final int ANOMALIES_CORROSIVE_AT_START = 2;
     //4.0f
     public static final float ANOMALIES_CORROSIVE_RESPAWN_TIME = 4.0f;
-    //10.0f
-    public static final float ANOMALIES_CORROSIVE_HUNGRY_TIME = 10.0f;
     //100
     public static final int ANOMALIES_CORROSIVE_MAX_COUNT = 100;
-    //15.0f
-    public static final float ANOMALIES_CORROSIVE_SLIM_TIME = 15.0f;
-    //60
-    public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
     //60.0f
     public static final float ANOMALIES_CORROSIVE_VELOCITY = 60.0f;
+    //0.15f
+    public static final float ANOMALIES_CORROSIVE_BOOM_MIN_DELAY = 0.15f;
+    //0.3f
+    public static final float ANOMALIES_CORROSIVE_BOOM_MAX_DELAY = 0.3f;
+    //10.0f
+    public static final float ANOMALIES_CORROSIVE_HUNGRY_TIME = 10.0f;
+    //15.0f
+    public static final float ANOMALIES_CORROSIVE_SLIM_TIME = 15.0f;
+    //2
+    public static final int ANOMALIES_CORROSIVE_AFRAID_FACTOR = 2;
     //ASTEROID
     //4.0f
     public static final float ASTEROID_RESPAWN_TIME = 4.0f;
@@ -132,9 +128,6 @@ public final class Rules {
     public static final int PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY = 200;
     //150
     public static final int PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY = 150;
-    //20000
-    //todo: need to be balanced
-    public static final int SCORE_TO_LIVE = 20000;
     //1.0f
     public static final float PLAYER_FUEL_CONSUMPTION = 1.0f;
     //
@@ -160,9 +153,6 @@ public final class Rules {
     public static final int BLACKHOLE_VELOCITY_CONSUME_PLAYER = 200;
     //5
     public static final int BLACKHOLE_GET_DAMAGE = 5;
-    //GAME
-    //false
-    public static boolean GAME_OVER = false;
     //SOUND
     //0.1f
     public static final float FRAGMENT_KICK_PRETTY_SOUND_DELAY = 0.1f;
@@ -174,10 +164,20 @@ public final class Rules {
     //CAMERA
     //1500.0f
     public static final float CAMERA_SMOOTH_VELOCITY = 1500.0f;
-
-    //SPACE
-    //600
-    private static final int STARS = 600;
+    //GAME
+    //false
+    public static boolean GAME_OVER = false;
+    //20000
+    //todo: need to be balanced
+    public static final int SCORE_TO_LIVE = 20000;
+    //500
+    public static final int ANOMALIES_BASE_SCORE_ADD = 500;
+    //10000
+    public static final int CONSUMABLE_BASE_SCORE_ADD = 10000;
+    //10000
+    public static final int CONSUMABLE_MURDER_SCORE_DECREASE = 50000;
+    //60
+    public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
 
     public static void setSpace(int n) {
         STARS_COUNT = STARS * n;
