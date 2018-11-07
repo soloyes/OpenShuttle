@@ -156,7 +156,7 @@ public class Radar {
             float d = Vector2.dst(player.getPosition().x, player.getPosition().y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
             if (d <= Rules.BLACKHOLE_NOISE_RANGE) {
                 if (!player.isTaken() && !Rules.GAME_OVER) {
-                    boomBox.playMusicEffectInLoop(MSConstants.RADAR_WHITE_NOISE_MUSIC, GamePreferences.getSoundVolume());
+                    boomBox.playMusicEffectInLoop(MSConstants.RADAR_WHITE_NOISE_MUSIC, 1.0f);
                 } else {
                     boomBox.stopMusicEffect(MSConstants.RADAR_WHITE_NOISE_MUSIC);
                 }

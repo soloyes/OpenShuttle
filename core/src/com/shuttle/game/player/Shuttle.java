@@ -67,17 +67,6 @@ public class Shuttle extends AbstractShuttle {
     @Getter
     @Setter
     private float maxPower;
-    //pretty sound if collect much fragments in little time;
-    private float tmpDelayFragment;
-    @Getter
-    @Setter
-    private boolean delayFragment;
-    //
-    //pretty sound if collide with much anomalies in little time;
-    private float tmpDelayAnomaly;
-    @Getter
-    @Setter
-    private boolean delayAnomaly;
     @Getter
     @Setter
     private boolean cameraSmooth;
@@ -279,18 +268,6 @@ public class Shuttle extends AbstractShuttle {
         checkRadar();
         radar.update(dt);
         boundCheck.checkAndHandleBounds(this, dt);
-
-        tmpDelayFragment += dt;
-        if (tmpDelayFragment >= Rules.FRAGMENT_KICK_PRETTY_SOUND_DELAY) {
-            tmpDelayFragment = 0.0f;
-            delayFragment = true;
-        }
-
-        tmpDelayAnomaly += dt;
-        if (tmpDelayAnomaly >= Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY) {
-            tmpDelayAnomaly = 0.0f;
-            delayAnomaly = true;
-        }
 
         if (!taken) {
             startEngine(dt);

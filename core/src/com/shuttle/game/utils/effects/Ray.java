@@ -11,6 +11,8 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.GameScreen;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -100,9 +102,10 @@ public class Ray {
     }
 
     public void laser(Shuttle player, Asteroid asteroid, ParticleEmitter particleEmitter, float dt) {
-        if (player.getPosition().dst(asteroid.getPosition()) <= Rules.PLAYER_LASER_TAKE_RANGE) {
-            boomBox.playMusicEffectInLoop(MSConstants.LASER, GamePreferences.getSoundVolume());
-            float dst = player.getPosition().dst(asteroid.getPosition());
+        float dst = player.getPosition().dst(asteroid.getPosition());
+        if (dst <= Rules.PLAYER_LASER_TAKE_RANGE && !player.isTaken()) {
+            asteroid.setAtLaserPoint(true);
+            boomBox.playMusicEffectInLoop(MSConstants.LASER, 1.0f);
             float scaleX = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleX();
             float scaleY = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleY();
             particleEmitter.setupFromPointToPoint(
@@ -131,9 +134,21 @@ public class Ray {
                 asteroid.destroy();
                 asteroid.showSprayCollision(particleEmitter);
                 asteroid.setTimeToBurn(0.0f);
+                asteroid.setAtLaserPoint(false);
             }
         } else {
+            asteroid.setAtLaserPoint(false);
             asteroid.setTimeToBurn(0.0f);
+        }
+
+        boolean anyAtLaserPoint = false;
+        List<Asteroid> asteroidList = gs.getAsteroidEmitter().getActiveList();
+        for (int i = 0; i < asteroidList.size(); i++) {
+            if (!asteroidList.get(i).isFragmented()) {
+                anyAtLaserPoint |= asteroidList.get(i).isAtLaserPoint();
+            }
+        }
+        if (!anyAtLaserPoint) {
             boomBox.stopMusicEffect(MSConstants.LASER);
         }
     }

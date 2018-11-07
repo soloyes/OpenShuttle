@@ -43,6 +43,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.group.PauseGroup;
 import com.shuttle.game.utils.BoundCheck;
+import com.shuttle.game.utils.effects.PrettySound;
 import com.shuttle.game.utils.effects.Ray;
 import com.shuttle.game.utils.effects.Shake;
 import com.shuttle.game.utils.effects.Vibrator;
@@ -105,6 +106,9 @@ public class GameScreen extends BaseScreen {
     private ShaderProgram shaderPause;
     private GameOver gameOver;
     private Ray ray;
+    private PrettySound prettyCorrosiveKick;
+    private PrettySound prettyElectricKick;
+    private PrettySound prettyFragmentHarvest;
     private float holeTime;
     private float fadeInAlpha;
     private boolean gameOverDeactivate;
@@ -157,6 +161,9 @@ public class GameScreen extends BaseScreen {
         Gdx.input.setInputProcessor(im);
         ray = new Ray(this);
         calcMusicEffectVolume();
+        prettyCorrosiveKick = PrettySound.getPretty(Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY);
+        prettyElectricKick = PrettySound.getPretty(Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY);
+        prettyFragmentHarvest = PrettySound.getPretty(Rules.FRAGMENT_KICK_PRETTY_SOUND_DELAY);
     }
 
     private void calcMusicEffectVolume() {
@@ -286,6 +293,7 @@ public class GameScreen extends BaseScreen {
     public void update(float dt) {
         cameraUpdate(dt);
         if (!pauseGroup.isPause()) {
+            PrettySound.update(dt);
             background.update(dt);
             player.update(dt);
             corrosiveAnomalyEmitter.update(dt);
@@ -397,7 +405,7 @@ public class GameScreen extends BaseScreen {
                         }
                         tmpAnomaly.setHungry(false);
                         tmpAnomaly.setSlimTimer(0);
-                        prettyKick(MSConstants.PLAYER_KICKED_CORROSIVE);
+                        prettyCorrosiveKick.playSound(MSConstants.PLAYER_KICKED_CORROSIVE);
                         Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
                     }
                 }
@@ -414,7 +422,7 @@ public class GameScreen extends BaseScreen {
                     tmpAnomaly.setHungry(false);
                     damageToPlayer(tmpAnomaly);
                     Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, tmpAnomaly.getLevel());
-                    prettyKick(MSConstants.PLAYER_KICKED_ELECTRIC);
+                    prettyElectricKick.playSound(MSConstants.PLAYER_KICKED_ELECTRIC);
                     tmpAnomaly.setV(tmpAnomaly.getV() * Rules.ANOMALY_ELECTRIC_DECREASE_FACTOR);
                 }
             }
@@ -523,10 +531,7 @@ public class GameScreen extends BaseScreen {
                         player.getRamShield().blink(0.5f);
                         player.setPower(player.getPower() + tmpAsteroid.getSizeForHarvest());
                         //pretty sound if collect much fragments in little time
-                        if (player.isDelayFragment()) {
-                            boomBox.playSound(MSConstants.GET_FRAGMENT);
-                            player.setDelayFragment(false);
-                        }
+                        prettyFragmentHarvest.playSound(MSConstants.GET_FRAGMENT);
                         tmpAsteroid.destroy();
                     }
                 }
@@ -661,6 +666,7 @@ public class GameScreen extends BaseScreen {
         float dst = blackhole.getPosition().dst(abstractPoolable.getPosition());
         if (dst <= Rules.BLACKHOLE_TAKE_RANGE) {
             abstractPoolable.setTaken(true);
+            abstractPoolable.setAtLaserPoint(false);
             abstractPoolable.getVelocity().scl(0.5f);
             float scaleX = (dst / Rules.BLACKHOLE_TAKE_RANGE) * abstractPoolable.getSaveScaleX();
             float scaleY = (dst / Rules.BLACKHOLE_TAKE_RANGE) * abstractPoolable.getSaveScaleY();
@@ -720,13 +726,6 @@ public class GameScreen extends BaseScreen {
             player.resetPower();
             tmp1V2.scl(-1);
             anomaly.getVelocity().add(tmp1V2);
-        }
-    }
-
-    private void prettyKick(String sound) {
-        if (player.isDelayAnomaly()) {
-            boomBox.playSound(sound);
-            player.setDelayAnomaly(false);
         }
     }
 
