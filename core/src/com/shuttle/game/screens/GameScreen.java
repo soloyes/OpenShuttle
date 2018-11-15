@@ -363,92 +363,92 @@ public class GameScreen extends BaseScreen {
         calcMusicEffectVolume();
 
         for (int i = 0; i < consumableEmitter.getActiveList().size(); i++) {
-            AbstractConsumable tmpAbstractConsumable = consumableEmitter.getActiveList().get(i);
-            if (!tmpAbstractConsumable.isTaken()) {
-                if (player.getPosition().dst(tmpAbstractConsumable.getPosition()) <= 128) {
+            AbstractConsumable abstractConsumable = consumableEmitter.getActiveList().get(i);
+            if (!abstractConsumable.isTaken()) {
+                if (player.getPosition().dst(abstractConsumable.getPosition()) <= 128) {
                     if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel()) {
-                        tmpAbstractConsumable.destroy();
-                        player.takeEffect(tmpAbstractConsumable);
-                        player.getStanding().addToStatistics(tmpAbstractConsumable.getType(), tmpAbstractConsumable.getLevel());
+                        abstractConsumable.destroy();
+                        player.takeEffect(abstractConsumable);
+                        player.getStanding().addToStatistics(abstractConsumable.getType(), abstractConsumable.getLevel());
                     } else {
-                        if (!player.canCatch(tmpAbstractConsumable)) {
-                            tmpAbstractConsumable.destroy();
-                            player.badEffect(tmpAbstractConsumable);
+                        if (!player.canCatch(abstractConsumable)) {
+                            abstractConsumable.destroy();
+                            player.badEffect(abstractConsumable);
                         } else {
-                            tmpAbstractConsumable.destroy();
-                            player.takeEffect(tmpAbstractConsumable);
+                            abstractConsumable.destroy();
+                            player.takeEffect(abstractConsumable);
                         }
                     }
                 }
                 ray.setCount(24);
                 ray.setSize(4);
                 ray.setPreset(Ray.Preset.GREEN);
-                ray.harvest(player, tmpAbstractConsumable, particleEmitter, dt);
+                ray.harvest(player, abstractConsumable, particleEmitter, dt);
             }
             ///
-            collideBlackholePoolable(tmpAbstractConsumable);
+            collideBlackholePoolable(abstractConsumable);
             ///
         }
 
         for (int i = 0; i < corrosiveAnomalyEmitter.getActiveList().size(); i++) {
-            CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(i);
-            if (!tmpAnomaly.isTaken()) {
-                if (player.getPosition().dst(tmpAnomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && tmpAnomaly.isBorn()) {
-                    if (tmpAnomaly.getLevel() < player.getPushPower() || player.getVelocity().len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
-                        damageToAnomaly(tmpAnomaly);
+            CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(i);
+            if (!anomaly.isTaken()) {
+                if (player.getPosition().dst(anomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && anomaly.isBorn()) {
+                    if (anomaly.getLevel() < player.getPushPower() || player.getVelocity().len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
+                        damageToAnomaly(anomaly);
                         boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
-                        Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, tmpAnomaly.getLevel());
+                        Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
                     } else {
-                        damageToPlayer(tmpAnomaly);
-                        if (tmpAnomaly.getLevel() != 4) {
-                            tmpAnomaly.takeDamage(player.getPushPower());
+                        damageToPlayer(anomaly);
+                        if (anomaly.getLevel() != 4) {
+                            anomaly.takeDamage(player.getPushPower());
                         }
-                        tmpAnomaly.setHungry(false);
-                        tmpAnomaly.setSlimTimer(0);
+                        anomaly.setHungry(false);
+                        anomaly.setSlimTimer(0);
                         prettyCorrosiveKick.playSound(MSConstants.PLAYER_KICKED_CORROSIVE);
                         Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
                     }
                 }
             }
             ///
-            collideBlackholePoolable(tmpAnomaly);
+            collideBlackholePoolable(anomaly);
             ///
         }
 
         for (int i = 0; i < electricalAnomalyEmitter.getActiveList().size(); i++) {
-            ElectricalAnomaly tmpAnomaly = (ElectricalAnomaly) electricalAnomalyEmitter.getActiveList().get(i);
-            if (!tmpAnomaly.isTaken()) {
-                if (player.getPosition().dst(tmpAnomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 && tmpAnomaly.isBorn()) {
-                    tmpAnomaly.setHungry(false);
-                    damageToPlayer(tmpAnomaly);
-                    Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, tmpAnomaly.getLevel());
+            ElectricalAnomaly anomaly = (ElectricalAnomaly) electricalAnomalyEmitter.getActiveList().get(i);
+            if (!anomaly.isTaken()) {
+                if (player.getPosition().dst(anomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 && anomaly.isBorn()) {
+                    anomaly.setHungry(false);
+                    damageToPlayer(anomaly);
+                    Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
                     prettyElectricKick.playSound(MSConstants.PLAYER_KICKED_ELECTRIC);
-                    tmpAnomaly.setV(tmpAnomaly.getV() * Rules.ANOMALY_ELECTRIC_DECREASE_FACTOR);
+                    anomaly.setV(anomaly.getV() * Rules.ANOMALY_ELECTRIC_DECREASE_FACTOR);
                 }
             }
             ///
-            collideBlackholePoolable(tmpAnomaly);
+            collideBlackholePoolable(anomaly);
             ///
         }
 
         //
         boolean tmp1 = false;
         for (int i = 0; i < radiationAnomalyEmitter.getActiveList().size(); i++) {
-            RadiationAnomaly tmpAnomaly = (RadiationAnomaly) radiationAnomalyEmitter.getActiveList().get(i);
-            if (!tmpAnomaly.isTaken()) {
-                if (player.getPosition().dst(tmpAnomaly.getPosition()) < PaintConstants.ANOMALY_RADIATION_WIDTH / 3 && tmpAnomaly.isBorn()) {
-                    tmpAnomaly.setEat(true);
-                    tmpAnomaly.setGlued(true);
+            RadiationAnomaly anomaly = (RadiationAnomaly) radiationAnomalyEmitter.getActiveList().get(i);
+            if (!anomaly.isTaken()) {
+                if (player.getPosition().dst(anomaly.getPosition()) < PaintConstants.ANOMALY_RADIATION_WIDTH / 3 && anomaly.isBorn()) {
+                    anomaly.setEat(true);
+                    anomaly.setGlued(true);
                 } else {
-                    tmpAnomaly.setEat(false);
-                    tmpAnomaly.setEatTimer(0.0f);
-                    tmpAnomaly.setGlued(false);
+                    anomaly.setEat(false);
+                    anomaly.setEatTimer(0.0f);
+                    anomaly.setGlued(false);
                 }
 
-                if (tmpAnomaly.isEat()) {
-                    tmpAnomaly.addEatTimer(dt);
-                    if (tmpAnomaly.getEatTimer() >= Rules.ANOMALIES_RADIATION_EAT_TIME) {
-                        tmpAnomaly.setEatTimer(0.0f);
+                if (anomaly.isEat()) {
+                    anomaly.addEatTimer(dt);
+                    if (anomaly.getEatTimer() >= Rules.ANOMALIES_RADIATION_EAT_TIME) {
+                        anomaly.setEatTimer(0.0f);
                         player.getStanding().changeScore(-Rules.ANOMALIES_RADIATION_SCORE_DECREASE);
                         boomBox.playSound(MSConstants.PLAYER_LOSE_SCORE);
                         gameInfoSystem.setup(
@@ -460,31 +460,31 @@ public class GameScreen extends BaseScreen {
                         );
                     }
                 }
-                tmp1 |= tmpAnomaly.isGlued();
+                tmp1 |= anomaly.isGlued();
             }
             ///
-            collideBlackholePoolable(tmpAnomaly);
+            collideBlackholePoolable(anomaly);
             ///
         }
         player.getStanding().setScoreAlertRadiationAnomaly(tmp1);
 
         boolean tmp2 = false;
         for (int i = 0; i < magneticAnomalyEmitter.getActiveList().size(); i++) {
-            MagneticAnomaly tmpAnomaly = (MagneticAnomaly) magneticAnomalyEmitter.getActiveList().get(i);
-            if (!tmpAnomaly.isTaken()) {
-                if (player.getPosition().dst(tmpAnomaly.getPosition()) < PaintConstants.ANOMALY_MAGNETIC_HEIGHT / 3 && tmpAnomaly.isBorn()) {
-                    tmpAnomaly.setEat(true);
-                    tmpAnomaly.setGlued(true);
+            MagneticAnomaly anomaly = (MagneticAnomaly) magneticAnomalyEmitter.getActiveList().get(i);
+            if (!anomaly.isTaken()) {
+                if (player.getPosition().dst(anomaly.getPosition()) < PaintConstants.ANOMALY_MAGNETIC_HEIGHT / 3 && anomaly.isBorn()) {
+                    anomaly.setEat(true);
+                    anomaly.setGlued(true);
                 } else {
-                    tmpAnomaly.setEat(false);
-                    tmpAnomaly.setEatTimer(0.0f);
-                    tmpAnomaly.setGlued(false);
+                    anomaly.setEat(false);
+                    anomaly.setEatTimer(0.0f);
+                    anomaly.setGlued(false);
                 }
 
-                if (tmpAnomaly.isEat()) {
-                    tmpAnomaly.addEatTimer(dt);
-                    if (tmpAnomaly.getEatTimer() >= Rules.ANOMALIES_MAGNETIC_EAT_TIME) {
-                        tmpAnomaly.setEatTimer(0.0f);
+                if (anomaly.isEat()) {
+                    anomaly.addEatTimer(dt);
+                    if (anomaly.getEatTimer() >= Rules.ANOMALIES_MAGNETIC_EAT_TIME) {
+                        anomaly.setEatTimer(0.0f);
                         player.getStanding().changeFuel(-Rules.ANOMALIES_MAGNETIC_FUEL_DECREASE);
                         boomBox.playSound(MSConstants.PLAYER_LOSE_FUEL);
                         gameInfoSystem.setup(
@@ -496,28 +496,28 @@ public class GameScreen extends BaseScreen {
                         );
                     }
                 }
-                tmp2 |= tmpAnomaly.isGlued();
+                tmp2 |= anomaly.isGlued();
             }
             ///
-            collideBlackholePoolable(tmpAnomaly);
+            collideBlackholePoolable(anomaly);
             ///
         }
         player.getStanding().setFuelAlertMagneticAnomaly(tmp2);
         //
 
         for (int i = 0; i < asteroidEmitter.getActiveList().size(); i++) {
-            Asteroid tmpAsteroid = asteroidEmitter.getActiveList().get(i);
-            if (!tmpAsteroid.isTaken()) {
-                if (player.getPosition().dst(tmpAsteroid.getPosition()) < tmpAsteroid.getHeight() * tmpAsteroid.getScaleX()) {
-                    if (!tmpAsteroid.isFragmented()) {
-                        tmpAsteroid.destroy();
+            Asteroid asteroid = asteroidEmitter.getActiveList().get(i);
+            if (!asteroid.isTaken()) {
+                if (player.getPosition().dst(asteroid.getPosition()) < asteroid.getHeight() * asteroid.getScaleX()) {
+                    if (!asteroid.isFragmented()) {
+                        asteroid.destroy();
                         Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
                         if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
                             Gdx.input.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
                         }
                         player.getLifeShield().blink(1.0f);
-                        particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, player.getShieldLevel().getLevel() * 16 + 32);
-                        asteroidEmitter.boom(tmpAsteroid.getPosition(), player.getShieldLevel());
+                        particleEmitter.getBuilder().buildDust(asteroid.getPosition().x, asteroid.getPosition().y, 180, player.getShieldLevel().getLevel() * 16 + 32);
+                        asteroidEmitter.boom(asteroid.getPosition(), player.getShieldLevel());
                         player.takeDamage(player.getShieldLevel().getLevel() + 1);
                         gameInfoSystem.setup(
                                 player.getPosition().x, player.getPosition().y,
@@ -526,57 +526,57 @@ public class GameScreen extends BaseScreen {
                                 true
                         );
                         boomBox.playSound(MSConstants.ASTEROID_DESTROY);
-                        player.getStanding().addToStatistics(tmpAsteroid.getType(), tmpAsteroid.getLevel());
+                        player.getStanding().addToStatistics(asteroid.getType(), asteroid.getLevel());
                     } else {
                         player.getRamShield().blink(0.5f);
-                        player.setPower(player.getPower() + tmpAsteroid.getSizeForHarvest());
+                        player.setPower(player.getPower() + asteroid.getSizeForHarvest());
                         //pretty sound if collect much fragments in little time
                         prettyFragmentHarvest.playSound(MSConstants.GET_FRAGMENT);
-                        tmpAsteroid.destroy();
+                        asteroid.destroy();
                     }
                 }
 
                 //
-                if (tmpAsteroid.isFragmented()) {
+                if (asteroid.isFragmented()) {
                     ray.setCount(12);
                     ray.setSize(2);
                     ray.setPreset(Ray.Preset.GREY);
-                    ray.harvest(player, tmpAsteroid, particleEmitter, dt);
+                    ray.harvest(player, asteroid, particleEmitter, dt);
                 } else {
                     ray.setCount(5);
                     ray.setSize(3);
                     ray.setPreset(Ray.Preset.RED);
-                    ray.laser(player, tmpAsteroid, particleEmitter, dt);
+                    ray.laser(player, asteroid, particleEmitter, dt);
                 }
                 //
 
                 for (int j = 0; j < corrosiveAnomalyEmitter.getActiveList().size(); j++) {
-                    CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(j);
-                    if (!tmpAsteroid.isFragmented() && tmpAnomaly.getPosition().dst(tmpAsteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
-                        tmpAsteroid.destroy();
-                        particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 32 + 32);
-                        asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE);
-                        gameInfoSystem.setup(tmpAnomaly.getPosition().x, tmpAnomaly.getPosition().y, GameInfoSystem.GameInfoSystemPreset.BOOM, 3.0f, false);
-                        if (tmpAnomaly.getLevel() == 0) {
-                            tmpAnomaly.destroy();
-                            tmpAnomaly.showSprayCollision(particleEmitter);
+                    CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(j);
+                    if (!asteroid.isFragmented() && anomaly.getPosition().dst(asteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
+                        asteroid.destroy();
+                        particleEmitter.getBuilder().buildDust(asteroid.getPosition().x, asteroid.getPosition().y, 180, 32 + 32);
+                        asteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                        gameInfoSystem.setup(anomaly.getPosition().x, anomaly.getPosition().y, GameInfoSystem.GameInfoSystemPreset.BOOM, 3.0f, false);
+                        if (anomaly.getLevel() == 0) {
+                            anomaly.destroy();
+                            anomaly.showSprayCollision(particleEmitter);
                         } else {
-                            tmpAnomaly.takeDamage(1);
+                            anomaly.takeDamage(1);
                         }
                     }
                 }
 
                 for (int j = 0; j < consumableEmitter.getActiveList().size(); j++) {
-                    AbstractConsumable tmpAbstractConsumable = consumableEmitter.getActiveList().get(j);
-                    if (!tmpAsteroid.isFragmented() && tmpAbstractConsumable.getPosition().dst(tmpAsteroid.getPosition()) < 128) {
-                        tmpAsteroid.destroy();
-                        tmpAbstractConsumable.destroy();
-                        asteroidEmitter.boom(tmpAsteroid.getPosition(), GlobalInteractionLevels.NONE);
-                        particleEmitter.getBuilder().buildDust(tmpAsteroid.getPosition().x, tmpAsteroid.getPosition().y, 180, 32 + 32);
-                        tmpAbstractConsumable.showSprayCollision(particleEmitter);
+                    AbstractConsumable abstractConsumable = consumableEmitter.getActiveList().get(j);
+                    if (!asteroid.isFragmented() && abstractConsumable.getPosition().dst(asteroid.getPosition()) < 128) {
+                        asteroid.destroy();
+                        abstractConsumable.destroy();
+                        asteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                        particleEmitter.getBuilder().buildDust(asteroid.getPosition().x, asteroid.getPosition().y, 180, 32 + 32);
+                        abstractConsumable.showSprayCollision(particleEmitter);
                         gameInfoSystem.setup(
-                                tmpAbstractConsumable.getPosition().x,
-                                tmpAbstractConsumable.getPosition().y,
+                                abstractConsumable.getPosition().x,
+                                abstractConsumable.getPosition().y,
                                 GameInfoSystem.GameInfoSystemPreset.SAD,
                                 3.0f,
                                 true
@@ -585,7 +585,7 @@ public class GameScreen extends BaseScreen {
                 }
             }
             ///
-            collideBlackholePoolable(tmpAsteroid);
+            collideBlackholePoolable(asteroid);
             ///
         }
     }
