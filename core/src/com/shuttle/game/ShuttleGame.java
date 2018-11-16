@@ -5,9 +5,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.screens.ScreenManager;
 
+import lombok.Getter;
+
 public class ShuttleGame extends Game {
     private SpriteBatch batch;
     private ScreenManager.ScreenType screenType;
+    @Getter
+    private static Share share;
+
+    public ShuttleGame(Share share) {
+        ShuttleGame.share = share;
+    }
 
     @Override
     public void create() {

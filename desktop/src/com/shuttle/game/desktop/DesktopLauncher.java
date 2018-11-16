@@ -23,7 +23,7 @@ public class DesktopLauncher {
                 }
             }
         }
-        ShuttleGame game = new ShuttleGame();
+        ShuttleGame game = new ShuttleGame(new ShareDesktop());
         game.setRunScreen(screenType);
         //
 

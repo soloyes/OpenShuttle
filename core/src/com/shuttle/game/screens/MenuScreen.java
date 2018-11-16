@@ -7,6 +7,7 @@ import com.shuttle.game.screens.group.ConfigGroup;
 import com.shuttle.game.screens.group.MenuBar;
 import com.shuttle.game.screens.group.MenuGroup;
 import com.shuttle.game.screens.group.ResultGroup;
+import com.shuttle.game.screens.group.ShareGroup;
 
 /**
  * @author Shuttle on 3/24/18.
@@ -30,11 +31,13 @@ public class MenuScreen extends BaseScreen {
         MenuGroup menuGroup = new MenuGroup();
         MenuBar menuBar = new MenuBar();
         ResultGroup resultGroup = new ResultGroup();
+        ShareGroup shareGroup = new ShareGroup();
         menuBar.setGroup(menuGroup);
         stage.addActor(menuGroup);
         stage.addActor(new ConfigGroup(ScreenManager.ScreenType.MENU));
         stage.addActor(menuBar);
         stage.addActor(resultGroup);
+        stage.addActor(shareGroup);
     }
 
     @Override

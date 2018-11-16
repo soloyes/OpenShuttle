@@ -30,6 +30,11 @@ public class Results {
         }
     }
 
+    public String getTopResults() {
+        return resultsFile.readString();
+    }
+
+
     public void setResult(String result) {
         results = Arrays.asList(resultsFile.readString().split("\n"));
         boolean exists = false;
