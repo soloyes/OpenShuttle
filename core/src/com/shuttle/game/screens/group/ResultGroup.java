@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Results;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 
@@ -54,9 +55,9 @@ public class ResultGroup extends Group {
         scrollPane.setClamp(false);
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollbarsOnTop(true);
-        scrollPane.setWidth(ScreenManager.getInstance().getViewport().getWorldWidth());
-        scrollPane.setHeight(2 * ScreenManager.getInstance().getViewport().getWorldHeight() / 3);
-        scrollPane.setY(ScreenManager.getInstance().getViewport().getWorldHeight() / 3);
+        scrollPane.setWidth(Rules.WORLD_WIDTH);
+        scrollPane.setHeight(2 * Rules.WORLD_HEIGHT / 3);
+        scrollPane.setY(Rules.WORLD_HEIGHT / 3);
         this.addActor(scrollPane);
     }
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.screens.ScreenManager;
 
@@ -44,11 +45,11 @@ public class MenuGroup extends Group {
                 "login");
 
         username.setPosition(
-                ScreenManager.getInstance().getViewport().getWorldWidth() / 4,
-                ScreenManager.getInstance().getViewport().getWorldHeight() / 2
+                Rules.WORLD_WIDTH / 4,
+                Rules.WORLD_HEIGHT / 2
         );
         username.setMaxLength(10);
-        username.setWidth(ScreenManager.getInstance().getViewport().getWorldWidth() / 2);
+        username.setWidth(Rules.WORLD_WIDTH / 2);
 
         username.addListener(new ChangeListener() {
             @Override

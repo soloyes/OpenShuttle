@@ -14,6 +14,7 @@ import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Results;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.effects.BoomBox;
@@ -52,22 +53,22 @@ public class MenuBar extends Group {
         this.buttonShare.setSize(128, 128);
 
         buttonExit.setPosition(
-                ScreenManager.getInstance().getViewport().getWorldWidth() - buttonExit.getWidth(),
+                Rules.WORLD_WIDTH - buttonExit.getWidth(),
                 0
         );
 
         buttonConfig.setPosition(
-                3 * ScreenManager.getInstance().getViewport().getWorldWidth() / 4 - buttonExit.getWidth() / 2,
+                3 * Rules.WORLD_WIDTH / 4 - buttonExit.getWidth() / 2,
                 0
         );
 
         buttonResults.setPosition(
-                ScreenManager.getInstance().getViewport().getWorldWidth() / 4 - buttonResults.getWidth() / 2,
+                Rules.WORLD_WIDTH / 4 - buttonResults.getWidth() / 2,
                 0
         );
 
         buttonShare.setPosition(
-                ScreenManager.getInstance().getViewport().getWorldWidth() / 2 - buttonShare.getWidth() / 2,
+                Rules.WORLD_WIDTH / 2 - buttonShare.getWidth() / 2,
                 0
         );
 
