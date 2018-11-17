@@ -14,7 +14,6 @@ import com.shuttle.game.screens.group.ShareGroup;
  */
 public class MenuScreen extends BaseScreen {
     private Background background;
-    private ShareGroup shareGroup;
 
     public MenuScreen(SpriteBatch batch) {
         super(batch);
@@ -32,7 +31,7 @@ public class MenuScreen extends BaseScreen {
         MenuGroup menuGroup = new MenuGroup();
         MenuBar menuBar = new MenuBar();
         ResultGroup resultGroup = new ResultGroup();
-        shareGroup = new ShareGroup();
+        ShareGroup shareGroup = new ShareGroup();
         menuBar.setGroup(menuGroup);
         stage.addActor(menuGroup);
         stage.addActor(new ConfigGroup(ScreenManager.ScreenType.MENU));
@@ -54,11 +53,5 @@ public class MenuScreen extends BaseScreen {
     public void update(float delta) {
         background.update(delta);
         stage.act();
-    }
-
-    @Override
-    public void resume() {
-        //*hack to pretty show click when call share API*//
-        shareGroup.getSocialLabel().setFontScale(1.0f);
     }
 }

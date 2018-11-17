@@ -6,55 +6,39 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.ShuttleGame;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.effects.BoomBox;
 
 import lombok.Getter;
 
+
 public class ShareGroup extends Group {
-    private Table table;
     private Label titleLabel;
     @Getter
     private final Label socialLabel;
-    private Label rateLabel;
-    private Label aboutLabel;
-    private Label introLabel;
+    private final Label rateLabel;
+    private final Label aboutLabel;
+    private final Label introLabel;
     private BoomBox boomBox;
     private Results results;
 
     public ShareGroup() {
+        this.setName(GroupType.SHARE.name());
         this.boomBox = new BoomBox();
         this.results = new Results();
-        this.setName(GroupType.SHARE.name());
         this.setVisible(false);
-        Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        final Color c = new Color(0.8f, 0.43f, 0.33f, 1f);
+        final Color color = new Color(0.8f, 0.43f, 0.33f, 1f);
 
-        Label.LabelStyle style64 = new Label.LabelStyle(
-                Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
-                c
-        );
+        Label.LabelStyle style64 = new Label.LabelStyle(Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class), color);
 
-        Label.LabelStyle style96 = new Label.LabelStyle(
-                Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class),
-                c
-        );
+        Label.LabelStyle style96 = new Label.LabelStyle(Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class), color);
 
-        table = new Table();
-        table.setPosition(
-                ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
-                ScreenManager.getInstance().getViewport().getWorldHeight() / 2
-        );
         titleLabel = new Label("Shares:", style96);
         socialLabel = new Label("Share Results", style64);
         rateLabel = new Label("Rate Shuttle", style64);
@@ -77,7 +61,6 @@ public class ShareGroup extends Group {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 boomBox.playSound(MSConstants.BUTTON_SOUND);
-                ShuttleGame.getShare().share(results.getTopResults());
                 float scale = 0.9f;
                 socialLabel.setFontScale(scale);
                 socialLabel.setX(Rules.WORLD_WIDTH / 2 - scale * socialLabel.getWidth() / 2);
@@ -88,6 +71,7 @@ public class ShareGroup extends Group {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 socialLabel.setFontScale(1.0f);
                 socialLabel.setX(Rules.WORLD_WIDTH / 2 - socialLabel.getWidth() / 2);
+                ShuttleGame.getShare().share(results.getTopResults());
             }
         });
 
