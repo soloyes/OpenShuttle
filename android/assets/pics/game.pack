@@ -3,21 +3,28 @@ images1.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-asteroid
+magnetic
   rotate: false
   xy: 2, 2
   size: 1024, 1024
   orig: 1024, 1024
   offset: 0, 0
   index: -1
-magnetic
+radiation
   rotate: false
   xy: 1028, 2
   size: 1024, 1024
   orig: 1024, 1024
   offset: 0, 0
   index: -1
-radiation
+asteroid
+  rotate: false
+  xy: 2054, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+asteroid
   rotate: false
   xy: 2054, 2
   size: 1024, 1024
@@ -45,74 +52,95 @@ radar
   orig: 512, 512
   offset: 0, 0
   index: -1
-astronaut
+takeRangeField384
   rotate: false
   xy: 3594, 2
-  size: 256, 256
-  orig: 256, 256
+  size: 384, 384
+  orig: 384, 384
   offset: 0, 0
   index: -1
-blackholeSpiral
+scratch
+  rotate: false
+  xy: 1028, 1028
+  size: 1280, 256
+  orig: 1280, 256
+  offset: 0, 0
+  index: -1
+shuttleBlur
   rotate: false
   xy: 3080, 516
-  size: 256, 256
-  orig: 256, 256
+  size: 768, 256
+  orig: 768, 256
   offset: 0, 0
   index: -1
-blackholeHole
-  rotate: false
-  xy: 3338, 516
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-glow
-  rotate: false
-  xy: 3596, 516
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-crate
+astronaut
   rotate: false
   xy: 2, 2824
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-joystick
-  rotate: false
-  xy: 3852, 2
-  size: 200, 250
-  orig: 200, 250
-  offset: 0, 0
-  index: -1
-scratch
+blackholeSpiral
   rotate: false
   xy: 260, 2824
-  size: 640, 128
-  orig: 640, 128
+  size: 256, 256
+  orig: 256, 256
   offset: 0, 0
   index: -1
-shuttleBlur2
+blackholeHole
   rotate: false
-  xy: 3594, 260
-  size: 128, 128
-  orig: 128, 128
+  xy: 518, 2824
+  size: 256, 256
+  orig: 256, 256
   offset: 0, 0
   index: -1
 lifeShield
   rotate: false
-  xy: 3724, 260
-  size: 128, 128
-  orig: 128, 128
+  xy: 2, 3082
+  size: 256, 256
+  orig: 256, 256
   offset: 0, 0
   index: -1
-shuttleBlur3
+glow
   rotate: false
-  xy: 3854, 260
-  size: 128, 128
-  orig: 128, 128
+  xy: 2, 3340
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+takeRangeField256
+  rotate: false
+  xy: 2, 3598
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+crate
+  rotate: false
+  xy: 260, 3082
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+ramShield
+  rotate: false
+  xy: 518, 3082
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+shuttle
+  rotate: false
+  xy: 260, 3340
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+joystick
+  rotate: false
+  xy: 3850, 516
+  size: 200, 250
+  orig: 200, 250
   offset: 0, 0
   index: -1
 fuel
@@ -124,35 +152,14 @@ fuel
   index: -1
 HP
   rotate: false
-  xy: 3338, 774
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-shuttleBlur1
-  rotate: false
-  xy: 3854, 516
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-ramShield
-  rotate: false
-  xy: 3596, 774
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-shuttle
-  rotate: false
-  xy: 3726, 774
+  xy: 3210, 774
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 star16
   rotate: false
-  xy: 4054, 2
+  xy: 3980, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

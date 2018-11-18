@@ -41,6 +41,7 @@ public class Crate extends AbstractConsumable {
         this.taken = false;
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.spiralRadius = MathUtils.random(20, 60);
+        this.atRayPoint = false;
     }
 
     @Override

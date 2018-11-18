@@ -83,7 +83,7 @@ public abstract class AbstractPoolable implements Poolable {
     protected int spiralRadius;
     @Getter
     @Setter
-    protected boolean atLaserPoint;
+    protected boolean atRayPoint;
 
     @Override
     public void destroy() {

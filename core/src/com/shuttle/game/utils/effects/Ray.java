@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.asteroids.Asteroid;
 import com.shuttle.game.bot.particle.ParticleEmitter;
 import com.shuttle.game.bot.pool.AbstractPoolable;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
@@ -47,6 +46,7 @@ public class Ray {
                     Rules.PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY : Rules.PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY;
 
             if (player.getPosition().dst(abstractPoolable.getPosition()) <= takeRange) {
+                abstractPoolable.setAtRayPoint(true);
                 tmp1V2.set(
                         player.getPosition())
                         .sub(abstractPoolable.getPosition())
@@ -88,8 +88,11 @@ public class Ray {
 
                 abstractPoolable.setScaleX(scaleX);
                 abstractPoolable.setScaleY(scaleY);
+            } else {
+                abstractPoolable.setAtRayPoint(false);
             }
         } else {
+
             abstractPoolable.setScaleX(abstractPoolable.getScaleX() + dt);
             abstractPoolable.setScaleY(abstractPoolable.getScaleY() + dt);
             if (abstractPoolable.getScaleX() >= abstractPoolable.getSaveScaleX()) {
@@ -104,7 +107,7 @@ public class Ray {
     public void laser(Shuttle player, Asteroid asteroid, ParticleEmitter particleEmitter, float dt) {
         float dst = player.getPosition().dst(asteroid.getPosition());
         if (dst <= Rules.PLAYER_LASER_TAKE_RANGE && !player.isTaken()) {
-            asteroid.setAtLaserPoint(true);
+            asteroid.setAtRayPoint(true);
             boomBox.playMusicEffectInLoop(MSConstants.LASER, 1.0f);
             float scaleX = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleX();
             float scaleY = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleY();
@@ -134,10 +137,10 @@ public class Ray {
                 asteroid.destroy();
                 asteroid.showSprayCollision(particleEmitter);
                 asteroid.setTimeToBurn(0.0f);
-                asteroid.setAtLaserPoint(false);
+                asteroid.setAtRayPoint(false);
             }
         } else {
-            asteroid.setAtLaserPoint(false);
+            asteroid.setAtRayPoint(false);
             asteroid.setTimeToBurn(0.0f);
         }
 
@@ -145,7 +148,7 @@ public class Ray {
         List<Asteroid> asteroidList = gs.getAsteroidEmitter().getActiveList();
         for (int i = 0; i < asteroidList.size(); i++) {
             if (!asteroidList.get(i).isFragmented()) {
-                anyAtLaserPoint |= asteroidList.get(i).isAtLaserPoint();
+                anyAtLaserPoint |= asteroidList.get(i).isAtRayPoint();
             }
         }
         if (!anyAtLaserPoint) {

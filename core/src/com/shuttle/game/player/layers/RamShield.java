@@ -23,6 +23,7 @@ public class RamShield {
     @Getter
     @Setter
     private float scaleX, scaleY;
+    @Getter
     private Color tmpColor;
 
     public RamShield(Shuttle player) {

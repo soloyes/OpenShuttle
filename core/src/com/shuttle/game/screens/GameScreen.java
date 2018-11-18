@@ -362,10 +362,11 @@ public class GameScreen extends BaseScreen {
         collideBlackholePlayer(dt);
         calcMusicEffectVolume();
 
+        boolean anyAtHarvestPoint = false;
         for (int i = 0; i < consumableEmitter.getActiveList().size(); i++) {
             AbstractConsumable abstractConsumable = consumableEmitter.getActiveList().get(i);
             if (!abstractConsumable.isTaken()) {
-                if (player.getPosition().dst(abstractConsumable.getPosition()) <= 128) {
+                if (player.getPosition().dst(abstractConsumable.getPosition()) <= PaintConstants.SHUTTLE_WIDTH / 2) {
                     if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel()) {
                         abstractConsumable.destroy();
                         player.takeEffect(abstractConsumable);
@@ -384,11 +385,14 @@ public class GameScreen extends BaseScreen {
                 ray.setSize(4);
                 ray.setPreset(Ray.Preset.GREEN);
                 ray.harvest(player, abstractConsumable, particleEmitter, dt);
+                anyAtHarvestPoint |= abstractConsumable.isAtRayPoint();
             }
             ///
             collideBlackholePoolable(abstractConsumable);
             ///
         }
+
+        player.showTakeRangeField(dt, anyAtHarvestPoint);
 
         for (int i = 0; i < corrosiveAnomalyEmitter.getActiveList().size(); i++) {
             CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(i);
@@ -631,6 +635,8 @@ public class GameScreen extends BaseScreen {
             player.getLifeShield().setScaleY(scaleY);
             player.getScratch().setScaleX(scaleX);
             player.getScratch().setScaleY(scaleY);
+            player.getTakeRangeField().setScaleX(scaleX);
+            player.getTakeRangeField().setScaleY(scaleY);
             player.setAngle(player.getAngle() + 365 * dt);
             if (blackhole.getPosition().dst(player.getPosition()) <= Rules.BLACKHOLE_EVENT_HORIZON) {
                 BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
@@ -642,6 +648,8 @@ public class GameScreen extends BaseScreen {
                 player.getLifeShield().setScaleY(1.0f);
                 player.getScratch().setScaleX(1.0f);
                 player.getScratch().setScaleY(1.0f);
+                player.getTakeRangeField().setScaleX(1.0f);
+                player.getTakeRangeField().setScaleY(1.0f);
                 player.setTaken(false);
                 boomBox.playSound(MSConstants.BLACKHOLE_TELEPORT);
                 player.takeDamage(Rules.BLACKHOLE_GET_DAMAGE);
@@ -656,6 +664,8 @@ public class GameScreen extends BaseScreen {
             player.getLifeShield().setScaleY(1.0f);
             player.getScratch().setScaleX(1.0f);
             player.getScratch().setScaleY(1.0f);
+            player.getTakeRangeField().setScaleX(1.0f);
+            player.getTakeRangeField().setScaleY(1.0f);
             player.setTaken(false);
         }
     }
@@ -666,7 +676,7 @@ public class GameScreen extends BaseScreen {
         float dst = blackhole.getPosition().dst(abstractPoolable.getPosition());
         if (dst <= Rules.BLACKHOLE_TAKE_RANGE) {
             abstractPoolable.setTaken(true);
-            abstractPoolable.setAtLaserPoint(false);
+            abstractPoolable.setAtRayPoint(false);
             abstractPoolable.getVelocity().scl(0.5f);
             float scaleX = (dst / Rules.BLACKHOLE_TAKE_RANGE) * abstractPoolable.getSaveScaleX();
             float scaleY = (dst / Rules.BLACKHOLE_TAKE_RANGE) * abstractPoolable.getSaveScaleY();
