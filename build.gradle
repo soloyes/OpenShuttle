@@ -2,9 +2,9 @@ buildscript {
     
 
     repositories {
-        mavenLocal()
+            mavenLocal()
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url  'https://dl.google.com/dl/android/maven2' }
         jcenter()
         google()
     }
