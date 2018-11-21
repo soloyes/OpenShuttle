@@ -9,6 +9,7 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.Regions;
 import com.shuttle.game.utils.effects.BoomBox;
 
 import java.util.LinkedList;
@@ -58,9 +59,11 @@ public class AbstractShuttle implements InputProcessor {
         this.engineParticleEmitter = new ParticleEmitter();
         this.textureRegion = new TextureRegion[4];
         this.textureRegion[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_REGION);
-        this.textureRegion[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_BLUR_REGION_1);
-        this.textureRegion[2] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_BLUR_REGION_2);
-        this.textureRegion[3] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_BLUR_REGION_3);
+        TextureRegion[] tmpRegion = Regions.split(
+                Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_BLUR_REGION),
+                1, 3, 3
+        );
+        System.arraycopy(tmpRegion, 0, textureRegion, 1, tmpRegion.length);
         this.position = new Vector2(
                 ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
                 ScreenManager.getInstance().getViewport().getWorldHeight() / 2

@@ -9,15 +9,18 @@ import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 9/3/18.
  */
-@Data
 public class Scratch {
     private TextureRegion[] textures;
     private Shuttle player;
     private int width, height;
+    @Getter
+    @Setter
     private float scaleX, scaleY;
     private float alpha;
     private int frame;

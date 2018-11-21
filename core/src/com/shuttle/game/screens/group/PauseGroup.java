@@ -40,8 +40,8 @@ public class PauseGroup extends Group {
         pauseBtn.setOrigin(Align.center);
         pauseBtn.setSize(128f, 128f);
         pauseBtn.setPosition(
-                ScreenManager.getInstance().getViewport().getWorldWidth() - pauseBtn.getWidth() - 20,
-                ScreenManager.getInstance().getViewport().getWorldHeight() - pauseBtn.getHeight() - 20
+                Rules.WORLD_WIDTH - pauseBtn.getWidth() - 20,
+                Rules.WORLD_HEIGHT - pauseBtn.getHeight() - 20
         );
 
         this.configGroup = new ConfigGroup(ScreenManager.ScreenType.GAME);
@@ -58,7 +58,7 @@ public class PauseGroup extends Group {
         buttonRestart.setSize(128f, 128f);
 
         buttonRestart.setPosition(
-                ScreenManager.getInstance().getViewport().getWorldWidth() - buttonRestart.getWidth(),
+                Rules.WORLD_WIDTH - buttonRestart.getWidth(),
                 0
         );
 

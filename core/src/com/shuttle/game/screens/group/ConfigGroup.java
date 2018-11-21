@@ -67,15 +67,15 @@ public class ConfigGroup extends Group {
 
         table = new Table();
         table.setPosition(
-                ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
-                ScreenManager.getInstance().getViewport().getWorldHeight() / 2
+                Rules.WORLD_WIDTH / 2,
+                Rules.WORLD_HEIGHT / 2
         );
 
         Slider.SliderStyle sliderStyle = new Slider.SliderStyle(skin.get("default-horizontal", Slider.SliderStyle.class));
-        sliderStyle.knob.setMinHeight(25);
-        sliderStyle.knobOver.setMinHeight(25);
-        sliderStyle.knob.setMinWidth(25);
-        sliderStyle.knobOver.setMinWidth(25);
+        sliderStyle.knob.setMinHeight(50);
+        sliderStyle.knobOver.setMinHeight(50);
+        sliderStyle.knob.setMinWidth(50);
+        sliderStyle.knobOver.setMinWidth(50);
 
         final Slider musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, sliderStyle);
         musicSlider.setValue(GamePreferences.getMusicVolume());
@@ -197,12 +197,12 @@ public class ConfigGroup extends Group {
             case MENU:
                 table.row();
                 table.add(levelLabel).left();
-                table.add(levelSlider).padRight(10);
+                table.add(levelSlider).padRight(10).width(300);
                 table.add(levelLabelDynamic).left().width(200);
 
                 table.row();
                 table.add(effectsLabel).left();
-                table.add(effectsSlider).padRight(10);
+                table.add(effectsSlider).padRight(10).width(300);
                 table.add(effectsLabelDynamic).left().width(200);
                 break;
         }

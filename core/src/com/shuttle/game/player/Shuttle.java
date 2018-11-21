@@ -9,6 +9,8 @@ import com.shuttle.game.Joystick;
 import com.shuttle.game.bot.consumable.Astronaut;
 import com.shuttle.game.bot.consumable.Consumable;
 import com.shuttle.game.bot.consumable.Crate;
+import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.player.layers.TakeRangeField;
 import com.shuttle.game.utils.effects.KillingSpree;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.pool.AbstractPoolable;
@@ -48,6 +50,9 @@ public class Shuttle extends AbstractShuttle {
     private RamShield ramShield;
     @Getter
     @Setter
+    private TakeRangeField takeRangeField;
+    @Getter
+    @Setter
     private Scratch scratch;
     private float zigzagEffect;
     private float killTimer;
@@ -67,17 +72,6 @@ public class Shuttle extends AbstractShuttle {
     @Getter
     @Setter
     private float maxPower;
-    //pretty sound if collect much fragments in little time;
-    private float tmpDelayFragment;
-    @Getter
-    @Setter
-    private boolean delayFragment;
-    //
-    //pretty sound if collide with much anomalies in little time;
-    private float tmpDelayAnomaly;
-    @Getter
-    @Setter
-    private boolean delayAnomaly;
     @Getter
     @Setter
     private boolean cameraSmooth;
@@ -97,6 +91,7 @@ public class Shuttle extends AbstractShuttle {
         this.boundCheck = new BoundCheck();
         this.lifeShield = new LifeShield(this);
         this.ramShield = new RamShield(this);
+        this.takeRangeField = new TakeRangeField(this);
         this.scratch = new Scratch(this);
         this.F = 2 * (int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Rules.PLAYER_ENGINE_POWER);
         this.shadowsCoordinates = Fibonacci.generate(F);
@@ -192,6 +187,9 @@ public class Shuttle extends AbstractShuttle {
         }
         //ramShield.render(batch); - render from GameScreen with layer's order
         if (!Rules.GAME_OVER) {
+            if (getShieldLevel().getLevel() >= 2) {
+                takeRangeField.render(batch);
+            }
             scratch.render(batch);
             lifeShield.render(batch);
             radar.render(batch);
@@ -200,6 +198,23 @@ public class Shuttle extends AbstractShuttle {
 
     public void resetPower() {
         power = 0.0f;
+    }
+
+    public void showTakeRangeField(float dt, boolean anyAtHarvestPoint) {
+        float a = takeRangeField.getAlpha();
+        if (anyAtHarvestPoint) {
+            if (a >= PaintConstants.SHUTTLE_TAKE_RANGE_FIELD_MAX) {
+                takeRangeField.setAlpha(PaintConstants.SHUTTLE_TAKE_RANGE_FIELD_MAX);
+            } else {
+                takeRangeField.setAlpha(a + dt);
+            }
+        } else {
+            if (a <= 0.0f) {
+                takeRangeField.setAlpha(0.0f);
+            } else {
+                takeRangeField.setAlpha(a - dt);
+            }
+        }
     }
 
     public void slowDown(float amount) {
@@ -251,6 +266,7 @@ public class Shuttle extends AbstractShuttle {
         scratch.update(dt);
         lifeShield.update(dt);
         ramShield.update(dt);
+        takeRangeField.update(dt);
 
         velocity.scl(/*FPS hack*/1.0f - dt/*FPS hack*/);
 
@@ -279,18 +295,6 @@ public class Shuttle extends AbstractShuttle {
         checkRadar();
         radar.update(dt);
         boundCheck.checkAndHandleBounds(this, dt);
-
-        tmpDelayFragment += dt;
-        if (tmpDelayFragment >= Rules.FRAGMENT_KICK_PRETTY_SOUND_DELAY) {
-            tmpDelayFragment = 0.0f;
-            delayFragment = true;
-        }
-
-        tmpDelayAnomaly += dt;
-        if (tmpDelayAnomaly >= Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY) {
-            tmpDelayAnomaly = 0.0f;
-            delayAnomaly = true;
-        }
 
         if (!taken) {
             startEngine(dt);
@@ -432,4 +436,5 @@ public class Shuttle extends AbstractShuttle {
     public int getPushPower() {
         return (int) power;
     }
+
 }

@@ -115,6 +115,7 @@ public class Asteroid extends AbstractPoolable {
         this.color.set(1.0f, 1.0f, 1.0f, 1.0f);
         this.spreeColor.set(1.0f, 1.0f, 1.0f, 1.0f);
         this.spiralRadius = MathUtils.random(20, 60);
+        this.atRayPoint = false;
     }
 
     @Override

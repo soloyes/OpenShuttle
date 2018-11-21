@@ -46,7 +46,6 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
         this.count = rang.getFragmentAsteroidCount();
         this.position = position;
         this.boom = true;
-        this.boomBox.stopMusicEffect(MSConstants.LASER);
     }
 
     public void render(SpriteBatch batch) {
