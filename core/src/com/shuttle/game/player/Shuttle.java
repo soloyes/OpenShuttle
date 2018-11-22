@@ -437,4 +437,41 @@ public class Shuttle extends AbstractShuttle {
         return (int) power;
     }
 
+    public void collideBlackhole(float dt) {
+        if (position.dst(gs.getBlackhole().getPosition()) <= Rules.BLACKHOLE_TAKE_RANGE) {
+            taken = true;
+            velocity.scl(0.5f);
+            tmpV2.set(gs.getBlackhole().getPosition()).sub(position).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_POOLABLE);
+            position.mulAdd(tmpV2, dt);
+            float dst = gs.getBlackhole().getPosition().dst(position);
+            float scaleX = dst / Rules.BLACKHOLE_TAKE_RANGE;
+            float scaleY = dst / Rules.BLACKHOLE_TAKE_RANGE;
+            setLayersScale(scaleX, scaleY);
+            angle = angle + 365 * dt;
+            if (gs.getBlackhole().getPosition().dst(position) <= Rules.BLACKHOLE_EVENT_HORIZON) {
+                BoundCheck.avoidPosition(gs.getBlackhole().getPosition(), position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+                setLayersScale(1.0f, 1.0f);
+                taken = false;
+                boomBox.playSound(MSConstants.BLACKHOLE_TELEPORT);
+                takeDamage(Rules.BLACKHOLE_GET_DAMAGE);
+                cameraSmooth = true;
+            }
+        } else {
+            setLayersScale(1.0f, 1.0f);
+            taken = false;
+        }
+    }
+
+    private void setLayersScale(float scaleX, float scaleY) {
+        this.scaleX = scaleX;
+        this.scaleY = scaleY;
+        ramShield.setScaleX(scaleX);
+        ramShield.setScaleY(scaleY);
+        lifeShield.setScaleX(scaleX);
+        lifeShield.setScaleY(scaleY);
+        scratch.setScaleX(scaleX);
+        scratch.setScaleY(scaleY);
+        takeRangeField.setScaleX(scaleX);
+        takeRangeField.setScaleY(scaleY);
+    }
 }

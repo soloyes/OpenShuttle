@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.particle.ParticleEmitter;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.effects.MoveProcessor;
 import com.shuttle.game.utils.effects.BoomBox;
@@ -143,7 +145,35 @@ public abstract class AbstractPoolable implements Poolable {
         }
     }
 
+    public void collideBlackhole() {
+        float dst = gs.getBlackhole().getPosition().dst(position);
+        if (dst <= Rules.BLACKHOLE_TAKE_RANGE) {
+            taken = true;
+            atRayPoint = false;
+            velocity.scl(0.5f);
+            float scaleX = (dst / Rules.BLACKHOLE_TAKE_RANGE) * saveScaleX;
+            float scaleY = (dst / Rules.BLACKHOLE_TAKE_RANGE) * saveScaleY;
+            if (scaleX >= saveScaleX) {
+                scaleX = saveScaleX;
+            }
+            if (scaleY >= saveScaleY) {
+                scaleY = saveScaleY;
+            }
+            this.scaleX = scaleX;
+            this.scaleY = scaleY;
+            if (dst <= Rules.BLACKHOLE_EVENT_HORIZON) {
+                destroy();
+            }
+        } else {
+            if (!(this instanceof AbstractConsumable)) {
+                this.scaleX = this.saveScaleX;
+                this.scaleY = this.saveScaleY;
+            }
+            taken = false;
+        }
+    }
+
     public enum Type {
-        CORROSIVE, ELECTRIC, MAGNETIC, RADIATION, ASTEROID, ASTRONAUT, CRATE
+        CORROSIVE, ELECTRIC, MAGNETIC, RADIATION, ASTEROID, ASTRONAUT, CRATE, FUEL, STORAGE
     }
 }

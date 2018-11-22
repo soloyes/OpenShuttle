@@ -12,6 +12,7 @@ import com.shuttle.game.bot.anomaly.RadiationAnomaly;
 import com.shuttle.game.bot.asteroids.Asteroid;
 import com.shuttle.game.bot.consumable.Astronaut;
 import com.shuttle.game.bot.consumable.Crate;
+import com.shuttle.game.bot.consumable.Fuel;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.screens.GameScreen;
@@ -105,10 +106,15 @@ public class GameOver {
         crate.setWidth(128);
         crate.setHeight(128);
 
+        Fuel fuel = new Fuel(gs);
+        fuel.init(picx, 440);
+        fuel.setWidth(128);
+        fuel.setHeight(128);
+
         Asteroid asteroid = new Asteroid(gs);
         asteroid.setScaleX(1.0f);
         asteroid.setScaleY(1.0f);
-        asteroid.init(picx, 440);
+        asteroid.init(picx, 340);
 
         poolable.add(corrosiveAnomalyTAN);
         poolable.add(corrosiveAnomalyGREEN);
@@ -119,6 +125,7 @@ public class GameOver {
         poolable.add(radiationAnomaly);
         poolable.add(astronaut);
         poolable.add(crate);
+        poolable.add(fuel);
         poolable.add(asteroid);
     }
 
@@ -127,7 +134,7 @@ public class GameOver {
         font96.getColor().a = batch.getColor().a;
         font96.draw(batch, glyphLayout,
                 ScreenManager.getInstance().getViewport().getWorldWidth() / 2 - glyphLayout.width / 2,
-                340
+                240
         );
         Color tmpColor = batch.getColor();
         for (int i = 0; i < poolable.size(); i++) {
@@ -161,6 +168,10 @@ public class GameOver {
                 batch.setColor(tmpColor);
                 Crate tmpCrate = (Crate) abstractPoolable;
                 tmpCrate.basicRender(batch);
+            } else if (abstractPoolable instanceof Fuel) {
+                batch.setColor(tmpColor);
+                Fuel tmpFuel = (Fuel) abstractPoolable;
+                tmpFuel.basicRender(batch);
             } else if (abstractPoolable instanceof Asteroid) {
                 batch.setColor(tmpColor);
                 Asteroid tmpAsteroid = (Asteroid) abstractPoolable;

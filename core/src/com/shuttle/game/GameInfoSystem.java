@@ -51,12 +51,14 @@ public class GameInfoSystem {
         SAD("[YELLOW]SO SAD[]"),
         OUT("[YELLOW]OUT OF RANGE![]"),
         REPAIR("REPAIR [GREEN]+" + Rules.CRATE_REPAIR_ADD),
-        FUEL("FUEL [GREEN]+" + Rules.CRATE_FUEL_ADD+"[]"),
+        FUEL("FUEL [GREEN]+" + Rules.CRATE_FUEL_ADD + "[]"),
         TURBO("TURBO [GREEN]x3[]"),
         TRASH("[YELLOW]TRASH[]"),
         FLUSH("[GREEN]FLUSH[]"),
         LOST_FUEL("[RED]-FUEL[]"),
-        LOST_SCORE("[RED]-SCORE[]");
+        LOST_SCORE("[RED]-SCORE[]"),
+        MURDERER("MURDERER!\n-50000"),
+        EASY("BE EASY!");
         private String value;
 
         GameInfoSystemPreset(String value) {

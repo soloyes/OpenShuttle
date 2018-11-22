@@ -35,6 +35,7 @@ public class MoveProcessor {
         } else {
             archimedesInit(abstractConsumable);
         }
+        update(abstractConsumable);
     }
 
     private void intoTheDark(AbstractPoolable abstractPoolable) {
@@ -96,6 +97,7 @@ public class MoveProcessor {
             abstractAnomaly.getPosition().y = gs.getBlackhole().getPosition().y + radius * MathUtils.sin(angle);
             angle += dt;
         }
+        update(abstractAnomaly);
     }
 
     public void update(Asteroid asteroid, float dt) {
@@ -111,6 +113,13 @@ public class MoveProcessor {
             angle += dt;
 
             intoTheDark(asteroid);
+        }
+        update(asteroid);
+    }
+
+    private void update(AbstractPoolable abstractPoolable){
+        if (abstractPoolable.isActive()){
+            abstractPoolable.collideBlackhole();
         }
     }
 }

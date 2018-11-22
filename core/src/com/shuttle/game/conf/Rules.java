@@ -24,6 +24,12 @@ public final class Rules {
     public static final int CONSUMABLE_AT_START = 2;
     //6.0f
     public static final float CONSUMABLE_RESPAWN_TIME = 6.0f;
+    //0
+    public static final int CONSUMABLE_FUEL_AT_START = 0;
+    //6.0f
+    public static final float CONSUMABLE_FUEL_RESPAWN_TIME = 6.0f;
+    //2
+    public static final int CONSUMABLE_FUEL_MAX_COUNT = 2;
     //ANOMALY
     //0
     public static final int ANOMALIES_ELECTRIC_AT_START = 0;
