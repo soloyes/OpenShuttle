@@ -3,14 +3,13 @@ package com.shuttle.game.bot.consumable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.effects.BoomBox;
 import com.shuttle.game.utils.BoundCheck;
 
-public abstract class AbstractConsumable extends AbstractPoolable implements Consumable{
+public abstract class AbstractConsumable extends AbstractPoolable implements Consumable {
     protected TextureRegion texture;
 
     public AbstractConsumable(GameScreen gs) {

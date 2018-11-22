@@ -17,6 +17,8 @@ public final class VConstants {
     public static final int PLAYER_ASTRONAUT_DESTROY = 50;
     //30
     public static final int PLAYER_CRATE_DESTROY = 30;
+    //30
+    public static final int PLAYER_FUEL_DESTROY = 30;
     //10
     public static final int PLAYER_ANOMALY_CORROSIVE_COLLISION = 10;
 }

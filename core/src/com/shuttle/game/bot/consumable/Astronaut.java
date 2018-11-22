@@ -2,6 +2,7 @@ package com.shuttle.game.bot.consumable;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
@@ -55,8 +56,7 @@ public class Astronaut extends AbstractConsumable {
 
     @Override
     public void consumed(GameScreen gs) {
-        Standing standing = gs.getPlayer().getStanding();
-        standing.changeScore(Rules.CONSUMABLE_BASE_SCORE_ADD);
+        gs.getPlayer().getStanding().changeScore(Rules.CONSUMABLE_BASE_SCORE_ADD);
         gs.getGameInfoSystem().setup(
                 position.x,
                 position.y,
@@ -74,7 +74,7 @@ public class Astronaut extends AbstractConsumable {
         gs.getGameInfoSystem().setup(
                 position.x,
                 position.y,
-                "Murderer!\n-50000",
+                GameInfoSystem.GameInfoSystemPreset.MURDERER,
                 8.0f,
                 false
         );

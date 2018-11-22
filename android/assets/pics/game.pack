@@ -3,35 +3,28 @@ images1.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-magnetic
+radiation
   rotate: false
   xy: 2, 2
   size: 1024, 1024
   orig: 1024, 1024
   offset: 0, 0
   index: -1
-radiation
+magnetic
   rotate: false
   xy: 1028, 2
   size: 1024, 1024
   orig: 1024, 1024
   offset: 0, 0
   index: -1
-asteroid
-  rotate: false
-  xy: 2054, 2
-  size: 1024, 1024
-  orig: 1024, 1024
-  offset: 0, 0
-  index: -1
-asteroid
-  rotate: false
-  xy: 2054, 2
-  size: 1024, 1024
-  orig: 1024, 1024
-  offset: 0, 0
-  index: -1
 electric
+  rotate: false
+  xy: 2054, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+asteroid
   rotate: false
   xy: 2, 1028
   size: 1024, 1024
@@ -73,65 +66,86 @@ shuttleBlur
   orig: 768, 256
   offset: 0, 0
   index: -1
-astronaut
+takeRangeField256
   rotate: false
   xy: 2, 2824
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackholeSpiral
+storage1
   rotate: false
   xy: 260, 2824
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackholeHole
+shuttle
   rotate: false
   xy: 518, 2824
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-lifeShield
+ramShield
   rotate: false
   xy: 2, 3082
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-glow
+lifeShield
   rotate: false
   xy: 2, 3340
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-takeRangeField256
+glow
   rotate: false
   xy: 2, 3598
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-crate
+fuel1
   rotate: false
   xy: 260, 3082
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-ramShield
+crate2
   rotate: false
   xy: 518, 3082
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-shuttle
+crate1
   rotate: false
   xy: 260, 3340
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+blackholeSpiral
+  rotate: false
+  xy: 260, 3598
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+blackholeHole
+  rotate: false
+  xy: 518, 3340
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+astronaut
+  rotate: false
+  xy: 518, 3598
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -141,20 +155,6 @@ joystick
   xy: 3850, 516
   size: 200, 250
   orig: 200, 250
-  offset: 0, 0
-  index: -1
-fuel
-  rotate: false
-  xy: 3080, 774
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-HP
-  rotate: false
-  xy: 3210, 774
-  size: 128, 128
-  orig: 128, 128
   offset: 0, 0
   index: -1
 star16

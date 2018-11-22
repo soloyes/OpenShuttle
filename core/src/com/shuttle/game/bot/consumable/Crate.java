@@ -23,9 +23,9 @@ import java.util.List;
 public class Crate extends AbstractConsumable {
     public Crate(GameScreen gs) {
         super(gs);
-        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_REGION);
-        this.width = PaintConstants.CRATE_WIDTH;
-        this.height = PaintConstants.CRATE_HEIGHT;
+        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_2_REGION);
+        this.width = PaintConstants.CRATE_2_WIDTH;
+        this.height = PaintConstants.CRATE_2_HEIGHT;
         this.type = Type.CRATE;
         this.moveProcessor = new MoveProcessor(gs);
     }
@@ -55,7 +55,7 @@ public class Crate extends AbstractConsumable {
     public void consumed(GameScreen gs) {
         Standing standing = gs.getPlayer().getStanding();
         Shuttle player = gs.getPlayer();
-        int x = MathUtils.random(0, 4);
+        int x = MathUtils.random(0, 3);
         /*Hack to pretty shadow effect. This effect should be finished firstly*/
         if (player.getVelocity().len() >= Rules.PLAYER_ENGINE_POWER) {
             x++;
@@ -79,18 +79,6 @@ public class Crate extends AbstractConsumable {
             boomBox.playSound(MSConstants.PLAYER_REPAIR);
         }
         if (x == 1) {
-            standing.changeFuel(Rules.CRATE_FUEL_ADD);
-            gs.getGameInfoSystem()
-                    .setup(
-                            position.x,
-                            position.y,
-                            GameInfoSystem.GameInfoSystemPreset.FUEL,
-                            3.0f,
-                            true
-                    );
-            boomBox.playSound(MSConstants.GET_FUEL);
-        }
-        if (x == 2) {
             player.getVelocity().add(
                     Rules.PLAYER_TURBO_ENGINE_POWER * (float) Math.cos(Math.toRadians(player.getAngle())),
                     Rules.PLAYER_TURBO_ENGINE_POWER * (float) Math.sin(Math.toRadians(player.getAngle()))
@@ -105,13 +93,14 @@ public class Crate extends AbstractConsumable {
                     );
             boomBox.playSound(MSConstants.TURBO);
         }
-        if (x == 3) {
+        if (x == 2) {
             List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
             for (int i = 0; i < anomalies.size(); i++) {
                 if (boundCheck.checkAndHandleBoundsInCamera(anomalies.get(i), gs.getCamera())) {
                     if (!anomalies.get(i).isTaken()) {
                         anomalies.get(i).setMarkedToBoom(true);
                         standing.addToStatistics(anomalies.get(i).getType(), anomalies.get(i).getLevel());
+                        standing.changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
                     }
                 }
             }
@@ -125,7 +114,7 @@ public class Crate extends AbstractConsumable {
                     );
             boomBox.playSound(MSConstants.ANOMALY_FLUSH);
         }
-        if (x > 3) {
+        if (x > 2) {
             gs.getGameInfoSystem()
                     .setup(
                             position.x,
@@ -143,7 +132,7 @@ public class Crate extends AbstractConsumable {
         gs.getGameInfoSystem().setup(
                 position.x,
                 position.y,
-                "Be easy!",
+                GameInfoSystem.GameInfoSystemPreset.EASY,
                 3.0f,
                 false
         );

@@ -127,7 +127,7 @@ public class Blackhole {
                 PaintConstants.BLACKHOLE_SHADER_OSCILLATION_FREQUENCY,
                 PaintConstants.BLACKHOLE_SHADER_OSCILLATOR_MIN,
                 PaintConstants.BLACKHOLE_SHADER_OSCILLATOR_MAX,
-                dt / PaintConstants.BLACKHOLE_SHADER_OSCILLATION_FACATOR
+                dt / PaintConstants.BLACKHOLE_SHADER_OSCILLATION_FACTOR
         );
     }
 }
