@@ -49,6 +49,7 @@ import com.shuttle.game.utils.effects.Shake;
 import com.shuttle.game.utils.effects.Vibrator;
 
 import java.util.List;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -383,7 +384,17 @@ public class GameScreen extends BaseScreen {
                 }
                 ray.setCount(24);
                 ray.setSize(4);
-                ray.setPreset(Ray.Preset.GREEN);
+                ray.setHarvestVelocity(Rules.PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY);
+                ray.setTakeRange(Rules.PLAYER_CONSUMABLE_TAKE_RANGE);
+                if (player.getShieldLevel().getLevel() < 2) {
+                    ray.setPreset(Ray.Preset.GREEN);
+                } else {
+                    if (player.canCatch(abstractConsumable)) {
+                        ray.setPreset(Ray.Preset.GREEN);
+                    } else {
+                        ray.setPreset(Ray.Preset.RED);
+                    }
+                }
                 ray.harvest(player, abstractConsumable, particleEmitter, dt);
                 anyAtHarvestPoint |= abstractConsumable.isAtRayPoint();
             }
@@ -545,6 +556,8 @@ public class GameScreen extends BaseScreen {
                     ray.setCount(12);
                     ray.setSize(2);
                     ray.setPreset(Ray.Preset.GREY);
+                    ray.setHarvestVelocity(Rules.PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY);
+                    ray.setTakeRange(Rules.PLAYER_FRAGMENT_TAKE_RANGE);
                     ray.harvest(player, asteroid, particleEmitter, dt);
                 } else {
                     ray.setCount(5);

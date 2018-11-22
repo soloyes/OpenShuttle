@@ -26,6 +26,10 @@ public class Ray {
     private Preset preset;
     @Setter
     private float size;
+    @Setter
+    private float harvestVelocity;
+    @Setter
+    private  float takeRange;
     private BoomBox boomBox;
     private GameScreen gs;
 
@@ -35,16 +39,13 @@ public class Ray {
         this.count = 24;
         this.preset = Preset.GREEN;
         this.size = 4;
+        this.harvestVelocity = Rules.PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY;
+        this.takeRange = Rules.PLAYER_CONSUMABLE_TAKE_RANGE;
         this.boomBox = new BoomBox();
     }
 
     public void harvest(Shuttle player, AbstractPoolable abstractPoolable, ParticleEmitter particleEmitter, float dt) {
         if (!player.isTaken()) {
-            float takeRange = preset.name().equals(Preset.GREEN.name()) ?
-                    Rules.PLAYER_CONSUMABLE_TAKE_RANGE : Rules.PLAYER_FRAGMENT_TAKE_RANGE;
-            float harvestVelocity = preset.name().equals(Preset.GREEN.name()) ?
-                    Rules.PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY : Rules.PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY;
-
             if (player.getPosition().dst(abstractPoolable.getPosition()) <= takeRange) {
                 abstractPoolable.setAtRayPoint(true);
                 tmp1V2.set(
