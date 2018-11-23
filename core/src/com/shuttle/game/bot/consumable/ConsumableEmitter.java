@@ -8,7 +8,7 @@ import com.shuttle.game.screens.GameScreen;
 
 import lombok.Getter;
 import lombok.Setter;
-
+//#77 depricated
 public class ConsumableEmitter extends ObjectPool<AbstractConsumable> {
     @Getter
     @Setter

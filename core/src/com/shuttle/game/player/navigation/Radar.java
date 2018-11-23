@@ -101,8 +101,12 @@ public class Radar {
             CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) gs.getCorrosiveAnomalyEmitter().getActiveList().get(i);
             drawPoolables(batch, tmpAnomaly);
         }
-        for (int i = 0; i < gs.getConsumableEmitter().getActiveList().size(); i++) {
-            AbstractConsumable tmpAbstractConsumable = gs.getConsumableEmitter().getActiveList().get(i);
+        for (int i = 0; i < gs.getCrateEmitter().getActiveList().size(); i++) {
+            AbstractConsumable tmpAbstractConsumable = gs.getCrateEmitter().getActiveList().get(i);
+            drawPoolables(batch, tmpAbstractConsumable);
+        }
+        for (int i = 0; i < gs.getAstronautEmitter().getActiveList().size(); i++) {
+            AbstractConsumable tmpAbstractConsumable = gs.getAstronautEmitter().getActiveList().get(i);
             drawPoolables(batch, tmpAbstractConsumable);
         }
         for (int i = 0; i < gs.getElectricalAnomalyEmitter().getActiveList().size(); i++) {
