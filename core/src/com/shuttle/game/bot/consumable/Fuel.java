@@ -40,12 +40,13 @@ public class Fuel extends AbstractConsumable {
 
     @Override
     public void consumed(GameScreen gs) {
-        gs.getPlayer().getStanding().changeFuel(Rules.CRATE_FUEL_ADD);
+        int fuel = Rules.CONSUMABLE_FUEL_BASE_ADD * MathUtils.random(5, 10);
+        gs.getPlayer().getStanding().changeFuel(fuel);
         gs.getGameInfoSystem()
                 .setup(
                         position.x,
                         position.y,
-                        GameInfoSystem.GameInfoSystemPreset.FUEL,
+                        GameInfoSystem.GameInfoSystemPreset.FUEL + "[GREEN] +" + fuel + "[]",
                         3.0f,
                         true
                 );

@@ -136,6 +136,7 @@ public class Ray {
                 boomBox.playSound(MSConstants.ASTEROID_SPLASH);
                 gs.getAsteroidEmitter().boom(asteroid.getPosition(), player.getShieldLevel());
                 asteroid.destroy();
+                player.getStanding().addToStatistics(asteroid.getType(), asteroid.getLevel());
                 asteroid.showSprayCollision(particleEmitter);
                 asteroid.setTimeToBurn(0.0f);
                 asteroid.setAtRayPoint(false);

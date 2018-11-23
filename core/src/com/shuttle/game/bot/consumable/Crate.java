@@ -67,7 +67,7 @@ public class Crate extends AbstractConsumable {
         }
         /*Hack*/
         if (x == 0) {
-            standing.changeHP(Rules.CRATE_REPAIR_ADD);
+            standing.changeHP(Rules.CONSUMABLE_REPAIR_ADD);
             gs.getGameInfoSystem()
                     .setup(
                             position.x,
