@@ -17,6 +17,7 @@ import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.consumable.Consumable;
 import com.shuttle.game.bot.consumable.FuelEmitter;
+import com.shuttle.game.bot.consumable.StorageEmitter;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
@@ -88,6 +89,9 @@ public class GameScreen extends BaseScreen {
     private FuelEmitter fuelEmitter;
     @Getter
     @Setter
+    private StorageEmitter storageEmitter;
+    @Getter
+    @Setter
     private Camera camera;
     private Vector2 tmp1V2;
     private Vector3 tmp1V3;
@@ -120,7 +124,6 @@ public class GameScreen extends BaseScreen {
     private float holeTime;
     private float fadeInAlpha;
     private boolean gameOverDeactivate;
-    private ActiveListJoiner<Consumable> joiner;
     private List<List<? extends Consumable>> consumableList;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
@@ -156,6 +159,7 @@ public class GameScreen extends BaseScreen {
         consumableEmitter = new ConsumableEmitter(this);
         asteroidEmitter = new AsteroidEmitter(this);
         fuelEmitter = new FuelEmitter(this);
+        storageEmitter = new StorageEmitter(this);
         background = new Background();
         gameInfoSystem = new GameInfoSystem();
         joystick = new Joystick();
@@ -175,9 +179,9 @@ public class GameScreen extends BaseScreen {
         prettyCorrosiveKick = PrettySound.getPretty(Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY);
         prettyElectricKick = PrettySound.getPretty(Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY);
         prettyFragmentHarvest = PrettySound.getPretty(Rules.FRAGMENT_KICK_PRETTY_SOUND_DELAY);
-        joiner = new ActiveListJoiner<Consumable>();
+        ActiveListJoiner<Consumable> joiner = new ActiveListJoiner<Consumable>();
         consumableList = new ArrayList<List<? extends Consumable>>();
-        consumableList = joiner.join(consumableEmitter.getActiveList(), fuelEmitter.getActiveList());
+        consumableList = joiner.join(consumableEmitter.getActiveList(), fuelEmitter.getActiveList(), storageEmitter.getActiveList());
     }
 
     private void calcMusicEffectVolume() {
@@ -221,6 +225,7 @@ public class GameScreen extends BaseScreen {
         }
         asteroidEmitter.render(batch);
         fuelEmitter.render(batch);
+        storageEmitter.render(batch);
         player.render(batch);
         consumableEmitter.render(batch);
         corrosiveAnomalyEmitter.render(batch);
@@ -318,6 +323,7 @@ public class GameScreen extends BaseScreen {
             consumableEmitter.update(dt);
             asteroidEmitter.update(dt);
             fuelEmitter.update(dt);
+            storageEmitter.update(dt);
             particleEmitter.update(dt);
             blackhole.update(dt);
             if (!Rules.GAME_OVER) {

@@ -78,8 +78,8 @@ public final class PaintConstants {
     public static final int CRATE_2_WIDTH = 128;
     public static final int CRATE_2_HEIGHT = 128;
     public static final String STORAGE_1_REGION = "storage1";
-    public static final int STORAGE_1_WIDTH = 128;
-    public static final int STORAGE_1_HEIGHT = 128;
+    public static final int STORAGE_1_WIDTH = 160;
+    public static final int STORAGE_1_HEIGHT = 160;
     public static final String FUEL_1_REGION = "fuel1";
     public static final int FUEL_1_WIDTH = 160;
     public static final int FUEL_1_HEIGHT = 160;
