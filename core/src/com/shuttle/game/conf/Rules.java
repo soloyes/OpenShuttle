@@ -27,9 +27,13 @@ public final class Rules {
     //0
     public static final int CONSUMABLE_FUEL_AT_START = 0;
     //6.0f
-    public static final float CONSUMABLE_FUEL_RESPAWN_TIME = 6.0f;
+    public static final float CONSUMABLE_FUEL_RESPAWN_TIME = 10.0f;
+    //1
+    public static final int CONSUMABLE_FUEL_BASE_ADD = 1;
     //2
     public static final int CONSUMABLE_FUEL_MAX_COUNT = 2;
+    //2
+    public static final int CONSUMABLE_REPAIR_ADD = 2;
     //ANOMALY
     //0
     public static final int ANOMALIES_ELECTRIC_AT_START = 0;
@@ -137,11 +141,6 @@ public final class Rules {
     //1.0f
     public static final float PLAYER_FUEL_CONSUMPTION = 1.0f;
     //
-    //CRATE
-    //50
-    public static final int CRATE_FUEL_ADD = 50;
-    //2
-    public static final int CRATE_REPAIR_ADD = 2;
     //BLACKHOLE
     //750
     private static int BLACKHOLE_ROAR_FACTOR = 750;
@@ -180,6 +179,8 @@ public final class Rules {
     public static final int ANOMALIES_BASE_SCORE_ADD = 500;
     //10000
     public static final int CONSUMABLE_BASE_SCORE_ADD = 10000;
+    //1000
+    public static final int CONSUMABLE_BONUS_SCORE_ADD = 1000;
     //10000
     public static final int CONSUMABLE_MURDER_SCORE_DECREASE = 50000;
     //60

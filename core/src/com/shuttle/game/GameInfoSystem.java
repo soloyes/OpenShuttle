@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.effects.FlyingText;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class GameInfoSystem {
     private FlyingText[] elements;
 
@@ -50,15 +53,16 @@ public class GameInfoSystem {
         BOOM("BOOOOM!"),
         SAD("[YELLOW]SO SAD[]"),
         OUT("[YELLOW]OUT OF RANGE![]"),
-        REPAIR("REPAIR [GREEN]+" + Rules.CRATE_REPAIR_ADD),
-        FUEL("FUEL [GREEN]+" + Rules.CRATE_FUEL_ADD + "[]"),
+        REPAIR("REPAIR [GREEN]+" + Rules.CONSUMABLE_REPAIR_ADD),
+        FUEL("FUEL"),
         TURBO("TURBO [GREEN]x3[]"),
         TRASH("[YELLOW]TRASH[]"),
         FLUSH("[GREEN]FLUSH[]"),
         LOST_FUEL("[RED]-FUEL[]"),
         LOST_SCORE("[RED]-SCORE[]"),
         MURDERER("MURDERER!\n-50000"),
-        EASY("BE EASY!");
+        EASY("BE EASY!"),
+        SCORE("SCORE");
         private String value;
 
         GameInfoSystemPreset(String value) {

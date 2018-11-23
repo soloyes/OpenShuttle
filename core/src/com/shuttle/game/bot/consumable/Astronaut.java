@@ -56,13 +56,14 @@ public class Astronaut extends AbstractConsumable {
 
     @Override
     public void consumed(GameScreen gs) {
-        gs.getPlayer().getStanding().changeScore(Rules.CONSUMABLE_BASE_SCORE_ADD);
+        int score = Rules.CONSUMABLE_BASE_SCORE_ADD + gs.getPlayer().getShieldLevel().getLevel() * Rules.CONSUMABLE_BONUS_SCORE_ADD;
+        gs.getPlayer().getStanding().changeScore(score);
         gs.getGameInfoSystem().setup(
                 position.x,
                 position.y,
-                "+" + Rules.CONSUMABLE_BASE_SCORE_ADD,
+                GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
                 3.0f,
-                false
+                true
         );
         boomBox.playSound(MSConstants.GET_ASTRONAUT);
     }
