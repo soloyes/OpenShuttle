@@ -62,6 +62,7 @@ public class GameInfoSystem {
         LOST_SCORE("[RED]-SCORE[]"),
         MURDERER("MURDERER!\n-50000"),
         EASY("BE EASY!"),
+        STORAGE("STORAGE"),
         SCORE("SCORE");
         private String value;
 

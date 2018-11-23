@@ -13,6 +13,7 @@ import com.shuttle.game.bot.asteroids.Asteroid;
 import com.shuttle.game.bot.consumable.Astronaut;
 import com.shuttle.game.bot.consumable.Crate;
 import com.shuttle.game.bot.consumable.Fuel;
+import com.shuttle.game.bot.consumable.Storage;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.screens.GameScreen;
@@ -31,6 +32,7 @@ public class GameOver {
     private GameScreen gs;
     private GlyphLayout glyphLayout;
     private BitmapFont font96;
+    private float picX, picY = 1600.0f, dY = 100.0f;
 
     public GameOver(GameScreen gs) {
         this.gs = gs;
@@ -45,76 +47,95 @@ public class GameOver {
         this.titleLabel = new Label("GAME OVER", style96);
         this.resLabel = new Label("", style96);
 
+        picX = ScreenManager.getInstance().getViewport().getWorldWidth() / 4;
+
         titleLabel.setPosition(ScreenManager.getInstance().getViewport().getWorldWidth() / 2
                         - titleLabel.getWidth() / 2,
-                1440);
+                picY);
 
         poolable = new ArrayList<AbstractPoolable>();
         CorrosiveAnomaly corrosiveAnomalyTAN = new CorrosiveAnomaly(gs);
         CorrosiveAnomaly corrosiveAnomalyGREEN = new CorrosiveAnomaly(gs);
         CorrosiveAnomaly corrosiveAnomalyYELLOW = new CorrosiveAnomaly(gs);
         CorrosiveAnomaly corrosiveAnomalyRED = new CorrosiveAnomaly(gs);
-        float picx = ScreenManager.getInstance().getViewport().getWorldWidth() / 4;
         int[] levels = new int[]{0, 1, 2, 3};
 
-        corrosiveAnomalyTAN.init(picx, 1340);
+        picY -= dY;
+        corrosiveAnomalyTAN.init(picX, picY);
         corrosiveAnomalyTAN.setLevel(0);
         corrosiveAnomalyTAN.setScaleX(1.0f + levels[0] * 0.15f);
         corrosiveAnomalyTAN.setScaleY(1.0f + levels[0] * 0.15f);
 
-        corrosiveAnomalyGREEN.init(picx, 1240);
+        picY -= dY;
+        corrosiveAnomalyGREEN.init(picX, picY);
         corrosiveAnomalyGREEN.setLevel(1);
         corrosiveAnomalyGREEN.setScaleX(1.0f + levels[1] * 0.15f);
         corrosiveAnomalyGREEN.setScaleY(1.0f + levels[1] * 0.15f);
 
-        corrosiveAnomalyYELLOW.init(picx, 1140);
+        picY -= dY;
+        corrosiveAnomalyYELLOW.init(picX, picY);
         corrosiveAnomalyYELLOW.setLevel(2);
         corrosiveAnomalyYELLOW.setScaleX(1.0f + levels[2] * 0.15f);
         corrosiveAnomalyYELLOW.setScaleY(1.0f + levels[2] * 0.15f);
 
-        corrosiveAnomalyRED.init(picx, 1040);
+        picY -= dY;
+        corrosiveAnomalyRED.init(picX, picY);
         corrosiveAnomalyRED.setLevel(3);
         corrosiveAnomalyRED.setScaleX(1.0f + levels[3] * 0.15f);
         corrosiveAnomalyRED.setScaleY(1.0f + levels[3] * 0.15f);
 
+        picY -= dY;
         ElectricalAnomaly electricalAnomaly = new ElectricalAnomaly(gs);
-        electricalAnomaly.init(picx, 940);
+        electricalAnomaly.init(picX, picY);
         electricalAnomaly.setScaleX(1.0f);
         electricalAnomaly.setScaleY(1.0f);
         electricalAnomaly.getColor().a = 1.0f;
 
+        picY -= dY;
         RadiationAnomaly radiationAnomaly = new RadiationAnomaly(gs);
-        radiationAnomaly.init(picx, 840);
+        radiationAnomaly.init(picX, picY);
         radiationAnomaly.setScaleX(1.0f);
         radiationAnomaly.setScaleY(1.0f);
         radiationAnomaly.getColor().a = 1.0f;
 
+        picY -= dY;
         MagneticAnomaly magneticAnomaly = new MagneticAnomaly(gs);
-        magneticAnomaly.init(picx, 740);
+        magneticAnomaly.init(picX, picY);
         magneticAnomaly.setScaleX(1.0f);
         magneticAnomaly.setScaleY(1.0f);
         magneticAnomaly.getColor().a = 1.0f;
 
+        picY -= dY;
         Astronaut astronaut = new Astronaut(gs);
         astronaut.setFake(true);
-        astronaut.init(picx, 640);
+        astronaut.init(picX, picY);
         astronaut.setWidth(corrosiveAnomalyTAN.getWidth());
         astronaut.setHeight(corrosiveAnomalyTAN.getHeight());
 
+        picY -= dY;
         Crate crate = new Crate(gs);
-        crate.init(picx, 540);
+        crate.init(picX, picY);
         crate.setWidth(128);
         crate.setHeight(128);
 
+        picY -= dY;
         Fuel fuel = new Fuel(gs);
-        fuel.init(picx, 440);
+        fuel.init(picX, picY);
         fuel.setWidth(128);
         fuel.setHeight(128);
 
+        picY -= dY;
+        Storage storage = new Storage(gs);
+        storage.init(picX, picY);
+        storage.setWidth(128);
+        storage.setHeight(128);
+
+        picY -= dY;
         Asteroid asteroid = new Asteroid(gs);
+        asteroid.init(picX, picY);
         asteroid.setScaleX(1.0f);
         asteroid.setScaleY(1.0f);
-        asteroid.init(picx, 340);
+
 
         poolable.add(corrosiveAnomalyTAN);
         poolable.add(corrosiveAnomalyGREEN);
@@ -126,7 +147,10 @@ public class GameOver {
         poolable.add(astronaut);
         poolable.add(crate);
         poolable.add(fuel);
+        poolable.add(storage);
         poolable.add(asteroid);
+
+        picY -= dY;
     }
 
     public void draw(SpriteBatch batch) {
@@ -134,7 +158,7 @@ public class GameOver {
         font96.getColor().a = batch.getColor().a;
         font96.draw(batch, glyphLayout,
                 ScreenManager.getInstance().getViewport().getWorldWidth() / 2 - glyphLayout.width / 2,
-                240
+                picY
         );
         Color tmpColor = batch.getColor();
         for (int i = 0; i < poolable.size(); i++) {
@@ -172,6 +196,10 @@ public class GameOver {
                 batch.setColor(tmpColor);
                 Fuel tmpFuel = (Fuel) abstractPoolable;
                 tmpFuel.basicRender(batch);
+            } else if (abstractPoolable instanceof Storage) {
+                batch.setColor(tmpColor);
+                Storage tmpStorage = (Storage) abstractPoolable;
+                tmpStorage.basicRender(batch);
             } else if (abstractPoolable instanceof Asteroid) {
                 batch.setColor(tmpColor);
                 Asteroid tmpAsteroid = (Asteroid) abstractPoolable;
