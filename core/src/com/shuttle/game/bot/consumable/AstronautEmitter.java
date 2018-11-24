@@ -2,7 +2,7 @@ package com.shuttle.game.bot.consumable;
 
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
-//#77 create class
+
 public class AstronautEmitter extends AbstractConsumableEmitter {
     public AstronautEmitter(GameScreen gs) {
         super.gs = gs;

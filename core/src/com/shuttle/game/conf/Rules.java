@@ -21,10 +21,6 @@ public final class Rules {
     public static int SPACE_HEIGHT;
     //CONSUMABLE
     //2
-    public static final int CONSUMABLE_AT_START = 2;//#77 depricated
-    //6.0f
-    public static final float CONSUMABLE_RESPAWN_TIME = 6.0f;//#77 depricated
-    //2
     public static final int CONSUMABLE_ASTRONAUT_AT_START = 2;
     //20.0f
     public static final float CONSUMABLE_ASTRONAUT_RESPAWN_TIME = 20.0f;

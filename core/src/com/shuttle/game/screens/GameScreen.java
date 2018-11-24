@@ -67,17 +67,12 @@ public class GameScreen extends BaseScreen {
     @Getter
     @Setter
     private ParticleEmitter particleEmitter;
-    //#77
-//    @Getter
-//    @Setter
-//    private ConsumableEmitter consumableEmitter;
     @Getter
     @Setter
     private AstronautEmitter astronautEmitter;
     @Getter
     @Setter
     private CrateEmitter crateEmitter;
-    //#77
     @Getter
     @Setter
     private CorrosiveAnomalyEmitter corrosiveAnomalyEmitter;
@@ -165,11 +160,8 @@ public class GameScreen extends BaseScreen {
         electricalAnomalyEmitter = new ElectricalAnomalyEmitter(this);
         radiationAnomalyEmitter = new RadiationAnomalyEmitter(this);
         magneticAnomalyEmitter = new MagneticAnomalyEmitter(this);
-        //#77
-        //consumableEmitter = new ConsumableEmitter(this);
         astronautEmitter = new AstronautEmitter(this);
         crateEmitter = new CrateEmitter(this);
-        //#77
         asteroidEmitter = new AsteroidEmitter(this);
         fuelEmitter = new FuelEmitter(this);
         storageEmitter = new StorageEmitter(this);
@@ -242,7 +234,6 @@ public class GameScreen extends BaseScreen {
         storageEmitter.render(batch);
         player.render(batch);
         //#77
-        //consumableEmitter.render(batch);
         astronautEmitter.render(batch);
         crateEmitter.render(batch);
         //#77
@@ -338,11 +329,8 @@ public class GameScreen extends BaseScreen {
             electricalAnomalyEmitter.update(dt);
             radiationAnomalyEmitter.update(dt);
             magneticAnomalyEmitter.update(dt);
-            //#77
-            //consumableEmitter.update(dt);
             astronautEmitter.update(dt);
             crateEmitter.update(dt);
-            //#77
             asteroidEmitter.update(dt);
             fuelEmitter.update(dt);
             storageEmitter.update(dt);
