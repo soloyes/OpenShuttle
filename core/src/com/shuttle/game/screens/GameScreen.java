@@ -15,7 +15,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.blackhole.Blackhole;
+import com.shuttle.game.bot.consumable.AstronautEmitter;
 import com.shuttle.game.bot.consumable.Consumable;
+import com.shuttle.game.bot.consumable.CrateEmitter;
 import com.shuttle.game.bot.consumable.FuelEmitter;
 import com.shuttle.game.bot.consumable.StorageEmitter;
 import com.shuttle.game.bot.pool.AbstractPoolable;
@@ -38,7 +40,6 @@ import com.shuttle.game.bot.asteroids.Asteroid;
 import com.shuttle.game.bot.asteroids.AsteroidEmitter;
 import com.shuttle.game.Background;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
-import com.shuttle.game.bot.consumable.ConsumableEmitter;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.bot.particle.ParticleEmitter;
 import com.shuttle.game.conf.MSConstants;
@@ -68,7 +69,10 @@ public class GameScreen extends BaseScreen {
     private ParticleEmitter particleEmitter;
     @Getter
     @Setter
-    private ConsumableEmitter consumableEmitter;
+    private AstronautEmitter astronautEmitter;
+    @Getter
+    @Setter
+    private CrateEmitter crateEmitter;
     @Getter
     @Setter
     private CorrosiveAnomalyEmitter corrosiveAnomalyEmitter;
@@ -156,7 +160,8 @@ public class GameScreen extends BaseScreen {
         electricalAnomalyEmitter = new ElectricalAnomalyEmitter(this);
         radiationAnomalyEmitter = new RadiationAnomalyEmitter(this);
         magneticAnomalyEmitter = new MagneticAnomalyEmitter(this);
-        consumableEmitter = new ConsumableEmitter(this);
+        astronautEmitter = new AstronautEmitter(this);
+        crateEmitter = new CrateEmitter(this);
         asteroidEmitter = new AsteroidEmitter(this);
         fuelEmitter = new FuelEmitter(this);
         storageEmitter = new StorageEmitter(this);
@@ -181,7 +186,8 @@ public class GameScreen extends BaseScreen {
         prettyFragmentHarvest = PrettySound.getPretty(Rules.FRAGMENT_KICK_PRETTY_SOUND_DELAY);
         ActiveListJoiner<Consumable> joiner = new ActiveListJoiner<Consumable>();
         consumableList = new ArrayList<List<? extends Consumable>>();
-        consumableList = joiner.join(consumableEmitter.getActiveList(), fuelEmitter.getActiveList(), storageEmitter.getActiveList());
+        //#77
+        consumableList = joiner.join(astronautEmitter.getActiveList(), crateEmitter.getActiveList(), fuelEmitter.getActiveList(), storageEmitter.getActiveList());
     }
 
     private void calcMusicEffectVolume() {
@@ -227,7 +233,10 @@ public class GameScreen extends BaseScreen {
         fuelEmitter.render(batch);
         storageEmitter.render(batch);
         player.render(batch);
-        consumableEmitter.render(batch);
+        //#77
+        astronautEmitter.render(batch);
+        crateEmitter.render(batch);
+        //#77
         corrosiveAnomalyEmitter.render(batch);
         electricalAnomalyEmitter.render(batch);
         radiationAnomalyEmitter.render(batch);
@@ -320,7 +329,8 @@ public class GameScreen extends BaseScreen {
             electricalAnomalyEmitter.update(dt);
             radiationAnomalyEmitter.update(dt);
             magneticAnomalyEmitter.update(dt);
-            consumableEmitter.update(dt);
+            astronautEmitter.update(dt);
+            crateEmitter.update(dt);
             asteroidEmitter.update(dt);
             fuelEmitter.update(dt);
             storageEmitter.update(dt);

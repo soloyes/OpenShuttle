@@ -8,16 +8,20 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
+import com.shuttle.game.bot.consumable.Consumable;
 import com.shuttle.game.bot.pool.AbstractPoolable;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.utils.ActiveListJoiner;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.effects.BoomBox;
 import com.shuttle.game.utils.effects.Oscillator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -101,10 +105,18 @@ public class Radar {
             CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) gs.getCorrosiveAnomalyEmitter().getActiveList().get(i);
             drawPoolables(batch, tmpAnomaly);
         }
-        for (int i = 0; i < gs.getConsumableEmitter().getActiveList().size(); i++) {
-            AbstractConsumable tmpAbstractConsumable = gs.getConsumableEmitter().getActiveList().get(i);
-            drawPoolables(batch, tmpAbstractConsumable);
+
+        ActiveListJoiner<Consumable> joiner = new ActiveListJoiner<Consumable>();
+        List<List<? extends Consumable>> listsActiveConsumable;
+        listsActiveConsumable = joiner.join(gs.getAstronautEmitter().getActiveList(), gs.getCrateEmitter().getActiveList(), gs.getFuelEmitter().getActiveList(), gs.getStorageEmitter().getActiveList());
+
+        for (int i = 0; i < listsActiveConsumable.size(); i++) {
+            for (int j = 0; j < listsActiveConsumable.get(i).size(); j++) {
+                AbstractConsumable tmpConsumable = (AbstractConsumable) listsActiveConsumable.get(i).get(j);
+                drawPoolables(batch, tmpConsumable);
+            }
         }
+
         for (int i = 0; i < gs.getElectricalAnomalyEmitter().getActiveList().size(); i++) {
             ElectricalAnomaly tmpAnomaly = (ElectricalAnomaly) gs.getElectricalAnomalyEmitter().getActiveList().get(i);
             drawPoolables(batch, tmpAnomaly);
