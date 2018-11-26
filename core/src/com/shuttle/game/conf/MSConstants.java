@@ -36,6 +36,9 @@ public final class MSConstants {
     public final static String ANOMALY_FLUSH = SOUND_FOLDER + "flush.ogg";
     public final static String FLAME = SOUND_FOLDER + "flame.ogg";
     public final static String ASTEROID_SPLASH = SOUND_FOLDER + "splash.ogg";
+    public final static String FUEL_DESTROY = SOUND_FOLDER + "crash_fuel_box.ogg";
+    public final static String STORAGE_DESTROY = SOUND_FOLDER + "storage_destroy.ogg";
+
     //
     private final static String MUSIC_FOLDER = "music/";
     public final static String MENU_MUSIC = MUSIC_FOLDER + "menu.ogg";

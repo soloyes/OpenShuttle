@@ -569,22 +569,6 @@ public class GameScreen extends BaseScreen {
                     }
                 }
 
-                //
-                if (asteroid.isFragmented()) {
-                    ray.setCount(12);
-                    ray.setSize(2);
-                    ray.setPreset(Ray.Preset.GREY);
-                    ray.setHarvestVelocity(Rules.PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY);
-                    ray.setTakeRange(Rules.PLAYER_FRAGMENT_TAKE_RANGE);
-                    ray.harvest(player, asteroid, particleEmitter, dt);
-                } else {
-                    ray.setCount(5);
-                    ray.setSize(3);
-                    ray.setPreset(Ray.Preset.RED);
-                    ray.laser(player, asteroid, particleEmitter, dt);
-                }
-                //
-
                 for (int j = 0; j < corrosiveAnomalyEmitter.getActiveList().size(); j++) {
                     CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(j);
                     if (!asteroid.isFragmented() && anomaly.getPosition().dst(asteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
@@ -620,6 +604,22 @@ public class GameScreen extends BaseScreen {
                         }
                     }
                 }
+
+                //
+                if (asteroid.isFragmented()) {
+                    ray.setCount(12);
+                    ray.setSize(2);
+                    ray.setPreset(Ray.Preset.GREY);
+                    ray.setHarvestVelocity(Rules.PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY);
+                    ray.setTakeRange(Rules.PLAYER_FRAGMENT_TAKE_RANGE);
+                    ray.harvest(player, asteroid, particleEmitter, dt);
+                } else {
+                    ray.setCount(5);
+                    ray.setSize(3);
+                    ray.setPreset(Ray.Preset.RED);
+                    ray.laser(player, asteroid, particleEmitter, dt);
+                }
+                //
             }
         }
     }

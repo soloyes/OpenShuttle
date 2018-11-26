@@ -62,8 +62,7 @@ public class Fuel extends AbstractConsumable {
                 3.0f,
                 false
         );
-        //todo: boom fuel sound
-        boomBox.playSound(MSConstants.KILL_CRATE);
+        boomBox.playSound(MSConstants.FUEL_DESTROY);
         Vibrator.vibrate(VConstants.PLAYER_FUEL_DESTROY);
     }
 

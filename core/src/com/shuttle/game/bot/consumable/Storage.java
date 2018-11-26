@@ -60,8 +60,7 @@ public class Storage extends AbstractConsumable {
                 3.0f,
                 false
         );
-        //todo: boom storage sound
-        boomBox.playSound(MSConstants.KILL_CRATE);
+        boomBox.playSound(MSConstants.STORAGE_DESTROY);
         Vibrator.vibrate(VConstants.PLAYER_STORAGE_DESTROY);
     }
 

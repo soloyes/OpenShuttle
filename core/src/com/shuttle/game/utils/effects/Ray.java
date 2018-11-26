@@ -107,7 +107,7 @@ public class Ray {
 
     public void laser(Shuttle player, Asteroid asteroid, ParticleEmitter particleEmitter, float dt) {
         float dst = player.getPosition().dst(asteroid.getPosition());
-        if (dst <= Rules.PLAYER_LASER_TAKE_RANGE && !player.isTaken()) {
+        if (dst <= Rules.PLAYER_LASER_TAKE_RANGE && !player.isTaken() && !asteroid.isTaken() && asteroid.isActive()) {
             asteroid.setAtRayPoint(true);
             boomBox.playMusicEffectInLoop(MSConstants.LASER, 1.0f);
             float scaleX = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleX();
