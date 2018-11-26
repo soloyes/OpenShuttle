@@ -167,11 +167,11 @@ public final class Rules {
     //20
     public static final int BLACKHOLE_EVENT_HORIZON = 20;
     //200
-    public static final int BLACKHOLE_VELOCITY_CONSUME_POOLABLE = 200;
-    //200
     public static final int BLACKHOLE_VELOCITY_CONSUME_PLAYER = 200;
     //5
     public static final int BLACKHOLE_GET_DAMAGE = 5;
+    //0.02f
+    public static final float BLACKHOLE_FLOW_VELOCITY = 0.02f;
     //SOUND
     //0.1f
     public static final float FRAGMENT_KICK_PRETTY_SOUND_DELAY = 0.1f;
@@ -269,7 +269,7 @@ public final class Rules {
                 player.getStanding().setFuel(100);
                 player.getStanding().setHp(10);
                 player.getStanding().setMaxHp(10);
-                player.getStanding().setLives(3);
+                player.getStanding().setLives(30);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);

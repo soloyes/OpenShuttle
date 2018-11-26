@@ -108,7 +108,7 @@ public class Blackhole {
     }
 
     public void update(float dt) {
-        angle += dt / 50;
+        angle += dt * Rules.BLACKHOLE_FLOW_VELOCITY;
         if (angle >= 365) {
             angle = 0;
         }

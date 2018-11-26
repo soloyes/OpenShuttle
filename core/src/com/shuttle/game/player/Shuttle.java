@@ -441,7 +441,7 @@ public class Shuttle extends AbstractShuttle {
         if (position.dst(gs.getBlackhole().getPosition()) <= Rules.BLACKHOLE_TAKE_RANGE) {
             taken = true;
             velocity.scl(0.5f);
-            tmpV2.set(gs.getBlackhole().getPosition()).sub(position).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_POOLABLE);
+            tmpV2.set(gs.getBlackhole().getPosition()).sub(position).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER);
             position.mulAdd(tmpV2, dt);
             float dst = gs.getBlackhole().getPosition().dst(position);
             float scaleX = dst / Rules.BLACKHOLE_TAKE_RANGE;
