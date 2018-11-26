@@ -110,11 +110,19 @@ public final class Rules {
     public static final float ANOMALIES_CORROSIVE_SLIM_TIME = 15.0f;
     //2
     public static final int ANOMALIES_CORROSIVE_AFRAID_FACTOR = 2;
-    //ASTEROID
+    //ASTEROID_METAL
     //4.0f
-    public static final float ASTEROID_RESPAWN_TIME = 4.0f;
+    public static final float ASTEROID_METAL_RESPAWN_TIME = 4.0f;
     //0.3f
-    public static final float ASTEROID_BURN_TIME = 0.3f;
+    public static final float ASTEROID_METAL_BURN_TIME = 0.3f;
+    //50
+    public static final int ASTEROID_METAL_MAX_COUNT = 50;
+    //4.0f
+    public static final float ASTEROID_MINERAL_RESPAWN_TIME = 4.0f;
+    //0.3f
+    public static final float ASTEROID_MINERAL_BURN_TIME = 0.3f;
+    //50
+    public static final int ASTEROID_MINERAL_MAX_COUNT = 50;
     //0.5f
     public static final float ASTEROID_SIZE_FOR_HARVEST_FACTOR = 0.5f;
     //PLAYER
@@ -221,7 +229,6 @@ public final class Rules {
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(true);
-                //player.getGun().setActive(true);
                 player.getStanding().setPlayingLevel(24);
                 player.getStanding().setScoreToLive(SCORE_TO_LIVE * 4);
             }
@@ -239,7 +246,6 @@ public final class Rules {
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);
-                //player.getGun().setActive(false);
                 player.getStanding().setPlayingLevel(21);
                 player.getStanding().setScoreToLive(SCORE_TO_LIVE * 7);
             }
@@ -257,7 +263,6 @@ public final class Rules {
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);
-                //player.getGun().setActive(false);
                 player.getStanding().setPlayingLevel(15);
                 player.getStanding().setScoreToLive(SCORE_TO_LIVE * 13);
             }
@@ -269,13 +274,12 @@ public final class Rules {
                 player.getStanding().setFuel(100);
                 player.getStanding().setHp(10);
                 player.getStanding().setMaxHp(10);
-                player.getStanding().setLives(30);
+                player.getStanding().setLives(3);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);
-                //player.getGun().setActive(false);
                 player.getStanding().setPlayingLevel(10);
                 player.getStanding().setScoreToLive(SCORE_TO_LIVE * 18);
             }

@@ -3,7 +3,7 @@ package com.shuttle.game.utils.effects;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
-import com.shuttle.game.bot.asteroids.Asteroid;
+import com.shuttle.game.bot.asteroids.AbstractAsteroid;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.Rules;
@@ -100,7 +100,7 @@ public class MoveProcessor {
         update(abstractAnomaly);
     }
 
-    public void update(Asteroid asteroid, float dt) {
+    public void update(AbstractAsteroid asteroid, float dt) {
         if (!asteroid.isTaken()) {
             //*Standard move*//
             asteroid.getPosition().mulAdd(asteroid.getVelocity(), dt);

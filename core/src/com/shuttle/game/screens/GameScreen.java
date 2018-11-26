@@ -14,6 +14,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
+import com.shuttle.game.bot.asteroids.AbstractAsteroid;
+import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
+import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
 import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.consumable.AstronautEmitter;
 import com.shuttle.game.bot.consumable.Consumable;
@@ -36,8 +39,6 @@ import com.shuttle.game.player.navigation.PlayerPointer;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
-import com.shuttle.game.bot.asteroids.Asteroid;
-import com.shuttle.game.bot.asteroids.AsteroidEmitter;
 import com.shuttle.game.Background;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.GameInfoSystem;
@@ -87,7 +88,10 @@ public class GameScreen extends BaseScreen {
     private MagneticAnomalyEmitter magneticAnomalyEmitter;
     @Getter
     @Setter
-    private AsteroidEmitter asteroidEmitter;
+    private MetalAsteroidEmitter metalAsteroidEmitter;
+    @Getter
+    @Setter
+    private MineralAsteroidEmitter mineralAsteroidEmitter;
     @Getter
     @Setter
     private FuelEmitter fuelEmitter;
@@ -129,6 +133,7 @@ public class GameScreen extends BaseScreen {
     private float fadeInAlpha;
     private boolean gameOverDeactivate;
     private List<List<? extends Consumable>> consumableList;
+    private List<List<? extends AbstractAsteroid>> asteroidsList;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -162,7 +167,8 @@ public class GameScreen extends BaseScreen {
         magneticAnomalyEmitter = new MagneticAnomalyEmitter(this);
         astronautEmitter = new AstronautEmitter(this);
         crateEmitter = new CrateEmitter(this);
-        asteroidEmitter = new AsteroidEmitter(this);
+        metalAsteroidEmitter = new MetalAsteroidEmitter(this);
+        mineralAsteroidEmitter = new MineralAsteroidEmitter(this);
         fuelEmitter = new FuelEmitter(this);
         storageEmitter = new StorageEmitter(this);
         background = new Background();
@@ -184,10 +190,14 @@ public class GameScreen extends BaseScreen {
         prettyCorrosiveKick = PrettySound.getPretty(Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY);
         prettyElectricKick = PrettySound.getPretty(Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY);
         prettyFragmentHarvest = PrettySound.getPretty(Rules.FRAGMENT_KICK_PRETTY_SOUND_DELAY);
-        ActiveListJoiner<Consumable> joiner = new ActiveListJoiner<Consumable>();
+        //
+        ActiveListJoiner<Consumable> consumableJoiner = new ActiveListJoiner<Consumable>();
+        ActiveListJoiner<AbstractAsteroid> asteroidsJoiner = new ActiveListJoiner<AbstractAsteroid>();
         consumableList = new ArrayList<List<? extends Consumable>>();
-        //#77
-        consumableList = joiner.join(astronautEmitter.getActiveList(), crateEmitter.getActiveList(), fuelEmitter.getActiveList(), storageEmitter.getActiveList());
+        consumableList = consumableJoiner.join(astronautEmitter.getActiveList(), crateEmitter.getActiveList(), fuelEmitter.getActiveList(), storageEmitter.getActiveList());
+        asteroidsList = new ArrayList<List<? extends AbstractAsteroid>>();
+        asteroidsList = asteroidsJoiner.join(metalAsteroidEmitter.getActiveList(), mineralAsteroidEmitter.getActiveList());
+        //
     }
 
     private void calcMusicEffectVolume() {
@@ -229,7 +239,8 @@ public class GameScreen extends BaseScreen {
         if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.LOW.getValue() || shaderBlackHole == null) {
             blackhole.render(batch);
         }
-        asteroidEmitter.render(batch);
+        metalAsteroidEmitter.render(batch);
+        mineralAsteroidEmitter.render(batch);
         fuelEmitter.render(batch);
         storageEmitter.render(batch);
         player.render(batch);
@@ -331,7 +342,8 @@ public class GameScreen extends BaseScreen {
             magneticAnomalyEmitter.update(dt);
             astronautEmitter.update(dt);
             crateEmitter.update(dt);
-            asteroidEmitter.update(dt);
+            metalAsteroidEmitter.update(dt);
+            mineralAsteroidEmitter.update(dt);
             fuelEmitter.update(dt);
             storageEmitter.update(dt);
             particleEmitter.update(dt);
@@ -538,88 +550,112 @@ public class GameScreen extends BaseScreen {
         player.getStanding().setFuelAlertMagneticAnomaly(tmp2);
         //
 
-        for (int i = 0; i < asteroidEmitter.getActiveList().size(); i++) {
-            Asteroid asteroid = asteroidEmitter.getActiveList().get(i);
-            if (!asteroid.isTaken()) {
-                if (player.getPosition().dst(asteroid.getPosition()) < asteroid.getHeight() * asteroid.getScaleX()) {
-                    if (!asteroid.isFragmented()) {
-                        asteroid.destroy();
-                        Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
-                        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
-                            Gdx.input.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
-                        }
-                        player.getLifeShield().blink(1.0f);
-                        particleEmitter.getBuilder().buildDust(asteroid.getPosition().x, asteroid.getPosition().y, 180, player.getShieldLevel().getLevel() * 16 + 32);
-                        asteroidEmitter.boom(asteroid.getPosition(), player.getShieldLevel());
-                        player.takeDamage(player.getShieldLevel().getLevel() + 1);
-                        gameInfoSystem.setup(
-                                player.getPosition().x, player.getPosition().y,
-                                GameInfoSystem.GameInfoSystemPreset.SCREECH,
-                                3.0f,
-                                true
-                        );
-                        boomBox.playSound(MSConstants.ASTEROID_DESTROY);
-                        player.getStanding().addToStatistics(asteroid.getType(), asteroid.getLevel());
-                    } else {
-                        player.getRamShield().blink(0.5f);
-                        player.setPower(player.getPower() + asteroid.getSizeForHarvest());
-                        //pretty sound if collect much fragments in little time
-                        prettyFragmentHarvest.playSound(MSConstants.GET_FRAGMENT);
-                        asteroid.destroy();
-                    }
-                }
-
-                for (int j = 0; j < corrosiveAnomalyEmitter.getActiveList().size(); j++) {
-                    CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(j);
-                    if (!asteroid.isFragmented() && anomaly.getPosition().dst(asteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
-                        asteroid.destroy();
-                        particleEmitter.getBuilder().buildDust(asteroid.getPosition().x, asteroid.getPosition().y, 180, 32 + 32);
-                        asteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
-                        gameInfoSystem.setup(anomaly.getPosition().x, anomaly.getPosition().y, GameInfoSystem.GameInfoSystemPreset.BOOM, 3.0f, false);
-                        if (anomaly.getLevel() == 0) {
-                            anomaly.destroy();
-                            anomaly.showSprayCollision(particleEmitter);
-                        } else {
-                            anomaly.takeDamage(1);
-                        }
-                    }
-                }
-
-                for (int j = 0; j < consumableList.size(); j++) {
-                    for (int k = 0; k < consumableList.get(j).size(); k++) {
-                        AbstractConsumable abstractConsumable = (AbstractConsumable) consumableList.get(j).get(k);
-                        if (!asteroid.isFragmented() && abstractConsumable.getPosition().dst(asteroid.getPosition()) < 128) {
+        for (int i = 0; i < asteroidsList.size(); i++) {
+            for (int j = 0; j < asteroidsList.get(i).size(); j++) {
+                AbstractAsteroid asteroid = asteroidsList.get(i).get(j);
+                if (!asteroid.isTaken()) {
+                    if (player.getPosition().dst(asteroid.getPosition()) < asteroid.getHeight() * asteroid.getScaleX()) {
+                        if (!asteroid.isFragmented()) {
                             asteroid.destroy();
-                            abstractConsumable.destroy();
-                            asteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
-                            particleEmitter.getBuilder().buildDust(asteroid.getPosition().x, asteroid.getPosition().y, 180, 32 + 32);
-                            abstractConsumable.showSprayCollision(particleEmitter);
+                            Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
+                            if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
+                                Gdx.input.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
+                            }
+                            player.getLifeShield().blink(1.0f);
+                            particleEmitter.getBuilder().buildDust(asteroid.getPosition().x, asteroid.getPosition().y, 180, player.getShieldLevel().getLevel() * 16 + 32);
+                            switch (asteroid.getType()) {
+                                case ASTEROID_METAL:
+                                    metalAsteroidEmitter.boom(asteroid.getPosition(), player.getShieldLevel());
+                                    break;
+                                case ASTEROID_MINERAL:
+                                    mineralAsteroidEmitter.boom(asteroid.getPosition(), player.getShieldLevel());
+                                    break;
+                            }
+                            player.takeDamage(player.getShieldLevel().getLevel() + 1);
                             gameInfoSystem.setup(
-                                    abstractConsumable.getPosition().x,
-                                    abstractConsumable.getPosition().y,
-                                    GameInfoSystem.GameInfoSystemPreset.SAD,
+                                    player.getPosition().x, player.getPosition().y,
+                                    GameInfoSystem.GameInfoSystemPreset.SCREECH,
                                     3.0f,
                                     true
                             );
+                            boomBox.playSound(MSConstants.ASTEROID_DESTROY);
+                            player.getStanding().addToStatistics(asteroid.getType(), asteroid.getLevel());
+                        } else {
+                            player.getRamShield().blink(0.5f);
+                            player.setPower(player.getPower() + asteroid.getSizeForHarvest());
+                            //pretty sound if collect much fragments in little time
+                            prettyFragmentHarvest.playSound(MSConstants.GET_FRAGMENT);
+                            asteroid.destroy();
                         }
                     }
-                }
 
-                //
-                if (asteroid.isFragmented()) {
-                    ray.setCount(12);
-                    ray.setSize(2);
-                    ray.setPreset(Ray.Preset.GREY);
-                    ray.setHarvestVelocity(Rules.PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY);
-                    ray.setTakeRange(Rules.PLAYER_FRAGMENT_TAKE_RANGE);
-                    ray.harvest(player, asteroid, particleEmitter, dt);
-                } else {
-                    ray.setCount(5);
-                    ray.setSize(3);
-                    ray.setPreset(Ray.Preset.RED);
-                    ray.laser(player, asteroid, particleEmitter, dt);
+                    for (int k = 0; k < corrosiveAnomalyEmitter.getActiveList().size(); k++) {
+                        CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(k);
+                        if (!asteroid.isFragmented() && anomaly.getPosition().dst(asteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
+                            asteroid.destroy();
+                            particleEmitter.getBuilder().buildDust(asteroid.getPosition().x, asteroid.getPosition().y, 180, 32 + 32);
+                            switch (asteroid.getType()) {
+                                case ASTEROID_METAL:
+                                    metalAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                                    break;
+                                case ASTEROID_MINERAL:
+                                    mineralAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                                    break;
+                            }
+                            gameInfoSystem.setup(anomaly.getPosition().x, anomaly.getPosition().y, GameInfoSystem.GameInfoSystemPreset.BOOM, 3.0f, false);
+                            if (anomaly.getLevel() == 0) {
+                                anomaly.destroy();
+                                anomaly.showSprayCollision(particleEmitter);
+                            } else {
+                                anomaly.takeDamage(1);
+                            }
+                        }
+                    }
+
+                    for (int m = 0; m < consumableList.size(); m++) {
+                        for (int p = 0; p < consumableList.get(m).size(); p++) {
+                            AbstractConsumable abstractConsumable = (AbstractConsumable) consumableList.get(m).get(p);
+                            if (!asteroid.isFragmented() && abstractConsumable.getPosition().dst(asteroid.getPosition()) < 128) {
+                                asteroid.destroy();
+                                abstractConsumable.destroy();
+                                //todo: repeatable code :(
+                                switch (asteroid.getType()) {
+                                    case ASTEROID_METAL:
+                                        metalAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                                        break;
+                                    case ASTEROID_MINERAL:
+                                        mineralAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                                        break;
+                                }
+                                particleEmitter.getBuilder().buildDust(asteroid.getPosition().x, asteroid.getPosition().y, 180, 32 + 32);
+                                abstractConsumable.showSprayCollision(particleEmitter);
+                                gameInfoSystem.setup(
+                                        abstractConsumable.getPosition().x,
+                                        abstractConsumable.getPosition().y,
+                                        GameInfoSystem.GameInfoSystemPreset.SAD,
+                                        3.0f,
+                                        true
+                                );
+                            }
+                        }
+                    }
+
+                    //
+                    if (asteroid.isFragmented()) {
+                        ray.setCount(12);
+                        ray.setSize(2);
+                        ray.setPreset(Ray.Preset.GREY);
+                        ray.setHarvestVelocity(Rules.PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY);
+                        ray.setTakeRange(Rules.PLAYER_FRAGMENT_TAKE_RANGE);
+                        ray.harvest(player, asteroid, particleEmitter, dt);
+                    } else {
+                        ray.setCount(5);
+                        ray.setSize(3);
+                        ray.setPreset(Ray.Preset.RED);
+                        ray.laser(player, asteroid, particleEmitter, dt);
+                    }
+                    //
                 }
-                //
             }
         }
     }

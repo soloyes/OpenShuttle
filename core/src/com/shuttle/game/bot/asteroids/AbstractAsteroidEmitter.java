@@ -5,45 +5,39 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.pool.ObjectPool;
 import com.shuttle.game.conf.GlobalInteractionLevels;
-import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
-import com.shuttle.game.utils.effects.BoomBox;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 6/30/18.
+ * @author Shuttle on 11/26/18.
  */
-public class AsteroidEmitter extends ObjectPool<Asteroid> {
+public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroid> {
+    protected GameScreen gs;
+    private float time;
     @Getter
     @Setter
     private float respawnTime;
+    @Getter
+    @Setter
+    private int asteroidsMaxCount;
     private boolean boom;
     private Vector2 position;
     private Vector2 destination;
     private float size;
     private float scale;
     private float count;
-    private GlobalInteractionLevels rang;
-    private GameScreen gs;
-    private BoomBox boomBox;
-
-    public AsteroidEmitter(GameScreen gs) {
-        this.gs = gs;
-        this.boomBox = new BoomBox();
-    }
+    private GlobalInteractionLevels range;
 
     @Override
-    protected Asteroid newObject() {
-        return new Asteroid(gs);
-    }
+    protected abstract AbstractAsteroid newObject();
 
-    public void boom(Vector2 position, GlobalInteractionLevels rang) {
-        this.rang = rang;
-        this.count = rang.getFragmentAsteroidCount();
+    public void boom(Vector2 position, GlobalInteractionLevels range) {
+        this.range = range;
+        this.count = range.getFragmentAsteroidCount();
         this.position = position;
         this.boom = true;
     }
@@ -55,15 +49,17 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
     }
 
     public void update(float dt) {
-        respawnTime += dt;
-        if (respawnTime > Rules.ASTEROID_RESPAWN_TIME) {
-            respawnTime = 0.0f;
-            createAsteroid();
+        time += dt;
+        if (time > respawnTime) {
+            time = 0.0f;
+            if (activeList.size() < asteroidsMaxCount) {
+                createAsteroid();
+            }
         }
 
         if (boom) {
             for (int i = 0; i < MathUtils.random(2 * count, 4 * count); i++) {
-                size = scale = MathUtils.random(rang.getFragmentAsteroidSize1(), rang.getFragmentAsteroidSize2());
+                size = scale = MathUtils.random(range.getFragmentAsteroidSize1(), range.getFragmentAsteroidSize2());
                 createFragment();
             }
             boom = false;
@@ -76,32 +72,35 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
     }
 
     private void createAsteroid() {
+        //todo: Если не создавать объекты, то астероиды пропадают спонтанно. Можно поразбираться
+        //todo://зачем я так сделал
         position = new Vector2();
         destination = new Vector2();
-        Side side = Side.values()[MathUtils.random(0, 3)];
-        if (side == Side.NORTH) {
+        //
+        AbstractAsteroidEmitter.Side side = AbstractAsteroidEmitter.Side.values()[MathUtils.random(0, 3)];
+        if (side == AbstractAsteroidEmitter.Side.NORTH) {
             position.set(
                     MathUtils.random(Rules.SPACE_WIDTH / 3, 2 * Rules.SPACE_WIDTH / 3),
-                    Rules.SPACE_HEIGHT + PaintConstants.ASTEROID_HEIGHT / 2
+                    Rules.SPACE_HEIGHT + PaintConstants.ASTEROID_METAL_HEIGHT / 2
             );
             destination.set(
                     MathUtils.random(0, Rules.SPACE_WIDTH),
                     MathUtils.random(0, Rules.SPACE_HEIGHT / 2)
             );
         }
-        if (side == Side.SOUTH) {
+        if (side == AbstractAsteroidEmitter.Side.SOUTH) {
             position.set(
                     MathUtils.random(Rules.SPACE_WIDTH / 3, 2 * Rules.SPACE_WIDTH / 3),
-                    -PaintConstants.ASTEROID_HEIGHT / 2
+                    -PaintConstants.ASTEROID_METAL_HEIGHT / 2
             );
             destination.set(
                     MathUtils.random(0, Rules.SPACE_WIDTH),
                     MathUtils.random(Rules.SPACE_HEIGHT / 2, Rules.SPACE_HEIGHT)
             );
         }
-        if (side == Side.WEST) {
+        if (side == AbstractAsteroidEmitter.Side.WEST) {
             position.set(
-                    -PaintConstants.ASTEROID_WIDTH / 2,
+                    -PaintConstants.ASTEROID_METAL_WIDTH / 2,
                     MathUtils.random(Rules.SPACE_HEIGHT / 3, 2 * Rules.SPACE_HEIGHT / 3)
             );
             destination.set(
@@ -109,9 +108,9 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
                     MathUtils.random(0, Rules.SPACE_HEIGHT)
             );
         }
-        if (side == Side.EAST) {
+        if (side == AbstractAsteroidEmitter.Side.EAST) {
             position.set(
-                    Rules.SPACE_WIDTH + PaintConstants.ASTEROID_WIDTH / 2,
+                    Rules.SPACE_WIDTH + PaintConstants.ASTEROID_METAL_WIDTH / 2,
                     MathUtils.random(Rules.SPACE_HEIGHT / 3, 2 * Rules.SPACE_HEIGHT / 3)
             );
             destination.set(
@@ -124,7 +123,7 @@ public class AsteroidEmitter extends ObjectPool<Asteroid> {
 
     private void createFragment() {
         destination.set(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
-        Asteroid tmpAsteroid = getActiveElement();
+        AbstractAsteroid tmpAsteroid = getActiveElement();
         tmpAsteroid.init(position, destination, scale, true);
         tmpAsteroid.setSizeForHarvest(size * Rules.ASTEROID_SIZE_FOR_HARVEST_FACTOR);
     }

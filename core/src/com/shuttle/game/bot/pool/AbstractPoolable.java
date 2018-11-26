@@ -174,6 +174,6 @@ public abstract class AbstractPoolable implements Poolable {
     }
 
     public enum Type {
-        CORROSIVE, ELECTRIC, MAGNETIC, RADIATION, ASTEROID, ASTRONAUT, CRATE, FUEL, STORAGE
+        CORROSIVE, ELECTRIC, MAGNETIC, RADIATION, ASTEROID_METAL, ASTEROID_MINERAL, ASTRONAUT, CRATE, FUEL, STORAGE
     }
 }

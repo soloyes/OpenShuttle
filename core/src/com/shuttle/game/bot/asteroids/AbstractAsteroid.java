@@ -6,21 +6,18 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.pool.AbstractPoolable;
-import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.screens.GameScreen;
-import com.shuttle.game.utils.effects.MoveProcessor;
-import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.BoundCheck;
-import com.shuttle.game.utils.Regions;
+import com.shuttle.game.utils.effects.MoveProcessor;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 6/30/18.
+ * @author Shuttle on 11/26/18.
  */
-public class Asteroid extends AbstractPoolable {
-    private TextureRegion[] textureRegions;
+public abstract class AbstractAsteroid extends AbstractPoolable {
+    protected TextureRegion[] textureRegions;
     @Getter
     @Setter
     private boolean fragmented;
@@ -32,21 +29,13 @@ public class Asteroid extends AbstractPoolable {
     @Setter
     private float timeToBurn;
 
-    public Asteroid(GameScreen gs) {
+    public AbstractAsteroid(GameScreen gs) {
         this.gs = gs;
-        this.textureRegions = Regions.split(
-                new TextureRegion(
-                        Assets.getInstance()
-                                .getAtlas()
-                                .findRegion(PaintConstants.ASTEROID_REGION)),
-                8, 8, 32
-        );
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.angle = MathUtils.random(365f);
         this.active = true;
         this.boundCheck = new BoundCheck();
-        this.type = Type.ASTEROID;
         this.moveProcessor = new MoveProcessor(gs);
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.spreeColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -118,12 +107,5 @@ public class Asteroid extends AbstractPoolable {
         this.atRayPoint = false;
     }
 
-    @Override
-    public void init(float x, float y) {
-        this.position.set(x, y);
-        this.width = PaintConstants.ASTEROID_WIDTH;
-        this.height = PaintConstants.ASTEROID_HEIGHT;
-        this.active = true;
-        this.taken = false;
-    }
+    public abstract void init(float x, float y);
 }

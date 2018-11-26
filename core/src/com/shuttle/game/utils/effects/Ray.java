@@ -2,9 +2,10 @@ package com.shuttle.game.utils.effects;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.asteroids.Asteroid;
+import com.shuttle.game.bot.asteroids.AbstractAsteroid;
 import com.shuttle.game.bot.particle.ParticleEmitter;
 import com.shuttle.game.bot.pool.AbstractPoolable;
+import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
@@ -105,7 +106,7 @@ public class Ray {
         }
     }
 
-    public void laser(Shuttle player, Asteroid asteroid, ParticleEmitter particleEmitter, float dt) {
+    public void laser(Shuttle player, AbstractAsteroid asteroid, ParticleEmitter particleEmitter, float dt) {
         float dst = player.getPosition().dst(asteroid.getPosition());
         if (dst <= Rules.PLAYER_LASER_TAKE_RANGE && !player.isTaken() && !asteroid.isTaken() && asteroid.isActive()) {
             asteroid.setAtRayPoint(true);
@@ -132,9 +133,17 @@ public class Ray {
                 );
             }
             asteroid.setTimeToBurn(asteroid.getTimeToBurn() + dt);
-            if (asteroid.getTimeToBurn() >= 0.5f + Rules.ASTEROID_BURN_TIME * player.getShieldLevel().getLevel()) {
+            if (asteroid.getTimeToBurn() >= 0.5f + Rules.ASTEROID_METAL_BURN_TIME * player.getShieldLevel().getLevel()) {
                 boomBox.playSound(MSConstants.ASTEROID_SPLASH);
-                gs.getAsteroidEmitter().boom(asteroid.getPosition(), player.getShieldLevel());
+                //todo:repeatable code..
+                switch (asteroid.getType()){
+                    case ASTEROID_METAL:
+                        gs.getMetalAsteroidEmitter().boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                        break;
+                    case ASTEROID_MINERAL:
+                        gs.getMineralAsteroidEmitter().boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                        break;
+                }
                 asteroid.destroy();
                 player.getStanding().addToStatistics(asteroid.getType(), asteroid.getLevel());
                 asteroid.showSprayCollision(particleEmitter);
@@ -147,7 +156,7 @@ public class Ray {
         }
 
         boolean anyAtLaserPoint = false;
-        List<Asteroid> asteroidList = gs.getAsteroidEmitter().getActiveList();
+        List<AbstractAsteroid> asteroidList = gs.getMetalAsteroidEmitter().getActiveList();
         for (int i = 0; i < asteroidList.size(); i++) {
             if (!asteroidList.get(i).isFragmented()) {
                 anyAtLaserPoint |= asteroidList.get(i).isAtRayPoint();

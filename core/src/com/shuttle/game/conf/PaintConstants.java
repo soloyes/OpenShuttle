@@ -43,9 +43,12 @@ public final class PaintConstants {
     public static final String ANOMALY_GLOW = "glow";
     public static final int ANOMALY_GLOW_WIDTH = 96;
     public static final int ANOMALY_GLOW_HEIGHT = 96;
-    public static final String ASTEROID_REGION = "asteroid";
-    public static final int ASTEROID_WIDTH = 128;
-    public static final int ASTEROID_HEIGHT = 128;
+    public static final String ASTEROID_METAL_REGION = "asteroidMetal";
+    public static final int ASTEROID_METAL_WIDTH = 128;
+    public static final int ASTEROID_METAL_HEIGHT = 128;
+    public static final String ASTEROID_MINERAL_REGION = "asteroidMineral";
+    public static final int ASTEROID_MINERAL_WIDTH = 128;
+    public static final int ASTEROID_MINERAL_HEIGHT = 128;
     public static final String BLACKHOLE_HOLE_REGION = "blackholeHole";
     public static int BLACKHOLE_HOLE_WIDTH = 192;
     public static int BLACKHOLE_HOLE_HEIGHT = 192;

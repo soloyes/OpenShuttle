@@ -9,15 +9,13 @@ import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
 import com.shuttle.game.bot.anomaly.MagneticAnomaly;
 import com.shuttle.game.bot.anomaly.RadiationAnomaly;
-import com.shuttle.game.bot.asteroids.Asteroid;
+import com.shuttle.game.bot.asteroids.MineralAsteroid;
 import com.shuttle.game.bot.consumable.Astronaut;
 import com.shuttle.game.bot.consumable.Crate;
 import com.shuttle.game.bot.consumable.Fuel;
 import com.shuttle.game.bot.consumable.Storage;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.screens.GameScreen;
-import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 
 import java.util.ArrayList;
@@ -131,7 +129,7 @@ public class GameOver {
         storage.setHeight(128);
 
         picY -= dY;
-        Asteroid asteroid = new Asteroid(gs);
+        MineralAsteroid asteroid = new MineralAsteroid(gs);
         asteroid.init(picX, picY);
         asteroid.setScaleX(1.0f);
         asteroid.setScaleY(1.0f);
@@ -200,9 +198,9 @@ public class GameOver {
                 batch.setColor(tmpColor);
                 Storage tmpStorage = (Storage) abstractPoolable;
                 tmpStorage.basicRender(batch);
-            } else if (abstractPoolable instanceof Asteroid) {
+            } else if (abstractPoolable instanceof MineralAsteroid) {
                 batch.setColor(tmpColor);
-                Asteroid tmpAsteroid = (Asteroid) abstractPoolable;
+                MineralAsteroid tmpAsteroid = (MineralAsteroid) abstractPoolable;
                 tmpAsteroid.basicRender(batch);
             }
             batch.setColor(tmpColor);
