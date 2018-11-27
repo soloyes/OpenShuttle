@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
-import com.shuttle.game.bot.consumable.Consumable;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
@@ -20,7 +19,6 @@ import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.effects.BoomBox;
 import com.shuttle.game.utils.effects.Oscillator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -48,6 +46,7 @@ public class Radar {
     private Color color;
     private BoomBox boomBox;
     private Oscillator oscillator;
+    private List<List<? extends AbstractConsumable>> listsActiveConsumable;
 
     public Radar(GameScreen gs, Shuttle player) {
         this.gs = gs;
@@ -64,6 +63,13 @@ public class Radar {
         this.dotSize = 0.0f;
         this.color = new Color(Color.valueOf(PaintConstants.BACKGROUND_COLOR_HEX));
         this.boomBox = new BoomBox();
+        ActiveListJoiner<AbstractConsumable> joiner = new ActiveListJoiner<AbstractConsumable>();
+        listsActiveConsumable = joiner.join(
+                gs.getAstronautEmitter().getActiveList(),
+                gs.getCrateEmitter().getActiveList(),
+                gs.getFuelEmitter().getActiveList(),
+                gs.getStorageEmitter().getActiveList()
+        );
     }
 
     //Prevent generation near blackhole
@@ -103,29 +109,25 @@ public class Radar {
     private void drawRadar(SpriteBatch batch) {
         for (int i = 0; i < gs.getCorrosiveAnomalyEmitter().getActiveList().size(); i++) {
             CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) gs.getCorrosiveAnomalyEmitter().getActiveList().get(i);
-            drawPoolables(batch, tmpAnomaly);
+            drawPoolable(batch, tmpAnomaly);
         }
-
-        ActiveListJoiner<Consumable> joiner = new ActiveListJoiner<Consumable>();
-        List<List<? extends Consumable>> listsActiveConsumable;
-        listsActiveConsumable = joiner.join(gs.getAstronautEmitter().getActiveList(), gs.getCrateEmitter().getActiveList(), gs.getFuelEmitter().getActiveList(), gs.getStorageEmitter().getActiveList());
 
         for (int i = 0; i < listsActiveConsumable.size(); i++) {
             for (int j = 0; j < listsActiveConsumable.get(i).size(); j++) {
-                AbstractConsumable tmpConsumable = (AbstractConsumable) listsActiveConsumable.get(i).get(j);
-                drawPoolables(batch, tmpConsumable);
+                AbstractConsumable tmpConsumable = listsActiveConsumable.get(i).get(j);
+                drawPoolable(batch, tmpConsumable);
             }
         }
 
         for (int i = 0; i < gs.getElectricalAnomalyEmitter().getActiveList().size(); i++) {
             ElectricalAnomaly tmpAnomaly = (ElectricalAnomaly) gs.getElectricalAnomalyEmitter().getActiveList().get(i);
-            drawPoolables(batch, tmpAnomaly);
+            drawPoolable(batch, tmpAnomaly);
         }
 
         batch.setColor(1, 1, 1, 1);
     }
 
-    private void drawPoolables(SpriteBatch batch, AbstractPoolable abstractPoolable) {
+    private void drawPoolable(SpriteBatch batch, AbstractPoolable abstractPoolable) {
         float d = Vector2.dst(player.getPosition().x, player.getPosition().y, abstractPoolable.getPosition().x, abstractPoolable.getPosition().y);
         if (d < 2000.0f) {
             float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f + dotSize;

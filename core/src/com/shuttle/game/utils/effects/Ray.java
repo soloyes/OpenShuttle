@@ -10,6 +10,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.utils.ActiveListJoiner;
 
 import java.util.List;
 
@@ -30,9 +31,10 @@ public class Ray {
     @Setter
     private float harvestVelocity;
     @Setter
-    private  float takeRange;
+    private float takeRange;
     private BoomBox boomBox;
     private GameScreen gs;
+    private List<List<? extends AbstractAsteroid>> asteroidList;
 
     public Ray(GameScreen gs) {
         this.gs = gs;
@@ -43,6 +45,8 @@ public class Ray {
         this.harvestVelocity = Rules.PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY;
         this.takeRange = Rules.PLAYER_CONSUMABLE_TAKE_RANGE;
         this.boomBox = new BoomBox();
+        ActiveListJoiner<AbstractAsteroid> joiner = new ActiveListJoiner<AbstractAsteroid>();
+        this.asteroidList = joiner.join(gs.getMetalAsteroidEmitter().getActiveList(), gs.getMineralAsteroidEmitter().getActiveList());
     }
 
     public void harvest(Shuttle player, AbstractPoolable abstractPoolable, ParticleEmitter particleEmitter, float dt) {
@@ -136,7 +140,7 @@ public class Ray {
             if (asteroid.getTimeToBurn() >= 0.5f + Rules.ASTEROID_METAL_BURN_TIME * player.getShieldLevel().getLevel()) {
                 boomBox.playSound(MSConstants.ASTEROID_SPLASH);
                 //todo:repeatable code..
-                switch (asteroid.getType()){
+                switch (asteroid.getType()) {
                     case ASTEROID_METAL:
                         gs.getMetalAsteroidEmitter().boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
                         break;
@@ -156,10 +160,11 @@ public class Ray {
         }
 
         boolean anyAtLaserPoint = false;
-        List<AbstractAsteroid> asteroidList = gs.getMetalAsteroidEmitter().getActiveList();
         for (int i = 0; i < asteroidList.size(); i++) {
-            if (!asteroidList.get(i).isFragmented()) {
-                anyAtLaserPoint |= asteroidList.get(i).isAtRayPoint();
+            for (int j = 0; j < asteroidList.get(i).size(); j++) {
+                if (!asteroidList.get(i).get(j).isFragmented()) {
+                    anyAtLaserPoint |= asteroidList.get(i).get(j).isAtRayPoint();
+                }
             }
         }
         if (!anyAtLaserPoint) {

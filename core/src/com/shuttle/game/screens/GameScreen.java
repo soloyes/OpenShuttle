@@ -132,7 +132,7 @@ public class GameScreen extends BaseScreen {
     private float holeTime;
     private float fadeInAlpha;
     private boolean gameOverDeactivate;
-    private List<List<? extends Consumable>> consumableList;
+    private List<List<? extends AbstractConsumable>> consumableList;
     private List<List<? extends AbstractAsteroid>> asteroidsList;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
@@ -191,11 +191,9 @@ public class GameScreen extends BaseScreen {
         prettyElectricKick = PrettySound.getPretty(Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY);
         prettyFragmentHarvest = PrettySound.getPretty(Rules.FRAGMENT_KICK_PRETTY_SOUND_DELAY);
         //
-        ActiveListJoiner<Consumable> consumableJoiner = new ActiveListJoiner<Consumable>();
+        ActiveListJoiner<AbstractConsumable> consumableJoiner = new ActiveListJoiner<AbstractConsumable>();
         ActiveListJoiner<AbstractAsteroid> asteroidsJoiner = new ActiveListJoiner<AbstractAsteroid>();
-        consumableList = new ArrayList<List<? extends Consumable>>();
         consumableList = consumableJoiner.join(astronautEmitter.getActiveList(), crateEmitter.getActiveList(), fuelEmitter.getActiveList(), storageEmitter.getActiveList());
-        asteroidsList = new ArrayList<List<? extends AbstractAsteroid>>();
         asteroidsList = asteroidsJoiner.join(metalAsteroidEmitter.getActiveList(), mineralAsteroidEmitter.getActiveList());
         //
     }
@@ -244,10 +242,8 @@ public class GameScreen extends BaseScreen {
         fuelEmitter.render(batch);
         storageEmitter.render(batch);
         player.render(batch);
-        //#77
         astronautEmitter.render(batch);
         crateEmitter.render(batch);
-        //#77
         corrosiveAnomalyEmitter.render(batch);
         electricalAnomalyEmitter.render(batch);
         radiationAnomalyEmitter.render(batch);
@@ -409,7 +405,7 @@ public class GameScreen extends BaseScreen {
         boolean anyAtHarvestPoint = false;
         for (int i = 0; i < consumableList.size(); i++) {
             for (int j = 0; j < consumableList.get(i).size(); j++) {
-                AbstractConsumable abstractConsumable = (AbstractConsumable) consumableList.get(i).get(j);
+                AbstractConsumable abstractConsumable = consumableList.get(i).get(j);
                 if (!abstractConsumable.isTaken()) {
                     if (player.getPosition().dst(abstractConsumable.getPosition()) <= PaintConstants.SHUTTLE_WIDTH / 2) {
                         if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel()) {
@@ -614,7 +610,7 @@ public class GameScreen extends BaseScreen {
 
                     for (int m = 0; m < consumableList.size(); m++) {
                         for (int p = 0; p < consumableList.get(m).size(); p++) {
-                            AbstractConsumable abstractConsumable = (AbstractConsumable) consumableList.get(m).get(p);
+                            AbstractConsumable abstractConsumable = consumableList.get(m).get(p);
                             if (!asteroid.isFragmented() && abstractConsumable.getPosition().dst(asteroid.getPosition()) < 128) {
                                 asteroid.destroy();
                                 abstractConsumable.destroy();

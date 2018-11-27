@@ -90,14 +90,14 @@ public abstract class AbstractAsteroid extends AbstractPoolable {
         return active;
     }
 
-    public void init(Vector2 position, Vector2 destanation, float scale, boolean isFragment) {
+    public void init(Vector2 position, Vector2 destination, float scale, boolean isFragment) {
         init(position.x, position.y);
         this.fragmented = isFragment;
-        destanation.sub(position).nor();
+        destination.sub(position).nor();
         if (isFragment) {
-            velocity.set(destanation).scl(MathUtils.random(25, 150));
+            velocity.set(destination).scl(MathUtils.random(25, 150));
         } else {
-            velocity.set(destanation).scl(MathUtils.random(50, 300));
+            velocity.set(destination).scl(MathUtils.random(50, 300));
         }
         this.scaleX = this.saveScaleX = scale;
         this.scaleY = this.saveScaleY = scale;
