@@ -92,6 +92,7 @@ public class Assets {
                 assetManager.load(MSConstants.FUEL_DESTROY, Sound.class);
                 assetManager.load(MSConstants.STORAGE_DESTROY, Sound.class);
                 assetManager.load(MSConstants.ANOMALY_CORROSIVE_BURST, Sound.class);
+                assetManager.load(MSConstants.GET_STORAGE, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 createStdFont(32, "");
                 createStdFont(32, "Coloured");

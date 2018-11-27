@@ -47,8 +47,7 @@ public class Storage extends AbstractConsumable {
                         3.0f,
                         true
                 );
-        //todo: get storage sound
-        boomBox.playSound(MSConstants.GET_FUEL);
+        boomBox.playSound(MSConstants.GET_STORAGE);
     }
 
     @Override
