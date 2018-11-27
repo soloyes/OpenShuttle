@@ -84,13 +84,14 @@ public class Assets {
                 assetManager.load(MSConstants.PLAYER_REPAIR, Sound.class);
                 assetManager.load(MSConstants.PLAYER_OUT_OF_SCREEN, Sound.class);
                 assetManager.load(MSConstants.PLAYER_START_ENGINE, Sound.class);
-                assetManager.load(MSConstants.ANOMALY_BURSTING, Sound.class);
+                assetManager.load(MSConstants.ANOMALY_BOOM, Sound.class);
                 assetManager.load(MSConstants.ANOMALY_FLUSH, Sound.class);
                 assetManager.load(MSConstants.PLAYER_START_ENGINE, Sound.class);
                 assetManager.load(MSConstants.FLAME, Sound.class);
                 assetManager.load(MSConstants.ASTEROID_SPLASH, Sound.class);
                 assetManager.load(MSConstants.FUEL_DESTROY, Sound.class);
                 assetManager.load(MSConstants.STORAGE_DESTROY, Sound.class);
+                assetManager.load(MSConstants.ANOMALY_CORROSIVE_BURST, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 createStdFont(32, "");
                 createStdFont(32, "Coloured");

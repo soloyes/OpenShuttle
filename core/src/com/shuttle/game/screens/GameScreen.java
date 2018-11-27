@@ -19,7 +19,6 @@ import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
 import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
 import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.consumable.AstronautEmitter;
-import com.shuttle.game.bot.consumable.Consumable;
 import com.shuttle.game.bot.consumable.CrateEmitter;
 import com.shuttle.game.bot.consumable.FuelEmitter;
 import com.shuttle.game.bot.consumable.StorageEmitter;
@@ -54,7 +53,6 @@ import com.shuttle.game.utils.effects.Ray;
 import com.shuttle.game.utils.effects.Shake;
 import com.shuttle.game.utils.effects.Vibrator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -448,8 +446,12 @@ public class GameScreen extends BaseScreen {
             if (!anomaly.isTaken()) {
                 if (player.getPosition().dst(anomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && anomaly.isBorn()) {
                     if (anomaly.getLevel() < player.getPushPower() || player.getVelocity().len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
+                        if (player.getVelocity().len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY){
+                            boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_BURST);
+                        }else {
+                            boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
+                        }
                         damageToAnomaly(anomaly);
-                        boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
                         Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
                     } else {
                         damageToPlayer(anomaly);

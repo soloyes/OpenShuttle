@@ -124,7 +124,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 if (boomTimer >= boomDelay) {
                     destroy();
                     showSprayBoom(gs.getParticleEmitter());
-                    boomBox.playSound(MSConstants.ANOMALY_BURSTING);
+                    boomBox.playSound(MSConstants.ANOMALY_BOOM);
                     Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY);
                 }
             }
