@@ -39,4 +39,21 @@ public class ParticleEffectBuilder {
             particleEmitter.setup(position.x + radius * (float) Math.cos(Math.toRadians(angle + i)), position.y + radius * (float) Math.sin(Math.toRadians(angle + i)), MathUtils.random(-5, 5), MathUtils.random(-5, 5), 0.15f, 3.0f, 4.0f, r, g, b, 0.1f, 0, 0, 0, 0.0f);
         }
     }
+
+    public void buildFuelDestroyFlame(Vector2 position){
+        for (int j = 0; j < 20; j++) {
+            particleEmitter.setup(
+                    position.x, position.y,
+                    MathUtils.random(-70, 70), MathUtils.random(-100, 100), 3f, 10, 0,
+                    0.4f, 0.4f, 0.4f, 0.2f,
+                    0.4f, 0.4f, 0.4f, 0.0f
+            );
+            particleEmitter.setup(
+                    position.x, position.y,
+                    MathUtils.random(-60, 60), MathUtils.random(-100, 100), 2f, 10, 0,
+                    1.0f, 0.4f, 0.0f, 0.7f,
+                    1.0f, 0.0f, 0.0f, 0.0f
+            );
+        }
+    }
 }

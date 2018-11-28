@@ -100,6 +100,14 @@ public class Crate extends AbstractConsumable {
                     if (!anomalies.get(i).isTaken()) {
                         anomalies.get(i).setMarkedToBoom(true);
                         standing.addToStatistics(anomalies.get(i).getType(), anomalies.get(i).getLevel());
+                        int score = Rules.ANOMALIES_BASE_SCORE_ADD;
+                        gs.getGameInfoSystem().setup(
+                                anomalies.get(i).getPosition().x,
+                                anomalies.get(i).getPosition().y,
+                                GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
+                                3.0f,
+                                true
+                        );
                         standing.changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
                     }
                 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.Joystick;
 import com.shuttle.game.bot.consumable.Astronaut;
 import com.shuttle.game.bot.consumable.Consumable;
@@ -135,8 +136,16 @@ public class Shuttle extends AbstractShuttle {
                     KillingSpree.getKillingSpreeFromKillsCount(killSeries).getTextSizeModifier(),
                     false
             );
-            int asc = (abstractPoolable.getLevel()) * Rules.ANOMALIES_BASE_SCORE_ADD * killSeries;
-            standing.changeScore(asc);
+
+            int score = (abstractPoolable.getLevel()) * Rules.ANOMALIES_BASE_SCORE_ADD * killSeries;
+            gs.getGameInfoSystem().setup(
+                    position.x,
+                    position.y,
+                    GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
+                    3.0f,
+                    true
+            );
+            standing.changeScore(score);
             killSeries++;
         } else {
             gs.getGameInfoSystem().setup(

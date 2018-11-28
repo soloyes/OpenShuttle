@@ -75,9 +75,9 @@ public class Astronaut extends AbstractConsumable {
         gs.getGameInfoSystem().setup(
                 position.x,
                 position.y,
-                GameInfoSystem.GameInfoSystemPreset.MURDERER,
+                GameInfoSystem.GameInfoSystemPreset.MURDERER + "\n[RED]-" + Rules.CONSUMABLE_MURDER_SCORE_DECREASE + "[]",
                 8.0f,
-                false
+                true
         );
         boomBox.playSound(MSConstants.KILL_ASTRONAUT);
         Vibrator.vibrate(VConstants.PLAYER_ASTRONAUT_DESTROY);

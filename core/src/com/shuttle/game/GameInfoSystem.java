@@ -60,7 +60,7 @@ public class GameInfoSystem {
         FLUSH("[GREEN]FLUSH[]"),
         LOST_FUEL("[RED]-FUEL[]"),
         LOST_SCORE("[RED]-SCORE[]"),
-        MURDERER("MURDERER!\n-50000"),
+        MURDERER("MURDERER!"),
         EASY("BE EASY!"),
         STORAGE("STORAGE"),
         SCORE("SCORE");

@@ -9,10 +9,12 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.effects.MoveProcessor;
 import com.shuttle.game.utils.effects.Vibrator;
 
 public class Fuel extends AbstractConsumable {
+    private BoundCheck boundCheck;
 
     public Fuel(GameScreen gs) {
         super(gs);
@@ -22,6 +24,7 @@ public class Fuel extends AbstractConsumable {
         this.type = Type.FUEL;
         this.moveProcessor = new MoveProcessor(gs);
         this.level = -2;
+        this.boundCheck = new BoundCheck();
     }
 
     @Override
@@ -71,5 +74,18 @@ public class Fuel extends AbstractConsumable {
         basicUpdate(dt);
         moveProcessor.update(this, dt);
         boundCheck.checkAndHandleBoundsAndDestroy(this);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        if (boundCheck.checkAndHandleBoundsInCamera(this, gs.getCamera())) {
+            showFlame();
+        }
+    }
+
+    private void showFlame() {
+        gs.getShake().shake(1, 35, 50);
+        gs.getParticleEmitter().getBuilder().buildFuelDestroyFlame(position);
     }
 }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
@@ -134,8 +135,15 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                 gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
                 this.showSprayBoom(gs.getParticleEmitter());
                 //score amount decrease when kicked
-                float asc = level * Rules.ANOMALIES_BASE_SCORE_ADD * (v / Rules.ANOMALY_ELECTRIC_VELOCITY);
-                gs.getPlayer().getStanding().changeScore((int) asc);
+                int score = (int) (level * Rules.ANOMALIES_BASE_SCORE_ADD * (v / Rules.ANOMALY_ELECTRIC_VELOCITY));
+                gs.getGameInfoSystem().setup(
+                        position.x,
+                        position.y,
+                        GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
+                        3.0f,
+                        true
+                );
+                gs.getPlayer().getStanding().changeScore(score);
             }
         } else {
             born = true;
