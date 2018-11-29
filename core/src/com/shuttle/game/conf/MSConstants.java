@@ -32,12 +32,14 @@ public final class MSConstants {
     public final static String PLAYER_OUT_OF_SCREEN = SOUND_FOLDER + "out_of_screen.ogg";
     public final static String PLAYER_REPAIR = SOUND_FOLDER + "repair.ogg";
     public final static String PLAYER_START_ENGINE = SOUND_FOLDER + "shuttle_move_full.ogg";
-    public final static String ANOMALY_BURSTING = SOUND_FOLDER + "bursting.ogg";
+    public final static String ANOMALY_BOOM = SOUND_FOLDER + "bursting.ogg";
     public final static String ANOMALY_FLUSH = SOUND_FOLDER + "flush.ogg";
     public final static String FLAME = SOUND_FOLDER + "flame.ogg";
     public final static String ASTEROID_SPLASH = SOUND_FOLDER + "splash.ogg";
     public final static String FUEL_DESTROY = SOUND_FOLDER + "crash_fuel_box.ogg";
     public final static String STORAGE_DESTROY = SOUND_FOLDER + "storage_destroy.ogg";
+    public final static String ANOMALY_CORROSIVE_BURST = SOUND_FOLDER + "monster_burst.ogg";
+    public final static String GET_STORAGE = SOUND_FOLDER + "storage.ogg";
 
     //
     private final static String MUSIC_FOLDER = "music/";
