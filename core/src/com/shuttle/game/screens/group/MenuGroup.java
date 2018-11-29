@@ -2,6 +2,7 @@ package com.shuttle.game.screens.group;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
@@ -22,6 +24,7 @@ import lombok.Setter;
  */
 public class MenuGroup extends Group {
     private BitmapFont font96;
+    private BitmapFont font64;
     @Getter
     @Setter
     private boolean isEmptyUserName;
@@ -38,12 +41,20 @@ public class MenuGroup extends Group {
         this.setVisible(true);
         this.skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.font96 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
+        this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
+
         this.file = Gdx.files.local("username");
+        TextField.TextFieldStyle tfs = skin.get("login", TextField.TextFieldStyle.class);
+        tfs.font = font64;
+        tfs.fontColor = Color.WHITE;
+        tfs.cursor.setMinWidth(10);
+
         this.username = new TextField(
                 "",
                 skin,
                 "login");
 
+        this.username.setAlignment(Align.center);
         username.setPosition(
                 Rules.WORLD_WIDTH / 4,
                 Rules.WORLD_HEIGHT / 2
