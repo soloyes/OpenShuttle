@@ -2,6 +2,7 @@ package com.shuttle.game.screens.group;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
@@ -161,6 +163,17 @@ public class ConfigGroup extends Group {
             }
         });
 
+        final CheckBox childCheckBox = new CheckBox("Child", checkBoxStyle48);
+        childCheckBox.setChecked(GamePreferences.isChildEnabled());
+        childCheckBox.addListener(new ClickListener() {
+            @Override
+            public boolean handle(Event event) {
+                boolean enabled = childCheckBox.isChecked();
+                GamePreferences.setChildEnabled(enabled);
+                return false;
+            }
+        });
+
         Label titleLabel = new Label("Preferences", style96);
         Label volumeMusicLabel = new Label("Music Volume ", style64);
         Label volumeSoundLabel = new Label("Sound Volume ", style64);
@@ -168,8 +181,9 @@ public class ConfigGroup extends Group {
         Label soundOnOffLabel = new Label("Sound Effect ", style64);
         Label joyStickOnOffLabel = new Label("JoyStick ", style64);
         Label levelLabel = new Label("Level ", style64);
-
         Label effectsLabel = new Label("Effects ", style64);
+        Label childLabel = new Label("Child ", style64);
+        Image joystick = new Image(Assets.getInstance().getAtlas().findRegion(PaintConstants.JOYSTICK_REGION));
 
         table.add(titleLabel).colspan(3);
         table.row();
@@ -192,6 +206,14 @@ public class ConfigGroup extends Group {
         table.add(joyStickOnOffLabel).left();
         table.add();
         table.add(joyStickCheckBox).left();
+        table.row();
+        table.add();
+        table.add(joystick).width(joystick.getWidth()).height(joystick.getHeight());
+        table.add();
+        table.row();
+        table.add(childLabel).left();
+        table.add();
+        table.add(childCheckBox).left();
 
         switch (screenType) {
             case MENU:

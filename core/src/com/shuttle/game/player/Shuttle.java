@@ -7,9 +7,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.Joystick;
-import com.shuttle.game.bot.consumable.Astronaut;
 import com.shuttle.game.bot.consumable.Consumable;
-import com.shuttle.game.bot.consumable.Crate;
+import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.player.layers.TakeRangeField;
 import com.shuttle.game.utils.effects.KillingSpree;
@@ -462,7 +461,9 @@ public class Shuttle extends AbstractShuttle {
                 setLayersScale(1.0f, 1.0f);
                 taken = false;
                 boomBox.playSound(MSConstants.BLACKHOLE_TELEPORT);
-                takeDamage(Rules.BLACKHOLE_GET_DAMAGE);
+                if (!GamePreferences.isChildEnabled()) {
+                    takeDamage(Rules.BLACKHOLE_GET_DAMAGE);
+                }
                 cameraSmooth = true;
             }
         } else {

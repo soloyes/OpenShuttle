@@ -1,13 +1,17 @@
 package com.shuttle.game.bot.anomaly;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.shuttle.game.GameInfoSystem;
+import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.VConstants;
+import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.effects.MoveProcessor;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.conf.Rules;
@@ -28,6 +32,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     private float slim;
     private int glowWidth, glowHeight;
     private Oscillator oscillator;
+    private boolean touched;
 
     public CorrosiveAnomaly(GameScreen gs) {
         super(gs);
@@ -53,6 +58,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
 
     @Override
     public void init(float x, float y) {
+        this.touched = false;
         this.hungryTimer = 0;
         this.slimTimer = 0;
         this.slim = Rules.ANOMALIES_CORROSIVE_SLIM_TIME + MathUtils.random(0, 5);
@@ -96,6 +102,16 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         scaleAndBorn(dt);
 
         if (born) {
+
+            if (Gdx.input.isTouched() && !Rules.GAME_OVER) {
+                tmp.set(Gdx.input.getX(), Gdx.input.getY());
+                ScreenManager.getInstance().getViewport().unproject(tmp);
+                if (tmp.dst(position) < PaintConstants.ANOMALY_CORROSIVE_WIDTH) {
+                    hungry = false;
+                    touched = true;
+                }
+            }
+
             color.a = oscillator.oscillate(
                     color.a, PaintConstants.ANOMALY_CORROSIVE_OSCILLATION_FREQUENCY,
                     PaintConstants.ANOMALY_CORROSIVE_GLOW_OSCILLATOR_MIN, PaintConstants.ANOMALY_CORROSIVE_GLOW_OSCILLATOR_MAX, dt
@@ -135,15 +151,31 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
 
     private void scaleAndBorn(float dt) {
         if (!taken) {
-            moveProcessor.archimedesInit(this);
-            scaleX = scaleY += dt;
-            saveScaleX = saveScaleY += dt;
-            if (scaleX >= 1 + level * 0.15f) {
-                scaleX = saveScaleX = 1 + level * 0.15f;
-                scaleY = saveScaleY = 1 + level * 0.15f;
-                if (!born) {
-                    born = true;
+            if (!touched) {
+                moveProcessor.archimedesInit(this);
+                scaleX = scaleY += dt;
+                saveScaleX = saveScaleY += dt;
+                if (scaleX >= 1 + level * 0.15f) {
+                    scaleX = saveScaleX = 1 + level * 0.15f;
+                    scaleY = saveScaleY = 1 + level * 0.15f;
+                    if (!born) {
+                        born = true;
+                    }
                 }
+            } else if (GamePreferences.isChildEnabled()){
+                destroy();
+                boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
+                gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
+                this.showSprayBoom(gs.getParticleEmitter());
+                //score amount decrease when kicked
+                gs.getGameInfoSystem().setup(
+                        position.x,
+                        position.y,
+                        GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
+                        3.0f,
+                        true
+                );
+                gs.getPlayer().getStanding().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
             }
         } else {
             born = true;
