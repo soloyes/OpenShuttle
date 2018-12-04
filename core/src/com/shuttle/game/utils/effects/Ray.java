@@ -49,31 +49,31 @@ public class Ray {
         this.asteroidList = joiner.join(gs.getMetalAsteroidEmitter().getActiveList(), gs.getMineralAsteroidEmitter().getActiveList());
     }
 
-    public void harvest(Shuttle player, AbstractPoolable abstractPoolable, ParticleEmitter particleEmitter, float dt) {
+    public void harvest(Shuttle player, AbstractPoolable poolable, ParticleEmitter particleEmitter, float dt) {
         if (!player.isTaken()) {
-            if (player.getPosition().dst(abstractPoolable.getPosition()) <= takeRange) {
-                abstractPoolable.setAtRayPoint(true);
+            if (player.getPosition().dst(poolable.getPosition()) <= takeRange) {
+                poolable.setAtRayPoint(true);
                 tmp1V2.set(
                         player.getPosition())
-                        .sub(abstractPoolable.getPosition())
+                        .sub(poolable.getPosition())
                         .nor()
                         .scl(harvestVelocity);
-                abstractPoolable.getPosition().mulAdd(tmp1V2, dt);
-                float dst = player.getPosition().dst(abstractPoolable.getPosition());
-                float scaleX = (dst / takeRange) * abstractPoolable.getSaveScaleX();
-                float scaleY = (dst / takeRange) * abstractPoolable.getSaveScaleY();
-                if (scaleX >= abstractPoolable.getSaveScaleX()) {
-                    scaleX = abstractPoolable.getSaveScaleX();
+                poolable.getPosition().mulAdd(tmp1V2, dt);
+                float dst = player.getPosition().dst(poolable.getPosition());
+                float scaleX = (dst / takeRange) * poolable.getSaveScaleX();
+                float scaleY = (dst / takeRange) * poolable.getSaveScaleY();
+                if (scaleX >= poolable.getSaveScaleX()) {
+                    scaleX = poolable.getSaveScaleX();
                 }
-                if (scaleY >= abstractPoolable.getSaveScaleY()) {
-                    scaleY = abstractPoolable.getSaveScaleY();
+                if (scaleY >= poolable.getSaveScaleY()) {
+                    scaleY = poolable.getSaveScaleY();
                 }
 
-                abstractPoolable.setScaleX(scaleX);
-                abstractPoolable.setScaleY(scaleY);
+                poolable.setScaleX(scaleX);
+                poolable.setScaleY(scaleY);
 
                 particleEmitter.setupFromPointToPoint(
-                        abstractPoolable.getPosition().x, abstractPoolable.getPosition().y,
+                        poolable.getPosition().x, poolable.getPosition().y,
                         player.getPosition().x, player.getPosition().y,
                         1, 2,
                         preset.startR, preset.startG, preset.startB, 0.3f,
@@ -81,31 +81,31 @@ public class Ray {
                 );
                 for (int j = 0; j < count; j++) {
                     float ang = 6.28f / count * j;
-                    float radX = abstractPoolable.getWidth() / 2 * scaleX;
-                    float radY = abstractPoolable.getHeight() / 2 * scaleY;
+                    float radX = poolable.getWidth() / 2 * scaleX;
+                    float radY = poolable.getHeight() / 2 * scaleY;
                     particleEmitter.setup(
-                            abstractPoolable.getPosition().x + radX * (float) Math.cos(ang) + MathUtils.random(-10, 10),
-                            abstractPoolable.getPosition().y + radY * (float) Math.sin(ang) + MathUtils.random(-10, 10),
+                            poolable.getPosition().x + radX * (float) Math.cos(ang) + MathUtils.random(-10, 10),
+                            poolable.getPosition().y + radY * (float) Math.sin(ang) + MathUtils.random(-10, 10),
                             0, 0, 0.1f, size, size,
                             preset.startR, preset.startG, preset.startB, 0.2f,
                             preset.endA, preset.endG, preset.endB, 0.0f
                     );
                 }
 
-                abstractPoolable.setScaleX(scaleX);
-                abstractPoolable.setScaleY(scaleY);
+                poolable.setScaleX(scaleX);
+                poolable.setScaleY(scaleY);
             } else {
-                abstractPoolable.setAtRayPoint(false);
+                poolable.setAtRayPoint(false);
             }
         } else {
 
-            abstractPoolable.setScaleX(abstractPoolable.getScaleX() + dt);
-            abstractPoolable.setScaleY(abstractPoolable.getScaleY() + dt);
-            if (abstractPoolable.getScaleX() >= abstractPoolable.getSaveScaleX()) {
-                abstractPoolable.setScaleX(abstractPoolable.getSaveScaleX());
+            poolable.setScaleX(poolable.getScaleX() + dt);
+            poolable.setScaleY(poolable.getScaleY() + dt);
+            if (poolable.getScaleX() >= poolable.getSaveScaleX()) {
+                poolable.setScaleX(poolable.getSaveScaleX());
             }
-            if (abstractPoolable.getScaleY() >= abstractPoolable.getSaveScaleY()) {
-                abstractPoolable.setScaleY(abstractPoolable.getSaveScaleY());
+            if (poolable.getScaleY() >= poolable.getSaveScaleY()) {
+                poolable.setScaleY(poolable.getSaveScaleY());
             }
         }
     }
@@ -148,9 +148,9 @@ public class Ray {
                         gs.getMineralAsteroidEmitter().boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
                         break;
                 }
-                asteroid.destroy();
-                player.getStanding().addToStatistics(asteroid.getType(), asteroid.getLevel());
+                asteroid.destroyWithEffect();
                 asteroid.showSprayCollision(particleEmitter);
+                player.getStanding().addToStatistics(asteroid.getType(), asteroid.getLevel());
                 asteroid.setTimeToBurn(0.0f);
                 asteroid.setAtRayPoint(false);
             }

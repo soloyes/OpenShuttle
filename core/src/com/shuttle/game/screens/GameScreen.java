@@ -404,20 +404,23 @@ public class GameScreen extends BaseScreen {
         boolean anyAtHarvestPoint = false;
         for (int i = 0; i < consumableList.size(); i++) {
             for (int j = 0; j < consumableList.get(i).size(); j++) {
-                AbstractConsumable abstractConsumable = consumableList.get(i).get(j);
-                if (!abstractConsumable.isTaken()) {
-                    if (player.getPosition().dst(abstractConsumable.getPosition()) <= PaintConstants.SHUTTLE_WIDTH / 2) {
+                AbstractConsumable consumable = consumableList.get(i).get(j);
+                if (!consumable.isTaken()) {
+                    if (player.getPosition().dst(consumable.getPosition()) <= PaintConstants.SHUTTLE_WIDTH / 2) {
                         if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel()) {
-                            abstractConsumable.destroy();
-                            player.takeEffect(abstractConsumable);
-                            player.getStanding().addToStatistics(abstractConsumable.getType(), abstractConsumable.getLevel());
+                            consumable.destroy();
+                            player.takeEffect(consumable);
+                            player.getStanding().addToStatistics(consumable.getType(), consumable.getLevel());
                         } else {
-                            if (!player.canCatch(abstractConsumable)) {
-                                abstractConsumable.destroy();
-                                player.badEffect(abstractConsumable);
+                            if (!player.canCatch(consumable)) {
+                                consumable.destroyWithEffect();
+                                if (consumable instanceof Fuel) {
+                                    shake.shake(1, 35, 50);
+                                }
+                                player.badEffect(consumable);
                             } else {
-                                abstractConsumable.destroy();
-                                player.takeEffect(abstractConsumable);
+                                consumable.destroy();
+                                player.takeEffect(consumable);
                             }
                         }
                     }
@@ -428,14 +431,14 @@ public class GameScreen extends BaseScreen {
                     if (player.getShieldLevel().getLevel() < 2) {
                         ray.setPreset(Ray.Preset.GREEN);
                     } else {
-                        if (player.canCatch(abstractConsumable)) {
+                        if (player.canCatch(consumable)) {
                             ray.setPreset(Ray.Preset.GREEN);
                         } else {
                             ray.setPreset(Ray.Preset.RED);
                         }
                     }
-                    ray.harvest(player, abstractConsumable, particleEmitter, dt);
-                    anyAtHarvestPoint |= abstractConsumable.isAtRayPoint();
+                    ray.harvest(player, consumable, particleEmitter, dt);
+                    anyAtHarvestPoint |= consumable.isAtRayPoint();
                 }
             }
         }
@@ -447,9 +450,9 @@ public class GameScreen extends BaseScreen {
             if (!anomaly.isTaken()) {
                 if (player.getPosition().dst(anomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && anomaly.isBorn()) {
                     if (anomaly.getLevel() < player.getPushPower() || player.getVelocity().len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
-                        if (player.getVelocity().len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY){
+                        if (player.getVelocity().len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                             boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_BURST);
-                        }else {
+                        } else {
                             boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
                         }
                         damageToAnomaly(anomaly);
@@ -555,13 +558,9 @@ public class GameScreen extends BaseScreen {
                 if (!asteroid.isTaken()) {
                     if (player.getPosition().dst(asteroid.getPosition()) < asteroid.getHeight() * asteroid.getScaleX()) {
                         if (!asteroid.isFragmented()) {
-                            asteroid.destroy();
+                            asteroid.destroyWithEffect();
                             Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
-                            if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
-                                Gdx.input.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
-                            }
                             player.getLifeShield().blink(1.0f);
-                            particleEmitter.getBuilder().buildDust(asteroid.getPosition().x, asteroid.getPosition().y, 180, player.getShieldLevel().getLevel() * 16 + 32);
                             switch (asteroid.getType()) {
                                 case ASTEROID_METAL:
                                     metalAsteroidEmitter.boom(asteroid.getPosition(), player.getShieldLevel());
@@ -591,8 +590,7 @@ public class GameScreen extends BaseScreen {
                     for (int k = 0; k < corrosiveAnomalyEmitter.getActiveList().size(); k++) {
                         CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(k);
                         if (!asteroid.isFragmented() && anomaly.getPosition().dst(asteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
-                            asteroid.destroy();
-                            particleEmitter.getBuilder().buildDust(asteroid.getPosition().x, asteroid.getPosition().y, 180, 32 + 32);
+                            asteroid.destroyWithEffect();
                             switch (asteroid.getType()) {
                                 case ASTEROID_METAL:
                                     metalAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
@@ -603,8 +601,7 @@ public class GameScreen extends BaseScreen {
                             }
                             gameInfoSystem.setup(anomaly.getPosition().x, anomaly.getPosition().y, GameInfoSystem.GameInfoSystemPreset.BOOM, 3.0f, false);
                             if (anomaly.getLevel() == 0) {
-                                anomaly.destroy();
-                                anomaly.showSprayCollision(particleEmitter);
+                                anomaly.destroyWithEffect();
                             } else {
                                 anomaly.takeDamage(1);
                             }
@@ -613,10 +610,10 @@ public class GameScreen extends BaseScreen {
 
                     for (int m = 0; m < consumableList.size(); m++) {
                         for (int p = 0; p < consumableList.get(m).size(); p++) {
-                            AbstractConsumable abstractConsumable = consumableList.get(m).get(p);
-                            if (!asteroid.isFragmented() && abstractConsumable.getPosition().dst(asteroid.getPosition()) < 128) {
-                                asteroid.destroy();
-                                abstractConsumable.destroy();
+                            AbstractConsumable consumable = consumableList.get(m).get(p);
+                            if (!asteroid.isFragmented() && consumable.getPosition().dst(asteroid.getPosition()) < 128) {
+                                asteroid.destroyWithEffect();
+                                consumable.destroyWithEffect();
                                 //todo: repeatable code :(
                                 switch (asteroid.getType()) {
                                     case ASTEROID_METAL:
@@ -626,11 +623,9 @@ public class GameScreen extends BaseScreen {
                                         mineralAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
                                         break;
                                 }
-                                particleEmitter.getBuilder().buildDust(asteroid.getPosition().x, asteroid.getPosition().y, 180, 32 + 32);
-                                abstractConsumable.showSprayCollision(particleEmitter);
                                 gameInfoSystem.setup(
-                                        abstractConsumable.getPosition().x,
-                                        abstractConsumable.getPosition().y,
+                                        consumable.getPosition().x,
+                                        consumable.getPosition().y,
                                         GameInfoSystem.GameInfoSystemPreset.SAD,
                                         3.0f,
                                         true
@@ -683,7 +678,7 @@ public class GameScreen extends BaseScreen {
     }
 
     private void damageToAnomaly(AbstractPoolable abstractPoolable) {
-        abstractPoolable.destroy();
+        abstractPoolable.destroyWithEffect();
         player.getRamShield().blink(1.0f);
         player.slowDown(abstractPoolable.getLevel() * 50.0f);
         if (player.getVelocity().len() <= Rules.PLAYER_ENGINE_POWER) {

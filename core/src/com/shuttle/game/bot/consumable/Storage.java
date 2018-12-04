@@ -43,7 +43,7 @@ public class Storage extends AbstractConsumable {
                 .setup(
                         position.x,
                         position.y,
-                        GameInfoSystem.GameInfoSystemPreset.STORAGE ,
+                        GameInfoSystem.GameInfoSystemPreset.STORAGE,
                         3.0f,
                         true
                 );
@@ -68,5 +68,11 @@ public class Storage extends AbstractConsumable {
         basicUpdate(dt);
         moveProcessor.update(this, dt);
         boundCheck.checkAndHandleBoundsAndDestroy(this);
+    }
+
+    @Override
+    public void destroyWithEffect() {
+        super.destroyWithEffect();
+        showSprayCollision(gs.getParticleEmitter());
     }
 }

@@ -82,4 +82,10 @@ public class Astronaut extends AbstractConsumable {
         boomBox.playSound(MSConstants.KILL_ASTRONAUT);
         Vibrator.vibrate(VConstants.PLAYER_ASTRONAUT_DESTROY);
     }
+
+    @Override
+    public void destroyWithEffect() {
+        super.destroyWithEffect();
+        showSprayCollision(gs.getParticleEmitter());
+    }
 }

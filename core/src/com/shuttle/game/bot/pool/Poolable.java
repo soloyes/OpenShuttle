@@ -8,5 +8,7 @@ public interface Poolable {
 
     void destroy();
 
+    void destroyWithEffect();
+
     boolean isActive();
 }

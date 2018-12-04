@@ -176,4 +176,9 @@ public abstract class AbstractPoolable implements Poolable {
     public enum Type {
         CORROSIVE, ELECTRIC, MAGNETIC, RADIATION, ASTEROID_METAL, ASTEROID_MINERAL, ASTRONAUT, CRATE, FUEL, STORAGE
     }
+
+    @Override
+    public void destroyWithEffect() {
+        destroy();
+    }
 }

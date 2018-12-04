@@ -30,4 +30,10 @@ public class MetalAsteroid extends AbstractAsteroid {
         this.active = true;
         this.taken = false;
     }
+
+    @Override
+    public void destroyWithEffect() {
+        super.destroyWithEffect();
+        gs.getParticleEmitter().getBuilder().buildDust(getPosition().x, getPosition().y, 180, 32 + 32);
+    }
 }

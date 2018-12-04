@@ -85,6 +85,9 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         );
         this.moveProcessor = new MoveProcessor(gs);
         this.spiralRadius = MathUtils.random(20, 60);
+        this.scaleX = this.scaleY = 0;
+        this.saveScaleX = this.saveScaleY = 0;
+        this.markedToBoom = false;
     }
 
     @Override
@@ -102,8 +105,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         scaleAndBorn(dt);
 
         if (born) {
-
-            if (Gdx.input.isTouched() && !Rules.GAME_OVER) {
+            if (Gdx.input.isTouched() && !Rules.GAME_OVER && GamePreferences.isChildEnabled()) {
                 tmp.set(Gdx.input.getX(), Gdx.input.getY());
                 ScreenManager.getInstance().getViewport().unproject(tmp);
                 if (tmp.dst(position) < PaintConstants.ANOMALY_CORROSIVE_WIDTH) {
@@ -151,8 +153,8 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
 
     private void scaleAndBorn(float dt) {
         if (!taken) {
+            moveProcessor.archimedesInit(this);
             if (!touched) {
-                moveProcessor.archimedesInit(this);
                 scaleX = scaleY += dt;
                 saveScaleX = saveScaleY += dt;
                 if (scaleX >= 1 + level * 0.15f) {
@@ -162,12 +164,12 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                         born = true;
                     }
                 }
-            } else if (GamePreferences.isChildEnabled()){
+            } else {
                 destroy();
                 boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
                 gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
-                this.showSprayBoom(gs.getParticleEmitter());
-                //score amount decrease when kicked
+                gs.getPlayer().getStanding().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
+                showSprayBoom(gs.getParticleEmitter());
                 gs.getGameInfoSystem().setup(
                         position.x,
                         position.y,
@@ -175,7 +177,6 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                         3.0f,
                         true
                 );
-                gs.getPlayer().getStanding().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
             }
         } else {
             born = true;
@@ -189,10 +190,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     @Override
     public void destroy() {
         super.destroy();
-        scaleX = scaleY = 0;
-        saveScaleX = saveScaleY = 0;
-        born = false;
-        markedToBoom = false;
+
     }
 
     @Override
@@ -246,5 +244,11 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 spreeColor.set(color);
                 break;
         }
+    }
+
+    @Override
+    public void destroyWithEffect() {
+        super.destroyWithEffect();
+        showSprayCollision(gs.getParticleEmitter());
     }
 }

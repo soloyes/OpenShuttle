@@ -147,4 +147,10 @@ public class Crate extends AbstractConsumable {
         boomBox.playSound(MSConstants.KILL_CRATE);
         Vibrator.vibrate(VConstants.PLAYER_CRATE_DESTROY);
     }
+
+    @Override
+    public void destroyWithEffect() {
+        super.destroyWithEffect();
+        showSprayCollision(gs.getParticleEmitter());
+    }
 }

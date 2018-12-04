@@ -14,8 +14,6 @@ import com.shuttle.game.utils.effects.MoveProcessor;
 import com.shuttle.game.utils.effects.Vibrator;
 
 public class Fuel extends AbstractConsumable {
-    private BoundCheck boundCheck;
-
     public Fuel(GameScreen gs) {
         super(gs);
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_1_REGION);
@@ -24,7 +22,6 @@ public class Fuel extends AbstractConsumable {
         this.type = Type.FUEL;
         this.moveProcessor = new MoveProcessor(gs);
         this.level = -2;
-        this.boundCheck = new BoundCheck();
     }
 
     @Override
@@ -77,15 +74,8 @@ public class Fuel extends AbstractConsumable {
     }
 
     @Override
-    public void destroy() {
-        super.destroy();
-        if (boundCheck.checkAndHandleBoundsInCamera(this, gs.getCamera())) {
-            showFlame();
-        }
-    }
-
-    private void showFlame() {
-        gs.getShake().shake(1, 35, 50);
+    public void destroyWithEffect() {
+        super.destroyWithEffect();
         gs.getParticleEmitter().getBuilder().buildFuelDestroyFlame(position);
     }
 }
