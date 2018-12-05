@@ -73,86 +73,79 @@ shuttleBlur
   orig: 768, 256
   offset: 0, 0
   index: -1
-takeRangeField256
+storage1
   rotate: false
   xy: 2310, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-storage1
+shuttle
   rotate: false
   xy: 2568, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-shuttle
+ramShield
   rotate: false
   xy: 2826, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-ramShield
+lifeShield
   rotate: false
   xy: 3084, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-lifeShield
+glow
   rotate: false
   xy: 3342, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-glow
+fuel1
   rotate: false
   xy: 3600, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuel1
+crate2
   rotate: false
   xy: 1028, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-crate2
+crate1
   rotate: false
   xy: 1028, 1544
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-crate1
+blackholeSpiral
   rotate: false
   xy: 1028, 1802
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackholeSpiral
+blackholeHole
   rotate: false
   xy: 1028, 2060
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackholeHole
-  rotate: false
-  xy: 1028, 2318
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 astronaut
   rotate: false
-  xy: 1028, 2576
+  xy: 1028, 2318
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
