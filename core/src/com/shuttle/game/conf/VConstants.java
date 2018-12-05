@@ -9,10 +9,12 @@ public final class VConstants {
     public static final int PLAYER_ASTEROID_DESTROY = 30;
     //200
     public static final int PLAYER_LOST_LIVE = 200;
+    //200
+    public static final int VIBRATION_ENABLED = 200;
     //10
-    public static final int PLAYER_OUT_OF_SCREEN = 10;
+    public static final int PLAYER_OUT_OF_SCREEN = 30;
     //30
-    public static final int PLAYER_ANOMALY_CORROSIVE_DESTROY = 10;
+    public static final int PLAYER_ANOMALY_CORROSIVE_DESTROY = 30;
     //50
     public static final int PLAYER_ASTRONAUT_DESTROY = 50;
     //30
@@ -22,5 +24,5 @@ public final class VConstants {
     //30
     public static final int PLAYER_STORAGE_DESTROY = 30;
     //10
-    public static final int PLAYER_ANOMALY_CORROSIVE_COLLISION = 10;
+    public static final int PLAYER_ANOMALY_CORROSIVE_COLLISION = 30;
 }

@@ -39,15 +39,14 @@ public class ShaderManager {
                 if (shaderPause.isCompiled()) {
                     return shaderPause;
                 } else {
-                    GamePreferences.setEffectsLevel(0);
+                    GamePreferences.setPrefEffectsLevel(0);
                     return null;
                 }
             case BLACKHOLE:
                 if (shaderBlackHole.isCompiled()) {
                     return shaderBlackHole;
                 } else {
-                    //GamePreferences.setEffectsLevel(0);
-                    System.out.println(shaderBlackHole.getLog());
+                    GamePreferences.setPrefEffectsLevel(0);
                     return null;
                 }
         }

@@ -8,13 +8,13 @@ import com.shuttle.game.conf.GamePreferences;
  */
 public class Vibrator {
     public static void vibrate(int ms, int mul) {
-        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
+        if (GamePreferences.isVibrationEnabled()) {
             Gdx.input.vibrate(ms * mul);
         }
     }
 
     public static void vibrate(int ms) {
-        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.HIGH.getValue()) {
+        if (GamePreferences.isVibrationEnabled()) {
             Gdx.input.vibrate(ms);
         }
     }

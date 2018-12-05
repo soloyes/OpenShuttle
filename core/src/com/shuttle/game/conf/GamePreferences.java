@@ -11,11 +11,14 @@ public class GamePreferences {
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
     private static final String PREF_JOYSTICK_ENABLED = "joystick.enabled";
+    private static final String PREF_JOYSTICK_MODE = "0";
+    private static final String PREF_JOYSTICK_COLOR = "joystick_color.enabled";
     private static final String PREF_CHILD_ENABLED = "child.enabled";
     private static final String PREF_SOUND_VOLUME = "sound";
     private static final String PREFS_NAME = "shuttleGame_preferences";
     private static final String PREF_LEVEL = "level";
-    private static final String EFFECTS_LEVEL = "effects";
+    private static final String PREF_EFFECTS_LEVEL = "effects";
+    private static final String PREF_VIBRATION_ENABLED = "vibration.enabled";
     private static Preferences preferences;
 
     static {
@@ -34,23 +37,32 @@ public class GamePreferences {
         if (!getPrefs().contains(PREF_JOYSTICK_ENABLED)) {
             setSoundEnabled(true);
         }
+        if (!getPrefs().contains(PREF_JOYSTICK_MODE)) {
+            setJoyStickMode(0);
+        }
+        if (!getPrefs().contains(PREF_JOYSTICK_COLOR)) {
+            setJoyStickColor(false);
+        }
         if (!getPrefs().contains(PREF_CHILD_ENABLED)) {
             setSoundEnabled(true);
         }
         if (!getPrefs().contains(PREF_LEVEL)) {
             setLevel(1);
         }
-        if (!getPrefs().contains(EFFECTS_LEVEL)) {
+        if (!getPrefs().contains(PREF_EFFECTS_LEVEL)) {
             setLevel(1);
+        }
+        if (!getPrefs().contains(PREF_VIBRATION_ENABLED)) {
+            setVibrationEnabled(true);
         }
     }
 
-    public static int getEffectsLevel() {
-        return getPrefs().getInteger(EFFECTS_LEVEL);
+    public static int getPrefEffectsLevel() {
+        return getPrefs().getInteger(PREF_EFFECTS_LEVEL);
     }
 
-    public static void setEffectsLevel(int level) {
-        getPrefs().putInteger(EFFECTS_LEVEL, level);
+    public static void setPrefEffectsLevel(int level) {
+        getPrefs().putInteger(PREF_EFFECTS_LEVEL, level);
         getPrefs().flush();
     }
 
@@ -96,6 +108,24 @@ public class GamePreferences {
         getPrefs().flush();
     }
 
+    public static int getJoyStickMode() {
+        return getPrefs().getInteger(PREF_JOYSTICK_MODE);
+    }
+
+    public static void setJoyStickMode(int joystickMode) {
+        getPrefs().putInteger(PREF_JOYSTICK_MODE, joystickMode);
+        getPrefs().flush();
+    }
+
+    public static boolean isJoyStickColorEnabled() {
+        return getPrefs().getBoolean(PREF_JOYSTICK_COLOR);
+    }
+
+    public static void setJoyStickColor(boolean joystickColor) {
+        getPrefs().putBoolean(PREF_JOYSTICK_COLOR, joystickColor);
+        getPrefs().flush();
+    }
+
     public static boolean isChildEnabled() {
         return getPrefs().getBoolean(PREF_CHILD_ENABLED);
     }
@@ -123,8 +153,17 @@ public class GamePreferences {
         getPrefs().flush();
     }
 
+    public static boolean isVibrationEnabled() {
+        return getPrefs().getBoolean(PREF_VIBRATION_ENABLED);
+    }
+
+    public static void setVibrationEnabled(boolean vibrationEnabled) {
+        getPrefs().putBoolean(PREF_VIBRATION_ENABLED, vibrationEnabled);
+        getPrefs().flush();
+    }
+
     public enum EffectLevel {
-        LOW(0), MEDIUM(1), HIGH(2);
+        LOW(0), HIGH(1);
 
         private int value;
 

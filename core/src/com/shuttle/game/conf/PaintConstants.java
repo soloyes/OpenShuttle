@@ -90,7 +90,13 @@ public final class PaintConstants {
     public static final int STAR16_WIDTH = 16;
     public static final int STAR16_HEIGHT = 16;
     public static final float STAR16_BLINK_FACTOR = 1.5f;
-    public static final String JOYSTICK_REGION = "joystick";
+    public static final String JOYSTICK_1_REGION = "joystick1";
+    public static final int JOYSTICK_WIDTH = 200;
+    public static final int JOYSTICK_HEIGHT = 200;
+    public static final int JOYSTICK_STICK_WIDTH = 50;
+    public static final int JOYSTICK_STICK_HEIGHT = 50;
+    public static final float JOYSTICK_ALPHA = 0.5f;
+    public static final float JOYSTICK_STICK_ALPHA = 0.7f;
     public static final String RADAR_REGION = "radar";
     public static final int RADAR_WIDTH = 128;
     public static final int RADAR_HEIGHT = 128;

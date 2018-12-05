@@ -38,10 +38,11 @@ public class Assets {
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
 
                 assetManager.load(MSConstants.BUTTON_SOUND, Sound.class);
-                createStdFont(32, "");
-                createStdFont(48, "");
-                createStdFont(64, "");
-                createStdFont(96, "");
+                assetManager.load(MSConstants.CHECKBOX, Sound.class);
+                createSandartFont(32, "");
+                createSandartFont(48, "");
+                createSandartFont(64, "");
+                createSandartFont(96, "");
                 break;
             case GAME:
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
@@ -93,26 +94,27 @@ public class Assets {
                 assetManager.load(MSConstants.STORAGE_DESTROY, Sound.class);
                 assetManager.load(MSConstants.ANOMALY_CORROSIVE_BURST, Sound.class);
                 assetManager.load(MSConstants.GET_STORAGE, Sound.class);
+                assetManager.load(MSConstants.CHECKBOX, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
-                createStdFont(32, "");
-                createStdFont(32, "Coloured");
-                createStdFont(48, "");
-                createStdFont(64, "");
-                createStdFont(64, "Coloured");
-                createStdFont(96, "");
-                createStdFont(128, "");
+                createSandartFont(32, "");
+                createSandartFont(32, "Coloured");
+                createSandartFont(48, "");
+                createSandartFont(64, "");
+                createSandartFont(64, "Coloured");
+                createSandartFont(96, "");
+                createSandartFont(128, "");
                 break;
             case TEST:
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
-                createStdFont(32, "");
-                createStdFont(64, "");
-                createStdFont(96, "");
+                createSandartFont(32, "");
+                createSandartFont(64, "");
+                createSandartFont(96, "");
                 break;
         }
     }
 
-    private void createStdFont(int size, String postfix) {
+    private void createSandartFont(int size, String postfix) {
         FileHandleResolver resolver = new InternalFileHandleResolver();
         assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
         assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));

@@ -13,39 +13,39 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.shuttle.game.Background;
+import com.shuttle.game.GameInfoSystem;
+import com.shuttle.game.Joystick;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
-import com.shuttle.game.bot.asteroids.AbstractAsteroid;
-import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
-import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
-import com.shuttle.game.bot.blackhole.Blackhole;
-import com.shuttle.game.bot.consumable.AstronautEmitter;
-import com.shuttle.game.bot.consumable.CrateEmitter;
-import com.shuttle.game.bot.consumable.Fuel;
-import com.shuttle.game.bot.consumable.FuelEmitter;
-import com.shuttle.game.bot.consumable.StorageEmitter;
-import com.shuttle.game.bot.pool.AbstractPoolable;
+import com.shuttle.game.bot.anomaly.AnomalyTimer;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
+import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
 import com.shuttle.game.bot.anomaly.ElectricalAnomalyEmitter;
 import com.shuttle.game.bot.anomaly.MagneticAnomaly;
 import com.shuttle.game.bot.anomaly.MagneticAnomalyEmitter;
 import com.shuttle.game.bot.anomaly.RadiationAnomaly;
 import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
-import com.shuttle.game.bot.anomaly.AnomalyTimer;
-import com.shuttle.game.conf.GamePreferences;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.VConstants;
-import com.shuttle.game.player.navigation.PlayerPointer;
-import com.shuttle.game.conf.GlobalInteractionLevels;
-import com.shuttle.game.Joystick;
-import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
-import com.shuttle.game.Background;
+import com.shuttle.game.bot.asteroids.AbstractAsteroid;
+import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
+import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
+import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
-import com.shuttle.game.GameInfoSystem;
+import com.shuttle.game.bot.consumable.AstronautEmitter;
+import com.shuttle.game.bot.consumable.CrateEmitter;
+import com.shuttle.game.bot.consumable.Fuel;
+import com.shuttle.game.bot.consumable.FuelEmitter;
+import com.shuttle.game.bot.consumable.StorageEmitter;
 import com.shuttle.game.bot.particle.ParticleEmitter;
+import com.shuttle.game.bot.pool.AbstractPoolable;
+import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.navigation.PlayerPointer;
 import com.shuttle.game.screens.group.PauseGroup;
 import com.shuttle.game.utils.ActiveListJoiner;
 import com.shuttle.game.utils.BoundCheck;
@@ -233,7 +233,7 @@ public class GameScreen extends BaseScreen {
         //BEGIN
         batch.begin();
         background.render(batch);
-        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.LOW.getValue() || shaderBlackHole == null) {
+        if (GamePreferences.getPrefEffectsLevel() == GamePreferences.EffectLevel.LOW.getValue() || shaderBlackHole == null) {
             blackhole.render(batch);
         }
         metalAsteroidEmitter.render(batch);
@@ -262,7 +262,7 @@ public class GameScreen extends BaseScreen {
         //BEGIN
         batch.begin();
         super.render(dt);
-        if (GamePreferences.getEffectsLevel() == GamePreferences.EffectLevel.LOW.getValue() || shaderBlackHole == null) {
+        if (GamePreferences.getPrefEffectsLevel() == GamePreferences.EffectLevel.LOW.getValue() || shaderBlackHole == null) {
             batch.setShader(null);
             //BEGIN
             batch.draw(fboTexRegion, 0, 0, Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);

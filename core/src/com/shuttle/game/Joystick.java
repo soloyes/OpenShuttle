@@ -1,41 +1,69 @@
 package com.shuttle.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.Regions;
 
 import java.util.LinkedList;
 
 /**
  * Created by FlameXander on 30.09.2017.
  */
-public class Joystick extends InputAdapter {
-    private TextureRegion background;
-    private TextureRegion stick;
+public class Joystick extends Actor implements InputProcessor {
+    private TextureRegion joy1;
+    private TextureRegion stick1;
+    private TextureRegion joy2;
+    private TextureRegion stick2;
+
     private Rectangle rectangle;
-    private float joyCenterX, joyCenterY;
     private Vector2 vs;
     private Vector2 tmp;
+    private Vector2 joyCenter;
+    private float stickDeviation;
     private LinkedList<Integer> pointer;
+    private Color color;
 
     public Joystick() {
-        TextureRegion texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.JOYSTICK_REGION);
-        this.background = new TextureRegion(texture, 0, 0, 200, 200);
-        this.stick = new TextureRegion(texture, 0, 200, 50, 50);
-        this.rectangle = new Rectangle(50, 50, 200, 200);
-        this.joyCenterX = rectangle.x + rectangle.width / 2;
-        this.joyCenterY = rectangle.y + rectangle.height / 2;
+        TextureRegion[] textureRegions = Regions.split(Assets.getInstance().getAtlas().findRegion(PaintConstants.JOYSTICK_1_REGION), 1, 2, 2);
+        this.joy1 = new TextureRegion(textureRegions[0], 0, 0, PaintConstants.JOYSTICK_WIDTH, PaintConstants.JOYSTICK_HEIGHT);
+        this.stick1 = new TextureRegion(textureRegions[0], 0, PaintConstants.JOYSTICK_HEIGHT, PaintConstants.JOYSTICK_STICK_WIDTH, PaintConstants.JOYSTICK_STICK_HEIGHT);
+        this.joy2 = new TextureRegion(textureRegions[1], 0, 0, PaintConstants.JOYSTICK_WIDTH, PaintConstants.JOYSTICK_HEIGHT);
+        this.stick2 = new TextureRegion(textureRegions[1], 0, PaintConstants.JOYSTICK_HEIGHT, PaintConstants.JOYSTICK_STICK_WIDTH, PaintConstants.JOYSTICK_STICK_HEIGHT);
+
+        this.rectangle = new Rectangle(PaintConstants.JOYSTICK_STICK_WIDTH, PaintConstants.JOYSTICK_STICK_HEIGHT, PaintConstants.JOYSTICK_WIDTH, PaintConstants.JOYSTICK_HEIGHT);
+        this.joyCenter = new Vector2(rectangle.x + rectangle.width / 2, rectangle.y + rectangle.height / 2);
         this.vs = new Vector2(0, 0);
         this.tmp = new Vector2(0, 0);
         this.pointer = new LinkedList<Integer>();
+        this.stickDeviation = (PaintConstants.JOYSTICK_WIDTH + PaintConstants.JOYSTICK_STICK_WIDTH) / 2;
+        this.color = new Color();
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
     }
 
     @Override
@@ -45,16 +73,14 @@ public class Joystick extends InputAdapter {
         ScreenManager.getInstance().getViewport().unproject(tmp);
         rectangle.x = tmp.x - rectangle.width / 2;
         rectangle.y = tmp.y - rectangle.height / 2;
-        joyCenterX = rectangle.x + rectangle.width / 2;
-        joyCenterY = rectangle.y + rectangle.height / 2;
+        joyCenter.set(rectangle.x + rectangle.width / 2, rectangle.y + rectangle.height / 2);
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (this.pointer.size() == 0) {
-            vs.x = 0;
-            vs.y = 0;
+            vs.set(0, 0);
         } else {
             this.pointer.remove(Integer.valueOf(pointer));
         }
@@ -69,13 +95,23 @@ public class Joystick extends InputAdapter {
         setTarget();
         ScreenManager.getInstance().getViewport().unproject(tmp);
         if (this.pointer.size() != 0) {
-            vs.x = tmp.x - joyCenterX;
-            vs.y = tmp.y - joyCenterY;
-            if (vs.len() > 75) {
-                vs.nor().scl(75);
+            vs.x = tmp.x - joyCenter.x;
+            vs.y = tmp.y - joyCenter.y;
+            if (vs.len() > stickDeviation) {
+                vs.nor().scl(stickDeviation);
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 
     private void setTarget() {
@@ -88,12 +124,65 @@ public class Joystick extends InputAdapter {
 
     public void render(SpriteBatch batch) {
         if (isActive()) {
-            batch.setColor(1, 1, 1, 0.5f);
-            batch.draw(background, rectangle.x, rectangle.y);
-            batch.setColor(1, 1, 1, 0.7f);
-            batch.draw(stick, joyCenterX + vs.x - 25, joyCenterY + vs.y - 25);
-            batch.setColor(1, 1, 1, 1f);
+            drawJoystick(batch, rectangle.x, rectangle.y);
         }
+    }
+
+    private void drawJoystick(SpriteBatch batch, float x, float y) {
+        TextureRegion joy;
+        TextureRegion stick;
+        int mode = GamePreferences.getJoyStickMode();
+        switch (mode) {
+            case 0:
+                joy = joy1;
+                stick = stick1;
+                break;
+            case 1:
+                joy = joy1;
+                stick = stick2;
+                break;
+            case 2:
+                joy = joy2;
+                stick = stick1;
+                break;
+            default:
+                joy = joy2;
+                stick = stick2;
+        }
+
+        if (GamePreferences.isJoyStickColorEnabled()) {
+            color.set(Color.CYAN);
+        } else {
+            color.set(Color.WHITE);
+        }
+
+        color.a = PaintConstants.JOYSTICK_ALPHA;
+        batch.setColor(color);
+        batch.draw(joy, x, y);
+        if (mode > 3) {
+            batch.draw(joy1, x, y);
+        }
+        color.a = PaintConstants.JOYSTICK_STICK_ALPHA;
+        batch.draw(stick, joyCenter.x + vs.x - PaintConstants.JOYSTICK_STICK_WIDTH / 2, joyCenter.y + vs.y - PaintConstants.JOYSTICK_STICK_HEIGHT / 2);
+        if (mode > 3) {
+            batch.draw(stick1, joyCenter.x + vs.x - PaintConstants.JOYSTICK_STICK_WIDTH / 2, joyCenter.y + vs.y - PaintConstants.JOYSTICK_STICK_HEIGHT / 2);
+        }
+        batch.setColor(1, 1, 1, 1f);
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        vs.set(Gdx.input.getX(), Gdx.input.getY());
+        ScreenManager.getInstance().getViewport().unproject(vs);
+        tmp.set(getX() + PaintConstants.JOYSTICK_WIDTH / 2, getY() + PaintConstants.JOYSTICK_HEIGHT / 2);
+        joyCenter.set(tmp);
+        vs.sub(tmp);
+
+        if (vs.len() > stickDeviation) {
+            vs.nor().scl(stickDeviation);
+        }
+
+        drawJoystick((SpriteBatch) batch, getX(), getY());
     }
 
     public boolean isActive() {
@@ -105,6 +194,6 @@ public class Joystick extends InputAdapter {
     }
 
     public float getPower() {
-        return vs.len() / 75.0f;
+        return vs.len() / stickDeviation;
     }
 }
