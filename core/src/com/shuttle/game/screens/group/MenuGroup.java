@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
-import com.shuttle.game.screens.ScreenManager;
 
 import lombok.Getter;
 import lombok.Setter;

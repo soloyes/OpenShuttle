@@ -8,7 +8,6 @@ import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

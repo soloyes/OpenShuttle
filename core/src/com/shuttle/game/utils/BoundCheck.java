@@ -5,11 +5,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.GameInfoSystem;
+import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.MSConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.player.Shuttle;
-import com.shuttle.game.bot.pool.AbstractPoolable;
-import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.effects.BoomBox;
 import com.shuttle.game.utils.effects.Vibrator;
 

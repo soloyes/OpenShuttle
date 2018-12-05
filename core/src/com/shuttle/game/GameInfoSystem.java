@@ -4,9 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.effects.FlyingText;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class GameInfoSystem {
     private FlyingText[] elements;
 

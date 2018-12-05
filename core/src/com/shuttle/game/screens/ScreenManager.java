@@ -5,11 +5,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.*;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.shuttle.game.ShuttleGame;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
-import com.shuttle.game.ShuttleGame;
 
 public class ScreenManager {
     private static ScreenManager ourInstance = new ScreenManager();

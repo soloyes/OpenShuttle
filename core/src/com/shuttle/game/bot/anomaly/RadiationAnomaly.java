@@ -7,9 +7,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
-import com.shuttle.game.utils.effects.MoveProcessor;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
+import com.shuttle.game.utils.effects.MoveProcessor;
 
 import lombok.Getter;
 import lombok.Setter;

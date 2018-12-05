@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 
 /**

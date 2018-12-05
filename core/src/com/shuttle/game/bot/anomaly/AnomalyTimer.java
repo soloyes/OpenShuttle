@@ -7,6 +7,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
+
 import java.util.List;
 
 import lombok.Setter;

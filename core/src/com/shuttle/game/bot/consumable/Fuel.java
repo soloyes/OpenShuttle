@@ -9,7 +9,6 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.effects.MoveProcessor;
 import com.shuttle.game.utils.effects.Vibrator;
 
