@@ -25,6 +25,7 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     @Setter
     private int asteroidsMaxCount;
     private boolean boom;
+    private  Vector2 tmp1V2 = new Vector2(0,0);
     private Vector2 position;
     private Vector2 destination;
     private float size;
@@ -35,10 +36,14 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     @Override
     protected abstract AbstractAsteroid newObject();
 
+    public AbstractAsteroidEmitter(){
+        position = new Vector2();
+        destination = new Vector2();
+    }
+
     public void boom(Vector2 position, GlobalInteractionLevels range) {
         this.range = range;
         this.count = range.getFragmentAsteroidCount();
-        this.position = position;
         this.boom = true;
     }
 
@@ -72,9 +77,8 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     }
 
     private void createAsteroid() {
-        //todo:Исправить бабуйню тут. Они пропадают.
-        position = new Vector2();
-        destination = new Vector2();
+        position.set(tmp1V2);
+        destination.set(tmp1V2);
 
         AbstractAsteroidEmitter.Side side = AbstractAsteroidEmitter.Side.values()[MathUtils.random(0, 3)];
         if (side == AbstractAsteroidEmitter.Side.NORTH) {
