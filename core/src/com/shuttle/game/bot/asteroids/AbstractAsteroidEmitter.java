@@ -27,6 +27,7 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     private boolean boom;
     private  Vector2 tmp1V2 = new Vector2(0,0);
     private Vector2 position;
+    private Vector2 positionBoom;
     private Vector2 destination;
     private float size;
     private float scale;
@@ -38,12 +39,14 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
 
     public AbstractAsteroidEmitter(){
         position = new Vector2();
+        positionBoom = new Vector2();
         destination = new Vector2();
     }
 
     public void boom(Vector2 position, GlobalInteractionLevels range) {
         this.range = range;
         this.count = range.getFragmentAsteroidCount();
+        this.positionBoom = position;
         this.boom = true;
     }
 
@@ -127,7 +130,7 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     private void createFragment() {
         destination.set(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
         AbstractAsteroid tmpAsteroid = getActiveElement();
-        tmpAsteroid.init(position, destination, scale, true);
+        tmpAsteroid.init(positionBoom, destination, scale, true);
         tmpAsteroid.setSizeForHarvest(size * Rules.ASTEROID_SIZE_FOR_HARVEST_FACTOR);
     }
 
