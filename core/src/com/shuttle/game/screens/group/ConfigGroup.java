@@ -59,7 +59,6 @@ public class ConfigGroup extends Group {
         checkBoxStyle48.checkboxOff.setMinWidth(50);
         checkBoxStyle48.checkboxOff.setMinHeight(50);
 
-
         Label.LabelStyle style48 = new Label.LabelStyle(
                 Assets.getInstance().getAssetManager().get(PaintConstants.FONT48, BitmapFont.class),
                 new Color(0.8f, 0.43f, 0.33f, 1f)
@@ -81,7 +80,8 @@ public class ConfigGroup extends Group {
                 Rules.WORLD_WIDTH / 2,
                 Rules.WORLD_HEIGHT / 2
         );
-        Table innerTable = new Table();
+        final Table joystickTable = new Table();
+        final Table innerTable = new Table();
 
         Slider.SliderStyle sliderStyle = new Slider.SliderStyle(skin.get("default-horizontal", Slider.SliderStyle.class));
         sliderStyle.knob.setMinHeight(50);
@@ -117,7 +117,6 @@ public class ConfigGroup extends Group {
         final Label levelLabelDynamic = new Label(Rules.StartLevel.values()[GamePreferences.getLevel()].toString(), style48);
         final Label effectsLabelDynamic = new Label(GamePreferences.EffectLevel.values()[GamePreferences.getPrefEffectsLevel()].toString(), style48);
 
-
         final Slider levelSlider = new Slider(0.0f, Rules.StartLevel.values().length - 1, 1.0f, false, sliderStyle);
         levelSlider.setValue(GamePreferences.getLevel());
         levelSlider.addListener(new ChangeListener() {
@@ -151,7 +150,6 @@ public class ConfigGroup extends Group {
             }
         });
 
-
         final CheckBox musicCheckBox = new CheckBox("", checkBoxStyle48);
         musicCheckBox.setText(GamePreferences.isMusicEnabled() ? on : off);
         musicCheckBox.setChecked(GamePreferences.isMusicEnabled());
@@ -183,12 +181,14 @@ public class ConfigGroup extends Group {
         final CheckBox joyStickCheckBox = new CheckBox("", checkBoxStyle48);
         joyStickCheckBox.setText(GamePreferences.isJoyStickEnabled() ? on : off);
         joyStickCheckBox.setChecked(GamePreferences.isJoyStickEnabled());
+        joystickTable.setVisible(joyStickCheckBox.isChecked());
         joyStickCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = joyStickCheckBox.isChecked();
                 joyStickCheckBox.setText(enabled ? on : off);
                 GamePreferences.setJoyStickEnabled(enabled);
+                joystickTable.setVisible(enabled);
                 boomBox.playSound(MSConstants.CHECKBOX);
             }
         });
@@ -249,8 +249,8 @@ public class ConfigGroup extends Group {
         table.add(titleLabel).colspan(3);
         table.row();
         table.add(volumeMusicLabel).left();
-        table.add();
-        table.add(musicSlider).left().fillX();
+        table.add().padRight(10).width(300);
+        table.add(musicSlider).left().fillX().width(200);
         table.row();
         table.add(musicOnOffLabel).left();
         table.add();
@@ -264,26 +264,9 @@ public class ConfigGroup extends Group {
         table.add();
         table.add(soundCheckBox).left();
         table.row();
-        table.add(joyStickOnOffLabel).left();
-        table.add();
-        table.add(joyStickCheckBox).left();
-        table.row();
-        table.add();
-        table.add(joystick)
-                .width(PaintConstants.JOYSTICK_WIDTH)
-                .height(PaintConstants.JOYSTICK_HEIGHT)
-                .align(Align.center);
-        innerTable.row().expand();
-        innerTable.add(joyStickModeSlider).left().fillX();
-        innerTable.row().expand();
-        innerTable.add(joyStickColorCheckBox).left();
-
-        table.add(innerTable).left().fillX();
-        table.row();
         table.add(childLabel).left();
         table.add();
         table.add(childCheckBox).left();
-
 
         switch (screenType) {
             case MENU:
@@ -298,14 +281,35 @@ public class ConfigGroup extends Group {
                 table.add(effectsLabelDynamic).left().width(200);
                 break;
         }
+
         table.row();
         table.add(vibrationLabel).left();
         table.add();
         table.add(vibrationCheckBox).left();
+        table.row();
+        table.add(joyStickOnOffLabel).left();
+        table.add();
+        table.add(joyStickCheckBox).left();
+        table.row();
+        table.add(joystickTable).colspan(3);
+
+        joystickTable.row();
+        joystickTable.add(innerTable);
+        joystickTable.add(joystick)
+                .width(PaintConstants.JOYSTICK_WIDTH)
+                .height(PaintConstants.JOYSTICK_HEIGHT)
+                .align(Align.center);
+        joystickTable.add();
+
+        innerTable.row().width(200).padRight(45);
+        innerTable.add(joyStickModeSlider);
+        innerTable.row();
+        innerTable.add(joyStickColorCheckBox).left();
+
         //table.setDebug(true);
         //innerTable.setDebug(true);
+        //joystickTable.setDebug(true);
         this.addActor(table);
-
     }
 
     @Override
