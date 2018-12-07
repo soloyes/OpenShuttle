@@ -25,7 +25,7 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     @Setter
     private int asteroidsMaxCount;
     private boolean boom;
-    private  Vector2 tmp1V2 = new Vector2(0,0);
+    private  Vector2 tmp1V2;
     private Vector2 position;
     private Vector2 destination;
     private float size;
@@ -37,8 +37,9 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     protected abstract AbstractAsteroid newObject();
 
     public AbstractAsteroidEmitter(){
-        position = new Vector2();
-        destination = new Vector2();
+        this.position = new Vector2();
+        this.destination = new Vector2();
+        this.tmp1V2 = new Vector2();
     }
 
     public void boom(Vector2 position, GlobalInteractionLevels range) {
