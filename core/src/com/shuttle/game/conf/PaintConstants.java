@@ -83,9 +83,13 @@ public final class PaintConstants {
     public static final String STORAGE_1_REGION = "storage1";
     public static final int STORAGE_1_WIDTH = 160;
     public static final int STORAGE_1_HEIGHT = 160;
-    public static final String FUEL_1_REGION = "fuel1";
+    public static final String FUEL_1_REGION = "fuel2";
+    public static final String FUEL_2_REGION = "fuel3";
     public static final int FUEL_1_WIDTH = 160;
     public static final int FUEL_1_HEIGHT = 160;
+    public static final String FUEL_BUBBLE_REGION = "bubble";
+    public static final int FUEL_BUBBLE_WIDTH = 16;
+    public static final int FUEL_BUBBLE_HEIGHT = 16;
     public static final String STAR16_REGION = "star16";
     public static final int STAR16_WIDTH = 16;
     public static final int STAR16_HEIGHT = 16;
@@ -115,6 +119,7 @@ public final class PaintConstants {
     public static final String FONT96 = "fonts/gomarice96.ttf";
     public static final String FONT128 = "fonts/gomarice128.ttf";
     public static final String GAME_PACK = "pics/game.pack";
-
-    public static final String BACKGROUND_COLOR_HEX = "191919ff";
+//"191919ff"
+    public static final String BACKGROUND_COLOR_HEX = "100514ff";
+    //"0A05EFff";//"190A1Eff";//"140A1Eff";//"0F0519ff"
 }

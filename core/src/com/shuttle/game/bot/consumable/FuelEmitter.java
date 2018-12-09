@@ -1,5 +1,6 @@
 package com.shuttle.game.bot.consumable;
 
+import com.shuttle.game.bot.consumable.fuel.Fuel;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 

@@ -46,6 +46,7 @@ public abstract class AbstractPoolable implements Poolable {
     protected float saveScaleX, saveScaleY;
     @Setter
     protected float frame;
+    @Getter
     protected float angle, rotationSpeed;
     protected int clockwise;
     @Getter
