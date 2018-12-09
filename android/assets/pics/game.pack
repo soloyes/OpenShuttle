@@ -3,14 +3,14 @@ images1.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-radiation
+magnetic
   rotate: false
   xy: 2, 2
   size: 1024, 1024
   orig: 1024, 1024
   offset: 0, 0
   index: -1
-magnetic
+radiation
   rotate: false
   xy: 1028, 2
   size: 1024, 1024
@@ -24,14 +24,14 @@ electric
   orig: 1024, 1024
   offset: 0, 0
   index: -1
-asteroidMineral
+asteroidMetal
   rotate: false
   xy: 2, 1028
   size: 1024, 1024
   orig: 1024, 1024
   offset: 0, 0
   index: -1
-asteroidMetal
+asteroidMineral
   rotate: false
   xy: 2, 2054
   size: 1024, 1024
@@ -52,6 +52,13 @@ radar
   orig: 512, 512
   offset: 0, 0
   index: -1
+mapСloud512
+  rotate: false
+  xy: 1028, 1028
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
 takeRangeField384
   rotate: false
   xy: 3594, 2
@@ -61,7 +68,7 @@ takeRangeField384
   index: -1
 scratch
   rotate: false
-  xy: 1028, 1028
+  xy: 1542, 1028
   size: 1280, 256
   orig: 1280, 256
   offset: 0, 0
@@ -73,79 +80,79 @@ shuttleBlur
   orig: 768, 256
   offset: 0, 0
   index: -1
-storage1
+astronaut
   rotate: false
-  xy: 2310, 1028
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-shuttle
-  rotate: false
-  xy: 2568, 1028
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-ramShield
-  rotate: false
-  xy: 2826, 1028
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-lifeShield
-  rotate: false
-  xy: 3084, 1028
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-glow
-  rotate: false
-  xy: 3342, 1028
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-fuel1
-  rotate: false
-  xy: 3600, 1028
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-crate2
-  rotate: false
-  xy: 1028, 1286
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-crate1
-  rotate: false
-  xy: 1028, 1544
+  xy: 2824, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 blackholeSpiral
   rotate: false
-  xy: 1028, 1802
+  xy: 3082, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 blackholeHole
   rotate: false
-  xy: 1028, 2060
+  xy: 3340, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-astronaut
+lifeShield
   rotate: false
-  xy: 1028, 2318
+  xy: 3598, 1028
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+fuel1
+  rotate: false
+  xy: 1028, 1542
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+glow
+  rotate: false
+  xy: 1028, 1800
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+crate1
+  rotate: false
+  xy: 1028, 2058
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+crate2
+  rotate: false
+  xy: 1028, 2316
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+storage1
+  rotate: false
+  xy: 1028, 2574
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+ramShield
+  rotate: false
+  xy: 1028, 2832
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+shuttle
+  rotate: false
+  xy: 1028, 3090
   size: 256, 256
   orig: 256, 256
   offset: 0, 0

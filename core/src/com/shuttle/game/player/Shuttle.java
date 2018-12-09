@@ -312,10 +312,14 @@ public class Shuttle extends AbstractShuttle {
     private void makeShadow(float dt) {
         float v = velocity.len() - Rules.PLAYER_ENGINE_POWER;
         if (v >= 0) {
+            //todo: тут вылетает NoSuchElementException. Одина раз видел.
             if (v <= shadowsCoordinates.getLast()) {
                 shadowsCoordinates.removeLast();
                 Vector2 tmp = position.cpy();
-                tmp.set(tmp.x - (float) Math.cos(Math.toRadians(angle)) - width / 2, tmp.y - (float) Math.sin(Math.toRadians(angle)) - height / 2);
+                tmp.set(
+                        tmp.x - (float) Math.cos(Math.toRadians(angle)) - width / 2,
+                        tmp.y - (float) Math.sin(Math.toRadians(angle)) - height / 2
+                );
                 vector2List.add(tmp);
                 angleList.add(angle);
                 int i = vector2List.size() - 1;

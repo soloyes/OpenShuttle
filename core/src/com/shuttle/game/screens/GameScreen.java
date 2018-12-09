@@ -13,9 +13,9 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.shuttle.game.Background;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.Joystick;
+import com.shuttle.game.background.Background;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.anomaly.AnomalyTimer;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
@@ -219,7 +219,6 @@ public class GameScreen extends BaseScreen {
     public void render(float dt) {
         //todo: refactor this
         FitViewport v = (FitViewport) ScreenManager.getInstance().getViewport();
-
         //FBO BEGIN
         fbo.begin();
         super.render(dt);

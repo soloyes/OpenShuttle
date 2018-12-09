@@ -90,6 +90,9 @@ public final class PaintConstants {
     public static final int STAR16_WIDTH = 16;
     public static final int STAR16_HEIGHT = 16;
     public static final float STAR16_BLINK_FACTOR = 1.5f;
+    public static final String CLOUD512_REGION = "mapСloud512";
+    public static final int CLOUD512_WIDTH = 512;
+    public static final int CLOUD512_HEIGHT = 512;
     public static final String JOYSTICK_1_REGION = "joystick1";
     public static final int JOYSTICK_WIDTH = 200;
     public static final int JOYSTICK_HEIGHT = 200;
@@ -115,6 +118,5 @@ public final class PaintConstants {
     public static final String FONT96 = "fonts/gomarice96.ttf";
     public static final String FONT128 = "fonts/gomarice128.ttf";
     public static final String GAME_PACK = "pics/game.pack";
-
-    public static final String BACKGROUND_COLOR_HEX = "191919ff";
+    public static final String BACKGROUND_COLOR_HEX = "100514ff";
 }

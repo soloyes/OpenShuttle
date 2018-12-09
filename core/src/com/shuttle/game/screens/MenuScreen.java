@@ -1,7 +1,7 @@
 package com.shuttle.game.screens;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.shuttle.game.Background;
+import com.shuttle.game.background.Background;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.screens.group.ConfigGroup;
 import com.shuttle.game.screens.group.MenuBar;
