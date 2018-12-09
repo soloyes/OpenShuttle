@@ -67,8 +67,8 @@ public class CloudSky {
     }
 
     public void update(float dt) {
-        BCdx = oscillatorBC.oscillate(BCdx, 20, 0, widthBC, dt);
-        SCdx = oscillatorSC.oscillate(SCdx, 70, 0, widthSC, dt);
+        BCdx = oscillatorBC.prettyOscillate(BCdx, 20, 0, widthBC, dt);
+        SCdx = oscillatorSC.prettyOscillate(SCdx, 70, 0, widthSC, dt);
         a = oscillatorA.oscillate(a, 0.03f, 0.1f, 0.2f, dt);
     }
 }
