@@ -27,7 +27,10 @@ public class CloudSky {
     private Oscillator oscillatorBC;
     private Oscillator oscillatorSC;
     private Oscillator oscillatorA;
+    private Oscillator oscillatorF;
     private float a;
+    private float frequency1;
+    private float frequency2;
 
     public CloudSky() {
         this.bc = Assets.getInstance().getAtlas().findRegion(PaintConstants.CLOUD512_REGION);
@@ -45,6 +48,7 @@ public class CloudSky {
         this.oscillatorBC = new Oscillator();
         this.oscillatorSC = new Oscillator();
         this.oscillatorA = new Oscillator();
+        this.oscillatorF = new Oscillator();
         this.a = 0.1f;
     }
 
@@ -67,8 +71,10 @@ public class CloudSky {
     }
 
     public void update(float dt) {
-        BCdx = oscillatorBC.prettyOscillate(BCdx, 20, 0, widthBC, dt);
-        SCdx = oscillatorSC.prettyOscillate(SCdx, 70, 0, widthSC, dt);
+        frequency1 = oscillatorF.oscillate(frequency1, 60, -100, 100, dt);
+        BCdx = oscillatorBC.oscillate(BCdx, frequency1, 0, widthBC, dt);
+        frequency2 = oscillatorF.oscillate(frequency2, 180, -100, 100, dt);
+        SCdx = oscillatorSC.oscillate(SCdx, frequency2, 0, widthSC, dt);
         a = oscillatorA.oscillate(a, 0.03f, 0.1f, 0.2f, dt);
     }
 }
