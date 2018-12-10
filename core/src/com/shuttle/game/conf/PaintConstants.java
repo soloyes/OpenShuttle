@@ -83,9 +83,13 @@ public final class PaintConstants {
     public static final String STORAGE_1_REGION = "storage1";
     public static final int STORAGE_1_WIDTH = 160;
     public static final int STORAGE_1_HEIGHT = 160;
-    public static final String FUEL_1_REGION = "fuel1";
+    public static final String FUEL_1_REGION = "fuel2";
+    public static final String FUEL_2_REGION = "fuel3";
     public static final int FUEL_1_WIDTH = 160;
     public static final int FUEL_1_HEIGHT = 160;
+    public static final String FUEL_BUBBLE_REGION = "bubble";
+    public static final int FUEL_BUBBLE_WIDTH = 16;
+    public static final int FUEL_BUBBLE_HEIGHT = 16;
     public static final String STAR16_REGION = "star16";
     public static final int STAR16_WIDTH = 16;
     public static final int STAR16_HEIGHT = 16;
