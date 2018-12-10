@@ -15,7 +15,8 @@ public class Box {
         this.fuel = fuel;
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_2_REGION);
         this.width = PaintConstants.FUEL_1_WIDTH;
-        this.height = PaintConstants.FUEL_1_HEIGHT;     }
+        this.height = PaintConstants.FUEL_1_HEIGHT;
+    }
 
 
     public void render(SpriteBatch batch) {

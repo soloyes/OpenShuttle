@@ -17,7 +17,6 @@ public class Bubble {
     private int width, height;
     private Vector2 position;
     private Vector2 velocity;
-    private float delta;
     @Getter
     @Setter
     protected float scaleX, scaleY;
@@ -29,13 +28,13 @@ public class Bubble {
         this.height = PaintConstants.FUEL_BUBBLE_HEIGHT;
         this.position = new Vector2();
         this.velocity = new Vector2();
-        this.delta = MathUtils.random(0, fuel.getWidth()- fuel.getWidth() * 0.27f * 2 - width);
     }
-
+    //todo: нужно подумать над тем стоит ли выносить в константы:
+    //todo: 0.27f(отношение левой/правой полосы к размеру текстуры)
+    //todo: 0.156f(отношение верхней/нижней полосы к размеру текстуры)
     public void init(float x, float y){
-        position.set(delta,MathUtils.random(0, fuel.getHeight() - fuel.getHeight() * 0.156f * 2 - height));
-        //position.set(0,0);
-        scaleX = scaleY = MathUtils.random(0.1f, 1);
+        position.set(MathUtils.random(0, fuel.getWidth()- fuel.getWidth() * 0.27f * 2 - width), MathUtils.random(0, fuel.getHeight() - fuel.getHeight() * 0.156f * 2 - height));
+        scaleX = scaleY = MathUtils.random(0.1f, 0.6f);
         velocity.set(0, MathUtils.random(5, 25));
     }
 
