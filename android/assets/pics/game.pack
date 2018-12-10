@@ -115,44 +115,58 @@ glow
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuel1
+fuel3
   rotate: false
   xy: 1028, 1800
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-crate2
+fuel2
   rotate: false
   xy: 1028, 2058
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-crate1
+fuel1
   rotate: false
   xy: 1028, 2316
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackholeSpiral
+crate2
   rotate: false
   xy: 1028, 2574
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackholeHole
+crate1
   rotate: false
   xy: 1028, 2832
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-astronaut
+blackholeSpiral
   rotate: false
   xy: 1028, 3090
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+blackholeHole
+  rotate: false
+  xy: 1028, 3348
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+astronaut
+  rotate: false
+  xy: 1028, 3606
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -167,6 +181,13 @@ joystick1
 star16
   rotate: false
   xy: 3980, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+bubble
+  rotate: false
+  xy: 3998, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
