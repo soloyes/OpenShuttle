@@ -119,7 +119,5 @@ public final class PaintConstants {
     public static final String FONT96 = "fonts/gomarice96.ttf";
     public static final String FONT128 = "fonts/gomarice128.ttf";
     public static final String GAME_PACK = "pics/game.pack";
-
     public static final String BACKGROUND_COLOR_HEX = "100514ff";
-
 }
