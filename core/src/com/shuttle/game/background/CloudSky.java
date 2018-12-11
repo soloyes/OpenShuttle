@@ -5,10 +5,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.effects.Oscillator;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 12/8/18.
@@ -20,14 +22,14 @@ public class CloudSky {
     private int BCw, BCh, SCw, SCh;
     private TextureRegion bc;
     private TextureRegion sc;
+    @Setter
+    private Shuttle player;
     @Getter
     private float widthBC, heightBC, widthSC, heightSC;
     private float scaleBCx, scaleBCy, scaleSCx, scaleSCy;
     private float BCdx, SCdx;
     private Oscillator oscillatorBC;
     private Oscillator oscillatorSC;
-    private Oscillator oscillatorA;
-    private Oscillator oscillatorF;
     private float a;
     private float frequency1 = 0f;
     private float frequency2 = 0f;
@@ -47,8 +49,6 @@ public class CloudSky {
         this.SCh = (int) Math.ceil(Rules.SPACE_HEIGHT / heightSC);
         this.oscillatorBC = new Oscillator();
         this.oscillatorSC = new Oscillator();
-        this.oscillatorA = new Oscillator();
-        this.oscillatorF = new Oscillator();
         this.a = 0.1f;
     }
 
@@ -72,17 +72,26 @@ public class CloudSky {
 
     public void update(float dt) {
 
-        BCdx = oscillatorBC.prettyOscillate(BCdx, frequency1, 2f, 0, widthBC, dt);
 
-        if (BCdx > widthBC/2)
+        if (player != null) BCdx += player.getVelocity().x / 400;
+        else {
+            BCdx = oscillatorBC.prettyOscillate(BCdx, frequency1, 2f, 0, widthBC, dt);
+
+
+        if (BCdx > widthBC / 2)
             frequency1 -= 2 * dt;
         else
             frequency1 += 2 * dt;
-        SCdx = oscillatorSC.prettyOscillate(SCdx, frequency2,5f, 0, widthSC, dt);
+    }
 
-        if (SCdx > widthSC/2)
-            frequency2 -= 5 * dt;
-        else
-            frequency2 += 5 * dt;
+        if (player != null) SCdx += player.getVelocity().x/300;
+        else {
+            SCdx = oscillatorSC.prettyOscillate(SCdx, frequency2, 5f, 0, widthSC, dt);
+
+            if (SCdx > widthSC / 2)
+                frequency2 -= 5 * dt;
+            else
+                frequency2 += 5 * dt;
+        }
     }
 }

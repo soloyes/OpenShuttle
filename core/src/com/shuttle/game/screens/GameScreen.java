@@ -63,6 +63,7 @@ public class GameScreen extends BaseScreen {
     @Getter
     @Setter
     private Shuttle player;
+    @Getter
     private Background background;
     @Getter
     @Setter
