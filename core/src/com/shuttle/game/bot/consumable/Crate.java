@@ -23,9 +23,9 @@ import java.util.List;
 public class Crate extends AbstractConsumable {
     public Crate(GameScreen gs) {
         super(gs);
-        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_2_REGION);
-        this.width = PaintConstants.CRATE_2_WIDTH;
-        this.height = PaintConstants.CRATE_2_HEIGHT;
+        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_1_REGION);
+        this.width = PaintConstants.CRATE_1_WIDTH;
+        this.height = PaintConstants.CRATE_1_HEIGHT;
         this.type = Type.CRATE;
         this.moveProcessor = new MoveProcessor(gs);
     }

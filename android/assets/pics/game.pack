@@ -24,14 +24,14 @@ electric
   orig: 1024, 1024
   offset: 0, 0
   index: -1
-asteroidMineral
+asteroidmineral
   rotate: false
   xy: 2, 1028
   size: 1024, 1024
   orig: 1024, 1024
   offset: 0, 0
   index: -1
-asteroidMetal
+asteroidmetal
   rotate: false
   xy: 2, 2054
   size: 1024, 1024
@@ -59,7 +59,7 @@ map512
   orig: 512, 512
   offset: 0, 0
   index: -1
-takeRangeField384
+takefield384
   rotate: false
   xy: 3594, 2
   size: 384, 384
@@ -73,100 +73,240 @@ scratch
   orig: 1280, 256
   offset: 0, 0
   index: -1
-shuttleBlur
+shuttleblur
   rotate: false
   xy: 3080, 516
   size: 768, 256
   orig: 768, 256
   offset: 0, 0
   index: -1
-storage1
+trashv1
   rotate: false
   xy: 2824, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-shuttle
+storage1
   rotate: false
   xy: 3082, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-ramShield
+splashv1
   rotate: false
   xy: 3340, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-lifeShield
+shuttle
   rotate: false
   xy: 3598, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-glow
+shabbysign
   rotate: false
   xy: 1028, 1542
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuel3
+scanv3
   rotate: false
   xy: 1028, 1800
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuel2
+scanv2
   rotate: false
   xy: 1028, 2058
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuel1
+scanv1
   rotate: false
   xy: 1028, 2316
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-crate2
+rocketlauncherv2
   rotate: false
   xy: 1028, 2574
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-crate1
+rocketlauncherv1
   rotate: false
   xy: 1028, 2832
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackholeSpiral
+repairv2
   rotate: false
   xy: 1028, 3090
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackholeHole
+repairv1
   rotate: false
   xy: 1028, 3348
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-astronaut
+ramshield
   rotate: false
   xy: 1028, 3606
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+radarv2
+  rotate: false
+  xy: 1286, 1542
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+radarv1
+  rotate: false
+  xy: 1286, 1800
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+patternsign
+  rotate: false
+  xy: 1286, 2058
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+lifeshield
+  rotate: false
+  xy: 1286, 2316
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+laserv2
+  rotate: false
+  xy: 1286, 2574
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+laserv1
+  rotate: false
+  xy: 1286, 2832
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+glow
+  rotate: false
+  xy: 1286, 3090
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+fuelv2
+  rotate: false
+  xy: 1286, 3348
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+fuelv1
+  rotate: false
+  xy: 1286, 3606
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+fuelback
+  rotate: false
+  xy: 1544, 1542
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+fuel1
+  rotate: false
+  xy: 1802, 1542
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+crate1
+  rotate: false
+  xy: 2060, 1542
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+boxshieldv3
+  rotate: false
+  xy: 2318, 1542
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+boxshieldv2
+  rotate: false
+  xy: 2576, 1542
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+boxshieldv1
+  rotate: false
+  xy: 2834, 1542
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+boostv2
+  rotate: false
+  xy: 3092, 1542
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+boostv1
+  rotate: false
+  xy: 3350, 1542
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+blackholespiral
+  rotate: false
+  xy: 3608, 1542
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+blackholehole
+  rotate: false
+  xy: 1544, 1800
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+astronaut
+  rotate: false
+  xy: 1544, 2058
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -185,7 +325,7 @@ star16
   orig: 16, 16
   offset: 0, 0
   index: -1
-bubble
+bubble16
   rotate: false
   xy: 3998, 2
   size: 16, 16

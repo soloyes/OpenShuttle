@@ -46,7 +46,7 @@ public class Fuel extends AbstractConsumable {
         this.spiralRadius = MathUtils.random(20, 60);
         this.atRayPoint = false;
         for (int i = 0; i < 10; i++) {
-            this.bubble[i].init(x, y);
+            this.bubble[i].init(width, height);
         }
 
     }

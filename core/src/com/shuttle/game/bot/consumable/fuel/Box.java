@@ -13,7 +13,7 @@ public class Box {
 
     public Box(Fuel fuel) {
         this.fuel = fuel;
-        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_2_REGION);
+        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_1_REGION);
         this.width = PaintConstants.FUEL_1_WIDTH;
         this.height = PaintConstants.FUEL_1_HEIGHT;
     }

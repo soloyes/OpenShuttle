@@ -13,9 +13,9 @@ public class Substrate {
 
     public Substrate(Fuel fuel) {
         this.fuel = fuel;
-        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_1_REGION);
-        this.width = PaintConstants.FUEL_1_WIDTH;
-        this.height = PaintConstants.FUEL_1_HEIGHT;
+        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_BACK_REGION);
+        this.width = PaintConstants.FUEL_BACK_WIDTH;
+        this.height = PaintConstants.FUEL_BACK_HEIGHT;
     }
 
 
