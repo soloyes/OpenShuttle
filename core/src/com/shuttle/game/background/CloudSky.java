@@ -5,10 +5,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.effects.Oscillator;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 12/8/18.
@@ -20,6 +22,8 @@ public class CloudSky {
     private int BCw, BCh, SCw, SCh;
     private TextureRegion bc;
     private TextureRegion sc;
+    @Setter
+    private Shuttle player;
     @Getter
     private float widthBC, heightBC, widthSC, heightSC;
     private float scaleBCx, scaleBCy, scaleSCx, scaleSCy;
@@ -71,28 +75,18 @@ public class CloudSky {
     }
 
     public void update(float dt) {
-//        frequency1 = oscillatorF.oscillate(frequency1, 60, -100, 100, dt);
-//        BCdx = oscillatorBC.oscillate(BCdx, frequency1, 0, widthBC, dt);
-//        frequency2 = oscillatorF.oscillate(frequency2, 180, -100, 100, dt);
-//        SCdx = oscillatorSC.oscillate(SCdx, frequency2, 0, widthSC, dt);
-//        a = oscillatorA.oscillate(a, 0.03f, 0.1f, 0.2f, dt);
 
         BCdx = oscillatorBC.prettyOscillate(BCdx, frequency1, 2f, 0, widthBC, dt);
-        if ((widthBC/2 > BCdx && !oscillatorBC.isOscillator())||(widthBC/2 < BCdx && oscillatorBC.isOscillator())){
-            frequency1 += 2 * dt;
-        }
-        else {
-            frequency1 += 2 * dt * (-1);
-            if (frequency2 < 0) frequency2 = 0;
-        }
 
+        if (BCdx > widthBC/2)
+            frequency1 -= 2 * dt;
+        else
+            frequency1 += 2 * dt;
         SCdx = oscillatorSC.prettyOscillate(SCdx, frequency2,5f, 0, widthSC, dt);
-        if ((widthSC/2 > SCdx && !oscillatorSC.isOscillator())||(widthSC/2 < SCdx && oscillatorSC.isOscillator())){
+
+        if (SCdx > widthSC/2)
+            frequency2 -= 5 * dt;
+        else
             frequency2 += 5 * dt;
-        }
-        else {
-            frequency2 += 5 * dt * (-1);
-            if (frequency2 < 0) frequency2 = 0;
-        }
     }
 }
