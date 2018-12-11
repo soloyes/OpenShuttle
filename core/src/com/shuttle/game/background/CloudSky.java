@@ -5,12 +5,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.effects.Oscillator;
 
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author Shuttle on 12/8/18.
@@ -22,8 +20,6 @@ public class CloudSky {
     private int BCw, BCh, SCw, SCh;
     private TextureRegion bc;
     private TextureRegion sc;
-    @Setter
-    private Shuttle player;
     @Getter
     private float widthBC, heightBC, widthSC, heightSC;
     private float scaleBCx, scaleBCy, scaleSCx, scaleSCy;
