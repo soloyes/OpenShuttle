@@ -29,8 +29,8 @@ public class CloudSky {
     private Oscillator oscillatorA;
     private Oscillator oscillatorF;
     private float a;
-    private float frequency1;
-    private float frequency2;
+    private float frequency1 = 0f;
+    private float frequency2 = 0f;
 
     public CloudSky() {
         this.bc = Assets.getInstance().getAtlas().findRegion(PaintConstants.CLOUD512_REGION);
@@ -71,10 +71,28 @@ public class CloudSky {
     }
 
     public void update(float dt) {
-        frequency1 = oscillatorF.oscillate(frequency1, 60, -100, 100, dt);
-        BCdx = oscillatorBC.oscillate(BCdx, frequency1, 0, widthBC, dt);
-        frequency2 = oscillatorF.oscillate(frequency2, 180, -100, 100, dt);
-        SCdx = oscillatorSC.oscillate(SCdx, frequency2, 0, widthSC, dt);
-        a = oscillatorA.oscillate(a, 0.03f, 0.1f, 0.2f, dt);
+//        frequency1 = oscillatorF.oscillate(frequency1, 60, -100, 100, dt);
+//        BCdx = oscillatorBC.oscillate(BCdx, frequency1, 0, widthBC, dt);
+//        frequency2 = oscillatorF.oscillate(frequency2, 180, -100, 100, dt);
+//        SCdx = oscillatorSC.oscillate(SCdx, frequency2, 0, widthSC, dt);
+//        a = oscillatorA.oscillate(a, 0.03f, 0.1f, 0.2f, dt);
+
+        BCdx = oscillatorBC.prettyOscillate(BCdx, frequency1, 2f, 0, widthBC, dt);
+        if ((widthBC/2 > BCdx && !oscillatorBC.isOscillator())||(widthBC/2 < BCdx && oscillatorBC.isOscillator())){
+            frequency1 += 2 * dt;
+        }
+        else {
+            frequency1 += 2 * dt * (-1);
+            if (frequency2 < 0) frequency2 = 0;
+        }
+
+        SCdx = oscillatorSC.prettyOscillate(SCdx, frequency2,5f, 0, widthSC, dt);
+        if ((widthSC/2 > SCdx && !oscillatorSC.isOscillator())||(widthSC/2 < SCdx && oscillatorSC.isOscillator())){
+            frequency2 += 5 * dt;
+        }
+        else {
+            frequency2 += 5 * dt * (-1);
+            if (frequency2 < 0) frequency2 = 0;
+        }
     }
 }
