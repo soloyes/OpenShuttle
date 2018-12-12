@@ -6,92 +6,123 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.effects.Oscillator;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * @author Shuttle on 12/8/18.
- * bc - big cloud
+ * mc - big cloud
  * sc - small cloud
  * mc - middle cloud
  */
 public class CloudSky {
-    private int BCw, BCh, SCw, SCh;
+    private int BCw, BCh, MCw, MCh, SCw, SCh;
     private TextureRegion bc;
+    private TextureRegion mc;
     private TextureRegion sc;
-    @Setter
-    private Shuttle player;
-    @Getter
-    private float widthBC, heightBC, widthSC, heightSC;
-    private float scaleBCx, scaleBCy, scaleSCx, scaleSCy;
-    private float BCdx, SCdx;
+    private float widthBC, heightBC, widthMC, heightMC, widthSC, heightSC;
+    private float scaleBCx, scaleBCy, scaleMCx, scaleMCy, scaleSCx, scaleSCy;
+    private float BCdx, MCdx, SCdx;
     private Oscillator oscillatorBC;
+    private Oscillator oscillatorMC;
     private Oscillator oscillatorSC;
+    private Oscillator oscillatorA;
     private float a;
-    private float frequency1 = 0f;
-    private float frequency2 = 0f;
+    private float frequency1;
+    private float frequency2;
+    private float frequency3;
+    private ScreenManager.ScreenType screenType;
+    private Shuttle player;
 
-    public CloudSky() {
+    public void setPlayer(Shuttle player) {
+        this.player = player;
+    }
+
+    public CloudSky(ScreenManager.ScreenType screenType) {
+        this.screenType = screenType;
         this.bc = Assets.getInstance().getAtlas().findRegion(PaintConstants.CLOUD512_REGION);
+        this.mc = Assets.getInstance().getAtlas().findRegion(PaintConstants.CLOUD512_REGION);
         this.sc = Assets.getInstance().getAtlas().findRegion(PaintConstants.CLOUD512_REGION);
-        this.scaleBCx = this.scaleBCy = 7.0f;
-        this.scaleSCx = this.scaleSCy = 4.0f;
+        this.scaleBCx = this.scaleBCy = 12.0f;
+        this.scaleMCx = this.scaleMCy = 8.0f;
+        this.scaleSCx = this.scaleSCy = 3.0f;
         this.widthBC = PaintConstants.CLOUD512_WIDTH * scaleBCx;
         this.heightBC = PaintConstants.CLOUD512_HEIGHT * scaleBCy;
+        this.widthMC = PaintConstants.CLOUD512_WIDTH * scaleMCx;
+        this.heightMC = PaintConstants.CLOUD512_HEIGHT * scaleMCy;
         this.widthSC = PaintConstants.CLOUD512_WIDTH * scaleSCx;
         this.heightSC = PaintConstants.CLOUD512_HEIGHT * scaleSCy;
         this.BCw = (int) Math.ceil(Rules.SPACE_WIDTH / widthBC);
         this.BCh = (int) Math.ceil(Rules.SPACE_HEIGHT / heightBC);
+        this.MCw = (int) Math.ceil(Rules.SPACE_WIDTH / widthMC);
+        this.MCh = (int) Math.ceil(Rules.SPACE_HEIGHT / heightMC);
         this.SCw = (int) Math.ceil(Rules.SPACE_WIDTH / widthSC);
         this.SCh = (int) Math.ceil(Rules.SPACE_HEIGHT / heightSC);
-        this.oscillatorBC = new Oscillator();
+        this.oscillatorMC = new Oscillator();
         this.oscillatorSC = new Oscillator();
-        this.a = 0.1f;
+        this.oscillatorA = new Oscillator();
+        this.a = 0.3f;
     }
 
     public void render(SpriteBatch batch) {
         Color color = batch.getColor();
-        batch.setColor(1.0f, 0.0f, 1.0f, 0.1f);
+        batch.setColor(Color.valueOf("0024ffe0"));
         for (int i = -1; i < BCw + 1; i++) {
             for (int j = 0; j < BCh; j++) {
-                batch.draw(bc, i * widthBC - BCdx, j * heightBC, widthBC, heightBC);
+                batch.draw(bc, i * widthBC - BCdx % widthBC, j * heightBC, widthBC, heightBC);
+            }
+        }
+
+        batch.setColor(Color.valueOf("9e00ff70"));
+        for (int i = -1; i < MCw + 1; i++) {
+            for (int j = 0; j < MCh; j++) {
+                batch.draw(mc, i * widthMC - MCdx % widthMC, j * heightMC, widthMC, heightMC);
             }
         }
 
         batch.setColor(1.0f, 1.0f, 0.0f, a);
         for (int i = -1; i < SCw + 1; i++) {
-            for (int j = 0; j < SCh; j++) {
-                batch.draw(sc, i * widthSC - SCdx, j * heightSC, widthSC, heightSC);
+            for (int j = -1; j < SCh; j++) {
+                batch.draw(sc, i * widthSC - SCdx % widthSC, j * heightSC, widthSC, heightSC);
             }
         }
         batch.setColor(color);
     }
 
     public void update(float dt) {
-
-
-        if (player != null) BCdx += player.getVelocity().x / 400;
-        else {
-            BCdx = oscillatorBC.prettyOscillate(BCdx, frequency1, 2f, 0, widthBC, dt);
-
-
-        if (BCdx > widthBC / 2)
-            frequency1 -= 2 * dt;
-        else
-            frequency1 += 2 * dt;
-    }
-
-        if (player != null) SCdx += player.getVelocity().x/300;
-        else {
-            SCdx = oscillatorSC.prettyOscillate(SCdx, frequency2, 5f, 0, widthSC, dt);
-
-            if (SCdx > widthSC / 2)
-                frequency2 -= 5 * dt;
-            else
-                frequency2 += 5 * dt;
+        if (screenType == ScreenManager.ScreenType.GAME) {
+            BCdx += player.getVelocity().x / 1200;
+        } else {
+            BCdx = oscillatorBC.prettyOscillate(BCdx, frequency3, 1f, 0, widthBC, dt);
+            if (BCdx > widthBC / 2) {
+                frequency1 -= 1 * dt;
+            } else {
+                frequency1 += 1 * dt;
+            }
         }
+
+        if (screenType == ScreenManager.ScreenType.GAME) {
+            MCdx += player.getVelocity().x / 600;
+        } else {
+            MCdx = oscillatorMC.prettyOscillate(MCdx, frequency1, 3f, 0, widthMC, dt);
+            if (MCdx > widthMC / 2) {
+                frequency2 -= 3 * dt;
+            } else {
+                frequency2 += 3 * dt;
+            }
+        }
+
+        if (screenType == ScreenManager.ScreenType.GAME) {
+            SCdx += player.getVelocity().x / 200;
+        } else {
+            SCdx = oscillatorSC.prettyOscillate(SCdx, frequency2, 5f, 0, widthSC, dt);
+            if (SCdx > widthSC / 2) {
+                frequency3 -= 5 * dt;
+            } else {
+                frequency3 += 5 * dt;
+            }
+        }
+        a = oscillatorA.oscillate(a, 0.03f, 0.3f, 0.4f, dt);
     }
 }

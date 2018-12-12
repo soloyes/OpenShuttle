@@ -99,7 +99,6 @@ public class Shuttle extends AbstractShuttle {
         this.angleList = new LinkedList<Float>();
         this.alphaList = new LinkedList<Float>();
         this.killSeries = 1;
-        gs.getBackground().getCloudSky().setPlayer(this);
     }
 
     public boolean addZigZag(float amount) {

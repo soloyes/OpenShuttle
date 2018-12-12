@@ -1,9 +1,6 @@
 package com.shuttle.game.utils.effects;
 
-import lombok.Getter;
-
 public class Oscillator {
-    @Getter
     private boolean oscillator;
 
     public float oscillate(float value, float frequency, float from, float to, float dt) {
@@ -23,14 +20,11 @@ public class Oscillator {
         return value;
     }
 
-    public float prettyOscillate(float value, float frequency, float asc, float from, float to, float dt) {
-
-        if (value > (to - from) / 2){
-            value += dt * frequency + asc * (-1) * dt * dt/2;
-        }
-        else
-            value += dt * frequency + asc * dt * dt / 2;
-        
+    public float prettyOscillate(float value, float frequency, float acceleration, float from, float to, float dt) {
+        if (value > (to - from) / 2) {
+            value += dt * frequency + acceleration * (-1) * dt * dt / 2;
+        } else
+            value += dt * frequency + acceleration * dt * dt / 2;
         return value;
     }
 }

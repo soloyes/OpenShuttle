@@ -22,32 +22,29 @@ public class Star {
     @Getter
     private Color color;
 
-    public Star() {
+    public Star(float startScale, float endScale) {
         this.position = new Vector2(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
         this.speed = MathUtils.random(5.0f, 60.0f);
-        this.scaleX = this.scaleY = MathUtils.random(0.5f, 1.5f);
+        this.scaleX = this.scaleY = MathUtils.random(startScale, endScale);
         this.speed = MathUtils.random(5.0f, 60.0f);
         this.width = PaintConstants.STAR16_WIDTH;
         this.height = PaintConstants.STAR16_HEIGHT;
         int r = MathUtils.random(0, 20);
         switch (r) {
             case 0:
-                color = Color.RED;
+                color = Color.CORAL;
                 break;
             case 1:
-                color = Color.YELLOW;
+                color = Color.LIGHT_GRAY;
                 break;
             case 2:
-                color = Color.GREEN;
-                break;
-            case 3:
                 color = Color.PURPLE;
                 break;
-            case 4:
-                color = Color.CYAN;
+            case 3:
+                color = Color.GOLDENROD;
                 break;
-            case 5:
-                color = Color.CORAL;
+            case 4:
+                color = Color.FIREBRICK;
             default:
                 color = Color.WHITE;
         }

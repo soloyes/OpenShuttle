@@ -13,6 +13,7 @@ import lombok.Setter;
  * @author Shuttle on 11/12/18.
  */
 public class Label {
+    private TextureRegion textureRegion;
     @Setter
     private Sticker sticker;
     @Getter
@@ -24,6 +25,7 @@ public class Label {
     private float scaleFactor;
 
     public Label(Sticker sticker) {
+        this.textureRegion = new TextureRegion();
         this.sticker = sticker;
     }
 
@@ -31,7 +33,45 @@ public class Label {
         Color tmpColor = batch.getColor();
         color.a = PaintConstants.LABEL_ALPHA;
         batch.setColor(color);
-        batch.draw(sticker.sticker,
+        switch (sticker) {
+            case FUEL:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_1_REGION);
+                break;
+            case BOOST:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOOST_LABEL_1_REGION);
+                break;
+            case SCAN:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SCAN_LABEL_1_REGION);
+                break;
+            case LASER:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.LASER_LABEL_1_REGION);
+                break;
+            case RADAR:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_LABEL_1_REGION);
+                break;
+            case TRASH:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.TRASH_LABEL_1_REGION);
+                break;
+            case REPAIR:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.REPAIR_LABEL_1_REGION);
+                break;
+            case ROCKET:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.ROCKET_LAUNCHER_LABEL_1_REGION);
+                break;
+            case SHABBY:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHABBY_SIGN_LABEL_1_REGION);
+                break;
+            case SHIELD:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOX_SHIELD_LABEL_1_REGION);
+                break;
+            case SPLASH:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SPLASH_LABEL_1_REGION);
+                break;
+            case PATTERN:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_LABEL_1_REGION);
+        }
+
+        batch.draw(textureRegion,
                 master.getPosition().x - master.getWidth() / 2, master.getPosition().y - master.getHeight() / 2,
                 master.getWidth() / 2, master.getHeight() / 2,
                 master.getWidth(), master.getHeight(),
@@ -43,29 +83,20 @@ public class Label {
 
     public enum Sticker {
         //Empty
-        PATTERN(getRegion(PaintConstants.PATTERN_SIGN_LABEL_2_REGION)),
-        SHABBY(getRegion(PaintConstants.SHABBY_SIGN_LABEL_2_REGION)),
+        PATTERN,
+        SHABBY,
         //Crate
-        BOOST(getRegion(PaintConstants.BOOST_LABEL_1_REGION)),
-        REPAIR(getRegion(PaintConstants.REPAIR_LABEL_1_REGION)),
-        SHIELD(getRegion(PaintConstants.BOX_SHIELD_LABEL_1_REGION)),
-        TRASH(getRegion(PaintConstants.TRASH_LABEL_1_REGION)),
-        SPLASH(getRegion(PaintConstants.SPLASH_LABEL_1_REGION)),
-        SCAN(getRegion(PaintConstants.SCAN_LABEL_1_REGION)),
+        BOOST,
+        REPAIR,
+        SHIELD,
+        TRASH,
+        SPLASH,
+        SCAN,
         //Storage
-        LASER(getRegion(PaintConstants.LASER_LABEL_1_REGION)),
-        RADAR(getRegion(PaintConstants.RADAR_LABEL_1_REGION)),
-        ROCKET(getRegion(PaintConstants.ROCKET_LAUNCHER_LABEL_1_REGION)),
+        LASER,
+        RADAR,
+        ROCKET,
         //Fuel
-        FUEL(getRegion(PaintConstants.FUEL_LABEL_1_REGION));
-        private TextureRegion sticker;
-
-        Sticker(TextureRegion regionSticker) {
-            this.sticker = regionSticker;
-        }
-
-        private static TextureRegion getRegion(String region) {
-            return Assets.getInstance().getAtlas().findRegion(region);
-        }
+        FUEL
     }
 }

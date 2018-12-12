@@ -114,8 +114,8 @@ public final class PaintConstants {
     public static final int POINTER_WIDTH = 48;
     public static final int POINTER_HEIGHT = 48;
     public static final float POINTER_BLINK_FREQUENCY = 0.3f;
-    public static final String PATTERN_SIGN_LABEL_2_REGION = "patternsign";
-    public static final String SHABBY_SIGN_LABEL_2_REGION = "shabbysign";
+    public static final String PATTERN_SIGN_LABEL_1_REGION = "patternsign";
+    public static final String SHABBY_SIGN_LABEL_1_REGION = "shabbysign";
     public static final String BOOST_LABEL_1_REGION = "boostv1";
     public static final String BOOST_LABEL_2_REGION = "boostv2";
     public static final String BOX_SHIELD_LABEL_1_REGION = "boxshieldv1";

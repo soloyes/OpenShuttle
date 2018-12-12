@@ -18,8 +18,14 @@ public class StarSky {
     public StarSky() {
         this.stars = new Star[Rules.STARS_COUNT];
         this.starTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STAR16_REGION);
-        for (int i = 0; i < stars.length; i++) {
-            stars[i] = new Star();
+        for (int i = 0; i < stars.length / 2; i++) {
+            stars[i] = new Star(0.3f, 0.8f);
+        }
+        for (int i = stars.length / 2; i < 2 * stars.length / 3; i++) {
+            stars[i] = new Star(0.8f, 1.2f);
+        }
+        for (int i = 2 * stars.length / 3; i < stars.length; i++) {
+            stars[i] = new Star(1.2f, 1.8f);
         }
     }
 

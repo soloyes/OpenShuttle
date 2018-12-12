@@ -63,7 +63,6 @@ public class GameScreen extends BaseScreen {
     @Getter
     @Setter
     private Shuttle player;
-    @Getter
     private Background background;
     @Getter
     @Setter
@@ -171,13 +170,14 @@ public class GameScreen extends BaseScreen {
         mineralAsteroidEmitter = new MineralAsteroidEmitter(this);
         fuelEmitter = new FuelEmitter(this);
         storageEmitter = new StorageEmitter(this);
-        background = new Background();
+        background = new Background(ScreenManager.ScreenType.GAME);
         gameInfoSystem = new GameInfoSystem();
         joystick = new Joystick();
 
         blackhole = new Blackhole();
         player = new Shuttle(this, joystick);
         BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+        background.setPlayer(player);
         playerPointer = new PlayerPointer(player);
         Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel(player);
         gameOver = new GameOver(this);
