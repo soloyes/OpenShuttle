@@ -46,7 +46,7 @@ public class CloudSky {
         this.sc = Assets.getInstance().getAtlas().findRegion(PaintConstants.CLOUD512_REGION);
         this.scaleBCx = this.scaleBCy = 12.0f;
         this.scaleMCx = this.scaleMCy = 8.0f;
-        this.scaleSCx = this.scaleSCy = 3.0f;
+        this.scaleSCx = this.scaleSCy = 4.0f;
         this.widthBC = PaintConstants.CLOUD512_WIDTH * scaleBCx;
         this.heightBC = PaintConstants.CLOUD512_HEIGHT * scaleBCy;
         this.widthMC = PaintConstants.CLOUD512_WIDTH * scaleMCx;
@@ -59,6 +59,7 @@ public class CloudSky {
         this.MCh = (int) Math.ceil(Rules.SPACE_HEIGHT / heightMC);
         this.SCw = (int) Math.ceil(Rules.SPACE_WIDTH / widthSC);
         this.SCh = (int) Math.ceil(Rules.SPACE_HEIGHT / heightSC);
+        this.oscillatorBC = new Oscillator();
         this.oscillatorMC = new Oscillator();
         this.oscillatorSC = new Oscillator();
         this.oscillatorA = new Oscillator();
@@ -81,7 +82,7 @@ public class CloudSky {
             }
         }
 
-        batch.setColor(1.0f, 1.0f, 0.0f, a);
+        batch.setColor(1.0f, 1.0f, 1.0f, a);
         for (int i = -1; i < SCw + 1; i++) {
             for (int j = -1; j < SCh; j++) {
                 batch.draw(sc, i * widthSC - SCdx % widthSC, j * heightSC, widthSC, heightSC);
@@ -94,7 +95,7 @@ public class CloudSky {
         if (screenType == ScreenManager.ScreenType.GAME) {
             BCdx += player.getVelocity().x / 1200;
         } else {
-            BCdx = oscillatorBC.prettyOscillate(BCdx, frequency3, 1f, 0, widthBC, dt);
+            BCdx = oscillatorBC.prettyOscillate(BCdx, frequency1, 1f, 0, widthBC, dt);
             if (BCdx > widthBC / 2) {
                 frequency1 -= 1 * dt;
             } else {
@@ -105,7 +106,7 @@ public class CloudSky {
         if (screenType == ScreenManager.ScreenType.GAME) {
             MCdx += player.getVelocity().x / 600;
         } else {
-            MCdx = oscillatorMC.prettyOscillate(MCdx, frequency1, 3f, 0, widthMC, dt);
+            MCdx = oscillatorMC.prettyOscillate(MCdx, frequency2, 3f, 0, widthMC, dt);
             if (MCdx > widthMC / 2) {
                 frequency2 -= 3 * dt;
             } else {
@@ -114,13 +115,13 @@ public class CloudSky {
         }
 
         if (screenType == ScreenManager.ScreenType.GAME) {
-            SCdx += player.getVelocity().x / 200;
+            SCdx += player.getVelocity().x / 400;
         } else {
-            SCdx = oscillatorSC.prettyOscillate(SCdx, frequency2, 5f, 0, widthSC, dt);
+            SCdx = oscillatorSC.prettyOscillate(SCdx, frequency3, 4f, 0, widthSC, dt);
             if (SCdx > widthSC / 2) {
-                frequency3 -= 5 * dt;
+                frequency3 -= 4 * dt;
             } else {
-                frequency3 += 5 * dt;
+                frequency3 += 4 * dt;
             }
         }
         a = oscillatorA.oscillate(a, 0.03f, 0.3f, 0.4f, dt);
