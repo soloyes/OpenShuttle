@@ -9,8 +9,13 @@ import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.effects.BoomBox;
 
+import lombok.Setter;
+
 public abstract class AbstractConsumable extends AbstractPoolable implements Consumable {
     protected TextureRegion texture;
+    @Setter
+    protected boolean labeled;
+    protected Label label;
 
     public AbstractConsumable(GameScreen gs) {
         this.gs = gs;
@@ -22,6 +27,9 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.spreeColor = Color.GREEN;
         this.level = -1;
+        this.label = new Label(Label.Sticker.PATTERN);
+        this.label.setColor(Color.BLACK);
+        this.label.setMaster(this);
     }
 
     public abstract void init(float x, float y);
@@ -52,6 +60,9 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     @Override
     public void render(SpriteBatch batch) {
         basicRender(batch);
+        if (labeled) {
+            label.render(batch);
+        }
     }
 
     @Override

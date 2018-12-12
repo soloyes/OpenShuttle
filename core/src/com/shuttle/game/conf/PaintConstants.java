@@ -76,20 +76,21 @@ public final class PaintConstants {
     public static final int ASTRONAUT_WIDTH = 256;
     public static final int ASTRONAUT_HEIGHT = 256;
     public static final String CRATE_1_REGION = "crate1";
-    public static final int CRATE_1_WIDTH = 128;
-    public static final int CRATE_1_HEIGHT = 128;
+    public static final int CRATE_1_WIDTH = 256;
+    public static final int CRATE_1_HEIGHT = 256;
     public static final String STORAGE_1_REGION = "storage1";
     public static final int STORAGE_1_WIDTH = 256;
     public static final int STORAGE_1_HEIGHT = 256;
     public static final String FUEL_1_REGION = "fuel1";
-    public static final int FUEL_1_WIDTH = 192;
-    public static final int FUEL_1_HEIGHT = 192;
+    public static final int FUEL_1_WIDTH = 256;
+    public static final int FUEL_1_HEIGHT = 256;
     public static final String FUEL_BACK_REGION = "fuelback";
-    public static final int FUEL_BACK_WIDTH = 192;
-    public static final int FUEL_BACK_HEIGHT = 192;
+    public static final int FUEL_BACK_WIDTH = 256;
+    public static final int FUEL_BACK_HEIGHT = 256;
     public static final String FUEL_BUBBLE_REGION = "bubble16";
     public static final int FUEL_BUBBLE_WIDTH = 16;
     public static final int FUEL_BUBBLE_HEIGHT = 16;
+    public static final int FUEL_BUBBLE_COUNT = 10;
     public static final String STAR16_REGION = "star16";
     public static final int STAR16_WIDTH = 16;
     public static final int STAR16_HEIGHT = 16;
@@ -113,7 +114,7 @@ public final class PaintConstants {
     public static final int POINTER_WIDTH = 48;
     public static final int POINTER_HEIGHT = 48;
     public static final float POINTER_BLINK_FREQUENCY = 0.3f;
-    public static final String PATTERNSIGN_LABEL_2_REGION = "patternsign";
+    public static final String PATTERN_SIGN_LABEL_2_REGION = "patternsign";
     public static final String SHABBY_SIGN_LABEL_2_REGION = "shabbysign";
     public static final String BOOST_LABEL_1_REGION = "boostv1";
     public static final String BOOST_LABEL_2_REGION = "boostv2";
@@ -135,6 +136,7 @@ public final class PaintConstants {
     public static final String SCAN_LABEL_3_REGION = "scanv3";
     public static final String SPLASH_LABEL_1_REGION = "splashv1";
     public static final String TRASH_LABEL_1_REGION = "trashv1";
+    public static final float LABEL_ALPHA = 0.5f;
 
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
     public static final String FONT32 = "fonts/gomarice32.ttf";

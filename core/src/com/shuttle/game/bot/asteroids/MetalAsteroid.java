@@ -29,6 +29,7 @@ public class MetalAsteroid extends AbstractAsteroid {
         this.height = PaintConstants.ASTEROID_METAL_HEIGHT;
         this.active = true;
         this.taken = false;
+        this.level = -4;
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
+import com.shuttle.game.bot.consumable.Label;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
@@ -17,6 +18,7 @@ public class Fuel extends AbstractConsumable {
     private Substrate substrate;
     private Box box;
     private Bubble[] bubble;
+
     public Fuel(GameScreen gs) {
         super(gs);
         this.width = PaintConstants.FUEL_1_WIDTH;
@@ -27,10 +29,9 @@ public class Fuel extends AbstractConsumable {
         this.substrate = new Substrate(this);
         this.box = new Box(this);
         this.bubble = new Bubble[10];
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < PaintConstants.FUEL_BUBBLE_COUNT; i++) {
             this.bubble[i] = new Bubble(this);
         }
-
     }
 
     @Override
@@ -45,10 +46,14 @@ public class Fuel extends AbstractConsumable {
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.spiralRadius = MathUtils.random(20, 60);
         this.atRayPoint = false;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < PaintConstants.FUEL_BUBBLE_COUNT; i++) {
             this.bubble[i].init(width, height);
         }
-
+        this.labeled = true;
+        this.label.setSticker(Label.Sticker.FUEL);
+        this.label.setMaster(this);
+        this.label.setColor(Color.BLACK);
+        this.label.setScaleFactor(4);
     }
 
     @Override
@@ -83,7 +88,7 @@ public class Fuel extends AbstractConsumable {
     public void update(float dt) {
         basicUpdate(dt);
         moveProcessor.update(this, dt);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < PaintConstants.FUEL_BUBBLE_COUNT; i++) {
             bubble[i].update(dt);
         }
         boundCheck.checkAndHandleBoundsAndDestroy(this);
@@ -96,16 +101,12 @@ public class Fuel extends AbstractConsumable {
     }
 
     @Override
-    public void basicRender(SpriteBatch batch){
-      render(batch);
-    }
-
-    @Override
     public void render(SpriteBatch batch) {
         substrate.render(batch);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < PaintConstants.FUEL_BUBBLE_COUNT; i++) {
             bubble[i].render(batch);
         }
         box.render(batch);
+        label.render(batch);
     }
 }

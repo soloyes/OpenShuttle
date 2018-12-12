@@ -9,6 +9,7 @@ import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
 import com.shuttle.game.bot.anomaly.MagneticAnomaly;
 import com.shuttle.game.bot.anomaly.RadiationAnomaly;
+import com.shuttle.game.bot.asteroids.MetalAsteroid;
 import com.shuttle.game.bot.asteroids.MineralAsteroid;
 import com.shuttle.game.bot.consumable.Astronaut;
 import com.shuttle.game.bot.consumable.Crate;
@@ -30,7 +31,7 @@ public class GameOver {
     private GameScreen gs;
     private GlyphLayout glyphLayout;
     private BitmapFont font96;
-    private float picX, picY = 1600.0f, dY = 100.0f;
+    private float picX, picY = 1700.0f, dY = 100.0f;
 
     public GameOver(GameScreen gs) {
         this.gs = gs;
@@ -113,27 +114,30 @@ public class GameOver {
         picY -= dY;
         Crate crate = new Crate(gs);
         crate.init(picX, picY);
-        crate.setWidth(128);
-        crate.setHeight(128);
 
         picY -= dY;
         Fuel fuel = new Fuel(gs);
         fuel.init(picX, picY);
-        fuel.setWidth(128);
-        fuel.setHeight(128);
+        fuel.setScaleX(0.7f);
+        fuel.setScaleY(0.7f);
 
         picY -= dY;
         Storage storage = new Storage(gs);
         storage.init(picX, picY);
-        storage.setWidth(128);
-        storage.setHeight(128);
+        storage.setScaleX(0.6f);
+        storage.setScaleY(0.6f);
 
         picY -= dY;
-        MineralAsteroid asteroid = new MineralAsteroid(gs);
-        asteroid.init(picX, picY);
-        asteroid.setScaleX(1.0f);
-        asteroid.setScaleY(1.0f);
+        MineralAsteroid mineralAsteroid = new MineralAsteroid(gs);
+        mineralAsteroid.init(picX, picY);
+        mineralAsteroid.setScaleX(1.0f);
+        mineralAsteroid.setScaleY(1.0f);
 
+        picY -= dY;
+        MetalAsteroid metalAsteroid = new MetalAsteroid(gs);
+        metalAsteroid.init(picX, picY);
+        metalAsteroid.setScaleX(1.0f);
+        metalAsteroid.setScaleY(1.0f);
 
         poolable.add(corrosiveAnomalyTAN);
         poolable.add(corrosiveAnomalyGREEN);
@@ -146,7 +150,8 @@ public class GameOver {
         poolable.add(crate);
         poolable.add(fuel);
         poolable.add(storage);
-        poolable.add(asteroid);
+        poolable.add(mineralAsteroid);
+        poolable.add(metalAsteroid);
 
         picY -= dY;
     }
@@ -162,46 +167,50 @@ public class GameOver {
         for (int i = 0; i < poolable.size(); i++) {
             AbstractPoolable abstractPoolable = poolable.get(i);
             if (abstractPoolable instanceof CorrosiveAnomaly) {
-                CorrosiveAnomaly tmpCorrosive = (CorrosiveAnomaly) abstractPoolable;
+                CorrosiveAnomaly anomaly = (CorrosiveAnomaly) abstractPoolable;
                 batch.setColor(
-                        tmpCorrosive.getColor().r,
-                        tmpCorrosive.getColor().g,
-                        tmpCorrosive.getColor().b,
+                        anomaly.getColor().r,
+                        anomaly.getColor().g,
+                        anomaly.getColor().b,
                         tmpColor.a
                 );
-                tmpCorrosive.basicRender(batch);
+                anomaly.basicRender(batch);
             } else if (abstractPoolable instanceof ElectricalAnomaly) {
                 batch.setColor(tmpColor);
-                ElectricalAnomaly tmpElectrical = (ElectricalAnomaly) abstractPoolable;
-                tmpElectrical.basicRender(batch);
+                ElectricalAnomaly anomaly = (ElectricalAnomaly) abstractPoolable;
+                anomaly.basicRender(batch);
             } else if (abstractPoolable instanceof MagneticAnomaly) {
                 batch.setColor(tmpColor);
-                MagneticAnomaly tmpMagnetic = (MagneticAnomaly) abstractPoolable;
-                tmpMagnetic.basicRender(batch);
+                MagneticAnomaly anomaly = (MagneticAnomaly) abstractPoolable;
+                anomaly.basicRender(batch);
             } else if (abstractPoolable instanceof RadiationAnomaly) {
                 batch.setColor(tmpColor);
-                RadiationAnomaly tmpRadiation = (RadiationAnomaly) abstractPoolable;
-                tmpRadiation.basicRender(batch);
+                RadiationAnomaly anomaly = (RadiationAnomaly) abstractPoolable;
+                anomaly.basicRender(batch);
             } else if (abstractPoolable instanceof Astronaut) {
                 batch.setColor(tmpColor);
-                Astronaut tmpAstronaut = (Astronaut) abstractPoolable;
-                tmpAstronaut.basicRender(batch);
+                Astronaut astronaut = (Astronaut) abstractPoolable;
+                astronaut.basicRender(batch);
             } else if (abstractPoolable instanceof Crate) {
                 batch.setColor(tmpColor);
-                Crate tmpCrate = (Crate) abstractPoolable;
-                tmpCrate.basicRender(batch);
+                Crate crate = (Crate) abstractPoolable;
+                crate.basicRender(batch);
             } else if (abstractPoolable instanceof Fuel) {
                 batch.setColor(tmpColor);
-                Fuel tmpFuel = (Fuel) abstractPoolable;
-                tmpFuel.basicRender(batch);
+                Fuel fuel = (Fuel) abstractPoolable;
+                fuel.render(batch);
             } else if (abstractPoolable instanceof Storage) {
                 batch.setColor(tmpColor);
                 Storage tmpStorage = (Storage) abstractPoolable;
                 tmpStorage.basicRender(batch);
             } else if (abstractPoolable instanceof MineralAsteroid) {
                 batch.setColor(tmpColor);
-                MineralAsteroid tmpAsteroid = (MineralAsteroid) abstractPoolable;
-                tmpAsteroid.basicRender(batch);
+                MineralAsteroid asteroid = (MineralAsteroid) abstractPoolable;
+                asteroid.basicRender(batch);
+            } else if (abstractPoolable instanceof MetalAsteroid) {
+                batch.setColor(tmpColor);
+                MetalAsteroid asteroid = (MetalAsteroid) abstractPoolable;
+                asteroid.basicRender(batch);
             }
             batch.setColor(tmpColor);
             resLabel.setText(

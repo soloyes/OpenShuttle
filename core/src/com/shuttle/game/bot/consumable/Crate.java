@@ -42,6 +42,8 @@ public class Crate extends AbstractConsumable {
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.spiralRadius = MathUtils.random(20, 60);
         this.atRayPoint = false;
+        this.labeled = true;
+        this.label.setScaleFactor(3.5f);
     }
 
     @Override
