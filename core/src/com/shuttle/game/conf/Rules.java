@@ -155,7 +155,7 @@ public final class Rules {
     //3.0f
     private static final float PLAYER_ENGINE_POWER_FACTOR = 3.0f;
     //
-    public static final float PLAYER_TURBO_ENGINE_POWER = PLAYER_ENGINE_POWER * PLAYER_ENGINE_POWER_FACTOR;
+    public static final float PLAYER_BOOST_ENGINE_POWER = PLAYER_ENGINE_POWER * PLAYER_ENGINE_POWER_FACTOR;
     //200
     public static final int PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY = 200;
     //150

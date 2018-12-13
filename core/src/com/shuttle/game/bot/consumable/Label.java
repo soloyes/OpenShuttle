@@ -14,6 +14,7 @@ import lombok.Setter;
  */
 public class Label {
     private TextureRegion textureRegion;
+    @Getter
     @Setter
     private Sticker sticker;
     @Getter
@@ -35,40 +36,40 @@ public class Label {
         batch.setColor(color);
         switch (sticker) {
             case FUEL:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_1_REGION);
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION);
                 break;
             case BOOST:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOOST_LABEL_1_REGION);
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOOST_LABEL_REGION);
                 break;
             case SCAN:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SCAN_LABEL_1_REGION);
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SCAN_LABEL_REGION);
                 break;
             case LASER:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.LASER_LABEL_1_REGION);
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.LASER_LABEL_REGION);
                 break;
             case RADAR:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_LABEL_1_REGION);
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_LABEL_REGION);
                 break;
             case TRASH:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.TRASH_LABEL_1_REGION);
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.TRASH_LABEL_REGION);
                 break;
             case REPAIR:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.REPAIR_LABEL_1_REGION);
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.REPAIR_LABEL_REGION);
                 break;
             case ROCKET:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.ROCKET_LAUNCHER_LABEL_1_REGION);
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.ROCKET_LAUNCHER_LABEL_REGION);
                 break;
             case SHABBY:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHABBY_SIGN_LABEL_1_REGION);
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHABBY_SIGN_LABEL_REGION);
                 break;
             case SHIELD:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOX_SHIELD_LABEL_1_REGION);
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOX_SHIELD_LABEL_REGION);
                 break;
             case SPLASH:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SPLASH_LABEL_1_REGION);
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SPLASH_LABEL_REGION);
                 break;
             case PATTERN:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_LABEL_1_REGION);
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_LABEL_REGION);
         }
 
         batch.draw(textureRegion,
@@ -82,7 +83,7 @@ public class Label {
     }
 
     public enum Sticker {
-        //Empty
+        //Surprise
         PATTERN,
         SHABBY,
         //Crate

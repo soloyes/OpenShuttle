@@ -115,198 +115,128 @@ shabbysign
   orig: 256, 256
   offset: 0, 0
   index: -1
-scanv3
+scanv1
   rotate: false
   xy: 1028, 1800
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-scanv2
+rocketlauncherv1
   rotate: false
   xy: 1028, 2058
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-scanv1
+repairv1
   rotate: false
   xy: 1028, 2316
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-rocketlauncherv2
+ramshield
   rotate: false
   xy: 1028, 2574
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-rocketlauncherv1
+radarv1
   rotate: false
   xy: 1028, 2832
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-repairv2
+patternsign
   rotate: false
   xy: 1028, 3090
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-repairv1
+lifeshield
   rotate: false
   xy: 1028, 3348
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-ramshield
+laserv1
   rotate: false
   xy: 1028, 3606
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-radarv2
+glow
   rotate: false
   xy: 1286, 1542
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-radarv1
+fuelv1
   rotate: false
   xy: 1286, 1800
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-patternsign
+fuelback
   rotate: false
   xy: 1286, 2058
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-lifeshield
+fuel1
   rotate: false
   xy: 1286, 2316
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-laserv2
+crate1
   rotate: false
   xy: 1286, 2574
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-laserv1
+boxshieldv1
   rotate: false
   xy: 1286, 2832
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-glow
+boostv1
   rotate: false
   xy: 1286, 3090
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelv2
+blackholespiral
   rotate: false
   xy: 1286, 3348
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelv1
+blackholehole
   rotate: false
   xy: 1286, 3606
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelback
-  rotate: false
-  xy: 1544, 1542
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-fuel1
-  rotate: false
-  xy: 1802, 1542
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-crate1
-  rotate: false
-  xy: 2060, 1542
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-boxshieldv3
-  rotate: false
-  xy: 2318, 1542
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-boxshieldv2
-  rotate: false
-  xy: 2576, 1542
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-boxshieldv1
-  rotate: false
-  xy: 2834, 1542
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-boostv2
-  rotate: false
-  xy: 3092, 1542
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-boostv1
-  rotate: false
-  xy: 3350, 1542
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-blackholespiral
-  rotate: false
-  xy: 3608, 1542
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-blackholehole
-  rotate: false
-  xy: 1544, 1800
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 astronaut
   rotate: false
-  xy: 1544, 2058
+  xy: 1544, 1542
   size: 256, 256
   orig: 256, 256
   offset: 0, 0

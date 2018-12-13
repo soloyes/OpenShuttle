@@ -694,7 +694,6 @@ public class GameScreen extends BaseScreen {
             if (player.getRadar().isActive()) {
                 boomBox.playSound(MSConstants.LOST_RADAR);
                 player.getRadar().setActive(false);
-                player.getRadar().generatePosition();
             }
         }
 

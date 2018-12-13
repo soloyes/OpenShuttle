@@ -94,11 +94,15 @@ public class Shuttle extends AbstractShuttle {
         this.takeRangeField = new TakeRangeField(this);
         this.scratch = new Scratch(this);
         this.F = 2 * (int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Rules.PLAYER_ENGINE_POWER);
-        this.shadowsCoordinates = Fibonacci.generate(F);
         this.vector2List = new LinkedList<Vector2>();
         this.angleList = new LinkedList<Float>();
         this.alphaList = new LinkedList<Float>();
         this.killSeries = 1;
+        setShadowsCoordinates();
+    }
+
+    public void setShadowsCoordinates(){
+        this.shadowsCoordinates = Fibonacci.generate(F);
     }
 
     public boolean addZigZag(float amount) {
@@ -300,7 +304,6 @@ public class Shuttle extends AbstractShuttle {
             }
         }
 
-        checkRadar();
         radar.update(dt);
         boundCheck.checkAndHandleBounds(this, dt);
 
@@ -336,7 +339,7 @@ public class Shuttle extends AbstractShuttle {
                     vector2List.clear();
                     angleList.clear();
                     alphaList.clear();
-                    shadowsCoordinates = Fibonacci.generate(F);
+                    setShadowsCoordinates();
                 }
             }
         }
@@ -407,15 +410,6 @@ public class Shuttle extends AbstractShuttle {
                 acceleration * (float) Math.cos(Math.toRadians(angle)) * dt,
                 acceleration * (float) Math.sin(Math.toRadians(angle)) * dt
         );
-    }
-
-    private void checkRadar() {
-        if (!radar.isActive()) {
-            if (position.dst(radar.getPosition()) <= 128 && !Rules.GAME_OVER) {
-                radar.setActive(true);
-                boomBox.playSound(MSConstants.GET_RADAR);
-            }
-        }
     }
 
     private void startEngine(float dt) {

@@ -44,6 +44,49 @@ public class Crate extends AbstractConsumable {
         this.atRayPoint = false;
         this.labeled = true;
         this.label.setScaleFactor(3.5f);
+        stickLabel();
+    }
+
+    private void stickLabel() {
+        int r = MathUtils.random(0, 20);
+        switch (r) {
+            case 0:
+                generateDanger();
+                break;
+            default:
+                generateSafe();
+        }
+    }
+
+    private void generateSafe() {
+        int r = MathUtils.random(0, 5);
+        switch (r) {
+            case 0:
+                label.setSticker(Label.Sticker.BOOST);
+                break;
+            case 1:
+                label.setSticker(Label.Sticker.REPAIR);
+                break;
+            case 2:
+                label.setSticker(Label.Sticker.TRASH);
+                break;
+            case 3:
+                label.setSticker(Label.Sticker.SPLASH);
+                break;
+            case 5:
+                label.setSticker(Label.Sticker.SCAN);
+        }
+    }
+
+    private void generateDanger() {
+        int r = MathUtils.random(0, 5);
+        switch (r) {
+            case 1:
+                label.setSticker(Label.Sticker.PATTERN);
+                break;
+            default:
+                label.setSticker(Label.Sticker.SHABBY);
+        }
     }
 
     @Override
@@ -57,18 +100,7 @@ public class Crate extends AbstractConsumable {
     public void consumed(GameScreen gs) {
         Standing standing = gs.getPlayer().getStanding();
         Shuttle player = gs.getPlayer();
-        int x = MathUtils.random(0, 3);
-        /*Hack to pretty shadow effect. This effect should be finished firstly*/
-        if (player.getVelocity().len() >= Rules.PLAYER_ENGINE_POWER) {
-            x++;
-        }
-        /*Hack*/
-        /*Hack to prevent useless hp additions*/
-        if (x == 0 && standing.getHp() == standing.getMaxHp()) {
-            x++;
-        }
-        /*Hack*/
-        if (x == 0) {
+        if (label.getSticker() == Label.Sticker.REPAIR) {
             standing.changeHP(Rules.CONSUMABLE_REPAIR_ADD);
             gs.getGameInfoSystem()
                     .setup(
@@ -80,10 +112,12 @@ public class Crate extends AbstractConsumable {
                     );
             boomBox.playSound(MSConstants.PLAYER_REPAIR);
         }
-        if (x == 1) {
+        if (label.getSticker() == Label.Sticker.BOOST) {
+            float d = Rules.PLAYER_BOOST_ENGINE_POWER - player.getVelocity().len();
+            player.setShadowsCoordinates();
             player.getVelocity().add(
-                    Rules.PLAYER_TURBO_ENGINE_POWER * (float) Math.cos(Math.toRadians(player.getAngle())),
-                    Rules.PLAYER_TURBO_ENGINE_POWER * (float) Math.sin(Math.toRadians(player.getAngle()))
+                    d * (float) Math.cos(Math.toRadians(player.getAngle())),
+                    d * (float) Math.sin(Math.toRadians(player.getAngle()))
             );
             gs.getGameInfoSystem()
                     .setup(
@@ -95,7 +129,7 @@ public class Crate extends AbstractConsumable {
                     );
             boomBox.playSound(MSConstants.TURBO);
         }
-        if (x == 2) {
+        if (label.getSticker() == Label.Sticker.SPLASH) {
             List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
             for (int i = 0; i < anomalies.size(); i++) {
                 if (boundCheck.checkAndHandleBoundsInCamera(anomalies.get(i), gs.getCamera())) {
@@ -118,13 +152,13 @@ public class Crate extends AbstractConsumable {
                     .setup(
                             position.x,
                             position.y,
-                            GameInfoSystem.GameInfoSystemPreset.FLUSH,
+                            GameInfoSystem.GameInfoSystemPreset.SPLASH,
                             8.0f,
                             true
                     );
-            boomBox.playSound(MSConstants.ANOMALY_FLUSH);
+            boomBox.playSound(MSConstants.ANOMALY_SPLASH);
         }
-        if (x > 2) {
+        if (label.getSticker() == Label.Sticker.TRASH) {
             gs.getGameInfoSystem()
                     .setup(
                             position.x,

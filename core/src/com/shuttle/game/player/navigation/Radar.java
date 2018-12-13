@@ -29,18 +29,11 @@ import lombok.Setter;
  */
 public class Radar {
     private GameScreen gs;
-    private TextureRegion backgroundTexture;
     private TextureRegion pointTexture;
-    @Getter
-    @Setter
-    private Vector2 position;
     private Vector2 tmp;
     @Getter
     @Setter
     private boolean active;
-    private int width, height;
-    private float scaleX, scaleY;
-    private float spin;
     private float dotSize;
     private Shuttle player;
     private Color color;
@@ -50,15 +43,9 @@ public class Radar {
 
     public Radar(GameScreen gs, Shuttle player) {
         this.gs = gs;
-        this.backgroundTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_REGION);
         this.pointTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STAR16_REGION);
         this.player = player;
-        this.position = new Vector2();
         this.tmp = new Vector2();
-        this.width = PaintConstants.RADAR_WIDTH;
-        this.height = PaintConstants.RADAR_HEIGHT;
-        this.scaleX = this.scaleY = 1;
-        this.generatePosition();
         this.oscillator = new Oscillator();
         this.dotSize = 0.0f;
         this.color = new Color(Color.valueOf(PaintConstants.BACKGROUND_COLOR_HEX));
@@ -72,37 +59,11 @@ public class Radar {
         );
     }
 
-    //Prevent generation near blackhole
-    public final void generatePosition() {
-        float x = MathUtils.random(0, Rules.SPACE_WIDTH);
-        float y = MathUtils.random(0, Rules.SPACE_HEIGHT);
-        float r1 = gs.getBlackhole().getRadius().len();
-        float x0 = gs.getBlackhole().getCenter().x;
-        float y0 = gs.getBlackhole().getCenter().y;
-        while (true) {
-            float r2 = (float) Math.sqrt(Math.abs(Math.pow(x - x0, 2) + Math.pow(y - y0, 2)));
-            if (Math.abs(r1 - r2) >= Rules.BLACKHOLE_TAKE_RANGE) {
-                break;
-            }
-            x = MathUtils.random(0, Rules.SPACE_WIDTH);
-            y = MathUtils.random(0, Rules.SPACE_HEIGHT);
-        }
-        position.set(x, y);
-    }
-
     public void render(SpriteBatch batch) {
         if (active) {
             if (!player.isTaken()) {
                 drawRadar(batch);
             }
-        } else {
-            batch.draw(
-                    backgroundTexture,
-                    position.x - width / 2, position.y - height / 2,
-                    width / 2, height / 2,
-                    width, height, scaleX, scaleY,
-                    0.0f
-            );
         }
     }
 
@@ -177,12 +138,7 @@ public class Radar {
             } else {
                 boomBox.stopMusicEffect(MSConstants.RADAR_WHITE_NOISE_MUSIC);
             }
-        } else {
-            spin += dt;
-            scaleX = (float) Math.sin(Math.toRadians(spin * 100));
-            boomBox.stopMusicEffect(MSConstants.RADAR_WHITE_NOISE_MUSIC);
         }
-
     }
 
     private void updateRadar(float dt) {

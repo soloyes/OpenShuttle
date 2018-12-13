@@ -33,7 +33,7 @@ public final class MSConstants {
     public final static String PLAYER_REPAIR = SOUND_FOLDER + "repair.ogg";
     public final static String PLAYER_START_ENGINE = SOUND_FOLDER + "shuttle_move_full.ogg";
     public final static String ANOMALY_BOOM = SOUND_FOLDER + "bursting.ogg";
-    public final static String ANOMALY_FLUSH = SOUND_FOLDER + "flush.ogg";
+    public final static String ANOMALY_SPLASH = SOUND_FOLDER + "splash.ogg";
     public final static String FLAME = SOUND_FOLDER + "flame.ogg";
     public final static String ASTEROID_SPLASH = SOUND_FOLDER + "splash.ogg";
     public final static String FUEL_DESTROY = SOUND_FOLDER + "crash_fuel_box.ogg";

@@ -54,12 +54,13 @@ public class GameInfoSystem {
         FUEL("FUEL"),
         TURBO("TURBO [GREEN]x3[]"),
         TRASH("[YELLOW]TRASH[]"),
-        FLUSH("[GREEN]FLUSH[]"),
+        SPLASH("[GREEN]SPLASH[]"),
         LOST_FUEL("[RED]-FUEL[]"),
         LOST_SCORE("[RED]-SCORE[]"),
         MURDERER("MURDERER!"),
         EASY("BE EASY!"),
         STORAGE("STORAGE"),
+        RADAR("[GREEN]RADAR![]"),
         SCORE("SCORE");
         private String value;
 

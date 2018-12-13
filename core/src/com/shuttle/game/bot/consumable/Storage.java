@@ -37,19 +37,75 @@ public class Storage extends AbstractConsumable {
         this.atRayPoint = false;
         this.labeled = true;
         this.label.setScaleFactor(2);
+        stickLabel();
+    }
+
+    private void stickLabel() {
+        int r = MathUtils.random(0, 20);
+        switch (r) {
+            case 0:
+                generateDanger();
+                break;
+            default:
+                generateSafe();
+        }
+    }
+
+    private void generateSafe() {
+        int r = MathUtils.random(0, 3);
+        if (gs.getPlayer().getRadar().isActive()) {
+            r = 4;
+        }
+        switch (r) {
+            case 0:
+                label.setSticker(Label.Sticker.LASER);
+                break;
+            case 1:
+                label.setSticker(Label.Sticker.RADAR);
+                break;
+            case 2:
+                label.setSticker(Label.Sticker.ROCKET);
+                break;
+            default:
+                label.setSticker(Label.Sticker.PATTERN);
+        }
+    }
+
+    private void generateDanger() {
+        int r = MathUtils.random(0, 5);
+        switch (r) {
+            case 1:
+                label.setSticker(Label.Sticker.PATTERN);
+                break;
+            default:
+                label.setSticker(Label.Sticker.SHABBY);
+        }
     }
 
     @Override
     public void consumed(GameScreen gs) {
-        gs.getGameInfoSystem()
-                .setup(
-                        position.x,
-                        position.y,
-                        GameInfoSystem.GameInfoSystemPreset.STORAGE,
-                        3.0f,
-                        true
-                );
-        boomBox.playSound(MSConstants.GET_STORAGE);
+        if (label.getSticker() == Label.Sticker.RADAR) {
+            gs.getGameInfoSystem()
+                    .setup(
+                            position.x,
+                            position.y,
+                            GameInfoSystem.GameInfoSystemPreset.RADAR,
+                            3.0f,
+                            true
+                    );
+            boomBox.playSound(MSConstants.GET_RADAR);
+            gs.getPlayer().getRadar().setActive(true);
+        } else {
+            gs.getGameInfoSystem()
+                    .setup(
+                            position.x,
+                            position.y,
+                            GameInfoSystem.GameInfoSystemPreset.STORAGE,
+                            3.0f,
+                            true
+                    );
+            boomBox.playSound(MSConstants.GET_STORAGE);
+        }
     }
 
     @Override
