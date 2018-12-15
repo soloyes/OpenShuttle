@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.screens.ScreenManager;
 
 import lombok.Getter;
 
@@ -25,6 +26,7 @@ public class Star {
     private float width, height;
     @Getter
     private Color color;
+    private ScreenManager.ScreenType screenType;
 
     public Star(float startScale, float endScale) {
         this.position = new Vector2(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
@@ -55,7 +57,7 @@ public class Star {
     }
 
     public void update(float dt) {
-        if (player != null){
+        if (screenType == ScreenManager.ScreenType.GAME){
             position.x -= player.getVelocity().x / (1000/ scaleX);
             position.y -= player.getVelocity().y / (1000/ scaleX);
             if (normal.set(player.getVelocity()).len() < 150){
@@ -79,9 +81,8 @@ public class Star {
             else {
                 speed -= scaleX * dt;
             }
-
-
         }
+
         if (position.x < -width) {
             position.x = Rules.SPACE_WIDTH;
         }
@@ -103,5 +104,9 @@ public class Star {
 
     public void setCloudSky(CloudSky cloudSky) {
         this.cloudSky = cloudSky;
+    }
+
+    public void setScreenType(ScreenManager.ScreenType screenType) {
+        this.screenType = screenType;
     }
 }

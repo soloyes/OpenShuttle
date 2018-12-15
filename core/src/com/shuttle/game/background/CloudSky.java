@@ -32,8 +32,6 @@ public class CloudSky {
     private float BCdy, MCdy, SCdy;
     @Getter
     private Oscillator oscillatorBC;
-    private Oscillator oscillatorMC;
-    private Oscillator oscillatorSC;
     private Oscillator oscillatorA;
     private Vector2 normal;
     private float a;
@@ -69,8 +67,6 @@ public class CloudSky {
         this.SCw = (int) Math.ceil(Rules.SPACE_WIDTH / widthSC);
         this.SCh = (int) Math.ceil(Rules.SPACE_HEIGHT / heightSC);
         this.oscillatorBC = new Oscillator();
-        this.oscillatorMC = new Oscillator();
-        this.oscillatorSC = new Oscillator();
         this.oscillatorA = new Oscillator();
         this.a = 0.3f;
         this.normal = new Vector2();

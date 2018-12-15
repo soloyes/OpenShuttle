@@ -18,7 +18,7 @@ public class Background {
 
     public Background(ScreenManager.ScreenType screenType) {
         cloudSky = new CloudSky(screenType);
-        starSky = new StarSky(cloudSky);
+        starSky = new StarSky(cloudSky, screenType);
     }
 
     public void render(SpriteBatch batch) {
