@@ -13,11 +13,12 @@ public class Background {
 
     public void setPlayer(Shuttle shuttle) {
         cloudSky.setPlayer(shuttle);
+        starSky.setPlayer(shuttle);
     }
 
     public Background(ScreenManager.ScreenType screenType) {
         cloudSky = new CloudSky(screenType);
-        starSky = new StarSky();
+        starSky = new StarSky(cloudSky, screenType);
     }
 
     public void render(SpriteBatch batch) {

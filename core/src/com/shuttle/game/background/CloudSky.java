@@ -3,12 +3,15 @@ package com.shuttle.game.background;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.effects.Oscillator;
+
+import lombok.Getter;
 
 /**
  * @author Shuttle on 12/8/18.
@@ -21,14 +24,18 @@ public class CloudSky {
     private TextureRegion bc;
     private TextureRegion mc;
     private TextureRegion sc;
+    @Getter
     private float widthBC, heightBC, widthMC, heightMC, widthSC, heightSC;
     private float scaleBCx, scaleBCy, scaleMCx, scaleMCy, scaleSCx, scaleSCy;
+    @Getter
     private float BCdx, MCdx, SCdx;
+    private float BCdy, MCdy, SCdy;
+    @Getter
     private Oscillator oscillatorBC;
-    private Oscillator oscillatorMC;
-    private Oscillator oscillatorSC;
     private Oscillator oscillatorA;
+    private Vector2 normal;
     private float a;
+    @Getter
     private float frequency1;
     private float frequency2;
     private float frequency3;
@@ -60,32 +67,31 @@ public class CloudSky {
         this.SCw = (int) Math.ceil(Rules.SPACE_WIDTH / widthSC);
         this.SCh = (int) Math.ceil(Rules.SPACE_HEIGHT / heightSC);
         this.oscillatorBC = new Oscillator();
-        this.oscillatorMC = new Oscillator();
-        this.oscillatorSC = new Oscillator();
         this.oscillatorA = new Oscillator();
         this.a = 0.3f;
+        this.normal = new Vector2();
     }
 
     public void render(SpriteBatch batch) {
         Color color = batch.getColor();
         batch.setColor(Color.valueOf("0024ffe0"));
         for (int i = -1; i < BCw + 1; i++) {
-            for (int j = 0; j < BCh; j++) {
-                batch.draw(bc, i * widthBC - BCdx % widthBC, j * heightBC, widthBC, heightBC);
+            for (int j = -1; j < BCh + 1; j++) {
+                batch.draw(bc, i * widthBC - BCdx % widthBC, j * heightBC - BCdy % heightBC, widthBC, heightBC);
             }
         }
 
         batch.setColor(Color.valueOf("9e00ff70"));
         for (int i = -1; i < MCw + 1; i++) {
-            for (int j = 0; j < MCh; j++) {
-                batch.draw(mc, i * widthMC - MCdx % widthMC, j * heightMC, widthMC, heightMC);
+            for (int j = -1; j < MCh + 1; j++) {
+                batch.draw(mc, i * widthMC - MCdx % widthMC, j * heightMC - MCdy % heightMC, widthMC, heightMC);
             }
         }
 
         batch.setColor(1.0f, 1.0f, 1.0f, a);
         for (int i = -1; i < SCw + 1; i++) {
-            for (int j = -1; j < SCh; j++) {
-                batch.draw(sc, i * widthSC - SCdx % widthSC, j * heightSC, widthSC, heightSC);
+            for (int j = -1; j < SCh + 1; j++) {
+                batch.draw(sc, i * widthSC - SCdx % widthSC, j * heightSC - SCdy % heightSC, widthSC, heightSC);
             }
         }
         batch.setColor(color);
@@ -94,34 +100,52 @@ public class CloudSky {
     public void update(float dt) {
         if (screenType == ScreenManager.ScreenType.GAME) {
             BCdx += player.getVelocity().x / 1200;
+            BCdy += player.getVelocity().y / 1200;
+            if (normal.set(player.getVelocity()).len() < 150){
+                normal.set(player.getVelocity()).nor();
+                BCdx += 0.1 * normal.x;
+                BCdy += 0.1 * normal.y;
+            }
         } else {
-            BCdx = oscillatorBC.prettyOscillate(BCdx, frequency1, 1f, 0, widthBC, dt);
-            if (BCdx > widthBC / 2) {
+
+            if (BCdx > widthBC / 8) {
+                MCdx += frequency2 * dt - 2f * dt* dt / 2;
+                SCdx += frequency3 * dt - 3f * dt* dt / 2;
+            } else {
+                MCdx += frequency2 * dt + 2f * dt* dt / 2;
+                SCdx += frequency3 * dt + 3f * dt* dt / 2;
+            }
+
+            BCdx = oscillatorBC.prettyOscillate(BCdx, frequency1, 1f, 0, widthBC/4, dt);
+
+            if (BCdx > widthBC / 8) {
                 frequency1 -= 1 * dt;
+                frequency2 -= 2 * dt;
+                frequency3 -= 3 * dt;
             } else {
                 frequency1 += 1 * dt;
+                frequency2 += 2 * dt;
+                frequency3 += 3 * dt;
             }
         }
 
         if (screenType == ScreenManager.ScreenType.GAME) {
-            MCdx += player.getVelocity().x / 600;
-        } else {
-            MCdx = oscillatorMC.prettyOscillate(MCdx, frequency2, 3f, 0, widthMC, dt);
-            if (MCdx > widthMC / 2) {
-                frequency2 -= 3 * dt;
-            } else {
-                frequency2 += 3 * dt;
+            MCdx += player.getVelocity().x / 900;
+            MCdy += player.getVelocity().y / 900;
+            if (normal.set(player.getVelocity()).len() < 150){
+                normal.set(player.getVelocity()).nor();
+                MCdx += 0.2 * normal.x;
+                MCdy += 0.2 * normal.y;
             }
         }
 
         if (screenType == ScreenManager.ScreenType.GAME) {
-            SCdx += player.getVelocity().x / 400;
-        } else {
-            SCdx = oscillatorSC.prettyOscillate(SCdx, frequency3, 4f, 0, widthSC, dt);
-            if (SCdx > widthSC / 2) {
-                frequency3 -= 4 * dt;
-            } else {
-                frequency3 += 4 * dt;
+            SCdx += player.getVelocity().x / 600;
+            SCdy += player.getVelocity().y / 600;
+            if (normal.set(player.getVelocity()).len() < 150){
+                normal.set(player.getVelocity()).nor();
+                SCdx += 0.3 * normal.x;
+                SCdy += 0.3 * normal.y;
             }
         }
         a = oscillatorA.oscillate(a, 0.03f, 0.3f, 0.4f, dt);
