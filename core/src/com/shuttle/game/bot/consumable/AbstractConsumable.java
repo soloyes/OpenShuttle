@@ -15,7 +15,10 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     protected TextureRegion texture;
     @Setter
     protected boolean labeled;
-    protected Label label;
+    @Setter
+    protected boolean shielded;
+    protected Label[] labels;
+    protected Shield shield;
 
     public AbstractConsumable(GameScreen gs) {
         this.gs = gs;
@@ -27,9 +30,19 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.spreeColor = Color.GREEN;
         this.level = -1;
-        this.label = new Label(Label.Sticker.PATTERN);
-        this.label.setColor(Color.BLACK);
-        this.label.setMaster(this);
+        this.labels = new Label[3];
+        //Back
+        this.labels[0] = new Label(Label.Sticker.PATTERN);
+        //Front, exactly Sticker is set in init() method
+        this.labels[1] = new Label(Label.Sticker.PATTERN);
+        //Scanner
+        this.labels[2] = new Label(Label.Sticker.BOX_SCAN_NOISE);
+        this.labels[0].setColor(Color.BLACK);
+        this.labels[1].setColor(Color.valueOf("ffffffff"));
+        this.labels[2].setColor(Color.CYAN);
+        for (int i = 0; i < labels.length; i++) {
+            this.labels[i].setMaster(this);
+        }
     }
 
     public abstract void init(float x, float y);
@@ -61,7 +74,12 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     public void render(SpriteBatch batch) {
         basicRender(batch);
         if (labeled) {
-            label.render(batch);
+            for (int i = 0; i < labels.length; i++) {
+                labels[i].render(batch);
+            }
+        }
+        if (shielded) {
+            shield.render(batch);
         }
     }
 

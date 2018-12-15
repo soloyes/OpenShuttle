@@ -21,6 +21,7 @@ public class Storage extends AbstractConsumable {
         this.type = Type.STORAGE;
         this.moveProcessor = new MoveProcessor(gs);
         this.level = -3;
+        this.shield = new Shield(this);
     }
 
     @Override
@@ -36,8 +37,11 @@ public class Storage extends AbstractConsumable {
         this.spiralRadius = MathUtils.random(20, 60);
         this.atRayPoint = false;
         this.labeled = true;
-        this.label.setScaleFactor(2);
+        this.labels[0].setScaleFactor(2.0f);
+        this.labels[1].setScaleFactor(2.0f);
+        this.labels[2].setScaleFactor(0.5f);
         stickLabel();
+        this.shielded = true;
     }
 
     private void stickLabel() {
@@ -58,16 +62,16 @@ public class Storage extends AbstractConsumable {
         }
         switch (r) {
             case 0:
-                label.setSticker(Label.Sticker.LASER);
+                labels[1].setSticker(Label.Sticker.LASER);
                 break;
             case 1:
-                label.setSticker(Label.Sticker.RADAR);
+                labels[1].setSticker(Label.Sticker.RADAR);
                 break;
             case 2:
-                label.setSticker(Label.Sticker.ROCKET);
+                labels[1].setSticker(Label.Sticker.ROCKET);
                 break;
             default:
-                label.setSticker(Label.Sticker.PATTERN);
+                labels[1].setSticker(Label.Sticker.PATTERN);
         }
     }
 
@@ -75,16 +79,16 @@ public class Storage extends AbstractConsumable {
         int r = MathUtils.random(0, 5);
         switch (r) {
             case 1:
-                label.setSticker(Label.Sticker.PATTERN);
+                labels[1].setSticker(Label.Sticker.PATTERN);
                 break;
             default:
-                label.setSticker(Label.Sticker.SHABBY);
+                labels[1].setSticker(Label.Sticker.SHABBY);
         }
     }
 
     @Override
     public void consumed(GameScreen gs) {
-        if (label.getSticker() == Label.Sticker.RADAR) {
+        if (labels[1].getSticker() == Label.Sticker.RADAR) {
             gs.getGameInfoSystem()
                     .setup(
                             position.x,
@@ -126,6 +130,10 @@ public class Storage extends AbstractConsumable {
         basicUpdate(dt);
         moveProcessor.update(this, dt);
         boundCheck.checkAndHandleBoundsAndDestroy(this);
+        for (int i = 0; i < labels.length; i++) {
+            labels[i].update(dt);
+        }
+        shield.update(dt);
     }
 
     @Override

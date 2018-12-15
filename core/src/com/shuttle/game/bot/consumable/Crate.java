@@ -28,6 +28,7 @@ public class Crate extends AbstractConsumable {
         this.height = PaintConstants.CRATE_1_HEIGHT;
         this.type = Type.CRATE;
         this.moveProcessor = new MoveProcessor(gs);
+        this.shield = new Shield(this);
     }
 
     @Override
@@ -43,8 +44,11 @@ public class Crate extends AbstractConsumable {
         this.spiralRadius = MathUtils.random(20, 60);
         this.atRayPoint = false;
         this.labeled = true;
-        this.label.setScaleFactor(3.5f);
+        this.labels[0].setScaleFactor(3.5f);
+        this.labels[1].setScaleFactor(3.5f);
+        this.labels[2].setScaleFactor(1f);
         stickLabel();
+        this.shielded = true;
     }
 
     private void stickLabel() {
@@ -62,19 +66,19 @@ public class Crate extends AbstractConsumable {
         int r = MathUtils.random(0, 5);
         switch (r) {
             case 0:
-                label.setSticker(Label.Sticker.BOOST);
+                labels[1].setSticker(Label.Sticker.BOOST);
                 break;
             case 1:
-                label.setSticker(Label.Sticker.REPAIR);
+                labels[1].setSticker(Label.Sticker.REPAIR);
                 break;
             case 2:
-                label.setSticker(Label.Sticker.TRASH);
+                labels[1].setSticker(Label.Sticker.TRASH);
                 break;
             case 3:
-                label.setSticker(Label.Sticker.SPLASH);
+                labels[1].setSticker(Label.Sticker.SPLASH);
                 break;
             case 5:
-                label.setSticker(Label.Sticker.SCAN);
+                labels[1].setSticker(Label.Sticker.SCAN);
         }
     }
 
@@ -82,10 +86,10 @@ public class Crate extends AbstractConsumable {
         int r = MathUtils.random(0, 5);
         switch (r) {
             case 1:
-                label.setSticker(Label.Sticker.PATTERN);
+                labels[1].setSticker(Label.Sticker.PATTERN);
                 break;
             default:
-                label.setSticker(Label.Sticker.SHABBY);
+                labels[1].setSticker(Label.Sticker.SHABBY);
         }
     }
 
@@ -94,13 +98,18 @@ public class Crate extends AbstractConsumable {
         basicUpdate(dt);
         moveProcessor.update(this, dt);
         boundCheck.checkAndHandleBoundsAndDestroy(this);
+        for (int i = 0; i < labels.length; i++) {
+            labels[i].update(dt);
+        }
+        shield.update(dt);
     }
 
     @Override
     public void consumed(GameScreen gs) {
         Standing standing = gs.getPlayer().getStanding();
         Shuttle player = gs.getPlayer();
-        if (label.getSticker() == Label.Sticker.REPAIR) {
+
+        if (labels[1].getSticker() == Label.Sticker.REPAIR) {
             standing.changeHP(Rules.CONSUMABLE_REPAIR_ADD);
             gs.getGameInfoSystem()
                     .setup(
@@ -112,7 +121,7 @@ public class Crate extends AbstractConsumable {
                     );
             boomBox.playSound(MSConstants.PLAYER_REPAIR);
         }
-        if (label.getSticker() == Label.Sticker.BOOST) {
+        if (labels[1].getSticker() == Label.Sticker.BOOST) {
             float d = Rules.PLAYER_BOOST_ENGINE_POWER - player.getVelocity().len();
             player.setShadowsCoordinates();
             player.getVelocity().add(
@@ -129,7 +138,7 @@ public class Crate extends AbstractConsumable {
                     );
             boomBox.playSound(MSConstants.TURBO);
         }
-        if (label.getSticker() == Label.Sticker.SPLASH) {
+        if (labels[1].getSticker() == Label.Sticker.SPLASH) {
             List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
             for (int i = 0; i < anomalies.size(); i++) {
                 if (boundCheck.checkAndHandleBoundsInCamera(anomalies.get(i), gs.getCamera())) {
@@ -158,7 +167,7 @@ public class Crate extends AbstractConsumable {
                     );
             boomBox.playSound(MSConstants.ANOMALY_SPLASH);
         }
-        if (label.getSticker() == Label.Sticker.TRASH) {
+        if (labels[1].getSticker() == Label.Sticker.TRASH) {
             gs.getGameInfoSystem()
                     .setup(
                             position.x,

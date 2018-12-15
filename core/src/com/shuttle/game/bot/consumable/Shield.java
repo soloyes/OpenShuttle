@@ -1,0 +1,59 @@
+package com.shuttle.game.bot.consumable;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.effects.Oscillator;
+
+import lombok.Setter;
+
+public class Shield {
+    private TextureRegion texture;
+    private AbstractConsumable consumable;
+    private float width, height;
+    @Setter
+    private Color color;
+    private Oscillator oscillatorA;
+
+    public Shield(AbstractConsumable consumable) {
+        this.consumable = consumable;
+        switch (consumable.getType()) {
+            case FUEL:
+                this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHIELD_FUEL_REGION);
+                this.width = PaintConstants.SHIELD_FUEL_WIDTH;
+                this.height = PaintConstants.SHIELD_FUEL_HEIGHT;
+                break;
+            case STORAGE:
+                this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHIELD_STORAGE_REGION);
+                this.width = PaintConstants.SHIELD_STORAGE_WIDTH;
+                this.height = PaintConstants.SHIELD_STORAGE_HEIGHT;
+                break;
+            case CRATE:
+                this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHIELD_CRATE_REGION);
+                this.width = PaintConstants.SHIELD_CRATE_WIDTH;
+                this.height = PaintConstants.SHIELD_CRATE_HEIGHT;
+                break;
+        }
+        this.color = Color.valueOf("00ffffff");
+        this.oscillatorA = new Oscillator();
+    }
+
+    public void render(SpriteBatch batch) {
+        Color tmpColor = batch.getColor();
+        batch.setColor(color);
+        batch.draw(texture,
+                consumable.getPosition().x - width / 2, consumable.getPosition().y - height / 2,
+                width / 2, height / 2,
+                width, height,
+                consumable.getScaleX(), consumable.getScaleY(),
+                consumable.getAngle()
+        );
+        batch.setColor(tmpColor);
+    }
+
+    public void update(float dt) {
+        color.a = oscillatorA.oscillate(color.a, 0.3f, PaintConstants.SHIELD_ALPHA_MIN, PaintConstants.SHIELD_ALPHA_MAX, dt);
+    }
+}

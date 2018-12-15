@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.effects.Oscillator;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,16 +25,17 @@ public class Label {
     private AbstractConsumable master;
     @Setter
     private float scaleFactor;
+    private Oscillator oscillatorA;
+    private float angle;
 
     public Label(Sticker sticker) {
         this.textureRegion = new TextureRegion();
         this.sticker = sticker;
+        this.oscillatorA = new Oscillator();
     }
 
     public void render(SpriteBatch batch) {
-        Color tmpColor = batch.getColor();
-        color.a = PaintConstants.LABEL_ALPHA;
-        batch.setColor(color);
+        //todo: не оптимально
         switch (sticker) {
             case FUEL:
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION);
@@ -70,14 +72,20 @@ public class Label {
                 break;
             case PATTERN:
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_LABEL_REGION);
+                break;
+            case BOX_SCAN_NOISE:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOX_SCAN_NOISE_REGION);
+                break;
         }
 
+        Color tmpColor = batch.getColor();
+        batch.setColor(color);
         batch.draw(textureRegion,
                 master.getPosition().x - master.getWidth() / 2, master.getPosition().y - master.getHeight() / 2,
                 master.getWidth() / 2, master.getHeight() / 2,
                 master.getWidth(), master.getHeight(),
                 master.getScaleX() / scaleFactor, master.getScaleY() / scaleFactor,
-                master.getAngle()
+                angle
         );
         batch.setColor(tmpColor);
     }
@@ -98,6 +106,20 @@ public class Label {
         RADAR,
         ROCKET,
         //Fuel
-        FUEL
+        FUEL,
+        //Box Scan Noise
+        BOX_SCAN_NOISE
+    }
+
+    public void update(float dt) {
+        switch (sticker) {
+            case BOX_SCAN_NOISE:
+                angle = 0;
+                color.a = oscillatorA.oscillate(color.a, 0.2f, PaintConstants.LABEL_ALPHA_MIN, PaintConstants.LABEL_ALPHA_MAX, dt);
+                break;
+            default:
+                angle = master.getAngle();
+                color.a = PaintConstants.LABEL_ALPHA_MIN;
+        }
     }
 }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.consumable.Label;
+import com.shuttle.game.bot.consumable.Shield;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
@@ -32,6 +33,7 @@ public class Fuel extends AbstractConsumable {
         for (int i = 0; i < PaintConstants.FUEL_BUBBLE_COUNT; i++) {
             this.bubble[i] = new Bubble(this);
         }
+        this.shield = new Shield(this);
     }
 
     @Override
@@ -50,10 +52,14 @@ public class Fuel extends AbstractConsumable {
             this.bubble[i].init(width, height);
         }
         this.labeled = true;
-        this.label.setSticker(Label.Sticker.FUEL);
-        this.label.setMaster(this);
-        this.label.setColor(Color.BLACK);
-        this.label.setScaleFactor(4);
+
+        this.labels[1].setSticker(Label.Sticker.FUEL);
+        for (int i = 0; i < labels.length; i++) {
+            this.labels[i].setMaster(this);
+            this.labels[i].setColor(Color.BLACK);
+            this.labels[i].setScaleFactor(4);
+        }
+        this.shielded = true;
     }
 
     @Override
@@ -92,6 +98,10 @@ public class Fuel extends AbstractConsumable {
             bubble[i].update(dt);
         }
         boundCheck.checkAndHandleBoundsAndDestroy(this);
+        for (int i = 0; i < labels.length; i++) {
+            labels[i].update(dt);
+        }
+        shield.update(dt);
     }
 
     @Override
@@ -107,6 +117,7 @@ public class Fuel extends AbstractConsumable {
             bubble[i].render(batch);
         }
         box.render(batch);
-        label.render(batch);
+        labels[1].render(batch);
+        shield.render(batch);
     }
 }
