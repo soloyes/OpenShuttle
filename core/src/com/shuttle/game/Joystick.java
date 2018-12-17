@@ -151,9 +151,9 @@ public class Joystick extends Actor implements InputProcessor {
         }
 
         if (GamePreferences.isJoyStickColorEnabled()) {
-            color.set(Color.CYAN);
+            color.set(Color.valueOf("00ffffff"));
         } else {
-            color.set(Color.WHITE);
+            color.set(Color.valueOf("ffffffff"));
         }
 
         color.a = PaintConstants.JOYSTICK_ALPHA;

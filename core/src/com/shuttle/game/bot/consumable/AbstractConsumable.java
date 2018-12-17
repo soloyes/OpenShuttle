@@ -28,7 +28,7 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
         this.boundCheck = new BoundCheck();
         this.boomBox = new BoomBox();
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-        this.spreeColor = Color.GREEN;
+        this.spreeColor = Color.valueOf("00ff00ff");
         this.level = -1;
         this.labels = new Label[3];
         //Back
@@ -37,9 +37,9 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
         this.labels[1] = new Label(Label.Sticker.PATTERN);
         //Scanner
         this.labels[2] = new Label(Label.Sticker.BOX_SCAN_NOISE);
-        this.labels[0].setColor(Color.BLACK);
-        this.labels[1].setColor(Color.valueOf("ffffffff"));
-        this.labels[2].setColor(Color.CYAN);
+        this.labels[0].setColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, 1.0f);
+        this.labels[1].setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, 1.0f);
+        this.labels[2].setColor(Color.CYAN.r, Color.CYAN.g, Color.CYAN.b, 1.0f);
         for (int i = 0; i < labels.length; i++) {
             this.labels[i].setMaster(this);
         }

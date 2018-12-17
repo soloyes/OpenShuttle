@@ -21,6 +21,14 @@ public class Label {
     @Getter
     @Setter
     private Color color;
+
+    public void setColor(float r, float g, float b, float a) {
+        this.color.r = r;
+        this.color.g = g;
+        this.color.b = b;
+        this.color.a = a;
+    }
+
     @Setter
     private AbstractConsumable master;
     @Setter
@@ -32,6 +40,7 @@ public class Label {
         this.textureRegion = new TextureRegion();
         this.sticker = sticker;
         this.oscillatorA = new Oscillator();
+        this.color = new Color();
     }
 
     public void render(SpriteBatch batch) {

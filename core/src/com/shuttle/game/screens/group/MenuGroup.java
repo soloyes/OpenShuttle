@@ -45,7 +45,7 @@ public class MenuGroup extends Group {
         this.file = Gdx.files.local("username");
         TextField.TextFieldStyle tfs = skin.get("login", TextField.TextFieldStyle.class);
         tfs.font = font64;
-        tfs.fontColor = Color.WHITE;
+        tfs.fontColor = Color.valueOf("ffffffff");
         tfs.cursor.setMinWidth(10);
 
         this.username = new TextField(

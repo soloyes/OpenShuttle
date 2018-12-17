@@ -56,7 +56,7 @@ public class Fuel extends AbstractConsumable {
         this.labels[1].setSticker(Label.Sticker.FUEL);
         for (int i = 0; i < labels.length; i++) {
             this.labels[i].setMaster(this);
-            this.labels[i].setColor(Color.BLACK);
+            this.labels[i].setColor(Color.valueOf("000000ff"));
             this.labels[i].setScaleFactor(4);
         }
         this.shielded = true;

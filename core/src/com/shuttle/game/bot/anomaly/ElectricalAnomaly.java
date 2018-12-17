@@ -50,7 +50,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.born = false;
         this.level = 4;
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-        this.spreeColor = Color.PURPLE;
+        this.spreeColor.set(Color.PURPLE.r, Color.PURPLE.g, Color.PURPLE.b, 1.0f);
         this.color.a = 0.0f;
         this.scaleX = this.saveScaleX = 1.0f;
         this.scaleY = this.saveScaleY = 1.0f;

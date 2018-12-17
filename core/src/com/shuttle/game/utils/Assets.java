@@ -39,10 +39,10 @@ public class Assets {
 
                 assetManager.load(MSConstants.BUTTON_SOUND, Sound.class);
                 assetManager.load(MSConstants.CHECKBOX, Sound.class);
-                createSandartFont(32, "");
-                createSandartFont(48, "");
-                createSandartFont(64, "");
-                createSandartFont(96, "");
+                createStandartFont(32, "");
+                createStandartFont(48, "");
+                createStandartFont(64, "");
+                createStandartFont(96, "");
                 break;
             case GAME:
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
@@ -96,37 +96,37 @@ public class Assets {
                 assetManager.load(MSConstants.GET_STORAGE, Sound.class);
                 assetManager.load(MSConstants.CHECKBOX, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
-                createSandartFont(32, "");
-                createSandartFont(32, "Coloured");
-                createSandartFont(48, "");
-                createSandartFont(64, "");
-                createSandartFont(64, "Coloured");
-                createSandartFont(96, "");
-                createSandartFont(128, "");
+                createStandartFont(32, "");
+                createStandartFont(32, "Coloured");
+                createStandartFont(48, "");
+                createStandartFont(64, "");
+                createStandartFont(64, "Coloured");
+                createStandartFont(96, "");
+                createStandartFont(128, "");
                 break;
             case TEST:
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
-                createSandartFont(32, "");
-                createSandartFont(64, "");
-                createSandartFont(96, "");
+                createStandartFont(32, "");
+                createStandartFont(64, "");
+                createStandartFont(96, "");
                 break;
         }
     }
 
-    private void createSandartFont(int size, String postfix) {
+    private void createStandartFont(int size, String postfix) {
         FileHandleResolver resolver = new InternalFileHandleResolver();
         assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
         assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
         FreetypeFontLoader.FreeTypeFontLoaderParameter fontParameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         fontParameter.fontFileName = "fonts/gomarice.ttf";
         fontParameter.fontParameters.size = size;
-        fontParameter.fontParameters.color = Color.WHITE;
+        fontParameter.fontParameters.color = Color.valueOf("ffffffff");
         fontParameter.fontParameters.borderWidth = 1;
-        fontParameter.fontParameters.borderColor = Color.BLACK;
+        fontParameter.fontParameters.borderColor = Color.valueOf("000000ff");
         fontParameter.fontParameters.shadowOffsetX = 3;
         fontParameter.fontParameters.shadowOffsetY = 3;
-        fontParameter.fontParameters.shadowColor = Color.BLACK;
+        fontParameter.fontParameters.shadowColor = Color.valueOf("000000ff");
         assetManager.load("fonts/gomarice" + size + postfix + ".ttf", BitmapFont.class, fontParameter);
     }
 
