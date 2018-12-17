@@ -59,12 +59,13 @@ public class Fuel extends AbstractConsumable {
             this.labels[i].setColor(Color.valueOf("000000ff"));
             this.labels[i].setScaleFactor(4);
         }
-        this.shielded = true;
+        this.shielded = false;
+        this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
     }
 
     @Override
     public void consumed(GameScreen gs) {
-        int fuel = Rules.CONSUMABLE_FUEL_BASE_ADD * MathUtils.random(5, 10);
+        int fuel = Rules.CONSUMABLE_FUEL_ADD_FACTOR * MathUtils.random(Rules.CONSUMABLE_FUEL_MIN_ADD, Rules.CONSUMABLE_FUEL_MAX_ADD);
         gs.getPlayer().getStanding().changeFuel(fuel);
         gs.getGameInfoSystem()
                 .setup(
@@ -87,6 +88,7 @@ public class Fuel extends AbstractConsumable {
                 false
         );
         boomBox.playSound(MSConstants.FUEL_DESTROY);
+        gs.getPlayer().getStanding().changeHP(-Rules.CONSUMABLE_FUEL_DECREASE_LIFE);
         Vibrator.vibrate(VConstants.PLAYER_FUEL_DESTROY);
     }
 
@@ -98,10 +100,15 @@ public class Fuel extends AbstractConsumable {
             bubble[i].update(dt);
         }
         boundCheck.checkAndHandleBoundsAndDestroy(this);
+        shield.update(dt);
+    }
+
+    @Override
+    public void basicUpdate(float dt) {
+        super.basicUpdate(dt);
         for (int i = 0; i < labels.length; i++) {
             labels[i].update(dt);
         }
-        shield.update(dt);
     }
 
     @Override
@@ -118,6 +125,8 @@ public class Fuel extends AbstractConsumable {
         }
         box.render(batch);
         labels[1].render(batch);
-        shield.render(batch);
+        if (shielded && !taken) {
+            shield.render(batch);
+        }
     }
 }

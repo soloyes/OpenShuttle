@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.effects.Oscillator;
 
@@ -16,6 +17,9 @@ public class Shield {
     @Setter
     private Color color;
     private Oscillator oscillatorA;
+    @Setter
+    private float time;
+    private float frequency;
 
     public Shield(AbstractConsumable consumable) {
         this.consumable = consumable;
@@ -54,6 +58,25 @@ public class Shield {
     }
 
     public void update(float dt) {
-        color.a = oscillatorA.oscillate(color.a, 0.3f, PaintConstants.SHIELD_ALPHA_MIN, PaintConstants.SHIELD_ALPHA_MAX, dt);
+        if (consumable.isShielded()) {
+            time -= dt;
+            if (time <= 1.0f) {
+                consumable.setShielded(false);
+                time = Rules.CONSUMABLE_SHIELD_TIME;
+            }
+            frequency = Rules.CONSUMABLE_SHIELD_TIME / time;
+            frequency = frequency / Rules.CONSUMABLE_SHIELD_TIME;
+            frequency = 10 * frequency;
+            float da = (frequency % 10) / 10;
+            float minA = PaintConstants.SHIELD_ALPHA_MIN - da;
+            float maxA = PaintConstants.SHIELD_ALPHA_MAX - da;
+            if (minA <= 0.0f) {
+                minA = 0.0f;
+            }
+            if (maxA <= 0.0f) {
+                maxA = 0.0f;
+            }
+            color.a = oscillatorA.oscillate(color.a, frequency, minA, maxA, dt);
+        }
     }
 }

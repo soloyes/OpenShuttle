@@ -48,7 +48,9 @@ public class Crate extends AbstractConsumable {
         this.labels[1].setScaleFactor(3.5f);
         this.labels[2].setScaleFactor(1f);
         stickLabel();
-        this.shielded = true;
+        this.shielded = false;
+        this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
+        this.scanned = false;
     }
 
     private void stickLabel() {
@@ -63,7 +65,7 @@ public class Crate extends AbstractConsumable {
     }
 
     private void generateSafe() {
-        int r = MathUtils.random(0, 5);
+        int r = MathUtils.random(0, 6);
         switch (r) {
             case 0:
                 labels[1].setSticker(Label.Sticker.BOOST);
@@ -79,6 +81,8 @@ public class Crate extends AbstractConsumable {
                 break;
             case 5:
                 labels[1].setSticker(Label.Sticker.SCAN);
+            case 6:
+                labels[1].setSticker(Label.Sticker.SHIELD);
         }
     }
 
@@ -121,6 +125,7 @@ public class Crate extends AbstractConsumable {
                     );
             boomBox.playSound(MSConstants.PLAYER_REPAIR);
         }
+
         if (labels[1].getSticker() == Label.Sticker.BOOST) {
             float d = Rules.PLAYER_BOOST_ENGINE_POWER - player.getVelocity().len();
             player.setShadowsCoordinates();
@@ -138,6 +143,7 @@ public class Crate extends AbstractConsumable {
                     );
             boomBox.playSound(MSConstants.TURBO);
         }
+
         if (labels[1].getSticker() == Label.Sticker.SPLASH) {
             List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
             for (int i = 0; i < anomalies.size(); i++) {
@@ -167,6 +173,7 @@ public class Crate extends AbstractConsumable {
                     );
             boomBox.playSound(MSConstants.ANOMALY_SPLASH);
         }
+
         if (labels[1].getSticker() == Label.Sticker.TRASH) {
             gs.getGameInfoSystem()
                     .setup(
@@ -176,6 +183,31 @@ public class Crate extends AbstractConsumable {
                             2.0f,
                             true
                     );
+            boomBox.playSound(MSConstants.GET_TRASH);
+        }
+
+        if (labels[1].getSticker() == Label.Sticker.SHIELD) {
+            List<AbstractConsumable> list = gs.getCrateEmitter().getActiveList();
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).setShielded(true);
+            }
+            list = gs.getFuelEmitter().getActiveList();
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).setShielded(true);
+            }
+            list = gs.getStorageEmitter().getActiveList();
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).setShielded(true);
+            }
+            gs.getGameInfoSystem()
+                    .setup(
+                            position.x,
+                            position.y,
+                            GameInfoSystem.GameInfoSystemPreset.SHIELD,
+                            2.0f,
+                            true
+                    );
+            //todo: Shield music
             boomBox.playSound(MSConstants.GET_TRASH);
         }
     }

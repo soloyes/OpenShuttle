@@ -407,7 +407,7 @@ public class GameScreen extends BaseScreen {
                 AbstractConsumable consumable = consumableList.get(i).get(j);
                 if (!consumable.isTaken()) {
                     if (player.getPosition().dst(consumable.getPosition()) <= PaintConstants.SHUTTLE_WIDTH / 2) {
-                        if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel()) {
+                        if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
                             consumable.destroy();
                             player.takeEffect(consumable);
                             player.getStanding().addToStatistics(consumable.getType(), consumable.getLevel());
@@ -428,7 +428,7 @@ public class GameScreen extends BaseScreen {
                     ray.setSize(4);
                     ray.setHarvestVelocity(Rules.PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY);
                     ray.setTakeRange(Rules.PLAYER_CONSUMABLE_TAKE_RANGE);
-                    if (player.getShieldLevel().getLevel() < 2) {
+                    if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
                         ray.setPreset(Ray.Preset.GREEN);
                     } else {
                         if (player.canCatch(consumable)) {
@@ -613,7 +613,9 @@ public class GameScreen extends BaseScreen {
                             AbstractConsumable consumable = consumableList.get(m).get(p);
                             if (!asteroid.isFragmented() && consumable.getPosition().dst(asteroid.getPosition()) < 128) {
                                 asteroid.destroyWithEffect();
-                                consumable.destroyWithEffect();
+                                if (!consumable.isShielded()) {
+                                    consumable.destroyWithEffect();
+                                }
                                 //todo: repeatable code :(
                                 switch (asteroid.getType()) {
                                     case ASTEROID_METAL:

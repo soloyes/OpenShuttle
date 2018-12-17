@@ -9,16 +9,19 @@ import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.effects.BoomBox;
 
+import lombok.Getter;
 import lombok.Setter;
 
 public abstract class AbstractConsumable extends AbstractPoolable implements Consumable {
     protected TextureRegion texture;
-    @Setter
-    protected boolean labeled;
+    @Getter
     @Setter
     protected boolean shielded;
-    protected Label[] labels;
     protected Shield shield;
+    @Setter
+    protected boolean labeled;
+    protected Label[] labels;
+    protected boolean scanned;
 
     public AbstractConsumable(GameScreen gs) {
         this.gs = gs;
@@ -74,11 +77,11 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     public void render(SpriteBatch batch) {
         basicRender(batch);
         if (labeled) {
-            for (int i = 0; i < labels.length; i++) {
+            for (int i = 0; i < labels.length - 1; i++) {
                 labels[i].render(batch);
             }
         }
-        if (shielded) {
+        if (shielded && !taken) {
             shield.render(batch);
         }
     }

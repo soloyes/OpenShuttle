@@ -37,9 +37,15 @@ public final class Rules {
     //10.0f
     public static final float CONSUMABLE_FUEL_RESPAWN_TIME = 10.0f;
     //1
-    public static final int CONSUMABLE_FUEL_BASE_ADD = 1;
-    //2
+    public static final int CONSUMABLE_FUEL_ADD_FACTOR = 1;
+    //10
+    public static final int CONSUMABLE_FUEL_MIN_ADD = 10;
+    //1
+    public static final int CONSUMABLE_FUEL_MAX_ADD = 20;
+    //20
     public static final int CONSUMABLE_FUEL_MAX_COUNT = 2;
+    //2
+    public static final int CONSUMABLE_FUEL_DECREASE_LIFE = 2;
     //10.0f
     public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 10.0f;
     //0
@@ -153,7 +159,7 @@ public final class Rules {
     //5.0f
     public static final float PLAYER_KILL_TIMER = 5.0f;
     //3.0f
-    private static final float PLAYER_ENGINE_POWER_FACTOR = 3.0f;
+    public static final float PLAYER_ENGINE_POWER_FACTOR = 3.0f;
     //
     public static final float PLAYER_BOOST_ENGINE_POWER = PLAYER_ENGINE_POWER * PLAYER_ENGINE_POWER_FACTOR;
     //200
@@ -205,6 +211,8 @@ public final class Rules {
     public static final int CONSUMABLE_BONUS_SCORE_ADD = 1000;
     //10000
     public static final int CONSUMABLE_MURDER_SCORE_DECREASE = 50000;
+    //30.0f
+    public static final float CONSUMABLE_SHIELD_TIME = 30.0f;
     //60
     public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
 

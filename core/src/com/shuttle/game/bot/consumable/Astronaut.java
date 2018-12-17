@@ -75,7 +75,7 @@ public class Astronaut extends AbstractConsumable {
         gs.getGameInfoSystem().setup(
                 position.x,
                 position.y,
-                GameInfoSystem.GameInfoSystemPreset.MURDERER + "\n[RED]-" + Rules.CONSUMABLE_MURDER_SCORE_DECREASE + "[]",
+                GameInfoSystem.GameInfoSystemPreset.MURDERER,
                 8.0f,
                 true
         );

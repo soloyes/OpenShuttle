@@ -51,6 +51,10 @@ public class Star {
                 break;
             case 4:
                 color = Color.FIREBRICK;
+                break;
+            case 5:
+                color = Color.RED;
+                break;
             default:
                 color = Color.WHITE;
         }

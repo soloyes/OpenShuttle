@@ -47,20 +47,21 @@ public class GameInfoSystem {
     public enum GameInfoSystemPreset {
         BRAKED("BRAKED"),
         SCREECH("[RED]SCREECH[]"),
-        BOOM("BOOOOM!"),
+        BOOM("BOOOOM"),
         SAD("[YELLOW]SO SAD[]"),
-        OUT("[YELLOW]OUT OF RANGE![]"),
+        OUT("[YELLOW]OUT OF RANGE[]"),
         REPAIR("REPAIR [GREEN]+" + Rules.CONSUMABLE_REPAIR_ADD),
         FUEL("FUEL"),
-        TURBO("TURBO [GREEN]x3[]"),
+        TURBO("TURBO [GREEN]x" + (int) Rules.PLAYER_ENGINE_POWER_FACTOR + "[]"),
         TRASH("[YELLOW]TRASH[]"),
         SPLASH("[GREEN]SPLASH[]"),
         LOST_FUEL("[RED]-FUEL[]"),
         LOST_SCORE("[RED]-SCORE[]"),
-        MURDERER("MURDERER!"),
-        EASY("BE EASY!"),
+        MURDERER("MURDERER" + "\n[RED]-" + Rules.CONSUMABLE_MURDER_SCORE_DECREASE + "[]"),
+        EASY("BE EASY"),
         STORAGE("STORAGE"),
-        RADAR("[GREEN]RADAR![]"),
+        RADAR("[GREEN]RADAR[]"),
+        SHIELD("SHIELD [GREEN]+" + (int) Rules.CONSUMABLE_SHIELD_TIME + "[]"),
         SCORE("SCORE");
         private String value;
 

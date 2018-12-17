@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
@@ -41,7 +42,9 @@ public class Storage extends AbstractConsumable {
         this.labels[1].setScaleFactor(2.0f);
         this.labels[2].setScaleFactor(0.5f);
         stickLabel();
-        this.shielded = true;
+        this.shielded = false;
+        this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
+        this.scanned = false;
     }
 
     private void stickLabel() {
@@ -57,6 +60,7 @@ public class Storage extends AbstractConsumable {
 
     private void generateSafe() {
         int r = MathUtils.random(0, 3);
+        //todo: переделать логику. щас криво.
         if (gs.getPlayer().getRadar().isActive()) {
             r = 4;
         }
