@@ -29,6 +29,7 @@ public class Crate extends AbstractConsumable {
         this.type = Type.CRATE;
         this.moveProcessor = new MoveProcessor(gs);
         this.shield = new Shield(this);
+        this.scan = new Scan(this);
     }
 
     @Override
@@ -46,7 +47,6 @@ public class Crate extends AbstractConsumable {
         this.labeled = true;
         this.labels[0].setScaleFactor(3.5f);
         this.labels[1].setScaleFactor(3.5f);
-        this.labels[2].setScaleFactor(1f);
         stickLabel();
         this.shielded = false;
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
@@ -81,6 +81,7 @@ public class Crate extends AbstractConsumable {
                 break;
             case 5:
                 labels[1].setSticker(Label.Sticker.SCAN);
+                break;
             case 6:
                 labels[1].setSticker(Label.Sticker.SHIELD);
         }
@@ -208,6 +209,28 @@ public class Crate extends AbstractConsumable {
                             true
                     );
             //todo: Shield music
+            boomBox.playSound(MSConstants.GET_TRASH);
+        }
+
+        if (labels[1].getSticker() == Label.Sticker.SCAN) {
+            List<AbstractConsumable> list = gs.getCrateEmitter().getActiveList();
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).setScanned(true);
+            }
+            list = gs.getStorageEmitter().getActiveList();
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).setScanned(true);
+            }
+
+            gs.getGameInfoSystem()
+                    .setup(
+                            position.x,
+                            position.y,
+                            GameInfoSystem.GameInfoSystemPreset.SCAN,
+                            2.0f,
+                            true
+                    );
+            //todo: Scan music
             boomBox.playSound(MSConstants.GET_TRASH);
         }
     }

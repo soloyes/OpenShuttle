@@ -129,6 +129,8 @@ public final class PaintConstants {
     public static final String BOX_SCAN_NOISE_REGION = "boxscanv1";
     public static final float LABEL_ALPHA_MIN = 0.5f;
     public static final float LABEL_ALPHA_MAX = 1.0f;
+    public static final String RADAR_CONSUMABLE_DOT_REGION = "radardot1";
+    public static final String RADAR_ANOMALY_DOT_REGION = "radardot2";
 
     public static final String SHIELD_FUEL_REGION = "shieldfuel";
     public static final float SHIELD_FUEL_WIDTH = FUEL_1_WIDTH * 1.1f;

@@ -23,6 +23,7 @@ public class Storage extends AbstractConsumable {
         this.moveProcessor = new MoveProcessor(gs);
         this.level = -3;
         this.shield = new Shield(this);
+        this.scan = new Scan(this);
     }
 
     @Override
@@ -40,7 +41,6 @@ public class Storage extends AbstractConsumable {
         this.labeled = true;
         this.labels[0].setScaleFactor(2.0f);
         this.labels[1].setScaleFactor(2.0f);
-        this.labels[2].setScaleFactor(0.5f);
         stickLabel();
         this.shielded = false;
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);

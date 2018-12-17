@@ -213,6 +213,8 @@ public final class Rules {
     public static final int CONSUMABLE_MURDER_SCORE_DECREASE = 50000;
     //30.0f
     public static final float CONSUMABLE_SHIELD_TIME = 30.0f;
+    //30.0f
+    public static final float CONSUMABLE_SCAN_TIME = 30.0f;
     //60
     public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
 

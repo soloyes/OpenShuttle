@@ -28,8 +28,10 @@ import lombok.Setter;
  * @author Shuttle on 7/7/18.
  */
 public class Radar {
+    protected TextureRegion dot;
     private GameScreen gs;
-    private TextureRegion pointTexture;
+    private TextureRegion dot1;
+    private TextureRegion dot2;
     private Vector2 tmp;
     @Getter
     @Setter
@@ -43,7 +45,8 @@ public class Radar {
 
     public Radar(GameScreen gs, Shuttle player) {
         this.gs = gs;
-        this.pointTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STAR16_REGION);
+        this.dot1 = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_CONSUMABLE_DOT_REGION);
+        this.dot2 = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_ANOMALY_DOT_REGION);
         this.player = player;
         this.tmp = new Vector2();
         this.oscillator = new Oscillator();
@@ -70,18 +73,21 @@ public class Radar {
     private void drawRadar(SpriteBatch batch) {
         for (int i = 0; i < gs.getCorrosiveAnomalyEmitter().getActiveList().size(); i++) {
             CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) gs.getCorrosiveAnomalyEmitter().getActiveList().get(i);
+            dot = dot2;
             drawPoolable(batch, tmpAnomaly);
         }
 
         for (int i = 0; i < listsActiveConsumable.size(); i++) {
             for (int j = 0; j < listsActiveConsumable.get(i).size(); j++) {
                 AbstractConsumable tmpConsumable = listsActiveConsumable.get(i).get(j);
+                dot = dot1;
                 drawPoolable(batch, tmpConsumable);
             }
         }
 
         for (int i = 0; i < gs.getElectricalAnomalyEmitter().getActiveList().size(); i++) {
             ElectricalAnomaly tmpAnomaly = (ElectricalAnomaly) gs.getElectricalAnomalyEmitter().getActiveList().get(i);
+            dot = dot2;
             drawPoolable(batch, tmpAnomaly);
         }
 
@@ -94,7 +100,7 @@ public class Radar {
             float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f + dotSize;
             tmp.set(abstractPoolable.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
             batch.setColor(setPointColor(abstractPoolable));
-            batch.draw(pointTexture, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
+            batch.draw(dot, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
         }
     }
 

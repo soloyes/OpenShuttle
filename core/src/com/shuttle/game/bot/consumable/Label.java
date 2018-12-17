@@ -21,16 +21,8 @@ public class Label {
     @Getter
     @Setter
     private Color color;
-
-    public void setColor(float r, float g, float b, float a) {
-        this.color.r = r;
-        this.color.g = g;
-        this.color.b = b;
-        this.color.a = a;
-    }
-
     @Setter
-    private AbstractConsumable master;
+    private AbstractConsumable consumable;
     @Setter
     private float scaleFactor;
     private Oscillator oscillatorA;
@@ -82,21 +74,37 @@ public class Label {
             case PATTERN:
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_LABEL_REGION);
                 break;
-            case BOX_SCAN_NOISE:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOX_SCAN_NOISE_REGION);
-                break;
         }
 
         Color tmpColor = batch.getColor();
         batch.setColor(color);
         batch.draw(textureRegion,
-                master.getPosition().x - master.getWidth() / 2, master.getPosition().y - master.getHeight() / 2,
-                master.getWidth() / 2, master.getHeight() / 2,
-                master.getWidth(), master.getHeight(),
-                master.getScaleX() / scaleFactor, master.getScaleY() / scaleFactor,
+                consumable.getPosition().x - consumable.getWidth() / 2, consumable.getPosition().y - consumable.getHeight() / 2,
+                consumable.getWidth() / 2, consumable.getHeight() / 2,
+                consumable.getWidth(), consumable.getHeight(),
+                consumable.getScaleX() / scaleFactor, consumable.getScaleY() / scaleFactor,
                 angle
         );
         batch.setColor(tmpColor);
+    }
+
+    public void setColor(float r, float g, float b, float a) {
+        this.color.r = r;
+        this.color.g = g;
+        this.color.b = b;
+        this.color.a = a;
+    }
+
+    public void update(float dt) {
+        switch (sticker) {
+            case BOX_SCAN_NOISE:
+                angle = 0;
+                color.a = oscillatorA.oscillate(color.a, 0.2f, PaintConstants.LABEL_ALPHA_MIN, PaintConstants.LABEL_ALPHA_MAX, dt);
+                break;
+            default:
+                angle = consumable.getAngle();
+                color.a = PaintConstants.LABEL_ALPHA_MIN;
+        }
     }
 
     public enum Sticker {
@@ -118,17 +126,5 @@ public class Label {
         FUEL,
         //Box Scan Noise
         BOX_SCAN_NOISE
-    }
-
-    public void update(float dt) {
-        switch (sticker) {
-            case BOX_SCAN_NOISE:
-                angle = 0;
-                color.a = oscillatorA.oscillate(color.a, 0.2f, PaintConstants.LABEL_ALPHA_MIN, PaintConstants.LABEL_ALPHA_MAX, dt);
-                break;
-            default:
-                angle = master.getAngle();
-                color.a = PaintConstants.LABEL_ALPHA_MIN;
-        }
     }
 }

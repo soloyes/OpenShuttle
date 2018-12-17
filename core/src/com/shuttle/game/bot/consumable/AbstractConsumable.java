@@ -18,9 +18,11 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     @Setter
     protected boolean shielded;
     protected Shield shield;
+    protected Scan scan;
     @Setter
     protected boolean labeled;
     protected Label[] labels;
+    @Setter
     protected boolean scanned;
 
     public AbstractConsumable(GameScreen gs) {
@@ -33,24 +35,21 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.spreeColor = Color.valueOf("00ff00ff");
         this.level = -1;
-        this.labels = new Label[3];
+        this.labels = new Label[2];
         //Back
         this.labels[0] = new Label(Label.Sticker.PATTERN);
         //Front, exactly Sticker is set in init() method
         this.labels[1] = new Label(Label.Sticker.PATTERN);
-        //Scanner
-        this.labels[2] = new Label(Label.Sticker.BOX_SCAN_NOISE);
-        this.labels[0].setColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, 1.0f);
-        this.labels[1].setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, 1.0f);
-        this.labels[2].setColor(Color.CYAN.r, Color.CYAN.g, Color.CYAN.b, 1.0f);
+        this.labels[0].setColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, Color.BLACK.a);
+        this.labels[1].setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, Color.WHITE.a);
         for (int i = 0; i < labels.length; i++) {
-            this.labels[i].setMaster(this);
+            this.labels[i].setConsumable(this);
         }
     }
 
-    public abstract void init(float x, float y);
-
     public abstract void consumed(GameScreen gs);
+
+    public abstract void init(float x, float y);
 
     @Override
     public void basicRender(SpriteBatch batch) {
@@ -77,12 +76,15 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     public void render(SpriteBatch batch) {
         basicRender(batch);
         if (labeled) {
-            for (int i = 0; i < labels.length - 1; i++) {
+            for (int i = 0; i < labels.length; i++) {
                 labels[i].render(batch);
             }
         }
         if (shielded && !taken) {
             shield.render(batch);
+        }
+        if (scanned && !taken) {
+            scan.render(batch);
         }
     }
 
