@@ -2,6 +2,9 @@ package com.shuttle.game.utils.effects;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+
+import lombok.Getter;
 
 /**
  * @author Shuttle on 8/29/18.
@@ -9,6 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 public class Shake {
     private float[] samples;
     private float internalTimer = 0;
+    @Getter
     private float shakeDuration;
     private int duration = 10; // In seconds, make longer if you want more variation
     private int frequency; // hertz
@@ -55,6 +59,30 @@ public class Shake {
             camera.position.x = camera.position.x + deltaX * amplitude * (falloff ? Math.min(shakeDuration, 1f) : 1f);
             camera.position.y = camera.position.y + deltaY * amplitude * (falloff ? Math.min(shakeDuration, 1f) : 1f);
             camera.update();
+        }
+    }
+
+    /**
+     * Called every frame will shake the Vector if it has a shake duration
+     *
+     * @param dt      Gdx.graphics.getDeltaTime() or your dt in seconds
+     * @param vector2 your vector to shake
+     */
+    public void update(float dt, Vector2 vector2) {
+        internalTimer += dt;
+        if (internalTimer > duration) internalTimer -= duration;
+        if (shakeDuration > 0) {
+            shakeDuration -= dt;
+            float shakeTime = (internalTimer * frequency);
+            int first = (int) shakeTime;
+            int second = (first + 1) % sampleCount;
+            int third = (first + 2) % sampleCount;
+            float deltaT = shakeTime - (int) shakeTime;
+            float deltaX = samples[first] * deltaT + samples[second] * (1f - deltaT);
+            float deltaY = samples[second] * deltaT + samples[third] * (1f - deltaT);
+
+            vector2.x = vector2.x + deltaX * amplitude * (falloff ? Math.min(shakeDuration, 1f) : 1f);
+            vector2.y = vector2.y + deltaY * amplitude * (falloff ? Math.min(shakeDuration, 1f) : 1f);
         }
     }
 }

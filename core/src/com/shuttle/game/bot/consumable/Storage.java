@@ -41,52 +41,52 @@ public class Storage extends AbstractConsumable {
         this.labeled = true;
         this.labels[0].setScaleFactor(2.0f);
         this.labels[1].setScaleFactor(2.0f);
+        this.labels[2].setScaleFactor(2.0f);
         stickLabel();
+        if (labels[1].getSticker() == Label.Sticker.PATTERN) {
+            labels[2].setSticker(generateSafe());
+        }
         this.shielded = false;
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
         this.scanned = false;
+        this.scan.setTime(Rules.CONSUMABLE_SCAN_TIME);
     }
 
     private void stickLabel() {
         int r = MathUtils.random(0, 20);
         switch (r) {
             case 0:
-                generateDanger();
+                labels[1].setSticker(generateDanger());
                 break;
             default:
-                generateSafe();
+                labels[1].setSticker(generateSafe());
         }
     }
 
-    private void generateSafe() {
+    private Label.Sticker generateSafe() {
         int r = MathUtils.random(0, 3);
-        //todo: переделать логику. щас криво.
-        if (gs.getPlayer().getRadar().isActive()) {
-            r = 4;
-        }
+        //todo: переделать логику. щас криво. 1) Радар не должен появлять, если он уже взят. Две коробки с радаром не должны быть. Аналогично про лазер.
+        // тут надо еще попробоватЬ, если звать gs.getPlayer.getRadar.isActive, то нарушается последовательность конструирования объектов и вылетает NPE. Надо как-то переделать. А вообще это днище когда все
+        // знают про gs, но уже ничо не поделать. Это не правильно, но с этим будем жить.
         switch (r) {
             case 0:
-                labels[1].setSticker(Label.Sticker.LASER);
-                break;
+                return Label.Sticker.LASER;
             case 1:
-                labels[1].setSticker(Label.Sticker.RADAR);
-                break;
+                return Label.Sticker.RADAR;
             case 2:
-                labels[1].setSticker(Label.Sticker.ROCKET);
-                break;
+                return Label.Sticker.ROCKET;
             default:
-                labels[1].setSticker(Label.Sticker.PATTERN);
+                return Label.Sticker.PATTERN;
         }
     }
 
-    private void generateDanger() {
+    private Label.Sticker generateDanger() {
         int r = MathUtils.random(0, 5);
         switch (r) {
             case 1:
-                labels[1].setSticker(Label.Sticker.PATTERN);
-                break;
+                return Label.Sticker.PATTERN;
             default:
-                labels[1].setSticker(Label.Sticker.SHABBY);
+                return Label.Sticker.SHABBY;
         }
     }
 
@@ -138,6 +138,7 @@ public class Storage extends AbstractConsumable {
             labels[i].update(dt);
         }
         shield.update(dt);
+        scan.update(dt);
     }
 
     @Override

@@ -47,54 +47,53 @@ public class Crate extends AbstractConsumable {
         this.labeled = true;
         this.labels[0].setScaleFactor(3.5f);
         this.labels[1].setScaleFactor(3.5f);
+        this.labels[2].setScaleFactor(3.5f);
         stickLabel();
+        if (labels[1].getSticker() == Label.Sticker.PATTERN) {
+            labels[2].setSticker(generateSafe());
+        }
         this.shielded = false;
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
         this.scanned = false;
+        this.scan.setTime(Rules.CONSUMABLE_SCAN_TIME);
     }
 
     private void stickLabel() {
         int r = MathUtils.random(0, 20);
         switch (r) {
             case 0:
-                generateDanger();
+                labels[1].setSticker(generateDanger());
                 break;
             default:
-                generateSafe();
+                labels[1].setSticker(generateSafe());
         }
     }
 
-    private void generateSafe() {
+    private Label.Sticker generateSafe() {
         int r = MathUtils.random(0, 6);
         switch (r) {
             case 0:
-                labels[1].setSticker(Label.Sticker.BOOST);
-                break;
+                return Label.Sticker.BOOST;
             case 1:
-                labels[1].setSticker(Label.Sticker.REPAIR);
-                break;
+                return Label.Sticker.REPAIR;
             case 2:
-                labels[1].setSticker(Label.Sticker.TRASH);
-                break;
+                return Label.Sticker.TRASH;
             case 3:
-                labels[1].setSticker(Label.Sticker.SPLASH);
-                break;
+                return Label.Sticker.SPLASH;
             case 5:
-                labels[1].setSticker(Label.Sticker.SCAN);
-                break;
-            case 6:
-                labels[1].setSticker(Label.Sticker.SHIELD);
+                return Label.Sticker.SCAN;
+            default:
+                return Label.Sticker.SHIELD;
         }
     }
 
-    private void generateDanger() {
+    private Label.Sticker generateDanger() {
         int r = MathUtils.random(0, 5);
         switch (r) {
             case 1:
-                labels[1].setSticker(Label.Sticker.PATTERN);
-                break;
+                return Label.Sticker.PATTERN;
             default:
-                labels[1].setSticker(Label.Sticker.SHABBY);
+                return Label.Sticker.SHABBY;
         }
     }
 
@@ -107,6 +106,7 @@ public class Crate extends AbstractConsumable {
             labels[i].update(dt);
         }
         shield.update(dt);
+        scan.update(dt);
     }
 
     @Override
@@ -215,11 +215,15 @@ public class Crate extends AbstractConsumable {
         if (labels[1].getSticker() == Label.Sticker.SCAN) {
             List<AbstractConsumable> list = gs.getCrateEmitter().getActiveList();
             for (int i = 0; i < list.size(); i++) {
-                list.get(i).setScanned(true);
+                if (list.get(i).labels[1].getSticker() == Label.Sticker.PATTERN) {
+                    list.get(i).setScanned(true);
+                }
             }
             list = gs.getStorageEmitter().getActiveList();
             for (int i = 0; i < list.size(); i++) {
-                list.get(i).setScanned(true);
+                if (list.get(i).labels[1].getSticker() == Label.Sticker.PATTERN) {
+                    list.get(i).setScanned(true);
+                }
             }
 
             gs.getGameInfoSystem()

@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.effects.Oscillator;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,13 +24,11 @@ public class Label {
     private AbstractConsumable consumable;
     @Setter
     private float scaleFactor;
-    private Oscillator oscillatorA;
     private float angle;
 
     public Label(Sticker sticker) {
         this.textureRegion = new TextureRegion();
         this.sticker = sticker;
-        this.oscillatorA = new Oscillator();
         this.color = new Color();
     }
 
@@ -96,14 +93,13 @@ public class Label {
     }
 
     public void update(float dt) {
-        switch (sticker) {
-            case BOX_SCAN_NOISE:
-                angle = 0;
-                color.a = oscillatorA.oscillate(color.a, 0.2f, PaintConstants.LABEL_ALPHA_MIN, PaintConstants.LABEL_ALPHA_MAX, dt);
-                break;
-            default:
-                angle = consumable.getAngle();
-                color.a = PaintConstants.LABEL_ALPHA_MIN;
+        angle = consumable.getAngle();
+        if (consumable.isTaken()){
+            if (color.a >= consumable.getColor().a) {
+                color.a = consumable.getColor().a;
+            }
+        } else {
+            color.a = PaintConstants.LABEL_ALPHA;
         }
     }
 
@@ -124,7 +120,5 @@ public class Label {
         ROCKET,
         //Fuel
         FUEL,
-        //Box Scan Noise
-        BOX_SCAN_NOISE
     }
 }

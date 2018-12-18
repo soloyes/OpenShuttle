@@ -127,8 +127,7 @@ public final class PaintConstants {
     public static final String SPLASH_LABEL_REGION = "splashv1";
     public static final String TRASH_LABEL_REGION = "trashv1";
     public static final String BOX_SCAN_NOISE_REGION = "boxscanv1";
-    public static final float LABEL_ALPHA_MIN = 0.5f;
-    public static final float LABEL_ALPHA_MAX = 1.0f;
+    public static final float LABEL_ALPHA = 0.5f;
     public static final String RADAR_CONSUMABLE_DOT_REGION = "radardot1";
     public static final String RADAR_ANOMALY_DOT_REGION = "radardot2";
 
@@ -143,6 +142,9 @@ public final class PaintConstants {
     public static final int SHIELD_CRATE_HEIGHT = CRATE_1_HEIGHT;
     public static final float SHIELD_ALPHA_MIN = 0.5f;
     public static final float SHIELD_ALPHA_MAX = 1.0f;
+    public static final float SCAN_ALPHA_MIN = 0.5f;
+    public static final float SCAN_ALPHA_MAX = 1.0f;
+
 
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
     public static final String FONT32 = "fonts/gomarice32.ttf";

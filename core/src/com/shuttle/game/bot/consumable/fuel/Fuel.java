@@ -106,9 +106,7 @@ public class Fuel extends AbstractConsumable {
     @Override
     public void basicUpdate(float dt) {
         super.basicUpdate(dt);
-        for (int i = 0; i < labels.length; i++) {
-            labels[i].update(dt);
-        }
+        labels[1].update(dt);
     }
 
     @Override
