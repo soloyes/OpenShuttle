@@ -27,9 +27,9 @@ public final class Rules {
     //1
     public static final int CONSUMABLE_ASTRONAUT_MAX_COUNT = 1;
     //2
-    public static final int CONSUMABLE_CRATE_AT_START = 10;
+    public static final int CONSUMABLE_CRATE_AT_START = 2;
     //6.0f
-    public static final float CONSUMABLE_CRATE_RESPAWN_TIME = 1.0f;
+    public static final float CONSUMABLE_CRATE_RESPAWN_TIME = 6.0f;
     //3
     public static final int CONSUMABLE_CRATE_MAX_COUNT = 3;
     //0
@@ -47,9 +47,9 @@ public final class Rules {
     //2
     public static final int CONSUMABLE_FUEL_DECREASE_LIFE = 2;
     //10.0f
-    public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 2.0f;
+    public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 10.0f;
     //0
-    public static final int CONSUMABLE_STORAGE_AT_START = 3;
+    public static final int CONSUMABLE_STORAGE_AT_START = 0;
     //2
     public static final int CONSUMABLE_STORAGE_MAX_COUNT = 2;
     //2
