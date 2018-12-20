@@ -90,7 +90,6 @@ public class Radar {
             dot = dot2;
             drawPoolable(batch, tmpAnomaly);
         }
-
         batch.setColor(1, 1, 1, 1);
     }
 
@@ -100,7 +99,7 @@ public class Radar {
             float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f + dotSize;
             tmp.set(abstractPoolable.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
             batch.setColor(setPointColor(abstractPoolable));
-            batch.draw(dot, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, 16, 16, sc, sc, 0);
+            batch.draw(dot, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, PaintConstants.RADAR_DOT_WIDTH, PaintConstants.RADAR_DOT_HEIGHT, sc, sc, 0);
         }
     }
 

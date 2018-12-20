@@ -105,9 +105,6 @@ public final class PaintConstants {
     public static final int JOYSTICK_STICK_HEIGHT = 50;
     public static final float JOYSTICK_ALPHA = 0.5f;
     public static final float JOYSTICK_STICK_ALPHA = 0.7f;
-    public static final String RADAR_REGION = "radar";
-    public static final int RADAR_WIDTH = 128;
-    public static final int RADAR_HEIGHT = 128;
     public static final float RADAR_GLOW_OSCILLATOR_MIN = -0.4f;
     public static final float RADAR_GLOW_OSCILLATOR_MAX = 0.4f;
     public static final float RADAR_OSCILLATION_FREQUENCY = 2.5f;
@@ -130,6 +127,8 @@ public final class PaintConstants {
     public static final float LABEL_ALPHA = 0.5f;
     public static final String RADAR_CONSUMABLE_DOT_REGION = "radardot1";
     public static final String RADAR_ANOMALY_DOT_REGION = "radardot2";
+    public static final float RADAR_DOT_WIDTH = 8.0f;
+    public static final float RADAR_DOT_HEIGHT = 8.0f;
 
     public static final String SHIELD_FUEL_REGION = "shieldfuel";
     public static final float SHIELD_FUEL_WIDTH = FUEL_1_WIDTH * 1.1f;

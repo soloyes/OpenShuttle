@@ -208,8 +208,7 @@ public class Crate extends AbstractConsumable {
                             2.0f,
                             true
                     );
-            //todo: Shield music
-            boomBox.playSound(MSConstants.GET_TRASH);
+            boomBox.playSound(MSConstants.GET_SHIELD);
         }
 
         if (labels[1].getSticker() == Label.Sticker.SCAN) {
@@ -234,8 +233,7 @@ public class Crate extends AbstractConsumable {
                             2.0f,
                             true
                     );
-            //todo: Scan music
-            boomBox.playSound(MSConstants.GET_TRASH);
+            boomBox.playSound(MSConstants.GET_SCANNER);
         }
     }
 

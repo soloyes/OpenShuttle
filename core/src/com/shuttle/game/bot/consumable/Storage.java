@@ -53,7 +53,7 @@ public class Storage extends AbstractConsumable {
     }
 
     private void stickLabel() {
-        int r = MathUtils.random(0, 20);
+        int r = MathUtils.random(0, 1);
         switch (r) {
             case 0:
                 labels[1].setSticker(generateDanger());
