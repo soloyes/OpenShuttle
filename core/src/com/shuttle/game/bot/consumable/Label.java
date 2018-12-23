@@ -15,7 +15,6 @@ import lombok.Setter;
 public class Label {
     private TextureRegion textureRegion;
     @Getter
-    @Setter
     private Sticker sticker;
     @Getter
     @Setter
@@ -26,14 +25,7 @@ public class Label {
     private float scaleFactor;
     private float angle;
 
-    public Label(Sticker sticker) {
-        this.textureRegion = new TextureRegion();
-        this.sticker = sticker;
-        this.color = new Color();
-    }
-
-    public void render(SpriteBatch batch) {
-        //todo: не оптимально
+    public void setSticker(Sticker sticker) {
         switch (sticker) {
             case FUEL:
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION);
@@ -72,6 +64,16 @@ public class Label {
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_LABEL_REGION);
                 break;
         }
+        this.sticker = sticker;
+    }
+
+    public Label() {
+        this.textureRegion = new TextureRegion();
+        this.color = new Color();
+        setSticker(Sticker.PATTERN);
+    }
+
+    public void render(SpriteBatch batch) {
 
         Color tmpColor = batch.getColor();
         batch.setColor(color);
@@ -94,7 +96,7 @@ public class Label {
 
     public void update(float dt) {
         angle = consumable.getAngle();
-        if (consumable.isTaken()){
+        if (consumable.isTaken()) {
             if (color.a >= consumable.getColor().a) {
                 color.a = consumable.getColor().a;
             }

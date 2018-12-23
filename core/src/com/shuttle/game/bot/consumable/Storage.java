@@ -1,6 +1,5 @@
 package com.shuttle.game.bot.consumable;
 
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.GameInfoSystem;
@@ -53,7 +52,7 @@ public class Storage extends AbstractConsumable {
     }
 
     private void stickLabel() {
-        int r = MathUtils.random(0, 1);
+        int r = MathUtils.random(0, 5);
         switch (r) {
             case 0:
                 labels[1].setSticker(generateDanger());
@@ -65,14 +64,37 @@ public class Storage extends AbstractConsumable {
 
     private Label.Sticker generateSafe() {
         int r = MathUtils.random(0, 3);
-        //todo: переделать логику. щас криво. 1) Радар не должен появлять, если он уже взят. Две коробки с радаром не должны быть. Аналогично про лазер.
-        // тут надо еще попробоватЬ, если звать gs.getPlayer.getRadar.isActive, то нарушается последовательность конструирования объектов и вылетает NPE. Надо как-то переделать. А вообще это днище когда все
-        // знают про gs, но уже ничо не поделать. Это не правильно, но с этим будем жить.
+        boolean radar = false;
+        boolean laser = false;
+        for (AbstractConsumable consumable : gs.getStorageEmitter().getActiveList()) {
+            if (consumable.getLabels()[1].getSticker() == Label.Sticker.LASER) {
+                laser = true;
+                break;
+            }
+        }
+
+        for (AbstractConsumable consumable : gs.getStorageEmitter().getActiveList()) {
+            if (consumable.getLabels()[1].getSticker() == Label.Sticker.RADAR) {
+                radar = true;
+                break;
+            }
+        }
+
+        System.out.println(r + " " + gs.getPlayer().getRadar().isActive() + " " + radar);
+        if (r == 0 && (gs.getPlayer().getRadar().isActive() || radar)) {
+            r += MathUtils.random(1, 3);
+        }
+        if (r == 1 && (gs.getPlayer().isLaser() || laser)) {
+            r += MathUtils.random(1, 2);
+        }
+
+        System.out.println(r);
+
         switch (r) {
             case 0:
-                return Label.Sticker.LASER;
-            case 1:
                 return Label.Sticker.RADAR;
+            case 1:
+                return Label.Sticker.LASER;
             case 2:
                 return Label.Sticker.ROCKET;
             default:
@@ -81,13 +103,7 @@ public class Storage extends AbstractConsumable {
     }
 
     private Label.Sticker generateDanger() {
-        int r = MathUtils.random(0, 5);
-        switch (r) {
-            case 1:
-                return Label.Sticker.PATTERN;
-            default:
-                return Label.Sticker.SHABBY;
-        }
+        return Label.Sticker.SHABBY;
     }
 
     @Override
@@ -103,16 +119,20 @@ public class Storage extends AbstractConsumable {
                     );
             boomBox.playSound(MSConstants.GET_RADAR);
             gs.getPlayer().getRadar().setActive(true);
-        } else {
+        }
+
+        if (labels[1].getSticker() == Label.Sticker.LASER) {
             gs.getGameInfoSystem()
                     .setup(
                             position.x,
                             position.y,
-                            GameInfoSystem.GameInfoSystemPreset.STORAGE,
+                            GameInfoSystem.GameInfoSystemPreset.LASER,
                             3.0f,
                             true
                     );
-            boomBox.playSound(MSConstants.GET_STORAGE);
+            gs.getPlayer().setLaser(true);
+            gs.getPlayer().setLaserChargeLevel(6);
+            boomBox.playSound(MSConstants.GET_LASER);
         }
     }
 

@@ -22,6 +22,7 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     protected Scan scan;
     @Setter
     protected boolean labeled;
+    @Getter
     protected Label[] labels;
     @Getter
     @Setter
@@ -39,11 +40,11 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
         this.level = -1;
         this.labels = new Label[3];
         //Back
-        this.labels[0] = new Label(Label.Sticker.PATTERN);
+        this.labels[0] = new Label();
         //Front, exactly Sticker is set in init() method
-        this.labels[1] = new Label(Label.Sticker.PATTERN);
+        this.labels[1] = new Label();
         //Hidden if labels[1].getSticker() = Label.Sticker.PATTERN
-        this.labels[2] = new Label(Label.Sticker.PATTERN);
+        this.labels[2] = new Label();
         this.labels[0].setColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, PaintConstants.LABEL_ALPHA);
         this.labels[1].setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.LABEL_ALPHA);
         this.labels[2].setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.LABEL_ALPHA);

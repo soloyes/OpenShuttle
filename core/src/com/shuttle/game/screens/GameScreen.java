@@ -581,6 +581,9 @@ public class GameScreen extends BaseScreen {
                         } else {
                             player.getRamShield().blink(0.5f);
                             player.setPower(player.getPower() + asteroid.getSizeForHarvest());
+                            if (asteroid.getType() == AbstractPoolable.Type.ASTEROID_MINERAL) {
+                                player.setLaserChargeLevel(player.getLaserChargeLevel() + asteroid.getSizeForHarvest());
+                            }
                             //pretty sound if collect much fragments in little time
                             prettyFragmentHarvest.playSound(MSConstants.GET_FRAGMENT);
                             asteroid.destroy();
@@ -645,10 +648,12 @@ public class GameScreen extends BaseScreen {
                         ray.setTakeRange(Rules.PLAYER_FRAGMENT_TAKE_RANGE);
                         ray.harvest(player, asteroid, particleEmitter, dt);
                     } else {
-                        ray.setCount(5);
-                        ray.setSize(3);
-                        ray.setPreset(Ray.Preset.RED);
-                        ray.laser(player, asteroid, particleEmitter, dt);
+                        if (player.isLaser()) {
+                            ray.setCount(5);
+                            ray.setSize(3);
+                            ray.setPreset(Ray.Preset.RED);
+                            ray.laser(player, asteroid, particleEmitter, dt);
+                        }
                     }
                     //
                 }

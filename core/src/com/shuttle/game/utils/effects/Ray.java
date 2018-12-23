@@ -137,7 +137,7 @@ public class Ray {
                 );
             }
             asteroid.setTimeToBurn(asteroid.getTimeToBurn() + dt);
-            if (asteroid.getTimeToBurn() >= 0.5f + Rules.ASTEROID_METAL_BURN_TIME * player.getShieldLevel().getLevel()) {
+            if (asteroid.getTimeToBurn() >= 0.5f + Rules.ASTEROID_METAL_BURN_TIME / player.getLaserChargeLevel()) {
                 boomBox.playSound(MSConstants.ASTEROID_SPLASH);
                 //todo:repeatable code..
                 switch (asteroid.getType()) {
@@ -153,6 +153,11 @@ public class Ray {
                 player.getStanding().addToStatistics(asteroid.getType(), asteroid.getLevel());
                 asteroid.setTimeToBurn(0.0f);
                 asteroid.setAtRayPoint(false);
+                player.setLaserChargeLevel(player.getLaserChargeLevel() - 1);
+                if (player.getLaserChargeLevel() < 1) {
+                    player.setLaser(false);
+                    player.setLaserChargeLevel(0);
+                }
             }
         } else {
             asteroid.setAtRayPoint(false);

@@ -107,7 +107,8 @@ public final class PaintConstants {
     public static final float JOYSTICK_STICK_ALPHA = 0.7f;
     public static final float RADAR_GLOW_OSCILLATOR_MIN = -0.4f;
     public static final float RADAR_GLOW_OSCILLATOR_MAX = 0.4f;
-    public static final float RADAR_OSCILLATION_FREQUENCY = 2.5f;
+    public static final float RADAR_OSCILLATION_FREQUENCY = 1.5f;
+    public static final float RADAR_ALPHA = 0.5f;
     public static final int POINTER_WIDTH = 48;
     public static final int POINTER_HEIGHT = 48;
     public static final float POINTER_BLINK_FREQUENCY = 0.3f;

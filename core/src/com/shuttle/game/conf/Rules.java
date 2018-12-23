@@ -49,6 +49,7 @@ public final class Rules {
     //10.0f
     public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 10.0f;
     //0
+    //todo:// NPE if != 0. Порядок конструирования объектов проверить. Изменить. Пофиксить в общем.
     public static final int CONSUMABLE_STORAGE_AT_START = 0;
     //2
     public static final int CONSUMABLE_STORAGE_MAX_COUNT = 2;

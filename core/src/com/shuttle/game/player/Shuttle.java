@@ -82,6 +82,12 @@ public class Shuttle extends AbstractShuttle {
     private LinkedList<Float> angleList;
     private LinkedList<Float> alphaList;
     private int F;
+    @Getter
+    @Setter
+    private boolean laser;
+    @Getter
+    @Setter
+    private float laserChargeLevel;
 
     public Shuttle(GameScreen gs, Joystick joystick) {
         super(gs);
@@ -101,7 +107,7 @@ public class Shuttle extends AbstractShuttle {
         setShadowsCoordinates();
     }
 
-    public void setShadowsCoordinates(){
+    public void setShadowsCoordinates() {
         this.shadowsCoordinates = Fibonacci.generate(F);
     }
 
@@ -316,8 +322,8 @@ public class Shuttle extends AbstractShuttle {
         float v = velocity.len() - Rules.PLAYER_ENGINE_POWER;
         if (v >= 0) {
             if (v <= shadowsCoordinates.getLast()) {
-                if (shadowsCoordinates.size() > 1){
-                shadowsCoordinates.removeLast();
+                if (shadowsCoordinates.size() > 1) {
+                    shadowsCoordinates.removeLast();
                 }
                 Vector2 tmp = position.cpy();
                 tmp.set(

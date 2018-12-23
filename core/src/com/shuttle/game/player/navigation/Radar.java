@@ -43,6 +43,13 @@ public class Radar {
     private Oscillator oscillator;
     private List<List<? extends AbstractConsumable>> listsActiveConsumable;
 
+    private Color tanColor = new Color(Color.TAN.r, Color.TAN.g, Color.TAN.b, PaintConstants.RADAR_ALPHA);
+    private Color greenColor = new Color(Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, PaintConstants.RADAR_ALPHA);
+    private Color yellowColor = new Color(Color.YELLOW.r, Color.YELLOW.g, Color.YELLOW.b, PaintConstants.RADAR_ALPHA);
+    private Color redColor = new Color(Color.RED.r, Color.RED.g, Color.RED.b, PaintConstants.RADAR_ALPHA);
+    private Color purpleColor = new Color(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.RADAR_ALPHA);
+    private Color whiteColor = new Color(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.RADAR_ALPHA);
+
     public Radar(GameScreen gs, Shuttle player) {
         this.gs = gs;
         this.dot1 = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_CONSUMABLE_DOT_REGION);
@@ -116,17 +123,17 @@ public class Radar {
         }
         switch (c) {
             case 0:
-                return Color.TAN;
+                return tanColor;
             case 1:
-                return Color.GREEN;
+                return greenColor;
             case 2:
-                return Color.YELLOW;
+                return yellowColor;
             case 3:
-                return Color.RED;
+                return redColor;
             case 4:
-                return Color.PURPLE;
+                return purpleColor;
             default:
-                return Color.WHITE;
+                return whiteColor;
         }
     }
 
