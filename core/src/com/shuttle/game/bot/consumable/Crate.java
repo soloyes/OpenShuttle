@@ -70,6 +70,7 @@ public class Crate extends AbstractConsumable {
     }
 
     private Label.Sticker generateSafe() {
+        
         int r = MathUtils.random(0, 6);
         switch (r) {
             case 0:
