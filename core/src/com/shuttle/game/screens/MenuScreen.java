@@ -27,7 +27,7 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public void createGUI() {
-        background = new Background(ScreenManager.ScreenType.MENU);
+        background = new Background();
         MenuGroup menuGroup = new MenuGroup();
         MenuBar menuBar = new MenuBar();
         ResultGroup resultGroup = new ResultGroup();

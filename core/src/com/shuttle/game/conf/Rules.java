@@ -10,7 +10,7 @@ public final class Rules {
     //SPACE
     public static int STARS_COUNT;
     //600
-    private static final int STARS = 600;
+    private static final int STARS = 300;
     //1080
     public static final int WORLD_WIDTH = 1080;
     //1920

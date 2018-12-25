@@ -1,13 +1,10 @@
 package com.shuttle.game.background;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
-import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 
 /**
@@ -17,23 +14,20 @@ public class StarSky {
     private TextureRegion starTexture;
     private Star[] stars;
 
-    public StarSky(CloudSky cloudSky, ScreenManager.ScreenType screenType) {
-        this.stars = new Star[Rules.STARS_COUNT];
+    public StarSky(CloudSky cloudSky) {
         this.starTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STAR16_REGION);
+        this.stars = new Star[Rules.STARS_COUNT];
         for (int i = 0; i < stars.length / 2; i++) {
-            stars[i] = new Star(0.3f, 0.8f);
+            stars[i] = new Star(0.3f, 0.5f);
             stars[i].setCloudSky(cloudSky);
-            stars[i].setScreenType(screenType);
         }
         for (int i = stars.length / 2; i < 2 * stars.length / 3; i++) {
-            stars[i] = new Star(0.8f, 1.2f);
+            stars[i] = new Star(0.5f, 1.0f);
             stars[i].setCloudSky(cloudSky);
-            stars[i].setScreenType(screenType);
         }
         for (int i = 2 * stars.length / 3; i < stars.length; i++) {
-            stars[i] = new Star(1.2f, 1.8f);
+            stars[i] = new Star(1.0f, 1.2f);
             stars[i].setCloudSky(cloudSky);
-            stars[i].setScreenType(screenType);
         }
     }
 
@@ -50,30 +44,9 @@ public class StarSky {
     }
 
     public void render(SpriteBatch batch) {
-        Color color = batch.getColor();
         for (int i = 0; i < stars.length; i++) {
-            batch.setColor(stars[i].getColor());
-            batch.draw(
-                    starTexture,
-                    stars[i].getPosition().x - stars[i].getWidth() / 2, stars[i].getPosition().y - stars[i].getHeight() / 2,
-                    stars[i].getWidth() / 2, stars[i].getHeight() / 2,
-                    stars[i].getWidth(), stars[i].getHeight(),
-                    stars[i].getScaleX(), stars[i].getScaleY(),
-                    0
-            );
-            if (MathUtils.random(0, 300) < 2) {
-                batch.setColor(stars[i].getColor());
-                batch.draw(
-                        starTexture,
-                        stars[i].getPosition().x - stars[i].getWidth() / 2, stars[i].getPosition().y - stars[i].getHeight() / 2,
-                        stars[i].getWidth() / 2, stars[i].getHeight() / 2,
-                        stars[i].getWidth(), stars[i].getHeight(),
-                        stars[i].getScaleX() * PaintConstants.STAR16_BLINK_FACTOR, stars[i].getScaleY() * PaintConstants.STAR16_BLINK_FACTOR,
-                        0
-                );
-            }
+            stars[i].render(batch, starTexture);
         }
-        batch.setColor(color);
     }
 
     public void update(float dt) {

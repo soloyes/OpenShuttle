@@ -12,6 +12,8 @@ import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 
+import lombok.Getter;
+
 public class ScreenManager {
     private static ScreenManager ourInstance = new ScreenManager();
     private ShuttleGame game;
@@ -23,6 +25,8 @@ public class ScreenManager {
     private SpriteBatch batch;
     private Viewport viewport;
     private Camera camera;
+    @Getter
+    private ScreenType currentScreen;
 
     private ScreenManager() {
     }
@@ -36,6 +40,7 @@ public class ScreenManager {
         }
         resetCamera();
         game.setScreen(loadingScreen);
+        currentScreen = type;
         switch (type) {
             case MENU:
                 targetScreen = menuScreen;
@@ -91,6 +96,6 @@ public class ScreenManager {
     }
 
     public enum ScreenType {
-        MENU, GAME, CONFIG, TEST
+        MENU, GAME, TEST
     }
 }

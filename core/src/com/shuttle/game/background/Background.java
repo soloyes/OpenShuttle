@@ -2,7 +2,6 @@ package com.shuttle.game.background;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.player.Shuttle;
-import com.shuttle.game.screens.ScreenManager;
 
 /**
  * @author Shuttle on 12/8/18.
@@ -16,9 +15,9 @@ public class Background {
         starSky.setPlayer(shuttle);
     }
 
-    public Background(ScreenManager.ScreenType screenType) {
-        cloudSky = new CloudSky(screenType);
-        starSky = new StarSky(cloudSky, screenType);
+    public Background() {
+        cloudSky = new CloudSky();
+        starSky = new StarSky(cloudSky);
     }
 
     public void render(SpriteBatch batch) {

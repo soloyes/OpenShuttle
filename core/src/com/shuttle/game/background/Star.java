@@ -1,6 +1,8 @@
 package com.shuttle.game.background;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
@@ -8,25 +10,22 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.ScreenManager;
 
-import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 12/8/18.
  */
 public class Star {
-    @Getter
     private Vector2 position;
+    @Setter
     private Shuttle player;
     private Vector2 normal;
+    @Setter
     private CloudSky cloudSky;
     private float speed;
-    @Getter
     private float scaleX, scaleY;
-    @Getter
     private float width, height;
-    @Getter
     private Color color;
-    private ScreenManager.ScreenType screenType;
 
     public Star(float startScale, float endScale) {
         this.position = new Vector2(MathUtils.random(0, Rules.SPACE_WIDTH), MathUtils.random(0, Rules.SPACE_HEIGHT));
@@ -61,28 +60,25 @@ public class Star {
     }
 
     public void update(float dt) {
-        if (screenType == ScreenManager.ScreenType.GAME){
-            position.x -= player.getVelocity().x / (1000/ scaleX);
-            position.y -= player.getVelocity().y / (1000/ scaleX);
-            if (normal.set(player.getVelocity()).len() < 150){
+        if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
+            position.x -= player.getVelocity().x / (1000 / scaleX);
+            position.y -= player.getVelocity().y / (1000 / scaleX);
+            if (normal.set(player.getVelocity()).len() < 150) {
                 normal.set(player.getVelocity()).nor();
                 position.x -= 0.1 * normal.x * scaleX;
                 position.y -= 0.1 * normal.y * scaleX;
             }
-        }
-        else {
-            if(cloudSky.getBCdx() > cloudSky.getWidthBC() / 8)
-            {
-                position.x += speed * dt + scaleX * dt* dt / 2;
-            }
-            else {
-                position.x += speed * dt - scaleX * dt* dt / 2;
+        } else {
+            if (cloudSky.getBCdx() > PaintConstants.BACKGROUND_OSCILLATE_WIDTH) {
+                position.x += speed * dt + scaleX * dt * dt / 2;
+            } else {
+                position.x += speed * dt - scaleX * dt * dt / 2;
             }
 
-            if(cloudSky.getOscillatorBC().prettyOscillate(cloudSky.getBCdx(), cloudSky.getFrequency1(), 1f, 0 , cloudSky.getWidthBC() / 4, dt) > cloudSky.getWidthBC() / 8){
+            float tmp = cloudSky.getOscillatorBC().prettyOscillate(cloudSky.getBCdx(), cloudSky.getFrequency1(), 1f, 0, cloudSky.getWidthBC() / 4, dt);
+            if (tmp > PaintConstants.BACKGROUND_OSCILLATE_WIDTH) {
                 speed += scaleX * dt;
-            }
-            else {
+            } else {
                 speed -= scaleX * dt;
             }
         }
@@ -99,18 +95,29 @@ public class Star {
         if (position.y > Rules.SPACE_HEIGHT) {
             position.y = height;
         }
-
     }
 
-    public void setPlayer(Shuttle player) {
-        this.player = player;
-    }
-
-    public void setCloudSky(CloudSky cloudSky) {
-        this.cloudSky = cloudSky;
-    }
-
-    public void setScreenType(ScreenManager.ScreenType screenType) {
-        this.screenType = screenType;
+    public void render(SpriteBatch batch, TextureRegion textureRegion) {
+        Color tmpColor = batch.getColor();
+        batch.setColor(color);
+        batch.draw(
+                textureRegion,
+                position.x - width / 2, position.y - height / 2,
+                width / 2, height / 2,
+                width, height,
+                scaleX, scaleY,
+                0
+        );
+        if (MathUtils.random(0, 300) < 2) {
+            batch.draw(
+                    textureRegion,
+                    position.x - width / 2, position.y - height / 2,
+                    width / 2, height / 2,
+                    width, height,
+                    scaleX * PaintConstants.STAR16_BLINK_FACTOR, scaleY * PaintConstants.STAR16_BLINK_FACTOR,
+                    0
+            );
+        }
+        batch.setColor(tmpColor);
     }
 }

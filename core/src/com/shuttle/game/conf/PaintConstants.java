@@ -149,7 +149,6 @@ public final class PaintConstants {
     public static final float SCAN_ALPHA_MIN = 0.5f;
     public static final float SCAN_ALPHA_MAX = 1.0f;
 
-
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
     public static final String FONT32 = "fonts/gomarice32.ttf";
     public static final String FONT32_C = "fonts/gomarice32Coloured.ttf";
@@ -160,4 +159,5 @@ public final class PaintConstants {
     public static final String FONT128 = "fonts/gomarice128.ttf";
     public static final String GAME_PACK = "pics/game.pack";
     public static final String BACKGROUND_COLOR_HEX = "100514ff";
+    public static final float BACKGROUND_OSCILLATE_WIDTH = 50;
 }

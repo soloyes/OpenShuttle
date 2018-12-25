@@ -170,7 +170,7 @@ public class GameScreen extends BaseScreen {
         mineralAsteroidEmitter = new MineralAsteroidEmitter(this);
         fuelEmitter = new FuelEmitter(this);
         storageEmitter = new StorageEmitter(this);
-        background = new Background(ScreenManager.ScreenType.GAME);
+        background = new Background();
         gameInfoSystem = new GameInfoSystem();
         joystick = new Joystick();
 
