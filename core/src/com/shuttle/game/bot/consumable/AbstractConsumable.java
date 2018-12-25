@@ -41,7 +41,7 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
         this.labels = new Label[3];
         //Back
         this.labels[0] = new Label();
-        //Front, exactly Sticker is set in init() method
+        //Front, exactly sticker is set in init() method
         this.labels[1] = new Label();
         //Hidden if labels[1].getSticker() = Label.Sticker.PATTERN
         this.labels[2] = new Label();

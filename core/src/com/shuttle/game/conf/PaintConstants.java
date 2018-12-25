@@ -109,8 +109,6 @@ public final class PaintConstants {
     public static final float RADAR_GLOW_OSCILLATOR_MAX = 0.4f;
     public static final float RADAR_OSCILLATION_FREQUENCY = 1.5f;
     public static final float RADAR_ALPHA = 0.5f;
-    public static final int POINTER_WIDTH = 48;
-    public static final int POINTER_HEIGHT = 48;
     public static final float POINTER_BLINK_FREQUENCY = 0.3f;
     public static final String PATTERN_SIGN_LABEL_REGION = "patternsign";
     public static final String SHABBY_SIGN_LABEL_REGION = "shabbysign";
@@ -130,6 +128,12 @@ public final class PaintConstants {
     public static final String RADAR_ANOMALY_DOT_REGION = "radardot2";
     public static final float RADAR_DOT_WIDTH = 8.0f;
     public static final float RADAR_DOT_HEIGHT = 8.0f;
+    public static final String POINTER_ARROW = "outarrow";
+    public static final String POINTER_MARK = "outmark";
+    public static final int POINTER_WIDTH = 48;
+    public static final int POINTER_HEIGHT = 48;
+    public static final float POINTER_MARK_SCALE = 1.3f;
+    public static final int POINTER_D = 50;
 
     public static final String SHIELD_FUEL_REGION = "shieldfuel";
     public static final float SHIELD_FUEL_WIDTH = FUEL_1_WIDTH * 1.1f;

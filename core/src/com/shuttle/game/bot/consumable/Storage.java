@@ -80,7 +80,6 @@ public class Storage extends AbstractConsumable {
             }
         }
 
-        System.out.println(r + " " + gs.getPlayer().getRadar().isActive() + " " + radar);
         if (r == 0 && (gs.getPlayer().getRadar().isActive() || radar)) {
             r += MathUtils.random(1, 3);
         }
@@ -88,22 +87,25 @@ public class Storage extends AbstractConsumable {
             r += MathUtils.random(1, 2);
         }
 
-        System.out.println(r);
-
         switch (r) {
             case 0:
                 return Label.Sticker.RADAR;
             case 1:
                 return Label.Sticker.LASER;
-            case 2:
-                return Label.Sticker.ROCKET;
             default:
-                return Label.Sticker.PATTERN;
+                return Label.Sticker.ROCKET;
+                //todo:// add many items insight Storage
         }
     }
 
     private Label.Sticker generateDanger() {
-        return Label.Sticker.SHABBY;
+        int r = MathUtils.random(0, 5);
+        switch (r) {
+            case 1:
+                return Label.Sticker.SHABBY;
+            default:
+                return Label.Sticker.PATTERN;
+        }
     }
 
     @Override

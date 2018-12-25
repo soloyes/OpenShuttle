@@ -70,7 +70,6 @@ public class Crate extends AbstractConsumable {
     }
 
     private Label.Sticker generateSafe() {
-        
         int r = MathUtils.random(0, 6);
         switch (r) {
             case 0:
@@ -92,9 +91,9 @@ public class Crate extends AbstractConsumable {
         int r = MathUtils.random(0, 5);
         switch (r) {
             case 1:
-                return Label.Sticker.PATTERN;
-            default:
                 return Label.Sticker.SHABBY;
+            default:
+                return Label.Sticker.PATTERN;
         }
     }
 
