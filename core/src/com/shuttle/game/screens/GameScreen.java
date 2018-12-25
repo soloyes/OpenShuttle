@@ -196,6 +196,7 @@ public class GameScreen extends BaseScreen {
         consumableList = consumableJoiner.join(astronautEmitter.getActiveList(), crateEmitter.getActiveList(), fuelEmitter.getActiveList(), storageEmitter.getActiveList());
         asteroidsList = asteroidsJoiner.join(metalAsteroidEmitter.getActiveList(), mineralAsteroidEmitter.getActiveList());
         //
+        storageEmitter.emit();
     }
 
     private void calcMusicEffectVolume() {

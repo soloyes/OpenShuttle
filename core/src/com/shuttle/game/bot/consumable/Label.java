@@ -74,7 +74,6 @@ public class Label {
     }
 
     public void render(SpriteBatch batch) {
-
         Color tmpColor = batch.getColor();
         batch.setColor(color);
         batch.draw(textureRegion,

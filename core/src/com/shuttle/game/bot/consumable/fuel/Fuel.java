@@ -88,7 +88,7 @@ public class Fuel extends AbstractConsumable {
                 false
         );
         boomBox.playSound(MSConstants.FUEL_DESTROY);
-        gs.getPlayer().getStanding().changeHP(-Rules.CONSUMABLE_FUEL_DECREASE_LIFE);
+        gs.getPlayer().getStanding().changeHP(-Rules.CONSUMABLE_FUEL_HP_DAMAGE);
         Vibrator.vibrate(VConstants.PLAYER_FUEL_DESTROY);
     }
 

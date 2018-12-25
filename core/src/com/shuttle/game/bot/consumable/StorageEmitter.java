@@ -9,7 +9,6 @@ public class StorageEmitter extends AbstractConsumableEmitter {
         super.setRespawnTime(Rules.CONSUMABLE_STORAGE_RESPAWN_TIME);
         super.setConsumablesAtStart(Rules.CONSUMABLE_STORAGE_AT_START);
         super.setConsumablesMaxCount(Rules.CONSUMABLE_STORAGE_MAX_COUNT);
-        emit();
     }
 
     @Override

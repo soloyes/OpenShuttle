@@ -9,7 +9,7 @@ import com.shuttle.game.player.Shuttle;
 public final class Rules {
     //SPACE
     public static int STARS_COUNT;
-    //600
+    //300
     private static final int STARS = 300;
     //1080
     public static final int WORLD_WIDTH = 1080;
@@ -36,21 +36,20 @@ public final class Rules {
     public static final int CONSUMABLE_FUEL_AT_START = 0;
     //10.0f
     public static final float CONSUMABLE_FUEL_RESPAWN_TIME = 10.0f;
+    //5
+    public static final int CONSUMABLE_FUEL_MAX_COUNT = 5;
     //1
     public static final int CONSUMABLE_FUEL_ADD_FACTOR = 1;
     //10
     public static final int CONSUMABLE_FUEL_MIN_ADD = 10;
-    //1
-    public static final int CONSUMABLE_FUEL_MAX_ADD = 20;
     //20
-    public static final int CONSUMABLE_FUEL_MAX_COUNT = 2;
+    public static final int CONSUMABLE_FUEL_MAX_ADD = 20;
     //2
-    public static final int CONSUMABLE_FUEL_DECREASE_LIFE = 2;
-    //10.0f
-    public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 10.0f;
+    public static final int CONSUMABLE_FUEL_HP_DAMAGE = 2;
     //0
-    //todo:// NPE if != 0. Порядок конструирования объектов проверить. Изменить. Пофиксить в общем.
     public static final int CONSUMABLE_STORAGE_AT_START = 0;
+    //15.0f
+    public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 15.0f;
     //2
     public static final int CONSUMABLE_STORAGE_MAX_COUNT = 2;
     //2
@@ -86,7 +85,7 @@ public final class Rules {
     //
     //0
     public static final int ANOMALIES_MAGNETIC_AT_START = 0;
-    //15
+    //15.0f
     public static final float ANOMALIES_MAGNETIC_RESPAWN_TIME = 15.0f;
     //2
     public static final int ANOMALIES_MAGNETIC_MAX_COUNT = 2;
@@ -103,8 +102,8 @@ public final class Rules {
     public static final int ANOMALIES_CORROSIVE_AT_START = 2;
     //4.0f
     public static final float ANOMALIES_CORROSIVE_RESPAWN_TIME = 4.0f;
-    //100
-    public static final int ANOMALIES_CORROSIVE_MAX_COUNT = 100;
+    //30
+    public static final int ANOMALIES_CORROSIVE_MAX_COUNT = 30;
     //60.0f
     public static final float ANOMALIES_CORROSIVE_VELOCITY = 60.0f;
     //0.15f
@@ -210,7 +209,7 @@ public final class Rules {
     public static final int CONSUMABLE_BASE_SCORE_ADD = 10000;
     //1000
     public static final int CONSUMABLE_BONUS_SCORE_ADD = 1000;
-    //10000
+    //50000
     public static final int CONSUMABLE_MURDER_SCORE_DECREASE = 50000;
     //30.0f
     public static final float CONSUMABLE_SHIELD_TIME = 30.0f;
