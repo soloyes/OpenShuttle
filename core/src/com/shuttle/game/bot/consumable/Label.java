@@ -122,4 +122,8 @@ public class Label {
         //Fuel
         FUEL,
     }
+
+    public enum Layer{
+        BACK, LABEL, HIDDEN
+    }
 }

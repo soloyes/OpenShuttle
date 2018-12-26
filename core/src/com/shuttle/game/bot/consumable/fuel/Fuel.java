@@ -53,12 +53,11 @@ public class Fuel extends AbstractConsumable {
         }
         this.labeled = true;
 
-        this.labels[1].setSticker(Label.Sticker.FUEL);
-        for (int i = 0; i < labels.length; i++) {
-            this.labels[i].setConsumable(this);
-            this.labels[i].setColor(Color.valueOf("000000ff"));
-            this.labels[i].setScaleFactor(4);
-        }
+        this.labels.get(Label.Layer.LABEL).get(0).setSticker(Label.Sticker.FUEL);
+        this.labels.get(Label.Layer.LABEL).get(0).setConsumable(this);
+        this.labels.get(Label.Layer.LABEL).get(0).setColor(Color.valueOf("000000ff"));
+        this.labels.get(Label.Layer.LABEL).get(0).setScaleFactor(4);
+
         this.shielded = false;
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
     }
@@ -88,7 +87,7 @@ public class Fuel extends AbstractConsumable {
                 false
         );
         boomBox.playSound(MSConstants.FUEL_DESTROY);
-        gs.getPlayer().getStanding().changeHP(-Rules.CONSUMABLE_FUEL_HP_DAMAGE);
+        gs.getPlayer().takeDamage(Rules.CONSUMABLE_FUEL_HP_DAMAGE);
         Vibrator.vibrate(VConstants.PLAYER_FUEL_DESTROY);
     }
 
@@ -106,7 +105,7 @@ public class Fuel extends AbstractConsumable {
     @Override
     public void basicUpdate(float dt) {
         super.basicUpdate(dt);
-        labels[1].update(dt);
+        labels.get(Label.Layer.LABEL).get(0).update(dt);
     }
 
     @Override
@@ -122,7 +121,7 @@ public class Fuel extends AbstractConsumable {
             bubble[i].render(batch);
         }
         box.render(batch);
-        labels[1].render(batch);
+        labels.get(Label.Layer.LABEL).get(0).render(batch);
         if (shielded && !taken) {
             shield.render(batch);
         }

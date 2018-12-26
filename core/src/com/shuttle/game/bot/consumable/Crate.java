@@ -45,13 +45,21 @@ public class Crate extends AbstractConsumable {
         this.spiralRadius = MathUtils.random(20, 60);
         this.atRayPoint = false;
         this.labeled = true;
-        this.labels[0].setScaleFactor(3.5f);
-        this.labels[1].setScaleFactor(3.5f);
-        this.labels[2].setScaleFactor(3.5f);
+
+        this.labels.get(Label.Layer.BACK).get(0).setConsumable(this);
+        this.labels.get(Label.Layer.BACK).get(0).setScaleFactor(3.5f);
+        this.labels.get(Label.Layer.BACK).get(0).setColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, PaintConstants.LABEL_ALPHA);
+
+        this.labels.get(Label.Layer.LABEL).get(0).setConsumable(this);
+        this.labels.get(Label.Layer.LABEL).get(0).setScaleFactor(3.5f);
+        this.labels.get(Label.Layer.LABEL).get(0).setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.LABEL_ALPHA);
+
+        this.labels.get(Label.Layer.HIDDEN).get(0).setConsumable(this);
+        this.labels.get(Label.Layer.HIDDEN).get(0).setScaleFactor(3.5f);
+        this.labels.get(Label.Layer.HIDDEN).get(0).setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.LABEL_ALPHA);
+
         stickLabel();
-        if (labels[1].getSticker() == Label.Sticker.PATTERN) {
-            labels[2].setSticker(generateSafe());
-        }
+
         this.shielded = false;
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
         this.scanned = false;
@@ -62,10 +70,13 @@ public class Crate extends AbstractConsumable {
         int r = MathUtils.random(0, 20);
         switch (r) {
             case 0:
-                labels[1].setSticker(generateDanger());
+                labels.get(Label.Layer.LABEL).get(0).setSticker(generateDanger());
                 break;
             default:
-                labels[1].setSticker(generateSafe());
+                labels.get(Label.Layer.LABEL).get(0).setSticker(generateSafe());
+        }
+        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.PATTERN) {
+            labels.get(Label.Layer.HIDDEN).get(0).setSticker(generateSafe());
         }
     }
 
@@ -102,8 +113,14 @@ public class Crate extends AbstractConsumable {
         basicUpdate(dt);
         moveProcessor.update(this, dt);
         boundCheck.checkAndHandleBoundsAndDestroy(this);
-        for (int i = 0; i < labels.length; i++) {
-            labels[i].update(dt);
+        for (int i = 0; i < labels.get(Label.Layer.BACK).size(); i++) {
+            labels.get(Label.Layer.BACK).get(i).update(dt);
+        }
+        for (int i = 0; i < labels.get(Label.Layer.LABEL).size(); i++) {
+            labels.get(Label.Layer.LABEL).get(i).update(dt);
+        }
+        for (int i = 0; i < labels.get(Label.Layer.HIDDEN).size(); i++) {
+            labels.get(Label.Layer.HIDDEN).get(i).update(dt);
         }
         shield.update(dt);
         scan.update(dt);
@@ -114,7 +131,7 @@ public class Crate extends AbstractConsumable {
         Standing standing = gs.getPlayer().getStanding();
         Shuttle player = gs.getPlayer();
 
-        if (labels[1].getSticker() == Label.Sticker.REPAIR) {
+        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.REPAIR) {
             standing.changeHP(Rules.CONSUMABLE_REPAIR_ADD);
             gs.getGameInfoSystem()
                     .setup(
@@ -127,7 +144,7 @@ public class Crate extends AbstractConsumable {
             boomBox.playSound(MSConstants.PLAYER_REPAIR);
         }
 
-        if (labels[1].getSticker() == Label.Sticker.BOOST) {
+        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.BOOST) {
             float d = Rules.PLAYER_BOOST_ENGINE_POWER - player.getVelocity().len();
             player.setShadowsCoordinates();
             player.getVelocity().add(
@@ -145,7 +162,7 @@ public class Crate extends AbstractConsumable {
             boomBox.playSound(MSConstants.TURBO);
         }
 
-        if (labels[1].getSticker() == Label.Sticker.SPLASH) {
+        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.SPLASH) {
             List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
             for (int i = 0; i < anomalies.size(); i++) {
                 if (boundCheck.checkAndHandleBoundsInCamera(anomalies.get(i), gs.getCamera())) {
@@ -175,7 +192,7 @@ public class Crate extends AbstractConsumable {
             boomBox.playSound(MSConstants.ANOMALY_SPLASH);
         }
 
-        if (labels[1].getSticker() == Label.Sticker.TRASH) {
+        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.TRASH) {
             gs.getGameInfoSystem()
                     .setup(
                             position.x,
@@ -187,7 +204,7 @@ public class Crate extends AbstractConsumable {
             boomBox.playSound(MSConstants.GET_TRASH);
         }
 
-        if (labels[1].getSticker() == Label.Sticker.SHIELD) {
+        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.SHIELD) {
             List<AbstractConsumable> list = gs.getCrateEmitter().getActiveList();
             for (int i = 0; i < list.size(); i++) {
                 list.get(i).setShielded(true);
@@ -211,16 +228,16 @@ public class Crate extends AbstractConsumable {
             boomBox.playSound(MSConstants.GET_SHIELD);
         }
 
-        if (labels[1].getSticker() == Label.Sticker.SCAN) {
+        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.SCAN) {
             List<AbstractConsumable> list = gs.getCrateEmitter().getActiveList();
             for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).labels[1].getSticker() == Label.Sticker.PATTERN) {
+                if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.PATTERN) {
                     list.get(i).setScanned(true);
                 }
             }
             list = gs.getStorageEmitter().getActiveList();
             for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).labels[1].getSticker() == Label.Sticker.PATTERN) {
+                if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.PATTERN) {
                     list.get(i).setScanned(true);
                 }
             }

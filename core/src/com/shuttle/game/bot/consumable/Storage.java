@@ -38,13 +38,21 @@ public class Storage extends AbstractConsumable {
         this.spiralRadius = MathUtils.random(20, 60);
         this.atRayPoint = false;
         this.labeled = true;
-        this.labels[0].setScaleFactor(2.0f);
-        this.labels[1].setScaleFactor(2.0f);
-        this.labels[2].setScaleFactor(2.0f);
+
+        this.labels.get(Label.Layer.BACK).get(0).setConsumable(this);
+        this.labels.get(Label.Layer.BACK).get(0).setScaleFactor(2.5f);
+        this.labels.get(Label.Layer.BACK).get(0).setColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, PaintConstants.LABEL_ALPHA);
+
+        this.labels.get(Label.Layer.LABEL).get(0).setConsumable(this);
+        this.labels.get(Label.Layer.LABEL).get(0).setScaleFactor(2.5f);
+        this.labels.get(Label.Layer.LABEL).get(0).setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.LABEL_ALPHA);
+
+        this.labels.get(Label.Layer.HIDDEN).get(0).setConsumable(this);
+        this.labels.get(Label.Layer.HIDDEN).get(0).setScaleFactor(2.5f);
+        this.labels.get(Label.Layer.HIDDEN).get(0).setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.LABEL_ALPHA);
+
         stickLabel();
-        if (labels[1].getSticker() == Label.Sticker.PATTERN) {
-            labels[2].setSticker(generateSafe());
-        }
+
         this.shielded = false;
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
         this.scanned = false;
@@ -55,10 +63,13 @@ public class Storage extends AbstractConsumable {
         int r = MathUtils.random(0, 5);
         switch (r) {
             case 0:
-                labels[1].setSticker(generateDanger());
+                labels.get(Label.Layer.LABEL).get(0).setSticker(generateDanger());
                 break;
             default:
-                labels[1].setSticker(generateSafe());
+                labels.get(Label.Layer.LABEL).get(0).setSticker(generateSafe());
+        }
+        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.PATTERN) {
+            labels.get(Label.Layer.HIDDEN).get(0).setSticker(generateSafe());
         }
     }
 
@@ -67,14 +78,14 @@ public class Storage extends AbstractConsumable {
         boolean radar = false;
         boolean laser = false;
         for (AbstractConsumable consumable : gs.getStorageEmitter().getActiveList()) {
-            if (consumable.getLabels()[1].getSticker() == Label.Sticker.LASER) {
+            if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.LASER) {
                 laser = true;
                 break;
             }
         }
 
         for (AbstractConsumable consumable : gs.getStorageEmitter().getActiveList()) {
-            if (consumable.getLabels()[1].getSticker() == Label.Sticker.RADAR) {
+            if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.RADAR) {
                 radar = true;
                 break;
             }
@@ -94,7 +105,7 @@ public class Storage extends AbstractConsumable {
                 return Label.Sticker.LASER;
             default:
                 return Label.Sticker.ROCKET;
-                //todo:// add many items insight Storage
+            //todo:// add many items insight Storage
         }
     }
 
@@ -110,7 +121,7 @@ public class Storage extends AbstractConsumable {
 
     @Override
     public void consumed(GameScreen gs) {
-        if (labels[1].getSticker() == Label.Sticker.RADAR) {
+        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.RADAR) {
             gs.getGameInfoSystem()
                     .setup(
                             position.x,
@@ -123,7 +134,7 @@ public class Storage extends AbstractConsumable {
             gs.getPlayer().getRadar().setActive(true);
         }
 
-        if (labels[1].getSticker() == Label.Sticker.LASER) {
+        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.LASER) {
             gs.getGameInfoSystem()
                     .setup(
                             position.x,
@@ -156,8 +167,14 @@ public class Storage extends AbstractConsumable {
         basicUpdate(dt);
         moveProcessor.update(this, dt);
         boundCheck.checkAndHandleBoundsAndDestroy(this);
-        for (int i = 0; i < labels.length; i++) {
-            labels[i].update(dt);
+        for (int i = 0; i < labels.get(Label.Layer.BACK).size(); i++) {
+            labels.get(Label.Layer.BACK).get(i).update(dt);
+        }
+        for (int i = 0; i < labels.get(Label.Layer.LABEL).size(); i++) {
+            labels.get(Label.Layer.LABEL).get(i).update(dt);
+        }
+        for (int i = 0; i < labels.get(Label.Layer.HIDDEN).size(); i++) {
+            labels.get(Label.Layer.HIDDEN).get(i).update(dt);
         }
         shield.update(dt);
         scan.update(dt);
@@ -167,5 +184,9 @@ public class Storage extends AbstractConsumable {
     public void destroyWithEffect() {
         super.destroyWithEffect();
         showSprayCollision(gs.getParticleEmitter());
+    }
+
+    private enum Size {
+        SINGLE, DOUBLE, TRIPLE
     }
 }
