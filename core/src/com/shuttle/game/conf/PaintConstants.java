@@ -81,6 +81,9 @@ public final class PaintConstants {
     public static final String STORAGE_1_REGION = "storage1";
     public static final int STORAGE_1_WIDTH = 256;
     public static final int STORAGE_1_HEIGHT = 256;
+    public static final float STORAGE_SINGLE_OFFSET = 0.0f;
+    public static final float STORAGE_DOUBLE_OFFSET = 32.0f;
+
     public static final String FUEL_1_REGION = "fuel1";
     public static final int FUEL_1_WIDTH = 256;
     public static final int FUEL_1_HEIGHT = 256;
@@ -127,6 +130,9 @@ public final class PaintConstants {
     public static final String TRASH_LABEL_REGION = "trashv1";
     public static final String BOX_SCAN_NOISE_REGION = "boxscanv1";
     public static final float LABEL_ALPHA = 0.5f;
+    public static final float LABEL_SINGLE_SCALE_FACTOR = 2.5f;
+    public static final float LABEL_DOUBLE_SCALE_FACTOR = 4.0f;
+
     public static final String POINTER_ARROW = "outarrow";
     public static final String POINTER_MARK = "outmark";
     public static final int POINTER_WIDTH = 48;

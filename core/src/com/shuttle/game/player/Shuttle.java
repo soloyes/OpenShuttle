@@ -451,7 +451,7 @@ public class Shuttle extends AbstractShuttle {
     }
 
     public void collideBlackhole(float dt) {
-        if (position.dst(gs.getBlackhole().getPosition()) <= Rules.BLACKHOLE_TAKE_RANGE) {
+        if (position.dst(gs.getBlackhole().getPosition()) <= 1/*Rules.BLACKHOLE_TAKE_RANGE*/) {
             taken = true;
             velocity.scl(0.5f);
             tmpV2.set(gs.getBlackhole().getPosition()).sub(position).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER);

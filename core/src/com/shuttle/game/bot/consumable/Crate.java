@@ -101,7 +101,7 @@ public class Crate extends AbstractConsumable {
     private Label.Sticker generateDanger() {
         int r = MathUtils.random(0, 5);
         switch (r) {
-            case 1:
+            case 0:
                 return Label.Sticker.SHABBY;
             default:
                 return Label.Sticker.PATTERN;
@@ -237,7 +237,7 @@ public class Crate extends AbstractConsumable {
             }
             list = gs.getStorageEmitter().getActiveList();
             for (int i = 0; i < list.size(); i++) {
-                if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.PATTERN) {
+                if (list.get(i).isDanger()) {
                     list.get(i).setScanned(true);
                 }
             }

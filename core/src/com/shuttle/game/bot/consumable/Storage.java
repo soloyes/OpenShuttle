@@ -1,6 +1,7 @@
 package com.shuttle.game.bot.consumable;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.conf.MSConstants;
@@ -13,6 +14,9 @@ import com.shuttle.game.utils.effects.MoveProcessor;
 import com.shuttle.game.utils.effects.Vibrator;
 
 public class Storage extends AbstractConsumable {
+    private Size size;
+    private Label danderLabel;
+
     public Storage(GameScreen gs) {
         super(gs);
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STORAGE_1_REGION);
@@ -23,6 +27,15 @@ public class Storage extends AbstractConsumable {
         this.level = -3;
         this.shield = new Shield(this);
         this.scan = new Scan(this);
+        while (this.labels.get(Label.Layer.BACK).size() < Size.values().length) {
+            this.labels.get(Label.Layer.BACK).add(new Label());
+        }
+        while (this.labels.get(Label.Layer.LABEL).size() < Size.values().length) {
+            this.labels.get(Label.Layer.LABEL).add(new Label());
+        }
+        while (this.labels.get(Label.Layer.HIDDEN).size() < Size.values().length) {
+            this.labels.get(Label.Layer.HIDDEN).add(new Label());
+        }
     }
 
     @Override
@@ -38,18 +51,23 @@ public class Storage extends AbstractConsumable {
         this.spiralRadius = MathUtils.random(20, 60);
         this.atRayPoint = false;
         this.labeled = true;
+        this.danger = false;
 
-        this.labels.get(Label.Layer.BACK).get(0).setConsumable(this);
-        this.labels.get(Label.Layer.BACK).get(0).setScaleFactor(2.5f);
-        this.labels.get(Label.Layer.BACK).get(0).setColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, PaintConstants.LABEL_ALPHA);
+        generateSize();
 
-        this.labels.get(Label.Layer.LABEL).get(0).setConsumable(this);
-        this.labels.get(Label.Layer.LABEL).get(0).setScaleFactor(2.5f);
-        this.labels.get(Label.Layer.LABEL).get(0).setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.LABEL_ALPHA);
+        for (int i = 0; i < labels.get(Label.Layer.BACK).size(); i++) {
+            this.labels.get(Label.Layer.BACK).get(i).setConsumable(this);
+            this.labels.get(Label.Layer.BACK).get(i).setColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, PaintConstants.LABEL_ALPHA);
+        }
+        for (int i = 0; i < labels.get(Label.Layer.LABEL).size(); i++) {
+            this.labels.get(Label.Layer.LABEL).get(i).setConsumable(this);
+            this.labels.get(Label.Layer.LABEL).get(i).setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.LABEL_ALPHA);
+        }
 
-        this.labels.get(Label.Layer.HIDDEN).get(0).setConsumable(this);
-        this.labels.get(Label.Layer.HIDDEN).get(0).setScaleFactor(2.5f);
-        this.labels.get(Label.Layer.HIDDEN).get(0).setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.LABEL_ALPHA);
+        for (int i = 0; i < labels.get(Label.Layer.HIDDEN).size(); i++) {
+            this.labels.get(Label.Layer.HIDDEN).get(i).setConsumable(this);
+            this.labels.get(Label.Layer.HIDDEN).get(i).setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.LABEL_ALPHA);
+        }
 
         stickLabel();
 
@@ -59,20 +77,37 @@ public class Storage extends AbstractConsumable {
         this.scan.setTime(Rules.CONSUMABLE_SCAN_TIME);
     }
 
+    private void generateSize() {
+        int r = MathUtils.random(0, Size.values().length - 1);
+        size = Size.values()[r];
+    }
+
     private void stickLabel() {
-        int r = MathUtils.random(0, 5);
-        switch (r) {
-            case 0:
-                labels.get(Label.Layer.LABEL).get(0).setSticker(generateDanger());
-                break;
-            default:
-                labels.get(Label.Layer.LABEL).get(0).setSticker(generateSafe());
+        for (int i = 0; i <= size.ordinal(); i++) {
+            int r = MathUtils.random(0, 10);
+            switch (r) {
+                case 0:
+                    labels.get(Label.Layer.LABEL).get(i).setSticker(generateDanger());
+                    break;
+                default:
+                    labels.get(Label.Layer.LABEL).get(i).setSticker(generateSafe());
+            }
         }
-        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.PATTERN) {
-            labels.get(Label.Layer.HIDDEN).get(0).setSticker(generateSafe());
+
+        for (int i = 0; i < labels.get(Label.Layer.LABEL).size(); i++) {
+            if (labels.get(Label.Layer.LABEL).get(i).getSticker() == Label.Sticker.PATTERN || labels.get(Label.Layer.LABEL).get(i).getSticker() == Label.Sticker.SHABBY) {
+                danger = true;
+                setLabelForSingle(labels.get(Label.Layer.LABEL).get(i));
+                danderLabel = labels.get(Label.Layer.LABEL).get(i);
+                for (int j = 0; j <= size.ordinal(); j++) {
+                    labels.get(Label.Layer.HIDDEN).get(j).setSticker(generateSafe());
+                }
+                break;
+            }
         }
     }
 
+    //todo: Изменить этот метод согласно меткам
     private Label.Sticker generateSafe() {
         int r = MathUtils.random(0, 3);
         boolean radar = false;
@@ -105,20 +140,20 @@ public class Storage extends AbstractConsumable {
                 return Label.Sticker.LASER;
             default:
                 return Label.Sticker.ROCKET;
-            //todo:// add many items insight Storage
         }
     }
 
     private Label.Sticker generateDanger() {
         int r = MathUtils.random(0, 5);
         switch (r) {
-            case 1:
+            case 0:
                 return Label.Sticker.SHABBY;
             default:
                 return Label.Sticker.PATTERN;
         }
     }
 
+    //todo: изменить этот метод согласно меткам
     @Override
     public void consumed(GameScreen gs) {
         if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.RADAR) {
@@ -181,12 +216,89 @@ public class Storage extends AbstractConsumable {
     }
 
     @Override
+    public void render(SpriteBatch batch) {
+        basicRender(batch);
+        if (labeled) {
+            if (danger) {
+                if (danderLabel.getSticker() == Label.Sticker.SHABBY) {
+                    setLabelForSingle(labels.get(Label.Layer.BACK).get(0));
+                    labels.get(Label.Layer.BACK).get(0).render(batch);
+                    danderLabel.render(batch);
+                } else {
+                    if (!scanned) {
+                        setLabelForSingle(labels.get(Label.Layer.BACK).get(0));
+                        labels.get(Label.Layer.BACK).get(0).render(batch);
+                        danderLabel.render(batch);
+                    } else {
+                        if (taken) {
+                            setLabelForSingle(labels.get(Label.Layer.BACK).get(0));
+                            labels.get(Label.Layer.BACK).get(0).render(batch);
+                            danderLabel.render(batch);
+                        } else {
+                            switch (size) {
+                                case SINGLE:
+                                    setLabelForSingle(labels.get(Label.Layer.BACK).get(0));
+                                    setLabelForSingle(labels.get(Label.Layer.HIDDEN).get(0));
+                                    labels.get(Label.Layer.BACK).get(0).render(batch);
+                                    labels.get(Label.Layer.HIDDEN).get(0).render(batch);
+                                    break;
+                                case DOUBLE:
+                                    for (int i = 0; i <= size.ordinal(); i++) {
+                                        setLabelForDouble(labels.get(Label.Layer.BACK).get(i), i);
+                                        setLabelForDouble(labels.get(Label.Layer.HIDDEN).get(i), i);
+                                        labels.get(Label.Layer.BACK).get(i).render(batch);
+                                        labels.get(Label.Layer.HIDDEN).get(i).render(batch);
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                }
+            } else {
+                switch (size) {
+                    case SINGLE:
+                        setLabelForSingle(labels.get(Label.Layer.BACK).get(0));
+                        setLabelForSingle(labels.get(Label.Layer.LABEL).get(0));
+                        labels.get(Label.Layer.BACK).get(0).render(batch);
+                        labels.get(Label.Layer.LABEL).get(0).render(batch);
+                        break;
+                    case DOUBLE:
+                        for (int i = 0; i <= size.ordinal(); i++) {
+                            setLabelForDouble(labels.get(Label.Layer.BACK).get(i), i);
+                            setLabelForDouble(labels.get(Label.Layer.LABEL).get(i), i);
+                            labels.get(Label.Layer.BACK).get(i).render(batch);
+                            labels.get(Label.Layer.LABEL).get(i).render(batch);
+                        }
+                        break;
+                }
+            }
+        }
+
+        if (shielded && !taken) {
+            shield.render(batch);
+        }
+        if (scanned && !taken && danderLabel.getSticker() != Label.Sticker.SHABBY) {
+            scan.render(batch);
+        }
+    }
+
+    private void setLabelForSingle(Label label) {
+        label.setScaleFactor(PaintConstants.LABEL_SINGLE_SCALE_FACTOR);
+        label.setD(PaintConstants.STORAGE_SINGLE_OFFSET);
+    }
+
+    private void setLabelForDouble(Label label, int i) {
+        label.setScaleFactor(PaintConstants.LABEL_DOUBLE_SCALE_FACTOR);
+        label.setD((float) Math.pow(-1, i) * PaintConstants.STORAGE_DOUBLE_OFFSET);
+    }
+
+    @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
         showSprayCollision(gs.getParticleEmitter());
     }
 
     private enum Size {
-        SINGLE, DOUBLE, TRIPLE
+        SINGLE, DOUBLE
     }
 }

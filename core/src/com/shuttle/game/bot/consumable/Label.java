@@ -3,6 +3,8 @@ package com.shuttle.game.bot.consumable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 
@@ -24,6 +26,9 @@ public class Label {
     @Setter
     private float scaleFactor;
     private float angle;
+    @Setter
+    private float d;
+    private Vector2 offset;
 
     public void setSticker(Sticker sticker) {
         switch (sticker) {
@@ -71,13 +76,18 @@ public class Label {
         this.textureRegion = new TextureRegion();
         this.color = new Color();
         setSticker(Sticker.PATTERN);
+        this.offset = new Vector2();
     }
 
     public void render(SpriteBatch batch) {
         Color tmpColor = batch.getColor();
         batch.setColor(color);
+        offset.set(
+                consumable.getPosition().x - consumable.getWidth() / 2 + d * MathUtils.cos(MathUtils.degreesToRadians * consumable.getAngle()) * consumable.getScaleX(),
+                consumable.getPosition().y - consumable.getHeight() / 2 + d * MathUtils.sin(MathUtils.degreesToRadians * consumable.getAngle()) * consumable.getScaleY()
+        );
         batch.draw(textureRegion,
-                consumable.getPosition().x - consumable.getWidth() / 2, consumable.getPosition().y - consumable.getHeight() / 2,
+                offset.x, offset.y,
                 consumable.getWidth() / 2, consumable.getHeight() / 2,
                 consumable.getWidth(), consumable.getHeight(),
                 consumable.getScaleX() / scaleFactor, consumable.getScaleY() / scaleFactor,
@@ -123,7 +133,7 @@ public class Label {
         FUEL,
     }
 
-    public enum Layer{
+    public enum Layer {
         BACK, LABEL, HIDDEN
     }
 }
