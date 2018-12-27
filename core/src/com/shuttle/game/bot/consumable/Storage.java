@@ -107,39 +107,58 @@ public class Storage extends AbstractConsumable {
         }
     }
 
-    //todo: Изменить этот метод согласно меткам
     private Label.Sticker generateSafe() {
-        int r = MathUtils.random(0, 3);
-        boolean radar = false;
-        boolean laser = false;
-        for (AbstractConsumable consumable : gs.getStorageEmitter().getActiveList()) {
-            if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.LASER) {
-                laser = true;
-                break;
-            }
-        }
+        int r;
+        switch (size) {
+            case SINGLE:
+                r = MathUtils.random(0, 3);
+                boolean radar = false;
+                boolean laser = false;
+                for (AbstractConsumable consumable : gs.getStorageEmitter().getActiveList()) {
+                    if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.LASER) {
+                        laser = true;
+                        break;
+                    }
+                }
 
-        for (AbstractConsumable consumable : gs.getStorageEmitter().getActiveList()) {
-            if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.RADAR) {
-                radar = true;
-                break;
-            }
-        }
+                for (AbstractConsumable consumable : gs.getStorageEmitter().getActiveList()) {
+                    if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.RADAR) {
+                        radar = true;
+                        break;
+                    }
+                }
 
-        if (r == 0 && (gs.getPlayer().getRadar().isActive() || radar)) {
-            r += MathUtils.random(1, 3);
-        }
-        if (r == 1 && (gs.getPlayer().isLaser() || laser)) {
-            r += MathUtils.random(1, 2);
-        }
+                if (r == 0 && (gs.getPlayer().getRadar().isActive() || radar)) {
+                    r += MathUtils.random(1, 3);
+                }
+                if (r == 1 && (gs.getPlayer().isLaser() || laser)) {
+                    r += MathUtils.random(1, 2);
+                }
 
-        switch (r) {
-            case 0:
-                return Label.Sticker.RADAR;
-            case 1:
-                return Label.Sticker.LASER;
+                switch (r) {
+                    case 0:
+                        return Label.Sticker.RADAR;
+                    case 1:
+                        return Label.Sticker.LASER;
+                    default:
+                        return Label.Sticker.ROCKET;
+                }
             default:
-                return Label.Sticker.ROCKET;
+                r = MathUtils.random(0, 6);
+                switch (r) {
+                    case 0:
+                        return Label.Sticker.BOOST;
+                    case 1:
+                        return Label.Sticker.REPAIR;
+                    case 2:
+                        return Label.Sticker.TRASH;
+                    case 3:
+                        return Label.Sticker.SPLASH;
+                    case 5:
+                        return Label.Sticker.SCAN;
+                    default:
+                        return Label.Sticker.SHIELD;
+                }
         }
     }
 
