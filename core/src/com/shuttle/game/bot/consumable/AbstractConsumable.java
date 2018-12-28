@@ -87,22 +87,6 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     @Override
     public void render(SpriteBatch batch) {
         basicRender(batch);
-        if (labeled) {
-            labels.get(Label.Layer.BACK).get(0).render(batch);
-            if (!scanned) {
-                labels.get(Label.Layer.LABEL).get(0).render(batch);
-            } else {
-                for (int i = 0; i < labels.get(Label.Layer.HIDDEN).size(); i++) {
-                    labels.get(Label.Layer.HIDDEN).get(i).render(batch);
-                }
-            }
-        }
-        if (shielded && !taken) {
-            shield.render(batch);
-        }
-        if (scanned && !taken) {
-            scan.render(batch);
-        }
     }
 
     @Override

@@ -40,6 +40,7 @@ public final class MSConstants {
     public final static String STORAGE_DESTROY = SOUND_FOLDER + "storage_destroy.ogg";
     public final static String ANOMALY_CORROSIVE_BURST = SOUND_FOLDER + "monster_burst.ogg";
     public final static String GET_STORAGE = SOUND_FOLDER + "storage.ogg";
+    public final static String GET_ROCKET = SOUND_FOLDER + "get_ammo.ogg";
     public final static String CHECKBOX = SOUND_FOLDER + "checkbox.ogg";
     public final static String GET_LASER = SOUND_FOLDER + "get_laser.ogg";
     public final static String GET_SCANNER = SOUND_FOLDER + "get_scanner.ogg";

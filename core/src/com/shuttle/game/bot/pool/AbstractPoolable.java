@@ -25,7 +25,9 @@ public abstract class AbstractPoolable implements Poolable {
     @Getter
     @Setter
     protected Vector2 velocity;
+    @Getter
     protected BoundCheck boundCheck;
+    @Getter
     protected BoomBox boomBox;
     @Getter
     @Setter

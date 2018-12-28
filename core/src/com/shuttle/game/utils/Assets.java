@@ -98,6 +98,7 @@ public class Assets {
                 assetManager.load(MSConstants.GET_SCANNER, Sound.class);
                 assetManager.load(MSConstants.GET_SHIELD, Sound.class);
                 assetManager.load(MSConstants.GET_LASER, Sound.class);
+                assetManager.load(MSConstants.GET_ROCKET, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 createStandartFont(32, "");
                 createStandartFont(32, "Coloured");

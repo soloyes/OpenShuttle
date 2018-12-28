@@ -1,26 +1,25 @@
 package com.shuttle.game.bot.consumable;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.GameInfoSystem;
-import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
-import com.shuttle.game.player.Shuttle;
-import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.Consumer;
 import com.shuttle.game.utils.effects.MoveProcessor;
 import com.shuttle.game.utils.effects.Vibrator;
-
-import java.util.List;
 
 /**
  * @author Shuttle on 10/11/18.
  */
 public class Crate extends AbstractConsumable {
+    private Label dangerLabel;
+
     public Crate(GameScreen gs) {
         super(gs);
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_1_REGION);
@@ -45,6 +44,7 @@ public class Crate extends AbstractConsumable {
         this.spiralRadius = MathUtils.random(20, 60);
         this.atRayPoint = false;
         this.labeled = true;
+        this.danger = false;
 
         this.labels.get(Label.Layer.BACK).get(0).setConsumable(this);
         this.labels.get(Label.Layer.BACK).get(0).setScaleFactor(3.5f);
@@ -75,8 +75,9 @@ public class Crate extends AbstractConsumable {
             default:
                 labels.get(Label.Layer.LABEL).get(0).setSticker(generateSafe());
         }
-        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.PATTERN) {
+        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.PATTERN || labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.SHABBY) {
             labels.get(Label.Layer.HIDDEN).get(0).setSticker(generateSafe());
+            danger = true;
         }
     }
 
@@ -128,129 +129,17 @@ public class Crate extends AbstractConsumable {
 
     @Override
     public void consumed(GameScreen gs) {
-        Standing standing = gs.getPlayer().getStanding();
-        Shuttle player = gs.getPlayer();
-
-        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.REPAIR) {
-            standing.changeHP(Rules.CONSUMABLE_REPAIR_ADD);
-            gs.getGameInfoSystem()
-                    .setup(
-                            position.x,
-                            position.y,
-                            GameInfoSystem.GameInfoSystemPreset.REPAIR,
-                            3.0f,
-                            true
-                    );
-            boomBox.playSound(MSConstants.PLAYER_REPAIR);
-        }
-
-        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.BOOST) {
-            float d = Rules.PLAYER_BOOST_ENGINE_POWER - player.getVelocity().len();
-            player.setShadowsCoordinates();
-            player.getVelocity().add(
-                    d * (float) Math.cos(Math.toRadians(player.getAngle())),
-                    d * (float) Math.sin(Math.toRadians(player.getAngle()))
-            );
-            gs.getGameInfoSystem()
-                    .setup(
-                            position.x,
-                            position.y,
-                            GameInfoSystem.GameInfoSystemPreset.TURBO,
-                            5.0f,
-                            true
-                    );
-            boomBox.playSound(MSConstants.TURBO);
-        }
-
-        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.SPLASH) {
-            List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
-            for (int i = 0; i < anomalies.size(); i++) {
-                if (boundCheck.checkAndHandleBoundsInCamera(anomalies.get(i), gs.getCamera())) {
-                    if (!anomalies.get(i).isTaken()) {
-                        anomalies.get(i).setMarkedToBoom(true);
-                        standing.addToStatistics(anomalies.get(i).getType(), anomalies.get(i).getLevel());
-                        int score = Rules.ANOMALIES_BASE_SCORE_ADD;
-                        gs.getGameInfoSystem().setup(
-                                anomalies.get(i).getPosition().x,
-                                anomalies.get(i).getPosition().y,
-                                GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
-                                3.0f,
-                                true
-                        );
-                        standing.changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
-                    }
-                }
+        if (danger) {
+            switch (labels.get(Label.Layer.LABEL).get(0).getSticker()) {
+                case PATTERN:
+                    Consumer.consume(gs, this, labels.get(Label.Layer.HIDDEN).get(0));
+                    break;
+                //todo:// SHABBY Logic here: 1/2 life, 1/2 fuel, new anomaly, disable radar/laser
+                case SHABBY:
+                    break;
             }
-            gs.getGameInfoSystem()
-                    .setup(
-                            position.x,
-                            position.y,
-                            GameInfoSystem.GameInfoSystemPreset.SPLASH,
-                            8.0f,
-                            true
-                    );
-            boomBox.playSound(MSConstants.ANOMALY_SPLASH);
-        }
-
-        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.TRASH) {
-            gs.getGameInfoSystem()
-                    .setup(
-                            position.x,
-                            position.y,
-                            GameInfoSystem.GameInfoSystemPreset.TRASH,
-                            2.0f,
-                            true
-                    );
-            boomBox.playSound(MSConstants.GET_TRASH);
-        }
-
-        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.SHIELD) {
-            List<AbstractConsumable> list = gs.getCrateEmitter().getActiveList();
-            for (int i = 0; i < list.size(); i++) {
-                list.get(i).setShielded(true);
-            }
-            list = gs.getFuelEmitter().getActiveList();
-            for (int i = 0; i < list.size(); i++) {
-                list.get(i).setShielded(true);
-            }
-            list = gs.getStorageEmitter().getActiveList();
-            for (int i = 0; i < list.size(); i++) {
-                list.get(i).setShielded(true);
-            }
-            gs.getGameInfoSystem()
-                    .setup(
-                            position.x,
-                            position.y,
-                            GameInfoSystem.GameInfoSystemPreset.SHIELD,
-                            2.0f,
-                            true
-                    );
-            boomBox.playSound(MSConstants.GET_SHIELD);
-        }
-
-        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.SCAN) {
-            List<AbstractConsumable> list = gs.getCrateEmitter().getActiveList();
-            for (int i = 0; i < list.size(); i++) {
-                if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.PATTERN) {
-                    list.get(i).setScanned(true);
-                }
-            }
-            list = gs.getStorageEmitter().getActiveList();
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).isDanger()) {
-                    list.get(i).setScanned(true);
-                }
-            }
-
-            gs.getGameInfoSystem()
-                    .setup(
-                            position.x,
-                            position.y,
-                            GameInfoSystem.GameInfoSystemPreset.SCAN,
-                            2.0f,
-                            true
-                    );
-            boomBox.playSound(MSConstants.GET_SCANNER);
+        } else {
+            Consumer.consume(gs, this, labels.get(Label.Layer.LABEL).get(0));
         }
     }
 
@@ -265,6 +154,39 @@ public class Crate extends AbstractConsumable {
         );
         boomBox.playSound(MSConstants.KILL_CRATE);
         Vibrator.vibrate(VConstants.PLAYER_CRATE_DESTROY);
+    }
+
+    @Override
+    public void render(SpriteBatch batch) {
+        basicRender(batch);
+        if (labeled) {
+            labels.get(Label.Layer.BACK).get(0).render(batch);
+            if (danger) {
+                if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.SHABBY) {
+                    labels.get(Label.Layer.LABEL).get(0).render(batch);
+                } else {
+                    if (!scanned) {
+                        labels.get(Label.Layer.LABEL).get(0).render(batch);
+
+                    } else {
+                        if (taken) {
+                            labels.get(Label.Layer.LABEL).get(0).render(batch);
+                        } else {
+                            labels.get(Label.Layer.HIDDEN).get(0).render(batch);
+                        }
+                    }
+                }
+            } else {
+                labels.get(Label.Layer.LABEL).get(0).render(batch);
+            }
+        }
+
+        if (shielded && !taken) {
+            shield.render(batch);
+        }
+        if (scanned && !taken && labels.get(Label.Layer.LABEL).get(0).getSticker() != Label.Sticker.SHABBY) {
+            scan.render(batch);
+        }
     }
 
     @Override

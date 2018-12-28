@@ -10,6 +10,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.Consumer;
 import com.shuttle.game.utils.effects.MoveProcessor;
 import com.shuttle.game.utils.effects.Vibrator;
 
@@ -94,6 +95,13 @@ public class Storage extends AbstractConsumable {
             }
         }
 
+        if (size.ordinal() == 1) {
+            if (labels.get(Label.Layer.LABEL).get(0).getSticker() == labels.get(Label.Layer.LABEL).get(1).getSticker()) {
+                int r = (labels.get(Label.Layer.LABEL).get(0).getSticker().ordinal() + 1) % 7;
+                labels.get(Label.Layer.LABEL).get(1).setSticker(Label.Sticker.values()[r]);
+            }
+        }
+
         for (int i = 0; i < labels.get(Label.Layer.LABEL).size(); i++) {
             if (labels.get(Label.Layer.LABEL).get(i).getSticker() == Label.Sticker.PATTERN || labels.get(Label.Layer.LABEL).get(i).getSticker() == Label.Sticker.SHABBY) {
                 danger = true;
@@ -115,14 +123,16 @@ public class Storage extends AbstractConsumable {
                 boolean radar = false;
                 boolean laser = false;
                 for (AbstractConsumable consumable : gs.getStorageEmitter().getActiveList()) {
-                    if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.LASER) {
+                    if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.LASER ||
+                            consumable.getLabels().get(Label.Layer.HIDDEN).get(0).getSticker() == Label.Sticker.LASER) {
                         laser = true;
                         break;
                     }
                 }
 
                 for (AbstractConsumable consumable : gs.getStorageEmitter().getActiveList()) {
-                    if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.RADAR) {
+                    if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.RADAR ||
+                            consumable.getLabels().get(Label.Layer.HIDDEN).get(0).getSticker() == Label.Sticker.RADAR) {
                         radar = true;
                         break;
                     }
@@ -172,34 +182,23 @@ public class Storage extends AbstractConsumable {
         }
     }
 
-    //todo: изменить этот метод согласно меткам
     @Override
     public void consumed(GameScreen gs) {
-        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.RADAR) {
-            gs.getGameInfoSystem()
-                    .setup(
-                            position.x,
-                            position.y,
-                            GameInfoSystem.GameInfoSystemPreset.RADAR,
-                            3.0f,
-                            true
-                    );
-            boomBox.playSound(MSConstants.GET_RADAR);
-            gs.getPlayer().getRadar().setActive(true);
-        }
-
-        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.LASER) {
-            gs.getGameInfoSystem()
-                    .setup(
-                            position.x,
-                            position.y,
-                            GameInfoSystem.GameInfoSystemPreset.LASER,
-                            3.0f,
-                            true
-                    );
-            gs.getPlayer().setLaser(true);
-            gs.getPlayer().setLaserChargeLevel(6);
-            boomBox.playSound(MSConstants.GET_LASER);
+        if (danger) {
+            switch (danderLabel.getSticker()) {
+                case PATTERN:
+                    for (int i = 0; i <= size.ordinal(); i++) {
+                        Consumer.consume(gs, this, labels.get(Label.Layer.HIDDEN).get(i));
+                    }
+                    break;
+                //todo:// SHABBY Logic here: 1/2 life, 1/2 fuel, new anomaly, disable radar/laser
+                case SHABBY:
+                    break;
+            }
+        } else {
+            for (int i = 0; i <= size.ordinal(); i++) {
+                Consumer.consume(gs, this, labels.get(Label.Layer.LABEL).get(i));
+            }
         }
     }
 
