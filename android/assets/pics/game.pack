@@ -66,6 +66,13 @@ scratch
   orig: 1280, 256
   offset: 0, 0
   index: -1
+astronaut
+  rotate: false
+  xy: 2310, 1028
+  size: 1280, 256
+  orig: 1280, 256
+  offset: 0, 0
+  index: -1
 shuttleblur
   rotate: false
   xy: 3080, 516
@@ -75,203 +82,231 @@ shuttleblur
   index: -1
 trashv1
   rotate: false
-  xy: 2310, 1028
+  xy: 3592, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-storage1
-  rotate: false
-  xy: 2568, 1028
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-splashv1
-  rotate: false
-  xy: 2826, 1028
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-shuttle
-  rotate: false
-  xy: 3084, 1028
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-shieldstorage
-  rotate: false
-  xy: 3342, 1028
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-shieldfuel
-  rotate: false
-  xy: 3600, 1028
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-shieldcrate
+storagegold
   rotate: false
   xy: 1028, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-shabbysign
+storage1
   rotate: false
   xy: 1028, 1544
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-scanv1
+splashv1
   rotate: false
   xy: 1028, 1802
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-rocketlauncherv1
+shuttle
   rotate: false
   xy: 1028, 2060
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-repairv1
+shieldstorage
   rotate: false
   xy: 1028, 2318
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-ramshield
+shieldfuel
   rotate: false
   xy: 1028, 2576
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-radarv1
+shieldcrate
   rotate: false
   xy: 1028, 2834
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-patternsign
+shabbysigngold
   rotate: false
   xy: 1028, 3092
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outmark
+shabbysign
   rotate: false
   xy: 1028, 3350
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outarrow
+scanv1
   rotate: false
   xy: 1028, 3608
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-lifeshield
+rocketlauncherv1
   rotate: false
   xy: 1286, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-laserv1
+repairv1
   rotate: false
   xy: 1544, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-glow
+ramshield
   rotate: false
   xy: 1802, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelv1
+radarv1
   rotate: false
   xy: 2060, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelback
+patternsigngold
   rotate: false
   xy: 2318, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuel1
+patternsign
   rotate: false
   xy: 2576, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-crate1
+outmark
   rotate: false
   xy: 2834, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-boxshieldv1
+outarrow
   rotate: false
   xy: 3092, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-boxscanv1
+lifeshield
   rotate: false
   xy: 3350, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-boostv1
+laserv1
   rotate: false
   xy: 3608, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackholespiral
+glow
   rotate: false
   xy: 1286, 1544
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackholehole
+fuelv1
   rotate: false
   xy: 1286, 1802
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-astronaut
+fuelgold
   rotate: false
   xy: 1286, 2060
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+fuelback
+  rotate: false
+  xy: 1286, 2318
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+fuel1
+  rotate: false
+  xy: 1286, 2576
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+crategold
+  rotate: false
+  xy: 1286, 2834
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+crate1
+  rotate: false
+  xy: 1286, 3092
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+boxshieldv1
+  rotate: false
+  xy: 1286, 3350
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+boxscanv1
+  rotate: false
+  xy: 1286, 3608
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+boostv1
+  rotate: false
+  xy: 1544, 1544
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+blackholespiral
+  rotate: false
+  xy: 1802, 1544
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+blackholehole
+  rotate: false
+  xy: 2060, 1544
   size: 256, 256
   orig: 256, 256
   offset: 0, 0

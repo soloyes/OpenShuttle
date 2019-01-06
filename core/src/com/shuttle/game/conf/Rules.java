@@ -206,9 +206,11 @@ public final class Rules {
     //500
     public static final int ANOMALIES_BASE_SCORE_ADD = 500;
     //10000
-    public static final int CONSUMABLE_BASE_SCORE_ADD = 10000;
+    public static final int CONSUMABLE_ASTRONAUT_BASE_SCORE_ADD = 10000;
     //1000
-    public static final int CONSUMABLE_BONUS_SCORE_ADD = 1000;
+    public static final int CONSUMABLE_ASTRONAUT_BONUS_SCORE_ADD = 1000;
+    //500
+    public static final int CONSUMABLE_ASTRONAUT_RANGE_SCORE_ADD = 500;
     //50000
     public static final int CONSUMABLE_MURDER_SCORE_DECREASE = 50000;
     //30.0f

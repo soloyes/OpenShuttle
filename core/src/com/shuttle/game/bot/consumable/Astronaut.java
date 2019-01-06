@@ -1,6 +1,7 @@
 package com.shuttle.game.bot.consumable;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.conf.MSConstants;
@@ -10,6 +11,7 @@ import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.Regions;
 import com.shuttle.game.utils.effects.MoveProcessor;
 import com.shuttle.game.utils.effects.Vibrator;
 
@@ -17,9 +19,13 @@ import com.shuttle.game.utils.effects.Vibrator;
  * @author Shuttle on 10/11/18.
  */
 public class Astronaut extends AbstractConsumable {
+    private TextureRegion[] regions;
+    private int multiplier;
+
     public Astronaut(GameScreen gs) {
         super(gs);
-        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.ASTRONAUT_REGION);
+        this.regions = Regions.split(
+                Assets.getInstance().getAtlas().findRegion(PaintConstants.ASTRONAUT_REGION), 1, 5, 5);
         this.width = PaintConstants.ASTRONAUT_WIDTH;
         this.height = PaintConstants.ASTRONAUT_HEIGHT;
         this.type = Type.ASTRONAUT;
@@ -38,6 +44,8 @@ public class Astronaut extends AbstractConsumable {
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.spiralRadius = MathUtils.random(20, 60);
         this.atRayPoint = false;
+        this.multiplier = MathUtils.random(0, regions.length - 1);
+        this.texture = regions[multiplier];
         playSound();
     }
 
@@ -56,7 +64,9 @@ public class Astronaut extends AbstractConsumable {
 
     @Override
     public void consumed(GameScreen gs) {
-        int score = Rules.CONSUMABLE_BASE_SCORE_ADD + gs.getPlayer().getShieldLevel().getLevel() * Rules.CONSUMABLE_BONUS_SCORE_ADD;
+        int score = Rules.CONSUMABLE_ASTRONAUT_BASE_SCORE_ADD +
+                multiplier * Rules.CONSUMABLE_ASTRONAUT_RANGE_SCORE_ADD +
+                gs.getPlayer().getShieldLevel().getLevel() * Rules.CONSUMABLE_ASTRONAUT_BONUS_SCORE_ADD;
         gs.getPlayer().getStanding().changeScore(score);
         gs.getGameInfoSystem().setup(
                 position.x,
