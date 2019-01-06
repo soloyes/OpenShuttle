@@ -143,9 +143,12 @@ public class Crate extends AbstractConsumable {
                 case PATTERN_GOLD:
                     Consumer.consume(gs, this, labels.get(Label.Layer.HIDDEN).get(0));
                     break;
-                //todo:// SHABBY Logic here: 1/2 life, 1/2 fuel, new anomaly, disable radar/laser
                 case SHABBY:
+                    //todo: -1/2 life + boom, -1/2 fuel, new tan anomaly, disable radar, -score
+                    //+1/2 life, +1/2 fuel, generate some crates, +score, kill all tan
                 case SHABBY_GOLD:
+                    //todo: -1 life + boom, -all fuel, new green anomaly, disable laser, -score
+                    //+1 life, +all fuel, +several manual activated loot, +score, kill all green, kill rad/fuel anomaly
                     break;
             }
         } else {

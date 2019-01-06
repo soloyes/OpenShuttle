@@ -12,6 +12,7 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.utils.Consumer;
 import com.shuttle.game.utils.effects.MoveProcessor;
 import com.shuttle.game.utils.effects.Vibrator;
 
@@ -66,17 +67,7 @@ public class Fuel extends AbstractConsumable {
 
     @Override
     public void consumed(GameScreen gs) {
-        int fuel = Rules.CONSUMABLE_FUEL_ADD_FACTOR * MathUtils.random(Rules.CONSUMABLE_FUEL_MIN_ADD, Rules.CONSUMABLE_FUEL_MAX_ADD);
-        gs.getPlayer().getStanding().changeFuel(fuel);
-        gs.getGameInfoSystem()
-                .setup(
-                        position.x,
-                        position.y,
-                        GameInfoSystem.GameInfoSystemPreset.FUEL + "[GREEN] +" + fuel + "[]",
-                        3.0f,
-                        true
-                );
-        boomBox.playSound(MSConstants.GET_FUEL);
+        Consumer.consume(gs, this, labels.get(Label.Layer.LABEL).get(0));
     }
 
     @Override

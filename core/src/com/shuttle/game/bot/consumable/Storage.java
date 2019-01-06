@@ -203,9 +203,12 @@ public class Storage extends AbstractConsumable {
                         Consumer.consume(gs, this, labels.get(Label.Layer.HIDDEN).get(i));
                     }
                     break;
-                //todo:// SHABBY Logic here: 1/2 life, 1/2 fuel, new anomaly, disable radar/laser
                 case SHABBY:
+                    //todo: -1,5 life + boom, -all fuel, new yellow anomaly, disable radar and laser, -score
+                    //+1,5 life, +all fuel, +generate storage, kill all yellow, +score, kill rad/fuel anomaly
                 case SHABBY_GOLD:
+                    //todo: -2 life + boom, -all fuel, new red anomaly, disable radar/laser, -score
+                    //+2 life, +all fuel, +several manual activated loot, +score, kill all red, kill rad/fuel anomaly
                     break;
             }
         } else {

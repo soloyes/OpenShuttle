@@ -1,5 +1,6 @@
 package com.shuttle.game.utils;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
@@ -16,7 +17,8 @@ import java.util.List;
 
 public class Consumer {
     public static void consume(GameScreen gs, AbstractConsumable consumable, Label label) {
-        //todo: Add Gold boxes addition here (seems need to add one more parameter to signature, and if-else logic in every block)
+        //todo: Add Gold boxes addition here (consumable.isGolden())
+        //todo: gold loot sounds??
 
         Standing standing = gs.getPlayer().getStanding();
         Shuttle player = gs.getPlayer();
@@ -183,6 +185,38 @@ public class Consumer {
                             true
                     );
             boomBox.playSound(MSConstants.GET_ROCKET);
+        }
+
+        if (label.getSticker() == Label.Sticker.FUEL) {
+            float fuel;
+            if (consumable.isGolden()) {
+                fuel = gs.getPlayer().getStanding().getMaxFuel();
+            } else {
+                fuel = Rules.CONSUMABLE_FUEL_ADD_FACTOR * MathUtils.random(Rules.CONSUMABLE_FUEL_MIN_ADD, Rules.CONSUMABLE_FUEL_MAX_ADD);
+            }
+
+            gs.getPlayer().getStanding().changeFuel(fuel);
+
+            if (consumable.isGolden()) {
+                gs.getGameInfoSystem()
+                        .setup(
+                                position.x,
+                                position.y,
+                                GameInfoSystem.GameInfoSystemPreset.FUEL + "[GOLD] +" + fuel + "[]",
+                                5.0f,
+                                true
+                        );
+            } else {
+                gs.getGameInfoSystem()
+                        .setup(
+                                position.x,
+                                position.y,
+                                GameInfoSystem.GameInfoSystemPreset.FUEL + "[GREEN] +" + fuel + "[]",
+                                3.0f,
+                                true
+                        );
+            }
+            boomBox.playSound(MSConstants.GET_FUEL);
         }
     }
 }
