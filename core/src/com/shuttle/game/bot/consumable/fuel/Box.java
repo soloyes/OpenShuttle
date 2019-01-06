@@ -13,11 +13,17 @@ public class Box {
 
     public Box(Fuel fuel) {
         this.fuel = fuel;
-        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_1_REGION);
         this.width = PaintConstants.FUEL_1_WIDTH;
         this.height = PaintConstants.FUEL_1_HEIGHT;
     }
 
+    public void init() {
+        if (!fuel.isGolden()) {
+            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_1_REGION);
+        } else {
+            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_GOLD_REGION);
+        }
+    }
 
     public void render(SpriteBatch batch) {
         Color tmpColor = batch.getColor();

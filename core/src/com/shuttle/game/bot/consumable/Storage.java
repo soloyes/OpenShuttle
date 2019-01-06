@@ -16,7 +16,7 @@ import com.shuttle.game.utils.effects.Vibrator;
 
 public class Storage extends AbstractConsumable {
     private Size size;
-    private Label danderLabel;
+    private Label dangerLabel;
 
     public Storage(GameScreen gs) {
         super(gs);
@@ -70,12 +70,19 @@ public class Storage extends AbstractConsumable {
             this.labels.get(Label.Layer.HIDDEN).get(i).setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.LABEL_ALPHA);
         }
 
+        this.golden = MathUtils.random(0, Rules.CONSUMABLE_GOLDEN_PROBABILITY) == 0;
+
         stickLabel();
 
         this.shielded = false;
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
         this.scanned = false;
         this.scan.setTime(Rules.CONSUMABLE_SCAN_TIME);
+        if (!golden) {
+            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STORAGE_1_REGION);
+        } else {
+            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STORAGE_GOLD_REGION);
+        }
     }
 
     private void generateSize() {
@@ -89,30 +96,34 @@ public class Storage extends AbstractConsumable {
             switch (r) {
                 case 0:
                     labels.get(Label.Layer.LABEL).get(i).setSticker(generateDanger());
+                    danger = true;
+                    setLabelForSingle(labels.get(Label.Layer.LABEL).get(i));
+                    dangerLabel = labels.get(Label.Layer.LABEL).get(i);
+                    for (int j = 0; j <= size.ordinal(); j++) {
+                        labels.get(Label.Layer.HIDDEN).get(j).setSticker(generateSafe());
+                    }
+                    i = size.ordinal() + 1;
                     break;
                 default:
                     labels.get(Label.Layer.LABEL).get(i).setSticker(generateSafe());
+                    break;
             }
         }
 
+        //Make different labels insight of storage
         if (size.ordinal() == 1) {
             if (labels.get(Label.Layer.LABEL).get(0).getSticker() == labels.get(Label.Layer.LABEL).get(1).getSticker()) {
                 int r = (labels.get(Label.Layer.LABEL).get(0).getSticker().ordinal() + 1) % 7;
                 labels.get(Label.Layer.LABEL).get(1).setSticker(Label.Sticker.values()[r]);
             }
-        }
-
-        for (int i = 0; i < labels.get(Label.Layer.LABEL).size(); i++) {
-            if (labels.get(Label.Layer.LABEL).get(i).getSticker() == Label.Sticker.PATTERN || labels.get(Label.Layer.LABEL).get(i).getSticker() == Label.Sticker.SHABBY) {
-                danger = true;
-                setLabelForSingle(labels.get(Label.Layer.LABEL).get(i));
-                danderLabel = labels.get(Label.Layer.LABEL).get(i);
-                for (int j = 0; j <= size.ordinal(); j++) {
-                    labels.get(Label.Layer.HIDDEN).get(j).setSticker(generateSafe());
+            if (danger) {
+                if (labels.get(Label.Layer.HIDDEN).get(0).getSticker() == labels.get(Label.Layer.HIDDEN).get(1).getSticker()) {
+                    int r = (labels.get(Label.Layer.HIDDEN).get(0).getSticker().ordinal() + 1) % 7;
+                    labels.get(Label.Layer.HIDDEN).get(1).setSticker(Label.Sticker.values()[r]);
                 }
-                break;
             }
         }
+        //
     }
 
     private Label.Sticker generateSafe() {
@@ -176,23 +187,25 @@ public class Storage extends AbstractConsumable {
         int r = MathUtils.random(0, 5);
         switch (r) {
             case 0:
-                return Label.Sticker.SHABBY;
+                return golden ? Label.Sticker.SHABBY_GOLD : Label.Sticker.SHABBY;
             default:
-                return Label.Sticker.PATTERN;
+                return golden ? Label.Sticker.PATTERN_GOLD : Label.Sticker.PATTERN;
         }
     }
 
     @Override
     public void consumed(GameScreen gs) {
         if (danger) {
-            switch (danderLabel.getSticker()) {
+            switch (dangerLabel.getSticker()) {
                 case PATTERN:
+                case PATTERN_GOLD:
                     for (int i = 0; i <= size.ordinal(); i++) {
                         Consumer.consume(gs, this, labels.get(Label.Layer.HIDDEN).get(i));
                     }
                     break;
                 //todo:// SHABBY Logic here: 1/2 life, 1/2 fuel, new anomaly, disable radar/laser
                 case SHABBY:
+                case SHABBY_GOLD:
                     break;
             }
         } else {
@@ -238,20 +251,20 @@ public class Storage extends AbstractConsumable {
         basicRender(batch);
         if (labeled) {
             if (danger) {
-                if (danderLabel.getSticker() == Label.Sticker.SHABBY) {
+                if (dangerLabel.getSticker() == Label.Sticker.SHABBY || dangerLabel.getSticker() == Label.Sticker.SHABBY_GOLD) {
                     setLabelForSingle(labels.get(Label.Layer.BACK).get(0));
                     labels.get(Label.Layer.BACK).get(0).render(batch);
-                    danderLabel.render(batch);
+                    dangerLabel.render(batch);
                 } else {
                     if (!scanned) {
                         setLabelForSingle(labels.get(Label.Layer.BACK).get(0));
                         labels.get(Label.Layer.BACK).get(0).render(batch);
-                        danderLabel.render(batch);
+                        dangerLabel.render(batch);
                     } else {
                         if (taken) {
                             setLabelForSingle(labels.get(Label.Layer.BACK).get(0));
                             labels.get(Label.Layer.BACK).get(0).render(batch);
-                            danderLabel.render(batch);
+                            dangerLabel.render(batch);
                         } else {
                             switch (size) {
                                 case SINGLE:
@@ -295,7 +308,7 @@ public class Storage extends AbstractConsumable {
         if (shielded && !taken) {
             shield.render(batch);
         }
-        if (scanned && !taken && danderLabel.getSticker() != Label.Sticker.SHABBY) {
+        if (scanned && !taken && dangerLabel.getSticker() != Label.Sticker.SHABBY && dangerLabel.getSticker() != Label.Sticker.SHABBY_GOLD) {
             scan.render(batch);
         }
     }

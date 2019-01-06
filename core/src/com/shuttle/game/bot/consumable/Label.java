@@ -59,6 +59,9 @@ public class Label {
             case SHABBY:
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHABBY_SIGN_LABEL_REGION);
                 break;
+            case SHABBY_GOLD:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHABBY_SIGN_GOLD_LABEL_REGION);
+                break;
             case SHIELD:
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOX_SHIELD_LABEL_REGION);
                 break;
@@ -67,6 +70,9 @@ public class Label {
                 break;
             case PATTERN:
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_LABEL_REGION);
+                break;
+            case PATTERN_GOLD:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_GOLD_LABEL_REGION);
                 break;
         }
         this.sticker = sticker;
@@ -117,7 +123,9 @@ public class Label {
     public enum Sticker {
         //Surprise
         PATTERN,
+        PATTERN_GOLD,
         SHABBY,
+        SHABBY_GOLD,
         //Crate
         BOOST,
         REPAIR,

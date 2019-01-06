@@ -13,16 +13,13 @@ import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.effects.BoomBox;
 
 import java.util.List;
-import java.util.Map;
 
 public class Consumer {
     public static void consume(GameScreen gs, AbstractConsumable consumable, Label label) {
         //todo: Add Gold boxes addition here (seems need to add one more parameter to signature, and if-else logic in every block)
 
-
         Standing standing = gs.getPlayer().getStanding();
         Shuttle player = gs.getPlayer();
-        Map<Label.Layer, List<Label>> labels = consumable.getLabels();
         Vector2 position = consumable.getPosition();
         BoomBox boomBox = consumable.getBoomBox();
         BoundCheck boundCheck = consumable.getBoundCheck();

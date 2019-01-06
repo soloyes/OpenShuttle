@@ -76,15 +76,18 @@ public final class PaintConstants {
     public static final int ASTRONAUT_WIDTH = 256;
     public static final int ASTRONAUT_HEIGHT = 256;
     public static final String CRATE_1_REGION = "crate1";
+    public static final String CRATE_GOLD_REGION = "crategold";
     public static final int CRATE_1_WIDTH = 256;
     public static final int CRATE_1_HEIGHT = 256;
     public static final String STORAGE_1_REGION = "storage1";
+    public static final String STORAGE_GOLD_REGION = "storagegold";
     public static final int STORAGE_1_WIDTH = 256;
     public static final int STORAGE_1_HEIGHT = 256;
     public static final float STORAGE_SINGLE_OFFSET = 0.0f;
     public static final float STORAGE_DOUBLE_OFFSET = 32.0f;
 
     public static final String FUEL_1_REGION = "fuel1";
+    public static final String FUEL_GOLD_REGION = "fuelgold";
     public static final int FUEL_1_WIDTH = 256;
     public static final int FUEL_1_HEIGHT = 256;
     public static final String FUEL_BACK_REGION = "fuelback";
@@ -117,7 +120,9 @@ public final class PaintConstants {
     public static final String RADAR_CONSUMABLE_DOT_REGION = "radardot1";
     public static final String RADAR_ANOMALY_DOT_REGION = "radardot2";
     public static final String PATTERN_SIGN_LABEL_REGION = "patternsign";
+    public static final String PATTERN_SIGN_GOLD_LABEL_REGION = "patternsigngold";
     public static final String SHABBY_SIGN_LABEL_REGION = "shabbysign";
+    public static final String SHABBY_SIGN_GOLD_LABEL_REGION = "shabbysigngold";
     public static final String BOOST_LABEL_REGION = "boostv1";
     public static final String BOX_SHIELD_LABEL_REGION = "boxshieldv1";
     public static final String REPAIR_LABEL_REGION = "repairv1";
@@ -129,7 +134,7 @@ public final class PaintConstants {
     public static final String SPLASH_LABEL_REGION = "splashv1";
     public static final String TRASH_LABEL_REGION = "trashv1";
     public static final String BOX_SCAN_NOISE_REGION = "boxscanv1";
-    public static final float LABEL_ALPHA = 0.5f;
+    public static final float LABEL_ALPHA = 0.7f;
     public static final float LABEL_SINGLE_SCALE_FACTOR = 2.5f;
     public static final float LABEL_DOUBLE_SCALE_FACTOR = 4.0f;
 

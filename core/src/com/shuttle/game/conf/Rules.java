@@ -219,6 +219,8 @@ public final class Rules {
     public static final float CONSUMABLE_SCAN_TIME = 30.0f;
     //60
     public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
+    //20 means 1/20
+    public static final int CONSUMABLE_GOLDEN_PROBABILITY = 20;
 
     public static void setSpace(int n) {
         STARS_COUNT = STARS * n;

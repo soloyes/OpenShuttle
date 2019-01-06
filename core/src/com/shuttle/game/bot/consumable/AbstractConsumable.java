@@ -33,6 +33,8 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     protected boolean scanned;
     @Getter
     protected boolean danger;
+    @Getter
+    protected boolean golden;
 
     public AbstractConsumable(GameScreen gs) {
         this.gs = gs;

@@ -60,6 +60,8 @@ public class Fuel extends AbstractConsumable {
 
         this.shielded = false;
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
+        this.golden = MathUtils.random(0, Rules.CONSUMABLE_GOLDEN_PROBABILITY) == 0;
+        this.box.init();
     }
 
     @Override

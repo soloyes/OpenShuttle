@@ -22,7 +22,6 @@ public class Crate extends AbstractConsumable {
 
     public Crate(GameScreen gs) {
         super(gs);
-        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_1_REGION);
         this.width = PaintConstants.CRATE_1_WIDTH;
         this.height = PaintConstants.CRATE_1_HEIGHT;
         this.type = Type.CRATE;
@@ -58,12 +57,18 @@ public class Crate extends AbstractConsumable {
         this.labels.get(Label.Layer.HIDDEN).get(0).setScaleFactor(3.5f);
         this.labels.get(Label.Layer.HIDDEN).get(0).setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.LABEL_ALPHA);
 
+        this.golden = MathUtils.random(0, Rules.CONSUMABLE_GOLDEN_PROBABILITY) == 0;
         stickLabel();
 
         this.shielded = false;
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
         this.scanned = false;
         this.scan.setTime(Rules.CONSUMABLE_SCAN_TIME);
+        if (!golden) {
+            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_1_REGION);
+        } else {
+            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_GOLD_REGION);
+        }
     }
 
     private void stickLabel() {
@@ -74,10 +79,7 @@ public class Crate extends AbstractConsumable {
                 break;
             default:
                 labels.get(Label.Layer.LABEL).get(0).setSticker(generateSafe());
-        }
-        if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.PATTERN || labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.SHABBY) {
-            labels.get(Label.Layer.HIDDEN).get(0).setSticker(generateSafe());
-            danger = true;
+                break;
         }
     }
 
@@ -100,13 +102,19 @@ public class Crate extends AbstractConsumable {
     }
 
     private Label.Sticker generateDanger() {
+        Label.Sticker sticker;
         int r = MathUtils.random(0, 5);
         switch (r) {
             case 0:
-                return Label.Sticker.SHABBY;
+                sticker = golden ? Label.Sticker.SHABBY_GOLD : Label.Sticker.SHABBY;
+                break;
             default:
-                return Label.Sticker.PATTERN;
+                sticker = golden ? Label.Sticker.PATTERN_GOLD : Label.Sticker.PATTERN;
+                break;
         }
+        danger = true;
+        labels.get(Label.Layer.HIDDEN).get(0).setSticker(generateSafe());
+        return sticker;
     }
 
     @Override
@@ -132,10 +140,12 @@ public class Crate extends AbstractConsumable {
         if (danger) {
             switch (labels.get(Label.Layer.LABEL).get(0).getSticker()) {
                 case PATTERN:
+                case PATTERN_GOLD:
                     Consumer.consume(gs, this, labels.get(Label.Layer.HIDDEN).get(0));
                     break;
                 //todo:// SHABBY Logic here: 1/2 life, 1/2 fuel, new anomaly, disable radar/laser
                 case SHABBY:
+                case SHABBY_GOLD:
                     break;
             }
         } else {
@@ -162,7 +172,7 @@ public class Crate extends AbstractConsumable {
         if (labeled) {
             labels.get(Label.Layer.BACK).get(0).render(batch);
             if (danger) {
-                if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.SHABBY) {
+                if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.SHABBY || labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.SHABBY_GOLD) {
                     labels.get(Label.Layer.LABEL).get(0).render(batch);
                 } else {
                     if (!scanned) {
@@ -184,7 +194,7 @@ public class Crate extends AbstractConsumable {
         if (shielded && !taken) {
             shield.render(batch);
         }
-        if (scanned && !taken && labels.get(Label.Layer.LABEL).get(0).getSticker() != Label.Sticker.SHABBY) {
+        if (scanned && !taken && labels.get(Label.Layer.LABEL).get(0).getSticker() != Label.Sticker.SHABBY && labels.get(Label.Layer.LABEL).get(0).getSticker() != Label.Sticker.SHABBY_GOLD) {
             scan.render(batch);
         }
     }
