@@ -74,6 +74,14 @@ public class Storage extends AbstractConsumable {
 
         stickLabel();
 
+        if (size == Size.SINGLE) {
+            Label.Sticker stickerFront = labels.get(Label.Layer.LABEL).get(0).getSticker();
+            Label.Sticker stickerHidden = labels.get(Label.Layer.HIDDEN).get(0).getSticker();
+            if (stickerFront == Label.Sticker.LASER || stickerFront == Label.Sticker.RADAR || stickerHidden == Label.Sticker.LASER || stickerHidden == Label.Sticker.RADAR) {
+                golden = false;
+            }
+        }
+
         this.shielded = false;
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
         this.scanned = false;
@@ -113,12 +121,12 @@ public class Storage extends AbstractConsumable {
         //Make different labels insight of storage
         if (size.ordinal() == 1) {
             if (labels.get(Label.Layer.LABEL).get(0).getSticker() == labels.get(Label.Layer.LABEL).get(1).getSticker()) {
-                int r = (labels.get(Label.Layer.LABEL).get(0).getSticker().ordinal() + 1) % 7;
+                int r = (labels.get(Label.Layer.LABEL).get(0).getSticker().ordinal() + 1) % 6;
                 labels.get(Label.Layer.LABEL).get(1).setSticker(Label.Sticker.values()[r]);
             }
             if (danger) {
                 if (labels.get(Label.Layer.HIDDEN).get(0).getSticker() == labels.get(Label.Layer.HIDDEN).get(1).getSticker()) {
-                    int r = (labels.get(Label.Layer.HIDDEN).get(0).getSticker().ordinal() + 1) % 7;
+                    int r = (labels.get(Label.Layer.HIDDEN).get(0).getSticker().ordinal() + 1) % 6;
                     labels.get(Label.Layer.HIDDEN).get(1).setSticker(Label.Sticker.values()[r]);
                 }
             }
