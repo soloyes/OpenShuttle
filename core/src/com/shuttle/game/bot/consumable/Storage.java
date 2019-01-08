@@ -92,8 +92,7 @@ public class Storage extends AbstractConsumable {
 
     private void stickLabel() {
         for (int i = 0; i <= size.ordinal(); i++) {
-            int r = 0;
-            MathUtils.random(0, 10);
+            int r = MathUtils.random(0, 10);
             switch (r) {
                 case 0:
                     labels.get(Label.Layer.LABEL).get(i).setSticker(generateDanger());
