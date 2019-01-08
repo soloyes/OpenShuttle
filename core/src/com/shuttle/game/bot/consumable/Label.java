@@ -121,11 +121,6 @@ public class Label {
     }
 
     public enum Sticker {
-        //Surprise
-        PATTERN,
-        PATTERN_GOLD,
-        SHABBY,
-        SHABBY_GOLD,
         //Crate
         BOOST,
         REPAIR,
@@ -139,6 +134,11 @@ public class Label {
         ROCKET,
         //Fuel
         FUEL,
+        //Surprise
+        PATTERN,
+        PATTERN_GOLD,
+        SHABBY,
+        SHABBY_GOLD,
     }
 
     public enum Layer {

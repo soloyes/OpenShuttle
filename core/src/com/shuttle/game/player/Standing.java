@@ -98,10 +98,6 @@ public class Standing {
         if (fuel <= 0.0f) {
             fuel = 0.0f;
         }
-    }
-
-    public void changeFuel(int amount) {
-        fuel += amount;
         if (fuel > maxFuel) {
             fuel = maxFuel;
         }

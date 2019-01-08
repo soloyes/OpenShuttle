@@ -18,7 +18,6 @@ import com.shuttle.game.utils.effects.Vibrator;
  * @author Shuttle on 10/11/18.
  */
 public class Crate extends AbstractConsumable {
-    private Label dangerLabel;
 
     public Crate(GameScreen gs) {
         super(gs);
@@ -144,11 +143,8 @@ public class Crate extends AbstractConsumable {
                     Consumer.consume(gs, this, labels.get(Label.Layer.HIDDEN).get(0));
                     break;
                 case SHABBY:
-                    //todo: -1/2 life + boom, -1/2 fuel, new tan anomaly, disable radar, -score
-                    //+1/2 life, +1/2 fuel, generate some crates, +score, kill all tan
                 case SHABBY_GOLD:
-                    //todo: -1 life + boom, -all fuel, new green anomaly, disable laser, -score
-                    //+1 life, +all fuel, +several manual activated loot, +score, kill all green, kill rad/fuel anomaly
+                    Consumer.consume(gs, this, labels.get(Label.Layer.LABEL).get(0));
                     break;
             }
         } else {

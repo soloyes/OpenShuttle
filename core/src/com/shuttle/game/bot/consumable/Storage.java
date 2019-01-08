@@ -92,7 +92,8 @@ public class Storage extends AbstractConsumable {
 
     private void stickLabel() {
         for (int i = 0; i <= size.ordinal(); i++) {
-            int r = MathUtils.random(0, 10);
+            int r = 0;
+            MathUtils.random(0, 10);
             switch (r) {
                 case 0:
                     labels.get(Label.Layer.LABEL).get(i).setSticker(generateDanger());
@@ -204,11 +205,8 @@ public class Storage extends AbstractConsumable {
                     }
                     break;
                 case SHABBY:
-                    //todo: -1,5 life + boom, -all fuel, new yellow anomaly, disable radar and laser, -score
-                    //+1,5 life, +all fuel, +generate storage, kill all yellow, +score, kill rad/fuel anomaly
                 case SHABBY_GOLD:
-                    //todo: -2 life + boom, -all fuel, new red anomaly, disable radar/laser, -score
-                    //+2 life, +all fuel, +several manual activated loot, +score, kill all red, kill rad/fuel anomaly
+                    Consumer.consume(gs, this, dangerLabel);
                     break;
             }
         } else {

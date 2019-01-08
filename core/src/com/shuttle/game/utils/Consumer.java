@@ -17,7 +17,6 @@ import java.util.List;
 
 public class Consumer {
     public static void consume(GameScreen gs, AbstractConsumable consumable, Label label) {
-        //todo: Add Gold boxes addition here (consumable.isGolden())
         //todo: gold loot sounds??
 
         Standing standing = gs.getPlayer().getStanding();
@@ -217,6 +216,33 @@ public class Consumer {
                         );
             }
             boomBox.playSound(MSConstants.GET_FUEL);
+        }
+
+        if (label.getSticker() == Label.Sticker.SHABBY || label.getSticker() == Label.Sticker.SHABBY_GOLD) {
+            switch (consumable.getType()) {
+                case CRATE:
+                    //todo: -1 life + boom, -all fuel, new green anomaly, disable laser, -score
+                    //+1 life, +all fuel, +several manual activated loot, +score, kill all green, kill rad/fuel anomaly
+                    if (consumable.isGolden()) {
+                        gs.getCorrosiveAnomalyEmitter().createAnomalyWithLevel(consumable.getPosition(), 1);
+                        //todo: -1/2 life + boom, -1/2 fuel, new tan anomaly, disable radar, -score
+                        //+1/2 life, +1/2 fuel, generate some crates, +score, kill all tan
+                    } else {
+                        gs.getCorrosiveAnomalyEmitter().createAnomalyWithLevel(consumable.getPosition(), 0);
+                    }
+                    break;
+                case STORAGE:
+                    if (consumable.isGolden()) {
+                        //todo: -2 life + boom, -all fuel, new red anomaly, disable radar/laser, -score
+                        //+2 life, +all fuel, +several manual activated loot, +score, kill all red, kill rad/fuel anomaly
+                        gs.getCorrosiveAnomalyEmitter().createAnomalyWithLevel(consumable.getPosition(), 3);
+                    } else {
+                        //todo: -1,5 life + boom, -all fuel, new yellow anomaly, disable radar and laser, -score
+                        //+1,5 life, +all fuel, +generate storage, kill all yellow, +score, kill rad/fuel anomaly
+                        gs.getCorrosiveAnomalyEmitter().createAnomalyWithLevel(consumable.getPosition(), 2);
+                    }
+                    break;
+            }
         }
     }
 }

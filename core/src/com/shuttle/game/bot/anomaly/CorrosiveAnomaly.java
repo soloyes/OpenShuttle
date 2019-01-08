@@ -74,7 +74,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         float rnd = MathUtils.random(0.0f, 1.0f);
         for (int i = probabilities.length - 1; i > 0; i--) {
             if (rnd < probabilities[i]) {
-                level = i;
+                this.level = i;
                 break;
             }
         }
