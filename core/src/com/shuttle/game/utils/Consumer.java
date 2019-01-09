@@ -222,11 +222,11 @@ public class Consumer {
             switch (consumable.getType()) {
                 case CRATE:
                     //todo: -1 life + boom, -all fuel, new green anomaly, disable laser, -score
-                    //+1 life, +all fuel, +several manual activated loot, +score, kill all green, kill rad/fuel anomaly
+                    //+1 life, + 1/15 maxFuel, generate some crates, +score, kill all green, kill rad or fuel anomaly (+ score)
                     if (consumable.isGolden()) {
                         gs.getCorrosiveAnomalyEmitter().createAnomalyWithLevel(consumable.getPosition(), 1);
                         //todo: -1/2 life + boom, -1/2 fuel, new tan anomaly, disable radar, -score
-                        //+1/2 life, +1/2 fuel, generate some crates, +score, kill all tan
+                        //+1/2 life, +1/20 maxFuel, +several manual activated loot, +score, kill all tan
                     } else {
                         gs.getCorrosiveAnomalyEmitter().createAnomalyWithLevel(consumable.getPosition(), 0);
                     }
@@ -234,15 +234,38 @@ public class Consumer {
                 case STORAGE:
                     if (consumable.isGolden()) {
                         //todo: -2 life + boom, -all fuel, new red anomaly, disable radar/laser, -score
-                        //+2 life, +all fuel, +several manual activated loot, +score, kill all red, kill rad/fuel anomaly
+                        //+2 life, +1/5 maxFuel, +generate storage, +score, kill all red, kill rad and fuel anomaly (+ score)
                         gs.getCorrosiveAnomalyEmitter().createAnomalyWithLevel(consumable.getPosition(), 3);
                     } else {
                         //todo: -1,5 life + boom, -all fuel, new yellow anomaly, disable radar and laser, -score
-                        //+1,5 life, +all fuel, +generate storage, kill all yellow, +score, kill rad/fuel anomaly
+                        //+1,5 life, +1/10 maxFuel, +several manual activated loot, +score, kill all yellow
                         gs.getCorrosiveAnomalyEmitter().createAnomalyWithLevel(consumable.getPosition(), 2);
                     }
                     break;
             }
+        }
+    }
+
+    private void getPositive(GameScreen gs, int level) {
+        int r = MathUtils.random(0, 3);
+        switch (r) {
+            case 0:
+                List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
+                for (int i = 0; i < anomalies.size(); i++) {
+                    if (anomalies.get(i).getLevel() == level){
+                        anomalies.get(i).destroyWithEffect();
+                    }
+                }
+                break;
+            case 1:
+                gs.getPlayer().getStanding().changeScore(50000);
+                break;
+            case 2:
+                gs.getPlayer().takeDamage(20);
+                break;
+            case 3:
+                gs.getPlayer().getRadar().setActive(false);
+                break;
         }
     }
 }
