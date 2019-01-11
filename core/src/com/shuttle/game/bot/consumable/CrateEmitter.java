@@ -2,7 +2,7 @@ package com.shuttle.game.bot.consumable;
 
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
-//#77 create class
+
 public class CrateEmitter extends AbstractConsumableEmitter {
     public CrateEmitter(GameScreen gs) {
         super.gs = gs;
@@ -14,6 +14,10 @@ public class CrateEmitter extends AbstractConsumableEmitter {
 
     @Override
     protected Crate newObject() {
-            return new Crate(gs);
+        return new Crate(gs);
+    }
+
+    public void createBonusAnomaly() {
+        super.createConsumable();
     }
 }

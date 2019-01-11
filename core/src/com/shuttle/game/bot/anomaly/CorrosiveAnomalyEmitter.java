@@ -21,7 +21,7 @@ public class CorrosiveAnomalyEmitter extends AbstractAnomalyEmitter {
         return new CorrosiveAnomaly(gs);
     }
 
-    public void createAnomalyWithLevel(Vector2 position, int level) {
+    public void createBonusAnomaly(Vector2 position, int level) {
         AbstractAnomaly anomaly = getActiveElement();
         anomaly.init(position.x, position.y);
         anomaly.setLevel(level);

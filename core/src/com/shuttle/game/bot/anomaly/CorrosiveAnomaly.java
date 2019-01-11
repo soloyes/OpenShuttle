@@ -190,7 +190,6 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     @Override
     public void destroy() {
         super.destroy();
-
     }
 
     @Override

@@ -82,6 +82,8 @@ public final class Rules {
     public static final float ANOMALIES_RADIATION_LIVE_TIME = 120.0f;
     //0.4f
     public static final float ANOMALIES_RADIATION_EAT_TIME = 0.4f;
+    //2.0f
+    public static final float ANOMALIES_RADIATION_BORN_SPEED = 2.0f;
     //
     //0
     public static final int ANOMALIES_MAGNETIC_AT_START = 0;
@@ -97,6 +99,8 @@ public final class Rules {
     public static final float ANOMALIES_MAGNETIC_LIVE_TIME = 120.0f;
     //0.4f
     public static final float ANOMALIES_MAGNETIC_EAT_TIME = 0.4f;
+    //2.0f
+    public static final float ANOMALIES_MAGNETIC_BORN_SPEED = 2.0f;
     //
     //2
     public static final int ANOMALIES_CORROSIVE_AT_START = 2;
@@ -203,6 +207,10 @@ public final class Rules {
     //20000
     //todo: need to be balanced
     public static final int SCORE_TO_LIVE = 20000;
+    //10000
+    public static final int SCORE_BASE_BONUS = 10000;
+    //3
+    public static final int CONSUMABLE_GENERATE_BASE_BONUS = 3;
     //500
     public static final int ANOMALIES_BASE_SCORE_ADD = 500;
     //10000

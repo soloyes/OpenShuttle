@@ -13,6 +13,10 @@ public class StorageEmitter extends AbstractConsumableEmitter {
 
     @Override
     protected Storage newObject() {
-            return new Storage(gs);
+        return new Storage(gs);
+    }
+
+    public void createBonusAnomaly() {
+        super.createConsumable();
     }
 }

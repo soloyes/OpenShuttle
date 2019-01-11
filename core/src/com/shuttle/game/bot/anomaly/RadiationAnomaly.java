@@ -1,12 +1,18 @@
 package com.shuttle.game.bot.anomaly;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.shuttle.game.GameInfoSystem;
+import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
 import com.shuttle.game.utils.effects.MoveProcessor;
@@ -28,6 +34,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
     @Getter
     @Setter
     private float eatTimer;
+    private boolean touched;
 
     public RadiationAnomaly(GameScreen gs) {
         super(gs);
@@ -63,6 +70,8 @@ public class RadiationAnomaly extends AbstractAnomaly {
                 3 * Rules.ANOMALIES_RADIATION_VELOCITY
         );
         this.spiralRadius = MathUtils.random(20, 60);
+        this.touched = false;
+        this.spreeColor.set(Color.CYAN.r, Color.CYAN.g, Color.CYAN.b, 1.0f);
     }
 
     @Override
@@ -100,6 +109,13 @@ public class RadiationAnomaly extends AbstractAnomaly {
 
         if (born) {
             moveProcessor.update(this, dt);
+            if (Gdx.input.isTouched() && !Rules.GAME_OVER && GamePreferences.isChildEnabled()) {
+                tmp.set(Gdx.input.getX(), Gdx.input.getY());
+                ScreenManager.getInstance().getViewport().unproject(tmp);
+                if (tmp.dst(position) < PaintConstants.ANOMALY_MAGNETIC_WIDTH) {
+                    touched = true;
+                }
+            }
         }
         boundCheck.checkAndHandleBoundsAndDestroy(this);
     }
@@ -107,23 +123,38 @@ public class RadiationAnomaly extends AbstractAnomaly {
     private void scaleAndBorn(float dt) {
         if (!taken) {
             moveProcessor.archimedesInit(this);
-            if (!born) {
-                color.a += dt;
-                if (color.a >= 1.0) {
-                    color.a = 1.0f;
-                    born = true;
+            if (!touched) {
+                if (!born) {
+                    color.a += dt / Rules.ANOMALIES_RADIATION_BORN_SPEED;
+                    if (color.a >= 1.0) {
+                        color.a = 1.0f;
+                        born = true;
+                    }
+                } else {
+                    liveTime += dt;
+                    if (liveTime >= Rules.ANOMALIES_RADIATION_LIVE_TIME && !Rules.GAME_OVER) {
+                        color.a -= dt;
+                    }
+                    if (color.a <= 0.0f) {
+                        color.a = 0.0f;
+                        liveTime = 0.0f;
+                        born = false;
+                        destroy();
+                    }
                 }
             } else {
-                liveTime += dt;
-                if (liveTime >= Rules.ANOMALIES_RADIATION_LIVE_TIME && !Rules.GAME_OVER) {
-                    color.a -= dt;
-                }
-                if (color.a <= 0.0f) {
-                    color.a = 0.0f;
-                    liveTime = 0.0f;
-                    born = false;
-                    destroy();
-                }
+                destroy();
+                boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
+                gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
+                gs.getPlayer().getStanding().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
+                showSprayBoom(gs.getParticleEmitter());
+                gs.getGameInfoSystem().setup(
+                        position.x,
+                        position.y,
+                        GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
+                        3.0f,
+                        true
+                );
             }
         } else {
             born = true;
