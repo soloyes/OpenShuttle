@@ -64,6 +64,8 @@ public class GameInfoSystem {
         SHIELD("SHIELD [GREEN]+" + (int) Rules.CONSUMABLE_SHIELD_TIME + "[]"),
         SCAN("SCAN [GREEN]+" + (int) Rules.CONSUMABLE_SCAN_TIME + "[]"),
         LASER("[GREEN]LASER[]"),
+        BONUS_CRATES("[GREEN]BONUS CRATES[]"),
+        BONUS_STORAGES("[GREEN]BONUS STORAGES[]"),
         SCORE("SCORE");
         private String value;
 

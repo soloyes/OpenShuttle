@@ -224,29 +224,29 @@ public class Consumer {
                     //todo: -1 life + boom, -all fuel, new green anomaly, disable laser, -score
                     //generate some crates, kill rad or fuel anomaly (+ score)
                     if (consumable.isGolden()) {
-                        gs.getCorrosiveAnomalyEmitter().createBonusAnomaly(consumable.getPosition(), 1);
+                        getPositive(gs, consumable, 1);
                         //todo: -1/2 life + boom, -1/2 fuel, new tan anomaly, disable radar, -score
                         //+several manual activated loot, add HP
                     } else {
-                        gs.getCorrosiveAnomalyEmitter().createBonusAnomaly(consumable.getPosition(), 0);
+                        getPositive(gs, consumable, 0);
                     }
                     break;
                 case STORAGE:
                     if (consumable.isGolden()) {
                         //todo: -2 life + boom, -all fuel, new red anomaly, disable radar/laser, -score
                         //+generate storage, kill rad and fuel anomaly (+ score)
-                        gs.getCorrosiveAnomalyEmitter().createBonusAnomaly(consumable.getPosition(), 3);
+                        getPositive(gs, consumable, 3);
                     } else {
                         //todo: -1,5 life + boom, -all fuel, new yellow anomaly, disable radar and laser, -score
                         //+several manual activated loot, add HP
-                        gs.getCorrosiveAnomalyEmitter().createBonusAnomaly(consumable.getPosition(), 2);
+                        getPositive(gs, consumable, 2);
                     }
                     break;
             }
         }
     }
 
-    private void getPositive(GameScreen gs, AbstractConsumable consumable, int level) {
+    private static void getPositive(GameScreen gs, AbstractConsumable consumable, int level) {
         int r = MathUtils.random(0, 3);
         // 0 - Kill related level corrosive anomaly
         // 1 - Add score
@@ -257,27 +257,51 @@ public class Consumer {
             case 0:
                 List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
                 for (int i = 0; i < anomalies.size(); i++) {
-                    if (anomalies.get(i).getLevel() == level) {
-                        //todo:// Добавить очки
-                        anomalies.get(i).setMarkedToBoom(true);
+                    AbstractAnomaly anomaly = anomalies.get(i);
+                    if (anomaly.getLevel() == level) {
+                        //todo:// Добавить очки, высвечивание очков, и сплаш. Вынести в сплаш вызов отображения очков
+                        anomaly.setMarkedToBoom(true);
                     }
                 }
                 break;
             case 1:
-                gs.getPlayer().getStanding().changeScore((level + 1) * Rules.SCORE_BASE_BONUS);
+                //todo:// вынести выспечиваине очков на экране в changeScore и убрать по всему коду волосню
+                int score = (level + 1) * Rules.SCORE_BASE_BONUS;
+                gs.getPlayer().getStanding().changeScore(score);
+                gs.getGameInfoSystem().setup(
+                        consumable.getPosition().x,
+                        consumable.getPosition().y,
+                        GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
+                        3.0f,
+                        true
+                );
                 break;
             case 2:
                 if (consumable.isGolden()) {
                     //todo://Add manual activated loot
-
                 } else {
                     switch (consumable.getType()) {
                         case CRATE:
+                            gs.getGameInfoSystem().setup(
+                                    consumable.getPosition().x,
+                                    consumable.getPosition().y,
+                                    GameInfoSystem.GameInfoSystemPreset.BONUS_CRATES,
+                                    3.0f,
+                                    true
+                            );
                             for (int i = 0; i < (level + 1) * Rules.CONSUMABLE_GENERATE_BASE_BONUS; i++) {
                                 gs.getCrateEmitter().createBonusAnomaly();
                             }
                             break;
                         case STORAGE:
+                            gs.getCrateEmitter().createBonusAnomaly();
+                            gs.getGameInfoSystem().setup(
+                                    consumable.getPosition().x,
+                                    consumable.getPosition().y,
+                                    GameInfoSystem.GameInfoSystemPreset.BONUS_STORAGES,
+                                    3.0f,
+                                    true
+                            );
                             for (int i = 0; i < (level + 1) * Rules.CONSUMABLE_GENERATE_BASE_BONUS; i++) {
                                 gs.getStorageEmitter().createBonusAnomaly();
                             }
@@ -306,10 +330,25 @@ public class Consumer {
                                 list = gs.getRadiationAnomalyEmitter().getActiveList();
                             }
                             for (int i = 0; i < list.size(); i++) {
-                                list.get(i).destroy();
+                                AbstractAnomaly anomaly = list.get(i);
+                                if (!anomaly.isTaken()) {
+                                    list.get(i).destroyWithEffect();
+                                }
                             }
                             break;
                         case STORAGE:
+                            for (int i = 0; i < gs.getMagneticAnomalyEmitter().getActiveList().size(); i++) {
+                                AbstractAnomaly anomaly = gs.getMagneticAnomalyEmitter().getActiveList().get(i);
+                                if (!anomaly.isTaken()) {
+                                    anomaly.destroyWithEffect();
+                                }
+                            }
+                            for (int i = 0; i < gs.getRadiationAnomalyEmitter().getActiveList().size(); i++) {
+                                AbstractAnomaly anomaly = gs.getRadiationAnomalyEmitter().getActiveList().get(i);
+                                if (!anomaly.isTaken()) {
+                                    anomaly.destroyWithEffect();
+                                }
+                            }
                             break;
                     }
                     break;

@@ -143,18 +143,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
                     }
                 }
             } else {
-                destroy();
-                boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
-                gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
-                gs.getPlayer().getStanding().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
-                showSprayBoom(gs.getParticleEmitter());
-                gs.getGameInfoSystem().setup(
-                        position.x,
-                        position.y,
-                        GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
-                        3.0f,
-                        true
-                );
+                destroyWithEffect();
             }
         } else {
             born = true;
@@ -163,5 +152,21 @@ public class RadiationAnomaly extends AbstractAnomaly {
 
     public void addEatTimer(float dt) {
         eatTimer += dt;
+    }
+
+    @Override
+    public void destroyWithEffect() {
+        super.destroyWithEffect();
+        boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
+        gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
+        gs.getPlayer().getStanding().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
+        showSprayBoom(gs.getParticleEmitter());
+        gs.getGameInfoSystem().setup(
+                position.x,
+                position.y,
+                GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
+                3.0f,
+                true
+        );
     }
 }
