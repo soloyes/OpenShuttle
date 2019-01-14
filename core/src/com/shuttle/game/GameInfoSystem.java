@@ -53,20 +53,25 @@ public class GameInfoSystem {
         REPAIR("REPAIR [GREEN]+" + Rules.CONSUMABLE_REPAIR_ADD),
         FUEL("FUEL"),
         TURBO("TURBO [GREEN]x" + (int) Rules.PLAYER_ENGINE_POWER_FACTOR + "[]"),
-        TRASH("[YELLOW]TRASH[]"),
+        TRASH("TRASH"),
         SPLASH("[GREEN]SPLASH[]"),
-        LOST_FUEL("[RED]-FUEL[]"),
-        LOST_SCORE("[RED]-SCORE[]"),
+        LOST_SCORE("SCORE"),
         MURDERER("MURDERER" + "\n[RED]-" + Rules.CONSUMABLE_MURDER_SCORE_DECREASE + "[]"),
         EASY("BE EASY"),
         ROCKET("[GREEN]ROCKETS[]"),
-        RADAR("[GREEN]RADAR[]"),
+        RADAR("RADAR"),
         SHIELD("SHIELD [GREEN]+" + (int) Rules.CONSUMABLE_SHIELD_TIME + "[]"),
         SCAN("SCAN [GREEN]+" + (int) Rules.CONSUMABLE_SCAN_TIME + "[]"),
-        LASER("[GREEN]LASER[]"),
-        BONUS_CRATES("[GREEN]BONUS CRATES[]"),
-        BONUS_STORAGES("[GREEN]BONUS STORAGES[]"),
-        SCORE("SCORE");
+        LASER("LASER"),
+        BONUS_CRATE("[GREEN]BONUS CRATE[]"),
+        BONUS_STORAGE("[GREEN]BONUS STORAGE[]"),
+        SCORE("SCORE"),
+        ANOMALY_FLUSH("[GREEN]ANOMALY FLUSH[]"),
+        CRATE_FLUSH("[RED]CRATE FLUSH[]"),
+        STORAGE_FLUSH("[RED]STORAGE FLUSH[]"),
+        UP("1UP"),
+        HP("HP"),
+        ANOMALY_ARISE("[RED]ANOMALY[]");
         private String value;
 
         GameInfoSystemPreset(String value) {

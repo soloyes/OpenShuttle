@@ -144,6 +144,13 @@ public class RadiationAnomaly extends AbstractAnomaly {
                 }
             } else {
                 destroyWithEffect();
+                gs.getGameInfoSystem().setup(
+                        position.x,
+                        position.y,
+                        GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
+                        3.0f,
+                        true
+                );
             }
         } else {
             born = true;
@@ -161,12 +168,5 @@ public class RadiationAnomaly extends AbstractAnomaly {
         gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
         gs.getPlayer().getStanding().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
         showSprayBoom(gs.getParticleEmitter());
-        gs.getGameInfoSystem().setup(
-                position.x,
-                position.y,
-                GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
-                3.0f,
-                true
-        );
     }
 }

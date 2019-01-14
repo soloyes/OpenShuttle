@@ -63,14 +63,6 @@ public class Consumer {
                     if (!anomalies.get(i).isTaken()) {
                         anomalies.get(i).setMarkedToBoom(true);
                         standing.addToStatistics(anomalies.get(i).getType(), anomalies.get(i).getLevel());
-                        int score = Rules.ANOMALIES_BASE_SCORE_ADD;
-                        gs.getGameInfoSystem().setup(
-                                anomalies.get(i).getPosition().x,
-                                anomalies.get(i).getPosition().y,
-                                GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
-                                3.0f,
-                                true
-                        );
                         standing.changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
                     }
                 }
@@ -87,14 +79,16 @@ public class Consumer {
         }
 
         if (label.getSticker() == Label.Sticker.TRASH) {
+            int score = Rules.CONSUMABLE_TRASH_BASE_SCORE * MathUtils.random(0, 5);
             gs.getGameInfoSystem()
                     .setup(
                             position.x,
                             position.y,
-                            GameInfoSystem.GameInfoSystemPreset.TRASH,
+                            "+" + score + "[YELLOW]" + GameInfoSystem.GameInfoSystemPreset.TRASH + "[]",
                             2.0f,
                             true
                     );
+            standing.changeScore(score);
             boomBox.playSound(MSConstants.GET_TRASH);
         }
 
@@ -152,7 +146,7 @@ public class Consumer {
                     .setup(
                             position.x,
                             position.y,
-                            GameInfoSystem.GameInfoSystemPreset.RADAR,
+                            "[GREEN]" + GameInfoSystem.GameInfoSystemPreset.RADAR + "[]",
                             3.0f,
                             true
                     );
@@ -165,7 +159,7 @@ public class Consumer {
                     .setup(
                             position.x,
                             position.y,
-                            GameInfoSystem.GameInfoSystemPreset.LASER,
+                            "[GREEN]" + GameInfoSystem.GameInfoSystemPreset.LASER + "[]",
                             3.0f,
                             true
                     );
@@ -219,54 +213,208 @@ public class Consumer {
         }
 
         if (label.getSticker() == Label.Sticker.SHABBY || label.getSticker() == Label.Sticker.SHABBY_GOLD) {
+            int r = MathUtils.random(0, 1);
             switch (consumable.getType()) {
                 case CRATE:
-                    //todo: -1 life + boom, -all fuel, new green anomaly, disable laser, -score
-                    //generate some crates, kill rad or fuel anomaly (+ score)
                     if (consumable.isGolden()) {
-                        getPositive(gs, consumable, 1);
-                        //todo: -1/2 life + boom, -1/2 fuel, new tan anomaly, disable radar, -score
-                        //+several manual activated loot, add HP
+                        if (r == 0) {
+                            getPositive(gs, consumable, 1);
+                        } else {
+                            getNegative(gs, consumable, 1);
+                        }
                     } else {
-                        getPositive(gs, consumable, 0);
+                        if (r == 0) {
+                            getPositive(gs, consumable, 0);
+                        } else {
+                            getNegative(gs, consumable, 0);
+                        }
                     }
                     break;
                 case STORAGE:
                     if (consumable.isGolden()) {
-                        //todo: -2 life + boom, -all fuel, new red anomaly, disable radar/laser, -score
-                        //+generate storage, kill rad and fuel anomaly (+ score)
-                        getPositive(gs, consumable, 3);
+                        if (r == 0) {
+                            getPositive(gs, consumable, 3);
+                        } else {
+                            getNegative(gs, consumable, 3);
+                        }
                     } else {
-                        //todo: -1,5 life + boom, -all fuel, new yellow anomaly, disable radar and laser, -score
-                        //+several manual activated loot, add HP
-                        getPositive(gs, consumable, 2);
+                        if (r == 0) {
+                            getPositive(gs, consumable, 2);
+                        } else {
+                            getNegative(gs, consumable, 2);
+                        }
                     }
                     break;
             }
         }
     }
 
-    private static void getPositive(GameScreen gs, AbstractConsumable consumable, int level) {
+    private static void getNegative(GameScreen gs, AbstractConsumable consumable, int level) {
+        // 0 - Add related level corrosive anomaly
+        // 1 - Del score
+        // 2 - Disable Laser/Radar, or del Crate/Storage
+        // 3 - Add Electrical/Corrosive/Radiation anomaly, or del HP/fuel/life
         int r = MathUtils.random(0, 3);
+        int score;
+        switch (r) {
+            case 0:
+                gs.getCorrosiveAnomalyEmitter().createBonusAnomaly(consumable.getPosition(), level);
+                for (int i = 0; i < (4 - level) * Rules.ANOMALY_GENERATE_BASE_BONUS; i++) {
+                    gs.getCorrosiveAnomalyEmitter().createBonusAnomaly(level);
+                }
+                gs.getGameInfoSystem().setup(
+                        consumable.getPosition().x,
+                        consumable.getPosition().y,
+                        GameInfoSystem.GameInfoSystemPreset.ANOMALY_ARISE,
+                        3.0f,
+                        true
+                );
+                break;
+            case 1:
+                score = (level + 1) * Rules.SCORE_BASE_BONUS;
+                gs.getPlayer().getStanding().changeScore(-score);
+                gs.getGameInfoSystem().setup(
+                        consumable.getPosition().x,
+                        consumable.getPosition().y,
+                        GameInfoSystem.GameInfoSystemPreset.SCORE + "-[RED]" + score + "[]",
+                        3.0f,
+                        true
+                );
+                break;
+            case 2:
+                switch (consumable.getType()) {
+                    case CRATE:
+                        if (consumable.isGolden()) {
+                            gs.getPlayer().getRadar().setActive(false);
+                            gs.getGameInfoSystem().setup(
+                                    consumable.getPosition().x,
+                                    consumable.getPosition().y,
+                                    "-[RED]" + GameInfoSystem.GameInfoSystemPreset.RADAR + "[]",
+                                    3.0f,
+                                    true
+                            );
+                        } else {
+                            gs.getPlayer().setLaser(false);
+                            gs.getGameInfoSystem().setup(
+                                    consumable.getPosition().x,
+                                    consumable.getPosition().y,
+                                    "-[RED]" + GameInfoSystem.GameInfoSystemPreset.LASER + "[]",
+                                    3.0f,
+                                    true
+                            );
+                        }
+                        break;
+                    case STORAGE:
+                        List<AbstractConsumable> list;
+                        GameInfoSystem.GameInfoSystemPreset preset;
+                        if (consumable.isGolden()) {
+                            list = gs.getStorageEmitter().getActiveList();
+                            preset = GameInfoSystem.GameInfoSystemPreset.STORAGE_FLUSH;
+                        } else {
+                            list = gs.getCrateEmitter().getActiveList();
+                            preset = GameInfoSystem.GameInfoSystemPreset.CRATE_FLUSH;
+                        }
+
+                        for (int i = 0; i < list.size(); i++) {
+                            AbstractConsumable c = list.get(i);
+                            if (!c.isTaken()) {
+                                c.destroyWithEffect();
+                            }
+                        }
+                        gs.getGameInfoSystem().setup(
+                                consumable.getPosition().x,
+                                consumable.getPosition().y,
+                                preset,
+                                3.0f,
+                                true
+                        );
+                        break;
+                }
+                break;
+            case 3:
+                switch (consumable.getType()) {
+                    case CRATE:
+                        if (consumable.isGolden()) {
+                            gs.getPlayer().getStanding().changeLives(-1);
+                            gs.getGameInfoSystem().setup(
+                                    consumable.getPosition().x,
+                                    consumable.getPosition().y,
+                                    "-[RED]" + GameInfoSystem.GameInfoSystemPreset.UP + "[]",
+                                    3.0f,
+                                    true
+                            );
+                        } else {
+                            if (MathUtils.random(0, 1) == 0) {
+                                gs.getPlayer().getStanding().changeHP(-gs.getPlayer().getStanding().getHp() + 1);
+                                gs.getGameInfoSystem().setup(
+                                        consumable.getPosition().x,
+                                        consumable.getPosition().y,
+                                        "-[RED]" + GameInfoSystem.GameInfoSystemPreset.HP + "[]",
+                                        3.0f,
+                                        true
+                                );
+                            } else {
+                                gs.getPlayer().getStanding().changeFuel(-gs.getPlayer().getStanding().getFuel());
+                                gs.getGameInfoSystem().setup(
+                                        consumable.getPosition().x,
+                                        consumable.getPosition().y,
+                                        "-[RED]" + GameInfoSystem.GameInfoSystemPreset.FUEL + "[]",
+                                        3.0f,
+                                        true
+                                );
+                            }
+                        }
+                        break;
+                    case STORAGE:
+                        if (consumable.isGolden()) {
+                            gs.getElectricalAnomalyEmitter().createBonusAnomaly(consumable.getPosition());
+                        } else {
+                            if (MathUtils.random(0, 1) == 0) {
+                                gs.getMagneticAnomalyEmitter().createBonusAnomaly(consumable.getPosition());
+                            } else {
+                                gs.getRadiationAnomalyEmitter().createBonusAnomaly(consumable.getPosition());
+                            }
+                        }
+                        gs.getGameInfoSystem().setup(
+                                consumable.getPosition().x,
+                                consumable.getPosition().y,
+                                GameInfoSystem.GameInfoSystemPreset.ANOMALY_ARISE,
+                                3.0f,
+                                true
+                        );
+                        break;
+                }
+                break;
+        }
+    }
+
+    private static void getPositive(GameScreen gs, AbstractConsumable consumable, int level) {
         // 0 - Kill related level corrosive anomaly
         // 1 - Add score
         // 2 - Add manual activated loot, or generate Crate/Storage
         // 3 - Kill Fuel/Radiation anomaly, or add HP/life
-
+        int r = MathUtils.random(0, 3);
+        int score;
         switch (r) {
             case 0:
                 List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
                 for (int i = 0; i < anomalies.size(); i++) {
                     AbstractAnomaly anomaly = anomalies.get(i);
-                    if (anomaly.getLevel() == level) {
-                        //todo:// Добавить очки, высвечивание очков, и сплаш. Вынести в сплаш вызов отображения очков
+                    if (anomaly.getLevel() == level && !anomaly.isTaken()) {
                         anomaly.setMarkedToBoom(true);
+                        gs.getPlayer().getStanding().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD * (level + 1));
                     }
                 }
+                gs.getGameInfoSystem().setup(
+                        consumable.getPosition().x,
+                        consumable.getPosition().y,
+                        GameInfoSystem.GameInfoSystemPreset.ANOMALY_FLUSH,
+                        3.0f,
+                        true
+                );
                 break;
             case 1:
-                //todo:// вынести выспечиваине очков на экране в changeScore и убрать по всему коду волосню
-                int score = (level + 1) * Rules.SCORE_BASE_BONUS;
+                score = (level + 1) * Rules.SCORE_BASE_BONUS;
                 gs.getPlayer().getStanding().changeScore(score);
                 gs.getGameInfoSystem().setup(
                         consumable.getPosition().x,
@@ -285,7 +433,7 @@ public class Consumer {
                             gs.getGameInfoSystem().setup(
                                     consumable.getPosition().x,
                                     consumable.getPosition().y,
-                                    GameInfoSystem.GameInfoSystemPreset.BONUS_CRATES,
+                                    GameInfoSystem.GameInfoSystemPreset.BONUS_CRATE,
                                     3.0f,
                                     true
                             );
@@ -298,7 +446,7 @@ public class Consumer {
                             gs.getGameInfoSystem().setup(
                                     consumable.getPosition().x,
                                     consumable.getPosition().y,
-                                    GameInfoSystem.GameInfoSystemPreset.BONUS_STORAGES,
+                                    GameInfoSystem.GameInfoSystemPreset.BONUS_STORAGE,
                                     3.0f,
                                     true
                             );
@@ -326,31 +474,63 @@ public class Consumer {
                             List<AbstractAnomaly> list;
                             if (MathUtils.random(0, 1) == 0) {
                                 list = gs.getMagneticAnomalyEmitter().getActiveList();
+                                score = Rules.ANOMALIES_MAGNETIC_BONUS_SCORE;
                             } else {
                                 list = gs.getRadiationAnomalyEmitter().getActiveList();
+                                score = Rules.ANOMALIES_RADIATION_BONUS_SCORE;
                             }
                             for (int i = 0; i < list.size(); i++) {
                                 AbstractAnomaly anomaly = list.get(i);
                                 if (!anomaly.isTaken()) {
                                     list.get(i).destroyWithEffect();
+                                    gs.getGameInfoSystem().setup(
+                                            anomaly.getPosition().x,
+                                            anomaly.getPosition().y,
+                                            GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
+                                            3.0f,
+                                            true
+                                    );
                                 }
                             }
                             break;
                         case STORAGE:
+                            score = Rules.ANOMALIES_MAGNETIC_BONUS_SCORE;
                             for (int i = 0; i < gs.getMagneticAnomalyEmitter().getActiveList().size(); i++) {
                                 AbstractAnomaly anomaly = gs.getMagneticAnomalyEmitter().getActiveList().get(i);
                                 if (!anomaly.isTaken()) {
                                     anomaly.destroyWithEffect();
+                                    gs.getGameInfoSystem().setup(
+                                            anomaly.getPosition().x,
+                                            anomaly.getPosition().y,
+                                            GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
+                                            3.0f,
+                                            true
+                                    );
                                 }
                             }
+                            score = Rules.ANOMALIES_RADIATION_BONUS_SCORE;
                             for (int i = 0; i < gs.getRadiationAnomalyEmitter().getActiveList().size(); i++) {
                                 AbstractAnomaly anomaly = gs.getRadiationAnomalyEmitter().getActiveList().get(i);
                                 if (!anomaly.isTaken()) {
                                     anomaly.destroyWithEffect();
+                                    gs.getGameInfoSystem().setup(
+                                            anomaly.getPosition().x,
+                                            anomaly.getPosition().y,
+                                            GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
+                                            3.0f,
+                                            true
+                                    );
                                 }
                             }
                             break;
                     }
+                    gs.getGameInfoSystem().setup(
+                            consumable.getPosition().x,
+                            consumable.getPosition().y,
+                            GameInfoSystem.GameInfoSystemPreset.ANOMALY_FLUSH,
+                            3.0f,
+                            true
+                    );
                     break;
                 }
         }

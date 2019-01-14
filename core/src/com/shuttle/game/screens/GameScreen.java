@@ -508,7 +508,7 @@ public class GameScreen extends BaseScreen {
                         gameInfoSystem.setup(
                                 player.getPosition().x,
                                 player.getPosition().y,
-                                GameInfoSystem.GameInfoSystemPreset.LOST_SCORE,
+                                "-[RED]" + GameInfoSystem.GameInfoSystemPreset.LOST_SCORE + "[]",
                                 2.0f,
                                 true
                         );
@@ -541,7 +541,7 @@ public class GameScreen extends BaseScreen {
                         gameInfoSystem.setup(
                                 player.getPosition().x,
                                 player.getPosition().y,
-                                GameInfoSystem.GameInfoSystemPreset.LOST_FUEL,
+                                "-[RED]" + GameInfoSystem.GameInfoSystemPreset.FUEL + "[]",
                                 4.0f,
                                 true
                         );

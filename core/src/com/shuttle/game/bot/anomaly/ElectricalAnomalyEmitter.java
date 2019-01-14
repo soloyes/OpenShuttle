@@ -1,5 +1,6 @@
 package com.shuttle.game.bot.anomaly;
 
+import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 
@@ -18,5 +19,10 @@ public class ElectricalAnomalyEmitter extends AbstractAnomalyEmitter {
     @Override
     protected ElectricalAnomaly newObject() {
         return new ElectricalAnomaly(gs);
+    }
+
+    public void createBonusAnomaly(Vector2 position) {
+        AbstractAnomaly anomaly = getActiveElement();
+        anomaly.init(position.x, position.y);
     }
 }

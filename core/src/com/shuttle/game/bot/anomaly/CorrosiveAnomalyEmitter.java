@@ -1,5 +1,6 @@
 package com.shuttle.game.bot.anomaly;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
@@ -24,6 +25,15 @@ public class CorrosiveAnomalyEmitter extends AbstractAnomalyEmitter {
     public void createBonusAnomaly(Vector2 position, int level) {
         AbstractAnomaly anomaly = getActiveElement();
         anomaly.init(position.x, position.y);
+        anomaly.setLevel(level);
+    }
+
+    public void createBonusAnomaly(int level) {
+        AbstractAnomaly anomaly = getActiveElement();
+        anomaly.init(
+                MathUtils.random(0, Rules.SPACE_WIDTH),
+                MathUtils.random(0, Rules.SPACE_HEIGHT)
+        );
         anomaly.setLevel(level);
     }
 }

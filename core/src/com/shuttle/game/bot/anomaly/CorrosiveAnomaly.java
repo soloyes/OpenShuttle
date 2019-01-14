@@ -144,6 +144,13 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                     showSprayBoom(gs.getParticleEmitter());
                     boomBox.playSound(MSConstants.ANOMALY_BOOM);
                     Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY);
+                    gs.getGameInfoSystem().setup(
+                            position.x,
+                            position.y,
+                            GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
+                            3.0f,
+                            true
+                    );
                 }
             }
             moveProcessor.update(this, dt);

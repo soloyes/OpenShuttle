@@ -3,6 +3,7 @@ package com.shuttle.game.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
@@ -140,7 +141,7 @@ public class Standing {
             player.getGs().getGameInfoSystem().setup(
                     player.getPosition().x,
                     player.getPosition().y,
-                    "[GREEN]1UP[]",
+                    "+[GREEN]" + GameInfoSystem.GameInfoSystemPreset.UP + "[]",
                     4.0f,
                     true
             );

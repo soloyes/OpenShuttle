@@ -76,14 +76,16 @@ public final class Rules {
     public static final int ANOMALIES_RADIATION_MAX_COUNT = 2;
     //50.0f
     public static final float ANOMALIES_RADIATION_VELOCITY = 50.0f;
-    //500
-    public static final int ANOMALIES_RADIATION_SCORE_DECREASE = 500;
+    //2000
+    public static final int ANOMALIES_RADIATION_SCORE_DECREASE = 2000;
     //120.0f
     public static final float ANOMALIES_RADIATION_LIVE_TIME = 120.0f;
     //0.4f
     public static final float ANOMALIES_RADIATION_EAT_TIME = 0.4f;
     //2.0f
     public static final float ANOMALIES_RADIATION_BORN_SPEED = 2.0f;
+    //5000
+    public static final int ANOMALIES_RADIATION_BONUS_SCORE = 5000;
     //
     //0
     public static final int ANOMALIES_MAGNETIC_AT_START = 0;
@@ -93,14 +95,16 @@ public final class Rules {
     public static final int ANOMALIES_MAGNETIC_MAX_COUNT = 2;
     //50.0f
     public static final float ANOMALIES_MAGNETIC_VELOCITY = 50.0f;
-    //0.3f
-    public static final float ANOMALIES_MAGNETIC_FUEL_DECREASE = 0.3f;
+    //1.0f
+    public static final float ANOMALIES_MAGNETIC_FUEL_DECREASE = 1.0f;
     //120.0f
     public static final float ANOMALIES_MAGNETIC_LIVE_TIME = 120.0f;
     //0.4f
     public static final float ANOMALIES_MAGNETIC_EAT_TIME = 0.4f;
     //2.0f
     public static final float ANOMALIES_MAGNETIC_BORN_SPEED = 2.0f;
+    //5000
+    public static final int ANOMALIES_MAGNETIC_BONUS_SCORE = 5000;
     //
     //2
     public static final int ANOMALIES_CORROSIVE_AT_START = 2;
@@ -211,6 +215,10 @@ public final class Rules {
     public static final int SCORE_BASE_BONUS = 10000;
     //3
     public static final int CONSUMABLE_GENERATE_BASE_BONUS = 3;
+    //500
+    public static final int CONSUMABLE_TRASH_BASE_SCORE = 500;
+    //3
+    public static final int ANOMALY_GENERATE_BASE_BONUS = 3;
     //500
     public static final int ANOMALIES_BASE_SCORE_ADD = 500;
     //10000
