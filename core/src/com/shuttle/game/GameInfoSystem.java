@@ -1,10 +1,12 @@
 package com.shuttle.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.effects.FlyingText;
 
 public class GameInfoSystem {
+    private float dy;
     private FlyingText[] elements;
 
     public GameInfoSystem() {
@@ -27,8 +29,13 @@ public class GameInfoSystem {
 
     private void setupElement(float x, float y, String text, float scale, boolean colored) {
         for (int i = 0; i < elements.length; i++) {
+            if (MathUtils.random(0,1) == 0){
+                dy = MathUtils.random(-40, -15);
+            } else {
+                dy = MathUtils.random(15, 40);
+            }
             if (!elements[i].isActive()) {
-                elements[i].setup(x, y, text, scale, colored);
+                elements[i].setup(x, y + dy, text, scale, colored);
                 break;
             }
         }

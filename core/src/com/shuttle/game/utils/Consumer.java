@@ -18,6 +18,7 @@ import java.util.List;
 public class Consumer {
     public static void consume(GameScreen gs, AbstractConsumable consumable, Label label) {
         //todo: gold loot sounds??
+        //todo: gold loot, gold Trash?
 
         Standing standing = gs.getPlayer().getStanding();
         Shuttle player = gs.getPlayer();

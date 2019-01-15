@@ -83,7 +83,7 @@ public class Crate extends AbstractConsumable {
     }
 
     private Label.Sticker generateSafe() {
-        int r = 2;MathUtils.random(0, 6);
+        int r = MathUtils.random(0, 6);
         switch (r) {
             case 0:
                 return Label.Sticker.BOOST;
