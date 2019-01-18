@@ -155,6 +155,13 @@ public final class PaintConstants {
     public static final float SCAN_ALPHA_MIN = 0.5f;
     public static final float SCAN_ALPHA_MAX = 1.0f;
 
+    public static final float PANEL_ELEMENT_LIFETIME = 5.2f;
+    public static final float PANEL_ELEMENT_FLASH_TIME = 0.2f;
+    public static final float PANEL_ELEMENT_FADING_TIME = 0.4f;
+    public static final int PANEL_ELEMENTS_MAX = 5;
+    public static final int PANEL_ELEMENT_WIDTH = 192;
+    public static final int PANEL_ELEMENT_HEIGHT = 192;
+
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
     public static final String FONT32 = "fonts/gomarice32.ttf";
     public static final String FONT32_C = "fonts/gomarice32Coloured.ttf";
