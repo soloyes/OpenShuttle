@@ -25,6 +25,7 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     protected Shield shield;
     protected Scan scan;
     @Setter
+    @Getter
     protected boolean labeled;
     @Getter
     protected Map<Label.Layer, List<Label>> labels;

@@ -34,7 +34,9 @@ import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.consumable.AstronautEmitter;
 import com.shuttle.game.bot.consumable.CrateEmitter;
 import com.shuttle.game.bot.consumable.FuelEmitter;
+import com.shuttle.game.bot.consumable.Label;
 import com.shuttle.game.bot.consumable.StorageEmitter;
+import com.shuttle.game.bot.consumable.UILatestPanel;
 import com.shuttle.game.bot.consumable.fuel.Fuel;
 import com.shuttle.game.bot.particle.ParticleEmitter;
 import com.shuttle.game.bot.pool.AbstractPoolable;
@@ -55,6 +57,7 @@ import com.shuttle.game.utils.effects.Shake;
 import com.shuttle.game.utils.effects.Vibrator;
 
 import java.util.List;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -133,6 +136,7 @@ public class GameScreen extends BaseScreen {
     private boolean gameOverDeactivate;
     private List<List<? extends AbstractConsumable>> consumableList;
     private List<List<? extends AbstractAsteroid>> asteroidsList;
+    private UILatestPanel activeLabel;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -173,6 +177,7 @@ public class GameScreen extends BaseScreen {
         background = new Background();
         gameInfoSystem = new GameInfoSystem();
         joystick = new Joystick();
+        activeLabel = new UILatestPanel();
 
         blackhole = new Blackhole();
         player = new Shuttle(this, joystick);
@@ -295,6 +300,7 @@ public class GameScreen extends BaseScreen {
         if (!Rules.GAME_OVER) {
             player.getStanding().render(batch);
             anomalyTimer.render(batch);
+            activeLabel.render(batch);
         }
 
         if (!pauseGroup.isPause()) {
@@ -344,6 +350,7 @@ public class GameScreen extends BaseScreen {
             storageEmitter.update(dt);
             particleEmitter.update(dt);
             blackhole.update(dt);
+            activeLabel.update(dt);
             if (!Rules.GAME_OVER) {
                 anomalyTimer.update(dt);
             }
@@ -412,6 +419,16 @@ public class GameScreen extends BaseScreen {
                             consumable.destroy();
                             player.takeEffect(consumable);
                             player.getStanding().addToStatistics(consumable.getType(), consumable.getLevel());
+                            for (Map.Entry<Label.Layer, List<Label>> l: consumable.getLabels().entrySet()
+                                    ) {
+                                if(l.getKey() != Label.Layer.BACK ){
+                                for (Label lb: l.getValue()
+                                        ) {
+                                    if (lb.getSticker() != Label.Sticker.PATTERN && lb.getSticker() != Label.Sticker.SHABBY)
+                                    activeLabel.addLabel(lb.getSticker());
+                                }}
+                            }
+
                         } else {
                             if (!player.canCatch(consumable)) {
                                 consumable.destroyWithEffect();
@@ -422,6 +439,15 @@ public class GameScreen extends BaseScreen {
                             } else {
                                 consumable.destroy();
                                 player.takeEffect(consumable);
+                                for (Map.Entry<Label.Layer, List<Label>> l: consumable.getLabels().entrySet()
+                                        ) {
+                                    if(l.getKey() != Label.Layer.BACK ){
+                                        for (Label lb: l.getValue()
+                                                ) {
+                                            if (lb.getSticker() != Label.Sticker.PATTERN && lb.getSticker() != Label.Sticker.SHABBY)
+                                                activeLabel.addLabel(lb.getSticker());
+                                        }}
+                                }
                             }
                         }
                     }
