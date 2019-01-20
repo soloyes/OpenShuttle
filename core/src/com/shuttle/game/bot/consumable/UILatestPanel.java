@@ -7,22 +7,24 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class ActiveLabel {
-    private LinkedList<LabelTime> activeLabel;
-    private LinkedList<LabelTime> showedLabel;
-    private LinkedList<LabelTime> freeLabel;
+public class UILatestPanel {
+    private ArrayList<LabelTime> activeLabel;
+    private ArrayList<LabelTime> showLabel;
+    private ArrayList<LabelTime> freeLabel;
+    private ArrayList<Integer> needdel;
     @Getter
     @Setter
     protected Color color;
     private int width, height;
     private TextureRegion textureRegion;
+    private TextureRegion patternTexture;
+    private TextureRegion fueltext;
     private HashMap<Label.Sticker, TextureRegion> textureRegions;
     private float t1;
     private float t2;
@@ -36,7 +38,6 @@ public class ActiveLabel {
         private TextureRegion actTexture;
         private float time;
         float y;
-        boolean show;
         float alpha;
         float fleshAlpha;
         private float scaleX, scaleY;
@@ -45,26 +46,25 @@ public class ActiveLabel {
             this.actTexture = textureRegions.get(sticker);
             this.time = time;
             this.y = 0.0f;
-            this.show = false;
             this.alpha = 1.0f;
             this.fleshAlpha = 0f;
         }
 
         public void init(Label.Sticker sticker) {
-            actTexture = textureRegions.get(sticker);
-            time = t1;
-            y = 0.0f;
-            show = false;
-            alpha = 1.0f;
-            fleshAlpha = 0f;
-            scaleX = scaleY = 0.5f;
+            this.actTexture = textureRegions.get(sticker);
+            this.time = t1;
+            this.y = 0.0f;
+            this.alpha = 1.0f;
+            this.fleshAlpha = 0f;
+            this.scaleX = this.scaleY = 0.5f;
         }
     }
 
-    public ActiveLabel() {
-        this.activeLabel = new LinkedList<LabelTime>();
-        this.freeLabel = new LinkedList<LabelTime>();
-        this.showedLabel = new LinkedList<LabelTime>();
+    public UILatestPanel() {
+        this.activeLabel = new ArrayList<LabelTime>();
+        this.freeLabel = new ArrayList<LabelTime>();
+        this.showLabel = new ArrayList<LabelTime>();
+        this.needdel = new ArrayList<Integer>();
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.width = PaintConstants.PANEL_ELEMENT_WIDTH;
         this.height = PaintConstants.PANEL_ELEMENT_HEIGHT;
@@ -74,9 +74,11 @@ public class ActiveLabel {
         this.maxShowed = PaintConstants.PANEL_ELEMENTS_MAX;
         this.startPoint = Rules.WORLD_HEIGHT / 2 - height / 4;
         this.textureRegion = new TextureRegion();
+        this.patternTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_LABEL_REGION);
+        this.fueltext = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION);
         this.textureRegions = new HashMap<Label.Sticker, TextureRegion>();
-        for (Label.Sticker st : Label.Sticker.values()
-                ) {
+        for (int i = 0; i < Label.Sticker.values().length; i++) {
+            Label.Sticker st = Label.Sticker.values()[i];
             switch (st) {
                 case FUEL:
                     textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION);
@@ -132,16 +134,15 @@ public class ActiveLabel {
 
         Color tmpColor = batch.getColor();
 
-        for (LabelTime lt : showedLabel
-                ) {
-            if (!lt.show) {
+        for (int i = 0; i < showLabel.size(); i++) {
+            LabelTime lt = showLabel.get(i);
                 color.a = lt.alpha;
-                if(!lt.actTexture.equals(Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION))) {
-                    color.r = 0.254f;
-                    color.b = 0.859f;
-                    color.g = 0.234f;
+                if(!lt.actTexture.equals(fueltext)) {
+                    color.r = 0.25f;
+                    color.b = 0.85f;
+                    color.g = 0.23f;
                     batch.setColor(color);
-                    batch.draw(Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_LABEL_REGION),
+                    batch.draw(patternTexture,
                             0 - width / 8, startPoint - height / 4 - lt.y,
                             width / 4, height / 4,
                             width, height,
@@ -150,8 +151,8 @@ public class ActiveLabel {
                     );
                 }
 
-                color.r = 0.332f;
-                color.b = 0.898f;
+                color.r = 0.33f;
+                color.b = 0.89f;
                 color.g = 0.57f;
                 batch.setColor(color);
                 batch.draw(lt.actTexture,
@@ -179,50 +180,55 @@ public class ActiveLabel {
                 }
             }
             batch.setColor(tmpColor);
-        }
     }
 
     public void update(float dt) {
-        if (activeLabel.size() > 0) {
-            for (Iterator<LabelTime> k = activeLabel.iterator(); k.hasNext(); ) {
-                LabelTime temp = k.next();
 
-                if (showedLabel.size() > 0) {
+            for (int i = 0; i < activeLabel.size(); i++) {
+                LabelTime temp = activeLabel.get(i);
+                if (showLabel.size() > 0) {
                     temp.time -= dt;
                     if (temp.time > t1 - t2) {
-                        for (int i = 0; i < showedLabel.size(); i++) {
-                            LabelTime labelTime = showedLabel.get(i);
+                        for (int k = 0; k < showLabel.size(); k++) {
+                            LabelTime labelTime = showLabel.get(k);
                             labelTime.y += dt * (1.0f / t2) * height / 2;
                             labelTime.alpha -= dt * (1.0f / t2) * (1.0f / (float) maxShowed);
-                            if (showedLabel.size() < 5)
+                            if (showLabel.size() < 5)
                                 startPoint += dt * (1.0f / t2) * height / 4;
                             if (labelTime.alpha < 0) labelTime.alpha = 0;
                         }
                     } else {
-                        if (showedLabel.size() >= 5) {
-                            freeLabel.add(showedLabel.remove(0));
+                        if (showLabel.size() >= 5) {
+                            freeLabel.add(showLabel.remove(0));
                         }
-                        showedLabel.add(temp);
-                        k.remove();
+                        showLabel.add(temp);
+                        needdel.add(i);
 
                         temp.time = t1;
-                        for (int i = 0; i < showedLabel.size(); i++) {
-                            LabelTime labelTime = showedLabel.get(i);
-                            labelTime.y = height / 2 * (showedLabel.size() - i - 1);
-                            startPoint = Rules.WORLD_HEIGHT / 2 +  height * (showedLabel.size() - 1) / 4;
-                            if (labelTime.alpha > 1.0f - (1.0f / (float) maxShowed) * (showedLabel.size() - i - 1))
-                            labelTime.alpha = 1.0f - (1.0f / (float) maxShowed) * (showedLabel.size() - i - 1);
+                        for (int k = 0; k < showLabel.size(); k++) {
+                            LabelTime labelTime = showLabel.get(k);
+                            labelTime.y = height / 2 * (showLabel.size() - k - 1);
+                            startPoint = Rules.WORLD_HEIGHT / 2 +  height * (showLabel.size() - 1) / 4;
+                            if (labelTime.alpha > 1.0f - (1.0f / (float) maxShowed) * (showLabel.size() - k - 1))
+                            labelTime.alpha = 1.0f - (1.0f / (float) maxShowed) * (showLabel.size() - k - 1);
                         }
                     }
                 } else {
                     startPoint = Rules.WORLD_HEIGHT / 2;
-                    showedLabel.add(temp);
-                    k.remove();
+                    showLabel.add(temp);
+                    needdel.add(i);
                 }
+            }
+
+        if (needdel.size() > 0) {
+            for (int i = needdel.size() - 1; i >= 0; i--) {
+                activeLabel.remove((int)needdel.get(i));
+                needdel.remove(i);
             }
         }
 
-        for (LabelTime sh : showedLabel) {
+        for (int i = 0; i < showLabel.size(); i++) {
+            LabelTime sh = showLabel.get(i);
             sh.time -= dt;
             if (sh.time > t1 - t2) {
                 sh.fleshAlpha = (t1 - sh.time) / t2;
@@ -234,10 +240,10 @@ public class ActiveLabel {
                 }
             }
         }
-        for (int i = 0; i < showedLabel.size(); i++) {
-            LabelTime labelTime = showedLabel.get(i);
+
+        for (int i = 0; i < showLabel.size(); i++) {
+            LabelTime labelTime = showLabel.get(i);
             if (labelTime.time < t2 + t3 && labelTime.time > t2){
-                System.out.println(labelTime.alpha);
                     labelTime.alpha -= dt * labelTime.alpha / (labelTime.time - t2);
                 if (labelTime.alpha < 0){
                     labelTime.alpha = 0;
@@ -245,30 +251,36 @@ public class ActiveLabel {
             }
         }
 
-            for (Iterator<LabelTime> k = showedLabel.iterator(); k.hasNext(); ) {
-                LabelTime sh = k.next();
+        for (int i = 0; i < showLabel.size(); i++) {
+            LabelTime sh = showLabel.get(i);
             if (sh.time < t2) {
-                System.out.println(sh.alpha);
                     startPoint -= dt * (1.0f / t2) * height / 4;
                     if (sh.time < 0){
                         freeLabel.add(sh);
-                        k.remove();
-                        startPoint = Rules.WORLD_HEIGHT / 2 +  height * (showedLabel.size() - 1) / 4;
+                        needdel.add(i);
+
                     }
                 }
             }
+        if (needdel.size() > 0) {
+            for (int i = needdel.size() - 1; i >= 0; i--) {
+                showLabel.remove((int)needdel.get(i));
+                needdel.remove(i);
+            }
+            startPoint = Rules.WORLD_HEIGHT / 2 +  height * (showLabel.size() - 1) / 4;
+        }
         //todo:refactor this
 
-//        if (showedLabel.size() > 0) {
-//            LabelTime sl = showedLabel.get(showedLabel.size() - 1);
-//            for (int i = 0; i < showedLabel.size(); i++
+//        if (showLabel.size() > 0) {
+//            LabelTime sl = showLabel.get(showLabel.size() - 1);
+//            for (int i = 0; i < showLabel.size(); i++
 //                    ) {
-//                LabelTime sh = showedLabel.get(i);
+//                LabelTime sh = showLabel.get(i);
 //                if (sl.time < t1 - t2 && sl.time > t1 - t2 - t3) {
 //                    sh.y += dt * height / 2 / (t3);
 //                } else {
 //                    if (sl.time < t1 - t2 - t3) {
-//                        sh.y = height / 2 * (showedLabel.size() - i);
+//                        sh.y = height / 2 * (showLabel.size() - i);
 //                    }
 //                }
 //            }
