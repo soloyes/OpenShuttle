@@ -2,16 +2,16 @@ package com.shuttle.game.utils;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.consumable.Label;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.GameScreen;
-import com.shuttle.game.utils.effects.BoomBox;
+import com.shuttle.game.ui.GameInfoSystem;
 
 import java.util.List;
 
@@ -19,7 +19,6 @@ public class Consumer {
     public static void consume(GameScreen gs, AbstractConsumable consumable, Label label) {
         //todo: gold loot sounds??
         //todo: gold loot, gold Trash?
-
         Standing standing = gs.getPlayer().getStanding();
         Shuttle player = gs.getPlayer();
         Vector2 position = consumable.getPosition();
@@ -247,6 +246,15 @@ public class Consumer {
                     }
                     break;
             }
+        }
+        addToUI(gs, consumable, label);
+    }
+
+    private static void addToUI(GameScreen gs, AbstractConsumable consumable, Label label) {
+        if (!consumable.isGolden()) {
+            gs.getUiLatestPanel().addLabel(label.getSticker());
+        } else {
+
         }
     }
 

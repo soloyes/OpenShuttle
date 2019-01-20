@@ -13,8 +13,6 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.shuttle.game.GameInfoSystem;
-import com.shuttle.game.Joystick;
 import com.shuttle.game.background.Background;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.anomaly.AnomalyTimer;
@@ -34,30 +32,31 @@ import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.consumable.AstronautEmitter;
 import com.shuttle.game.bot.consumable.CrateEmitter;
 import com.shuttle.game.bot.consumable.FuelEmitter;
-import com.shuttle.game.bot.consumable.Label;
 import com.shuttle.game.bot.consumable.StorageEmitter;
-import com.shuttle.game.bot.consumable.UILatestPanel;
 import com.shuttle.game.bot.consumable.fuel.Fuel;
-import com.shuttle.game.bot.particle.ParticleEmitter;
-import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
+import com.shuttle.game.effects.PrettySound;
+import com.shuttle.game.effects.Ray;
+import com.shuttle.game.effects.Shake;
+import com.shuttle.game.effects.Vibrator;
+import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.player.Shuttle;
-import com.shuttle.game.player.navigation.PlayerPointer;
-import com.shuttle.game.screens.group.PauseGroup;
+import com.shuttle.game.ui.GameInfoSystem;
+import com.shuttle.game.ui.Joystick;
+import com.shuttle.game.ui.PlayerPointer;
+import com.shuttle.game.ui.UILatestPanel;
+import com.shuttle.game.ui.group.PauseGroup;
 import com.shuttle.game.utils.ActiveListJoiner;
 import com.shuttle.game.utils.BoundCheck;
-import com.shuttle.game.utils.effects.PrettySound;
-import com.shuttle.game.utils.effects.Ray;
-import com.shuttle.game.utils.effects.Shake;
-import com.shuttle.game.utils.effects.Vibrator;
+import com.shuttle.game.utils.ShaderManager;
+import com.shuttle.game.utils.pool.AbstractPoolable;
 
 import java.util.List;
-import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -136,7 +135,8 @@ public class GameScreen extends BaseScreen {
     private boolean gameOverDeactivate;
     private List<List<? extends AbstractConsumable>> consumableList;
     private List<List<? extends AbstractAsteroid>> asteroidsList;
-    private UILatestPanel activeLabel;
+    @Getter
+    private UILatestPanel uiLatestPanel;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -177,7 +177,7 @@ public class GameScreen extends BaseScreen {
         background = new Background();
         gameInfoSystem = new GameInfoSystem();
         joystick = new Joystick();
-        activeLabel = new UILatestPanel();
+        uiLatestPanel = new UILatestPanel();
 
         blackhole = new Blackhole();
         player = new Shuttle(this, joystick);
@@ -300,7 +300,7 @@ public class GameScreen extends BaseScreen {
         if (!Rules.GAME_OVER) {
             player.getStanding().render(batch);
             anomalyTimer.render(batch);
-            activeLabel.render(batch);
+            uiLatestPanel.render(batch);
         }
 
         if (!pauseGroup.isPause()) {
@@ -350,7 +350,7 @@ public class GameScreen extends BaseScreen {
             storageEmitter.update(dt);
             particleEmitter.update(dt);
             blackhole.update(dt);
-            activeLabel.update(dt);
+            uiLatestPanel.update(dt);
             if (!Rules.GAME_OVER) {
                 anomalyTimer.update(dt);
             }
@@ -419,16 +419,6 @@ public class GameScreen extends BaseScreen {
                             consumable.destroy();
                             player.takeEffect(consumable);
                             player.getStanding().addToStatistics(consumable.getType(), consumable.getLevel());
-                            for (Map.Entry<Label.Layer, List<Label>> l: consumable.getLabels().entrySet()
-                                    ) {
-                                if(l.getKey() != Label.Layer.BACK ){
-                                for (Label lb: l.getValue()
-                                        ) {
-                                    if (lb.getSticker() != Label.Sticker.PATTERN && lb.getSticker() != Label.Sticker.SHABBY)
-                                    activeLabel.addLabel(lb.getSticker());
-                                }}
-                            }
-
                         } else {
                             if (!player.canCatch(consumable)) {
                                 consumable.destroyWithEffect();
@@ -439,15 +429,6 @@ public class GameScreen extends BaseScreen {
                             } else {
                                 consumable.destroy();
                                 player.takeEffect(consumable);
-                                for (Map.Entry<Label.Layer, List<Label>> l: consumable.getLabels().entrySet()
-                                        ) {
-                                    if(l.getKey() != Label.Layer.BACK ){
-                                        for (Label lb: l.getValue()
-                                                ) {
-                                            if (lb.getSticker() != Label.Sticker.PATTERN && lb.getSticker() != Label.Sticker.SHABBY)
-                                                activeLabel.addLabel(lb.getSticker());
-                                        }}
-                                }
                             }
                         }
                     }

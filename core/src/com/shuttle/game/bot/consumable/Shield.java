@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.effects.Oscillator;
 import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.effects.Oscillator;
 
 import lombok.Setter;
 

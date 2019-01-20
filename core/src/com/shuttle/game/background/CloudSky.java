@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.effects.Oscillator;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.effects.Oscillator;
 
 import lombok.Getter;
 

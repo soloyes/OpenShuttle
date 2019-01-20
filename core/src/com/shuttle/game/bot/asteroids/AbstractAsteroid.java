@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.pool.AbstractPoolable;
+import com.shuttle.game.effects.MoveProcessor;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.BoundCheck;
-import com.shuttle.game.utils.effects.MoveProcessor;
+import com.shuttle.game.utils.pool.AbstractPoolable;
 
 import lombok.Getter;
 import lombok.Setter;

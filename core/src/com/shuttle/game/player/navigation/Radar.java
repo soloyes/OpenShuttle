@@ -8,16 +8,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
-import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.effects.Oscillator;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.ActiveListJoiner;
 import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.effects.BoomBox;
-import com.shuttle.game.utils.effects.Oscillator;
+import com.shuttle.game.utils.pool.AbstractPoolable;
 
 import java.util.List;
 

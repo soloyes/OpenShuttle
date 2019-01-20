@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.pool.AbstractPoolable;
+import com.shuttle.game.utils.pool.AbstractPoolable;
 
 /**
  * @author Shuttle on 19/01/19.

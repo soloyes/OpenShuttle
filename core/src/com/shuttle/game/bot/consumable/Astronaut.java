@@ -3,17 +3,17 @@ package com.shuttle.game.bot.consumable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
+import com.shuttle.game.effects.MoveProcessor;
+import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
-import com.shuttle.game.utils.effects.MoveProcessor;
-import com.shuttle.game.utils.effects.Vibrator;
 
 /**
  * @author Shuttle on 10/11/18.

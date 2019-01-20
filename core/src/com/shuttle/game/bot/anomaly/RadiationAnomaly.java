@@ -6,16 +6,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.effects.MoveProcessor;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
+import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
-import com.shuttle.game.utils.effects.MoveProcessor;
 
 import lombok.Getter;
 import lombok.Setter;

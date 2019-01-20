@@ -3,7 +3,6 @@ package com.shuttle.game.bot.consumable.fuel;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.shuttle.game.GameInfoSystem;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.consumable.Label;
 import com.shuttle.game.bot.consumable.Shield;
@@ -11,10 +10,11 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
+import com.shuttle.game.effects.MoveProcessor;
+import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Consumer;
-import com.shuttle.game.utils.effects.MoveProcessor;
-import com.shuttle.game.utils.effects.Vibrator;
 
 public class Fuel extends AbstractConsumable {
     private Substrate substrate;

@@ -3,14 +3,14 @@ package com.shuttle.game.player;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.Joystick;
-import com.shuttle.game.bot.particle.ParticleEmitter;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
+import com.shuttle.game.ui.Joystick;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
-import com.shuttle.game.utils.effects.BoomBox;
 
 import java.util.LinkedList;
 

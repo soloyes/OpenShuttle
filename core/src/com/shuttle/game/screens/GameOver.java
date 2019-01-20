@@ -15,9 +15,9 @@ import com.shuttle.game.bot.consumable.Astronaut;
 import com.shuttle.game.bot.consumable.Crate;
 import com.shuttle.game.bot.consumable.Storage;
 import com.shuttle.game.bot.consumable.fuel.Fuel;
-import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.pool.AbstractPoolable;
 
 import java.util.ArrayList;
 

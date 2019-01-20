@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.utils.effects.BoomBox;
+import com.shuttle.game.effects.BoomBox;
 
 /**
  * @author Shuttle on 4/6/18.

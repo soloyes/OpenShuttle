@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.pool.AbstractPoolable;
+import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.BoundCheck;
-import com.shuttle.game.utils.effects.BoomBox;
+import com.shuttle.game.utils.pool.AbstractPoolable;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -25,7 +25,6 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     protected Shield shield;
     protected Scan scan;
     @Setter
-    @Getter
     protected boolean labeled;
     @Getter
     protected Map<Label.Layer, List<Label>> labels;

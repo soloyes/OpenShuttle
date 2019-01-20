@@ -3,15 +3,15 @@ package com.shuttle.game.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.shuttle.game.GameInfoSystem;
-import com.shuttle.game.bot.pool.AbstractPoolable;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.effects.BoomBox;
+import com.shuttle.game.utils.pool.AbstractPoolable;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

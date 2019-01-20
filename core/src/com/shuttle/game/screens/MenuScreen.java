@@ -3,11 +3,11 @@ package com.shuttle.game.screens;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.background.Background;
 import com.shuttle.game.conf.MSConstants;
-import com.shuttle.game.screens.group.ConfigGroup;
-import com.shuttle.game.screens.group.MenuBar;
-import com.shuttle.game.screens.group.MenuGroup;
-import com.shuttle.game.screens.group.ResultGroup;
-import com.shuttle.game.screens.group.ShareGroup;
+import com.shuttle.game.ui.group.ConfigGroup;
+import com.shuttle.game.ui.group.MenuBar;
+import com.shuttle.game.ui.group.MenuGroup;
+import com.shuttle.game.ui.group.ResultGroup;
+import com.shuttle.game.ui.group.ShareGroup;
 
 /**
  * @author Shuttle on 3/24/18.

@@ -3,9 +3,9 @@ package com.shuttle.game.bot.bomb;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.shuttle.game.bot.pool.ObjectPool;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.pool.ObjectPool;
 
 /**
  * @author Shuttle on 19/01/19.
