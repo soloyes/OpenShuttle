@@ -5,61 +5,78 @@ package com.shuttle.game.conf;
  * Music and Sound constants (MSConstants)
  */
 public final class MSConstants {
-    private final static String SOUND_FOLDER = "sound/";
-    public final static String BUTTON_SOUND = SOUND_FOLDER + "pressing_the_menu_buttons.ogg";
-    public final static String PAUSE_SOUND = SOUND_FOLDER + "press_the_pause_button.ogg";
-    public final static String GET_RADAR = SOUND_FOLDER + "the_capture_of_radar.ogg";
-    public final static String UP = SOUND_FOLDER + "adding_life.ogg";
-    public final static String ANOMALY_CORROSIVE_DESTROY = SOUND_FOLDER + "the_destruction_of_the_devouring_monster.ogg";
-    public final static String ANOMALY_ELECTRIC_DESTROY = SOUND_FOLDER + "the_destruction_of_the_fast_monster.ogg";
-    public final static String GET_ASTRONAUT = SOUND_FOLDER + "capture_astronaut.ogg";
-    public final static String KILL_ASTRONAUT = SOUND_FOLDER + "accidental_destruction_of_an_astronaut.ogg";
-    public final static String KILL_CRATE = SOUND_FOLDER + "accidental_destruction_of_loot.ogg";
-    public final static String TURBO = SOUND_FOLDER + "turbo_boost.ogg";
-    public final static String LOST_RADAR = SOUND_FOLDER + "the_loss_of_radar.ogg";
-    public final static String GET_FUEL = SOUND_FOLDER + "taking_fuel_out_of_the_crate.ogg";
-    public final static String GET_TRASH = SOUND_FOLDER + "taking_an_empty_litter_box.ogg";
-    public final static String GET_FRAGMENT = SOUND_FOLDER + "get_fragment.ogg";
-    public final static String BLACKHOLE_TELEPORT = SOUND_FOLDER + "falling_into_a_black_hole_teleportation.ogg";
-    public final static String PLAYER_KICKED_CORROSIVE = SOUND_FOLDER + "player_kicked_corrosive.ogg";
-    public final static String PLAYER_KICKED_ELECTRIC = SOUND_FOLDER + "player_kicked_electric.ogg";
-    public final static String ASTRONAUT_ALIVE = SOUND_FOLDER + "the_appearance_of_the_astronaut.ogg";
-    public final static String ASTEROID_DESTROY = SOUND_FOLDER + "asteroid_destroy.ogg";
-    public final static String PLAYER_LOSE_SCORE = SOUND_FOLDER + "lose_score.ogg";
-    public final static String PLAYER_LOSE_FUEL = SOUND_FOLDER + "lose_fuel.ogg";
-    public final static String PLAYER_LOW_LIFE = SOUND_FOLDER + "low_life_warning.ogg";
-    public final static String PLAYER_DESTROYED = SOUND_FOLDER + "destroyed.ogg";
-    public final static String PLAYER_OUT_OF_SCREEN = SOUND_FOLDER + "out_of_screen.ogg";
-    public final static String PLAYER_REPAIR = SOUND_FOLDER + "repair.ogg";
-    public final static String PLAYER_START_ENGINE = SOUND_FOLDER + "shuttle_move_full.ogg";
-    public final static String ANOMALY_BOOM = SOUND_FOLDER + "bursting.ogg";
-    public final static String ANOMALY_SPLASH = SOUND_FOLDER + "splash.ogg";
-    public final static String FLAME = SOUND_FOLDER + "flame.ogg";
-    public final static String ASTEROID_SPLASH = SOUND_FOLDER + "splash.ogg";
-    public final static String FUEL_DESTROY = SOUND_FOLDER + "crash_fuel_box.ogg";
-    public final static String STORAGE_DESTROY = SOUND_FOLDER + "storage_destroy.ogg";
-    public final static String ANOMALY_CORROSIVE_BURST = SOUND_FOLDER + "monster_burst.ogg";
-    public final static String GET_STORAGE = SOUND_FOLDER + "storage.ogg";
-    public final static String GET_ROCKET = SOUND_FOLDER + "get_ammo.ogg";
-    public final static String CHECKBOX = SOUND_FOLDER + "checkbox.ogg";
-    public final static String GET_LASER = SOUND_FOLDER + "get_laser.ogg";
-    public final static String GET_SCANNER = SOUND_FOLDER + "get_scanner.ogg";
-    public final static String GET_SHIELD = SOUND_FOLDER + "get_shield.ogg";
+    private final static String SOUND_ROOT_FOLDER = "sound/";
+    private final static String UI_FOLDER = "ui/";
+    private final static String GAME_FOLDER = "game/";
+    private final static String UI = SOUND_ROOT_FOLDER + UI_FOLDER;
+    private final static String GAME = SOUND_ROOT_FOLDER +GAME_FOLDER;
 
-    //
+    private final static String MUSIC_ROOT_FOLDER = "music/";
     private final static String MUSIC_FOLDER = "music/";
-    public final static String MENU_MUSIC = MUSIC_FOLDER + "menu.ogg";
-    public final static String GAME_MUSIC = MUSIC_FOLDER + "game.ogg";
-    public final static String BLACKHOLE_ROAR_MUSIC = MUSIC_FOLDER + "the_roar_of_the_black_hole.ogg";
-    public final static String RADAR_WHITE_NOISE_MUSIC = MUSIC_FOLDER + "white_noise.ogg";
-    public final static String HUM_1 = MUSIC_FOLDER + "hum_1.ogg";
-    public final static String HUM_2 = MUSIC_FOLDER + "hum_2.ogg";
-    public final static String HUM_3 = MUSIC_FOLDER + "hum_3.ogg";
-    public final static String HUM_4 = MUSIC_FOLDER + "hum_4.ogg";
-    public final static String HUM_5 = MUSIC_FOLDER + "hum_5.ogg";
-    public final static String POWERING_ENGINE = MUSIC_FOLDER + "engine_is_powering.ogg";
-    public final static String POWERING_ROCKET = MUSIC_FOLDER + "rocket_weapon_is_charging.ogg";
-    public final static String PEEP = MUSIC_FOLDER + "peep_signal.ogg";
-    public final static String LASER = MUSIC_FOLDER + "laser.ogg";
+    private final static String EFFECT_FOLDER = "effect/";
+    private final static String MUSIC_EFFECT_FOLDER = MUSIC_ROOT_FOLDER + EFFECT_FOLDER;
+    private final static String SONG_FOLDER = MUSIC_ROOT_FOLDER + MUSIC_FOLDER;
+
+    //SOUND
+    public final static String UI_CHECKBOX = UI + "ui_checkbox.ogg";
+    public final static String UI_MENU = UI + "ui_menu_button.ogg";
+    public final static String UI_PAUSE = UI + "ui_pause_button.ogg";
+
+    public final static String GET_RADAR = GAME + "get_radar.ogg";
+    public final static String GET_ROCKET = GAME + "get_rocket.ogg";
+    public final static String GET_LASER = GAME + "get_laser.ogg";
+    public final static String GET_SCANNER = GAME + "get_scanner.ogg";
+    public final static String GET_SHIELD = GAME + "get_shield.ogg";
+    public final static String GET_FUEL = GAME + "get_fuel.ogg";
+    public final static String GET_TRASH = GAME + "get_trash.ogg";
+    public final static String GET_FRAGMENT = GAME + "get_fragment.ogg";
+    public final static String GET_BOOST = GAME + "get_boost.ogg";
+    public final static String GET_ASTRONAUT = GAME + "get_astronaut.ogg";
+    public final static String GET_REPAIR = GAME + "get_repair.ogg";
+    public final static String GET_SPLASH = GAME + "get_splash.ogg";
+
+    public final static String DESTROY_CORROSIVE_ANOMALY = GAME + "destroy_corrosive_anomaly.ogg";
+    public final static String DESTROY_ELECTRIC_ANOMALY = GAME + "destroy_electric_anomaly.ogg";
+    public final static String DESTROY_MAGNETIC_ANOMALY = GAME + "destroy_magnetic_anomaly.ogg";
+    public final static String DESTROY_RADIATION_ANOMALY = GAME + "destroy_radiation_anomaly.ogg";
+    public final static String DESTROY_FUEL = GAME + "destroy_fuel.ogg";
+    public final static String DESTROY_ASTRONAUT = GAME + "destroy_astronaut.ogg";
+    public final static String DESTROY_CRATE = GAME + "destroy_crate.ogg";
+    public final static String DESTROY_STORAGE = GAME + "destroy_storage.ogg";
+    public final static String DESTROY_ASTEROID = GAME + "destroy_asteroid.ogg";
+    public final static String DESTROY_ASTEROID_RAY = GAME + "destroy_asteroid_ray.ogg";
+
+    public final static String LOSE_RADAR = GAME + "lose_radar.ogg";
+    public final static String LOSE_FUEL = GAME + "lose_fuel.ogg";
+    public final static String LOSE_SCORE = GAME + "lose_score.ogg";
+    public final static String KICKED_BY_CORROSIVE = GAME + "kicked_by_corrosive.ogg";
+    public final static String KICKED_BY_ELECTRIC = GAME + "kicked_by_electric.ogg";
+
+    public final static String TELEPORT = GAME + "teleport.ogg";
+    public final static String NEW_ASTRONAUT = GAME + "new_astronaut.ogg";
+    public final static String LOW_LIFE_WARNING = GAME + "low_life_warning.ogg";
+    public final static String UP = GAME + "up.ogg";
+    public final static String DOWN = GAME + "down.ogg";
+    public final static String OUT_OF_SCREEN = GAME + "out_of_screen.ogg";
+    public final static String START_ENGINE = GAME + "start_engine.ogg";
+    public final static String SPLASH_ANOMALY = GAME + "splash_anomaly.ogg";
+    public final static String LAUNCH_ROCKET = GAME + "launch_rocket.ogg";
+    public final static String BURST_CORROSIVE_ANOMALY = GAME + "burst_corrosive_anomaly.ogg";
+    //
+
+    //SONG/MUSIC
+    public final static String MENU_SONG = SONG_FOLDER + "menu.ogg";
+    public final static String GAME_SONG = SONG_FOLDER + "game.ogg";
+    //
+
+    //MUSIC EFFECT
+    public final static String BLACKHOLE_ROAR_MUSIC = MUSIC_EFFECT_FOLDER + "black_hole_roar.ogg";
+    public final static String RADAR_WHITE_NOISE_MUSIC = MUSIC_EFFECT_FOLDER + "white_noise.ogg";
+    public final static String LASER = MUSIC_EFFECT_FOLDER + "laser.ogg";
+    public final static String HUM_MUSIC_EFFECT_1 = MUSIC_EFFECT_FOLDER + "hum_1.ogg";
+    public final static String HUM_MUSIC_EFFECT_2 = MUSIC_EFFECT_FOLDER + "hum_2.ogg";
+    public final static String HUM_MUSIC_EFFECT_3 = MUSIC_EFFECT_FOLDER + "hum_3.ogg";
+    public final static String HUM_MUSIC_EFFECT_4 = MUSIC_EFFECT_FOLDER + "hum_4.ogg";
+    public final static String HUM_MUSIC_EFFECT_5 = MUSIC_EFFECT_FOLDER + "hum_5.ogg";
     //
 }

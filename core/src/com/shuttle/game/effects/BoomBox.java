@@ -22,11 +22,11 @@ public class BoomBox {
     private static ArrayList<String> musicEffects = new ArrayList<String>();
     private float t = 0.0f;
     static {
-        musicEffects.add(MSConstants.HUM_1);
-        musicEffects.add(MSConstants.HUM_2);
-        musicEffects.add(MSConstants.HUM_3);
-        musicEffects.add(MSConstants.HUM_4);
-        musicEffects.add(MSConstants.HUM_5);
+        musicEffects.add(MSConstants.HUM_MUSIC_EFFECT_1);
+        musicEffects.add(MSConstants.HUM_MUSIC_EFFECT_2);
+        musicEffects.add(MSConstants.HUM_MUSIC_EFFECT_3);
+        musicEffects.add(MSConstants.HUM_MUSIC_EFFECT_4);
+        musicEffects.add(MSConstants.HUM_MUSIC_EFFECT_5);
     }
 
     public void playRandomMusicEffects(float dt) {

@@ -67,7 +67,7 @@ public class PauseGroup extends Group {
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
                 //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
                 if (GamePreferences.isSoundEnabled()) {
-                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.BUTTON_SOUND));
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.UI_MENU));
                     sound.play(GamePreferences.getSoundVolume());
                 }
                 //
@@ -81,7 +81,7 @@ public class PauseGroup extends Group {
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
                 //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
                 if (GamePreferences.isSoundEnabled()) {
-                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.BUTTON_SOUND));
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.UI_MENU));
                     sound.play(GamePreferences.getSoundVolume());
                 }
                 //
@@ -95,14 +95,14 @@ public class PauseGroup extends Group {
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
                 pause = !pause;
                 if (pause) {
-                    boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_MUSIC);
+                    boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
                 } else {
-                    boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_MUSIC, MSConstants.BLACKHOLE_ROAR_MUSIC);
+                    boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
                 }
                 configGroup.setVisible(pause);
                 buttonMenu.setVisible(pause);
                 buttonRestart.setVisible(pause);
-                boomBox.playSound(MSConstants.PAUSE_SOUND);
+                boomBox.playSound(MSConstants.UI_PAUSE);
                 boomBox.stopAllSound();
             }
         });

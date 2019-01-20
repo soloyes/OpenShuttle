@@ -51,7 +51,7 @@ public class Astronaut extends AbstractConsumable {
 
     private void playSound() {
         if (!fake && boundCheck.checkAndHandleBoundsInCamera(this, gs.getCamera())) {
-            boomBox.playSound(MSConstants.ASTRONAUT_ALIVE);
+            boomBox.playSound(MSConstants.NEW_ASTRONAUT);
         }
     }
 
@@ -89,7 +89,7 @@ public class Astronaut extends AbstractConsumable {
                 8.0f,
                 true
         );
-        boomBox.playSound(MSConstants.KILL_ASTRONAUT);
+        boomBox.playSound(MSConstants.DESTROY_ASTRONAUT);
         Vibrator.vibrate(VConstants.PLAYER_ASTRONAUT_DESTROY);
     }
 

@@ -232,7 +232,7 @@ public class Storage extends AbstractConsumable {
                 3.0f,
                 false
         );
-        boomBox.playSound(MSConstants.STORAGE_DESTROY);
+        boomBox.playSound(MSConstants.DESTROY_STORAGE);
         Vibrator.vibrate(VConstants.PLAYER_STORAGE_DESTROY);
     }
 

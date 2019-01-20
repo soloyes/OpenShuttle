@@ -164,7 +164,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
     @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
-        boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
+        boomBox.playSound(MSConstants.DESTROY_RADIATION_ANOMALY);
         gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
         gs.getPlayer().getStanding().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
         showSprayBoom(gs.getParticleEmitter());

@@ -154,7 +154,7 @@ public class GameScreen extends BaseScreen {
         gameOverDeactivate = false;
         shaderManager = new ShaderManager();
         anomalyTimer = new AnomalyTimer(this);
-        boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_MUSIC, MSConstants.BLACKHOLE_ROAR_MUSIC);
+        boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
         fbo = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(),
                 Gdx.graphics.getHeight(), false);
         fboTexRegion = new TextureRegion(fbo.getColorBufferTexture());
@@ -309,7 +309,7 @@ public class GameScreen extends BaseScreen {
 
         Color tmpColor = batch.getColor();
         if (Rules.GAME_OVER) {
-            boomBox.stopAllMusicAndPlayThis(MSConstants.MENU_MUSIC);
+            boomBox.stopAllMusicAndPlayThis(MSConstants.MENU_SONG);
             pauseGroup.setGameOver();
             fadeInAlpha += dt / 2;
             if (fadeInAlpha >= 1.0f)
@@ -459,9 +459,9 @@ public class GameScreen extends BaseScreen {
                 if (player.getPosition().dst(anomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && anomaly.isBorn()) {
                     if (anomaly.getLevel() < player.getPushPower() || player.getVelocity().len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                         if (player.getVelocity().len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
-                            boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_BURST);
+                            boomBox.playSound(MSConstants.BURST_CORROSIVE_ANOMALY);
                         } else {
-                            boomBox.playSound(MSConstants.ANOMALY_CORROSIVE_DESTROY);
+                            boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
                         }
                         damageToAnomaly(anomaly);
                         Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
@@ -472,7 +472,7 @@ public class GameScreen extends BaseScreen {
                         }
                         anomaly.setHungry(false);
                         anomaly.setSlimTimer(0);
-                        prettyCorrosiveKick.playSound(MSConstants.PLAYER_KICKED_CORROSIVE);
+                        prettyCorrosiveKick.playSound(MSConstants.KICKED_BY_CORROSIVE);
                         Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
                     }
                 }
@@ -486,7 +486,7 @@ public class GameScreen extends BaseScreen {
                     anomaly.setHungry(false);
                     damageToPlayer(anomaly);
                     Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
-                    prettyElectricKick.playSound(MSConstants.PLAYER_KICKED_ELECTRIC);
+                    prettyElectricKick.playSound(MSConstants.KICKED_BY_ELECTRIC);
                     anomaly.setV(anomaly.getV() * Rules.ANOMALY_ELECTRIC_DECREASE_FACTOR);
                 }
             }
@@ -511,7 +511,7 @@ public class GameScreen extends BaseScreen {
                     if (anomaly.getEatTimer() >= Rules.ANOMALIES_RADIATION_EAT_TIME) {
                         anomaly.setEatTimer(0.0f);
                         player.getStanding().changeScore(-Rules.ANOMALIES_RADIATION_SCORE_DECREASE);
-                        boomBox.playSound(MSConstants.PLAYER_LOSE_SCORE);
+                        boomBox.playSound(MSConstants.LOSE_SCORE);
                         gameInfoSystem.setup(
                                 player.getPosition().x,
                                 player.getPosition().y,
@@ -544,7 +544,7 @@ public class GameScreen extends BaseScreen {
                     if (anomaly.getEatTimer() >= Rules.ANOMALIES_MAGNETIC_EAT_TIME) {
                         anomaly.setEatTimer(0.0f);
                         player.getStanding().changeFuel(-Rules.ANOMALIES_MAGNETIC_FUEL_DECREASE);
-                        boomBox.playSound(MSConstants.PLAYER_LOSE_FUEL);
+                        boomBox.playSound(MSConstants.LOSE_FUEL);
                         gameInfoSystem.setup(
                                 player.getPosition().x,
                                 player.getPosition().y,
@@ -584,7 +584,7 @@ public class GameScreen extends BaseScreen {
                                     3.0f,
                                     true
                             );
-                            boomBox.playSound(MSConstants.ASTEROID_DESTROY);
+                            boomBox.playSound(MSConstants.DESTROY_ASTEROID);
                             player.getStanding().addToStatistics(asteroid.getType(), asteroid.getLevel());
                         } else {
                             player.getRamShield().blink(0.5f);
@@ -707,7 +707,7 @@ public class GameScreen extends BaseScreen {
     private void damageToPlayer(AbstractPoolable anomaly) {
         if (anomaly.getLevel() >= 3) {
             if (player.getRadar().isActive()) {
-                boomBox.playSound(MSConstants.LOST_RADAR);
+                boomBox.playSound(MSConstants.LOSE_RADAR);
                 player.getRadar().setActive(false);
             }
         }

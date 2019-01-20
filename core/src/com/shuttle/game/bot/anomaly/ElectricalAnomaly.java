@@ -131,7 +131,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                 }
             } else {
                 destroy();
-                boomBox.playSound(MSConstants.ANOMALY_ELECTRIC_DESTROY);
+                boomBox.playSound(MSConstants.DESTROY_ELECTRIC_ANOMALY);
                 gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
                 showSprayBoom(gs.getParticleEmitter());
                 //score amount decrease when kicked

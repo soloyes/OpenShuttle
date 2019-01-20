@@ -100,7 +100,7 @@ public class ConfigGroup extends Group {
                     musicArray.get(i).setVolume(musicSlider.getValue());
                 }
                 GamePreferences.setMusicVolume(musicSlider.getValue());
-                boomBox.playSound(MSConstants.BUTTON_SOUND);
+                boomBox.playSound(MSConstants.UI_MENU);
             }
         });
 
@@ -110,7 +110,7 @@ public class ConfigGroup extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 GamePreferences.setSoundVolume(soundSlider.getValue());
-                boomBox.playSound(MSConstants.BUTTON_SOUND);
+                boomBox.playSound(MSConstants.UI_MENU);
             }
         });
 
@@ -124,7 +124,7 @@ public class ConfigGroup extends Group {
             public void changed(ChangeEvent event, Actor actor) {
                 GamePreferences.setLevel((int) levelSlider.getValue());
                 levelLabelDynamic.setText(Rules.StartLevel.values()[(int) levelSlider.getValue()].toString());
-                boomBox.playSound(MSConstants.BUTTON_SOUND);
+                boomBox.playSound(MSConstants.UI_MENU);
 
             }
         });
@@ -136,7 +136,7 @@ public class ConfigGroup extends Group {
             public void changed(ChangeEvent event, Actor actor) {
                 GamePreferences.setPrefEffectsLevel((int) effectsSlider.getValue());
                 effectsLabelDynamic.setText(GamePreferences.EffectLevel.values()[(int) effectsSlider.getValue()].toString());
-                boomBox.playSound(MSConstants.BUTTON_SOUND);
+                boomBox.playSound(MSConstants.UI_MENU);
             }
         });
 
@@ -146,7 +146,7 @@ public class ConfigGroup extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 GamePreferences.setJoyStickMode((int) joyStickModeSlider.getValue());
-                boomBox.playSound(MSConstants.BUTTON_SOUND);
+                boomBox.playSound(MSConstants.UI_MENU);
             }
         });
 
@@ -160,8 +160,8 @@ public class ConfigGroup extends Group {
                 GamePreferences.setMusicEnabled(enabled);
                 musicCheckBox.setText(enabled ? on : off);
                 boomBox.setAllMusicVolume(GamePreferences.getMusicVolume());
-                boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_MUSIC);
-                boomBox.playSound(MSConstants.CHECKBOX);
+                boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
+                boomBox.playSound(MSConstants.UI_CHECKBOX);
             }
         });
 
@@ -171,7 +171,7 @@ public class ConfigGroup extends Group {
         soundCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                boomBox.playSound(MSConstants.CHECKBOX);
+                boomBox.playSound(MSConstants.UI_CHECKBOX);
                 boolean enabled = soundCheckBox.isChecked();
                 soundCheckBox.setText(enabled ? on : off);
                 GamePreferences.setSoundEnabled(enabled);
@@ -189,7 +189,7 @@ public class ConfigGroup extends Group {
                 joyStickCheckBox.setText(enabled ? on : off);
                 GamePreferences.setJoyStickEnabled(enabled);
                 joystickTable.setVisible(enabled);
-                boomBox.playSound(MSConstants.CHECKBOX);
+                boomBox.playSound(MSConstants.UI_CHECKBOX);
             }
         });
 
@@ -202,7 +202,7 @@ public class ConfigGroup extends Group {
                 boolean enabled = joyStickColorCheckBox.isChecked();
                 joyStickColorCheckBox.setText(enabled ? "CYAN" : "WHITE");
                 GamePreferences.setJoyStickColor(enabled);
-                boomBox.playSound(MSConstants.CHECKBOX);
+                boomBox.playSound(MSConstants.UI_CHECKBOX);
             }
         });
 
@@ -215,7 +215,7 @@ public class ConfigGroup extends Group {
                 boolean enabled = childCheckBox.isChecked();
                 childCheckBox.setText(enabled ? on : off);
                 GamePreferences.setChildEnabled(enabled);
-                boomBox.playSound(MSConstants.CHECKBOX);
+                boomBox.playSound(MSConstants.UI_CHECKBOX);
             }
         });
 
@@ -231,7 +231,7 @@ public class ConfigGroup extends Group {
                 if (enabled) {
                     Vibrator.vibrate(VConstants.VIBRATION_ENABLED);
                 }
-                boomBox.playSound(MSConstants.CHECKBOX);
+                boomBox.playSound(MSConstants.UI_CHECKBOX);
             }
         });
 

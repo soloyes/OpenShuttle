@@ -35,7 +35,7 @@ public class Consumer {
                             3.0f,
                             true
                     );
-            boomBox.playSound(MSConstants.PLAYER_REPAIR);
+            boomBox.playSound(MSConstants.GET_REPAIR);
         }
 
         if (label.getSticker() == Label.Sticker.BOOST) {
@@ -53,7 +53,7 @@ public class Consumer {
                             5.0f,
                             true
                     );
-            boomBox.playSound(MSConstants.TURBO);
+            boomBox.playSound(MSConstants.GET_BOOST);
         }
 
         if (label.getSticker() == Label.Sticker.SPLASH) {
@@ -75,7 +75,7 @@ public class Consumer {
                             8.0f,
                             true
                     );
-            boomBox.playSound(MSConstants.ANOMALY_SPLASH);
+            boomBox.playSound(MSConstants.GET_SPLASH);
         }
 
         if (label.getSticker() == Label.Sticker.TRASH) {

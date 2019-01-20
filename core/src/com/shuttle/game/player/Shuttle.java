@@ -255,7 +255,7 @@ public class Shuttle extends AbstractShuttle {
                         true
                 );
                 Vibrator.vibrate(VConstants.PLAYER_LOST_LIVE);
-                boomBox.playSound(MSConstants.PLAYER_DESTROYED);
+                boomBox.playSound(MSConstants.DOWN);
             }
             hpNotification = false;
         }
@@ -263,7 +263,7 @@ public class Shuttle extends AbstractShuttle {
         float p = standing.getHp() / (float) standing.getMaxHp();
         if (!hpNotification && p <= Rules.PLAYER_LOW_LIFE_HP_PERCENT) {
             hpNotification = true;
-            boomBox.playSound(MSConstants.PLAYER_LOW_LIFE);
+            boomBox.playSound(MSConstants.LOW_LIFE_WARNING);
         }
     }
 
@@ -427,7 +427,7 @@ public class Shuttle extends AbstractShuttle {
             if (standing.getFuel() > 0.1f && velocity.len() >= 80 && !Rules.GAME_OVER) {
                 engineParticleEmitter.getBuilder().buildShuttleEngineFire(position, angle,  /*FPS hack*/70 - j * 0.5f /*FPS hack*/, 1.0f, 60 * dt);
                 if (engineStarted) {
-                    boomBox.playSound(MSConstants.PLAYER_START_ENGINE);
+                    boomBox.playSound(MSConstants.START_ENGINE);
                     engineStarted = false;
                 }
             } else {
@@ -465,7 +465,7 @@ public class Shuttle extends AbstractShuttle {
                 BoundCheck.avoidPosition(gs.getBlackhole().getPosition(), position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
                 setLayersScale(1.0f, 1.0f);
                 taken = false;
-                boomBox.playSound(MSConstants.BLACKHOLE_TELEPORT);
+                boomBox.playSound(MSConstants.TELEPORT);
                 if (!GamePreferences.isChildEnabled()) {
                     takeDamage(Rules.BLACKHOLE_GET_DAMAGE);
                 }

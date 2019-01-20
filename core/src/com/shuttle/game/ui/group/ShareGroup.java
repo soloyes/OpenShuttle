@@ -60,7 +60,7 @@ public class ShareGroup extends Group {
         socialLabel.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                boomBox.playSound(MSConstants.BUTTON_SOUND);
+                boomBox.playSound(MSConstants.UI_MENU);
                 float scale = 0.9f;
                 socialLabel.setFontScale(scale);
                 socialLabel.setX(Rules.WORLD_WIDTH / 2 - scale * socialLabel.getWidth() / 2);
@@ -78,7 +78,7 @@ public class ShareGroup extends Group {
         rateLabel.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                boomBox.playSound(MSConstants.BUTTON_SOUND);
+                boomBox.playSound(MSConstants.UI_MENU);
                 rateLabel.setFontScale(0.9f);
                 float scale = 0.9f;
                 rateLabel.setFontScale(scale);
@@ -97,7 +97,7 @@ public class ShareGroup extends Group {
         aboutLabel.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                boomBox.playSound(MSConstants.BUTTON_SOUND);
+                boomBox.playSound(MSConstants.UI_MENU);
                 aboutLabel.setFontScale(0.9f);
                 float scale = 0.9f;
                 aboutLabel.setFontScale(scale);
@@ -115,7 +115,7 @@ public class ShareGroup extends Group {
         introLabel.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                boomBox.playSound(MSConstants.BUTTON_SOUND);
+                boomBox.playSound(MSConstants.UI_MENU);
                 introLabel.setFontScale(0.9f);
                 float scale = 0.9f;
                 introLabel.setFontScale(scale);

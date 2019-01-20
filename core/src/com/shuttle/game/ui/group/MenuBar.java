@@ -83,7 +83,7 @@ public class MenuBar extends Group {
             public void changed(ChangeEvent event, Actor actor) {
                 //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
                 if (GamePreferences.isSoundEnabled()) {
-                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.BUTTON_SOUND));
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.UI_MENU));
                     sound.play(GamePreferences.getSoundVolume());
                 }
                 //
@@ -119,7 +119,7 @@ public class MenuBar extends Group {
                         actorArray[i].setVisible(false);
                     }
                 }
-                boomBox.playSound(MSConstants.BUTTON_SOUND);
+                boomBox.playSound(MSConstants.UI_MENU);
             }
         });
 
@@ -147,7 +147,7 @@ public class MenuBar extends Group {
                         actorArray[i].setVisible(false);
                     }
                 }
-                boomBox.playSound(MSConstants.BUTTON_SOUND);
+                boomBox.playSound(MSConstants.UI_MENU);
             }
         });
 
@@ -175,7 +175,7 @@ public class MenuBar extends Group {
                         actorArray[i].setVisible(false);
                     }
                 }
-                boomBox.playSound(MSConstants.BUTTON_SOUND);
+                boomBox.playSound(MSConstants.UI_MENU);
             }
         });
 

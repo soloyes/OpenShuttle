@@ -80,7 +80,7 @@ shuttleblur
   orig: 768, 256
   offset: 0, 0
   index: -1
-trashv1
+trash
   rotate: false
   xy: 3592, 1028
   size: 256, 256
@@ -94,14 +94,14 @@ storagegold
   orig: 256, 256
   offset: 0, 0
   index: -1
-storage1
+storage
   rotate: false
   xy: 1028, 1544
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-splashv1
+splash
   rotate: false
   xy: 1028, 1802
   size: 256, 256
@@ -136,35 +136,35 @@ shieldcrate
   orig: 256, 256
   offset: 0, 0
   index: -1
-shabbysigngold
+shabbygold
   rotate: false
   xy: 1028, 3092
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-shabbysign
+shabby
   rotate: false
   xy: 1028, 3350
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-scanv1
+scan
   rotate: false
   xy: 1028, 3608
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-rocketlauncherv1
+rocketlauncher
   rotate: false
   xy: 1286, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-repairv1
+repair
   rotate: false
   xy: 1544, 1286
   size: 256, 256
@@ -178,21 +178,21 @@ ramshield
   orig: 256, 256
   offset: 0, 0
   index: -1
-radarv1
+radar
   rotate: false
   xy: 2060, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-patternsigngold
+patterngold
   rotate: false
   xy: 2318, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-patternsign
+pattern
   rotate: false
   xy: 2576, 1286
   size: 256, 256
@@ -220,7 +220,7 @@ lifeshield
   orig: 256, 256
   offset: 0, 0
   index: -1
-laserv1
+laser
   rotate: false
   xy: 3608, 1286
   size: 256, 256
@@ -234,14 +234,14 @@ glow
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelv1
+fuelboxgold
   rotate: false
   xy: 1286, 1802
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelgold
+fuelbox
   rotate: false
   xy: 1286, 2060
   size: 256, 256
@@ -255,7 +255,7 @@ fuelback
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuel1
+fuel
   rotate: false
   xy: 1286, 2576
   size: 256, 256
@@ -269,28 +269,28 @@ crategold
   orig: 256, 256
   offset: 0, 0
   index: -1
-crate1
+crate
   rotate: false
   xy: 1286, 3092
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-boxshieldv1
+boxshield
   rotate: false
   xy: 1286, 3350
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-boxscanv1
+boxscan
   rotate: false
   xy: 1286, 3608
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-boostv1
+boost
   rotate: false
   xy: 1544, 1544
   size: 256, 256
@@ -304,14 +304,14 @@ blackholespiral
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackholehole
+blackhole
   rotate: false
   xy: 2060, 1544
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-joystick1
+joystick
   rotate: false
   xy: 3080, 774
   size: 400, 250
@@ -325,21 +325,21 @@ star16
   orig: 16, 16
   offset: 0, 0
   index: -1
-radardot2
+consumabledot
   rotate: false
   xy: 3998, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-radardot1
+bubble16
   rotate: false
   xy: 4016, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-bubble16
+anomalydot
   rotate: false
   xy: 4034, 2
   size: 16, 16

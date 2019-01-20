@@ -139,7 +139,7 @@ public class Ray {
             asteroid.setTimeToBurn(asteroid.getTimeToBurn() + dt);
             //todo: может быть по-разному таймеру выжигать астероиды?
             if (asteroid.getTimeToBurn() >= 0.5f + Rules.ASTEROID_MINERAL_BURN_TIME / player.getLaserChargeLevel()) {
-                boomBox.playSound(MSConstants.ASTEROID_SPLASH);
+                boomBox.playSound(MSConstants.DESTROY_ASTEROID_RAY);
                 //todo:repeatable code..
                 switch (asteroid.getType()) {
                     case ASTEROID_METAL:
