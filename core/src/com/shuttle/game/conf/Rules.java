@@ -60,7 +60,7 @@ public final class Rules {
     //30.0f
     public static final float ANOMALIES_ELECTRIC_RESPAWN_TIME = 30.0f;
     //1
-    public static final int ANOMALIES_ELECTRIC_MAX_COUNT = 1;
+    public static final int ANOMALIES_ELECTRIC_MAX_COUNT = 0;
     //600.0f
     public static float ANOMALY_ELECTRIC_VELOCITY = 600.0f;
     //0.5
@@ -73,7 +73,7 @@ public final class Rules {
     //12
     public static final float ANOMALIES_RADIATION_RESPAWN_TIME = 12.0f;
     //2
-    public static final int ANOMALIES_RADIATION_MAX_COUNT = 2;
+    public static final int ANOMALIES_RADIATION_MAX_COUNT = 0;
     //50.0f
     public static final float ANOMALIES_RADIATION_VELOCITY = 50.0f;
     //500
@@ -88,7 +88,7 @@ public final class Rules {
     //15.0f
     public static final float ANOMALIES_MAGNETIC_RESPAWN_TIME = 15.0f;
     //2
-    public static final int ANOMALIES_MAGNETIC_MAX_COUNT = 2;
+    public static final int ANOMALIES_MAGNETIC_MAX_COUNT = 0;
     //50.0f
     public static final float ANOMALIES_MAGNETIC_VELOCITY = 50.0f;
     //0.3f
@@ -99,11 +99,11 @@ public final class Rules {
     public static final float ANOMALIES_MAGNETIC_EAT_TIME = 0.4f;
     //
     //2
-    public static final int ANOMALIES_CORROSIVE_AT_START = 2;
+    public static final int ANOMALIES_CORROSIVE_AT_START = 0;
     //4.0f
     public static final float ANOMALIES_CORROSIVE_RESPAWN_TIME = 4.0f;
     //30
-    public static final int ANOMALIES_CORROSIVE_MAX_COUNT = 30;
+    public static final int ANOMALIES_CORROSIVE_MAX_COUNT = 0;
     //60.0f
     public static final float ANOMALIES_CORROSIVE_VELOCITY = 60.0f;
     //0.15f
@@ -122,13 +122,13 @@ public final class Rules {
     //0.3f
     public static final float ASTEROID_METAL_BURN_TIME = 0.3f;
     //50
-    public static final int ASTEROID_METAL_MAX_COUNT = 50;
+    public static final int ASTEROID_METAL_MAX_COUNT = 0;
     //4.0f
     public static final float ASTEROID_MINERAL_RESPAWN_TIME = 4.0f;
     //0.3f
     public static final float ASTEROID_MINERAL_BURN_TIME = 0.3f;
     //50
-    public static final int ASTEROID_MINERAL_MAX_COUNT = 50;
+    public static final int ASTEROID_MINERAL_MAX_COUNT = 0;
     //0.5f
     public static final float ASTEROID_SIZE_FOR_HARVEST_FACTOR = 0.5f;
     //PLAYER

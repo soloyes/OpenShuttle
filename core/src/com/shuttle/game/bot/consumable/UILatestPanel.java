@@ -17,7 +17,7 @@ public class UILatestPanel {
     private ArrayList<LabelTime> activeLabel;
     private ArrayList<LabelTime> showLabel;
     private ArrayList<LabelTime> freeLabel;
-    private ArrayList<Integer> needdel;
+    private ArrayList<Integer> needDel;
     @Getter
     @Setter
     protected Color color;
@@ -64,7 +64,7 @@ public class UILatestPanel {
         this.activeLabel = new ArrayList<LabelTime>();
         this.freeLabel = new ArrayList<LabelTime>();
         this.showLabel = new ArrayList<LabelTime>();
-        this.needdel = new ArrayList<Integer>();
+        this.needDel = new ArrayList<Integer>();
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.width = PaintConstants.PANEL_ELEMENT_WIDTH;
         this.height = PaintConstants.PANEL_ELEMENT_HEIGHT;
@@ -202,7 +202,7 @@ public class UILatestPanel {
                             freeLabel.add(showLabel.remove(0));
                         }
                         showLabel.add(temp);
-                        needdel.add(i);
+                        needDel.add(i);
 
                         temp.time = t1;
                         for (int k = 0; k < showLabel.size(); k++) {
@@ -216,14 +216,14 @@ public class UILatestPanel {
                 } else {
                     startPoint = Rules.WORLD_HEIGHT / 2;
                     showLabel.add(temp);
-                    needdel.add(i);
+                    needDel.add(i);
                 }
             }
 
-        if (needdel.size() > 0) {
-            for (int i = needdel.size() - 1; i >= 0; i--) {
-                activeLabel.remove((int)needdel.get(i));
-                needdel.remove(i);
+        if (needDel.size() > 0) {
+            for (int i = needDel.size() - 1; i >= 0; i--) {
+                activeLabel.remove((int)needDel.get(i));
+                needDel.remove(i);
             }
         }
 
@@ -257,15 +257,15 @@ public class UILatestPanel {
                     startPoint -= dt * (1.0f / t2) * height / 4;
                     if (sh.time < 0){
                         freeLabel.add(sh);
-                        needdel.add(i);
+                        needDel.add(i);
 
                     }
                 }
             }
-        if (needdel.size() > 0) {
-            for (int i = needdel.size() - 1; i >= 0; i--) {
-                showLabel.remove((int)needdel.get(i));
-                needdel.remove(i);
+        if (needDel.size() > 0) {
+            for (int i = needDel.size() - 1; i >= 0; i--) {
+                showLabel.remove((int)needDel.get(i));
+                needDel.remove(i);
             }
             startPoint = Rules.WORLD_HEIGHT / 2 +  height * (showLabel.size() - 1) / 4;
         }
