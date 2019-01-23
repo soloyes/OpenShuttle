@@ -49,7 +49,7 @@ public final class Rules {
     //0
     public static final int CONSUMABLE_STORAGE_AT_START = 0;
     //15.0f
-    public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 15.0f;
+    public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 2.0f;
     //2
     public static final int CONSUMABLE_STORAGE_MAX_COUNT = 2;
     //2
@@ -235,6 +235,10 @@ public final class Rules {
     public static final float CONSUMABLE_SCAN_TIME = 30.0f;
     //60
     public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
+    //3
+    public static int LAUNCH_BOMBS_TIME = 3;
+    //7
+    public static int LAUNCH_BOMBS = 7;
     //20 means 1/20
     public static final int CONSUMABLE_GOLDEN_PROBABILITY = 20;
 

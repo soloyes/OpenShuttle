@@ -168,16 +168,17 @@ public class Consumer {
             boomBox.playSound(MSConstants.GET_LASER);
         }
 
-        if (label.getSticker() == Label.Sticker.ROCKET) {
+        if (label.getSticker() == Label.Sticker.BOMBS) {
             gs.getGameInfoSystem()
                     .setup(
                             position.x,
                             position.y,
-                            GameInfoSystem.GameInfoSystemPreset.ROCKET,
+                            GameInfoSystem.GameInfoSystemPreset.BOMBS,
                             3.0f,
                             true
                     );
-            boomBox.playSound(MSConstants.GET_ROCKET);
+            boomBox.playSound(MSConstants.GET_BOMBS);
+            gs.getBombLauncher().launch();
         }
 
         if (label.getSticker() == Label.Sticker.FUEL) {
@@ -274,7 +275,7 @@ public class Consumer {
                 gs.getGameInfoSystem().setup(
                         consumable.getPosition().x,
                         consumable.getPosition().y,
-                        GameInfoSystem.GameInfoSystemPreset.ANOMALY_ARISE,
+                        GameInfoSystem.GameInfoSystemPreset.ANOMALY_ARISE.getValue(),
                         3.0f,
                         true
                 );
@@ -333,7 +334,7 @@ public class Consumer {
                         gs.getGameInfoSystem().setup(
                                 consumable.getPosition().x,
                                 consumable.getPosition().y,
-                                preset,
+                                preset.getValue(),
                                 3.0f,
                                 true
                         );
@@ -387,7 +388,7 @@ public class Consumer {
                         gs.getGameInfoSystem().setup(
                                 consumable.getPosition().x,
                                 consumable.getPosition().y,
-                                GameInfoSystem.GameInfoSystemPreset.ANOMALY_ARISE,
+                                GameInfoSystem.GameInfoSystemPreset.ANOMALY_ARISE.getValue(),
                                 3.0f,
                                 true
                         );
@@ -417,7 +418,7 @@ public class Consumer {
                 gs.getGameInfoSystem().setup(
                         consumable.getPosition().x,
                         consumable.getPosition().y,
-                        GameInfoSystem.GameInfoSystemPreset.ANOMALY_FLUSH,
+                        GameInfoSystem.GameInfoSystemPreset.ANOMALY_FLUSH.getValue(),
                         3.0f,
                         true
                 );
@@ -442,7 +443,7 @@ public class Consumer {
                             gs.getGameInfoSystem().setup(
                                     consumable.getPosition().x,
                                     consumable.getPosition().y,
-                                    GameInfoSystem.GameInfoSystemPreset.BONUS_CRATE,
+                                    GameInfoSystem.GameInfoSystemPreset.BONUS_CRATE.getValue(),
                                     3.0f,
                                     true
                             );
@@ -455,7 +456,7 @@ public class Consumer {
                             gs.getGameInfoSystem().setup(
                                     consumable.getPosition().x,
                                     consumable.getPosition().y,
-                                    GameInfoSystem.GameInfoSystemPreset.BONUS_STORAGE,
+                                    GameInfoSystem.GameInfoSystemPreset.BONUS_STORAGE.getValue(),
                                     3.0f,
                                     true
                             );
@@ -536,7 +537,7 @@ public class Consumer {
                     gs.getGameInfoSystem().setup(
                             consumable.getPosition().x,
                             consumable.getPosition().y,
-                            GameInfoSystem.GameInfoSystemPreset.ANOMALY_FLUSH,
+                            GameInfoSystem.GameInfoSystemPreset.ANOMALY_FLUSH.getValue(),
                             3.0f,
                             true
                     );

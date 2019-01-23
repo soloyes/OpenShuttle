@@ -2,25 +2,28 @@ package com.shuttle.game.bot.bomb;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
-import com.shuttle.game.conf.Rules;
+import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.pool.ObjectPool;
 
 /**
  * @author Shuttle on 19/01/19.
  */
 public class BombEmitter extends ObjectPool<Bomb> {
-    //private GameScreen gs;
     private BombParticleEffectPool bombParticleEffectPool;
-    private boolean f = true;
+    private BoundCheck boundCheck;
+    private GameScreen gs;
 
     @Override
     protected Bomb newObject() {
-        return new Bomb(bombParticleEffectPool);
+        return new Bomb(gs, bombParticleEffectPool.obtain());
     }
 
-    public BombEmitter() {
+    public BombEmitter(GameScreen gs) {
+        this.gs = gs;
+        this.boundCheck = new BoundCheck();
         this.bombParticleEffectPool = new BombParticleEffectPool.BombParticleBuilder()
                 .setInitialCapacity(0)
                 .setMaxCapacity(32)
@@ -35,23 +38,25 @@ public class BombEmitter extends ObjectPool<Bomb> {
     }
 
     public void update(float dt) {
-        if (f) {
-            createBomb();
-            f = false;
-        }
         for (int i = 0; i < activeList.size(); i++) {
-            activeList.get(i).update(dt);
+            Bomb bomb = activeList.get(i);
+            bomb.update(dt);
+            if (boundCheck.checkAndHandleBounds(bomb)) {
+                bomb.destroy();
+            }
         }
         checkPool();
     }
 
-    public void createBomb() {
-        for (int i = 0; i < 100; i++) {
-            getActiveElement().init(MathUtils.random(0, Rules.WORLD_WIDTH), MathUtils.random(0, Rules.WORLD_HEIGHT));
-        }
+    public void createBomb(float x, float y) {
+        getActiveElement().init(x, y);
     }
 
-    public void dispose(){
+    public void createBomb(Vector2 position) {
+        getActiveElement().init(position.x, position.y);
+    }
+
+    public void dispose() {
         bombParticleEffectPool.dispose();
     }
 }

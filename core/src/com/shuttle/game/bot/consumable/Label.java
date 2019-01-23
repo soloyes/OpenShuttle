@@ -53,8 +53,8 @@ public class Label {
             case REPAIR:
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.REPAIR_LABEL_REGION);
                 break;
-            case ROCKET:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.ROCKET_LAUNCHER_LABEL_REGION);
+            case BOMBS:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOMBS_LABEL_REGION);
                 break;
             case SHABBY:
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHABBY_SIGN_LABEL_REGION);
@@ -131,7 +131,7 @@ public class Label {
         //Storage
         LASER,
         RADAR,
-        ROCKET,
+        BOMBS,
         //Fuel
         FUEL,
         //Surprise

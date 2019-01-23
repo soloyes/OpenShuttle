@@ -157,140 +157,140 @@ scan
   orig: 256, 256
   offset: 0, 0
   index: -1
-rocketlauncher
+repair
   rotate: false
   xy: 1286, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-repair
+ramshield
   rotate: false
   xy: 1544, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-ramshield
+radar
   rotate: false
   xy: 1802, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-radar
+patterngold
   rotate: false
   xy: 2060, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-patterngold
+pattern
   rotate: false
   xy: 2318, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-pattern
+outmark
   rotate: false
   xy: 2576, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outmark
+outarrow
   rotate: false
   xy: 2834, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outarrow
+lifeshield
   rotate: false
   xy: 3092, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-lifeshield
+laser
   rotate: false
   xy: 3350, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-laser
+glow
   rotate: false
   xy: 3608, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-glow
+fuelboxgold
   rotate: false
   xy: 1286, 1544
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelboxgold
+fuelbox
   rotate: false
   xy: 1286, 1802
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelbox
+fuelback
   rotate: false
   xy: 1286, 2060
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelback
+fuel
   rotate: false
   xy: 1286, 2318
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuel
+crategold
   rotate: false
   xy: 1286, 2576
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-crategold
+crate
   rotate: false
   xy: 1286, 2834
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-crate
+boxshield
   rotate: false
   xy: 1286, 3092
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-boxshield
+boxscan
   rotate: false
   xy: 1286, 3350
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-boxscan
+boost
   rotate: false
   xy: 1286, 3608
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-boost
+bombs
   rotate: false
   xy: 1544, 1544
   size: 256, 256

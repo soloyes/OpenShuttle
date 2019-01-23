@@ -129,7 +129,7 @@ public final class PaintConstants {
     public static final String FUEL_LABEL_REGION = "fuel";
     public static final String LASER_LABEL_REGION = "laser";
     public static final String RADAR_LABEL_REGION = "radar";
-    public static final String ROCKET_LAUNCHER_LABEL_REGION = "rocketlauncher";
+    public static final String BOMBS_LABEL_REGION = "bombs";
     public static final String SCAN_LABEL_REGION = "scan";
     public static final String SPLASH_LABEL_REGION = "splash";
     public static final String TRASH_LABEL_REGION = "trash";

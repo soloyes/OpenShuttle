@@ -65,7 +65,7 @@ public class GameInfoSystem {
         LOST_SCORE("SCORE"),
         MURDERER("MURDERER" + "\n[RED]-" + Rules.CONSUMABLE_MURDER_SCORE_DECREASE + "[]"),
         EASY("BE EASY"),
-        ROCKET("[GREEN]ROCKETS[]"),
+        BOMBS("[GREEN]BOMBS[]"),
         RADAR("RADAR"),
         SHIELD("SHIELD [GREEN]+" + (int) Rules.CONSUMABLE_SHIELD_TIME + "[]"),
         SCAN("SCAN [GREEN]+" + (int) Rules.CONSUMABLE_SCAN_TIME + "[]"),

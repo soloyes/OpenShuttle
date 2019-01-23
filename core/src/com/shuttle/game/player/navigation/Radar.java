@@ -150,6 +150,8 @@ public class Radar {
             } else {
                 boomBox.stopMusicEffect(MSConstants.RADAR_WHITE_NOISE_MUSIC);
             }
+        } else {
+            boomBox.stopMusicEffect(MSConstants.RADAR_WHITE_NOISE_MUSIC);
         }
     }
 

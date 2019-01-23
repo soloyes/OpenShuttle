@@ -16,7 +16,7 @@ public class TestScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        this.bombEmitter = new BombEmitter();
+        this.bombEmitter = new BombEmitter(null);
     }
 
     @Override

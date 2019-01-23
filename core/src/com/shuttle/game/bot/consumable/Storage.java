@@ -95,7 +95,7 @@ public class Storage extends AbstractConsumable {
 
     private void generateSize() {
         int r = MathUtils.random(0, Size.values().length - 1);
-        size = Size.values()[r];
+        size = Size.SINGLE;//Size.values()[r];
     }
 
     private void stickLabel() {
@@ -170,7 +170,7 @@ public class Storage extends AbstractConsumable {
                     case 1:
                         return Label.Sticker.LASER;
                     default:
-                        return Label.Sticker.ROCKET;
+                        return Label.Sticker.BOMBS;
                 }
             default:
                 r = MathUtils.random(0, 6);

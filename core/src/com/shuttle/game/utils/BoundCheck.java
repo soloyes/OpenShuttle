@@ -22,6 +22,7 @@ public class BoundCheck {
     private float fuelTimer;
     private Rectangle rectangle;
     private BoomBox boomBox;
+    public static boolean playerOnScreen;
 
     public BoundCheck() {
         this.rectangle = new Rectangle();
@@ -44,12 +45,14 @@ public class BoundCheck {
         );
         if (!rectangle.contains(player.getPosition())) {
             checkCount(player, dt);
+            playerOnScreen = false;
         } else {
             alertTimer = 0;
             fuelTimer = 0;
             hpTimer = 0;
             player.getStanding().setFuelAlertOutOfBounds(false);
             player.getStanding().setHpAlert(false);
+            playerOnScreen = true;
         }
     }
 
