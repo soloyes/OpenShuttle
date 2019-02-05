@@ -127,6 +127,7 @@ public final class PaintConstants {
     public static final String BOX_SHIELD_LABEL_REGION = "boxshieldv1";
     public static final String REPAIR_LABEL_REGION = "repairv1";
     public static final String FUEL_LABEL_REGION = "fuelv1";
+    public static final String FUEL_LABEL_REGION_FOR_UI = "fuelv2";
     public static final String LASER_LABEL_REGION = "laserv1";
     public static final String RADAR_LABEL_REGION = "radarv1";
     public static final String ROCKET_LAUNCHER_LABEL_REGION = "rocketlauncherv1";
