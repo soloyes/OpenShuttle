@@ -7,6 +7,7 @@ import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
 import com.shuttle.game.utils.pool.AbstractPoolable;
@@ -23,14 +24,12 @@ public class Rocket extends AbstractPoolable {
     private GameScreen gs;
     private Vector2 velocity;
     private Vector2 destination;
-    private float alpha = 1.0f;
-    private float angle;
     private TextureRegion[] textureRegions;
     private Vector2 tmp1V2, tmp2V2;
     @Setter
     private AbstractAnomaly targetAnomaly;
     private boolean aimed;
-    private float v;
+    private float angle;
 
     public Rocket(GameScreen gs) {
         this.gs = gs;
@@ -70,14 +69,6 @@ public class Rocket extends AbstractPoolable {
 
     @Override
     public void basicUpdate(float dt) {
-//        if (taken) {
-//            alpha -= dt / 5;
-//            if (alpha <= 0.0f) {
-//                alpha = 0.0f;
-//                destroy();
-//            }
-//        }
-
         frame += 24 * dt;
         if (frame >= PaintConstants.ROCKET_FRAMES) {
             frame = 0.0f;
@@ -92,27 +83,23 @@ public class Rocket extends AbstractPoolable {
     @Override
     public void update(float dt) {
         basicUpdate(dt);
-        //collideBlackhole();
-        if (targetAnomaly.isActive() && aimed) {
-            destination = targetAnomaly.getPosition();
+        position.mulAdd(velocity, dt);
+        if (targetAnomaly.isActive() && !targetAnomaly.isTaken() && aimed) {
+            destination.set(targetAnomaly.getPosition());
             tmp2V2.set(destination);
-            v = targetAnomaly.isActivated() ? targetAnomaly.getV() + Rules.ROCKETS_VELOCITY : Rules.ROCKETS_VELOCITY;
         } else {
-            if (active) {
-                if (aimed) {
-                    tmp2V2.set(destination);
-                    tmp2V2.scl(Integer.MAX_VALUE);
-                    v = Rules.ROCKETS_VELOCITY;
-                    aimed = false;
-                }
+            if (aimed) {
+                tmp2V2.scl(Integer.MAX_VALUE);
+                aimed = false;
             }
         }
+        float v = Rules.ROCKETS_VELOCITY + (targetAnomaly.isActivated() ? targetAnomaly.getV() : 0);
         tmp1V2.set(tmp2V2
                 .sub(position)
                 .nor()
-                .scl(v));
+                .scl(v)
+        );
         velocity.mulAdd(tmp1V2, dt);
-        position.mulAdd(velocity, dt);
         angle = velocity.angle();
     }
 
@@ -125,17 +112,22 @@ public class Rocket extends AbstractPoolable {
     public void init(float x, float y) {
         this.position.set(x, y);
         this.active = true;
-        //this.alpha = 1.0f;
-        //this.taken = false;
+        this.velocity.set(0, 0);
         this.scaleX = this.scaleY = 1.0f;
         this.aimed = true;
     }
 
     public void checkCollision() {
-        if (position.dst(targetAnomaly.getPosition()) <= PaintConstants.ROCKET_WIDTH) {
+        if (position.dst(targetAnomaly.getPosition()) <= PaintConstants.ROCKET_WIDTH && targetAnomaly.isActive()) {
             destroy();
             targetAnomaly.destroyWithEffect();
+            gs.getGameInfoSystem().setup(
+                    position.x,
+                    position.y,
+                    GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
+                    3.0f,
+                    true
+            );
         }
     }
-
 }

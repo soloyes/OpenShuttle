@@ -59,7 +59,7 @@ public class Consumer {
         if (label.getSticker() == Label.Sticker.SPLASH) {
             List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
             for (int i = 0; i < anomalies.size(); i++) {
-                if (boundCheck.checkAndHandleBoundsInCamera(anomalies.get(i), gs.getCamera())) {
+                if (boundCheck.checkAndHandleBoundsInCamera(anomalies.get(i))) {
                     if (!anomalies.get(i).isTaken()) {
                         anomalies.get(i).setMarkedToBoom(true);
                         standing.addToStatistics(anomalies.get(i).getType(), anomalies.get(i).getLevel());

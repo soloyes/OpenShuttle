@@ -220,17 +220,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 clockwise * angle
         );
 
-        if (atRocketPoint) {
-            Color color = batch.getColor();
-            batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.AT_ROCKET_POINT_ALPHA);
-            batch.draw(atRocketRegion,
-                    position.x - width / 2, position.y - height / 2,
-                    width / 2, height / 2,
-                    width, height,
-                    scaleX, scaleY,
-                    clockwise * angle);
-            batch.setColor(color);
-        }
+        drawAtRocketPoint(batch);
     }
 
     public void basicUpdate(float dt) {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.bot.rocket.RocketLauncher;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.screens.GameScreen;
@@ -56,5 +57,19 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
                 Assets.getInstance()
                         .getAtlas()
                         .findRegion(PaintConstants.AT_ROCKET_POINT_REGION));
+    }
+
+    protected void drawAtRocketPoint(SpriteBatch batch) {
+        if (atRocketPoint && RocketLauncher.launched) {
+            Color color = batch.getColor();
+            batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.AT_ROCKET_POINT_ALPHA);
+            batch.draw(atRocketRegion,
+                    position.x - width / 2, position.y - height / 2,
+                    width / 2, height / 2,
+                    width, height,
+                    scaleX, scaleY,
+                    clockwise * angle);
+            batch.setColor(color);
+        }
     }
 }

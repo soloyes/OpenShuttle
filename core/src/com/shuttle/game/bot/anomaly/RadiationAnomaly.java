@@ -93,6 +93,8 @@ public class RadiationAnomaly extends AbstractAnomaly {
                 scaleX, scaleY,
                 clockwise * angle
         );
+
+        drawAtRocketPoint(batch);
     }
 
     @Override
@@ -144,6 +146,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
                 }
             } else {
                 destroyWithEffect();
+                boomBox.playSound(MSConstants.DESTROY_RADIATION_ANOMALY);
                 gs.getGameInfoSystem().setup(
                         position.x,
                         position.y,
@@ -164,7 +167,6 @@ public class RadiationAnomaly extends AbstractAnomaly {
     @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
-        boomBox.playSound(MSConstants.DESTROY_RADIATION_ANOMALY);
         gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
         gs.getPlayer().getStanding().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
         showSprayBoom(gs.getParticleEmitter());

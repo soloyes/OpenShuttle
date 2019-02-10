@@ -156,6 +156,7 @@ public class Ray {
                 asteroid.setAtRayPoint(false);
                 player.setLaserChargeLevel(player.getLaserChargeLevel() - 1);
                 if (player.getLaserChargeLevel() < 1) {
+                    boomBox.stopMusicEffect(MSConstants.LASER);
                     player.setLaser(false);
                     player.setLaserChargeLevel(0);
                 }

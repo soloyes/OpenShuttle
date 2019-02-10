@@ -19,13 +19,13 @@ public class RocketLauncher {
     private GameScreen gs;
     private BoomBox boomBox;
     private boolean charged;
-    private boolean launched;
+    public static boolean launched;
     private float time;
+    private int amplitude;
 
     public RocketLauncher(GameScreen gs) {
         this.gs = gs;
         this.rocketEmitter = new RocketEmitter(gs);
-        this.launched = false;
         this.charged = false;
         this.boomBox = new BoomBox();
     }
@@ -56,16 +56,18 @@ public class RocketLauncher {
                         rocketEmitter.createRocket(gs.getPlayer().getPosition(), anomaly);
                     }
                 }
-                if (count > 0) {
-                    boomBox.playSound(MSConstants.LAUNCH_ROCKETS);
-                    gs.getShake().shake(1, 35, 10 + count);
-                }
+            }
+            if (count > 0) {
+                boomBox.playSound(MSConstants.LAUNCH_ROCKETS);
+                gs.getShake().shake(1, 35, 10 + 5 * amplitude);
             }
             charged = false;
+            amplitude = 0;
         }
     }
 
     public void launch() {
         launched = true;
+        amplitude++;
     }
 }

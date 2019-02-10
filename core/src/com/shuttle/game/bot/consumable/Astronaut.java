@@ -50,7 +50,7 @@ public class Astronaut extends AbstractConsumable {
     }
 
     private void playSound() {
-        if (!fake && boundCheck.checkAndHandleBoundsInCamera(this, gs.getCamera())) {
+        if (!fake && boundCheck.checkAndHandleBoundsInCamera(this)) {
             boomBox.playSound(MSConstants.NEW_ASTRONAUT);
         }
     }

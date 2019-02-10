@@ -10,6 +10,7 @@ import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
@@ -112,7 +113,8 @@ public class BoundCheck {
             poolable.destroy();
     }
 
-    public boolean checkAndHandleBoundsInCamera(AbstractPoolable poolable, Camera camera) {
+    public boolean checkAndHandleBoundsInCamera(AbstractPoolable poolable) {
+        Camera camera = ScreenManager.getInstance().getViewport().getCamera();
         rectangle.set(
                 camera.position.x - Rules.WORLD_WIDTH / 2,
                 camera.position.y - Rules.WORLD_HEIGHT / 2,

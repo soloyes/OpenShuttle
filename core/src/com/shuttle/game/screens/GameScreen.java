@@ -486,8 +486,8 @@ public class GameScreen extends BaseScreen {
                         Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
                     }
                 }
-                collideWithRocket(anomaly);
             }
+            collideWithRocket(anomaly);
         }
 
         for (int i = 0; i < electricalAnomalyEmitter.getActiveList().size(); i++) {
@@ -500,8 +500,8 @@ public class GameScreen extends BaseScreen {
                     prettyElectricKick.playSound(MSConstants.KICKED_BY_ELECTRIC);
                     anomaly.setV(anomaly.getV() * Rules.ANOMALY_ELECTRIC_DECREASE_FACTOR);
                 }
-                collideWithRocket(anomaly);
             }
+            collideWithRocket(anomaly);
         }
 
         //
@@ -534,8 +534,8 @@ public class GameScreen extends BaseScreen {
                     }
                 }
                 tmp1 |= anomaly.isGlued();
-                collideWithRocket(anomaly);
             }
+            collideWithRocket(anomaly);
         }
         player.getStanding().setScoreAlertRadiationAnomaly(tmp1);
 
@@ -568,8 +568,8 @@ public class GameScreen extends BaseScreen {
                     }
                 }
                 tmp2 |= anomaly.isGlued();
-                collideWithRocket(anomaly);
             }
+            collideWithRocket(anomaly);
         }
         player.getStanding().setFuelAlertMagneticAnomaly(tmp2);
         //
@@ -686,7 +686,7 @@ public class GameScreen extends BaseScreen {
 
     private void collideWithRocket(AbstractAnomaly anomaly) {
         float dst = player.getPosition().dst(anomaly.getPosition());
-        if (dst <= Rules.ROCKETS_TAKE_RANGE && anomaly.isBorn()) {
+        if (dst <= Rules.ROCKETS_TAKE_RANGE && anomaly.isBorn() && !anomaly.isTaken()) {
             anomaly.setAtRocketPoint(true);
         } else {
             anomaly.setAtRocketPoint(false);

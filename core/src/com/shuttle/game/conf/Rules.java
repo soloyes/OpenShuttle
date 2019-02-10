@@ -126,7 +126,7 @@ public final class Rules {
     public static final int ANOMALIES_CORROSIVE_AFRAID_FACTOR = 2;
     //ASTEROID_METAL
     //4.0f
-    public static final float ASTEROID_METAL_RESPAWN_TIME = 4.0f;
+    public static final float ASTEROID_METAL_RESPAWN_TIME = 1.0f;
     //0.3f
     public static final float ASTEROID_METAL_BURN_TIME = 0.3f;
     //50
@@ -239,8 +239,8 @@ public final class Rules {
     public static int LAUNCH_ROCKETS_TIME = 3;
     //1500
     public static int ROCKETS_TAKE_RANGE = 1500;
-    //100
-    public static int ROCKETS_VELOCITY = 100;
+    //200
+    public static int ROCKETS_VELOCITY = 200;
     //20 means 1/20
     public static final int CONSUMABLE_GOLDEN_PROBABILITY = 20;
 
@@ -316,6 +316,7 @@ public final class Rules {
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);
+                player.setLaser(true);
                 player.getStanding().setPlayingLevel(10);
                 player.getStanding().setScoreToLive(SCORE_TO_LIVE * 18);
             }
