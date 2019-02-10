@@ -50,11 +50,11 @@ public final class PaintConstants {
     public static final String ASTEROID_MINERAL_REGION = "asteroidmineral";
     public static final int ASTEROID_MINERAL_WIDTH = 128;
     public static final int ASTEROID_MINERAL_HEIGHT = 128;
-    public static final String BLACKHOLE_HOLE_REGION = "blackholehole";
-    public static int BLACKHOLE_HOLE_WIDTH = 192;
-    public static int BLACKHOLE_HOLE_HEIGHT = 192;
-    public static final float BLACKHOLE_HOLE_OSCILLATOR_MIN = 0.8f;
-    public static final float BLACKHOLE_HOLE_OSCILLATOR_MAX = 1.0f;
+    public static final String BLACKHOLE_REGION = "blackhole";
+    public static int BLACKHOLE_WIDTH = 192;
+    public static int BLACKHOLE_HEIGHT = 192;
+    public static final float BLACKHOLE_OSCILLATOR_MIN = 0.8f;
+    public static final float BLACKHOLE_OSCILLATOR_MAX = 1.0f;
     public static final float BLACKHOLE_OSCILLATION_FREQUENCY = 0.1f;
     public static final String BLACKHOLE_SPIRAL_REGION = "blackholespiral";
     public static int BLACKHOLE_SPIRAL_WIDTH = 256;

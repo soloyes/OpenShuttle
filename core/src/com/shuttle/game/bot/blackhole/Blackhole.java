@@ -42,7 +42,7 @@ public class Blackhole {
     private float shaderDiameter;
 
     public Blackhole() {
-        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.BLACKHOLE_HOLE_REGION);
+        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.BLACKHOLE_REGION);
         this.spiralRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BLACKHOLE_SPIRAL_REGION);
         this.glowRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BLACKHOLE_GLOW_REGION);
         this.center = new Vector2(
@@ -50,8 +50,8 @@ public class Blackhole {
                 Rules.SPACE_HEIGHT / 2
         );
         this.position = new Vector2();
-        this.width = PaintConstants.BLACKHOLE_HOLE_WIDTH;
-        this.height = PaintConstants.BLACKHOLE_HOLE_HEIGHT;
+        this.width = PaintConstants.BLACKHOLE_WIDTH;
+        this.height = PaintConstants.BLACKHOLE_HEIGHT;
         this.spiralWidth = PaintConstants.BLACKHOLE_SPIRAL_WIDTH;
         this.spiralHeight = PaintConstants.BLACKHOLE_SPIRAL_HEIGHT;
         this.glowWidth = PaintConstants.BLACKHOLE_GLOW_WIDTH;
@@ -119,7 +119,7 @@ public class Blackhole {
 
         setPosition();
 
-        scale = oscillator.oscillate(scale, PaintConstants.BLACKHOLE_OSCILLATION_FREQUENCY, PaintConstants.BLACKHOLE_HOLE_OSCILLATOR_MIN, PaintConstants.BLACKHOLE_HOLE_OSCILLATOR_MAX, dt);
+        scale = oscillator.oscillate(scale, PaintConstants.BLACKHOLE_OSCILLATION_FREQUENCY, PaintConstants.BLACKHOLE_OSCILLATOR_MIN, PaintConstants.BLACKHOLE_OSCILLATOR_MAX, dt);
         spiralScale = oscillator.oscillate(spiralScale, PaintConstants.BLACKHOLE_SPIRAL_OSCILLATION_FREQUENCY, PaintConstants.BLACKHOLE_SPIRAL_OSCILLATOR_MIN, PaintConstants.BLACKHOLE_SPIRAL_OSCILLATOR_MAX, dt);
         glowB = oscillator.oscillate(glowB, PaintConstants.BLACKHOLE_GLOW_OSCILLATION_FREQUENCY, PaintConstants.BLACKHOLE_GLOW_OSCILLATOR_MIN, PaintConstants.BLACKHOLE_GLOW_OSCILLATOR_MAX, dt);
         shaderDiameter = oscillator.oscillate(
