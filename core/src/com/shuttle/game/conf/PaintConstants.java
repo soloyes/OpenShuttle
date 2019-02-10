@@ -50,7 +50,7 @@ public final class PaintConstants {
     public static final String ASTEROID_MINERAL_REGION = "asteroidmineral";
     public static final int ASTEROID_MINERAL_WIDTH = 128;
     public static final int ASTEROID_MINERAL_HEIGHT = 128;
-    public static final String BLACKHOLE_HOLE_REGION = "blackhole";
+    public static final String BLACKHOLE_HOLE_REGION = "blackholehole";
     public static int BLACKHOLE_HOLE_WIDTH = 192;
     public static int BLACKHOLE_HOLE_HEIGHT = 192;
     public static final float BLACKHOLE_HOLE_OSCILLATOR_MIN = 0.8f;
@@ -127,6 +127,7 @@ public final class PaintConstants {
     public static final String BOX_SHIELD_LABEL_REGION = "boxshield";
     public static final String REPAIR_LABEL_REGION = "repair";
     public static final String FUEL_LABEL_REGION = "fuel";
+    public static final String FUEL_LABEL_REGION_FOR_UI = "fuelv2";
     public static final String LASER_LABEL_REGION = "laser";
     public static final String RADAR_LABEL_REGION = "radar";
     public static final String BOMBS_LABEL_REGION = "bombs";

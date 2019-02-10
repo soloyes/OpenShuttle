@@ -236,6 +236,7 @@ public class Shuttle extends AbstractShuttle {
     }
 
     public void slowDown(float amount) {
+        if(velocity.len() > 0)
         velocity.scl(1.0f - amount / velocity.len());
     }
 
