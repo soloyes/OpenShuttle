@@ -74,6 +74,7 @@ public class UILatestPanel {
         this.patternTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_LABEL_REGION);
         this.fuelText = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION);
         this.textureRegions = new HashMap<Label.Sticker, TextureRegion>();
+        //todo: repeatable code
         for (int i = 0; i < Label.Sticker.values().length; i++) {
             Label.Sticker st = Label.Sticker.values()[i];
             switch (st) {
@@ -98,8 +99,8 @@ public class UILatestPanel {
                 case REPAIR:
                     textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.REPAIR_LABEL_REGION);
                     break;
-                case BOMBS:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOMBS_LABEL_REGION);
+                case ROCKETS:
+                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.ROCKETS_LABEL_REGION);
                     break;
                 case SHABBY:
                     textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHABBY_SIGN_LABEL_REGION);

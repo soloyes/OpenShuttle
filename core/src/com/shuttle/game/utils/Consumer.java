@@ -31,7 +31,7 @@ public class Consumer {
                     .setup(
                             position.x,
                             position.y,
-                            GameInfoSystem.GameInfoSystemPreset.REPAIR,
+                            GameInfoSystem.Preset.REPAIR,
                             3.0f,
                             true
                     );
@@ -49,7 +49,7 @@ public class Consumer {
                     .setup(
                             position.x,
                             position.y,
-                            GameInfoSystem.GameInfoSystemPreset.TURBO,
+                            GameInfoSystem.Preset.TURBO,
                             5.0f,
                             true
                     );
@@ -71,7 +71,7 @@ public class Consumer {
                     .setup(
                             position.x,
                             position.y,
-                            GameInfoSystem.GameInfoSystemPreset.SPLASH,
+                            GameInfoSystem.Preset.SPLASH,
                             8.0f,
                             true
                     );
@@ -84,7 +84,7 @@ public class Consumer {
                     .setup(
                             position.x,
                             position.y,
-                            "+" + score + "[YELLOW]" + GameInfoSystem.GameInfoSystemPreset.TRASH + "[]",
+                            "+" + score + "[YELLOW]" + GameInfoSystem.Preset.TRASH + "[]",
                             2.0f,
                             true
                     );
@@ -109,7 +109,7 @@ public class Consumer {
                     .setup(
                             position.x,
                             position.y,
-                            GameInfoSystem.GameInfoSystemPreset.SHIELD,
+                            GameInfoSystem.Preset.SHIELD,
                             2.0f,
                             true
                     );
@@ -134,7 +134,7 @@ public class Consumer {
                     .setup(
                             position.x,
                             position.y,
-                            GameInfoSystem.GameInfoSystemPreset.SCAN,
+                            GameInfoSystem.Preset.SCAN,
                             2.0f,
                             true
                     );
@@ -146,7 +146,7 @@ public class Consumer {
                     .setup(
                             position.x,
                             position.y,
-                            "[GREEN]" + GameInfoSystem.GameInfoSystemPreset.RADAR + "[]",
+                            "[GREEN]" + GameInfoSystem.Preset.RADAR + "[]",
                             3.0f,
                             true
                     );
@@ -159,7 +159,7 @@ public class Consumer {
                     .setup(
                             position.x,
                             position.y,
-                            "[GREEN]" + GameInfoSystem.GameInfoSystemPreset.LASER + "[]",
+                            "[GREEN]" + GameInfoSystem.Preset.LASER + "[]",
                             3.0f,
                             true
                     );
@@ -168,17 +168,17 @@ public class Consumer {
             boomBox.playSound(MSConstants.GET_LASER);
         }
 
-        if (label.getSticker() == Label.Sticker.BOMBS) {
+        if (label.getSticker() == Label.Sticker.ROCKETS) {
             gs.getGameInfoSystem()
                     .setup(
                             position.x,
                             position.y,
-                            GameInfoSystem.GameInfoSystemPreset.BOMBS,
+                            GameInfoSystem.Preset.ROCKETS,
                             3.0f,
                             true
                     );
-            boomBox.playSound(MSConstants.GET_BOMBS);
-            gs.getBombLauncher().launch();
+            boomBox.playSound(MSConstants.GET_ROCKETS);
+            gs.getRocketLauncher().launch();
         }
 
         if (label.getSticker() == Label.Sticker.FUEL) {
@@ -196,7 +196,7 @@ public class Consumer {
                         .setup(
                                 position.x,
                                 position.y,
-                                GameInfoSystem.GameInfoSystemPreset.FUEL + "[GOLD] +" + fuel + "[]",
+                                GameInfoSystem.Preset.FUEL + "[GOLD] +" + fuel + "[]",
                                 5.0f,
                                 true
                         );
@@ -205,7 +205,7 @@ public class Consumer {
                         .setup(
                                 position.x,
                                 position.y,
-                                GameInfoSystem.GameInfoSystemPreset.FUEL + "[GREEN] +" + fuel + "[]",
+                                GameInfoSystem.Preset.FUEL + "[GREEN] +" + fuel + "[]",
                                 3.0f,
                                 true
                         );
@@ -275,7 +275,7 @@ public class Consumer {
                 gs.getGameInfoSystem().setup(
                         consumable.getPosition().x,
                         consumable.getPosition().y,
-                        GameInfoSystem.GameInfoSystemPreset.ANOMALY_ARISE.getValue(),
+                        GameInfoSystem.Preset.ANOMALY_ARISE.getValue(),
                         3.0f,
                         true
                 );
@@ -286,7 +286,7 @@ public class Consumer {
                 gs.getGameInfoSystem().setup(
                         consumable.getPosition().x,
                         consumable.getPosition().y,
-                        GameInfoSystem.GameInfoSystemPreset.SCORE + "-[RED]" + score + "[]",
+                        GameInfoSystem.Preset.SCORE + "-[RED]" + score + "[]",
                         3.0f,
                         true
                 );
@@ -299,7 +299,7 @@ public class Consumer {
                             gs.getGameInfoSystem().setup(
                                     consumable.getPosition().x,
                                     consumable.getPosition().y,
-                                    "-[RED]" + GameInfoSystem.GameInfoSystemPreset.RADAR + "[]",
+                                    "-[RED]" + GameInfoSystem.Preset.RADAR + "[]",
                                     3.0f,
                                     true
                             );
@@ -308,7 +308,7 @@ public class Consumer {
                             gs.getGameInfoSystem().setup(
                                     consumable.getPosition().x,
                                     consumable.getPosition().y,
-                                    "-[RED]" + GameInfoSystem.GameInfoSystemPreset.LASER + "[]",
+                                    "-[RED]" + GameInfoSystem.Preset.LASER + "[]",
                                     3.0f,
                                     true
                             );
@@ -316,13 +316,13 @@ public class Consumer {
                         break;
                     case STORAGE:
                         List<AbstractConsumable> list;
-                        GameInfoSystem.GameInfoSystemPreset preset;
+                        GameInfoSystem.Preset preset;
                         if (consumable.isGolden()) {
                             list = gs.getStorageEmitter().getActiveList();
-                            preset = GameInfoSystem.GameInfoSystemPreset.STORAGE_FLUSH;
+                            preset = GameInfoSystem.Preset.STORAGE_FLUSH;
                         } else {
                             list = gs.getCrateEmitter().getActiveList();
-                            preset = GameInfoSystem.GameInfoSystemPreset.CRATE_FLUSH;
+                            preset = GameInfoSystem.Preset.CRATE_FLUSH;
                         }
 
                         for (int i = 0; i < list.size(); i++) {
@@ -349,7 +349,7 @@ public class Consumer {
                             gs.getGameInfoSystem().setup(
                                     consumable.getPosition().x,
                                     consumable.getPosition().y,
-                                    "-[RED]" + GameInfoSystem.GameInfoSystemPreset.UP + "[]",
+                                    "-[RED]" + GameInfoSystem.Preset.UP + "[]",
                                     3.0f,
                                     true
                             );
@@ -359,7 +359,7 @@ public class Consumer {
                                 gs.getGameInfoSystem().setup(
                                         consumable.getPosition().x,
                                         consumable.getPosition().y,
-                                        "-[RED]" + GameInfoSystem.GameInfoSystemPreset.HP + "[]",
+                                        "-[RED]" + GameInfoSystem.Preset.HP + "[]",
                                         3.0f,
                                         true
                                 );
@@ -368,7 +368,7 @@ public class Consumer {
                                 gs.getGameInfoSystem().setup(
                                         consumable.getPosition().x,
                                         consumable.getPosition().y,
-                                        "-[RED]" + GameInfoSystem.GameInfoSystemPreset.FUEL + "[]",
+                                        "-[RED]" + GameInfoSystem.Preset.FUEL + "[]",
                                         3.0f,
                                         true
                                 );
@@ -388,7 +388,7 @@ public class Consumer {
                         gs.getGameInfoSystem().setup(
                                 consumable.getPosition().x,
                                 consumable.getPosition().y,
-                                GameInfoSystem.GameInfoSystemPreset.ANOMALY_ARISE.getValue(),
+                                GameInfoSystem.Preset.ANOMALY_ARISE.getValue(),
                                 3.0f,
                                 true
                         );
@@ -418,7 +418,7 @@ public class Consumer {
                 gs.getGameInfoSystem().setup(
                         consumable.getPosition().x,
                         consumable.getPosition().y,
-                        GameInfoSystem.GameInfoSystemPreset.ANOMALY_FLUSH.getValue(),
+                        GameInfoSystem.Preset.ANOMALY_FLUSH.getValue(),
                         3.0f,
                         true
                 );
@@ -429,7 +429,7 @@ public class Consumer {
                 gs.getGameInfoSystem().setup(
                         consumable.getPosition().x,
                         consumable.getPosition().y,
-                        GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
+                        GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
                         3.0f,
                         true
                 );
@@ -443,7 +443,7 @@ public class Consumer {
                             gs.getGameInfoSystem().setup(
                                     consumable.getPosition().x,
                                     consumable.getPosition().y,
-                                    GameInfoSystem.GameInfoSystemPreset.BONUS_CRATE.getValue(),
+                                    GameInfoSystem.Preset.BONUS_CRATE.getValue(),
                                     3.0f,
                                     true
                             );
@@ -456,7 +456,7 @@ public class Consumer {
                             gs.getGameInfoSystem().setup(
                                     consumable.getPosition().x,
                                     consumable.getPosition().y,
-                                    GameInfoSystem.GameInfoSystemPreset.BONUS_STORAGE.getValue(),
+                                    GameInfoSystem.Preset.BONUS_STORAGE.getValue(),
                                     3.0f,
                                     true
                             );
@@ -496,7 +496,7 @@ public class Consumer {
                                     gs.getGameInfoSystem().setup(
                                             anomaly.getPosition().x,
                                             anomaly.getPosition().y,
-                                            GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
+                                            GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
                                             3.0f,
                                             true
                                     );
@@ -512,7 +512,7 @@ public class Consumer {
                                     gs.getGameInfoSystem().setup(
                                             anomaly.getPosition().x,
                                             anomaly.getPosition().y,
-                                            GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
+                                            GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
                                             3.0f,
                                             true
                                     );
@@ -526,7 +526,7 @@ public class Consumer {
                                     gs.getGameInfoSystem().setup(
                                             anomaly.getPosition().x,
                                             anomaly.getPosition().y,
-                                            GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
+                                            GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
                                             3.0f,
                                             true
                                     );
@@ -537,7 +537,7 @@ public class Consumer {
                     gs.getGameInfoSystem().setup(
                             consumable.getPosition().x,
                             consumable.getPosition().y,
-                            GameInfoSystem.GameInfoSystemPreset.ANOMALY_FLUSH.getValue(),
+                            GameInfoSystem.Preset.ANOMALY_FLUSH.getValue(),
                             3.0f,
                             true
                     );

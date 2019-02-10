@@ -141,7 +141,7 @@ public class Standing {
             player.getGs().getGameInfoSystem().setup(
                     player.getPosition().x,
                     player.getPosition().y,
-                    "+[GREEN]" + GameInfoSystem.GameInfoSystemPreset.UP + "[]",
+                    "+[GREEN]" + GameInfoSystem.Preset.UP + "[]",
                     4.0f,
                     true
             );

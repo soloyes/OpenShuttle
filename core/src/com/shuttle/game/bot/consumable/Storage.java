@@ -170,7 +170,7 @@ public class Storage extends AbstractConsumable {
                     case 1:
                         return Label.Sticker.LASER;
                     default:
-                        return Label.Sticker.BOMBS;
+                        return Label.Sticker.ROCKETS;
                 }
             default:
                 r = MathUtils.random(0, 6);
@@ -228,7 +228,7 @@ public class Storage extends AbstractConsumable {
         gs.getGameInfoSystem().setup(
                 position.x,
                 position.y,
-                GameInfoSystem.GameInfoSystemPreset.BOOM,
+                GameInfoSystem.Preset.BOOM,
                 3.0f,
                 false
         );

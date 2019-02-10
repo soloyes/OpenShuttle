@@ -75,7 +75,7 @@ public class Fuel extends AbstractConsumable {
         gs.getGameInfoSystem().setup(
                 position.x,
                 position.y,
-                GameInfoSystem.GameInfoSystemPreset.BOOM,
+                GameInfoSystem.Preset.BOOM,
                 3.0f,
                 false
         );

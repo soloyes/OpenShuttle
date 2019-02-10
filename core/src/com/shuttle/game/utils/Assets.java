@@ -55,7 +55,7 @@ public class Assets {
                 assetManager.load(MSConstants.HUM_MUSIC_EFFECT_3, Music.class);
                 assetManager.load(MSConstants.HUM_MUSIC_EFFECT_4, Music.class);
                 assetManager.load(MSConstants.HUM_MUSIC_EFFECT_5, Music.class);
-                assetManager.load(MSConstants.CHARGING_BOMBS, Music.class);
+                assetManager.load(MSConstants.CHARGING_ROCKETS, Music.class);
                 assetManager.load(MSConstants.LASER, Music.class);
                 assetManager.load(MSConstants.UI_MENU, Sound.class);
                 assetManager.load(MSConstants.UI_PAUSE, Sound.class);
@@ -89,7 +89,7 @@ public class Assets {
                 assetManager.load(MSConstants.SPLASH_ANOMALY, Sound.class);
                 assetManager.load(MSConstants.GET_SPLASH, Sound.class);
                 assetManager.load(MSConstants.START_ENGINE, Sound.class);
-                assetManager.load(MSConstants.LAUNCH_BOMBS, Sound.class);
+                assetManager.load(MSConstants.LAUNCH_ROCKETS, Sound.class);
                 assetManager.load(MSConstants.DESTROY_ASTEROID_RAY, Sound.class);
                 assetManager.load(MSConstants.DESTROY_FUEL, Sound.class);
                 assetManager.load(MSConstants.BURST_CORROSIVE_ANOMALY, Sound.class);
@@ -97,7 +97,7 @@ public class Assets {
                 assetManager.load(MSConstants.GET_SCANNER, Sound.class);
                 assetManager.load(MSConstants.GET_SHIELD, Sound.class);
                 assetManager.load(MSConstants.GET_LASER, Sound.class);
-                assetManager.load(MSConstants.GET_BOMBS, Sound.class);
+                assetManager.load(MSConstants.GET_ROCKETS, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 createStandartFont(32, "");
                 createStandartFont(32, "Coloured");

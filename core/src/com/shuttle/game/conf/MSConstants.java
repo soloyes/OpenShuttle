@@ -23,7 +23,7 @@ public final class MSConstants {
     public final static String UI_PAUSE = UI + "ui_pause_button.ogg";
 
     public final static String GET_RADAR = GAME + "get_radar.ogg";
-    public final static String GET_BOMBS = GAME + "get_bombs.ogg";
+    public final static String GET_ROCKETS = GAME + "get_rockets.ogg";
     public final static String GET_LASER = GAME + "get_laser.ogg";
     public final static String GET_SCANNER = GAME + "get_scanner.ogg";
     public final static String GET_SHIELD = GAME + "get_shield.ogg";
@@ -60,7 +60,7 @@ public final class MSConstants {
     public final static String OUT_OF_SCREEN = GAME + "out_of_screen.ogg";
     public final static String START_ENGINE = GAME + "start_engine.ogg";
     public final static String SPLASH_ANOMALY = GAME + "splash_anomaly.ogg";
-    public final static String LAUNCH_BOMBS = GAME + "launch_bombs.ogg";
+    public final static String LAUNCH_ROCKETS = GAME + "launch_rockets.ogg";
     public final static String BURST_CORROSIVE_ANOMALY = GAME + "burst_corrosive_anomaly.ogg";
     //
 
@@ -78,6 +78,6 @@ public final class MSConstants {
     public final static String HUM_MUSIC_EFFECT_3 = MUSIC_EFFECT_FOLDER + "hum_3.ogg";
     public final static String HUM_MUSIC_EFFECT_4 = MUSIC_EFFECT_FOLDER + "hum_4.ogg";
     public final static String HUM_MUSIC_EFFECT_5 = MUSIC_EFFECT_FOLDER + "hum_5.ogg";
-    public final static String CHARGING_BOMBS = MUSIC_EFFECT_FOLDER + "charging_bombs.ogg";
+    public final static String CHARGING_ROCKETS = MUSIC_EFFECT_FOLDER + "charging_rockets.ogg";
     //
 }

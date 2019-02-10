@@ -4,8 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
@@ -29,6 +31,8 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
     @Getter
     @Setter
     protected float v;
+    @Getter
+    protected TextureRegion atRocketRegion;
 
     @Override
     public Vector2 getPosition() {
@@ -48,5 +52,9 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
         this.color = new Color();
         this.spreeColor = new Color();
         this.boundCheck = new BoundCheck();
+        this.atRocketRegion = new TextureRegion(
+                Assets.getInstance()
+                        .getAtlas()
+                        .findRegion(PaintConstants.AT_ROCKET_POINT_REGION));
     }
 }

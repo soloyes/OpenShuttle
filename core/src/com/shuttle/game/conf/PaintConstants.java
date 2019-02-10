@@ -129,7 +129,7 @@ public final class PaintConstants {
     public static final String FUEL_LABEL_REGION = "fuel";
     public static final String LASER_LABEL_REGION = "laser";
     public static final String RADAR_LABEL_REGION = "radar";
-    public static final String BOMBS_LABEL_REGION = "bombs";
+    public static final String ROCKETS_LABEL_REGION = "rockets";
     public static final String SCAN_LABEL_REGION = "scan";
     public static final String SPLASH_LABEL_REGION = "splash";
     public static final String TRASH_LABEL_REGION = "trash";
@@ -137,6 +137,12 @@ public final class PaintConstants {
     public static final float LABEL_ALPHA = 0.7f;
     public static final float LABEL_SINGLE_SCALE_FACTOR = 2.5f;
     public static final float LABEL_DOUBLE_SCALE_FACTOR = 4.0f;
+    public static final String AT_ROCKET_POINT_REGION = "atrocketpoint";
+    public static final float AT_ROCKET_POINT_ALPHA = 0.5f;
+    public static final String ROCKET_REGION = "rocket";
+    public static final int ROCKET_WIDTH = 32;
+    public static final int ROCKET_HEIGHT = 32;
+    public static final int ROCKET_FRAMES = 3;
 
     public static final String POINTER_ARROW = "outarrow";
     public static final String POINTER_MARK = "outmark";

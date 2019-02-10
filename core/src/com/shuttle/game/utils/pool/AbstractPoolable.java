@@ -89,6 +89,9 @@ public abstract class AbstractPoolable implements Poolable {
     @Getter
     @Setter
     protected boolean atRayPoint;
+    @Getter
+    @Setter
+    protected boolean atRocketPoint;
 
     @Override
     public void destroy() {

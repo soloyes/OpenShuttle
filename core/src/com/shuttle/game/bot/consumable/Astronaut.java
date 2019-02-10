@@ -71,7 +71,7 @@ public class Astronaut extends AbstractConsumable {
         gs.getGameInfoSystem().setup(
                 position.x,
                 position.y,
-                GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
+                GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
                 3.0f,
                 true
         );
@@ -85,7 +85,7 @@ public class Astronaut extends AbstractConsumable {
         gs.getGameInfoSystem().setup(
                 position.x,
                 position.y,
-                GameInfoSystem.GameInfoSystemPreset.MURDERER,
+                GameInfoSystem.Preset.MURDERER,
                 8.0f,
                 true
         );

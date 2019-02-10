@@ -28,14 +28,13 @@ import com.shuttle.game.bot.asteroids.AbstractAsteroid;
 import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
 import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
 import com.shuttle.game.bot.blackhole.Blackhole;
-import com.shuttle.game.bot.bomb.Bomb;
-import com.shuttle.game.bot.bomb.BombLauncher;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.consumable.AstronautEmitter;
 import com.shuttle.game.bot.consumable.CrateEmitter;
 import com.shuttle.game.bot.consumable.FuelEmitter;
 import com.shuttle.game.bot.consumable.StorageEmitter;
 import com.shuttle.game.bot.consumable.fuel.Fuel;
+import com.shuttle.game.bot.rocket.RocketLauncher;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
@@ -136,11 +135,13 @@ public class GameScreen extends BaseScreen {
     private float fadeInAlpha;
     private boolean gameOverDeactivate;
     private List<List<? extends AbstractConsumable>> consumableList;
+    @Getter
+    private List<List<? extends AbstractAnomaly>> anomalyList;
     private List<List<? extends AbstractAsteroid>> asteroidsList;
     @Getter
     private UILatestPanel uiLatestPanel;
     @Getter
-    private BombLauncher bombLauncher;
+    private RocketLauncher rocketLauncher;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -182,7 +183,7 @@ public class GameScreen extends BaseScreen {
         gameInfoSystem = new GameInfoSystem();
         joystick = new Joystick();
         uiLatestPanel = new UILatestPanel();
-        bombLauncher = new BombLauncher(this);
+        rocketLauncher = new RocketLauncher(this);
 
         blackhole = new Blackhole();
         player = new Shuttle(this, joystick);
@@ -203,7 +204,9 @@ public class GameScreen extends BaseScreen {
         //
         ActiveListJoiner<AbstractConsumable> consumableJoiner = new ActiveListJoiner<AbstractConsumable>();
         ActiveListJoiner<AbstractAsteroid> asteroidsJoiner = new ActiveListJoiner<AbstractAsteroid>();
+        ActiveListJoiner<AbstractAnomaly> anomalyJoiner = new ActiveListJoiner<AbstractAnomaly>();
         consumableList = consumableJoiner.join(astronautEmitter.getActiveList(), crateEmitter.getActiveList(), fuelEmitter.getActiveList(), storageEmitter.getActiveList());
+        anomalyList = anomalyJoiner.join(corrosiveAnomalyEmitter.getActiveList(), electricalAnomalyEmitter.getActiveList(), magneticAnomalyEmitter.getActiveList(), radiationAnomalyEmitter.getActiveList());
         asteroidsList = asteroidsJoiner.join(metalAsteroidEmitter.getActiveList(), mineralAsteroidEmitter.getActiveList());
         //
         storageEmitter.emit();
@@ -260,7 +263,7 @@ public class GameScreen extends BaseScreen {
         magneticAnomalyEmitter.render(batch);
         player.getRamShield().render(batch);
         particleEmitter.render(batch);
-        bombLauncher.render(batch);
+        rocketLauncher.render(batch);
         batch.end();
 
         float shaderHoleX = (blackhole.getPosition().x - camera.position.x + Rules.WORLD_WIDTH / 2) / Rules.WORLD_WIDTH;
@@ -357,7 +360,7 @@ public class GameScreen extends BaseScreen {
             particleEmitter.update(dt);
             blackhole.update(dt);
             uiLatestPanel.update(dt);
-            bombLauncher.update(dt);
+            rocketLauncher.update(dt);
             if (!Rules.GAME_OVER) {
                 anomalyTimer.update(dt);
             }
@@ -483,7 +486,7 @@ public class GameScreen extends BaseScreen {
                         Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
                     }
                 }
-                collideWithBomb(anomaly);
+                collideWithRocket(anomaly);
             }
         }
 
@@ -497,7 +500,7 @@ public class GameScreen extends BaseScreen {
                     prettyElectricKick.playSound(MSConstants.KICKED_BY_ELECTRIC);
                     anomaly.setV(anomaly.getV() * Rules.ANOMALY_ELECTRIC_DECREASE_FACTOR);
                 }
-                collideWithBomb(anomaly);
+                collideWithRocket(anomaly);
             }
         }
 
@@ -524,14 +527,14 @@ public class GameScreen extends BaseScreen {
                         gameInfoSystem.setup(
                                 player.getPosition().x,
                                 player.getPosition().y,
-                                "-[RED]" + GameInfoSystem.GameInfoSystemPreset.LOST_SCORE.getValue() + "[]",
+                                "-[RED]" + GameInfoSystem.Preset.LOST_SCORE.getValue() + "[]",
                                 2.0f,
                                 true
                         );
                     }
                 }
                 tmp1 |= anomaly.isGlued();
-                collideWithBomb(anomaly);
+                collideWithRocket(anomaly);
             }
         }
         player.getStanding().setScoreAlertRadiationAnomaly(tmp1);
@@ -558,14 +561,14 @@ public class GameScreen extends BaseScreen {
                         gameInfoSystem.setup(
                                 player.getPosition().x,
                                 player.getPosition().y,
-                                "-[RED]" + GameInfoSystem.GameInfoSystemPreset.FUEL + "[]",
+                                "-[RED]" + GameInfoSystem.Preset.FUEL + "[]",
                                 4.0f,
                                 true
                         );
                     }
                 }
                 tmp2 |= anomaly.isGlued();
-                collideWithBomb(anomaly);
+                collideWithRocket(anomaly);
             }
         }
         player.getStanding().setFuelAlertMagneticAnomaly(tmp2);
@@ -591,7 +594,7 @@ public class GameScreen extends BaseScreen {
                             player.takeDamage(player.getShieldLevel().getLevel() + 1);
                             gameInfoSystem.setup(
                                     player.getPosition().x, player.getPosition().y,
-                                    GameInfoSystem.GameInfoSystemPreset.SCREECH,
+                                    GameInfoSystem.Preset.SCREECH,
                                     3.0f,
                                     true
                             );
@@ -621,7 +624,7 @@ public class GameScreen extends BaseScreen {
                                     mineralAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
                                     break;
                             }
-                            gameInfoSystem.setup(anomaly.getPosition().x, anomaly.getPosition().y, GameInfoSystem.GameInfoSystemPreset.BOOM, 3.0f, false);
+                            gameInfoSystem.setup(anomaly.getPosition().x, anomaly.getPosition().y, GameInfoSystem.Preset.BOOM, 3.0f, false);
                             if (anomaly.getLevel() == 0) {
                                 anomaly.destroyWithEffect();
                             } else {
@@ -650,7 +653,7 @@ public class GameScreen extends BaseScreen {
                                 gameInfoSystem.setup(
                                         consumable.getPosition().x,
                                         consumable.getPosition().y,
-                                        GameInfoSystem.GameInfoSystemPreset.SAD,
+                                        GameInfoSystem.Preset.SAD,
                                         3.0f,
                                         true
                                 );
@@ -678,22 +681,15 @@ public class GameScreen extends BaseScreen {
                 }
             }
         }
+        rocketLauncher.getRocketEmitter().checkCollision();
     }
 
-    private void collideWithBomb(AbstractAnomaly anomaly) {
-        for (int j = 0; j < bombLauncher.getBombEmitter().getActiveList().size(); j++) {
-            Bomb bomb = bombLauncher.getBombEmitter().getActiveList().get(j);
-            if (bomb.getPosition().dst(anomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && anomaly.isBorn()) {
-                anomaly.destroyWithEffect();
-                bomb.destroy();
-                gameInfoSystem.setup(
-                        anomaly.getPosition().x,
-                        anomaly.getPosition().y,
-                        GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
-                        3.0f,
-                        true
-                );
-            }
+    private void collideWithRocket(AbstractAnomaly anomaly) {
+        float dst = player.getPosition().dst(anomaly.getPosition());
+        if (dst <= Rules.ROCKETS_TAKE_RANGE && anomaly.isBorn()) {
+            anomaly.setAtRocketPoint(true);
+        } else {
+            anomaly.setAtRocketPoint(false);
         }
     }
 
@@ -745,7 +741,7 @@ public class GameScreen extends BaseScreen {
             gameInfoSystem.setup(
                     player.getPosition().x,
                     player.getPosition().y,
-                    GameInfoSystem.GameInfoSystemPreset.BRAKED,
+                    GameInfoSystem.Preset.BRAKED,
                     5.0f,
                     false
             );
@@ -762,6 +758,5 @@ public class GameScreen extends BaseScreen {
         super.dispose();
         shaderManager.dispose();
         player.getStanding().writeResult();
-        bombLauncher.dispose();
     }
 }

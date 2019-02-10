@@ -23,7 +23,7 @@ public class GameInfoSystem {
         }
     }
 
-    public void setup(float x, float y, GameInfoSystemPreset preset, float scale, boolean colored) {
+    public void setup(float x, float y, Preset preset, float scale, boolean colored) {
         setupElement(x, y, preset.getValue(), scale, colored);
     }
 
@@ -51,7 +51,7 @@ public class GameInfoSystem {
         }
     }
 
-    public enum GameInfoSystemPreset {
+    public enum Preset {
         BRAKED("BRAKED"),
         SCREECH("[RED]SCREECH[]"),
         BOOM("BOOOOM"),
@@ -65,7 +65,7 @@ public class GameInfoSystem {
         LOST_SCORE("SCORE"),
         MURDERER("MURDERER" + "\n[RED]-" + Rules.CONSUMABLE_MURDER_SCORE_DECREASE + "[]"),
         EASY("BE EASY"),
-        BOMBS("[GREEN]BOMBS[]"),
+        ROCKETS("[GREEN]ROCKETS[]"),
         RADAR("RADAR"),
         SHIELD("SHIELD [GREEN]+" + (int) Rules.CONSUMABLE_SHIELD_TIME + "[]"),
         SCAN("SCAN [GREEN]+" + (int) Rules.CONSUMABLE_SCAN_TIME + "[]"),
@@ -81,7 +81,7 @@ public class GameInfoSystem {
         ANOMALY_ARISE("[RED]ANOMALY[]");
         private String value;
 
-        GameInfoSystemPreset(String value) {
+        Preset(String value) {
             this.value = value;
         }
 

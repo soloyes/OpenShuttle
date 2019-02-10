@@ -157,7 +157,7 @@ public class Crate extends AbstractConsumable {
         gs.getGameInfoSystem().setup(
                 position.x,
                 position.y,
-                GameInfoSystem.GameInfoSystemPreset.EASY,
+                GameInfoSystem.Preset.EASY,
                 3.0f,
                 false
         );

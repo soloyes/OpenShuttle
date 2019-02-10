@@ -236,9 +236,11 @@ public final class Rules {
     //60
     public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
     //3
-    public static int LAUNCH_BOMBS_TIME = 3;
-    //7
-    public static int LAUNCH_BOMBS = 7;
+    public static int LAUNCH_ROCKETS_TIME = 3;
+    //1500
+    public static int ROCKETS_TAKE_RANGE = 1500;
+    //100
+    public static int ROCKETS_VELOCITY = 100;
     //20 means 1/20
     public static final int CONSUMABLE_GOLDEN_PROBABILITY = 20;
 

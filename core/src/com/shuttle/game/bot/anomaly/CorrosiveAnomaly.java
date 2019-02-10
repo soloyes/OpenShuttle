@@ -147,7 +147,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                     gs.getGameInfoSystem().setup(
                             position.x,
                             position.y,
-                            GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
+                            GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
                             3.0f,
                             true
                     );
@@ -180,7 +180,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 gs.getGameInfoSystem().setup(
                         position.x,
                         position.y,
-                        GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
+                        GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
                         3.0f,
                         true
                 );
@@ -219,6 +219,18 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 scaleX, scaleY,
                 clockwise * angle
         );
+
+        if (atRocketPoint) {
+            Color color = batch.getColor();
+            batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.AT_ROCKET_POINT_ALPHA);
+            batch.draw(atRocketRegion,
+                    position.x - width / 2, position.y - height / 2,
+                    width / 2, height / 2,
+                    width, height,
+                    scaleX, scaleY,
+                    clockwise * angle);
+            batch.setColor(color);
+        }
     }
 
     public void basicUpdate(float dt) {
@@ -228,28 +240,22 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         }
 
         angle += 48 * dt;
-        if (angle >= 365) {
-            angle = 0;
-        }
 
         switch (level) {
             case 0:
                 color.set(Color.TAN.r, Color.TAN.g, Color.TAN.b, color.a);
-                spreeColor.set(color);
                 break;
             case 1:
                 color.set(Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, color.a);
-                spreeColor.set(color);
                 break;
             case 2:
                 color.set(Color.YELLOW.r, Color.YELLOW.g, Color.YELLOW.b, color.a);
-                spreeColor.set(color);
                 break;
             case 3:
                 color.set(Color.RED.r, Color.RED.g, Color.RED.b, color.a);
-                spreeColor.set(color);
                 break;
         }
+        spreeColor.set(color);
     }
 
     @Override

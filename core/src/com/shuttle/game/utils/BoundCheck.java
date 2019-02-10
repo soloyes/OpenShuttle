@@ -83,7 +83,7 @@ public class BoundCheck {
             player.getGs().getGameInfoSystem().setup(
                     player.getGs().getCamera().position.x,
                     player.getGs().getCamera().position.y,
-                    GameInfoSystem.GameInfoSystemPreset.OUT,
+                    GameInfoSystem.Preset.OUT,
                     3,
                     true
             );

@@ -152,7 +152,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
                 gs.getGameInfoSystem().setup(
                         position.x,
                         position.y,
-                        GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
+                        GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
                         3.0f,
                         true
                 );

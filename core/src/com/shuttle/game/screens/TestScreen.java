@@ -1,13 +1,13 @@
 package com.shuttle.game.screens;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.shuttle.game.bot.bomb.BombEmitter;
+import com.shuttle.game.bot.rocket.RocketEmitter;
 
 /**
  * @author Shuttle on 6/28/18.
  */
 public class TestScreen extends BaseScreen {
-    private BombEmitter bombEmitter;
+    private RocketEmitter rocketEmitter;
 
     public TestScreen(SpriteBatch batch) {
         super(batch);
@@ -16,7 +16,7 @@ public class TestScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        this.bombEmitter = new BombEmitter(null);
+        this.rocketEmitter = new RocketEmitter(null);
     }
 
     @Override
@@ -28,17 +28,11 @@ public class TestScreen extends BaseScreen {
         super.render(dt);
         update(dt);
         batch.begin();
-        bombEmitter.render(batch);
+        rocketEmitter.render(batch);
         batch.end();
     }
 
     private void update(float dt) {
-        bombEmitter.update(dt);
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-        bombEmitter.dispose();
+        rocketEmitter.update(dt);
     }
 }

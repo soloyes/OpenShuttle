@@ -150,7 +150,7 @@ public class Shuttle extends AbstractShuttle {
             gs.getGameInfoSystem().setup(
                     position.x,
                     position.y,
-                    GameInfoSystem.GameInfoSystemPreset.SCORE + "[GREEN] +" + score + "[]",
+                    GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
                     3.0f,
                     true
             );
