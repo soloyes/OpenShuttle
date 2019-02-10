@@ -37,10 +37,10 @@ public class Rocket extends AbstractPoolable {
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.destination = new Vector2();
-        this.width = 128;
-        this.height = 128;
+        this.width = PaintConstants.ROCKET_WIDTH;
+        this.height = PaintConstants.ROCKET_HEIGHT;
         this.textureRegions = Regions.split(
-                Assets.getInstance().getAtlas().findRegion("rocket"),
+                Assets.getInstance().getAtlas().findRegion(PaintConstants.ROCKET_REGION),
                 1, 3, PaintConstants.ROCKET_FRAMES
         );
         this.tmp1V2 = new Vector2();
