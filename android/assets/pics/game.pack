@@ -227,86 +227,93 @@ glow
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelboxgold
+fuelv2
   rotate: false
   xy: 1286, 1544
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelbox
+fuelv1
   rotate: false
   xy: 1286, 1802
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelback
+fuelboxgold
   rotate: false
   xy: 1286, 2060
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuel
+fuelbox
   rotate: false
   xy: 1286, 2318
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-crategold
+fuelback
   rotate: false
   xy: 1286, 2576
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-crate
+crategold
   rotate: false
   xy: 1286, 2834
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-boxshield
+crate
   rotate: false
   xy: 1286, 3092
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-boxscan
+boxshield
   rotate: false
   xy: 1286, 3350
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-boost
+boxscan
   rotate: false
   xy: 1286, 3608
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-bombs
+boost
   rotate: false
   xy: 1544, 1544
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackholespiral
+bombs
   rotate: false
   xy: 1802, 1544
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackhole
+blackholespiral
   rotate: false
   xy: 2060, 1544
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+blackhole
+  rotate: false
+  xy: 2318, 1544
   size: 256, 256
   orig: 256, 256
   offset: 0, 0

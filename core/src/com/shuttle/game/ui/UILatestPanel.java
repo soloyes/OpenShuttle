@@ -78,7 +78,7 @@ public class UILatestPanel {
             Label.Sticker st = Label.Sticker.values()[i];
             switch (st) {
                 case FUEL:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION_FOR_UI);
+                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION_UI);
                     break;
                 case BOOST:
                     textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOOST_LABEL_REGION);
