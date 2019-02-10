@@ -157,105 +157,105 @@ scan
   orig: 256, 256
   offset: 0, 0
   index: -1
-rockets
+repair
   rotate: false
   xy: 1286, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-repair
+ramshield
   rotate: false
   xy: 1544, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-ramshield
+radar
   rotate: false
   xy: 1802, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-radar
+patterngold
   rotate: false
   xy: 2060, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-patterngold
+pattern
   rotate: false
   xy: 2318, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-pattern
+outmark
   rotate: false
   xy: 2576, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outmark
+outarrow
   rotate: false
   xy: 2834, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outarrow
+lifeshield
   rotate: false
   xy: 3092, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-lifeshield
+laser
   rotate: false
   xy: 3350, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-laser
+glow
   rotate: false
   xy: 3608, 1286
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-glow
+fuelv2
   rotate: false
   xy: 1286, 1544
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelboxgold
+fuelv1
   rotate: false
   xy: 1286, 1802
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelbox
+fuelboxgold
   rotate: false
   xy: 1286, 2060
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelback
+fuelbox
   rotate: false
   xy: 1286, 2318
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuel
+fuelback
   rotate: false
   xy: 1286, 2576
   size: 256, 256
@@ -297,16 +297,23 @@ boost
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackholespiral
+bombs
   rotate: false
   xy: 1802, 1544
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-blackhole
+blackholespiral
   rotate: false
   xy: 2060, 1544
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+blackhole
+  rotate: false
+  xy: 2318, 1544
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -318,44 +325,30 @@ joystick
   orig: 400, 250
   offset: 0, 0
   index: -1
-rocket
-  rotate: false
-  xy: 3980, 2
-  size: 96, 32
-  orig: 96, 32
-  offset: 0, 0
-  index: -1
-atrocketpoint
-  rotate: false
-  xy: 3980, 36
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
 star16
   rotate: false
-  xy: 4078, 2
+  xy: 3980, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 consumabledot
   rotate: false
-  xy: 4014, 36
+  xy: 3998, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 bubble16
   rotate: false
-  xy: 4032, 36
+  xy: 4016, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 anomalydot
   rotate: false
-  xy: 4050, 36
+  xy: 4034, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

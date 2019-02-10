@@ -79,7 +79,7 @@ public class UILatestPanel {
             Label.Sticker st = Label.Sticker.values()[i];
             switch (st) {
                 case FUEL:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION);
+                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION_UI);
                     break;
                 case BOOST:
                     textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOOST_LABEL_REGION);
@@ -135,7 +135,7 @@ public class UILatestPanel {
         for (int i = 0; i < showLabel.size(); i++) {
             LabelTime lt = showLabel.get(i);
             color.a = lt.alpha;
-            if (!lt.actTexture.equals(fuelText)) {
+
                 color.r = 0.25f;
                 color.b = 0.85f;
                 color.g = 0.23f;
@@ -147,7 +147,6 @@ public class UILatestPanel {
                         lt.scaleX, lt.scaleY,
                         0.0f
                 );
-            }
 
             color.r = 0.33f;
             color.b = 0.89f;
