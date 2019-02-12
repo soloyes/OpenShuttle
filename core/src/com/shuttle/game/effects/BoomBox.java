@@ -34,7 +34,6 @@ public class BoomBox {
         if (t >= 1.0f) {
             if (MathUtils.random(0, 100) <= Rules.MUSIC_EFFECT_PROBABILITY) {
                 String musicEffect = musicEffects.get(MathUtils.random(0, musicEffects.size() - 1));
-                setMusicEffectVolume(musicEffect, GamePreferences.getSoundVolume());
                 playMusicEffectOnce(musicEffect);
             }
             t = 0.0f;
@@ -52,6 +51,7 @@ public class BoomBox {
     }
 
     public void playMusicEffectOnce(String musicEffect) {
+        setMusicEffectVolume(musicEffect, GamePreferences.getSoundVolume());
         if (GamePreferences.isSoundEnabled()) {
             if (!Assets.getInstance()
                     .getAssetManager()
