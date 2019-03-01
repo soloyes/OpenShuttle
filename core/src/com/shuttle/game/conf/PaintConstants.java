@@ -170,9 +170,23 @@ public final class PaintConstants {
     public static final float PANEL_ELEMENT_LIFETIME = 5.2f;
     public static final float PANEL_ELEMENT_FLASH_TIME = 0.2f;
     public static final float PANEL_ELEMENT_FADING_TIME = 0.4f;
-    public static final int PANEL_ELEMENTS_MAX = 5;
-    public static final int PANEL_ELEMENT_WIDTH = 192;
-    public static final int PANEL_ELEMENT_HEIGHT = 192;
+    public static final int PANEL_ELEMENTS_MAX = 4;
+    public static final int PANEL_ELEMENT_WIDTH = 128;
+    public static final int PANEL_ELEMENT_HEIGHT = 128;
+
+    public static final String LEFT_RIGHT_PANEL_FULL_CIRCLE = "fullcirclev1";
+    public static final String LEFT_RIGHT_PANEL_EMPTY_CIRCLE = "emptycirclev1";
+    public static final int LEFT_RIGHT_PANEL_CIRCLE_WIDTH = 148;
+    public static final int LEFT_RIGHT_PANEL_CIRCLE_HEIGHT = 128;
+    public static final String ASTRONAUT_BONUS_ICON = "astronautbonusicon";
+    public static final String MECHANIC_BONUS_ICON = "mechanicbonusicon";
+    public static final String MILITARY_BONUS_ICON = "militarybonusicon";
+    public static final String MEDIC_BONUS_ICON = "medicbonusicon";
+    public static final String SCIENTIST_BONUS_ICON = "scientistbonusicon";
+    public static final int BONUS_ICON_WIDTH = 148;
+    public static final int BONUS_ICON_HEIGHT = 128;
+    public static final String MENU_BUTTON = "menubutton";
+    public static final String MENU_BUTTON_CLICK = "menubuttonclick";
 
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
     public static final String FONT32 = "fonts/gomarice32.ttf";

@@ -1,4 +1,4 @@
-package com.shuttle.game.ui.group;
+package com.shuttle.game.ui.groups;
 
 /**
  * @author Shuttle on 6/23/18.

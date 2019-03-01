@@ -1,12 +1,14 @@
-package com.shuttle.game.ui.group;
+package com.shuttle.game.ui.groups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
@@ -26,7 +28,7 @@ public class PauseGroup extends Group {
     private final Button buttonMenu;
     private final Button buttonRestart;
     private final Button pauseBtn;
-    private final ConfigGroup configGroup;
+    private final com.shuttle.game.ui.groups.ConfigGroup configGroup;
     private BoomBox boomBox;
     @Getter
     @Setter
@@ -36,7 +38,10 @@ public class PauseGroup extends Group {
         this.boomBox = new BoomBox();
         this.pause = false;
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        this.pauseBtn = new Button(skin, "default");
+        //this.pauseBtn = new Button(skin, "default");
+        TextureRegionDrawable image = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.MENU_BUTTON));
+        TextureRegionDrawable image1 = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.MENU_BUTTON_CLICK));
+        this.pauseBtn = new ImageButton(image, image1);
         pauseBtn.setOrigin(Align.center);
         pauseBtn.setSize(128f, 128f);
         pauseBtn.setPosition(
@@ -44,7 +49,7 @@ public class PauseGroup extends Group {
                 Rules.WORLD_HEIGHT - pauseBtn.getHeight() - 20
         );
 
-        this.configGroup = new ConfigGroup(ScreenManager.ScreenType.GAME);
+        this.configGroup = new com.shuttle.game.ui.groups.ConfigGroup(ScreenManager.ScreenType.GAME);
         configGroup.setVisible(false);
         this.buttonMenu = new Button(skin, "default");
         buttonMenu.setVisible(false);

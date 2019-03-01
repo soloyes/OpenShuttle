@@ -1,4 +1,4 @@
-package com.shuttle.game.ui.group;
+package com.shuttle.game.ui.groups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -36,7 +36,7 @@ public class MenuGroup extends Group {
     private FileHandle file;
 
     public MenuGroup() {
-        this.setName(GroupType.MENU.name());
+        this.setName(com.shuttle.game.ui.groups.GroupType.MENU.name());
         this.setVisible(true);
         this.skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.font96 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);

@@ -144,7 +144,7 @@ public class Crate extends AbstractConsumable {
                     break;
                 case SHABBY:
                 case SHABBY_GOLD:
-                    Consumer.consume(gs, this, labels.get(Label.Layer.LABEL).get(0));
+                    Consumer.consume(gs, this, labels.get(Label.Layer.HIDDEN).get(0));
                     break;
             }
         } else {

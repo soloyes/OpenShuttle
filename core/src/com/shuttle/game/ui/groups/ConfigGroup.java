@@ -1,4 +1,4 @@
-package com.shuttle.game.ui.group;
+package com.shuttle.game.ui.groups;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;

@@ -50,8 +50,9 @@ import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.Joystick;
 import com.shuttle.game.ui.PlayerPointer;
-import com.shuttle.game.ui.UILatestPanel;
-import com.shuttle.game.ui.group.PauseGroup;
+import com.shuttle.game.ui.groups.PauseGroup;
+import com.shuttle.game.ui.panels.UIBonusPanel;
+import com.shuttle.game.ui.panels.UILatestPanel;
 import com.shuttle.game.utils.ActiveListJoiner;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.ShaderManager;
@@ -140,6 +141,7 @@ public class GameScreen extends BaseScreen {
     private List<List<? extends AbstractAsteroid>> asteroidsList;
     @Getter
     private UILatestPanel uiLatestPanel;
+    private UIBonusPanel uiBonusPanel;
     @Getter
     private RocketLauncher rocketLauncher;
 
@@ -183,6 +185,7 @@ public class GameScreen extends BaseScreen {
         gameInfoSystem = new GameInfoSystem();
         joystick = new Joystick();
         uiLatestPanel = new UILatestPanel();
+        uiBonusPanel = new UIBonusPanel();
         rocketLauncher = new RocketLauncher(this);
 
         blackhole = new Blackhole();
@@ -310,6 +313,7 @@ public class GameScreen extends BaseScreen {
             player.getStanding().render(batch);
             anomalyTimer.render(batch);
             uiLatestPanel.render(batch);
+            uiBonusPanel.render(batch);
         }
 
         if (!pauseGroup.isPause()) {
@@ -360,6 +364,7 @@ public class GameScreen extends BaseScreen {
             particleEmitter.update(dt);
             blackhole.update(dt);
             uiLatestPanel.update(dt);
+            uiBonusPanel.update(dt);
             rocketLauncher.update(dt);
             if (!Rules.GAME_OVER) {
                 anomalyTimer.update(dt);
