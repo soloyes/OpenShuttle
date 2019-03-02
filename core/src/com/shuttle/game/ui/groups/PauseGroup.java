@@ -39,14 +39,14 @@ public class PauseGroup extends Group {
         this.pause = false;
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         //this.pauseBtn = new Button(skin, "default");
-        TextureRegionDrawable image = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.MENU_BUTTON));
-        TextureRegionDrawable image1 = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.MENU_BUTTON_CLICK));
+        TextureRegionDrawable image = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_BUTTON));
+        TextureRegionDrawable image1 = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_BUTTON_CLICK));
         this.pauseBtn = new ImageButton(image, image1);
         pauseBtn.setOrigin(Align.center);
-        pauseBtn.setSize(128f, 128f);
+        pauseBtn.setSize(PaintConstants.PAUSE_BUTTON_WIDTH, PaintConstants.PAUSE_BUTTON_HEIGHT);
         pauseBtn.setPosition(
-                Rules.WORLD_WIDTH - pauseBtn.getWidth() - 20,
-                Rules.WORLD_HEIGHT - pauseBtn.getHeight() - 20
+                Rules.WORLD_WIDTH - pauseBtn.getWidth() - 44,
+                Rules.WORLD_HEIGHT - pauseBtn.getHeight() - 44
         );
 
         this.configGroup = new com.shuttle.game.ui.groups.ConfigGroup(ScreenManager.ScreenType.GAME);

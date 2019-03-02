@@ -185,8 +185,16 @@ public final class PaintConstants {
     public static final String SCIENTIST_BONUS_ICON = "scientistbonusicon";
     public static final int BONUS_ICON_WIDTH = 148;
     public static final int BONUS_ICON_HEIGHT = 128;
-    public static final String MENU_BUTTON = "menubutton";
-    public static final String MENU_BUTTON_CLICK = "menubuttonclick";
+    public static final String PAUSE_BUTTON = "pausebutton";
+    public static final String PAUSE_BUTTON_CLICK = "pausebuttonclick";
+    public static final int PAUSE_BUTTON_WIDTH = 184;
+    public static final int PAUSE_BUTTON_HEIGHT = 184;
+
+    public static final String TIMER_BACKGROUND = "timerbackground";
+    public static final String TIMER_BOX = "timerbox";
+    public static final String TIMER_ICON = "timericon";
+    public static final int TIMER_WIDTH = 110;
+    public static final int TIMER_HEIGHT = 162;
 
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
     public static final String FONT32 = "fonts/gomarice32.ttf";

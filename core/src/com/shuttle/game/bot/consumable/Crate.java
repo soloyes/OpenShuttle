@@ -18,7 +18,6 @@ import com.shuttle.game.utils.Consumer;
  * @author Shuttle on 10/11/18.
  */
 public class Crate extends AbstractConsumable {
-
     public Crate(GameScreen gs) {
         super(gs);
         this.width = PaintConstants.CRATE_1_WIDTH;
@@ -27,6 +26,37 @@ public class Crate extends AbstractConsumable {
         this.moveProcessor = new MoveProcessor(gs);
         this.shield = new Shield(this);
         this.scan = new Scan(this);
+    }
+
+    @Override
+    public void badEffect(GameScreen gs) {
+        gs.getGameInfoSystem().setup(
+                position.x,
+                position.y,
+                GameInfoSystem.Preset.EASY,
+                3.0f,
+                false
+        );
+        boomBox.playSound(MSConstants.DESTROY_CRATE);
+        Vibrator.vibrate(VConstants.PLAYER_CRATE_DESTROY);
+    }
+
+    @Override
+    public void consumed(GameScreen gs) {
+        if (danger) {
+            switch (labels.get(Label.Layer.LABEL).get(0).getSticker()) {
+                case PATTERN:
+                case PATTERN_GOLD:
+                    Consumer.consume(gs, this, labels.get(Label.Layer.HIDDEN).get(0));
+                    break;
+                case SHABBY:
+                case SHABBY_GOLD:
+                    Consumer.consume(gs, this, labels.get(Label.Layer.HIDDEN).get(0));
+                    break;
+            }
+        } else {
+            Consumer.consume(gs, this, labels.get(Label.Layer.LABEL).get(0));
+        }
     }
 
     @Override
@@ -82,6 +112,22 @@ public class Crate extends AbstractConsumable {
         }
     }
 
+    private Label.Sticker generateDanger() {
+        Label.Sticker sticker;
+        int r = MathUtils.random(0, 5);
+        switch (r) {
+            case 0:
+                sticker = golden ? Label.Sticker.SHABBY_GOLD : Label.Sticker.SHABBY;
+                break;
+            default:
+                sticker = golden ? Label.Sticker.PATTERN_GOLD : Label.Sticker.PATTERN;
+                break;
+        }
+        danger = true;
+        labels.get(Label.Layer.HIDDEN).get(0).setSticker(generateSafe());
+        return sticker;
+    }
+
     private Label.Sticker generateSafe() {
         int r = MathUtils.random(0, 6);
         switch (r) {
@@ -100,22 +146,6 @@ public class Crate extends AbstractConsumable {
         }
     }
 
-    private Label.Sticker generateDanger() {
-        Label.Sticker sticker;
-        int r = MathUtils.random(0, 5);
-        switch (r) {
-            case 0:
-                sticker = golden ? Label.Sticker.SHABBY_GOLD : Label.Sticker.SHABBY;
-                break;
-            default:
-                sticker = golden ? Label.Sticker.PATTERN_GOLD : Label.Sticker.PATTERN;
-                break;
-        }
-        danger = true;
-        labels.get(Label.Layer.HIDDEN).get(0).setSticker(generateSafe());
-        return sticker;
-    }
-
     @Override
     public void update(float dt) {
         basicUpdate(dt);
@@ -132,37 +162,6 @@ public class Crate extends AbstractConsumable {
         }
         shield.update(dt);
         scan.update(dt);
-    }
-
-    @Override
-    public void consumed(GameScreen gs) {
-        if (danger) {
-            switch (labels.get(Label.Layer.LABEL).get(0).getSticker()) {
-                case PATTERN:
-                case PATTERN_GOLD:
-                    Consumer.consume(gs, this, labels.get(Label.Layer.HIDDEN).get(0));
-                    break;
-                case SHABBY:
-                case SHABBY_GOLD:
-                    Consumer.consume(gs, this, labels.get(Label.Layer.HIDDEN).get(0));
-                    break;
-            }
-        } else {
-            Consumer.consume(gs, this, labels.get(Label.Layer.LABEL).get(0));
-        }
-    }
-
-    @Override
-    public void badEffect(GameScreen gs) {
-        gs.getGameInfoSystem().setup(
-                position.x,
-                position.y,
-                GameInfoSystem.Preset.EASY,
-                3.0f,
-                false
-        );
-        boomBox.playSound(MSConstants.DESTROY_CRATE);
-        Vibrator.vibrate(VConstants.PLAYER_CRATE_DESTROY);
     }
 
     @Override

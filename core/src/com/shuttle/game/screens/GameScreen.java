@@ -15,7 +15,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.shuttle.game.background.Background;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
-import com.shuttle.game.bot.anomaly.AnomalyTimer;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
 import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
@@ -53,6 +52,7 @@ import com.shuttle.game.ui.PlayerPointer;
 import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.ui.panels.UIBonusPanel;
 import com.shuttle.game.ui.panels.UILatestPanel;
+import com.shuttle.game.ui.panels.info.AnomalyTimer;
 import com.shuttle.game.utils.ActiveListJoiner;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.ShaderManager;
@@ -763,5 +763,6 @@ public class GameScreen extends BaseScreen {
         super.dispose();
         shaderManager.dispose();
         player.getStanding().writeResult();
+        anomalyTimer.dispose();
     }
 }

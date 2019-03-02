@@ -325,30 +325,51 @@ joystick
   orig: 400, 250
   offset: 0, 0
   index: -1
-menubutton
+pausebutton
   rotate: false
   xy: 3850, 516
   size: 184, 184
   orig: 184, 184
   offset: 0, 0
   index: -1
-menubuttonclick
+pausebuttonclick
   rotate: false
   xy: 3482, 774
   size: 184, 184
   orig: 184, 184
   offset: 0, 0
   index: -1
-militarybonusicon
+timericon
+  rotate: false
+  xy: 3980, 2
+  size: 110, 162
+  orig: 110, 162
+  offset: 0, 0
+  index: -1
+timerbackground
+  rotate: false
+  xy: 3980, 166
+  size: 110, 162
+  orig: 110, 162
+  offset: 0, 0
+  index: -1
+timerbox
   rotate: false
   xy: 3668, 774
+  size: 110, 162
+  orig: 110, 162
+  offset: 0, 0
+  index: -1
+militarybonusicon
+  rotate: false
+  xy: 3780, 774
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
   index: -1
 mechanicbonusicon
   rotate: false
-  xy: 3818, 774
+  xy: 3930, 774
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
@@ -390,42 +411,42 @@ fullcirclev1
   index: -1
 rocket
   rotate: false
-  xy: 3980, 2
+  xy: 3980, 330
   size: 96, 32
   orig: 96, 32
   offset: 0, 0
   index: -1
 atrocketpoint
   rotate: false
-  xy: 3980, 36
+  xy: 3594, 388
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 anomalydot
   rotate: false
-  xy: 4078, 2
+  xy: 4078, 330
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 star16
   rotate: false
-  xy: 4014, 36
+  xy: 3980, 364
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 consumabledot
   rotate: false
-  xy: 4032, 36
+  xy: 3998, 364
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 bubble16
   rotate: false
-  xy: 4050, 36
+  xy: 4016, 364
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
