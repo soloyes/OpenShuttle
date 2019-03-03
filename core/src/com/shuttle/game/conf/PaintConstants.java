@@ -196,6 +196,12 @@ public final class PaintConstants {
     public static final int TIMER_WIDTH = 110;
     public static final int TIMER_HEIGHT = 162;
 
+    public static final String XP_OUT_CIRCLE = "xpoutcircle";
+    public static final String XP_IN_CIRCLE = "xpincircle";
+    public static final String XP_SCALE = "xpscale";
+    public static final int XP_WIDTH = 184;
+    public static final int XP_HEIGHT = 184;
+
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
     public static final String FONT32 = "fonts/gomarice32.ttf";
     public static final String FONT32_C = "fonts/gomarice32Coloured.ttf";

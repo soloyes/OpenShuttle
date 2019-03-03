@@ -53,6 +53,7 @@ import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.ui.panels.UIBonusPanel;
 import com.shuttle.game.ui.panels.UILatestPanel;
 import com.shuttle.game.ui.panels.info.AnomalyTimer;
+import com.shuttle.game.ui.panels.info.PlayerXP;
 import com.shuttle.game.utils.ActiveListJoiner;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.ShaderManager;
@@ -142,6 +143,7 @@ public class GameScreen extends BaseScreen {
     @Getter
     private UILatestPanel uiLatestPanel;
     private UIBonusPanel uiBonusPanel;
+    private PlayerXP playerXP;
     @Getter
     private RocketLauncher rocketLauncher;
 
@@ -184,12 +186,15 @@ public class GameScreen extends BaseScreen {
         background = new Background();
         gameInfoSystem = new GameInfoSystem();
         joystick = new Joystick();
-        uiLatestPanel = new UILatestPanel();
-        uiBonusPanel = new UIBonusPanel();
         rocketLauncher = new RocketLauncher(this);
 
         blackhole = new Blackhole();
         player = new Shuttle(this, joystick);
+        //todo: all into one class UI bla bla
+        uiLatestPanel = new UILatestPanel();
+        uiBonusPanel = new UIBonusPanel();
+        playerXP = new PlayerXP(this);
+        //
         BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         background.setPlayer(player);
         playerPointer = new PlayerPointer(player);
@@ -314,6 +319,7 @@ public class GameScreen extends BaseScreen {
             anomalyTimer.render(batch);
             uiLatestPanel.render(batch);
             uiBonusPanel.render(batch);
+            playerXP.render(batch);
         }
 
         if (!pauseGroup.isPause()) {
@@ -365,6 +371,7 @@ public class GameScreen extends BaseScreen {
             blackhole.update(dt);
             uiLatestPanel.update(dt);
             uiBonusPanel.update(dt);
+            playerXP.update(dt);
             rocketLauncher.update(dt);
             if (!Rules.GAME_OVER) {
                 anomalyTimer.update(dt);

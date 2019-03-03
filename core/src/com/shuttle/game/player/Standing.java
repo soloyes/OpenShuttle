@@ -29,9 +29,8 @@ public class Standing {
     private StringBuilder tmpString;
     private String username;
     @Getter
-    private int score, scoreView;
     @Setter
-    private int scoreToLive;
+    private int score, scoreView, scoreToLive;
     private Results results;
     private BitmapFont font64;
     private Shuttle player;
@@ -162,25 +161,6 @@ public class Standing {
 
     public void render(SpriteBatch batch) {
         tmpString.setLength(0);
-
-        tmpString
-                .append("NAME: ")
-                .append(username);
-        tmpString
-                .append("\nSCORE: ");
-        if (scoreAlertRadiationAnomaly) {
-            tmpString
-                    .append("[RED]")
-                    .append(scoreView)
-                    .append("[]")
-                    .append("/")
-                    .append(scoreToLive);
-        } else {
-            tmpString
-                    .append(scoreView)
-                    .append("/")
-                    .append(scoreToLive);
-        }
         tmpString
                 .append("\nHP: ");
         if (hpAlert) {
@@ -210,7 +190,7 @@ public class Standing {
         tmpString
                 .append("/")
                 .append((int) maxFuel);
-        font64.draw(batch, tmpString, 20, 1900);
+        font64.draw(batch, tmpString, 44, 1700);
     }
 
     public void update() {

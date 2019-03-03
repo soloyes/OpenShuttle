@@ -49,7 +49,7 @@ public class AnomalyTimer {
     public void render(SpriteBatch batch) {
         Color tmpColor = batch.getColor();
         batch.draw(timerBackground,
-                Rules.WORLD_WIDTH / 2, Rules.WORLD_HEIGHT - height - 44,
+                Rules.WORLD_WIDTH / 2 - width / 2, Rules.WORLD_HEIGHT - height - 44,
                 width / 2, height / 2,
                 width, height,
                 1.0f, 1.0f,
@@ -58,19 +58,19 @@ public class AnomalyTimer {
         batch.setColor(color);
         batch.draw(
                 texture,
-                Rules.WORLD_WIDTH / 2 + width / 6 + border / 4, Rules.WORLD_HEIGHT - height - 44 + border,
+                Rules.WORLD_WIDTH / 2 - width / 2 + width / 6 + border / 4, Rules.WORLD_HEIGHT - height - 44 + border,
                 2 * width / 3 - border / 2, (height - 2 * border) * percentage
         );
         batch.setColor(tmpColor);
         batch.draw(timerBox,
-                Rules.WORLD_WIDTH / 2, Rules.WORLD_HEIGHT - height - 44,
+                Rules.WORLD_WIDTH / 2 - width / 2, Rules.WORLD_HEIGHT - height - 44,
                 width / 2, height / 2,
                 width, height,
                 1.0f, 1.0f,
                 0.0f
         );
         batch.draw(timerIcon,
-                Rules.WORLD_WIDTH / 2, Rules.WORLD_HEIGHT - height - 44,
+                Rules.WORLD_WIDTH / 2 - width / 2, Rules.WORLD_HEIGHT - height - 44,
                 width / 2, height / 2,
                 width, height,
                 1.0f, 1.0f,

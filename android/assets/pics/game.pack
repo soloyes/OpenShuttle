@@ -325,16 +325,37 @@ joystick
   orig: 400, 250
   offset: 0, 0
   index: -1
-pausebutton
+xpincircle
   rotate: false
   xy: 3850, 516
   size: 184, 184
   orig: 184, 184
   offset: 0, 0
   index: -1
-pausebuttonclick
+pausebutton
   rotate: false
   xy: 3482, 774
+  size: 184, 184
+  orig: 184, 184
+  offset: 0, 0
+  index: -1
+xpscale
+  rotate: false
+  xy: 3668, 774
+  size: 184, 184
+  orig: 184, 184
+  offset: 0, 0
+  index: -1
+pausebuttonclick
+  rotate: false
+  xy: 3854, 774
+  size: 184, 184
+  orig: 184, 184
+  offset: 0, 0
+  index: -1
+xpoutcircle
+  rotate: false
+  xy: 2, 3850
   size: 184, 184
   orig: 184, 184
   offset: 0, 0
@@ -355,56 +376,56 @@ timerbackground
   index: -1
 timerbox
   rotate: false
-  xy: 3668, 774
+  xy: 188, 3850
   size: 110, 162
   orig: 110, 162
   offset: 0, 0
   index: -1
 militarybonusicon
   rotate: false
-  xy: 3780, 774
+  xy: 300, 3850
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
   index: -1
 mechanicbonusicon
   rotate: false
-  xy: 3930, 774
+  xy: 450, 3850
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
   index: -1
 scientistbonusicon
   rotate: false
-  xy: 2, 3850
+  xy: 600, 3850
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
   index: -1
 astronautbonusicon
   rotate: false
-  xy: 152, 3850
+  xy: 750, 3850
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
   index: -1
 emptycirclev1
   rotate: false
-  xy: 302, 3850
+  xy: 3850, 1028
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
   index: -1
 medicbonusicon
   rotate: false
-  xy: 452, 3850
+  xy: 1028, 3866
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
   index: -1
 fullcirclev1
   rotate: false
-  xy: 602, 3850
+  xy: 3866, 1286
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
