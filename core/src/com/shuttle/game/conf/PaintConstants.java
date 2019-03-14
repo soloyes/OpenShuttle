@@ -202,6 +202,30 @@ public final class PaintConstants {
     public static final int XP_WIDTH = 184;
     public static final int XP_HEIGHT = 184;
 
+    public static final String HP_BAR_OUT = "hpout";
+    public static final String HP_BAR_IN = "hpin";
+    public static final String HP_BAR_SCALE = "hpscale";
+    public static final int HP_BAR_WIDTH = 48;
+    public static final int HP_BAR_HEIGHT = 238;
+
+    public static final String LP_BAR_OUT = "lpout";
+    public static final String LP_BAR_IN = "lpin";
+    public static final String LP_BAR_SCALE = "lpscale";
+    public static final int LP_BAR_WIDTH = 48;
+    public static final int LP_BAR_HEIGHT = 238;
+
+    public static final String FP_BAR_OUT = "fpout";
+    public static final String FP_BAR_IN = "fpin";
+    public static final String FP_BAR_SCALE = "fpscale";
+    public static final int FP_BAR_WIDTH = 48;
+    public static final int FP_BAR_HEIGHT = 238;
+
+    public static final String SP_BAR_OUT = "spout";
+    public static final String SP_BAR_IN = "spin";
+    public static final String SP_BAR_SCALE = "spscale";
+    public static final int SP_BAR_WIDTH = 48;
+    public static final int SP_BAR_HEIGHT = 238;
+
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
     public static final String FONT32 = "fonts/gomarice32.ttf";
     public static final String FONT32_C = "fonts/gomarice32Coloured.ttf";

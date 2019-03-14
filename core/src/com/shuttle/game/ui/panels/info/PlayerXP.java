@@ -26,9 +26,9 @@ public class PlayerXP {
         this.gs = gs;
         this.width = PaintConstants.XP_WIDTH;
         this.height = PaintConstants.XP_HEIGHT;
-        this.outCircle = Assets.getInstance().getAtlas().findRegion("xpoutcircle");
-        this.inCircle = Assets.getInstance().getAtlas().findRegion("xpincircle");
-        this.scaleCircle = new RadialSprite(Assets.getInstance().getAtlas().findRegion("xpscale"));
+        this.outCircle = Assets.getInstance().getAtlas().findRegion(PaintConstants.XP_OUT_CIRCLE);
+        this.inCircle = Assets.getInstance().getAtlas().findRegion(PaintConstants.XP_IN_CIRCLE);
+        this.scaleCircle = new RadialSprite(Assets.getInstance().getAtlas().findRegion(PaintConstants.XP_SCALE));
         this.standing = gs.getPlayer().getStanding();
         this.color = new Color();
     }
