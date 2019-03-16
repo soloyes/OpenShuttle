@@ -3,6 +3,7 @@ package com.shuttle.game.ui.panels.info;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Standing;
@@ -21,6 +22,7 @@ public class PlayerXP {
     private Standing standing;
     private float alpha;
     private Color color;
+    private Vector2 position;
 
     //todo: add Vector2 position on everything UI elements
     public PlayerXP(GameScreen gs) {
@@ -32,13 +34,15 @@ public class PlayerXP {
         this.scaleCircle = new RadialSprite(Assets.getInstance().getAtlas().findRegion(PaintConstants.XP_SCALE));
         this.standing = gs.getPlayer().getStanding();
         this.color = new Color();
+        this.position = new Vector2();
+        this.position.set(44, Rules.WORLD_HEIGHT - height - 44);
     }
 
     public void render(SpriteBatch batch) {
         Color tmpColor = batch.getColor();
         batch.setColor(color);
         batch.draw(outCircle,
-                44, Rules.WORLD_HEIGHT - height - 44,
+                position.x, position.y,
                 width / 2, height / 2,
                 width, height,
                 1.0f, 1.0f,
@@ -46,12 +50,12 @@ public class PlayerXP {
         );
         batch.setColor(tmpColor);
         scaleCircle.draw(batch,
-                44, Rules.WORLD_HEIGHT - height - 44,
+                position.x, position.y,
                 width, height,
                 -alpha
         );
         batch.draw(inCircle,
-                44, Rules.WORLD_HEIGHT - height - 44,
+                position.x, position.y,
                 width / 2, height / 2,
                 width, height,
                 1.0f, 1.0f,

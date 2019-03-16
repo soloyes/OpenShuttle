@@ -1,6 +1,7 @@
 package com.shuttle.game.ui.panels.info;
 
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
 
@@ -17,5 +18,12 @@ public class BarHP extends AbstractBar {
         this.scale = Assets.getInstance().getAtlas().findRegion(PaintConstants.HP_BAR_SCALE);
         this.width = PaintConstants.HP_BAR_WIDTH;
         this.height = PaintConstants.HP_BAR_HEIGHT;
+        this.side = Side.LEFT;
+        this.position.set(Rules.WORLD_WIDTH / 4 - 32, Rules.WORLD_HEIGHT - 4 * height);
+    }
+
+    @Override
+    void update(float dt) {
+        percentage = 1.0f * standing.getHp() / standing.getMaxHp();
     }
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
@@ -24,6 +25,7 @@ public class AnomalyTimer {
     private int width, height, border;
     private float percentage;
     private float counter;
+    private Vector2 position;
 
     public AnomalyTimer(GameScreen gs) {
         this.gs = gs;
@@ -40,6 +42,8 @@ public class AnomalyTimer {
         pixmap.fill();
         this.texture = new Texture(pixmap);
         this.color = new Color();
+        this.position = new Vector2();
+        this.position.set(Rules.WORLD_WIDTH / 2 - width / 2, Rules.WORLD_HEIGHT - height - 44);
     }
 
     public void dispose() {
@@ -49,7 +53,7 @@ public class AnomalyTimer {
     public void render(SpriteBatch batch) {
         Color tmpColor = batch.getColor();
         batch.draw(timerBackground,
-                Rules.WORLD_WIDTH / 2 - width / 2, Rules.WORLD_HEIGHT - height - 44,
+                position.x, position.y,
                 width / 2, height / 2,
                 width, height,
                 1.0f, 1.0f,
@@ -58,19 +62,19 @@ public class AnomalyTimer {
         batch.setColor(color);
         batch.draw(
                 texture,
-                Rules.WORLD_WIDTH / 2 - width / 2 + width / 6 + border / 4, Rules.WORLD_HEIGHT - height - 44 + border,
+                position.x + width / 6 + border / 4, position.y + border,
                 2 * width / 3 - border / 2, (height - 2 * border) * percentage
         );
         batch.setColor(tmpColor);
         batch.draw(timerBox,
-                Rules.WORLD_WIDTH / 2 - width / 2, Rules.WORLD_HEIGHT - height - 44,
+                position.x, position.y,
                 width / 2, height / 2,
                 width, height,
                 1.0f, 1.0f,
                 0.0f
         );
         batch.draw(timerIcon,
-                Rules.WORLD_WIDTH / 2 - width / 2, Rules.WORLD_HEIGHT - height - 44,
+                position.x, position.y,
                 width / 2, height / 2,
                 width, height,
                 1.0f, 1.0f,

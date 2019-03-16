@@ -1,7 +1,7 @@
 package com.shuttle.game.ui.panels.info;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
 
@@ -18,15 +18,12 @@ public class BarLaser extends AbstractBar {
         this.scale = Assets.getInstance().getAtlas().findRegion(PaintConstants.LP_BAR_SCALE);
         this.width = PaintConstants.LP_BAR_WIDTH;
         this.height = PaintConstants.LP_BAR_HEIGHT;
+        this.side = Side.RIGHT;
+        this.position.set(3 * Rules.WORLD_WIDTH / 4 - width + 32, Rules.WORLD_HEIGHT - 2 * height - 20);
     }
 
     @Override
-    public void update(float dt) {
-
-    }
-
-    @Override
-    public void render(SpriteBatch batch) {
+    void update(float dt) {
 
     }
 }

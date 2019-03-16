@@ -14,7 +14,7 @@ import java.util.HashMap;
 import lombok.Getter;
 import lombok.Setter;
 
-public class UILatestPanel {
+public class UILatestPanel extends UIAbstractPanel {
     @Getter
     @Setter
     protected Color color;
