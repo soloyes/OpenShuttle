@@ -22,6 +22,7 @@ public class PlayerXP {
     private float alpha;
     private Color color;
 
+    //todo: add Vector2 position on everything UI elements
     public PlayerXP(GameScreen gs) {
         this.gs = gs;
         this.width = PaintConstants.XP_WIDTH;

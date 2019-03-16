@@ -53,6 +53,7 @@ import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.ui.panels.UIBonusPanel;
 import com.shuttle.game.ui.panels.UILatestPanel;
 import com.shuttle.game.ui.panels.info.AnomalyTimer;
+import com.shuttle.game.ui.panels.info.Bars;
 import com.shuttle.game.ui.panels.info.PlayerXP;
 import com.shuttle.game.utils.ActiveListJoiner;
 import com.shuttle.game.utils.BoundCheck;
@@ -146,6 +147,7 @@ public class GameScreen extends BaseScreen {
     private PlayerXP playerXP;
     @Getter
     private RocketLauncher rocketLauncher;
+    private Bars bars;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -194,6 +196,7 @@ public class GameScreen extends BaseScreen {
         uiLatestPanel = new UILatestPanel();
         uiBonusPanel = new UIBonusPanel();
         playerXP = new PlayerXP(this);
+        bars = new Bars(this);
         //
         BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         background.setPlayer(player);
@@ -320,6 +323,7 @@ public class GameScreen extends BaseScreen {
             uiLatestPanel.render(batch);
             uiBonusPanel.render(batch);
             playerXP.render(batch);
+            bars.render(batch);
         }
 
         if (!pauseGroup.isPause()) {
@@ -372,6 +376,7 @@ public class GameScreen extends BaseScreen {
             uiLatestPanel.update(dt);
             uiBonusPanel.update(dt);
             playerXP.update(dt);
+            bars.update(dt);
             rocketLauncher.update(dt);
             if (!Rules.GAME_OVER) {
                 anomalyTimer.update(dt);
