@@ -85,9 +85,6 @@ public class Shuttle extends AbstractShuttle {
     @Getter
     @Setter
     private boolean laser;
-    @Getter
-    @Setter
-    private float laserChargeLevel;
 
     public Shuttle(GameScreen gs, Joystick joystick) {
         super(gs);
@@ -241,6 +238,7 @@ public class Shuttle extends AbstractShuttle {
     }
 
     public void takeDamage(int amount) {
+        //todo move to Standing.changeHP (need to change shake envocation)
         standing.changeHP(-amount);
         if (standing.getHp() <= 0) {
             standing.setHp(standing.getMaxHp());

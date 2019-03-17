@@ -125,21 +125,19 @@ public final class Rules {
     public static final float ANOMALIES_CORROSIVE_SLIM_TIME = 15.0f;
     //2
     public static final int ANOMALIES_CORROSIVE_AFRAID_FACTOR = 2;
-    //ASTEROID_METAL
+    //ASTEROID
     //4.0f
     public static final float ASTEROID_METAL_RESPAWN_TIME = 1.0f;
-    //0.3f
-    public static final float ASTEROID_METAL_BURN_TIME = 0.3f;
     //50
     public static final int ASTEROID_METAL_MAX_COUNT = 50;
     //4.0f
     public static final float ASTEROID_MINERAL_RESPAWN_TIME = 4.0f;
-    //0.3f
-    public static final float ASTEROID_MINERAL_BURN_TIME = 0.3f;
     //50
     public static final int ASTEROID_MINERAL_MAX_COUNT = 50;
     //0.5f
     public static final float ASTEROID_SIZE_FOR_HARVEST_FACTOR = 0.5f;
+    //0.3f
+    public static final float ASTEROID_BURN_TIME = 0.3f;
     //PLAYER
     //400
     public static final int PLAYER_CONSUMABLE_TAKE_RANGE = 400;
@@ -260,12 +258,17 @@ public final class Rules {
                 Standing.getInstance().setFuel(250);
                 Standing.getInstance().setHp(25);
                 Standing.getInstance().setMaxHp(25);
+                Standing.getInstance().setMaxLaserChargeLevel(20);
                 Standing.getInstance().setLives(1);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(true);
+                //Set Laser like that
+                player.setLaser(true);
+                Standing.getInstance().setLaserChargeLevel(Standing.getInstance().getMaxLaserChargeLevel());
+                //
                 Standing.getInstance().setPlayingLevel(24);
                 Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 4);
             }
@@ -277,6 +280,7 @@ public final class Rules {
                 Standing.getInstance().setFuel(200);
                 Standing.getInstance().setHp(20);
                 Standing.getInstance().setMaxHp(20);
+                Standing.getInstance().setMaxLaserChargeLevel(15);
                 Standing.getInstance().setLives(2);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
@@ -294,6 +298,7 @@ public final class Rules {
                 Standing.getInstance().setFuel(150);
                 Standing.getInstance().setHp(15);
                 Standing.getInstance().setMaxHp(15);
+                Standing.getInstance().setMaxLaserChargeLevel(10);
                 Standing.getInstance().setLives(2);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
@@ -311,13 +316,13 @@ public final class Rules {
                 Standing.getInstance().setFuel(100);
                 Standing.getInstance().setHp(10);
                 Standing.getInstance().setMaxHp(10);
+                Standing.getInstance().setMaxLaserChargeLevel(5);
                 Standing.getInstance().setLives(3);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);
-                player.setLaser(true);
                 Standing.getInstance().setPlayingLevel(10);
                 Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 18);
             }

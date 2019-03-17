@@ -319,7 +319,6 @@ public class GameScreen extends BaseScreen {
         //BEGIN
         //batch.begin();
         if (!Rules.GAME_OVER) {
-            Standing.getInstance().render(batch);
             anomalyTimer.render(batch);
             uiLatestPanel.render(batch);
             uiBonusPanel.render(batch);
@@ -621,8 +620,8 @@ public class GameScreen extends BaseScreen {
                         } else {
                             player.getRamShield().blink(0.5f);
                             player.setPower(player.getPower() + asteroid.getSizeForHarvest());
-                            if (asteroid.getType() == AbstractPoolable.Type.ASTEROID_MINERAL) {
-                                player.setLaserChargeLevel(player.getLaserChargeLevel() + asteroid.getSizeForHarvest());
+                            if (asteroid.getType() == AbstractPoolable.Type.ASTEROID_MINERAL && player.isLaser()) {
+                                Standing.getInstance().changeLaserChargeLevel(asteroid.getSizeForHarvest());
                             }
                             //pretty sound if collect much fragments in little time
                             prettyFragmentHarvest.playSound(MSConstants.GET_FRAGMENT);

@@ -156,7 +156,7 @@ public class Consumer {
                     true
             );
             gs.getPlayer().setLaser(true);
-            gs.getPlayer().setLaserChargeLevel(6);
+            Standing.getInstance().setLaserChargeLevel(Standing.getInstance().getMaxLaserChargeLevel());
             boomBox.playSound(MSConstants.GET_LASER);
         }
 

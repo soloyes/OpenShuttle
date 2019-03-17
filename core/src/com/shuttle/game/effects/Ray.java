@@ -138,8 +138,7 @@ public class Ray {
                 );
             }
             asteroid.setTimeToBurn(asteroid.getTimeToBurn() + dt);
-            //todo: может быть по-разному таймеру выжигать астероиды?
-            if (asteroid.getTimeToBurn() >= 0.5f + Rules.ASTEROID_MINERAL_BURN_TIME / player.getLaserChargeLevel()) {
+            if (asteroid.getTimeToBurn() >= 0.5f + Rules.ASTEROID_BURN_TIME / Standing.getInstance().getLaserChargeLevel()) {
                 boomBox.playSound(MSConstants.DESTROY_ASTEROID_RAY);
                 //todo:repeatable code..
                 switch (asteroid.getType()) {
@@ -155,11 +154,11 @@ public class Ray {
                 Standing.getInstance().addToStatistics(asteroid.getType(), asteroid.getLevel());
                 asteroid.setTimeToBurn(0.0f);
                 asteroid.setAtRayPoint(false);
-                player.setLaserChargeLevel(player.getLaserChargeLevel() - 1);
-                if (player.getLaserChargeLevel() < 1) {
+                Standing.getInstance().changeLaserChargeLevel( -1);
+                if (Standing.getInstance().getLaserChargeLevel() <= 1) {
                     boomBox.stopMusicEffect(MSConstants.LASER);
                     player.setLaser(false);
-                    player.setLaserChargeLevel(0);
+                    Standing.getInstance().setLaserChargeLevel(0);
                 }
             }
         } else {

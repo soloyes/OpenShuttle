@@ -24,6 +24,7 @@ public class BarLaser extends AbstractBar {
 
     @Override
     void update(float dt) {
+        percentage = 1.0f * standing.getLaserChargeLevel() / standing.getMaxLaserChargeLevel();
         color.set(1.0f, 1.0f, 1.0f, 1.0f);
     }
 }

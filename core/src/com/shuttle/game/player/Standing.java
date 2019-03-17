@@ -1,16 +1,12 @@
 package com.shuttle.game.player;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
-import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.ui.GameInfoSystem;
-import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
 import java.text.SimpleDateFormat;
@@ -26,13 +22,11 @@ import lombok.Setter;
  * @author Shuttle on 8/2/18.
  */
 public class Standing {
-    private StringBuilder tmpString;
     private String username;
     @Getter
     @Setter
     private int score, scoreView, scoreToLive;
     private Results results;
-    private BitmapFont font64;
     @Getter
     @Setter
     private float fuel, maxFuel;
@@ -59,7 +53,7 @@ public class Standing {
     private boolean fuelAlertMagneticAnomaly;
     @Getter
     @Setter
-    private float laserChargeLevel;
+    private float laserChargeLevel, maxLaserChargeLevel;
     //Score to lives with formula scoreToLive*n*(28 - level)
     private int n;
     private BoomBox boomBox;
@@ -77,14 +71,11 @@ public class Standing {
 
     private Standing() {
         this.boomBox = new BoomBox();
-        this.tmpString = new StringBuilder();
         this.username = Gdx.files.local("username").readString();
         this.results = new Results();
-        this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64_C, BitmapFont.class);
         this.n = 1;
         this.statistics = new HashMap<AbstractPoolable.Type, Map<Integer, Integer>>();
         //Able to change colour for part of the text
-        font64.getData().markupEnabled = true;
     }
 
     public void addToStatistics(AbstractPoolable.Type type, Integer level) {
@@ -120,8 +111,14 @@ public class Standing {
         }
     }
 
-    public void changeLaserCharge(int amount) {
+    public void changeLaserChargeLevel(float amount) {
         laserChargeLevel += amount;
+        if (laserChargeLevel <= 0.0f) {
+            laserChargeLevel = 0.0f;
+        }
+        if (laserChargeLevel > maxLaserChargeLevel) {
+            laserChargeLevel = maxLaserChargeLevel;
+        }
     }
 
     public void changeLives(int amount) {
@@ -171,12 +168,6 @@ public class Standing {
             return 0;
         }
         return statistics.get(type).get(level);
-    }
-
-    public void render(SpriteBatch batch) {
-        tmpString.setLength(0);
-        tmpString.append(lives);
-        font64.draw(batch, tmpString, 44, 1700);
     }
 
     public void update() {
