@@ -121,7 +121,7 @@ public class Rocket extends AbstractPoolable {
         if (position.dst(targetAnomaly.getPosition()) <= PaintConstants.ROCKET_WIDTH && targetAnomaly.isActive()) {
             destroy();
             targetAnomaly.destroyWithEffect();
-            gs.getGameInfoSystem().setup(
+            GameInfoSystem.setup(
                     position.x,
                     position.y,
                     GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",

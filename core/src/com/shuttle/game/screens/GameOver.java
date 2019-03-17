@@ -16,6 +16,7 @@ import com.shuttle.game.bot.consumable.Crate;
 import com.shuttle.game.bot.consumable.Storage;
 import com.shuttle.game.bot.consumable.fuel.Fuel;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.player.Standing;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
@@ -214,8 +215,7 @@ public class GameOver {
             }
             batch.setColor(tmpColor);
             resLabel.setText(
-                    gs.getPlayer()
-                            .getStanding()
+                    Standing.getInstance()
                             .getFromStatistics(poolable.get(i).getType(), poolable.get(i).getLevel())
                             .toString()
             );
@@ -231,6 +231,6 @@ public class GameOver {
         for (int i = 0; i < poolable.size(); i++) {
             poolable.get(i).basicUpdate(delta);
         }
-        glyphLayout.setText(font96, "SCORE: " + String.valueOf(gs.getPlayer().getStanding().getScore()));
+        glyphLayout.setText(font96, "SCORE: " + String.valueOf(Standing.getInstance().getScore()));
     }
 }

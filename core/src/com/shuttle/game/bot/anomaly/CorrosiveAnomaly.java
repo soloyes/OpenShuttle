@@ -14,6 +14,7 @@ import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.MoveProcessor;
 import com.shuttle.game.effects.Oscillator;
 import com.shuttle.game.effects.Vibrator;
+import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.GameInfoSystem;
@@ -144,7 +145,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                     showSprayBoom(gs.getParticleEmitter());
                     boomBox.playSound(MSConstants.SPLASH_ANOMALY);
                     Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY);
-                    gs.getGameInfoSystem().setup(
+                    GameInfoSystem.setup(
                             position.x,
                             position.y,
                             GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
@@ -174,10 +175,10 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
             } else {
                 destroy();
                 boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
-                gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
-                gs.getPlayer().getStanding().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
+                Standing.getInstance().addToStatistics(this.type, this.level);
+                Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
                 showSprayBoom(gs.getParticleEmitter());
-                gs.getGameInfoSystem().setup(
+                GameInfoSystem.setup(
                         position.x,
                         position.y,
                         GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",

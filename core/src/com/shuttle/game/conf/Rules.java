@@ -1,6 +1,7 @@
 package com.shuttle.game.conf;
 
 import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Standing;
 
 /**
  * @author Shuttle on 10/16/18.
@@ -255,70 +256,70 @@ public final class Rules {
         LOW {
             @Override
             public void setGameLevel(Shuttle player) {
-                player.getStanding().setMaxFuel(250);
-                player.getStanding().setFuel(250);
-                player.getStanding().setHp(25);
-                player.getStanding().setMaxHp(25);
-                player.getStanding().setLives(1);
+                Standing.getInstance().setMaxFuel(250);
+                Standing.getInstance().setFuel(250);
+                Standing.getInstance().setHp(25);
+                Standing.getInstance().setMaxHp(25);
+                Standing.getInstance().setLives(1);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(true);
-                player.getStanding().setPlayingLevel(24);
-                player.getStanding().setScoreToLive(SCORE_TO_LIVE * 4);
+                Standing.getInstance().setPlayingLevel(24);
+                Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 4);
             }
         },
         MEDIUM {
             @Override
             public void setGameLevel(Shuttle player) {
-                player.getStanding().setMaxFuel(200);
-                player.getStanding().setFuel(200);
-                player.getStanding().setHp(20);
-                player.getStanding().setMaxHp(20);
-                player.getStanding().setLives(2);
+                Standing.getInstance().setMaxFuel(200);
+                Standing.getInstance().setFuel(200);
+                Standing.getInstance().setHp(20);
+                Standing.getInstance().setMaxHp(20);
+                Standing.getInstance().setLives(2);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);
-                player.getStanding().setPlayingLevel(21);
-                player.getStanding().setScoreToLive(SCORE_TO_LIVE * 7);
+                Standing.getInstance().setPlayingLevel(21);
+                Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 7);
             }
         },
         HIGH {
             @Override
             public void setGameLevel(Shuttle player) {
-                player.getStanding().setMaxFuel(150);
-                player.getStanding().setFuel(150);
-                player.getStanding().setHp(15);
-                player.getStanding().setMaxHp(15);
-                player.getStanding().setLives(2);
+                Standing.getInstance().setMaxFuel(150);
+                Standing.getInstance().setFuel(150);
+                Standing.getInstance().setHp(15);
+                Standing.getInstance().setMaxHp(15);
+                Standing.getInstance().setLives(2);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);
-                player.getStanding().setPlayingLevel(15);
-                player.getStanding().setScoreToLive(SCORE_TO_LIVE * 13);
+                Standing.getInstance().setPlayingLevel(15);
+                Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 13);
             }
         },
         EXTREME {
             @Override
             public void setGameLevel(Shuttle player) {
-                player.getStanding().setMaxFuel(100);
-                player.getStanding().setFuel(100);
-                player.getStanding().setHp(10);
-                player.getStanding().setMaxHp(10);
-                player.getStanding().setLives(3);
+                Standing.getInstance().setMaxFuel(100);
+                Standing.getInstance().setFuel(100);
+                Standing.getInstance().setHp(10);
+                Standing.getInstance().setMaxHp(10);
+                Standing.getInstance().setLives(3);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);
                 player.setLaser(true);
-                player.getStanding().setPlayingLevel(10);
-                player.getStanding().setScoreToLive(SCORE_TO_LIVE * 18);
+                Standing.getInstance().setPlayingLevel(10);
+                Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 18);
             }
         };
 

@@ -45,17 +45,17 @@ public class PlayerPointer {
     public void render(SpriteBatch batch) {
         Color tmpColor = batch.getColor();
         boolean lost;
-        if (player.getPosition().x - player.getWidth() / 2 > Rules.SPACE_WIDTH) {
-            tmp1V2.set(Rules.SPACE_WIDTH - width, player.getPosition().y);
+        if (Shuttle.position.x - player.getWidth() / 2 > Rules.SPACE_WIDTH) {
+            tmp1V2.set(Rules.SPACE_WIDTH - width, Shuttle.position.y);
             lost = true;
-        } else if (player.getPosition().x + player.getWidth() / 2 < 0) {
-            tmp1V2.set(0, player.getPosition().y);
+        } else if (Shuttle.position.x + player.getWidth() / 2 < 0) {
+            tmp1V2.set(0, Shuttle.position.y);
             lost = true;
-        } else if (player.getPosition().y - player.getHeight() / 2 > Rules.SPACE_HEIGHT) {
-            tmp1V2.set(player.getPosition().x, Rules.SPACE_HEIGHT - height);
+        } else if (Shuttle.position.y - player.getHeight() / 2 > Rules.SPACE_HEIGHT) {
+            tmp1V2.set(Shuttle.position.x, Rules.SPACE_HEIGHT - height);
             lost = true;
-        } else if (player.getPosition().y + player.getHeight() / 2 < 0) {
-            tmp1V2.set(player.getPosition().x, 0);
+        } else if (Shuttle.position.y + player.getHeight() / 2 < 0) {
+            tmp1V2.set(Shuttle.position.x, 0);
             lost = true;
         } else {
             lost = false;
@@ -88,7 +88,7 @@ public class PlayerPointer {
 
     public void update(float dt) {
         blinkTimer += dt;
-        tmp3V3.set(player.getPosition().x, player.getPosition().y);
+        tmp3V3.set(Shuttle.position.x, Shuttle.position.y);
         tmp2V2.set(tmp3V3.sub(Rules.SPACE_WIDTH / 2, Rules.SPACE_HEIGHT / 2));
         angle = tmp2V2.angle();
         tmp4V2.set(tmp1V2.x, tmp1V2.y).sub(d * MathUtils.cos(MathUtils.degreesToRadians * angle), d * MathUtils.sin(MathUtils.degreesToRadians * angle));

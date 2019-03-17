@@ -19,11 +19,11 @@ public class BarShield extends AbstractBar {
         this.width = PaintConstants.SP_BAR_WIDTH;
         this.height = PaintConstants.SP_BAR_HEIGHT;
         this.side = Side.LEFT;
-            this.position.set(Rules.WORLD_WIDTH / 4 - 32, Rules.WORLD_HEIGHT - 2 * height - 20);
+        this.position.set(Rules.WORLD_WIDTH / 4 - 32, Rules.WORLD_HEIGHT - 2 * height - 20);
     }
 
     @Override
     void update(float dt) {
-
+        color.set(1.0f, 1.0f, 1.0f, 1.0f);
     }
 }

@@ -8,6 +8,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.ActiveListJoiner;
 import com.shuttle.game.utils.pool.AbstractPoolable;
@@ -51,15 +52,15 @@ public class Ray {
 
     public void harvest(Shuttle player, AbstractPoolable poolable, ParticleEmitter particleEmitter, float dt) {
         if (!player.isTaken()) {
-            if (player.getPosition().dst(poolable.getPosition()) <= takeRange) {
+            if (Shuttle.position.dst(poolable.getPosition()) <= takeRange) {
                 poolable.setAtRayPoint(true);
                 tmp1V2.set(
-                        player.getPosition())
+                        Shuttle.position)
                         .sub(poolable.getPosition())
                         .nor()
                         .scl(harvestVelocity);
                 poolable.getPosition().mulAdd(tmp1V2, dt);
-                float dst = player.getPosition().dst(poolable.getPosition());
+                float dst = Shuttle.position.dst(poolable.getPosition());
                 float scaleX = (dst / takeRange) * poolable.getSaveScaleX();
                 float scaleY = (dst / takeRange) * poolable.getSaveScaleY();
                 if (scaleX >= poolable.getSaveScaleX()) {
@@ -74,7 +75,7 @@ public class Ray {
 
                 particleEmitter.setupFromPointToPoint(
                         poolable.getPosition().x, poolable.getPosition().y,
-                        player.getPosition().x, player.getPosition().y,
+                        Shuttle.position.x, Shuttle.position.y,
                         1, 2,
                         preset.startR, preset.startG, preset.startB, 0.3f,
                         preset.endA, preset.endG, preset.endB, 0.3f
@@ -111,7 +112,7 @@ public class Ray {
     }
 
     public void laser(Shuttle player, AbstractAsteroid asteroid, ParticleEmitter particleEmitter, float dt) {
-        float dst = player.getPosition().dst(asteroid.getPosition());
+        float dst = Shuttle.position.dst(asteroid.getPosition());
         if (dst <= Rules.PLAYER_LASER_TAKE_RANGE && !player.isTaken() && !asteroid.isTaken() && asteroid.isActive()) {
             asteroid.setAtRayPoint(true);
             boomBox.playMusicEffectInLoop(MSConstants.LASER, 1.0f);
@@ -119,7 +120,7 @@ public class Ray {
             float scaleY = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleY();
             particleEmitter.setupFromPointToPoint(
                     asteroid.getPosition().x, asteroid.getPosition().y,
-                    player.getPosition().x, player.getPosition().y,
+                    Shuttle.position.x, Shuttle.position.y,
                     1.0f, 1.0f,
                     preset.startR, preset.startG, preset.startB, 0.3f,
                     preset.endA, preset.endG, preset.endB, 0.3f
@@ -151,7 +152,7 @@ public class Ray {
                 }
                 asteroid.destroyWithEffect();
                 asteroid.showSprayCollision(particleEmitter);
-                player.getStanding().addToStatistics(asteroid.getType(), asteroid.getLevel());
+                Standing.getInstance().addToStatistics(asteroid.getType(), asteroid.getLevel());
                 asteroid.setTimeToBurn(0.0f);
                 asteroid.setAtRayPoint(false);
                 player.setLaserChargeLevel(player.getLaserChargeLevel() - 1);

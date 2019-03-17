@@ -61,10 +61,10 @@ public class Star {
 
     public void update(float dt) {
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
-            position.x -= player.getVelocity().x / (1000 / scaleX);
-            position.y -= player.getVelocity().y / (1000 / scaleX);
-            if (normal.set(player.getVelocity()).len() < 150) {
-                normal.set(player.getVelocity()).nor();
+            position.x -= Shuttle.velocity.x / (1000 / scaleX);
+            position.y -= Shuttle.velocity.y / (1000 / scaleX);
+            if (normal.set(Shuttle.velocity).len() < 150) {
+                normal.set(Shuttle.velocity).nor();
                 position.x -= 0.1 * normal.x * scaleX;
                 position.y -= 0.1 * normal.y * scaleX;
             }

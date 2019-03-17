@@ -11,6 +11,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.MoveProcessor;
+import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.GameInfoSystem;
@@ -147,7 +148,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
             } else {
                 destroyWithEffect();
                 boomBox.playSound(MSConstants.DESTROY_RADIATION_ANOMALY);
-                gs.getGameInfoSystem().setup(
+                GameInfoSystem.setup(
                         position.x,
                         position.y,
                         GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
@@ -167,8 +168,8 @@ public class RadiationAnomaly extends AbstractAnomaly {
     @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
-        gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
-        gs.getPlayer().getStanding().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
+        Standing.getInstance().addToStatistics(this.type, this.level);
+        Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
         showSprayBoom(gs.getParticleEmitter());
     }
 }

@@ -16,7 +16,7 @@ public class UIInfoPanel extends UIAbstractPanel {
 
     public UIInfoPanel(GameScreen gs) {
         this.gs = gs;
-        this.playerXP = new PlayerXP(gs);
+        this.playerXP = new PlayerXP();
         this.bars = new Bars(gs);
         this.anomalyTimer = new AnomalyTimer(gs);
     }

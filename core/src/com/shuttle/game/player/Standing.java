@@ -33,7 +33,6 @@ public class Standing {
     private int score, scoreView, scoreToLive;
     private Results results;
     private BitmapFont font64;
-    private Shuttle player;
     @Getter
     @Setter
     private float fuel, maxFuel;
@@ -58,19 +57,30 @@ public class Standing {
     @Getter
     @Setter
     private boolean fuelAlertMagneticAnomaly;
+    @Getter
+    @Setter
+    private float laserChargeLevel;
     //Score to lives with formula scoreToLive*n*(28 - level)
     private int n;
     private BoomBox boomBox;
     //Type, level, score
     private Map<AbstractPoolable.Type, Map<Integer, Integer>> statistics;
 
-    public Standing(Shuttle player) {
+    private static Standing instance;
+
+    public static Standing getInstance() {
+        if (instance == null) {
+            instance = new Standing();
+        }
+        return instance;
+    }
+
+    private Standing() {
         this.boomBox = new BoomBox();
         this.tmpString = new StringBuilder();
         this.username = Gdx.files.local("username").readString();
         this.results = new Results();
         this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64_C, BitmapFont.class);
-        this.player = player;
         this.n = 1;
         this.statistics = new HashMap<AbstractPoolable.Type, Map<Integer, Integer>>();
         //Able to change colour for part of the text
@@ -110,6 +120,10 @@ public class Standing {
         }
     }
 
+    public void changeLaserCharge(int amount) {
+        laserChargeLevel += amount;
+    }
+
     public void changeLives(int amount) {
         lives += amount;
         if (lives == 0) {
@@ -137,9 +151,9 @@ public class Standing {
             //todo: to be Balanced
             n += 3;
             lives++;
-            player.getGs().getGameInfoSystem().setup(
-                    player.getPosition().x,
-                    player.getPosition().y,
+            GameInfoSystem.setup(
+                    Shuttle.position.x,
+                    Shuttle.position.y,
                     "+[GREEN]" + GameInfoSystem.Preset.UP + "[]",
                     4.0f,
                     true
@@ -161,35 +175,7 @@ public class Standing {
 
     public void render(SpriteBatch batch) {
         tmpString.setLength(0);
-        tmpString
-                .append("\nHP: ");
-        if (hpAlert) {
-            tmpString
-                    .append("[RED]")
-                    .append(hp)
-                    .append("[]");
-        } else {
-            tmpString.append(hp);
-        }
-        tmpString
-                .append("/")
-                .append(maxHp)
-                .append(" x")
-                .append(lives);
-
-        tmpString
-                .append("\nFUEL: ");
-        if (fuelAlertOutOfBounds || fuelAlertMagneticAnomaly) {
-            tmpString
-                    .append("[RED]")
-                    .append((int) fuel)
-                    .append("[]");
-        } else {
-            tmpString.append((int) fuel);
-        }
-        tmpString
-                .append("/")
-                .append((int) maxFuel);
+        tmpString.append(lives);
         font64.draw(batch, tmpString, 44, 1700);
     }
 

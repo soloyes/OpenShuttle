@@ -92,7 +92,7 @@ public class Shuttle extends AbstractShuttle {
     public Shuttle(GameScreen gs, Joystick joystick) {
         super(gs);
         this.joystick = joystick;
-        this.standing = new Standing(this);
+        this.standing = Standing.getInstance();
         this.radar = new Radar(gs, this);
         this.boundCheck = new BoundCheck();
         this.lifeShield = new LifeShield(this);
@@ -139,7 +139,7 @@ public class Shuttle extends AbstractShuttle {
     public void killPlusPlus(AbstractPoolable abstractPoolable) {
         if (abstractPoolable.getLevel() != 0) {
             killTimer = Rules.PLAYER_KILL_TIMER;
-            gs.getGameInfoSystem().setup(
+            GameInfoSystem.setup(
                     position.x, position.y,
                     KillingSpree.getKillingSpreeFromKillsCount(killSeries).getText(),
                     KillingSpree.getKillingSpreeFromKillsCount(killSeries).getTextSizeModifier(),
@@ -147,7 +147,7 @@ public class Shuttle extends AbstractShuttle {
             );
 
             int score = (abstractPoolable.getLevel()) * Rules.ANOMALIES_BASE_SCORE_ADD * killSeries;
-            gs.getGameInfoSystem().setup(
+            GameInfoSystem.setup(
                     position.x,
                     position.y,
                     GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
@@ -157,7 +157,7 @@ public class Shuttle extends AbstractShuttle {
             standing.changeScore(score);
             killSeries++;
         } else {
-            gs.getGameInfoSystem().setup(
+            GameInfoSystem.setup(
                     position.x, position.y,
                     KillingSpree.getKillingSpreeFromKillsCount(0).getText(),
                     KillingSpree.getKillingSpreeFromKillsCount(0).getTextSizeModifier(),
@@ -248,7 +248,7 @@ public class Shuttle extends AbstractShuttle {
             if (standing.getLives() != 0) {
                 gs.getShake().shake(1, 35, 50);
                 standing.setFuel(standing.getMaxFuel());
-                gs.getGameInfoSystem().setup(
+                GameInfoSystem.setup(
                         position.x,
                         position.y,
                         "[RED]DESTROYED[]",

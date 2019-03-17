@@ -24,6 +24,6 @@ public class BarLaser extends AbstractBar {
 
     @Override
     void update(float dt) {
-
+        color.set(1.0f, 1.0f, 1.0f, 1.0f);
     }
 }

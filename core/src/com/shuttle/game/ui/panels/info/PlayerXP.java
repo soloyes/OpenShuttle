@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Standing;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.RadialSprite;
 
@@ -15,7 +14,6 @@ import com.shuttle.game.utils.RadialSprite;
  * @author Shuttle on 3/3/19.
  */
 public class PlayerXP {
-    private GameScreen gs;
     private TextureRegion outCircle, inCircle;
     private RadialSprite scaleCircle;
     private int width, height;
@@ -25,14 +23,13 @@ public class PlayerXP {
     private Vector2 position;
 
     //todo: add Vector2 position on everything UI elements
-    public PlayerXP(GameScreen gs) {
-        this.gs = gs;
+    public PlayerXP() {
         this.width = PaintConstants.XP_WIDTH;
         this.height = PaintConstants.XP_HEIGHT;
         this.outCircle = Assets.getInstance().getAtlas().findRegion(PaintConstants.XP_OUT_CIRCLE);
         this.inCircle = Assets.getInstance().getAtlas().findRegion(PaintConstants.XP_IN_CIRCLE);
         this.scaleCircle = new RadialSprite(Assets.getInstance().getAtlas().findRegion(PaintConstants.XP_SCALE));
-        this.standing = gs.getPlayer().getStanding();
+        this.standing = Standing.getInstance();
         this.color = new Color();
         this.position = new Vector2();
         this.position.set(44, Rules.WORLD_HEIGHT - height - 44);

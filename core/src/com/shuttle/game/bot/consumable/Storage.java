@@ -225,7 +225,7 @@ public class Storage extends AbstractConsumable {
 
     @Override
     public void badEffect(GameScreen gs) {
-        gs.getGameInfoSystem().setup(
+        GameInfoSystem.setup(
                 position.x,
                 position.y,
                 GameInfoSystem.Preset.BOOM,

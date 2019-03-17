@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Standing;
 import com.shuttle.game.utils.Assets;
 
 import lombok.Getter;
@@ -31,7 +32,7 @@ public class LifeShield {
     }
 
     public void blink(float alpha) {
-        if (player.getStanding().getLives() == 1) {
+        if (Standing.getInstance().getLives() == 1) {
             this.alpha = 0.0f;
         } else {
             this.alpha = alpha;
@@ -44,7 +45,7 @@ public class LifeShield {
         batch.setColor(color);
         batch.draw(
                 texture,
-                player.getPosition().x - width / 2, player.getPosition().y - height / 2,
+                Shuttle.position.x - width / 2, Shuttle.position.y - height / 2,
                 width / 2, height / 2,
                 width, height,
                 scaleX, scaleY,

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Standing;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
 
@@ -44,7 +45,7 @@ public class Scratch {
         batch.setColor(tmpColor);
         batch.draw(
                 textures[frame],
-                player.getPosition().x - width / 2, player.getPosition().y - height / 2,
+                Shuttle.position.x - width / 2, Shuttle.position.y - height / 2,
                 width / 2, height / 2,
                 width, height,
                 scaleX, scaleY,
@@ -54,7 +55,7 @@ public class Scratch {
     }
 
     public void update(float dt) {
-        if (player.getStanding().getLives() != 1) {
+        if (Standing.getInstance().getLives() != 1) {
             alpha -= dt;
             if (alpha <= 0) {
                 alpha = 0.0f;
@@ -63,7 +64,7 @@ public class Scratch {
             alpha = 1.0f;
         }
 
-        int hp = (100 * player.getStanding().getHp()) / player.getStanding().getMaxHp();
+        int hp = (100 * Standing.getInstance().getHp()) / Standing.getInstance().getMaxHp();
 
         if (hp >= 0 && hp < 20)
             frame = 4;

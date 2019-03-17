@@ -101,17 +101,17 @@ public class Radar {
     }
 
     private void drawPoolable(SpriteBatch batch, AbstractPoolable abstractPoolable) {
-        float d = Vector2.dst(player.getPosition().x, player.getPosition().y, abstractPoolable.getPosition().x, abstractPoolable.getPosition().y);
+        float d = Vector2.dst(Shuttle.position.x, Shuttle.position.y, abstractPoolable.getPosition().x, abstractPoolable.getPosition().y);
         if (d < 2000.0f) {
             float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f + dotSize;
-            tmp.set(abstractPoolable.getPosition()).sub(player.getPosition()).nor().scl(d / 2000.0f * 300.0f);
+            tmp.set(abstractPoolable.getPosition()).sub(Shuttle.position).nor().scl(d / 2000.0f * 300.0f);
             batch.setColor(setPointColor(abstractPoolable));
-            batch.draw(dot, player.getPosition().x + tmp.x, player.getPosition().y + tmp.y, 8f, 8f, PaintConstants.RADAR_DOT_WIDTH, PaintConstants.RADAR_DOT_HEIGHT, sc, sc, 0);
+            batch.draw(dot, Shuttle.position.x + tmp.x, Shuttle.position.y + tmp.y, 8f, 8f, PaintConstants.RADAR_DOT_WIDTH, PaintConstants.RADAR_DOT_HEIGHT, sc, sc, 0);
         }
     }
 
     private Color setPointColor(AbstractPoolable abstractPoolable) {
-        float d = Vector2.dst(player.getPosition().x, player.getPosition().y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
+        float d = Vector2.dst(Shuttle.position.x, Shuttle.position.y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
         int c;
         if (d <= Rules.BLACKHOLE_NOISE_RANGE && !gs.getPauseGroup().isPause()) {
             c = MathUtils.random(0, 4);
@@ -140,7 +140,7 @@ public class Radar {
     public void update(float dt) {
         if (active) {
             updateRadar(dt);
-            float d = Vector2.dst(player.getPosition().x, player.getPosition().y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
+            float d = Vector2.dst(Shuttle.position.x, Shuttle.position.y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
             if (d <= Rules.BLACKHOLE_NOISE_RANGE) {
                 if (!player.isTaken() && !Rules.GAME_OVER) {
                     boomBox.playMusicEffectInLoop(MSConstants.RADAR_WHITE_NOISE_MUSIC, 1.0f);

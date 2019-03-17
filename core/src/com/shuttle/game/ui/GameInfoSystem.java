@@ -6,8 +6,8 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.FlyingText;
 
 public class GameInfoSystem {
-    private float dy;
-    private FlyingText[] elements;
+    private static float dy;
+    private static FlyingText[] elements;
 
     public GameInfoSystem() {
         this.elements = new FlyingText[20];
@@ -23,11 +23,11 @@ public class GameInfoSystem {
         }
     }
 
-    public void setup(float x, float y, Preset preset, float scale, boolean colored) {
+    public static void setup(float x, float y, Preset preset, float scale, boolean colored) {
         setupElement(x, y, preset.getValue(), scale, colored);
     }
 
-    private void setupElement(float x, float y, String text, float scale, boolean colored) {
+    private static void setupElement(float x, float y, String text, float scale, boolean colored) {
         for (int i = 0; i < elements.length; i++) {
             if (MathUtils.random(0,1) == 0){
                 dy = MathUtils.random(-40, -15);
@@ -41,7 +41,7 @@ public class GameInfoSystem {
         }
     }
 
-    public void setup(float x, float y, String text, float scale, boolean colored) {
+    public static void setup(float x, float y, String text, float scale, boolean colored) {
         setupElement(x, y, text, scale, colored);
     }
 

@@ -48,7 +48,7 @@ public class RamShield {
         batch.setColor(tmpColor);
         batch.draw(
                 texture,
-                player.getPosition().x - width / 2, player.getPosition().y - height / 2,
+                Shuttle.position.x - width / 2, Shuttle.position.y - height / 2,
                 width / 2, height / 2,
                 width, height,
                 scaleX, scaleY,

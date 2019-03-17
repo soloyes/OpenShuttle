@@ -25,5 +25,10 @@ public class BarHP extends AbstractBar {
     @Override
     void update(float dt) {
         percentage = 1.0f * standing.getHp() / standing.getMaxHp();
+        if (standing.isHpAlert()) {
+            color.set(1.0f, 0.2f, 0.0f, 1f);
+        } else {
+            color.set(0.72f, 0.34f, 0.18f, 1.0f);
+        }
     }
 }

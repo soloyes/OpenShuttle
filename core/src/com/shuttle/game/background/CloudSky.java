@@ -104,10 +104,10 @@ public class CloudSky {
 
     public void update(float dt) {
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
-            BCdx += player.getVelocity().x / 1200;
-            BCdy += player.getVelocity().y / 1200;
-            if (normal.set(player.getVelocity()).len() < 150) {
-                normal.set(player.getVelocity()).nor();
+            BCdx += Shuttle.velocity.x / 1200;
+            BCdy += Shuttle.velocity.y / 1200;
+            if (normal.set(Shuttle.velocity).len() < 150) {
+                normal.set(Shuttle.velocity).nor();
                 BCdx += 0.1 * normal.x;
                 BCdy += 0.1 * normal.y;
             }
@@ -135,20 +135,20 @@ public class CloudSky {
         }
 
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
-            MCdx += player.getVelocity().x / 900;
-            MCdy += player.getVelocity().y / 900;
-            if (normal.set(player.getVelocity()).len() < 150) {
-                normal.set(player.getVelocity()).nor();
+            MCdx += Shuttle.velocity.x / 900;
+            MCdy += Shuttle.velocity.y / 900;
+            if (normal.set(Shuttle.velocity).len() < 150) {
+                normal.set(Shuttle.velocity).nor();
                 MCdx += 0.2 * normal.x;
                 MCdy += 0.2 * normal.y;
             }
         }
 
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
-            SCdx += player.getVelocity().x / 600;
-            SCdy += player.getVelocity().y / 600;
-            if (normal.set(player.getVelocity()).len() < 150) {
-                normal.set(player.getVelocity()).nor();
+            SCdx += Shuttle.velocity.x / 600;
+            SCdy += Shuttle.velocity.y / 600;
+            if (normal.set(Shuttle.velocity).len() < 150) {
+                normal.set(Shuttle.velocity).nor();
                 SCdx += 0.3 * normal.x;
                 SCdy += 0.3 * normal.y;
             }

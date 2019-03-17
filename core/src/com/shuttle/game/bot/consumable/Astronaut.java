@@ -67,8 +67,8 @@ public class Astronaut extends AbstractConsumable {
         int score = Rules.CONSUMABLE_ASTRONAUT_BASE_SCORE_ADD +
                 multiplier * Rules.CONSUMABLE_ASTRONAUT_RANGE_SCORE_ADD +
                 gs.getPlayer().getShieldLevel().getLevel() * Rules.CONSUMABLE_ASTRONAUT_BONUS_SCORE_ADD;
-        gs.getPlayer().getStanding().changeScore(score);
-        gs.getGameInfoSystem().setup(
+        Standing.getInstance().changeScore(score);
+        GameInfoSystem.setup(
                 position.x,
                 position.y,
                 GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
@@ -80,9 +80,9 @@ public class Astronaut extends AbstractConsumable {
 
     @Override
     public void badEffect(GameScreen gs) {
-        Standing standing = gs.getPlayer().getStanding();
+        Standing standing = Standing.getInstance();
         standing.changeScore(-Rules.CONSUMABLE_MURDER_SCORE_DECREASE);
-        gs.getGameInfoSystem().setup(
+        GameInfoSystem.setup(
                 position.x,
                 position.y,
                 GameInfoSystem.Preset.MURDERER,

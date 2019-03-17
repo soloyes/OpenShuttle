@@ -11,7 +11,7 @@ import com.shuttle.game.screens.GameScreen;
  * @author Shuttle on 3/14/19.
  */
 public abstract class AbstractBar {
-    protected TextureRegion outBar, inBar, icon, scale;
+    protected TextureRegion outBar, inBar, scale, icon;
     protected GameScreen gs;
     protected int width, height;
     protected Standing standing;
@@ -19,24 +19,25 @@ public abstract class AbstractBar {
     protected Vector2 position;
     protected Side side;
     protected float percentage;
+    protected boolean redAlert;
 
     public AbstractBar(GameScreen gs) {
         this.gs = gs;
-        this.standing = gs.getPlayer().getStanding();
-        this.color = Color.WHITE;
+        this.standing = Standing.getInstance();
+        this.color = new Color();
         this.outBar = new TextureRegion();
         this.inBar = new TextureRegion();
-        this.icon = new TextureRegion();
         this.scale = new TextureRegion();
+        this.icon = new TextureRegion();
         this.position = new Vector2();
         this.percentage = 1.0f;
+        this.redAlert = false;
     }
 
     abstract void update(float dt);
 
     protected void render(SpriteBatch batch) {
         Color tmpColor = batch.getColor();
-        batch.setColor(color);
         batch.draw(inBar,
                 position.x, position.y,
                 width / 2, height / 2,
@@ -44,13 +45,19 @@ public abstract class AbstractBar {
                 1.0f, 1.0f,
                 0.0f
         );
-        batch.draw(scale,
+        batch.setColor(color);
+        batch.draw(
+                scale.getTexture(),
                 position.x, position.y,
                 width / 2, height / 2,
                 width * percentage, height,
                 1.0f, 1.0f,
-                180 * side.factor
-        );
+                180 * side.factor,
+                scale.getRegionX(), scale.getRegionY(),
+                (int) (scale.getRegionWidth() * percentage), scale.getRegionHeight(),
+                false, false);
+        batch.setColor(tmpColor);
+
         batch.draw(outBar,
                 position.x, position.y,
                 width / 2, height / 2,

@@ -10,6 +10,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.MoveProcessor;
+import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.GameInfoSystem;
@@ -134,18 +135,18 @@ public class ElectricalAnomaly extends AbstractAnomaly {
             } else {
                 destroy();
                 boomBox.playSound(MSConstants.DESTROY_ELECTRIC_ANOMALY);
-                gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
+                Standing.getInstance().addToStatistics(this.type, this.level);
                 showSprayBoom(gs.getParticleEmitter());
                 //score amount decrease when kicked
                 int score = (int) (level * Rules.ANOMALIES_BASE_SCORE_ADD * (v / Rules.ANOMALY_ELECTRIC_VELOCITY));
-                gs.getGameInfoSystem().setup(
+                GameInfoSystem.setup(
                         position.x,
                         position.y,
                         GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
                         3.0f,
                         true
                 );
-                gs.getPlayer().getStanding().changeScore(score);
+                Standing.getInstance().changeScore(score);
             }
         } else {
             born = true;
@@ -155,8 +156,8 @@ public class ElectricalAnomaly extends AbstractAnomaly {
     @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
-        gs.getPlayer().getStanding().addToStatistics(this.type, this.level);
-        gs.getPlayer().getStanding().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
+        Standing.getInstance().addToStatistics(this.type, this.level);
+        Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
         showSprayBoom(gs.getParticleEmitter());
     }
 }

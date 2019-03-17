@@ -46,6 +46,7 @@ import com.shuttle.game.effects.Shake;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Standing;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.Joystick;
 import com.shuttle.game.ui.PlayerPointer;
@@ -195,10 +196,10 @@ public class GameScreen extends BaseScreen {
         //todo: all into one class UI bla bla
         uiLatestPanel = new UILatestPanel();
         uiBonusPanel = new UIBonusPanel();
-        playerXP = new PlayerXP(this);
+        playerXP = new PlayerXP();
         bars = new Bars(this);
         //
-        BoundCheck.avoidPosition(blackhole.getPosition(), player.getPosition(), (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+        BoundCheck.avoidPosition(blackhole.getPosition(), Shuttle.position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         background.setPlayer(player);
         playerPointer = new PlayerPointer(player);
         Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel(player);
@@ -225,12 +226,12 @@ public class GameScreen extends BaseScreen {
 
     private void calcMusicEffectVolume() {
         float v;
-        if (player.getPosition().dst(blackhole.getPosition()) >= Rules.BLACKHOLE_ROAR_RANGE) {
+        if (Shuttle.position.dst(blackhole.getPosition()) >= Rules.BLACKHOLE_ROAR_RANGE) {
             v = 0.0f;
-        } else if (player.getPosition().dst(blackhole.getPosition()) <= Rules.BLACKHOLE_TAKE_RANGE) {
+        } else if (Shuttle.position.dst(blackhole.getPosition()) <= Rules.BLACKHOLE_TAKE_RANGE) {
             v = 0.5f;
         } else {
-            v = 1 - player.getPosition().dst(blackhole.getPosition()) / Rules.BLACKHOLE_ROAR_RANGE;
+            v = 1 - Shuttle.position.dst(blackhole.getPosition()) / Rules.BLACKHOLE_ROAR_RANGE;
         }
         boomBox.setMusicEffectVolume(MSConstants.BLACKHOLE_ROAR_MUSIC, v);
     }
@@ -318,7 +319,7 @@ public class GameScreen extends BaseScreen {
         //BEGIN
         //batch.begin();
         if (!Rules.GAME_OVER) {
-            player.getStanding().render(batch);
+            Standing.getInstance().render(batch);
             anomalyTimer.render(batch);
             uiLatestPanel.render(batch);
             uiBonusPanel.render(batch);
@@ -413,20 +414,20 @@ public class GameScreen extends BaseScreen {
     //todo: Позиция обнулсяеся во время fbo.end(), поэтому хак - копипаста из cameraHelper
     private void cameraUpdate(float dt) {
         if (player.isCameraSmooth()) {
-            tmp1V3.set(player.getPosition(), 0.0f).sub(cameraHelper.position.x, cameraHelper.position.y, 0.0f).nor();
+            tmp1V3.set(Shuttle.position, 0.0f).sub(cameraHelper.position.x, cameraHelper.position.y, 0.0f).nor();
             cameraHelper.position.mulAdd(tmp1V3, Rules.CAMERA_SMOOTH_VELOCITY * dt);
             camera.position.set(cameraHelper.position);
             if (
                 //parking
-                    tmp1V2.set(player.getPosition()).sub(
+                    tmp1V2.set(Shuttle.position).sub(
                             cameraHelper.position.x, cameraHelper.position.y).len2() <
                             tmp1V3.scl(Rules.CAMERA_SMOOTH_VELOCITY * dt).len2()
                     ) {
                 player.setCameraSmooth(false);
             }
         } else {
-            cameraHelper.position.set(player.getPosition().x, player.getPosition().y, 0);
-            camera.position.set(player.getPosition().x, player.getPosition().y, 0);
+            cameraHelper.position.set(Shuttle.position.x, Shuttle.position.y, 0);
+            camera.position.set(Shuttle.position.x, Shuttle.position.y, 0);
         }
         cameraUpdater(cameraHelper);
         cameraUpdater(camera);
@@ -441,11 +442,11 @@ public class GameScreen extends BaseScreen {
             for (int j = 0; j < consumableList.get(i).size(); j++) {
                 AbstractConsumable consumable = consumableList.get(i).get(j);
                 if (!consumable.isTaken()) {
-                    if (player.getPosition().dst(consumable.getPosition()) <= PaintConstants.SHUTTLE_WIDTH / 2) {
+                    if (Shuttle.position.dst(consumable.getPosition()) <= PaintConstants.SHUTTLE_WIDTH / 2) {
                         if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
                             consumable.destroy();
                             player.takeEffect(consumable);
-                            player.getStanding().addToStatistics(consumable.getType(), consumable.getLevel());
+                            Standing.getInstance().addToStatistics(consumable.getType(), consumable.getLevel());
                         } else {
                             if (!player.canCatch(consumable)) {
                                 consumable.destroyWithEffect();
@@ -483,9 +484,9 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < corrosiveAnomalyEmitter.getActiveList().size(); i++) {
             CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(i);
             if (!anomaly.isTaken()) {
-                if (player.getPosition().dst(anomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && anomaly.isBorn()) {
-                    if (anomaly.getLevel() < player.getPushPower() || player.getVelocity().len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
-                        if (player.getVelocity().len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
+                if (Shuttle.position.dst(anomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && anomaly.isBorn()) {
+                    if (anomaly.getLevel() < player.getPushPower() || Shuttle.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
+                        if (Shuttle.position.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                             boomBox.playSound(MSConstants.BURST_CORROSIVE_ANOMALY);
                         } else {
                             boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
@@ -510,7 +511,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < electricalAnomalyEmitter.getActiveList().size(); i++) {
             ElectricalAnomaly anomaly = (ElectricalAnomaly) electricalAnomalyEmitter.getActiveList().get(i);
             if (!anomaly.isTaken()) {
-                if (player.getPosition().dst(anomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 && anomaly.isBorn()) {
+                if (Shuttle.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 && anomaly.isBorn()) {
                     anomaly.setHungry(false);
                     damageToPlayer(anomaly);
                     Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
@@ -526,7 +527,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < radiationAnomalyEmitter.getActiveList().size(); i++) {
             RadiationAnomaly anomaly = (RadiationAnomaly) radiationAnomalyEmitter.getActiveList().get(i);
             if (!anomaly.isTaken()) {
-                if (player.getPosition().dst(anomaly.getPosition()) < PaintConstants.ANOMALY_RADIATION_WIDTH / 3 && anomaly.isBorn()) {
+                if (Shuttle.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_RADIATION_WIDTH / 3 && anomaly.isBorn()) {
                     anomaly.setEat(true);
                     anomaly.setGlued(true);
                 } else {
@@ -539,11 +540,11 @@ public class GameScreen extends BaseScreen {
                     anomaly.addEatTimer(dt);
                     if (anomaly.getEatTimer() >= Rules.ANOMALIES_RADIATION_EAT_TIME) {
                         anomaly.setEatTimer(0.0f);
-                        player.getStanding().changeScore(-Rules.ANOMALIES_RADIATION_SCORE_DECREASE);
+                        Standing.getInstance().changeScore(-Rules.ANOMALIES_RADIATION_SCORE_DECREASE);
                         boomBox.playSound(MSConstants.LOSE_SCORE);
-                        gameInfoSystem.setup(
-                                player.getPosition().x,
-                                player.getPosition().y,
+                        GameInfoSystem.setup(
+                                Shuttle.position.x,
+                                Shuttle.position.y,
                                 "-[RED]" + GameInfoSystem.Preset.LOST_SCORE.getValue() + "[]",
                                 2.0f,
                                 true
@@ -554,13 +555,13 @@ public class GameScreen extends BaseScreen {
             }
             collideWithRocket(anomaly);
         }
-        player.getStanding().setScoreAlertRadiationAnomaly(tmp1);
+        Standing.getInstance().setScoreAlertRadiationAnomaly(tmp1);
 
         boolean tmp2 = false;
         for (int i = 0; i < magneticAnomalyEmitter.getActiveList().size(); i++) {
             MagneticAnomaly anomaly = (MagneticAnomaly) magneticAnomalyEmitter.getActiveList().get(i);
             if (!anomaly.isTaken()) {
-                if (player.getPosition().dst(anomaly.getPosition()) < PaintConstants.ANOMALY_MAGNETIC_HEIGHT / 3 && anomaly.isBorn()) {
+                if (Shuttle.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_MAGNETIC_HEIGHT / 3 && anomaly.isBorn()) {
                     anomaly.setEat(true);
                     anomaly.setGlued(true);
                 } else {
@@ -573,11 +574,11 @@ public class GameScreen extends BaseScreen {
                     anomaly.addEatTimer(dt);
                     if (anomaly.getEatTimer() >= Rules.ANOMALIES_MAGNETIC_EAT_TIME) {
                         anomaly.setEatTimer(0.0f);
-                        player.getStanding().changeFuel(-Rules.ANOMALIES_MAGNETIC_FUEL_DECREASE);
+                        Standing.getInstance().changeFuel(-Rules.ANOMALIES_MAGNETIC_FUEL_DECREASE);
                         boomBox.playSound(MSConstants.LOSE_FUEL);
-                        gameInfoSystem.setup(
-                                player.getPosition().x,
-                                player.getPosition().y,
+                        GameInfoSystem.setup(
+                                Shuttle.position.x,
+                                Shuttle.position.y,
                                 "-[RED]" + GameInfoSystem.Preset.FUEL + "[]",
                                 4.0f,
                                 true
@@ -588,14 +589,14 @@ public class GameScreen extends BaseScreen {
             }
             collideWithRocket(anomaly);
         }
-        player.getStanding().setFuelAlertMagneticAnomaly(tmp2);
+        Standing.getInstance().setFuelAlertMagneticAnomaly(tmp2);
         //
 
         for (int i = 0; i < asteroidsList.size(); i++) {
             for (int j = 0; j < asteroidsList.get(i).size(); j++) {
                 AbstractAsteroid asteroid = asteroidsList.get(i).get(j);
                 if (!asteroid.isTaken()) {
-                    if (player.getPosition().dst(asteroid.getPosition()) < asteroid.getHeight() * asteroid.getScaleX()) {
+                    if (Shuttle.position.dst(asteroid.getPosition()) < asteroid.getHeight() * asteroid.getScaleX()) {
                         if (!asteroid.isFragmented()) {
                             asteroid.destroyWithEffect();
                             Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
@@ -609,14 +610,14 @@ public class GameScreen extends BaseScreen {
                                     break;
                             }
                             player.takeDamage(player.getShieldLevel().getLevel() + 1);
-                            gameInfoSystem.setup(
-                                    player.getPosition().x, player.getPosition().y,
+                            GameInfoSystem.setup(
+                                    Shuttle.position.x, Shuttle.position.y,
                                     GameInfoSystem.Preset.SCREECH,
                                     3.0f,
                                     true
                             );
                             boomBox.playSound(MSConstants.DESTROY_ASTEROID);
-                            player.getStanding().addToStatistics(asteroid.getType(), asteroid.getLevel());
+                            Standing.getInstance().addToStatistics(asteroid.getType(), asteroid.getLevel());
                         } else {
                             player.getRamShield().blink(0.5f);
                             player.setPower(player.getPower() + asteroid.getSizeForHarvest());
@@ -641,7 +642,7 @@ public class GameScreen extends BaseScreen {
                                     mineralAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
                                     break;
                             }
-                            gameInfoSystem.setup(anomaly.getPosition().x, anomaly.getPosition().y, GameInfoSystem.Preset.BOOM, 3.0f, false);
+                            GameInfoSystem.setup(anomaly.getPosition().x, anomaly.getPosition().y, GameInfoSystem.Preset.BOOM, 3.0f, false);
                             if (anomaly.getLevel() == 0) {
                                 anomaly.destroyWithEffect();
                             } else {
@@ -667,7 +668,7 @@ public class GameScreen extends BaseScreen {
                                         mineralAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
                                         break;
                                 }
-                                gameInfoSystem.setup(
+                                GameInfoSystem.setup(
                                         consumable.getPosition().x,
                                         consumable.getPosition().y,
                                         GameInfoSystem.Preset.SAD,
@@ -702,7 +703,7 @@ public class GameScreen extends BaseScreen {
     }
 
     private void collideWithRocket(AbstractAnomaly anomaly) {
-        float dst = player.getPosition().dst(anomaly.getPosition());
+        float dst = Shuttle.position.dst(anomaly.getPosition());
         if (dst <= Rules.ROCKETS_TAKE_RANGE && anomaly.isBorn() && !anomaly.isTaken()) {
             anomaly.setAtRocketPoint(true);
         } else {
@@ -737,12 +738,12 @@ public class GameScreen extends BaseScreen {
         abstractPoolable.destroyWithEffect();
         player.getRamShield().blink(1.0f);
         player.slowDown(abstractPoolable.getLevel() * 50.0f);
-        if (player.getVelocity().len() <= Rules.PLAYER_ENGINE_POWER) {
+        if (Shuttle.velocity.len() <= Rules.PLAYER_ENGINE_POWER) {
             player.changePower(-abstractPoolable.getLevel());
         }
         abstractPoolable.showSprayCollision(particleEmitter);
         player.killPlusPlus(abstractPoolable);
-        player.getStanding().addToStatistics(abstractPoolable.getType(), abstractPoolable.getLevel());
+        Standing.getInstance().addToStatistics(abstractPoolable.getType(), abstractPoolable.getLevel());
     }
 
     private void damageToPlayer(AbstractPoolable anomaly) {
@@ -755,15 +756,15 @@ public class GameScreen extends BaseScreen {
 
         if (player.addZigZag(0.5f * anomaly.getLevel() + 0.2f)) {
             player.takeDamage(anomaly.getLevel() + 1);
-            gameInfoSystem.setup(
-                    player.getPosition().x,
-                    player.getPosition().y,
+            GameInfoSystem.setup(
+                    Shuttle.position.x,
+                    Shuttle.position.y,
                     GameInfoSystem.Preset.BRAKED,
                     5.0f,
                     false
             );
-            tmp1V2.set(player.getPosition()).sub(anomaly.getPosition()).nor().scl(300 + anomaly.getLevel() * 50);
-            player.getVelocity().add(tmp1V2);
+            tmp1V2.set(Shuttle.position).sub(anomaly.getPosition()).nor().scl(300 + anomaly.getLevel() * 50);
+            Shuttle.velocity.add(tmp1V2);
             player.resetPower();
             tmp1V2.scl(-1);
             anomaly.getVelocity().add(tmp1V2);
@@ -774,7 +775,7 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         shaderManager.dispose();
-        player.getStanding().writeResult();
+        Standing.getInstance().writeResult();
         anomalyTimer.dispose();
     }
 }

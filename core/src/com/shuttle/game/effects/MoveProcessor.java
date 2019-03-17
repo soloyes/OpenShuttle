@@ -6,6 +6,7 @@ import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.asteroids.AbstractAsteroid;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
@@ -61,19 +62,17 @@ public class MoveProcessor {
             //*Standard move*//
             if (abstractAnomaly.isHungry() && abstractAnomaly.isActivated()) {
                 abstractAnomaly.getPosition().mulAdd(abstractAnomaly.getVelocity(), dt);
-                float dst = gs.getPlayer().getPosition().dst(abstractAnomaly.getPosition());
+                float dst = Shuttle.position.dst(abstractAnomaly.getPosition());
                 if (abstractAnomaly.getLevel() + 1 != gs.getPlayer().getShieldLevel().getLevel()) {
                     if (dst < 2400.0f + 200 * abstractAnomaly.getLevel()) {
-                        tmp.set(gs.getPlayer()
-                                .getPosition())
+                        tmp.set(Shuttle.position)
                                 .sub(abstractAnomaly.getPosition())
                                 .nor()
                                 .scl(abstractAnomaly.getV());
                         abstractAnomaly.getVelocity().mulAdd(tmp, dt);
                     }
                     if (dst < 240 * abstractAnomaly.getLevel()) {
-                        tmp.set(gs.getPlayer()
-                                .getPosition())
+                        tmp.set(Shuttle.position)
                                 .sub(abstractAnomaly.getPosition())
                                 .nor()
                                 .scl(250.0f - 20 * abstractAnomaly.getLevel()
@@ -82,8 +81,7 @@ public class MoveProcessor {
                     }
                     //Anomaly afraid related shield level
                 } else {
-                    tmp.set(gs.getPlayer()
-                            .getPosition())
+                    tmp.set(Shuttle.position)
                             .sub(abstractAnomaly.getPosition())
                             .nor()
                             .scl(abstractAnomaly.getV() / Rules.ANOMALIES_CORROSIVE_AFRAID_FACTOR);

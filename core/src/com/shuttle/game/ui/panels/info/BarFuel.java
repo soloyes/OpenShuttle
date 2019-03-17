@@ -25,5 +25,10 @@ public class BarFuel extends AbstractBar {
     @Override
     void update(float dt) {
         percentage = 1.0f * standing.getFuel() / standing.getMaxFuel();
+        if (standing.isFuelAlertOutOfBounds() || standing.isFuelAlertMagneticAnomaly()) {
+            color.set(1.0f, 0.2f, 0.0f, 1f);
+        } else {
+            color.set(0.54f, 0.47f, 0.0f, 1.0f);
+        }
     }
 }

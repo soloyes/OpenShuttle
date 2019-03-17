@@ -5,6 +5,7 @@ import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.BoundCheck;
 
@@ -53,7 +54,7 @@ public class RocketLauncher {
                     AbstractAnomaly anomaly = gs.getAnomalyList().get(i).get(j);
                     if (anomaly.isAtRocketPoint()) {
                         count++;
-                        rocketEmitter.createRocket(gs.getPlayer().getPosition(), anomaly);
+                        rocketEmitter.createRocket(Shuttle.position, anomaly);
                     }
                 }
             }
