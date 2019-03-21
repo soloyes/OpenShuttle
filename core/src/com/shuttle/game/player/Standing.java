@@ -172,8 +172,10 @@ public class Standing {
                         8.0f,
                         true
                 );
-                Vibrator.vibrate(VConstants.PLAYER_LOST_LIVE);
-                boomBox.playSound(MSConstants.DOWN);
+                if (!Rules.GAME_OVER) {
+                    Vibrator.vibrate(VConstants.PLAYER_LOST_LIVE);
+                    boomBox.playSound(MSConstants.DOWN);
+                }
             }
         }
         //if hp is <= X% of maxHP

@@ -32,7 +32,7 @@ public class LifeShield {
     }
 
     public void blink(float alpha) {
-        if (Standing.getInstance().getLives() == 1) {
+        if (Standing.getInstance().getLifeShield() <= 0) {
             this.alpha = 0.0f;
         } else {
             this.alpha = alpha;
