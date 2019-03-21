@@ -12,10 +12,8 @@ import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.Fibonacci;
 import com.shuttle.game.effects.KillingSpree;
-import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.player.layers.LifeShield;
 import com.shuttle.game.player.layers.RamShield;
 import com.shuttle.game.player.layers.Scratch;
@@ -75,7 +73,6 @@ public class Shuttle extends AbstractShuttle {
     @Getter
     @Setter
     private boolean cameraSmooth;
-    private boolean hpNotification;
     private boolean engineStarted;
     private LinkedList<Integer> shadowsCoordinates;
     private LinkedList<Vector2> vector2List;
@@ -131,6 +128,50 @@ public class Shuttle extends AbstractShuttle {
 
     public void changePower(int amount) {
         power += amount;
+    }
+
+    public void collideBlackhole(float dt) {
+        if (position.dst(gs.getBlackhole().getPosition()) <= Rules.BLACKHOLE_TAKE_RANGE) {
+            taken = true;
+            velocity.scl(0.5f);
+            tmpV2.set(gs.getBlackhole().getPosition()).sub(position).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER);
+            position.mulAdd(tmpV2, dt);
+            float dst = gs.getBlackhole().getPosition().dst(position);
+            float scaleX = dst / Rules.BLACKHOLE_TAKE_RANGE;
+            float scaleY = dst / Rules.BLACKHOLE_TAKE_RANGE;
+            setLayersScale(scaleX, scaleY);
+            angle = angle + 365 * dt;
+            if (gs.getBlackhole().getPosition().dst(position) <= Rules.BLACKHOLE_EVENT_HORIZON) {
+                BoundCheck.avoidPosition(gs.getBlackhole().getPosition(), position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+                setLayersScale(1.0f, 1.0f);
+                taken = false;
+                boomBox.playSound(MSConstants.TELEPORT);
+                if (!GamePreferences.isChildEnabled()) {
+                    takeDamage(Rules.BLACKHOLE_GET_DAMAGE);
+                }
+                cameraSmooth = true;
+            }
+        } else {
+            setLayersScale(1.0f, 1.0f);
+            taken = false;
+        }
+    }
+
+    private void setLayersScale(float scaleX, float scaleY) {
+        this.scaleX = scaleX;
+        this.scaleY = scaleY;
+        ramShield.setScaleX(scaleX);
+        ramShield.setScaleY(scaleY);
+        lifeShield.setScaleX(scaleX);
+        lifeShield.setScaleY(scaleY);
+        scratch.setScaleX(scaleX);
+        scratch.setScaleY(scaleY);
+        takeRangeField.setScaleX(scaleX);
+        takeRangeField.setScaleY(scaleY);
+    }
+
+    public void takeDamage(int amount) {
+        standing.takeDamage(amount);
     }
 
     public void killPlusPlus(AbstractPoolable abstractPoolable) {
@@ -233,37 +274,8 @@ public class Shuttle extends AbstractShuttle {
     }
 
     public void slowDown(float amount) {
-        if(velocity.len() > 0)
-        velocity.scl(1.0f - amount / velocity.len());
-    }
-
-    public void takeDamage(int amount) {
-        //todo move to Standing.changeHP (need to change shake envocation)
-        standing.changeHP(-amount);
-        if (standing.getHp() <= 0) {
-            standing.setHp(standing.getMaxHp());
-            standing.changeLives(-1);
-            if (standing.getLives() != 0) {
-                gs.getShake().shake(1, 35, 50);
-                standing.setFuel(standing.getMaxFuel());
-                GameInfoSystem.setup(
-                        position.x,
-                        position.y,
-                        "[RED]DESTROYED[]",
-                        8.0f,
-                        true
-                );
-                Vibrator.vibrate(VConstants.PLAYER_LOST_LIVE);
-                boomBox.playSound(MSConstants.DOWN);
-            }
-            hpNotification = false;
-        }
-        //if hp is <= X% of maxHP
-        float p = standing.getHp() / (float) standing.getMaxHp();
-        if (!hpNotification && p <= Rules.PLAYER_LOW_LIFE_HP_PERCENT) {
-            hpNotification = true;
-            boomBox.playSound(MSConstants.LOW_LIFE_WARNING);
-        }
+        if (velocity.len() > 0)
+            velocity.scl(1.0f - amount / velocity.len());
     }
 
     public void takeEffect(Consumable consumable) {
@@ -277,7 +289,6 @@ public class Shuttle extends AbstractShuttle {
         checkPower();
         checkZigZagEffect(dt);
         angle = ShuttleMath.checkAngleBetween0And360(angle);
-        standing.update();
         checkFuel(dt);
 
         scratch.update(dt);
@@ -447,45 +458,5 @@ public class Shuttle extends AbstractShuttle {
 
     public int getPushPower() {
         return (int) power;
-    }
-
-    public void collideBlackhole(float dt) {
-        if (position.dst(gs.getBlackhole().getPosition()) <= Rules.BLACKHOLE_TAKE_RANGE) {
-            taken = true;
-            velocity.scl(0.5f);
-            tmpV2.set(gs.getBlackhole().getPosition()).sub(position).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER);
-            position.mulAdd(tmpV2, dt);
-            float dst = gs.getBlackhole().getPosition().dst(position);
-            float scaleX = dst / Rules.BLACKHOLE_TAKE_RANGE;
-            float scaleY = dst / Rules.BLACKHOLE_TAKE_RANGE;
-            setLayersScale(scaleX, scaleY);
-            angle = angle + 365 * dt;
-            if (gs.getBlackhole().getPosition().dst(position) <= Rules.BLACKHOLE_EVENT_HORIZON) {
-                BoundCheck.avoidPosition(gs.getBlackhole().getPosition(), position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
-                setLayersScale(1.0f, 1.0f);
-                taken = false;
-                boomBox.playSound(MSConstants.TELEPORT);
-                if (!GamePreferences.isChildEnabled()) {
-                    takeDamage(Rules.BLACKHOLE_GET_DAMAGE);
-                }
-                cameraSmooth = true;
-            }
-        } else {
-            setLayersScale(1.0f, 1.0f);
-            taken = false;
-        }
-    }
-
-    private void setLayersScale(float scaleX, float scaleY) {
-        this.scaleX = scaleX;
-        this.scaleY = scaleY;
-        ramShield.setScaleX(scaleX);
-        ramShield.setScaleY(scaleY);
-        lifeShield.setScaleX(scaleX);
-        lifeShield.setScaleY(scaleY);
-        scratch.setScaleX(scaleX);
-        scratch.setScaleY(scaleY);
-        takeRangeField.setScaleX(scaleX);
-        takeRangeField.setScaleY(scaleY);
     }
 }

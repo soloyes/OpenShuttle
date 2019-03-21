@@ -5,7 +5,11 @@ import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.effects.Shake;
+import com.shuttle.game.effects.Vibrator;
+import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
@@ -22,6 +26,7 @@ import lombok.Setter;
  * @author Shuttle on 8/2/18.
  */
 public class Standing {
+    private static Standing instance;
     private String username;
     @Getter
     @Setter
@@ -54,20 +59,17 @@ public class Standing {
     @Getter
     @Setter
     private float laserChargeLevel, maxLaserChargeLevel;
+    @Getter
+    @Setter
+    private float lifeShield, maxLifeShield;
+    private float lifeShieldDelayTime;
+    private boolean lifeShieldDelayFlag;
     //Score to lives with formula scoreToLive*n*(28 - level)
     private int n;
     private BoomBox boomBox;
+    private Shake shake;
     //Type, level, score
     private Map<AbstractPoolable.Type, Map<Integer, Integer>> statistics;
-
-    private static Standing instance;
-
-    public static Standing getInstance() {
-        if (instance == null) {
-            instance = new Standing();
-        }
-        return instance;
-    }
 
     private Standing() {
         this.boomBox = new BoomBox();
@@ -75,7 +77,7 @@ public class Standing {
         this.results = new Results();
         this.n = 1;
         this.statistics = new HashMap<AbstractPoolable.Type, Map<Integer, Integer>>();
-        //Able to change colour for part of the text
+        this.shake = new Shake();
     }
 
     public void addToStatistics(AbstractPoolable.Type type, Integer level) {
@@ -104,13 +106,6 @@ public class Standing {
         }
     }
 
-    public void changeHP(int amount) {
-        hp += amount;
-        if (hp > maxHp) {
-            hp = maxHp;
-        }
-    }
-
     public void changeLaserChargeLevel(float amount) {
         laserChargeLevel += amount;
         if (laserChargeLevel <= 0.0f) {
@@ -119,26 +114,6 @@ public class Standing {
         if (laserChargeLevel > maxLaserChargeLevel) {
             laserChargeLevel = maxLaserChargeLevel;
         }
-    }
-
-    public void changeLives(int amount) {
-        lives += amount;
-        if (lives == 0) {
-            Rules.GAME_OVER = true;
-            writeResult();
-        }
-    }
-
-    public void writeResult() {
-        results.setResult(
-                username +
-                        " " +
-                        scoreView +
-                        " "
-                        + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()) +
-                        " " +
-                        Rules.StartLevel.values()[GamePreferences.getLevel()].name()
-        );
     }
 
     public void changeScore(int amount) {
@@ -170,8 +145,87 @@ public class Standing {
         return statistics.get(type).get(level);
     }
 
-    public void update() {
+    public void takeDamage(int amount) {
+        lifeShield -= amount;
+        if (lifeShield <= 0) {
+            changeHP(lifeShield);
+        }
+    }
+
+    public void changeHP(float amount) {
+        hp += amount;
+        if (hp > maxHp) {
+            hp = maxHp;
+        }
+
+        if (hp <= 0) {
+            hp = maxHp;
+            lifeShield = maxLifeShield;
+            changeLives(-1);
+            if (lives != 0) {
+                shake.shake(1, 35, 50);
+                fuel = maxFuel;
+                GameInfoSystem.setup(
+                        Shuttle.position.x,
+                        Shuttle.position.y,
+                        "[RED]DESTROYED[]",
+                        8.0f,
+                        true
+                );
+                Vibrator.vibrate(VConstants.PLAYER_LOST_LIVE);
+                boomBox.playSound(MSConstants.DOWN);
+            }
+        }
+        //if hp is <= X% of maxHP
+        float p = 1.0f * hp / maxHp;
+        if (p <= Rules.PLAYER_LOW_LIFE_HP_PERCENT) {
+            boomBox.playSound(MSConstants.LOW_LIFE_WARNING);
+        }
+    }
+
+    public void changeLives(int amount) {
+        lives += amount;
+        if (lives == 0) {
+            Rules.GAME_OVER = true;
+            writeResult();
+        }
+    }
+
+    public void writeResult() {
+        results.setResult(
+                username +
+                        " " +
+                        scoreView +
+                        " "
+                        + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()) +
+                        " " +
+                        Rules.StartLevel.values()[GamePreferences.getLevel()].name()
+        );
+    }
+
+    public void update(float dt) {
+        shake.update(dt, ScreenManager.getInstance().getCamera());
+        lifeShieldTicTac(dt);
         scoreTicTac();
+    }
+
+    private void lifeShieldTicTac(float dt) {
+        if (!lifeShieldDelayFlag) {
+            lifeShield += dt / 3;
+        }
+        if (lifeShield > maxLifeShield) {
+            lifeShield = maxLifeShield;
+        }
+        if (lifeShield <= 0) {
+            lifeShieldDelayFlag = true;
+            lifeShield = 0;
+        }
+        if (lifeShieldDelayTime <= Rules.PLAYER_SHIELD_DELAY_TIME) {
+            lifeShieldDelayTime += dt;
+        } else {
+            lifeShieldDelayFlag = false;
+            lifeShieldDelayTime = 0;
+        }
     }
 
     private void scoreTicTac() {
@@ -187,5 +241,12 @@ public class Standing {
                 scoreView = score;
             }
         }
+    }
+
+    public static Standing getInstance() {
+        if (instance == null) {
+            instance = new Standing();
+        }
+        return instance;
     }
 }

@@ -149,6 +149,7 @@ public class GameScreen extends BaseScreen {
     @Getter
     private RocketLauncher rocketLauncher;
     private Bars bars;
+    private Standing standing;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -193,6 +194,7 @@ public class GameScreen extends BaseScreen {
 
         blackhole = new Blackhole();
         player = new Shuttle(this, joystick);
+        standing = Standing.getInstance();
         //todo: all into one class UI bla bla
         uiLatestPanel = new UILatestPanel();
         uiBonusPanel = new UIBonusPanel();
@@ -405,6 +407,7 @@ public class GameScreen extends BaseScreen {
         cameraUpdate(dt);
         if (!pauseGroup.isPause() && !Rules.GAME_OVER) {
             shake.update(dt, camera);
+            standing.update(dt);
         }
         stage.act();
     }
@@ -485,7 +488,7 @@ public class GameScreen extends BaseScreen {
             if (!anomaly.isTaken()) {
                 if (Shuttle.position.dst(anomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && anomaly.isBorn()) {
                     if (anomaly.getLevel() < player.getPushPower() || Shuttle.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
-                        if (Shuttle.position.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
+                        if (Shuttle.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                             boomBox.playSound(MSConstants.BURST_CORROSIVE_ANOMALY);
                         } else {
                             boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);

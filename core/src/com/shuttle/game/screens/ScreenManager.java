@@ -24,6 +24,7 @@ public class ScreenManager {
     private TestScreen testScreen;
     private SpriteBatch batch;
     private Viewport viewport;
+    @Getter
     private Camera camera;
     @Getter
     private ScreenType currentScreen;

@@ -9,7 +9,6 @@ import com.shuttle.game.utils.Assets;
  * @author Shuttle on 3/14/19.
  */
 public class BarHP extends AbstractBar {
-
     public BarHP(GameScreen gs) {
         super(gs);
         this.outBar = Assets.getInstance().getAtlas().findRegion(PaintConstants.HP_BAR_OUT);
@@ -25,7 +24,7 @@ public class BarHP extends AbstractBar {
     @Override
     void update(float dt) {
         percentage = 1.0f * standing.getHp() / standing.getMaxHp();
-        if (standing.isHpAlert()) {
+        if (standing.isHpAlert() && standing.getLifeShield() <= 0) {
             color.set(1.0f, 0.2f, 0.0f, 1f);
         } else {
             color.set(0.72f, 0.34f, 0.18f, 1.0f);

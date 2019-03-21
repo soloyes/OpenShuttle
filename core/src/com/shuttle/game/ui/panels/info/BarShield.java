@@ -9,7 +9,6 @@ import com.shuttle.game.utils.Assets;
  * @author Shuttle on 3/14/19.
  */
 public class BarShield extends AbstractBar {
-
     public BarShield(GameScreen gs) {
         super(gs);
         this.outBar = Assets.getInstance().getAtlas().findRegion(PaintConstants.SP_BAR_OUT);
@@ -24,6 +23,7 @@ public class BarShield extends AbstractBar {
 
     @Override
     void update(float dt) {
+        percentage = 1.0f * standing.getLifeShield() / standing.getMaxLifeShield();
         color.set(1.0f, 1.0f, 1.0f, 1.0f);
     }
 }

@@ -155,8 +155,8 @@ public final class Rules {
     public static final float PLAYER_MAX_POWER = 5.0f;
     //5.0f
     public static final float PLAYER_TIMER_HP_OUT_OF_MAP = 5.0f;
-    //1
-    public static final int PLAYER_HP_OUT_OF_MAP = 1;
+    //5
+    public static final int PLAYER_HP_OUT_OF_MAP = 5;
     //0.2f
     public static final float PLAYER_LOW_LIFE_HP_PERCENT = 0.2f;
     //2.5f
@@ -175,6 +175,8 @@ public final class Rules {
     public static final int PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY = 150;
     //1.0f
     public static final float PLAYER_FUEL_CONSUMPTION = 1.0f;
+    //3.0f
+    public static final float PLAYER_SHIELD_DELAY_TIME = 3.0f;
     //
     //BLACKHOLE
     //750
@@ -258,7 +260,9 @@ public final class Rules {
                 Standing.getInstance().setFuel(250);
                 Standing.getInstance().setHp(25);
                 Standing.getInstance().setMaxHp(25);
-                Standing.getInstance().setMaxLaserChargeLevel(20);
+                Standing.getInstance().setMaxLaserChargeLevel(25);
+                Standing.getInstance().setLifeShield(25);
+                Standing.getInstance().setMaxLifeShield(25);
                 Standing.getInstance().setLives(1);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
@@ -269,8 +273,8 @@ public final class Rules {
                 player.setLaser(true);
                 Standing.getInstance().setLaserChargeLevel(Standing.getInstance().getMaxLaserChargeLevel());
                 //
-                Standing.getInstance().setPlayingLevel(24);
-                Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 4);
+                Standing.getInstance().setPlayingLevel(25);
+                Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 3);
             }
         },
         MEDIUM {
@@ -280,15 +284,17 @@ public final class Rules {
                 Standing.getInstance().setFuel(200);
                 Standing.getInstance().setHp(20);
                 Standing.getInstance().setMaxHp(20);
-                Standing.getInstance().setMaxLaserChargeLevel(15);
+                Standing.getInstance().setMaxLaserChargeLevel(20);
+                Standing.getInstance().setLifeShield(20);
+                Standing.getInstance().setMaxLifeShield(20);
                 Standing.getInstance().setLives(2);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);
-                Standing.getInstance().setPlayingLevel(21);
-                Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 7);
+                Standing.getInstance().setPlayingLevel(28);
+                Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 8);
             }
         },
         HIGH {
@@ -298,7 +304,9 @@ public final class Rules {
                 Standing.getInstance().setFuel(150);
                 Standing.getInstance().setHp(15);
                 Standing.getInstance().setMaxHp(15);
-                Standing.getInstance().setMaxLaserChargeLevel(10);
+                Standing.getInstance().setMaxLaserChargeLevel(15);
+                Standing.getInstance().setLifeShield(15);
+                Standing.getInstance().setMaxLifeShield(15);
                 Standing.getInstance().setLives(2);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
@@ -316,7 +324,9 @@ public final class Rules {
                 Standing.getInstance().setFuel(100);
                 Standing.getInstance().setHp(10);
                 Standing.getInstance().setMaxHp(10);
-                Standing.getInstance().setMaxLaserChargeLevel(5);
+                Standing.getInstance().setMaxLaserChargeLevel(10);
+                Standing.getInstance().setLifeShield(10);
+                Standing.getInstance().setMaxLifeShield(10);
                 Standing.getInstance().setLives(3);
                 player.setMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
