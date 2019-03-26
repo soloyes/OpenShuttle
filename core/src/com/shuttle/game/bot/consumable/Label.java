@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.StickerToTexture;
+
+import java.util.Arrays;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +18,7 @@ import lombok.Setter;
  * @author Shuttle on 11/12/18.
  */
 public class Label {
+    @Getter
     private TextureRegion textureRegion;
     @Getter
     private Sticker sticker;
@@ -29,58 +33,17 @@ public class Label {
     @Setter
     private float d;
     private Vector2 offset;
+    private StickerToTexture stickerToTexture;
 
     public void setSticker(Sticker sticker) {
-        switch (sticker) {
-            case FUEL:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION);
-                break;
-            case BOOST:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOOST_LABEL_REGION);
-                break;
-            case SCAN:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SCAN_LABEL_REGION);
-                break;
-            case LASER:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.LASER_LABEL_REGION);
-                break;
-            case RADAR:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_LABEL_REGION);
-                break;
-            case TRASH:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.TRASH_LABEL_REGION);
-                break;
-            case REPAIR:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.REPAIR_LABEL_REGION);
-                break;
-            case ROCKETS:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.ROCKETS_LABEL_REGION);
-                break;
-            case SHABBY:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHABBY_SIGN_LABEL_REGION);
-                break;
-            case SHABBY_GOLD:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHABBY_SIGN_GOLD_LABEL_REGION);
-                break;
-            case SHIELD:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOX_SHIELD_LABEL_REGION);
-                break;
-            case SPLASH:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SPLASH_LABEL_REGION);
-                break;
-            case PATTERN:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_LABEL_REGION);
-                break;
-            case PATTERN_GOLD:
-                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_GOLD_LABEL_REGION);
-                break;
-        }
         this.sticker = sticker;
+        this.textureRegion = stickerToTexture.getRegion(sticker);
     }
 
     public Label() {
         this.textureRegion = new TextureRegion();
         this.color = new Color();
+        this.stickerToTexture = new StickerToTexture();
         setSticker(Sticker.PATTERN);
         this.offset = new Vector2();
     }
@@ -134,11 +97,13 @@ public class Label {
         ROCKETS,
         //Fuel
         FUEL,
+        FUEL_UI,
         //Surprise
         PATTERN,
         PATTERN_GOLD,
         SHABBY,
-        SHABBY_GOLD,
+        SHABBY_GOLD;
+        public static List<Sticker> SELECTABLE = Arrays.asList(BOOST, REPAIR, SHIELD, SPLASH, SCAN, ROCKETS);
     }
 
     public enum Layer {

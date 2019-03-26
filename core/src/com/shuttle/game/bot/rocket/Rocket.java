@@ -18,7 +18,6 @@ import lombok.Setter;
  * @author Shuttle on 19/01/19.
  */
 
-//todo:// вынести в константы все величины
 public class Rocket extends AbstractPoolable {
     private Vector2 position;
     private GameScreen gs;

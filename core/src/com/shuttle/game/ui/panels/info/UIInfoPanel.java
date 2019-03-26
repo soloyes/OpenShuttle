@@ -2,12 +2,11 @@ package com.shuttle.game.ui.panels.info;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.screens.GameScreen;
-import com.shuttle.game.ui.panels.UIAbstractPanel;
 
 /**
  * @author Shuttle on 3/1/19.
  */
-public class UIInfoPanel extends UIAbstractPanel {
+public class UIInfoPanel {
 
     private PlayerXP playerXP;
     private Bars bars;

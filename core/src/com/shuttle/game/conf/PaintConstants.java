@@ -230,6 +230,15 @@ public final class PaintConstants {
     public static final int SP_BAR_WIDTH = 238;
     public static final int SP_BAR_HEIGHT = 48;
 
+    public static final String SELECTOR_IN = "selectorin";
+    public static final String SELECTOR_OUT = "selectorout";
+    public static final String SELECTOR_SCALE = "selectorscale";
+    public static final String SELECTOR_LEFT = "selectorleft";
+    public static final String SELECTOR_RIGHT = "selectorright";
+    public static final int SELECTOR_WIDTH = 128;
+    public static final int SELECTOR_HEIGHT = 128;
+    public static final float SELECTOR_ALPHA = 0.5f;
+
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
     public static final String FONT32 = "fonts/gomarice32.ttf";
     public static final String FONT32_C = "fonts/gomarice32Coloured.ttf";

@@ -51,6 +51,7 @@ import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.Joystick;
 import com.shuttle.game.ui.PlayerPointer;
 import com.shuttle.game.ui.groups.PauseGroup;
+import com.shuttle.game.ui.groups.selector.SelectorGroup;
 import com.shuttle.game.ui.panels.UIBonusPanel;
 import com.shuttle.game.ui.panels.UILatestPanel;
 import com.shuttle.game.ui.panels.info.AnomalyTimer;
@@ -114,6 +115,8 @@ public class GameScreen extends BaseScreen {
     private GameInfoSystem gameInfoSystem;
     @Getter
     private PauseGroup pauseGroup;
+    @Getter
+    private SelectorGroup selectorGroup;
     private Joystick joystick;
     private PlayerPointer playerPointer;
     @Getter
@@ -241,7 +244,9 @@ public class GameScreen extends BaseScreen {
     @Override
     public void createGUI() {
         pauseGroup = new PauseGroup();
+        selectorGroup = new SelectorGroup();
         stage.addActor(pauseGroup);
+        stage.addActor(selectorGroup);
     }
 
     @Override
@@ -319,13 +324,13 @@ public class GameScreen extends BaseScreen {
         }
 
         //BEGIN
-        //batch.begin();
         if (!Rules.GAME_OVER) {
             anomalyTimer.render(batch);
             uiLatestPanel.render(batch);
             uiBonusPanel.render(batch);
             playerXP.render(batch);
             bars.render(batch);
+            selectorGroup.render(batch);
         }
 
         if (!pauseGroup.isPause()) {
@@ -355,6 +360,12 @@ public class GameScreen extends BaseScreen {
 
         batch.setShader(null);
         stage.draw();
+
+        batch.begin();
+        if (!Rules.GAME_OVER) {
+            selectorGroup.render(batch);
+        }
+        batch.end();
     }
 
     public void update(float dt) {
@@ -408,6 +419,7 @@ public class GameScreen extends BaseScreen {
         if (!pauseGroup.isPause() && !Rules.GAME_OVER) {
             shake.update(dt, camera);
             standing.update(dt);
+            selectorGroup.update(dt);
         }
         stage.act();
     }
@@ -704,15 +716,6 @@ public class GameScreen extends BaseScreen {
         rocketLauncher.getRocketEmitter().checkCollision();
     }
 
-    private void collideWithRocket(AbstractAnomaly anomaly) {
-        float dst = Shuttle.position.dst(anomaly.getPosition());
-        if (dst <= Rules.ROCKETS_TAKE_RANGE && anomaly.isBorn() && !anomaly.isTaken()) {
-            anomaly.setAtRocketPoint(true);
-        } else {
-            anomaly.setAtRocketPoint(false);
-        }
-    }
-
     private void abstractAnomalyDeactivate(List<AbstractAnomaly> anomalies) {
         for (int i = 0; i < anomalies.size(); i++) {
             if (anomalies.get(i).isActivated())
@@ -770,6 +773,15 @@ public class GameScreen extends BaseScreen {
             player.resetPower();
             tmp1V2.scl(-1);
             anomaly.getVelocity().add(tmp1V2);
+        }
+    }
+
+    private void collideWithRocket(AbstractAnomaly anomaly) {
+        float dst = Shuttle.position.dst(anomaly.getPosition());
+        if (dst <= Rules.ROCKETS_TAKE_RANGE && anomaly.isBorn() && !anomaly.isTaken()) {
+            anomaly.setAtRocketPoint(true);
+        } else {
+            anomaly.setAtRocketPoint(false);
         }
     }
 

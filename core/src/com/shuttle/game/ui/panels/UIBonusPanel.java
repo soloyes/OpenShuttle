@@ -10,7 +10,7 @@ import com.shuttle.game.utils.Assets;
 /**
  * @author Shuttle on 3/1/19.
  */
-public class UIBonusPanel extends UIAbstractPanel {
+public class UIBonusPanel {
     private int width, height, bWidth, bHeight;
     private float startPoint;
     private TextureRegion circleTexture[];

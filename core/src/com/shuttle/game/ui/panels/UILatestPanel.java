@@ -7,6 +7,7 @@ import com.shuttle.game.bot.consumable.Label;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.StickerToTexture;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import java.util.HashMap;
 import lombok.Getter;
 import lombok.Setter;
 
-public class UILatestPanel extends UIAbstractPanel {
+public class UILatestPanel {
     @Getter
     @Setter
     protected Color color;
@@ -29,6 +30,7 @@ public class UILatestPanel extends UIAbstractPanel {
     private float t1, t2, t3;
     private float startPoint;
     private int maxShowed;
+    private StickerToTexture stickerToTexture;
 
     public UILatestPanel() {
         this.activeLabel = new ArrayList<LabelTime>();
@@ -50,48 +52,12 @@ public class UILatestPanel extends UIAbstractPanel {
         this.circleTexture[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_FULL_CIRCLE);
         this.circleTexture[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_EMPTY_CIRCLE);
         this.textureRegions = new HashMap<Label.Sticker, TextureRegion>();
-        //todo: repeatable code
+        this.stickerToTexture = new StickerToTexture();
+
         for (int i = 0; i < Label.Sticker.values().length; i++) {
-            Label.Sticker st = Label.Sticker.values()[i];
-            switch (st) {
-                case FUEL:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION_UI);
-                    break;
-                case BOOST:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOOST_LABEL_REGION);
-                    break;
-                case SCAN:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SCAN_LABEL_REGION);
-                    break;
-                case LASER:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.LASER_LABEL_REGION);
-                    break;
-                case RADAR:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_LABEL_REGION);
-                    break;
-                case TRASH:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.TRASH_LABEL_REGION);
-                    break;
-                case REPAIR:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.REPAIR_LABEL_REGION);
-                    break;
-                case ROCKETS:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.ROCKETS_LABEL_REGION);
-                    break;
-                case SHABBY:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHABBY_SIGN_LABEL_REGION);
-                    break;
-                case SHIELD:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOX_SHIELD_LABEL_REGION);
-                    break;
-                case SPLASH:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SPLASH_LABEL_REGION);
-                    break;
-                case PATTERN:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_LABEL_REGION);
-                    break;
-            }
-            textureRegions.put(st, textureRegion);
+            Label.Sticker sticker = Label.Sticker.values()[i];
+            textureRegion = stickerToTexture.getRegion(sticker);
+            textureRegions.put(sticker, textureRegion);
         }
     }
 
@@ -100,6 +66,9 @@ public class UILatestPanel extends UIAbstractPanel {
             freeLabel.add(new LabelTime(sticker, 0.0f));
         }
         LabelTime temp = freeLabel.remove(freeLabel.size() - 1);
+        if (sticker == Label.Sticker.FUEL) {
+            sticker = Label.Sticker.FUEL_UI;
+        }
         temp.init(sticker);
         activeLabel.add(temp);
     }

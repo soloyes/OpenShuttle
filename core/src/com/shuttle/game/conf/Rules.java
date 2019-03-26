@@ -242,8 +242,10 @@ public final class Rules {
     public static int ROCKETS_TAKE_RANGE = 1500;
     //200
     public static int ROCKETS_VELOCITY = 200;
-    //20 means 1/20
-    public static final int CONSUMABLE_GOLDEN_PROBABILITY = 20;
+    //5 means 1/5
+    public static final int CONSUMABLE_GOLDEN_PROBABILITY = 0;
+    //5
+    public static final int SELECTOR_MAX_COUNT = 5;
 
     public static void setSpace(int n) {
         STARS_COUNT = STARS * n;
