@@ -3,9 +3,9 @@ package com.shuttle.game.ui.panels;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.shuttle.game.bot.consumable.Label;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.StickerToTexture;
 
@@ -26,7 +26,7 @@ public class UILatestPanel {
     private int width, height, cWidth, cHeight;
     private TextureRegion textureRegion;
     private TextureRegion circleTexture[];
-    private HashMap<Label.Sticker, TextureRegion> textureRegions;
+    private HashMap<Sticker, TextureRegion> textureRegions;
     private float t1, t2, t3;
     private float startPoint;
     private int maxShowed;
@@ -51,23 +51,23 @@ public class UILatestPanel {
         this.circleTexture = new TextureRegion[2];
         this.circleTexture[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_FULL_CIRCLE);
         this.circleTexture[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_EMPTY_CIRCLE);
-        this.textureRegions = new HashMap<Label.Sticker, TextureRegion>();
+        this.textureRegions = new HashMap<Sticker, TextureRegion>();
         this.stickerToTexture = new StickerToTexture();
 
-        for (int i = 0; i < Label.Sticker.values().length; i++) {
-            Label.Sticker sticker = Label.Sticker.values()[i];
+        for (int i = 0; i < Sticker.values().length; i++) {
+            Sticker sticker = Sticker.values()[i];
             textureRegion = stickerToTexture.getRegion(sticker);
             textureRegions.put(sticker, textureRegion);
         }
     }
 
-    public void addLabel(Label.Sticker sticker) {
+    public void addLabel(Sticker sticker) {
         if (freeLabel.size() == 0) {
             freeLabel.add(new LabelTime(sticker, 0.0f));
         }
         LabelTime temp = freeLabel.remove(freeLabel.size() - 1);
-        if (sticker == Label.Sticker.FUEL) {
-            sticker = Label.Sticker.FUEL_UI;
+        if (sticker == Sticker.FUEL) {
+            sticker = Sticker.FUEL_UI;
         }
         temp.init(sticker);
         activeLabel.add(temp);
@@ -206,7 +206,7 @@ public class UILatestPanel {
         private float time;
         private float scaleX, scaleY;
 
-        public LabelTime(Label.Sticker sticker, float time) {
+        public LabelTime(Sticker sticker, float time) {
             this.actTexture = textureRegions.get(sticker);
             this.time = time;
             this.y = 0.0f;
@@ -214,7 +214,7 @@ public class UILatestPanel {
             this.fleshAlpha = 0f;
         }
 
-        public void init(Label.Sticker sticker) {
+        public void init(Sticker sticker) {
             this.actTexture = textureRegions.get(sticker);
             this.time = t1;
             this.y = 0.0f;

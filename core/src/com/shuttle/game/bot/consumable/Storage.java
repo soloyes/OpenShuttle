@@ -8,7 +8,11 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.MoveProcessor;
+import com.shuttle.game.effects.Scan;
+import com.shuttle.game.effects.Shield;
 import com.shuttle.game.effects.Vibrator;
+import com.shuttle.game.labelsticker.Label;
+import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
@@ -36,6 +40,41 @@ public class Storage extends AbstractConsumable {
         }
         while (this.labels.get(Label.Layer.HIDDEN).size() < Size.values().length) {
             this.labels.get(Label.Layer.HIDDEN).add(new Label());
+        }
+    }
+
+    @Override
+    public void badEffect(GameScreen gs) {
+        GameInfoSystem.setup(
+                position.x,
+                position.y,
+                GameInfoSystem.Preset.BOOM,
+                3.0f,
+                false
+        );
+        boomBox.playSound(MSConstants.DESTROY_STORAGE);
+        Vibrator.vibrate(VConstants.PLAYER_STORAGE_DESTROY);
+    }
+
+    @Override
+    public void consumed(GameScreen gs) {
+        if (danger) {
+            switch (dangerLabel.getSticker()) {
+                case PATTERN:
+                case PATTERN_GOLD:
+                    for (int i = 0; i <= size.ordinal(); i++) {
+                        Consumer.consume(gs, labels.get(Label.Layer.HIDDEN).get(i).getSticker(), this);
+                    }
+                    break;
+                case SHABBY:
+                case SHABBY_GOLD:
+                    Consumer.consume(gs, dangerLabel.getSticker(), this);
+                    break;
+            }
+        } else {
+            for (int i = 0; i <= size.ordinal(); i++) {
+                Consumer.consume(gs, labels.get(Label.Layer.LABEL).get(i).getSticker(), this);
+            }
         }
     }
 
@@ -75,9 +114,9 @@ public class Storage extends AbstractConsumable {
         stickLabel();
 
         if (size == Size.SINGLE) {
-            Label.Sticker stickerFront = labels.get(Label.Layer.LABEL).get(0).getSticker();
-            Label.Sticker stickerHidden = labels.get(Label.Layer.HIDDEN).get(0).getSticker();
-            if (stickerFront == Label.Sticker.LASER || stickerFront == Label.Sticker.RADAR || stickerHidden == Label.Sticker.LASER || stickerHidden == Label.Sticker.RADAR) {
+            Sticker stickerFront = labels.get(Label.Layer.LABEL).get(0).getSticker();
+            Sticker stickerHidden = labels.get(Label.Layer.HIDDEN).get(0).getSticker();
+            if (stickerFront == Sticker.LASER || stickerFront == Sticker.RADAR || stickerHidden == Sticker.LASER || stickerHidden == Sticker.RADAR) {
                 golden = false;
             }
         }
@@ -122,19 +161,34 @@ public class Storage extends AbstractConsumable {
         if (size.ordinal() == 1) {
             if (labels.get(Label.Layer.LABEL).get(0).getSticker() == labels.get(Label.Layer.LABEL).get(1).getSticker()) {
                 int r = (labels.get(Label.Layer.LABEL).get(0).getSticker().ordinal() + 1) % 6;
-                labels.get(Label.Layer.LABEL).get(1).setSticker(Label.Sticker.values()[r]);
+                labels.get(Label.Layer.LABEL).get(1).setSticker(Sticker.values()[r]);
             }
             if (danger) {
                 if (labels.get(Label.Layer.HIDDEN).get(0).getSticker() == labels.get(Label.Layer.HIDDEN).get(1).getSticker()) {
                     int r = (labels.get(Label.Layer.HIDDEN).get(0).getSticker().ordinal() + 1) % 6;
-                    labels.get(Label.Layer.HIDDEN).get(1).setSticker(Label.Sticker.values()[r]);
+                    labels.get(Label.Layer.HIDDEN).get(1).setSticker(Sticker.values()[r]);
                 }
             }
         }
         //
     }
 
-    private Label.Sticker generateSafe() {
+    private Sticker generateDanger() {
+        int r = MathUtils.random(0, 5);
+        switch (r) {
+            case 0:
+                return golden ? Sticker.SHABBY_GOLD : Sticker.SHABBY;
+            default:
+                return golden ? Sticker.PATTERN_GOLD : Sticker.PATTERN;
+        }
+    }
+
+    private void setLabelForSingle(Label label) {
+        label.setScaleFactor(PaintConstants.LABEL_SINGLE_SCALE_FACTOR);
+        label.setD(PaintConstants.STORAGE_SINGLE_OFFSET);
+    }
+
+    private Sticker generateSafe() {
         int r;
         switch (size) {
             case SINGLE:
@@ -142,16 +196,16 @@ public class Storage extends AbstractConsumable {
                 boolean radar = false;
                 boolean laser = false;
                 for (AbstractConsumable consumable : gs.getStorageEmitter().getActiveList()) {
-                    if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.LASER ||
-                            consumable.getLabels().get(Label.Layer.HIDDEN).get(0).getSticker() == Label.Sticker.LASER) {
+                    if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Sticker.LASER ||
+                            consumable.getLabels().get(Label.Layer.HIDDEN).get(0).getSticker() == Sticker.LASER) {
                         laser = true;
                         break;
                     }
                 }
 
                 for (AbstractConsumable consumable : gs.getStorageEmitter().getActiveList()) {
-                    if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.RADAR ||
-                            consumable.getLabels().get(Label.Layer.HIDDEN).get(0).getSticker() == Label.Sticker.RADAR) {
+                    if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Sticker.RADAR ||
+                            consumable.getLabels().get(Label.Layer.HIDDEN).get(0).getSticker() == Sticker.RADAR) {
                         radar = true;
                         break;
                     }
@@ -166,74 +220,29 @@ public class Storage extends AbstractConsumable {
 
                 switch (r) {
                     case 0:
-                        return Label.Sticker.RADAR;
+                        return Sticker.RADAR;
                     case 1:
-                        return Label.Sticker.LASER;
+                        return Sticker.LASER;
                     default:
-                        return Label.Sticker.ROCKETS;
+                        return Sticker.ROCKETS;
                 }
             default:
                 r = MathUtils.random(0, 6);
                 switch (r) {
                     case 0:
-                        return Label.Sticker.BOOST;
+                        return Sticker.BOOST;
                     case 1:
-                        return Label.Sticker.REPAIR;
+                        return Sticker.REPAIR;
                     case 2:
-                        return Label.Sticker.TRASH;
+                        return Sticker.TRASH;
                     case 3:
-                        return Label.Sticker.SPLASH;
+                        return Sticker.SPLASH;
                     case 5:
-                        return Label.Sticker.SCAN;
+                        return Sticker.SCAN;
                     default:
-                        return Label.Sticker.SHIELD;
+                        return Sticker.SHIELD;
                 }
         }
-    }
-
-    private Label.Sticker generateDanger() {
-        int r = MathUtils.random(0, 5);
-        switch (r) {
-            case 0:
-                return golden ? Label.Sticker.SHABBY_GOLD : Label.Sticker.SHABBY;
-            default:
-                return golden ? Label.Sticker.PATTERN_GOLD : Label.Sticker.PATTERN;
-        }
-    }
-
-    @Override
-    public void consumed(GameScreen gs) {
-        if (danger) {
-            switch (dangerLabel.getSticker()) {
-                case PATTERN:
-                case PATTERN_GOLD:
-                    for (int i = 0; i <= size.ordinal(); i++) {
-                        Consumer.consume(gs, this, labels.get(Label.Layer.HIDDEN).get(i));
-                    }
-                    break;
-                case SHABBY:
-                case SHABBY_GOLD:
-                    Consumer.consume(gs, this, dangerLabel);
-                    break;
-            }
-        } else {
-            for (int i = 0; i <= size.ordinal(); i++) {
-                Consumer.consume(gs, this, labels.get(Label.Layer.LABEL).get(i));
-            }
-        }
-    }
-
-    @Override
-    public void badEffect(GameScreen gs) {
-        GameInfoSystem.setup(
-                position.x,
-                position.y,
-                GameInfoSystem.Preset.BOOM,
-                3.0f,
-                false
-        );
-        boomBox.playSound(MSConstants.DESTROY_STORAGE);
-        Vibrator.vibrate(VConstants.PLAYER_STORAGE_DESTROY);
     }
 
     @Override
@@ -259,7 +268,7 @@ public class Storage extends AbstractConsumable {
         basicRender(batch);
         if (labeled) {
             if (danger) {
-                if (dangerLabel.getSticker() == Label.Sticker.SHABBY || dangerLabel.getSticker() == Label.Sticker.SHABBY_GOLD) {
+                if (dangerLabel.getSticker() == Sticker.SHABBY || dangerLabel.getSticker() == Sticker.SHABBY_GOLD) {
                     setLabelForSingle(labels.get(Label.Layer.BACK).get(0));
                     labels.get(Label.Layer.BACK).get(0).render(batch);
                     dangerLabel.render(batch);
@@ -316,14 +325,9 @@ public class Storage extends AbstractConsumable {
         if (shielded && !taken) {
             shield.render(batch);
         }
-        if (scanned && !taken && dangerLabel.getSticker() != Label.Sticker.SHABBY && dangerLabel.getSticker() != Label.Sticker.SHABBY_GOLD) {
+        if (scanned && !taken && dangerLabel.getSticker() != Sticker.SHABBY && dangerLabel.getSticker() != Sticker.SHABBY_GOLD) {
             scan.render(batch);
         }
-    }
-
-    private void setLabelForSingle(Label label) {
-        label.setScaleFactor(PaintConstants.LABEL_SINGLE_SCALE_FACTOR);
-        label.setD(PaintConstants.STORAGE_SINGLE_OFFSET);
     }
 
     private void setLabelForDouble(Label label, int i) {

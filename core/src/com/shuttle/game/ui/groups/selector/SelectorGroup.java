@@ -10,10 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.shuttle.game.bot.consumable.Label;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.labelsticker.Sticker;
+import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.Consumer;
 
 import java.util.LinkedList;
 
@@ -21,6 +23,7 @@ import java.util.LinkedList;
  * @author Shuttle on 3/22/19.
  */
 public class SelectorGroup extends Group {
+    private GameScreen gs;
     private LinkedList<Selector> selectors;
     private Selector leftSelector, centerSelector, rightSelector;
     private ImageButton leftButton, centerButton, rightButton;
@@ -30,7 +33,8 @@ public class SelectorGroup extends Group {
     private float scale = 1.2f;
     private int select;
 
-    public SelectorGroup() {
+    public SelectorGroup(final GameScreen gs) {
+        this.gs = gs;
         this.selectors = new LinkedList<Selector>();
         this.circleIn = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_IN));
         this.leftButton = new ImageButton(circleIn);
@@ -75,19 +79,12 @@ public class SelectorGroup extends Group {
         leftArrow.setPosition(leftButton.getX(), leftButton.getY());
         rightArrow.setPosition(rightButton.getX(), rightButton.getY());
 
-        centerButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("WOOF");
-            }
-        });
-
         leftButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                select--;
-                if (select < 0) {
-                    select = selectors.size() == 0 ? 0 : selectors.size() - 1;
+                select++;
+                if (select > selectors.size() - 1) {
+                    select = 0;
                 }
             }
         });
@@ -95,9 +92,9 @@ public class SelectorGroup extends Group {
         rightButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                select++;
-                if (select > selectors.size() - 1) {
-                    select = 0;
+                select--;
+                if (select < 0) {
+                    select = selectors.size() == 0 ? 0 : selectors.size() - 1;
                 }
             }
         });
@@ -109,20 +106,20 @@ public class SelectorGroup extends Group {
         this.addActor(centerButton);
     }
 
-    public void addSelector(Label label) {
+    public void addSelector(Sticker sticker) {
         boolean isPresent = false;
         int i;
         for (i = 0; i < selectors.size(); i++) {
-            if (selectors.get(i).getSticker() == label.getSticker()) {
+            if (selectors.get(i).getSticker() == sticker) {
                 isPresent = true;
                 break;
             }
         }
         if (isPresent) {
             if (selectors.get(i).getCount() < Rules.SELECTOR_MAX_COUNT)
-                selectors.get(i).addCount(1);
+                selectors.get(i).changeCount(1);
         } else {
-            Selector selector = new Selector(label);
+            Selector selector = new Selector(sticker);
             selectors.add(selector);
         }
     }
@@ -134,11 +131,11 @@ public class SelectorGroup extends Group {
             renderRight(batch);
 
         } else if (selectors.size() == 2) {
-            if (select == 0) {
+            if (select == 1) {
                 renderLeft(batch);
                 renderCenter(batch, selectors.get(select).getCount());
             }
-            if (select == 1) {
+            if (select == 0) {
                 renderCenter(batch, selectors.get(select).getCount());
                 renderRight(batch);
             }
@@ -229,16 +226,33 @@ public class SelectorGroup extends Group {
             }
 
         } else if (selectors.size() == 2) {
-            if (select == 0) {
+            if (select == 1) {
                 leftSelector = selectors.get(0);
                 centerSelector = selectors.get(1);
             }
-            if (select == 1) {
+            if (select == 0) {
                 rightSelector = selectors.get(1);
                 centerSelector = selectors.get(0);
             }
         } else if (selectors.size() == 1) {
             centerSelector = selectors.get(0);
+        }
+
+        if (centerButton.isPressed())
+            removeSelector();
+    }
+
+    public void removeSelector() {
+        if (selectors.size() != 0) {
+            Consumer.select(gs, selectors.get(select).getSticker());
+            selectors.get(select).changeCount(-1);
+            if (selectors.get(select).getCount() == 0) {
+                selectors.remove(select);
+                select--;
+                if (select < 0) {
+                    select = 0;
+                }
+            }
         }
     }
 }

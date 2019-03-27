@@ -1,7 +1,7 @@
 package com.shuttle.game.ui.groups.selector;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.shuttle.game.bot.consumable.Label;
+import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.utils.StickerToTexture;
 
 import lombok.Getter;
@@ -17,23 +17,23 @@ public class Selector {
     @Getter
     private TextureRegion textureRegion;
     @Getter
-    private Label.Sticker sticker;
+    private Sticker sticker;
     private StickerToTexture stickerToTexture;
 
-    public Selector(Label label) {
+    public Selector(Sticker sticker) {
         this.count = 1;
         this.textureRegion = new TextureRegion();
-        this.sticker = Label.Sticker.PATTERN;
+        this.sticker = Sticker.PATTERN;
         this.stickerToTexture = new StickerToTexture();
-        init(label.getSticker());
+        init(sticker);
     }
 
-    private void init(Label.Sticker sticker) {
+    private void init(Sticker sticker) {
         this.sticker = sticker;
         this.textureRegion = stickerToTexture.getRegion(sticker);
     }
 
-    public void addCount(int amount) {
+    public void changeCount(int amount) {
         count += amount;
     }
 }

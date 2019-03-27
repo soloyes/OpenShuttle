@@ -1,8 +1,8 @@
 package com.shuttle.game.utils;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.shuttle.game.bot.consumable.Label;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.labelsticker.Sticker;
 
 /**
  * @author Shuttle on 3/25/19.
@@ -16,7 +16,7 @@ public class StickerToTexture {
         this.textureRegion = new TextureRegion();
     }
 
-    public TextureRegion getRegion(Label.Sticker sticker) {
+    public TextureRegion getRegion(Sticker sticker) {
         switch (sticker) {
             case FUEL:
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION);

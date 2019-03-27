@@ -244,7 +244,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void createGUI() {
         pauseGroup = new PauseGroup();
-        selectorGroup = new SelectorGroup();
+        selectorGroup = new SelectorGroup(this);
         stage.addActor(pauseGroup);
         stage.addActor(selectorGroup);
     }
@@ -361,6 +361,7 @@ public class GameScreen extends BaseScreen {
         batch.setShader(null);
         stage.draw();
 
+       //todo: on pause selector is not grey
         batch.begin();
         if (!Rules.GAME_OVER) {
             selectorGroup.render(batch);

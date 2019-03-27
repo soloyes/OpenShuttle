@@ -1,15 +1,13 @@
-package com.shuttle.game.bot.consumable;
+package com.shuttle.game.labelsticker;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.StickerToTexture;
-
-import java.util.Arrays;
-import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -35,17 +33,17 @@ public class Label {
     private Vector2 offset;
     private StickerToTexture stickerToTexture;
 
-    public void setSticker(Sticker sticker) {
-        this.sticker = sticker;
-        this.textureRegion = stickerToTexture.getRegion(sticker);
-    }
-
     public Label() {
         this.textureRegion = new TextureRegion();
         this.color = new Color();
         this.stickerToTexture = new StickerToTexture();
         setSticker(Sticker.PATTERN);
         this.offset = new Vector2();
+    }
+
+    public void setSticker(Sticker sticker) {
+        this.sticker = sticker;
+        this.textureRegion = stickerToTexture.getRegion(sticker);
     }
 
     public void render(SpriteBatch batch) {
@@ -81,29 +79,6 @@ public class Label {
         } else {
             color.a = PaintConstants.LABEL_ALPHA;
         }
-    }
-
-    public enum Sticker {
-        //Crate
-        BOOST,
-        REPAIR,
-        SHIELD,
-        TRASH,
-        SPLASH,
-        SCAN,
-        //Storage
-        LASER,
-        RADAR,
-        ROCKETS,
-        //Fuel
-        FUEL,
-        FUEL_UI,
-        //Surprise
-        PATTERN,
-        PATTERN_GOLD,
-        SHABBY,
-        SHABBY_GOLD;
-        public static List<Sticker> SELECTABLE = Arrays.asList(BOOST, REPAIR, SHIELD, SPLASH, SCAN, ROCKETS);
     }
 
     public enum Layer {

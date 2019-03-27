@@ -8,7 +8,11 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.MoveProcessor;
+import com.shuttle.game.effects.Scan;
+import com.shuttle.game.effects.Shield;
 import com.shuttle.game.effects.Vibrator;
+import com.shuttle.game.labelsticker.Label;
+import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
@@ -47,15 +51,15 @@ public class Crate extends AbstractConsumable {
             switch (labels.get(Label.Layer.LABEL).get(0).getSticker()) {
                 case PATTERN:
                 case PATTERN_GOLD:
-                    Consumer.consume(gs, this, labels.get(Label.Layer.HIDDEN).get(0));
+                    Consumer.consume(gs, labels.get(Label.Layer.HIDDEN).get(0).getSticker(), this);
                     break;
                 case SHABBY:
                 case SHABBY_GOLD:
-                    Consumer.consume(gs, this, labels.get(Label.Layer.HIDDEN).get(0));
+                    Consumer.consume(gs, labels.get(Label.Layer.HIDDEN).get(0).getSticker(), this);
                     break;
             }
         } else {
-            Consumer.consume(gs, this, labels.get(Label.Layer.LABEL).get(0));
+            Consumer.consume(gs, labels.get(Label.Layer.LABEL).get(0).getSticker(), this);
         }
     }
 
@@ -112,15 +116,15 @@ public class Crate extends AbstractConsumable {
         }
     }
 
-    private Label.Sticker generateDanger() {
-        Label.Sticker sticker;
+    private Sticker generateDanger() {
+        Sticker sticker;
         int r = MathUtils.random(0, 5);
         switch (r) {
             case 0:
-                sticker = golden ? Label.Sticker.SHABBY_GOLD : Label.Sticker.SHABBY;
+                sticker = golden ? Sticker.SHABBY_GOLD : Sticker.SHABBY;
                 break;
             default:
-                sticker = golden ? Label.Sticker.PATTERN_GOLD : Label.Sticker.PATTERN;
+                sticker = golden ? Sticker.PATTERN_GOLD : Sticker.PATTERN;
                 break;
         }
         danger = true;
@@ -128,21 +132,21 @@ public class Crate extends AbstractConsumable {
         return sticker;
     }
 
-    private Label.Sticker generateSafe() {
-        int r = MathUtils.random(0, 6);
+    private Sticker generateSafe() {
+        int r = 3;MathUtils.random(0, 6);
         switch (r) {
             case 0:
-                return Label.Sticker.BOOST;
+                return Sticker.BOOST;
             case 1:
-                return Label.Sticker.REPAIR;
+                return Sticker.REPAIR;
             case 2:
-                return Label.Sticker.TRASH;
+                return Sticker.TRASH;
             case 3:
-                return Label.Sticker.SPLASH;
+                return Sticker.SPLASH;
             case 5:
-                return Label.Sticker.SCAN;
+                return Sticker.SCAN;
             default:
-                return Label.Sticker.SHIELD;
+                return Sticker.SHIELD;
         }
     }
 
@@ -170,7 +174,7 @@ public class Crate extends AbstractConsumable {
         if (labeled) {
             labels.get(Label.Layer.BACK).get(0).render(batch);
             if (danger) {
-                if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.SHABBY || labels.get(Label.Layer.LABEL).get(0).getSticker() == Label.Sticker.SHABBY_GOLD) {
+                if (labels.get(Label.Layer.LABEL).get(0).getSticker() == Sticker.SHABBY || labels.get(Label.Layer.LABEL).get(0).getSticker() == Sticker.SHABBY_GOLD) {
                     labels.get(Label.Layer.LABEL).get(0).render(batch);
                 } else {
                     if (!scanned) {
@@ -192,7 +196,7 @@ public class Crate extends AbstractConsumable {
         if (shielded && !taken) {
             shield.render(batch);
         }
-        if (scanned && !taken && labels.get(Label.Layer.LABEL).get(0).getSticker() != Label.Sticker.SHABBY && labels.get(Label.Layer.LABEL).get(0).getSticker() != Label.Sticker.SHABBY_GOLD) {
+        if (scanned && !taken && labels.get(Label.Layer.LABEL).get(0).getSticker() != Sticker.SHABBY && labels.get(Label.Layer.LABEL).get(0).getSticker() != Sticker.SHABBY_GOLD) {
             scan.render(batch);
         }
     }

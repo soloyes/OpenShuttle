@@ -218,6 +218,12 @@ public final class Rules {
     public static final int CONSUMABLE_GENERATE_BASE_BONUS = 3;
     //500
     public static final int CONSUMABLE_TRASH_BASE_SCORE = 500;
+    //2
+    public static final int CONSUMABLE_TRASH_GOLDEN_SCORE_MIN = 2;
+    //4
+    public static final int CONSUMABLE_TRASH_GOLDEN_SCORE_MAX = 4;
+    //5
+    public static final int CONSUMABLE_TRASH_GOLDEN_SCORE_FACTOR = 5;
     //3
     public static final int ANOMALY_GENERATE_BASE_BONUS = 3;
     //500
@@ -242,10 +248,12 @@ public final class Rules {
     public static int ROCKETS_TAKE_RANGE = 1500;
     //200
     public static int ROCKETS_VELOCITY = 200;
-    //5 means 1/5
-    public static final int CONSUMABLE_GOLDEN_PROBABILITY = 0;
+    //4 means 1/4. 0 means 100%
+    public static int CONSUMABLE_GOLDEN_PROBABILITY = 4;
     //5
     public static final int SELECTOR_MAX_COUNT = 5;
+    //3
+    public static final int SELECTOR_SHABBY_BASE_BONUS = 3;
 
     public static void setSpace(int n) {
         STARS_COUNT = STARS * n;

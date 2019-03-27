@@ -1,11 +1,11 @@
-package com.shuttle.game.bot.consumable;
+package com.shuttle.game.effects;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.effects.Oscillator;
 import com.shuttle.game.utils.Assets;
 
 import lombok.Setter;
