@@ -303,7 +303,7 @@ public final class Rules {
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
                 player.getRadar().setActive(false);
-                Standing.getInstance().setPlayingLevel(28);
+                Standing.getInstance().setPlayingLevel(20);
                 Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 8);
             }
         },
