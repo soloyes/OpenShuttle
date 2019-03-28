@@ -208,7 +208,7 @@ public class Standing {
     public void update(float dt) {
         shake.update(dt, ScreenManager.getInstance().getCamera());
         lifeShieldTicTac(dt);
-        scoreTicTac();
+        scoreTicTac(dt);
     }
 
     private void lifeShieldTicTac(float dt) {
@@ -230,15 +230,15 @@ public class Standing {
         }
     }
 
-    private void scoreTicTac() {
+    private void scoreTicTac(float dt) {
         if (scoreView < score) {
-            scoreView += 500;
+            scoreView += 5000 * dt;
             if (scoreView > score) {
                 scoreView = score;
             }
         }
         if (scoreView > score) {
-            scoreView -= 500;
+            scoreView -= 5000 * dt;
             if (scoreView < score) {
                 scoreView = score;
             }

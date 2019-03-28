@@ -14,7 +14,7 @@ public class DesktopLauncher {
         config.vSyncEnabled = true;
         //config.foregroundFPS = 10;
 
-        //todo: this is for easy operate during test needed Screen, just run game with key from enum ScreenManager.ScreenType
+        //This is for easy operate during test. Just run game with key from enum ScreenManager.ScreenType
         ScreenManager.ScreenType screenType = ScreenManager.ScreenType.MENU;
         if (arg.length > 0){
             for (ScreenManager.ScreenType t: ScreenManager.ScreenType.values()) {

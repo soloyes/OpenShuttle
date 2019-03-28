@@ -4,7 +4,7 @@ package com.shuttle.game.conf;
  * @author Shuttle on 8/28/18.
  * Object paint constants (PaintConstants)
  */
-//todo: уменьшить все до 128? Думаю да. Экономнее. Но в конце.
+//todo: Make 128*128 pics in the end?
 public final class PaintConstants {
     public static final String SHUTTLE_REGION = "shuttle";
     public static final int SHUTTLE_WIDTH = 256;

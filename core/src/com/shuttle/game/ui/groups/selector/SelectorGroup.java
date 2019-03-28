@@ -1,6 +1,7 @@
 package com.shuttle.game.ui.groups.selector;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -104,6 +105,16 @@ public class SelectorGroup extends Group {
         this.addActor(leftButton);
         this.addActor(rightButton);
         this.addActor(centerButton);
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        if (gs.getPauseGroup().isPause()) {
+            batch.setShader(gs.getShaderPause());
+        } else {
+            batch.setShader(null);
+        }
+        this.drawChildren(batch,  parentAlpha);
     }
 
     public void addSelector(Sticker sticker) {

@@ -140,7 +140,6 @@ public class Ray {
             asteroid.setTimeToBurn(asteroid.getTimeToBurn() + dt);
             if (asteroid.getTimeToBurn() >= 0.5f + Rules.ASTEROID_BURN_TIME / Standing.getInstance().getLaserChargeLevel()) {
                 boomBox.playSound(MSConstants.DESTROY_ASTEROID_RAY);
-                //todo:repeatable code..
                 switch (asteroid.getType()) {
                     case ASTEROID_METAL:
                         gs.getMetalAsteroidEmitter().boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);

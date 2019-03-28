@@ -210,7 +210,7 @@ public final class Rules {
     //false
     public static boolean GAME_OVER = false;
     //20000
-    //todo: need to be balanced
+    //todo: to be Balanced
     public static final int SCORE_TO_LIVE = 1000;
     //10000
     public static final int SCORE_BASE_BONUS = 10000;
