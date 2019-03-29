@@ -8,6 +8,9 @@ import com.shuttle.game.player.Standing;
  * Game rules constants (Rules)
  */
 public final class Rules {
+    private Rules() {
+    }
+
     //SPACE
     public static int STARS_COUNT;
     //300
@@ -63,11 +66,11 @@ public final class Rules {
     //1
     public static final int ANOMALIES_ELECTRIC_MAX_COUNT = 1;
     //600.0f
-    public static float ANOMALY_ELECTRIC_VELOCITY = 600.0f;
+    public static final float ANOMALY_ELECTRIC_VELOCITY = 600.0f;
     //0.5
     public static final float ANOMALY_ELECTRIC_DECREASE_FACTOR = 0.5f;
     //10.0f
-    public static float ANOMALIES_ELECTRIC_HUNGRY_TIME = 10.0f;
+    public static final float ANOMALIES_ELECTRIC_HUNGRY_TIME = 10.0f;
     //
     //0
     public static final int ANOMALIES_RADIATION_AT_START = 0;
@@ -180,7 +183,7 @@ public final class Rules {
     //
     //BLACKHOLE
     //750
-    private static int BLACKHOLE_ROAR_FACTOR = 750;
+    private static final int BLACKHOLE_ROAR_FACTOR = 750;
     //
     public static final float BLACKHOLE_TAKE_RANGE = BLACKHOLE_ROAR_FACTOR / 3;
     //
@@ -241,15 +244,15 @@ public final class Rules {
     //30.0f
     public static final float CONSUMABLE_SCAN_TIME = 30.0f;
     //60
-    public static int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
+    public static final int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
     //3
-    public static int LAUNCH_ROCKETS_TIME = 3;
+    public static final int LAUNCH_ROCKETS_TIME = 3;
     //1500
-    public static int ROCKETS_TAKE_RANGE = 1500;
+    public static final int ROCKETS_TAKE_RANGE = 1500;
     //200
-    public static int ROCKETS_VELOCITY = 200;
-    //4 means 1/4. 0 means 100%
-    public static int CONSUMABLE_GOLDEN_PROBABILITY = 4;
+    public static final int ROCKETS_VELOCITY = 200;
+    //3 means 1/3. 0 means 100%
+    public static int CONSUMABLE_GOLDEN_PROBABILITY = 3;
     //5
     public static final int SELECTOR_MAX_COUNT = 5;
     //3

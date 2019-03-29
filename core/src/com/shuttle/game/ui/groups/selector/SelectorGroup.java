@@ -33,6 +33,8 @@ public class SelectorGroup extends Group {
     private Image circleOut, leftArrow, rightArrow;
     private float scale = 1.2f;
     private int select;
+    private int pressedCount;
+    private boolean paused;
 
     public SelectorGroup(final GameScreen gs) {
         this.gs = gs;
@@ -83,7 +85,9 @@ public class SelectorGroup extends Group {
         leftButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                select++;
+                if (!paused) {
+                    select++;
+                }
                 if (select > selectors.size() - 1) {
                     select = 0;
                 }
@@ -93,18 +97,27 @@ public class SelectorGroup extends Group {
         rightButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                select--;
+                if (!paused) {
+                    select--;
+                }
                 if (select < 0) {
                     select = selectors.size() == 0 ? 0 : selectors.size() - 1;
                 }
             }
         });
 
+        leftButton.setName("leftButton");
+        rightButton.setName("rightButton");
         this.addActor(leftArrow);
         this.addActor(rightArrow);
         this.addActor(leftButton);
         this.addActor(rightButton);
         this.addActor(centerButton);
+    }
+
+    @Override
+    public void act(float delta) {
+        paused = gs.getPauseGroup().isPause();
     }
 
     @Override
@@ -114,7 +127,7 @@ public class SelectorGroup extends Group {
         } else {
             batch.setShader(null);
         }
-        this.drawChildren(batch,  parentAlpha);
+        this.drawChildren(batch, parentAlpha);
     }
 
     public void addSelector(Sticker sticker) {
@@ -248,9 +261,18 @@ public class SelectorGroup extends Group {
         } else if (selectors.size() == 1) {
             centerSelector = selectors.get(0);
         }
+        press();
+    }
 
-        if (centerButton.isPressed())
+    private void press() {
+        if (centerButton.isPressed()) {
+            pressedCount++;
+        } else {
+            pressedCount = 0;
+        }
+        if (pressedCount == 1) {
             removeSelector();
+        }
     }
 
     public void removeSelector() {

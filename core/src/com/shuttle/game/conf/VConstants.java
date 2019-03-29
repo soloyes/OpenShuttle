@@ -5,6 +5,9 @@ package com.shuttle.game.conf;
  * Vibration time constants (VConstants)
  */
 public final class VConstants {
+    private VConstants() {
+    }
+
     //30
     public static final int PLAYER_ASTEROID_DESTROY = 30;
     //200

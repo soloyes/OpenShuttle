@@ -56,20 +56,16 @@ public class GamePreferences {
             setVibrationEnabled(true);
         }
     }
-
-    public static int getPrefEffectsLevel() {
-        return getPrefs().getInteger(PREF_EFFECTS_LEVEL);
+    private GamePreferences() {
     }
 
-    public static void setPrefEffectsLevel(int level) {
-        getPrefs().putInteger(PREF_EFFECTS_LEVEL, level);
+    public static int getJoyStickMode() {
+        return getPrefs().getInteger(PREF_JOYSTICK_MODE);
+    }
+
+    public static void setJoyStickMode(int joystickMode) {
+        getPrefs().putInteger(PREF_JOYSTICK_MODE, joystickMode);
         getPrefs().flush();
-    }
-
-    private static Preferences getPrefs() {
-        if (preferences == null)
-            preferences = Gdx.app.getPreferences(PREFS_NAME);
-        return preferences;
     }
 
     public static int getLevel() {
@@ -90,6 +86,21 @@ public class GamePreferences {
         getPrefs().flush();
     }
 
+    public static int getPrefEffectsLevel() {
+        return getPrefs().getInteger(PREF_EFFECTS_LEVEL);
+    }
+
+    public static void setPrefEffectsLevel(int level) {
+        getPrefs().putInteger(PREF_EFFECTS_LEVEL, level);
+        getPrefs().flush();
+    }
+
+    private static Preferences getPrefs() {
+        if (preferences == null)
+            preferences = Gdx.app.getPreferences(PREFS_NAME);
+        return preferences;
+    }
+
     public static float getSoundVolume() {
         return getPrefs().getFloat(PREF_SOUND_VOLUME);
     }
@@ -99,21 +110,12 @@ public class GamePreferences {
         getPrefs().flush();
     }
 
-    public static boolean isJoyStickEnabled() {
-        return getPrefs().getBoolean(PREF_JOYSTICK_ENABLED);
+    public static boolean isChildEnabled() {
+        return getPrefs().getBoolean(PREF_CHILD_ENABLED);
     }
 
-    public static void setJoyStickEnabled(boolean joyStickEnabled) {
-        getPrefs().putBoolean(PREF_JOYSTICK_ENABLED, joyStickEnabled);
-        getPrefs().flush();
-    }
-
-    public static int getJoyStickMode() {
-        return getPrefs().getInteger(PREF_JOYSTICK_MODE);
-    }
-
-    public static void setJoyStickMode(int joystickMode) {
-        getPrefs().putInteger(PREF_JOYSTICK_MODE, joystickMode);
+    public static void setChildEnabled(boolean childEnabled) {
+        getPrefs().putBoolean(PREF_CHILD_ENABLED, childEnabled);
         getPrefs().flush();
     }
 
@@ -121,17 +123,12 @@ public class GamePreferences {
         return getPrefs().getBoolean(PREF_JOYSTICK_COLOR);
     }
 
-    public static void setJoyStickColor(boolean joystickColor) {
-        getPrefs().putBoolean(PREF_JOYSTICK_COLOR, joystickColor);
-        getPrefs().flush();
+    public static boolean isJoyStickEnabled() {
+        return getPrefs().getBoolean(PREF_JOYSTICK_ENABLED);
     }
 
-    public static boolean isChildEnabled() {
-        return getPrefs().getBoolean(PREF_CHILD_ENABLED);
-    }
-
-    public static void setChildEnabled(boolean childEnabled) {
-        getPrefs().putBoolean(PREF_CHILD_ENABLED, childEnabled);
+    public static void setJoyStickEnabled(boolean joyStickEnabled) {
+        getPrefs().putBoolean(PREF_JOYSTICK_ENABLED, joyStickEnabled);
         getPrefs().flush();
     }
 
@@ -162,9 +159,13 @@ public class GamePreferences {
         getPrefs().flush();
     }
 
+    public static void setJoyStickColor(boolean joystickColor) {
+        getPrefs().putBoolean(PREF_JOYSTICK_COLOR, joystickColor);
+        getPrefs().flush();
+    }
+
     public enum EffectLevel {
         LOW(0), HIGH(1);
-
         private int value;
 
         EffectLevel(int value) {
