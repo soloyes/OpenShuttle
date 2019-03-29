@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.screens.ScreenManager;
@@ -29,11 +28,9 @@ public class MenuBar extends Group {
     private Button buttonShare;
     private MenuGroup group;
     private BoomBox boomBox;
-    private Results results;
 
     public MenuBar() {
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        this.results = new Results();
         this.boomBox = new BoomBox();
         this.setName(GroupType.MENU_BAR.name());
         this.buttonPlay = new Button(skin, "default");
@@ -91,6 +88,18 @@ public class MenuBar extends Group {
                 if (!group.isEmptyUserName()) {
                     group.getFile().writeString(group.getUsername().getText(), false);
                     ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
+                } else {
+                    Actor[] actorArray = getStage().getActors().toArray();
+                    for (int i = 0; i < actorArray.length; i++) {
+                        if (actorArray[i].getName().equals(GroupType.MENU.name())) {
+                            actorArray[i].setVisible(true);
+                        } else if (actorArray[i].getName().equals(GroupType.MENU_BAR.name())) {
+                            actorArray[i].setVisible(true);
+                        } else{
+                            actorArray[i].setVisible(false);
+                        }
+                    }
+
                 }
             }
         });
