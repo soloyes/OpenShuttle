@@ -194,15 +194,17 @@ public class Standing {
     }
 
     public void writeResult() {
-        results.setResult(
-                username +
-                        " " +
-                        scoreView +
-                        " "
-                        + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()) +
-                        " " +
-                        Rules.StartLevel.values()[GamePreferences.getLevel()].name()
-        );
+        if (!GamePreferences.isChildEnabled()) {
+            results.setResult(
+                    username +
+                            " " +
+                            scoreView +
+                            " "
+                            + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()) +
+                            " " +
+                            Rules.StartLevel.values()[GamePreferences.getLevel()].name()
+            );
+        }
     }
 
     public void update(float dt) {
