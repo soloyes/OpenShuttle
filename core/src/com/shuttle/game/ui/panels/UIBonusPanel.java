@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
 
 /**
@@ -12,12 +13,15 @@ import com.shuttle.game.utils.Assets;
  */
 public class UIBonusPanel {
     private int width, height, bWidth, bHeight;
+    private float x;
     private float startPoint;
     private TextureRegion circleTexture[];
     private TextureRegion astronautBonus;
     private TextureRegion[] bonusRegions;
+    private GameScreen gs;
 
-    public UIBonusPanel() {
+    public UIBonusPanel(GameScreen gs) {
+        this.gs = gs;
         this.width = PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_WIDTH;
         this.height = PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_HEIGHT;
         this.bWidth = PaintConstants.BONUS_ICON_WIDTH;
@@ -32,15 +36,15 @@ public class UIBonusPanel {
         this.bonusRegions[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SCIENTIST_BONUS_ICON);
         this.bonusRegions[2] = Assets.getInstance().getAtlas().findRegion(PaintConstants.MECHANIC_BONUS_ICON);
         this.bonusRegions[3] = Assets.getInstance().getAtlas().findRegion(PaintConstants.MILITARY_BONUS_ICON);
+        this.x = Rules.WORLD_WIDTH;
     }
 
     public void render(SpriteBatch batch) {
         Color tmpColor = batch.getColor();
-
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < circleTexture.length; j++) {
                 batch.draw(circleTexture[j],
-                        Rules.WORLD_WIDTH - width - 32, startPoint - (22 + height) * i,
+                        x, startPoint - (22 + height) * i,
                         width / 2, height / 2,
                         width, height,
                         1.0f, 1.0f,
@@ -48,14 +52,14 @@ public class UIBonusPanel {
                 );
             }
             batch.draw(astronautBonus,
-                    Rules.WORLD_WIDTH - width - 32, startPoint - (22 + bHeight) * i,
+                    x, startPoint - (22 + bHeight) * i,
                     bWidth / 2, bHeight / 2,
                     bWidth, bHeight,
                     1.0f, 1.0f,
                     0.0f
             );
             batch.draw(bonusRegions[i],
-                    Rules.WORLD_WIDTH - width - 32, startPoint - (22 + bHeight) * i,
+                    x, startPoint - (22 + bHeight) * i,
                     bWidth / 2, bHeight / 2,
                     bWidth, bHeight,
                     1.0f, 1.0f,
@@ -66,6 +70,16 @@ public class UIBonusPanel {
     }
 
     public void update(float dt) {
-
+        if (gs.getSwitchGroup().getRightSwitch().isOn()) {
+            x -= dt * 360;
+        } else {
+            x += dt * 360;
+        }
+        if (x >= Rules.WORLD_WIDTH) {
+            x = Rules.WORLD_WIDTH;
+        }
+        if (x <= Rules.WORLD_WIDTH - width - 32) {
+            x = Rules.WORLD_WIDTH - width - 32;
+        }
     }
 }

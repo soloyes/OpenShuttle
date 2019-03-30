@@ -51,6 +51,7 @@ import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.Joystick;
 import com.shuttle.game.ui.PlayerPointer;
 import com.shuttle.game.ui.groups.PauseGroup;
+import com.shuttle.game.ui.groups.leftright.SwitchGroup;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
 import com.shuttle.game.ui.panels.UIBonusPanel;
 import com.shuttle.game.ui.panels.UIInfoPanel;
@@ -116,6 +117,8 @@ public class GameScreen extends BaseScreen {
     private PauseGroup pauseGroup;
     @Getter
     private SelectorGroup selectorGroup;
+    @Getter
+    private SwitchGroup switchGroup;
     private Joystick joystick;
     private PlayerPointer playerPointer;
     @Getter
@@ -198,8 +201,8 @@ public class GameScreen extends BaseScreen {
         blackhole = new Blackhole();
         player = new Shuttle(this, joystick);
         standing = Standing.getInstance();
-        uiLatestPanel = new UILatestPanel();
-        uiBonusPanel = new UIBonusPanel();
+        uiLatestPanel = new UILatestPanel(this);
+        uiBonusPanel = new UIBonusPanel(this);
         uiInfoPanel = new UIInfoPanel(this);
 
         BoundCheck.avoidPosition(blackhole.getPosition(), Shuttle.position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
@@ -243,8 +246,10 @@ public class GameScreen extends BaseScreen {
     public void createGUI() {
         pauseGroup = new PauseGroup();
         selectorGroup = new SelectorGroup(this);
+        switchGroup = new SwitchGroup(this);
         stage.addActor(pauseGroup);
         stage.addActor(selectorGroup);
+        stage.addActor(switchGroup);
     }
 
     @Override
@@ -409,6 +414,7 @@ public class GameScreen extends BaseScreen {
             shake.update(dt, camera);
             standing.update(dt);
             selectorGroup.update(dt);
+            uiBonusPanel.update(dt);
         }
         stage.act();
     }

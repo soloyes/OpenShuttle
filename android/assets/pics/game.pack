@@ -465,114 +465,128 @@ selectorleft
   orig: 128, 128
   offset: 0, 0
   index: -1
-spicon
+switchoff
   rotate: false
   xy: 3594, 388
+  size: 37, 103
+  orig: 37, 103
+  offset: 0, 0
+  index: -1
+switchon
+  rotate: false
+  xy: 3633, 388
+  size: 37, 103
+  orig: 37, 103
+  offset: 0, 0
+  index: -1
+spicon
+  rotate: false
+  xy: 3672, 388
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 lpscale
   rotate: false
-  xy: 3594, 438
+  xy: 3672, 438
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpicon
   rotate: false
-  xy: 3834, 388
+  xy: 3850, 702
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpscale
   rotate: false
-  xy: 3834, 438
+  xy: 3854, 960
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 spscale
   rotate: false
-  xy: 3850, 702
+  xy: 3850, 1158
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 lpin
   rotate: false
-  xy: 3854, 960
+  xy: 3850, 1208
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpin
   rotate: false
-  xy: 3854, 960
+  xy: 3850, 1208
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpicon
   rotate: false
-  xy: 3850, 1158
+  xy: 3096, 1544
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 spin
   rotate: false
-  xy: 3850, 1208
+  xy: 3096, 1594
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpin
   rotate: false
-  xy: 3850, 1208
+  xy: 3096, 1594
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 lpicon
   rotate: false
-  xy: 3096, 1544
+  xy: 3096, 1644
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 spout
   rotate: false
-  xy: 3096, 1594
+  xy: 3096, 1694
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpout
   rotate: false
-  xy: 3096, 1594
+  xy: 3096, 1694
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpscale
   rotate: false
-  xy: 3096, 1644
+  xy: 3096, 1744
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpout
   rotate: false
-  xy: 3096, 1694
+  xy: 3336, 1544
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 lpout
   rotate: false
-  xy: 3096, 1694
+  xy: 3336, 1544
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
@@ -586,7 +600,7 @@ rocket
   index: -1
 atrocketpoint
   rotate: false
-  xy: 4036, 516
+  xy: 3912, 388
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

@@ -226,6 +226,11 @@ public final class PaintConstants {
     public static final int SELECTOR_WIDTH = 128;
     public static final int SELECTOR_HEIGHT = 128;
     public static final float SELECTOR_ALPHA = 0.5f;
+    public static final String SWITCH_ON = "switchon";
+    public static final String SWITCH_OFF = "switchoff";
+    public static final float SWITCH_WIDTH = 37.0f;
+    public static final float SWITCH_HEIGHT = 103.0f;
+
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
     public static final String FONT32 = "fonts/gomarice32.ttf";
     public static final String FONT32_C = "fonts/gomarice32Coloured.ttf";

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.labelsticker.Sticker;
+import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.StickerToTexture;
 
@@ -31,8 +32,11 @@ public class UILatestPanel {
     private float startPoint;
     private int maxShowed;
     private StickerToTexture stickerToTexture;
+    private float x;
+    private GameScreen gs;
 
-    public UILatestPanel() {
+    public UILatestPanel(GameScreen gs) {
+        this.gs = gs;
         this.activeLabel = new ArrayList<LabelTime>();
         this.freeLabel = new ArrayList<LabelTime>();
         this.showLabel = new ArrayList<LabelTime>();
@@ -59,6 +63,7 @@ public class UILatestPanel {
             textureRegion = stickerToTexture.getRegion(sticker);
             textureRegions.put(sticker, textureRegion);
         }
+        this.x = 0.0f;
     }
 
     public void addLabel(Sticker sticker) {
@@ -81,7 +86,7 @@ public class UILatestPanel {
             batch.setColor(color);
             for (int j = 0; j < circleTexture.length; j++) {
                 batch.draw(circleTexture[j],
-                        22, startPoint - cHeight / 2 - lt.y,
+                        x - 10, startPoint - cHeight / 2 - lt.y,
                         cWidth / 2, cHeight / 2,
                         cWidth, cHeight,
                         lt.scaleX, lt.scaleY,
@@ -90,7 +95,7 @@ public class UILatestPanel {
             }
             batch.setColor(color);
             batch.draw(lt.actTexture,
-                    32, startPoint - height / 2 - lt.y,
+                    x, startPoint - height / 2 - lt.y,
                     width / 2, height / 2,
                     width, height,
                     lt.scaleX, lt.scaleY,
@@ -100,7 +105,7 @@ public class UILatestPanel {
                 color.a = lt.fleshAlpha;
                 batch.setColor(color);
                 batch.draw(lt.actTexture,
-                        32, startPoint - height / 2 - lt.y,
+                        x, startPoint - height / 2 - lt.y,
                         width / 2, height / 2,
                         width, height,
                         lt.scaleX, lt.scaleY,
@@ -195,6 +200,18 @@ public class UILatestPanel {
                 needDel.remove(i);
             }
             startPoint = Rules.WORLD_HEIGHT / 2 + height * (showLabel.size() - 1) / 4;
+        }
+
+        if (gs.getSwitchGroup().getLeftSwitch().isOn()) {
+            x += dt * 360;
+        } else {
+            x -= dt * 360;
+        }
+        if (x >= 32) {
+            x = 32;
+        }
+        if (x <= -cWidth) {
+            x = -cWidth;
         }
     }
 

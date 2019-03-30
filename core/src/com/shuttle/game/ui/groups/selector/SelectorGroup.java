@@ -127,7 +127,9 @@ public class SelectorGroup extends Group {
         } else {
             batch.setShader(null);
         }
-        this.drawChildren(batch, parentAlpha);
+        if (!Rules.GAME_OVER) {
+            this.drawChildren(batch, parentAlpha);
+        }
     }
 
     public void addSelector(Sticker sticker) {
