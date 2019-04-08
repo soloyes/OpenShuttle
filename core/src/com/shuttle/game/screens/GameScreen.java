@@ -28,6 +28,7 @@ import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
 import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
 import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
+import com.shuttle.game.bot.consumable.Astronaut;
 import com.shuttle.game.bot.consumable.AstronautEmitter;
 import com.shuttle.game.bot.consumable.CrateEmitter;
 import com.shuttle.game.bot.consumable.FuelEmitter;
@@ -448,6 +449,24 @@ public class GameScreen extends BaseScreen {
                         if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
                             consumable.destroy();
                             player.takeEffect(consumable);
+                            if (consumable instanceof Astronaut){
+                                if( ((Astronaut) consumable).getMultiplier() == 1 ){
+                                    player.setA1(player.getA1() + 1);
+                                    uiBonusPanel.addBonus(1);
+                                }
+                                if( ((Astronaut) consumable).getMultiplier() == 2 ){
+                                    player.setA2(player.getA2() + 1);
+                                    uiBonusPanel.addBonus(2);
+                                }
+                                if( ((Astronaut) consumable).getMultiplier() == 3 ){
+                                    player.setA3(player.getA3() + 1);
+                                    uiBonusPanel.addBonus(3);
+                                }
+                                if( ((Astronaut) consumable).getMultiplier() == 4 ){
+                                    player.setA4(player.getA4() + 1);
+                                    uiBonusPanel.addBonus(4);
+                                }
+                            }
                             Standing.getInstance().addToStatistics(consumable.getType(), consumable.getLevel());
                         } else {
                             if (!player.canCatch(consumable)) {

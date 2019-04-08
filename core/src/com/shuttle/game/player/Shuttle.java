@@ -82,6 +82,18 @@ public class Shuttle extends AbstractShuttle {
     @Getter
     @Setter
     private boolean laser;
+    @Getter
+    @Setter
+    private int a1;
+    @Getter
+    @Setter
+    private int a2;
+    @Getter
+    @Setter
+    private int a3;
+    @Getter
+    @Setter
+    private int a4;
 
     public Shuttle(GameScreen gs, Joystick joystick) {
         super(gs);
