@@ -178,8 +178,12 @@ public final class Rules {
     public static final int PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY = 150;
     //1.0f
     public static final float PLAYER_FUEL_CONSUMPTION = 1.0f;
-    //3.0f
-    public static final float PLAYER_SHIELD_DELAY_TIME = 3.0f;
+    //2.0f
+    public static final float PLAYER_SHIELD_DELAY_TIME = 2.0f;
+    //2.0f
+    public static final float PLAYER_SHIELD_REPAIR_FACTOR = 2.0f;
+    //1.5f
+    public static final float PLAYER_SHIELD_DAMAGE_FACTOR = 1.5f;
     //
     //BLACKHOLE
     //750

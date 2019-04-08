@@ -263,13 +263,14 @@ public class ConfigGroup extends Group {
         table.add(soundOnOffLabel).left();
         table.add();
         table.add(soundCheckBox).left();
-        table.row();
-        table.add(childLabel).left();
-        table.add();
-        table.add(childCheckBox).left();
 
         switch (screenType) {
             case MENU:
+                table.row();
+                table.add(childLabel).left();
+                table.add();
+                table.add(childCheckBox).left();
+
                 table.row();
                 table.add(levelLabel).left();
                 table.add(levelSlider).padRight(10).width(300);

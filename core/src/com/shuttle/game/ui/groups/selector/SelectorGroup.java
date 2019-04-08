@@ -86,10 +86,10 @@ public class SelectorGroup extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (!paused) {
-                    select++;
+                    select--;
                 }
-                if (select > selectors.size() - 1) {
-                    select = 0;
+                if (select < 0) {
+                    select = selectors.size() == 0 ? 0 : selectors.size() - 1;
                 }
             }
         });
@@ -98,10 +98,10 @@ public class SelectorGroup extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (!paused) {
-                    select--;
+                    select++;
                 }
-                if (select < 0) {
-                    select = selectors.size() == 0 ? 0 : selectors.size() - 1;
+                if (select > selectors.size() - 1) {
+                    select = 0;
                 }
             }
         });

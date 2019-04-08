@@ -232,13 +232,13 @@ public final class PaintConstants {
     public static final float SWITCH_HEIGHT = 103.0f;
 
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
-    public static final String FONT32 = "fonts/gomarice32.ttf";
-    public static final String FONT32_C = "fonts/gomarice32Coloured.ttf";
-    public static final String FONT48 = "fonts/gomarice48.ttf";
-    public static final String FONT64 = "fonts/gomarice64.ttf";
-    public static final String FONT64_C = "fonts/gomarice64Coloured.ttf";
-    public static final String FONT96 = "fonts/gomarice96.ttf";
-    public static final String FONT128 = "fonts/gomarice128.ttf";
+    public static final String FONT32 = "fonts/CollegeRegular32.ttf";
+    public static final String FONT32_C = "fonts/CollegeRegular32Coloured.ttf";
+    public static final String FONT48 = "fonts/CollegeRegular48.ttf";
+    public static final String FONT64 = "fonts/CollegeRegular64.ttf";
+    public static final String FONT64_C = "fonts/CollegeRegular64Coloured.ttf";
+    public static final String FONT96 = "fonts/CollegeRegular96.ttf";
+    public static final String FONT128 = "fonts/CollegeRegular128.ttf";
     public static final String GAME_PACK = "pics/game.pack";
     public static final String BACKGROUND_COLOR_HEX = "100514ff";
     public static final float BACKGROUND_OSCILLATE_WIDTH = 50;
