@@ -183,15 +183,16 @@ public class Standing {
         if (lives == 0) {
             Rules.GAME_OVER = true;
             writeResult();
+        } else {
+            Shuttle.position.set(Rules.SPACE_WIDTH / 2, Rules.SPACE_HEIGHT / 2);
+            GameInfoSystem.setup(
+                    Shuttle.position.x,
+                    Shuttle.position.y,
+                    "[RED]DESTROYED[]",
+                    8.0f,
+                    true
+            );
         }
-        Shuttle.position.set(Rules.SPACE_WIDTH / 2, Rules.SPACE_HEIGHT / 2);
-        GameInfoSystem.setup(
-                Shuttle.position.x,
-                Shuttle.position.y,
-                "[RED]DESTROYED[]",
-                8.0f,
-                true
-        );
     }
 
     public void writeResult() {

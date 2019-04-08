@@ -33,8 +33,16 @@ public class BoomBox {
         t += dt;
         if (t >= 1.0f) {
             if (MathUtils.random(0, 100) <= Rules.MUSIC_EFFECT_PROBABILITY) {
-                String musicEffect = musicEffects.get(MathUtils.random(0, musicEffects.size() - 1));
-                playMusicEffectOnce(musicEffect);
+                boolean flag = true;
+                for (int i = 0; i < musicEffects.size(); i++) {
+                    if (isPlaying(musicEffects.get(i))){
+                        flag = false;
+                    }
+                }
+                if (flag) {
+                    String musicEffect = musicEffects.get(MathUtils.random(0, musicEffects.size() - 1));
+                    playMusicEffectOnce(musicEffect);
+                }
             }
             t = 0.0f;
         }
@@ -50,13 +58,17 @@ public class BoomBox {
         }
     }
 
+    private boolean isPlaying(String music){
+        return Assets.getInstance()
+                .getAssetManager()
+                .get(music, Music.class)
+                .isPlaying();
+    }
+
     public void playMusicEffectOnce(String musicEffect) {
         setMusicEffectVolume(musicEffect, GamePreferences.getSoundVolume());
         if (GamePreferences.isSoundEnabled()) {
-            if (!Assets.getInstance()
-                    .getAssetManager()
-                    .get(musicEffect, Music.class)
-                    .isPlaying()) {
+            if (!isPlaying(musicEffect)) {
                 Assets.getInstance()
                         .getAssetManager()
                         .get(musicEffect, Music.class)
@@ -110,10 +122,7 @@ public class BoomBox {
                     .getAssetManager()
                     .get(music, Music.class)
                     .setLooping(true);
-            if (!Assets.getInstance()
-                    .getAssetManager()
-                    .get(music, Music.class)
-                    .isPlaying()) {
+            if (!isPlaying(music)) {
                 Assets.getInstance()
                         .getAssetManager()
                         .get(music, Music.class)
@@ -133,10 +142,7 @@ public class BoomBox {
                     .getAssetManager()
                     .get(musicEffect, Music.class)
                     .setLooping(true);
-            if (!Assets.getInstance()
-                    .getAssetManager()
-                    .get(musicEffect, Music.class)
-                    .isPlaying()) {
+            if (!isPlaying(musicEffect)) {
                 Assets.getInstance()
                         .getAssetManager()
                         .get(musicEffect, Music.class)
@@ -146,10 +152,7 @@ public class BoomBox {
     }
 
     public void stopAllMusicAndPlayThis(String music) {
-        if (!Assets.getInstance()
-                .getAssetManager()
-                .get(music, Music.class)
-                .isPlaying()) {
+        if (!isPlaying(music)) {
             stopAllMusic();
             playMusicInLoop(music);
         }
