@@ -11,6 +11,7 @@ public class Bars {
     private GameScreen gs;
 
     public Bars(GameScreen gs) {
+        this.gs = gs;
         this.barFuel = new BarFuel(gs);
         this.barHP = new BarHP(gs);
         this.barLaser = new BarLaser(gs);

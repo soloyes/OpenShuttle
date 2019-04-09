@@ -25,6 +25,10 @@ public class ResultGroup extends Group {
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         ScrollPane scrollPane = new ScrollPane(table, skin);
 
+        Label.LabelStyle style32 = new Label.LabelStyle(
+                Assets.getInstance().getAssetManager().get(PaintConstants.FONT32, BitmapFont.class),
+                new Color(1.0f, 1.0f, 0.5f, 1f)
+        );
         Label.LabelStyle style64 = new Label.LabelStyle(
                 Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
                 new Color(0.8f, 0.43f, 0.33f, 1f)
@@ -35,8 +39,11 @@ public class ResultGroup extends Group {
         );
 
         Label titleLabel = new Label("Results:", style96);
+        Label subTitleLabel = new Label("(only  non-child  mode)", style32);
 
         table.add(titleLabel).colspan(4);
+        table.row();
+        table.add(subTitleLabel).colspan(4);
 
         if (results.getResults() != null) {
             for (int i = 1; i < results.getResults().size(); i++) {

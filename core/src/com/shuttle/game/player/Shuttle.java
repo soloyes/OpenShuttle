@@ -135,7 +135,7 @@ public class Shuttle extends AbstractShuttle {
 
         float dif = angle - tmp2V2.angle();
 
-        return dif >= -110 && dif <= -40 || dif <= 110 && dif >= 40;
+        return (dif >= -100 && dif <= -30) || (dif <= 100 && dif >= 30);
     }
 
     public void changePower(int amount) {

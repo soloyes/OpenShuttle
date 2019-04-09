@@ -4,14 +4,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
-import com.shuttle.game.bot.consumable.Label;
-import com.shuttle.game.bot.consumable.Shield;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.MoveProcessor;
+import com.shuttle.game.effects.Shield;
 import com.shuttle.game.effects.Vibrator;
+import com.shuttle.game.labelsticker.Label;
+import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Consumer;
@@ -38,6 +39,25 @@ public class Fuel extends AbstractConsumable {
     }
 
     @Override
+    public void badEffect(GameScreen gs) {
+        GameInfoSystem.setup(
+                position.x,
+                position.y,
+                GameInfoSystem.Preset.BOOM,
+                3.0f,
+                false
+        );
+        boomBox.playSound(MSConstants.DESTROY_FUEL);
+        gs.getPlayer().takeDamage(Rules.CONSUMABLE_FUEL_HP_DAMAGE);
+        Vibrator.vibrate(VConstants.PLAYER_FUEL_DESTROY);
+    }
+
+    @Override
+    public void consumed(GameScreen gs) {
+        Consumer.consume(gs, labels.get(Label.Layer.LABEL).get(0).getSticker(), this);
+    }
+
+    @Override
     public void init(float x, float y) {
         this.position.set(x, y);
         this.angle = MathUtils.random(0, 360);
@@ -54,7 +74,7 @@ public class Fuel extends AbstractConsumable {
         }
         this.labeled = true;
 
-        this.labels.get(Label.Layer.LABEL).get(0).setSticker(Label.Sticker.FUEL);
+        this.labels.get(Label.Layer.LABEL).get(0).setSticker(Sticker.FUEL);
         this.labels.get(Label.Layer.LABEL).get(0).setConsumable(this);
         this.labels.get(Label.Layer.LABEL).get(0).setColor(Color.valueOf("000000ff"));
         this.labels.get(Label.Layer.LABEL).get(0).setScaleFactor(4);
@@ -63,25 +83,6 @@ public class Fuel extends AbstractConsumable {
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
         this.golden = MathUtils.random(0, Rules.CONSUMABLE_GOLDEN_PROBABILITY) == 0;
         this.box.init();
-    }
-
-    @Override
-    public void consumed(GameScreen gs) {
-        Consumer.consume(gs, this, labels.get(Label.Layer.LABEL).get(0));
-    }
-
-    @Override
-    public void badEffect(GameScreen gs) {
-        GameInfoSystem.setup(
-                position.x,
-                position.y,
-                GameInfoSystem.Preset.BOOM,
-                3.0f,
-                false
-        );
-        boomBox.playSound(MSConstants.DESTROY_FUEL);
-        gs.getPlayer().takeDamage(Rules.CONSUMABLE_FUEL_HP_DAMAGE);
-        Vibrator.vibrate(VConstants.PLAYER_FUEL_DESTROY);
     }
 
     @Override
@@ -102,12 +103,6 @@ public class Fuel extends AbstractConsumable {
     }
 
     @Override
-    public void destroyWithEffect() {
-        super.destroyWithEffect();
-        gs.getParticleEmitter().getBuilder().buildFuelDestroyFlame(position);
-    }
-
-    @Override
     public void render(SpriteBatch batch) {
         substrate.render(batch);
         for (int i = 0; i < PaintConstants.FUEL_BUBBLE_COUNT; i++) {
@@ -118,5 +113,11 @@ public class Fuel extends AbstractConsumable {
         if (shielded && !taken) {
             shield.render(batch);
         }
+    }
+
+    @Override
+    public void destroyWithEffect() {
+        super.destroyWithEffect();
+        gs.getParticleEmitter().getBuilder().buildFuelDestroyFlame(position);
     }
 }

@@ -3,10 +3,12 @@ package com.shuttle.game.ui.panels;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.shuttle.game.bot.consumable.Label;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.labelsticker.Sticker;
+import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.StickerToTexture;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +16,7 @@ import java.util.HashMap;
 import lombok.Getter;
 import lombok.Setter;
 
-public class UILatestPanel extends UIAbstractPanel {
+public class UILatestPanel {
     @Getter
     @Setter
     protected Color color;
@@ -25,12 +27,16 @@ public class UILatestPanel extends UIAbstractPanel {
     private int width, height, cWidth, cHeight;
     private TextureRegion textureRegion;
     private TextureRegion circleTexture[];
-    private HashMap<Label.Sticker, TextureRegion> textureRegions;
+    private HashMap<Sticker, TextureRegion> textureRegions;
     private float t1, t2, t3;
     private float startPoint;
     private int maxShowed;
+    private StickerToTexture stickerToTexture;
+    private float x;
+    private GameScreen gs;
 
-    public UILatestPanel() {
+    public UILatestPanel(GameScreen gs) {
+        this.gs = gs;
         this.activeLabel = new ArrayList<LabelTime>();
         this.freeLabel = new ArrayList<LabelTime>();
         this.showLabel = new ArrayList<LabelTime>();
@@ -49,57 +55,25 @@ public class UILatestPanel extends UIAbstractPanel {
         this.circleTexture = new TextureRegion[2];
         this.circleTexture[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_FULL_CIRCLE);
         this.circleTexture[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_EMPTY_CIRCLE);
-        this.textureRegions = new HashMap<Label.Sticker, TextureRegion>();
-        //todo: repeatable code
-        for (int i = 0; i < Label.Sticker.values().length; i++) {
-            Label.Sticker st = Label.Sticker.values()[i];
-            switch (st) {
-                case FUEL:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION_UI);
-                    break;
-                case BOOST:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOOST_LABEL_REGION);
-                    break;
-                case SCAN:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SCAN_LABEL_REGION);
-                    break;
-                case LASER:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.LASER_LABEL_REGION);
-                    break;
-                case RADAR:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_LABEL_REGION);
-                    break;
-                case TRASH:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.TRASH_LABEL_REGION);
-                    break;
-                case REPAIR:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.REPAIR_LABEL_REGION);
-                    break;
-                case ROCKETS:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.ROCKETS_LABEL_REGION);
-                    break;
-                case SHABBY:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHABBY_SIGN_LABEL_REGION);
-                    break;
-                case SHIELD:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOX_SHIELD_LABEL_REGION);
-                    break;
-                case SPLASH:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SPLASH_LABEL_REGION);
-                    break;
-                case PATTERN:
-                    textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_LABEL_REGION);
-                    break;
-            }
-            textureRegions.put(st, textureRegion);
+        this.textureRegions = new HashMap<Sticker, TextureRegion>();
+        this.stickerToTexture = new StickerToTexture();
+
+        for (int i = 0; i < Sticker.values().length; i++) {
+            Sticker sticker = Sticker.values()[i];
+            textureRegion = stickerToTexture.getRegion(sticker);
+            textureRegions.put(sticker, textureRegion);
         }
+        this.x = 0.0f;
     }
 
-    public void addLabel(Label.Sticker sticker) {
+    public void addLabel(Sticker sticker) {
         if (freeLabel.size() == 0) {
             freeLabel.add(new LabelTime(sticker, 0.0f));
         }
         LabelTime temp = freeLabel.remove(freeLabel.size() - 1);
+        if (sticker == Sticker.FUEL) {
+            sticker = Sticker.FUEL_UI;
+        }
         temp.init(sticker);
         activeLabel.add(temp);
     }
@@ -112,7 +86,7 @@ public class UILatestPanel extends UIAbstractPanel {
             batch.setColor(color);
             for (int j = 0; j < circleTexture.length; j++) {
                 batch.draw(circleTexture[j],
-                        22, startPoint - cHeight / 2 - lt.y,
+                        x - 10, startPoint - cHeight / 2 - lt.y,
                         cWidth / 2, cHeight / 2,
                         cWidth, cHeight,
                         lt.scaleX, lt.scaleY,
@@ -121,7 +95,7 @@ public class UILatestPanel extends UIAbstractPanel {
             }
             batch.setColor(color);
             batch.draw(lt.actTexture,
-                    32, startPoint - height / 2 - lt.y,
+                    x, startPoint - height / 2 - lt.y,
                     width / 2, height / 2,
                     width, height,
                     lt.scaleX, lt.scaleY,
@@ -131,7 +105,7 @@ public class UILatestPanel extends UIAbstractPanel {
                 color.a = lt.fleshAlpha;
                 batch.setColor(color);
                 batch.draw(lt.actTexture,
-                        32, startPoint - height / 2 - lt.y,
+                        x, startPoint - height / 2 - lt.y,
                         width / 2, height / 2,
                         width, height,
                         lt.scaleX, lt.scaleY,
@@ -227,6 +201,18 @@ public class UILatestPanel extends UIAbstractPanel {
             }
             startPoint = Rules.WORLD_HEIGHT / 2 + height * (showLabel.size() - 1) / 2;
         }
+
+        if (gs.getSwitchGroup().getLeftSwitch().isOn()) {
+            x += dt * 360;
+        } else {
+            x -= dt * 360;
+        }
+        if (x >= 32) {
+            x = 32;
+        }
+        if (x <= -cWidth) {
+            x = -cWidth;
+        }
     }
 
     private class LabelTime {
@@ -237,7 +223,7 @@ public class UILatestPanel extends UIAbstractPanel {
         private float time;
         private float scaleX, scaleY;
 
-        public LabelTime(Label.Sticker sticker, float time) {
+        public LabelTime(Sticker sticker, float time) {
             this.actTexture = textureRegions.get(sticker);
             this.time = time;
             this.y = 0.0f;
@@ -245,7 +231,7 @@ public class UILatestPanel extends UIAbstractPanel {
             this.fleshAlpha = 0f;
         }
 
-        public void init(Label.Sticker sticker) {
+        public void init(Sticker sticker) {
             this.actTexture = textureRegions.get(sticker);
             this.time = t1;
             this.y = 0.0f;

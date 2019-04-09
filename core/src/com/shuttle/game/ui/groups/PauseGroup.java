@@ -38,10 +38,9 @@ public class PauseGroup extends Group {
         this.boomBox = new BoomBox();
         this.pause = false;
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        //this.pauseBtn = new Button(skin, "default");
         TextureRegionDrawable image = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_BUTTON));
-        TextureRegionDrawable image1 = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_BUTTON_CLICK));
-        this.pauseBtn = new ImageButton(image, image1);
+        TextureRegionDrawable imageClick = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_BUTTON_CLICK));
+        this.pauseBtn = new ImageButton(image, imageClick);
         pauseBtn.setOrigin(Align.center);
         pauseBtn.setSize(PaintConstants.PAUSE_BUTTON_WIDTH, PaintConstants.PAUSE_BUTTON_HEIGHT);
         pauseBtn.setPosition(

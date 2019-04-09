@@ -4,7 +4,7 @@ package com.shuttle.game.conf;
  * @author Shuttle on 8/28/18.
  * Object paint constants (PaintConstants)
  */
-//todo: уменьшить все до 128? Думаю да. Экономнее. Но в конце.
+//todo: Make 128*128 pics in the end?
 public final class PaintConstants {
     public static final String SHUTTLE_REGION = "shuttle";
     public static final int SHUTTLE_WIDTH = 256;
@@ -51,14 +51,14 @@ public final class PaintConstants {
     public static final int ASTEROID_MINERAL_WIDTH = 128;
     public static final int ASTEROID_MINERAL_HEIGHT = 128;
     public static final String BLACKHOLE_REGION = "blackhole";
-    public static int BLACKHOLE_WIDTH = 192;
-    public static int BLACKHOLE_HEIGHT = 192;
+    public static final int BLACKHOLE_WIDTH = 192;
+    public static final int BLACKHOLE_HEIGHT = 192;
     public static final float BLACKHOLE_OSCILLATOR_MIN = 0.8f;
     public static final float BLACKHOLE_OSCILLATOR_MAX = 1.0f;
     public static final float BLACKHOLE_OSCILLATION_FREQUENCY = 0.1f;
     public static final String BLACKHOLE_SPIRAL_REGION = "blackholespiral";
-    public static int BLACKHOLE_SPIRAL_WIDTH = 256;
-    public static int BLACKHOLE_SPIRAL_HEIGHT = 256;
+    public static final int BLACKHOLE_SPIRAL_WIDTH = 256;
+    public static final int BLACKHOLE_SPIRAL_HEIGHT = 256;
     public static final float BLACKHOLE_SPIRAL_OSCILLATOR_MIN = 0.9f;
     public static final float BLACKHOLE_SPIRAL_OSCILLATOR_MAX = 1.0f;
     public static final float BLACKHOLE_SPIRAL_OSCILLATION_FREQUENCY = 0.05f;
@@ -85,7 +85,6 @@ public final class PaintConstants {
     public static final int STORAGE_1_HEIGHT = 256;
     public static final float STORAGE_SINGLE_OFFSET = 0.0f;
     public static final float STORAGE_DOUBLE_OFFSET = 32.0f;
-
     public static final String FUEL_1_REGION = "fuelbox";
     public static final String FUEL_GOLD_REGION = "fuelboxgold";
     public static final int FUEL_1_WIDTH = 256;
@@ -144,7 +143,6 @@ public final class PaintConstants {
     public static final int ROCKET_WIDTH = 128;
     public static final int ROCKET_HEIGHT = 128;
     public static final int ROCKET_FRAMES = 3;
-
     public static final String POINTER_ARROW = "outarrow";
     public static final String POINTER_MARK = "outmark";
     public static final int POINTER_WIDTH = 48;
@@ -152,7 +150,6 @@ public final class PaintConstants {
     public static final float POINTER_MARK_SCALE = 1.3f;
     public static final int POINTER_D = 64;
     public static final float POINTER_BLINK_FREQUENCY = 0.3f;
-
     public static final String SHIELD_FUEL_REGION = "shieldfuel";
     public static final float SHIELD_FUEL_WIDTH = FUEL_1_WIDTH * 1.1f;
     public static final float SHIELD_FUEL_HEIGHT = FUEL_1_HEIGHT * 1.1f;
@@ -166,14 +163,12 @@ public final class PaintConstants {
     public static final float SHIELD_ALPHA_MAX = 1.0f;
     public static final float SCAN_ALPHA_MIN = 0.5f;
     public static final float SCAN_ALPHA_MAX = 1.0f;
-
     public static final float PANEL_ELEMENT_LIFETIME = 5.2f;
     public static final float PANEL_ELEMENT_FLASH_TIME = 0.2f;
     public static final float PANEL_ELEMENT_FADING_TIME = 0.4f;
     public static final int PANEL_ELEMENTS_MAX = 4;
     public static final int PANEL_ELEMENT_WIDTH = 128;
     public static final int PANEL_ELEMENT_HEIGHT = 128;
-
     public static final String LEFT_RIGHT_PANEL_FULL_CIRCLE = "fullcirclev1";
     public static final String LEFT_RIGHT_PANEL_EMPTY_CIRCLE = "emptycirclev1";
     public static final int LEFT_RIGHT_PANEL_CIRCLE_WIDTH = 148;
@@ -189,56 +184,64 @@ public final class PaintConstants {
     public static final String PAUSE_BUTTON_CLICK = "pausebuttonclick";
     public static final int PAUSE_BUTTON_WIDTH = 184;
     public static final int PAUSE_BUTTON_HEIGHT = 184;
-
     public static final String TIMER_BACKGROUND = "timerbackground";
     public static final String TIMER_BOX = "timerbox";
     public static final String TIMER_ICON = "timericon";
     public static final int TIMER_WIDTH = 110;
     public static final int TIMER_HEIGHT = 162;
-
     public static final String XP_OUT_CIRCLE = "xpoutcircle";
     public static final String XP_IN_CIRCLE = "xpincircle";
     public static final String XP_SCALE = "xpscale";
     public static final int XP_WIDTH = 184;
     public static final int XP_HEIGHT = 184;
-
     public static final String HP_BAR_OUT = "hpout";
     public static final String HP_BAR_IN = "hpin";
     public static final String HP_BAR_ICON = "hpicon";
     public static final String HP_BAR_SCALE = "hpscale";
     public static final int HP_BAR_WIDTH = 238;
     public static final int HP_BAR_HEIGHT = 48;
-
     public static final String LP_BAR_OUT = "lpout";
     public static final String LP_BAR_IN = "lpin";
     public static final String LP_BAR_ICON = "lpicon";
     public static final String LP_BAR_SCALE = "lpscale";
     public static final int LP_BAR_WIDTH = 238;
     public static final int LP_BAR_HEIGHT = 48;
-
     public static final String FP_BAR_OUT = "fpout";
     public static final String FP_BAR_IN = "fpin";
     public static final String FP_BAR_ICON = "fpicon";
     public static final String FP_BAR_SCALE = "fpscale";
     public static final int FP_BAR_WIDTH = 238;
     public static final int FP_BAR_HEIGHT = 48;
-
     public static final String SP_BAR_OUT = "spout";
     public static final String SP_BAR_IN = "spin";
     public static final String SP_BAR_ICON = "spicon";
     public static final String SP_BAR_SCALE = "spscale";
     public static final int SP_BAR_WIDTH = 238;
     public static final int SP_BAR_HEIGHT = 48;
+    public static final String SELECTOR_IN = "selectorin";
+    public static final String SELECTOR_OUT = "selectorout";
+    public static final String SELECTOR_SCALE = "selectorscale";
+    public static final String SELECTOR_LEFT = "selectorleft";
+    public static final String SELECTOR_RIGHT = "selectorright";
+    public static final int SELECTOR_WIDTH = 128;
+    public static final int SELECTOR_HEIGHT = 128;
+    public static final float SELECTOR_ALPHA = 0.5f;
+    public static final String SWITCH_ON = "switchon";
+    public static final String SWITCH_OFF = "switchoff";
+    public static final float SWITCH_WIDTH = 37.0f;
+    public static final float SWITCH_HEIGHT = 103.0f;
 
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
-    public static final String FONT32 = "fonts/gomarice32.ttf";
-    public static final String FONT32_C = "fonts/gomarice32Coloured.ttf";
-    public static final String FONT48 = "fonts/gomarice48.ttf";
-    public static final String FONT64 = "fonts/gomarice64.ttf";
-    public static final String FONT64_C = "fonts/gomarice64Coloured.ttf";
-    public static final String FONT96 = "fonts/gomarice96.ttf";
-    public static final String FONT128 = "fonts/gomarice128.ttf";
+    public static final String FONT32 = "fonts/CollegeRegular32.ttf";
+    public static final String FONT32_C = "fonts/CollegeRegular32Coloured.ttf";
+    public static final String FONT48 = "fonts/CollegeRegular48.ttf";
+    public static final String FONT64 = "fonts/CollegeRegular64.ttf";
+    public static final String FONT64_C = "fonts/CollegeRegular64Coloured.ttf";
+    public static final String FONT96 = "fonts/CollegeRegular96.ttf";
+    public static final String FONT128 = "fonts/CollegeRegular128.ttf";
     public static final String GAME_PACK = "pics/game.pack";
     public static final String BACKGROUND_COLOR_HEX = "100514ff";
     public static final float BACKGROUND_OSCILLATE_WIDTH = 50;
+    private PaintConstants() {
+    }
 }

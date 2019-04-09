@@ -7,15 +7,12 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 
-import java.util.ArrayList;
-
 /**
  * @author Shuttle on 3/1/19.
  */
 public class UIBonusPanel extends UIAbstractPanel {
     private int width, height, bWidth, bHeight;
     private float startPoint;
-    private Color color;
     private TextureRegion circleTexture[];
     private TextureRegion astronautBonus;
     private TextureRegion[] bonusRegions;
@@ -55,6 +52,7 @@ public class UIBonusPanel extends UIAbstractPanel {
             activeLabel.get(num - 1).time = 10;
             activeLabel.get(num - 1).active = true;
         }
+        this.x = Rules.WORLD_WIDTH;
     }
 
     public void render(SpriteBatch batch) {
@@ -66,22 +64,22 @@ public class UIBonusPanel extends UIAbstractPanel {
             batch.setColor(color);
             for (int j = 0; j < circleTexture.length; j++) {
                 batch.draw(circleTexture[j],
-                        Rules.WORLD_WIDTH - tmp.x, startPoint - (22 + height) * i,
+                        x, startPoint - (22 + height) * i,
                         width / 2, height / 2,
                         width, height,
-                        tmp.scaleX, tmp.scaleY,
+                        1.0f, 1.0f,
                         0.0f
                 );
             }
             batch.draw(astronautBonus,
-                    Rules.WORLD_WIDTH - tmp.x, startPoint - (22 + bHeight) * i,
+                    x, startPoint - (22 + bHeight) * i,
                     bWidth / 2, bHeight / 2,
                     bWidth, bHeight,
                     tmp.scaleX, tmp.scaleY,
                     0.0f
             );
             batch.draw(bonusRegions[i],
-                    Rules.WORLD_WIDTH - tmp.x, startPoint - (22 + bHeight) * i,
+                    x, startPoint - (22 + bHeight) * i,
                     bWidth / 2, bHeight / 2,
                     bWidth, bHeight,
                     tmp.scaleX, tmp.scaleY,
@@ -93,14 +91,14 @@ public class UIBonusPanel extends UIAbstractPanel {
                 color.a = tmp.fleshAlpha;
                 batch.setColor(color);
                 batch.draw(astronautBonus,
-                        Rules.WORLD_WIDTH - tmp.x, startPoint - (22 + bHeight) * i,
+                        x, startPoint - (22 + bHeight) * i,
                         bWidth / 2, bHeight / 2,
                         bWidth, bHeight,
                         tmp.scaleX, tmp.scaleY,
                         0.0f
                 );
                 batch.draw(bonusRegions[i],
-                        Rules.WORLD_WIDTH - tmp.x, startPoint - (22 + bHeight) * i,
+                        x, startPoint - (22 + bHeight) * i,
                         bWidth / 2, bHeight / 2,
                         bWidth, bHeight,
                         tmp.scaleX, tmp.scaleY,
@@ -149,6 +147,18 @@ public class UIBonusPanel extends UIAbstractPanel {
                     sh.fleshAlpha = (sh.time - (10.0f - 2.0f * t2 - t3)) / t3;
                 }
             }
+        }
+
+        if (gs.getSwitchGroup().getRightSwitch().isOn()) {
+            x -= dt * 360;
+        } else {
+            x += dt * 360;
+        }
+        if (x >= Rules.WORLD_WIDTH) {
+            x = Rules.WORLD_WIDTH;
+        }
+        if (x <= Rules.WORLD_WIDTH - width - 32) {
+            x = Rules.WORLD_WIDTH - width - 32;
         }
     }
 

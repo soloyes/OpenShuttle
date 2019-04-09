@@ -122,7 +122,7 @@ public class Assets {
         assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
         assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
         FreetypeFontLoader.FreeTypeFontLoaderParameter fontParameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
-        fontParameter.fontFileName = "fonts/gomarice.ttf";
+        fontParameter.fontFileName = "fonts/CollegeRegular.ttf";
         fontParameter.fontParameters.size = size;
         fontParameter.fontParameters.color = Color.valueOf("ffffffff");
         fontParameter.fontParameters.borderWidth = 1;
@@ -130,7 +130,7 @@ public class Assets {
         fontParameter.fontParameters.shadowOffsetX = 3;
         fontParameter.fontParameters.shadowOffsetY = 3;
         fontParameter.fontParameters.shadowColor = Color.valueOf("000000ff");
-        assetManager.load("fonts/gomarice" + size + postfix + ".ttf", BitmapFont.class, fontParameter);
+        assetManager.load("fonts/CollegeRegular" + size + postfix + ".ttf", BitmapFont.class, fontParameter);
     }
 
     public void makeLinks() {

@@ -146,8 +146,8 @@ public class Standing {
     }
 
     public void takeDamage(int amount) {
-        lifeShield -= amount;
-        if (lifeShield <= 0) {
+        lifeShield -= amount * Rules.PLAYER_SHIELD_DAMAGE_FACTOR;
+        if (lifeShield <= 0.0f) {
             changeHP(lifeShield);
         }
     }
@@ -165,13 +165,6 @@ public class Standing {
             if (lives != 0) {
                 shake.shake(1, 35, 50);
                 fuel = maxFuel;
-                GameInfoSystem.setup(
-                        Shuttle.position.x,
-                        Shuttle.position.y,
-                        "[RED]DESTROYED[]",
-                        8.0f,
-                        true
-                );
                 if (!Rules.GAME_OVER) {
                     Vibrator.vibrate(VConstants.PLAYER_LOST_LIVE);
                     boomBox.playSound(MSConstants.DOWN);
@@ -190,55 +183,66 @@ public class Standing {
         if (lives == 0) {
             Rules.GAME_OVER = true;
             writeResult();
+        } else {
+            Shuttle.position.set(Rules.SPACE_WIDTH / 2, Rules.SPACE_HEIGHT / 2);
+            GameInfoSystem.setup(
+                    Shuttle.position.x,
+                    Shuttle.position.y,
+                    "[RED]DESTROYED[]",
+                    8.0f,
+                    true
+            );
         }
     }
 
     public void writeResult() {
-        results.setResult(
-                username +
-                        " " +
-                        scoreView +
-                        " "
-                        + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()) +
-                        " " +
-                        Rules.StartLevel.values()[GamePreferences.getLevel()].name()
-        );
+        if (!GamePreferences.isChildEnabled()) {
+            results.setResult(
+                    username +
+                            " " +
+                            scoreView +
+                            " "
+                            + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()) +
+                            " " +
+                            Rules.StartLevel.values()[GamePreferences.getLevel()].name()
+            );
+        }
     }
 
     public void update(float dt) {
         shake.update(dt, ScreenManager.getInstance().getCamera());
         lifeShieldTicTac(dt);
-        scoreTicTac();
+        scoreTicTac(dt);
     }
 
     private void lifeShieldTicTac(float dt) {
         if (!lifeShieldDelayFlag) {
-            lifeShield += dt / 3;
+            lifeShield += dt / Rules.PLAYER_SHIELD_REPAIR_FACTOR;
         }
         if (lifeShield > maxLifeShield) {
             lifeShield = maxLifeShield;
         }
-        if (lifeShield <= 0) {
+        if (lifeShield <= 0.0f) {
             lifeShieldDelayFlag = true;
-            lifeShield = 0;
+            lifeShield = 0.0f;
         }
         if (lifeShieldDelayTime <= Rules.PLAYER_SHIELD_DELAY_TIME) {
             lifeShieldDelayTime += dt;
         } else {
             lifeShieldDelayFlag = false;
-            lifeShieldDelayTime = 0;
+            lifeShieldDelayTime = 0.0f;
         }
     }
 
-    private void scoreTicTac() {
+    private void scoreTicTac(float dt) {
         if (scoreView < score) {
-            scoreView += 500;
+            scoreView += 5000 * dt;
             if (scoreView > score) {
                 scoreView = score;
             }
         }
         if (scoreView > score) {
-            scoreView -= 500;
+            scoreView -= 5000 * dt;
             if (scoreView < score) {
                 scoreView = score;
             }

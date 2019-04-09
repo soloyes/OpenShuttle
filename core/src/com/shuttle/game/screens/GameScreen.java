@@ -52,11 +52,12 @@ import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.Joystick;
 import com.shuttle.game.ui.PlayerPointer;
 import com.shuttle.game.ui.groups.PauseGroup;
+import com.shuttle.game.ui.groups.leftright.SwitchGroup;
+import com.shuttle.game.ui.groups.selector.SelectorGroup;
 import com.shuttle.game.ui.panels.UIBonusPanel;
+import com.shuttle.game.ui.panels.UIInfoPanel;
 import com.shuttle.game.ui.panels.UILatestPanel;
 import com.shuttle.game.ui.panels.info.AnomalyTimer;
-import com.shuttle.game.ui.panels.info.Bars;
-import com.shuttle.game.ui.panels.info.PlayerXP;
 import com.shuttle.game.utils.ActiveListJoiner;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.ShaderManager;
@@ -115,6 +116,10 @@ public class GameScreen extends BaseScreen {
     private GameInfoSystem gameInfoSystem;
     @Getter
     private PauseGroup pauseGroup;
+    @Getter
+    private SelectorGroup selectorGroup;
+    @Getter
+    private SwitchGroup switchGroup;
     private Joystick joystick;
     private PlayerPointer playerPointer;
     @Getter
@@ -130,6 +135,7 @@ public class GameScreen extends BaseScreen {
     private OrthographicCamera cameraHelper;
     private ShaderManager shaderManager;
     private ShaderProgram shaderBlackHole;
+    @Getter
     private ShaderProgram shaderPause;
     private GameOver gameOver;
     private Ray ray;
@@ -144,12 +150,12 @@ public class GameScreen extends BaseScreen {
     private List<List<? extends AbstractAnomaly>> anomalyList;
     private List<List<? extends AbstractAsteroid>> asteroidsList;
     @Getter
+    private UIInfoPanel uiInfoPanel;
+    @Getter
     private UILatestPanel uiLatestPanel;
     private UIBonusPanel uiBonusPanel;
-    private PlayerXP playerXP;
     @Getter
     private RocketLauncher rocketLauncher;
-    private Bars bars;
     private Standing standing;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
@@ -196,12 +202,10 @@ public class GameScreen extends BaseScreen {
         blackhole = new Blackhole();
         player = new Shuttle(this, joystick);
         standing = Standing.getInstance();
-        //todo: all into one class UI bla bla
-        uiLatestPanel = new UILatestPanel();
-        uiBonusPanel = new UIBonusPanel();
-        playerXP = new PlayerXP();
-        bars = new Bars(this);
-        //
+        uiLatestPanel = new UILatestPanel(this);
+        uiBonusPanel = new UIBonusPanel(this);
+        uiInfoPanel = new UIInfoPanel(this);
+
         BoundCheck.avoidPosition(blackhole.getPosition(), Shuttle.position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         background.setPlayer(player);
         playerPointer = new PlayerPointer(player);
@@ -242,12 +246,15 @@ public class GameScreen extends BaseScreen {
     @Override
     public void createGUI() {
         pauseGroup = new PauseGroup();
+        selectorGroup = new SelectorGroup(this);
+        switchGroup = new SwitchGroup(this);
         stage.addActor(pauseGroup);
+        stage.addActor(selectorGroup);
+        stage.addActor(switchGroup);
     }
 
     @Override
     public void render(float dt) {
-        //todo: refactor this
         FitViewport v = (FitViewport) ScreenManager.getInstance().getViewport();
         //FBO BEGIN
         fbo.begin();
@@ -299,7 +306,9 @@ public class GameScreen extends BaseScreen {
         } else {
             batch.setShader(shaderBlackHole);
             shaderBlackHole.setUniformf("resolution", Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
-            holeTime += dt;
+            if(!pauseGroup.isPause()) {
+                holeTime += dt;
+            }
             shaderBlackHole.setUniformf("time", holeTime);
             shaderBlackHole.setUniformf("center", shaderHoleX, shaderHoleY);
             shaderBlackHole.setUniformf("dmax", blackhole.getShaderDiameter());
@@ -320,13 +329,11 @@ public class GameScreen extends BaseScreen {
         }
 
         //BEGIN
-        //batch.begin();
         if (!Rules.GAME_OVER) {
-            anomalyTimer.render(batch);
             uiLatestPanel.render(batch);
             uiBonusPanel.render(batch);
-            playerXP.render(batch);
-            bars.render(batch);
+            uiInfoPanel.render(batch);
+            selectorGroup.render(batch);
         }
 
         if (!pauseGroup.isPause()) {
@@ -377,9 +384,7 @@ public class GameScreen extends BaseScreen {
             particleEmitter.update(dt);
             blackhole.update(dt);
             uiLatestPanel.update(dt);
-            uiBonusPanel.update(dt);
-            playerXP.update(dt);
-            bars.update(dt);
+            uiInfoPanel.update(dt);
             rocketLauncher.update(dt);
             if (!Rules.GAME_OVER) {
                 anomalyTimer.update(dt);
@@ -409,12 +414,14 @@ public class GameScreen extends BaseScreen {
         if (!pauseGroup.isPause() && !Rules.GAME_OVER) {
             shake.update(dt, camera);
             standing.update(dt);
+            selectorGroup.update(dt);
+            uiBonusPanel.update(dt);
         }
         stage.act();
     }
 
-    //todo: It is works, somehow :)
-    //todo: Позиция обнулсяеся во время fbo.end(), поэтому хак - копипаста из cameraHelper
+    //todo: It is works, somehow.
+    //todo: Cam position is reset when fbo.end(), copy-paste from cameraHelper is the hack.
     private void cameraUpdate(float dt) {
         if (player.isCameraSmooth()) {
             tmp1V3.set(Shuttle.position, 0.0f).sub(cameraHelper.position.x, cameraHelper.position.y, 0.0f).nor();
@@ -680,7 +687,6 @@ public class GameScreen extends BaseScreen {
                                 if (!consumable.isShielded()) {
                                     consumable.destroyWithEffect();
                                 }
-                                //todo: repeatable code :(
                                 switch (asteroid.getType()) {
                                     case ASTEROID_METAL:
                                         metalAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
@@ -721,15 +727,6 @@ public class GameScreen extends BaseScreen {
             }
         }
         rocketLauncher.getRocketEmitter().checkCollision();
-    }
-
-    private void collideWithRocket(AbstractAnomaly anomaly) {
-        float dst = Shuttle.position.dst(anomaly.getPosition());
-        if (dst <= Rules.ROCKETS_TAKE_RANGE && anomaly.isBorn() && !anomaly.isTaken()) {
-            anomaly.setAtRocketPoint(true);
-        } else {
-            anomaly.setAtRocketPoint(false);
-        }
     }
 
     private void abstractAnomalyDeactivate(List<AbstractAnomaly> anomalies) {
@@ -792,11 +789,20 @@ public class GameScreen extends BaseScreen {
         }
     }
 
+    private void collideWithRocket(AbstractAnomaly anomaly) {
+        float dst = Shuttle.position.dst(anomaly.getPosition());
+        if (dst <= Rules.ROCKETS_TAKE_RANGE && anomaly.isBorn() && !anomaly.isTaken()) {
+            anomaly.setAtRocketPoint(true);
+        } else {
+            anomaly.setAtRocketPoint(false);
+        }
+    }
+
     @Override
     public void dispose() {
         super.dispose();
         shaderManager.dispose();
         Standing.getInstance().writeResult();
-        anomalyTimer.dispose();
+        uiInfoPanel.dispose();
     }
 }

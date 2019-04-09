@@ -6,13 +6,12 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.FlyingText;
 
 public class GameInfoSystem {
-    private static float dy;
     private static FlyingText[] elements;
 
     public GameInfoSystem() {
-        this.elements = new FlyingText[20];
+        elements = new FlyingText[20];
         for (int i = 0; i < elements.length; i++) {
-            this.elements[i] = new FlyingText();
+            elements[i] = new FlyingText();
         }
     }
 
@@ -29,10 +28,11 @@ public class GameInfoSystem {
 
     private static void setupElement(float x, float y, String text, float scale, boolean colored) {
         for (int i = 0; i < elements.length; i++) {
+            float dy;
             if (MathUtils.random(0,1) == 0){
-                dy = MathUtils.random(-40, -15);
+                dy = MathUtils.random(-50, -20);
             } else {
-                dy = MathUtils.random(15, 40);
+                dy = MathUtils.random(20, 50);
             }
             if (!elements[i].isActive()) {
                 elements[i].setup(x, y + dy, text, scale, colored);
@@ -55,7 +55,7 @@ public class GameInfoSystem {
         BRAKED("BRAKED"),
         SCREECH("[RED]SCREECH[]"),
         BOOM("BOOOOM"),
-        SAD("[YELLOW]SO SAD[]"),
+        SAD("[RED]SO SAD[]"),
         OUT("[YELLOW]OUT OF RANGE[]"),
         REPAIR("REPAIR [GREEN]+" + Rules.CONSUMABLE_REPAIR_ADD),
         FUEL("FUEL"),
@@ -72,6 +72,7 @@ public class GameInfoSystem {
         LASER("LASER"),
         BONUS_CRATE("[GREEN]BONUS CRATE[]"),
         BONUS_STORAGE("[GREEN]BONUS STORAGE[]"),
+        BIG_BONUS("[GREEN]BIG BONUS[]"),
         SCORE("SCORE"),
         ANOMALY_FLUSH("[GREEN]ANOMALY FLUSH[]"),
         CRATE_FLUSH("[RED]CRATE FLUSH[]"),
