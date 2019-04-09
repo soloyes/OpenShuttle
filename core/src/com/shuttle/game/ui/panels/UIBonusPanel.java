@@ -170,6 +170,7 @@ public class UIBonusPanel {
         }
     }
 
+    //todo: separate class
     private class LabelTime {
         float x;
         float alpha;
