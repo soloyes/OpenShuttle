@@ -5,21 +5,28 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
+
+import java.util.ArrayList;
 
 /**
  * @author Shuttle on 3/1/19.
  */
-public class UIBonusPanel extends UIAbstractPanel {
+public class UIBonusPanel {
     private int width, height, bWidth, bHeight;
     private float startPoint;
     private TextureRegion circleTexture[];
     private TextureRegion astronautBonus;
     private TextureRegion[] bonusRegions;
     private ArrayList<LabelTime> activeLabel;
+    private Color color;
     private float t1, t2, t3;
+    private float x;
+    private GameScreen gs;
 
-    public UIBonusPanel() {
+    public UIBonusPanel(GameScreen gs) {
+        this.gs = gs;
         this.width = PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_WIDTH;
         this.height = PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_HEIGHT;
         this.bWidth = PaintConstants.BONUS_ICON_WIDTH;
@@ -44,15 +51,15 @@ public class UIBonusPanel extends UIAbstractPanel {
         this.t2 = 0.4f;
         //this.t3 = PaintConstants.PANEL_ELEMENT_FADING_TIME;
         this.t3 = 0.6f;
+        this.x = Rules.WORLD_WIDTH;
     }
 
     public void addBonus(int num) {
 
-        if(activeLabel.get(num -1).time <= 0) {
+        if (activeLabel.get(num - 1).time <= 0) {
             activeLabel.get(num - 1).time = 10;
             activeLabel.get(num - 1).active = true;
         }
-        this.x = Rules.WORLD_WIDTH;
     }
 
     public void render(SpriteBatch batch) {
@@ -113,8 +120,8 @@ public class UIBonusPanel extends UIAbstractPanel {
         for (int i = 0; i < 4; i++) {
             LabelTime tmp = activeLabel.get(i);
 
-            if (tmp.active){
-                if (tmp.time > 0){
+            if (tmp.active) {
+                if (tmp.time > 0) {
                     tmp.time -= dt;
                 }
                 if (10.0f - tmp.time <= t2) {
@@ -122,15 +129,15 @@ public class UIBonusPanel extends UIAbstractPanel {
                     tmp.alpha += dt * (1.0f / t2) * 2.0f;
                     if (tmp.alpha > 1) tmp.alpha = 1.0f;
                 }
-                if (10.0f - tmp.time > t2 && 10.0f - tmp.time < t2 + t3){
+                if (10.0f - tmp.time > t2 && 10.0f - tmp.time < t2 + t3) {
                     tmp.x = (width + 32);
                 }
-                if (tmp.time < t2 && tmp.time > 0){
+                if (tmp.time < t2 && tmp.time > 0) {
                     tmp.x -= dt * (1.0f / t2) * (width + 32) * 2.0f;
                     tmp.alpha -= dt * (1.0f / t2) * 2.0f;
                     if (tmp.alpha < 0) tmp.alpha = 0.0f;
                 }
-                if (tmp.time <= 0){
+                if (tmp.time <= 0) {
                     tmp.x = 0;
                 }
             }
@@ -162,7 +169,7 @@ public class UIBonusPanel extends UIAbstractPanel {
         }
     }
 
-    private class LabelTime{
+    private class LabelTime {
         float x;
         float alpha;
         float fleshAlpha;
@@ -170,7 +177,7 @@ public class UIBonusPanel extends UIAbstractPanel {
         private float time;
         private float scaleX, scaleY;
 
-        public LabelTime(){
+        public LabelTime() {
             this.x = 0.0f;
             this.alpha = 0.0f;
             this.active = false;
