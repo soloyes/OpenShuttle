@@ -26,10 +26,10 @@ public final class Rules {
     //CONSUMABLE
     //2
     public static final int CONSUMABLE_ASTRONAUT_AT_START = 2;
-    //20.0f
-    public static final float CONSUMABLE_ASTRONAUT_RESPAWN_TIME = 20.0f;
-    //1
-    public static final int CONSUMABLE_ASTRONAUT_MAX_COUNT = 1;
+    //10.0f
+    public static final float CONSUMABLE_ASTRONAUT_RESPAWN_TIME = 10.0f;
+    //2
+    public static final int CONSUMABLE_ASTRONAUT_MAX_COUNT = 2;
     //2
     public static final int CONSUMABLE_CRATE_AT_START = 2;
     //6.0f

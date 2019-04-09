@@ -127,7 +127,7 @@ public class UILatestPanel {
                         labelTime.y += dt * (1.0f / t2) * height / 2;
                         labelTime.alpha -= dt * (1.0f / t2) * (1.0f / (float) maxShowed);
                         if (showLabel.size() < 5)
-                            startPoint += dt * (1.0f / t2) * height / 4;
+                            startPoint += dt * (1.0f / t2) * height / 2;
                         if (labelTime.alpha < 0) labelTime.alpha = 0;
                     }
                 } else {
@@ -140,7 +140,7 @@ public class UILatestPanel {
                     for (int k = 0; k < showLabel.size(); k++) {
                         LabelTime labelTime = showLabel.get(k);
                         labelTime.y = (height + 22) * (showLabel.size() - k - 1);
-                        startPoint = Rules.WORLD_HEIGHT / 2 + height * (showLabel.size() - 1) / 4;
+                        startPoint = Rules.WORLD_HEIGHT / 2 + height * (showLabel.size() - 1) / 2;
                         if (labelTime.alpha > 1.0f - (1.0f / (float) maxShowed) * (showLabel.size() - k - 1))
                             labelTime.alpha = 1.0f - (1.0f / (float) maxShowed) * (showLabel.size() - k - 1);
                     }
@@ -186,7 +186,7 @@ public class UILatestPanel {
         for (int i = 0; i < showLabel.size(); i++) {
             LabelTime sh = showLabel.get(i);
             if (sh.time < t2) {
-                startPoint -= dt * (1.0f / t2) * height / 4;
+                startPoint -= dt * (1.0f / t2) * height / 2;
                 if (sh.time < 0) {
                     freeLabel.add(sh);
                     needDel.add(i);
@@ -199,7 +199,7 @@ public class UILatestPanel {
                 showLabel.remove((int) needDel.get(i));
                 needDel.remove(i);
             }
-            startPoint = Rules.WORLD_HEIGHT / 2 + height * (showLabel.size() - 1) / 4;
+            startPoint = Rules.WORLD_HEIGHT / 2 + height * (showLabel.size() - 1) / 2;
         }
 
         if (gs.getSwitchGroup().getLeftSwitch().isOn()) {

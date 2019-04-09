@@ -15,11 +15,15 @@ import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
 
+import lombok.Getter;
+
 /**
  * @author Shuttle on 10/11/18.
  */
 public class Astronaut extends AbstractConsumable {
     private TextureRegion[] regions;
+    //todo: use level from Consumable
+    @Getter
     private int multiplier;
 
     public Astronaut(GameScreen gs) {
