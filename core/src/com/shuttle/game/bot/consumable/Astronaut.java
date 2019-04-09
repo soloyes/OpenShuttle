@@ -22,6 +22,7 @@ import lombok.Getter;
  */
 public class Astronaut extends AbstractConsumable {
     private TextureRegion[] regions;
+    //todo: use level from Consumable
     @Getter
     private int multiplier;
 

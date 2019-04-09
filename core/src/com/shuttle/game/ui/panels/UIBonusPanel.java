@@ -25,6 +25,7 @@ public class UIBonusPanel {
     private float x;
     private GameScreen gs;
 
+    //todo:// check GameOverScreen: how to calculate Astronauts + gold boxes to fix.
     public UIBonusPanel(GameScreen gs) {
         this.gs = gs;
         this.width = PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_WIDTH;

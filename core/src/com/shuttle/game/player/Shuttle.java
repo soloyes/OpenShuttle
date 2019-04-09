@@ -82,6 +82,7 @@ public class Shuttle extends AbstractShuttle {
     @Getter
     @Setter
     private boolean laser;
+    //todo: to Standings
     @Getter
     @Setter
     private int a1;
@@ -94,6 +95,7 @@ public class Shuttle extends AbstractShuttle {
     @Getter
     @Setter
     private int a4;
+    //todo: to Standings
 
     public Shuttle(GameScreen gs, Joystick joystick) {
         super(gs);
