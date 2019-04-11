@@ -40,6 +40,12 @@ public class Standing {
     private int hp, maxHp;
     @Getter
     @Setter
+    private float ramPower;
+    @Getter
+    @Setter
+    private float ramMaxPower;
+    @Getter
+    @Setter
     private int lives;
     @Getter
     @Setter
@@ -106,6 +112,13 @@ public class Standing {
         }
     }
 
+    public void changeRamPower(float amount) {
+        ramPower += amount;
+        if (ramPower >= ramMaxPower) {
+            ramPower = ramMaxPower;
+        }
+    }
+
     public void changeLaserChargeLevel(float amount) {
         laserChargeLevel += amount;
         if (laserChargeLevel <= 0.0f) {
@@ -161,6 +174,7 @@ public class Standing {
         if (hp <= 0) {
             hp = maxHp;
             lifeShield = maxLifeShield;
+            ramPower = 0.0f;
             changeLives(-1);
             if (lives != 0) {
                 shake.shake(1, 35, 50);

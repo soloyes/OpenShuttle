@@ -281,7 +281,7 @@ public final class Rules {
                 Standing.getInstance().setLifeShield(25);
                 Standing.getInstance().setMaxLifeShield(25);
                 Standing.getInstance().setLives(1);
-                player.setMaxPower(PLAYER_MAX_POWER);
+                Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
@@ -305,7 +305,7 @@ public final class Rules {
                 Standing.getInstance().setLifeShield(20);
                 Standing.getInstance().setMaxLifeShield(20);
                 Standing.getInstance().setLives(2);
-                player.setMaxPower(PLAYER_MAX_POWER);
+                Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
@@ -325,7 +325,7 @@ public final class Rules {
                 Standing.getInstance().setLifeShield(15);
                 Standing.getInstance().setMaxLifeShield(15);
                 Standing.getInstance().setLives(2);
-                player.setMaxPower(PLAYER_MAX_POWER);
+                Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);
@@ -345,7 +345,7 @@ public final class Rules {
                 Standing.getInstance().setLifeShield(10);
                 Standing.getInstance().setMaxLifeShield(10);
                 Standing.getInstance().setLives(3);
-                player.setMaxPower(PLAYER_MAX_POWER);
+                Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);

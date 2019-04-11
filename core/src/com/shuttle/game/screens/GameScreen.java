@@ -648,7 +648,7 @@ public class GameScreen extends BaseScreen {
                             Standing.getInstance().addToStatistics(asteroid.getType(), asteroid.getLevel());
                         } else {
                             player.getRamShield().blink(0.5f);
-                            player.setPower(player.getPower() + asteroid.getSizeForHarvest());
+                            Standing.getInstance().changeRamPower(asteroid.getSizeForHarvest());
                             if (asteroid.getType() == AbstractPoolable.Type.ASTEROID_MINERAL && player.isLaser()) {
                                 Standing.getInstance().changeLaserChargeLevel(asteroid.getSizeForHarvest());
                             }
@@ -757,7 +757,7 @@ public class GameScreen extends BaseScreen {
         player.getRamShield().blink(1.0f);
         player.slowDown(abstractPoolable.getLevel() * 50.0f);
         if (Shuttle.velocity.len() <= Rules.PLAYER_ENGINE_POWER) {
-            player.changePower(-abstractPoolable.getLevel());
+            Standing.getInstance().changeRamPower(-abstractPoolable.getLevel());
         }
         abstractPoolable.showSprayCollision(particleEmitter);
         player.killPlusPlus(abstractPoolable);
@@ -783,7 +783,7 @@ public class GameScreen extends BaseScreen {
             );
             tmp1V2.set(Shuttle.position).sub(anomaly.getPosition()).nor().scl(300 + anomaly.getLevel() * 50);
             Shuttle.velocity.add(tmp1V2);
-            player.resetPower();
+            Standing.getInstance().setRamPower(0.0f);
             tmp1V2.scl(-1);
             anomaly.getVelocity().add(tmp1V2);
         }

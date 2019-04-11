@@ -66,12 +66,6 @@ public class Shuttle extends AbstractShuttle {
     private float enginePower;
     @Getter
     @Setter
-    private float power;
-    @Getter
-    @Setter
-    private float maxPower;
-    @Getter
-    @Setter
     private boolean cameraSmooth;
     private boolean engineStarted;
     private LinkedList<Integer> shadowsCoordinates;
@@ -138,10 +132,6 @@ public class Shuttle extends AbstractShuttle {
         float dif = angle - tmp2V2.angle();
 
         return (dif >= -100 && dif <= -30) || (dif <= 100 && dif >= 30);
-    }
-
-    public void changePower(int amount) {
-        power += amount;
     }
 
     public void collideBlackhole(float dt) {
@@ -266,10 +256,6 @@ public class Shuttle extends AbstractShuttle {
         }
     }
 
-    public void resetPower() {
-        power = 0.0f;
-    }
-
     public void showTakeRangeField(float dt, boolean anyAtHarvestPoint) {
         float a = takeRangeField.getAlpha();
         if (anyAtHarvestPoint) {
@@ -300,7 +286,7 @@ public class Shuttle extends AbstractShuttle {
         makeShadow(dt);
         engineParticleEmitter.update(dt);
         checkSeries(dt);
-        checkPower();
+        checkRamPower();
         checkZigZagEffect(dt);
         angle = ShuttleMath.checkAngleBetween0And360(angle);
         checkFuel(dt);
@@ -385,11 +371,8 @@ public class Shuttle extends AbstractShuttle {
         }
     }
 
-    private void checkPower() {
-        if (power >= maxPower) {
-            power = maxPower;
-        }
-        shieldLevel = GlobalInteractionLevels.getFromLevel((int) (power));
+    private void checkRamPower() {
+        shieldLevel = GlobalInteractionLevels.getFromLevel((int) (Standing.getInstance().getRamPower()));
     }
 
     private void checkZigZagEffect(float dt) {
@@ -471,6 +454,6 @@ public class Shuttle extends AbstractShuttle {
     }
 
     public int getPushPower() {
-        return (int) power;
+        return (int) Standing.getInstance().getRamPower();
     }
 }
