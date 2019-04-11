@@ -34,6 +34,7 @@ public class GameOver {
     private BitmapFont font96;
     private float picX, picY = 1700.0f, dY = 100.0f;
 
+    //todo:// check GameOverScreen: how to calculate Astronauts + gold boxes to fix.
     public GameOver(GameScreen gs) {
         this.gs = gs;
         this.glyphLayout = new GlyphLayout();

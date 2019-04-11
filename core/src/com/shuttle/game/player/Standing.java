@@ -1,6 +1,7 @@
 package com.shuttle.game.player;
 
 import com.badlogic.gdx.Gdx;
+import com.shuttle.game.bot.consumable.Astronaut;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Results;
@@ -65,6 +66,7 @@ public class Standing {
     @Getter
     @Setter
     private float laserChargeLevel, maxLaserChargeLevel;
+    private Map<Astronaut.Profession, Integer> astronauts;
     @Getter
     @Setter
     private float lifeShield, maxLifeShield;
@@ -84,6 +86,7 @@ public class Standing {
         this.n = 1;
         this.statistics = new HashMap<AbstractPoolable.Type, Map<Integer, Integer>>();
         this.shake = new Shake();
+        this.astronauts = new HashMap<Astronaut.Profession, Integer>();
     }
 
     public void addToStatistics(AbstractPoolable.Type type, Integer level) {
@@ -102,6 +105,14 @@ public class Standing {
         }
     }
 
+    public void changeAstronauts(Astronaut.Profession profession) {
+        if (astronauts.get(profession) == null) {
+            astronauts.put(profession, 1);
+        } else {
+            astronauts.put(profession, astronauts.get(profession) + 1);
+        }
+    }
+
     public void changeFuel(float amount) {
         fuel += amount;
         if (fuel <= 0.0f) {
@@ -112,13 +123,6 @@ public class Standing {
         }
     }
 
-    public void changeRamPower(float amount) {
-        ramPower += amount;
-        if (ramPower >= ramMaxPower) {
-            ramPower = ramMaxPower;
-        }
-    }
-
     public void changeLaserChargeLevel(float amount) {
         laserChargeLevel += amount;
         if (laserChargeLevel <= 0.0f) {
@@ -126,6 +130,13 @@ public class Standing {
         }
         if (laserChargeLevel > maxLaserChargeLevel) {
             laserChargeLevel = maxLaserChargeLevel;
+        }
+    }
+
+    public void changeRamPower(float amount) {
+        ramPower += amount;
+        if (ramPower >= ramMaxPower) {
+            ramPower = ramMaxPower;
         }
     }
 

@@ -22,8 +22,8 @@ import lombok.Getter;
  */
 public class Astronaut extends AbstractConsumable {
     private TextureRegion[] regions;
-    //todo: use level from Consumable
     @Getter
+    private Profession profession;
     private int multiplier;
 
     public Astronaut(GameScreen gs) {
@@ -37,33 +37,18 @@ public class Astronaut extends AbstractConsumable {
     }
 
     @Override
-    public void init(float x, float y) {
-        this.position.set(x, y);
-        this.angle = MathUtils.random(0, 360);
-        this.rotationSpeed = MathUtils.random(-20, 20);
-        this.scaleX = this.saveScaleX = 1.0f;
-        this.scaleY = this.saveScaleY = 1.0f;
-        this.active = true;
-        this.taken = false;
-        this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-        this.spiralRadius = MathUtils.random(20, 60);
-        this.atRayPoint = false;
-        this.multiplier = MathUtils.random(0, regions.length - 1);
-        this.texture = regions[multiplier];
-        playSound();
-    }
-
-    private void playSound() {
-        if (!fake && boundCheck.checkAndHandleBoundsInCamera(this)) {
-            boomBox.playSound(MSConstants.NEW_ASTRONAUT);
-        }
-    }
-
-    @Override
-    public void update(float dt) {
-        basicUpdate(dt);
-        moveProcessor.update(this, dt);
-        boundCheck.checkAndHandleBoundsAndDestroy(this);
+    public void badEffect(GameScreen gs) {
+        Standing standing = Standing.getInstance();
+        standing.changeScore(-Rules.CONSUMABLE_MURDER_SCORE_DECREASE);
+        GameInfoSystem.setup(
+                position.x,
+                position.y,
+                GameInfoSystem.Preset.MURDERER,
+                8.0f,
+                true
+        );
+        boomBox.playSound(MSConstants.DESTROY_ASTRONAUT);
+        Vibrator.vibrate(VConstants.PLAYER_ASTRONAUT_DESTROY);
     }
 
     @Override
@@ -83,23 +68,49 @@ public class Astronaut extends AbstractConsumable {
     }
 
     @Override
-    public void badEffect(GameScreen gs) {
-        Standing standing = Standing.getInstance();
-        standing.changeScore(-Rules.CONSUMABLE_MURDER_SCORE_DECREASE);
-        GameInfoSystem.setup(
-                position.x,
-                position.y,
-                GameInfoSystem.Preset.MURDERER,
-                8.0f,
-                true
-        );
-        boomBox.playSound(MSConstants.DESTROY_ASTRONAUT);
-        Vibrator.vibrate(VConstants.PLAYER_ASTRONAUT_DESTROY);
+    public void init(float x, float y) {
+        this.position.set(x, y);
+        this.angle = MathUtils.random(0, 360);
+        this.rotationSpeed = MathUtils.random(-20, 20);
+        this.scaleX = this.saveScaleX = 1.0f;
+        this.scaleY = this.saveScaleY = 1.0f;
+        this.active = true;
+        this.taken = false;
+        this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        this.spiralRadius = MathUtils.random(20, 60);
+        this.atRayPoint = false;
+        this.multiplier = MathUtils.random(0, Profession.values().length - 1);
+        this.profession = Profession.values()[multiplier];
+        this.texture = regions[multiplier];
+        playSound();
+    }
+
+    private void playSound() {
+        if (!fake && boundCheck.checkAndHandleBoundsInCamera(this)) {
+            boomBox.playSound(MSConstants.NEW_ASTRONAUT);
+        }
+    }
+
+    @Override
+    public void update(float dt) {
+        basicUpdate(dt);
+        moveProcessor.update(this, dt);
+        boundCheck.checkAndHandleBoundsAndDestroy(this);
     }
 
     @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
         showSprayCollision(gs.getParticleEmitter());
+    }
+
+    public enum Profession {
+        REGULAR(0), MECHANIC(1), MEDIC(2), MILITARY(3), SCIENTIST(4);
+        @Getter
+        private int index;
+
+        Profession(int index) {
+            this.index = index;
+        }
     }
 }
