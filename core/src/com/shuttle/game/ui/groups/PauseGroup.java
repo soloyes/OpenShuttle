@@ -27,7 +27,7 @@ import lombok.Setter;
 public class PauseGroup extends Group {
     private final Button buttonMenu;
     private final Button buttonRestart;
-    private final Button pauseBtn;
+    private final ImageButton playPauseBtn;
     private final com.shuttle.game.ui.groups.ConfigGroup configGroup;
     private BoomBox boomBox;
     @Getter
@@ -38,14 +38,14 @@ public class PauseGroup extends Group {
         this.boomBox = new BoomBox();
         this.pause = false;
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        TextureRegionDrawable image = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_BUTTON));
-        TextureRegionDrawable imageClick = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_BUTTON_CLICK));
-        this.pauseBtn = new ImageButton(image, imageClick);
-        pauseBtn.setOrigin(Align.center);
-        pauseBtn.setSize(PaintConstants.PAUSE_BUTTON_WIDTH, PaintConstants.PAUSE_BUTTON_HEIGHT);
-        pauseBtn.setPosition(
-                Rules.WORLD_WIDTH - pauseBtn.getWidth() - 44,
-                Rules.WORLD_HEIGHT - pauseBtn.getHeight() - 44
+        final TextureRegionDrawable play = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PLAY_BUTTON));
+        final TextureRegionDrawable pause = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_BUTTON));
+        this.playPauseBtn = new ImageButton(pause);
+        playPauseBtn.setOrigin(Align.center);
+        playPauseBtn.setSize(PaintConstants.PLAY_PAUSE_BUTTON_WIDTH, PaintConstants.PLAY_PAUSE_BUTTON_HEIGHT);
+        playPauseBtn.setPosition(
+                Rules.WORLD_WIDTH - playPauseBtn.getWidth() - 44,
+                Rules.WORLD_HEIGHT - playPauseBtn.getHeight() - 44
         );
 
         this.configGroup = new com.shuttle.game.ui.groups.ConfigGroup(ScreenManager.ScreenType.GAME);
@@ -94,31 +94,33 @@ public class PauseGroup extends Group {
             }
         });
 
-        pauseBtn.addListener(new ChangeListener() {
+        playPauseBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-                pause = !pause;
-                if (pause) {
+                PauseGroup.this.pause = !PauseGroup.this.pause;
+                if (PauseGroup.this.pause) {
                     boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
+                    playPauseBtn.getStyle().imageUp = play;
                 } else {
                     boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
+                    playPauseBtn.getStyle().imageUp = pause;
                 }
-                configGroup.setVisible(pause);
-                buttonMenu.setVisible(pause);
-                buttonRestart.setVisible(pause);
+                configGroup.setVisible(PauseGroup.this.pause);
+                buttonMenu.setVisible(PauseGroup.this.pause);
+                buttonRestart.setVisible(PauseGroup.this.pause);
                 boomBox.playSound(MSConstants.UI_PAUSE);
                 boomBox.stopAllSound();
             }
         });
 
-        this.addActor(pauseBtn);
+        this.addActor(playPauseBtn);
         this.addActor(configGroup);
         this.addActor(buttonMenu);
         this.addActor(buttonRestart);
     }
 
     public void setGameOver() {
-        pauseBtn.setVisible(false);
+        playPauseBtn.setVisible(false);
         configGroup.setVisible(false);
         buttonMenu.setVisible(true);
         buttonRestart.setVisible(true);
