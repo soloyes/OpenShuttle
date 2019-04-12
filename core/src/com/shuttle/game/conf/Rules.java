@@ -215,7 +215,7 @@ public final class Rules {
     public static final float CAMERA_SMOOTH_VELOCITY = 1500.0f;
     //GAME
     //false
-    public static boolean GAME_OVER = false;
+    public static boolean GAME_OVER = true;
     //20000
     //todo: to be Balanced
     public static final int SCORE_TO_LIVE = 1000;

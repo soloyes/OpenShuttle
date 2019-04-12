@@ -20,7 +20,11 @@ import com.shuttle.game.player.Standing;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Shuttle on 10/10/18.
@@ -34,7 +38,6 @@ public class GameOver {
     private BitmapFont font96;
     private float picX, picY = 1700.0f, dY = 100.0f;
 
-    //todo:// check GameOverScreen: how to calculate Astronauts + gold boxes to fix.
     public GameOver(GameScreen gs) {
         this.gs = gs;
         this.glyphLayout = new GlyphLayout();
@@ -85,75 +88,47 @@ public class GameOver {
         corrosiveAnomalyRED.setScaleX(1.0f + levels[3] * 0.15f);
         corrosiveAnomalyRED.setScaleY(1.0f + levels[3] * 0.15f);
 
-        picY -= dY;
-        ElectricalAnomaly electricalAnomaly = new ElectricalAnomaly(gs);
-        electricalAnomaly.init(picX, picY);
-        electricalAnomaly.setScaleX(1.0f);
-        electricalAnomaly.setScaleY(1.0f);
-        electricalAnomaly.getColor().a = 1.0f;
+        //todo: add Corrosive here
+        List<Class<? extends AbstractPoolable>> classes = new LinkedList<Class<? extends AbstractPoolable>>();
+        classes.add(ElectricalAnomaly.class);
+        classes.add(RadiationAnomaly.class);
+        classes.add(MagneticAnomaly.class);
+        classes.add(Crate.class);
+        classes.add(Storage.class);
+        classes.add(Fuel.class);
+        classes.add(Astronaut.class);
+        classes.add(MetalAsteroid.class);
+        classes.add(MineralAsteroid.class);
 
-        picY -= dY;
-        RadiationAnomaly radiationAnomaly = new RadiationAnomaly(gs);
-        radiationAnomaly.init(picX, picY);
-        radiationAnomaly.setScaleX(1.0f);
-        radiationAnomaly.setScaleY(1.0f);
-        radiationAnomaly.getColor().a = 1.0f;
-
-        picY -= dY;
-        MagneticAnomaly magneticAnomaly = new MagneticAnomaly(gs);
-        magneticAnomaly.init(picX, picY);
-        magneticAnomaly.setScaleX(1.0f);
-        magneticAnomaly.setScaleY(1.0f);
-        magneticAnomaly.getColor().a = 1.0f;
-
-        picY -= dY;
-        Astronaut astronaut = new Astronaut(gs);
-        astronaut.setFake(true);
-        astronaut.init(picX, picY);
-        astronaut.setWidth(corrosiveAnomalyTAN.getWidth());
-        astronaut.setHeight(corrosiveAnomalyTAN.getHeight());
-
-        picY -= dY;
-        Crate crate = new Crate(gs);
-        crate.init(picX, picY);
-
-        picY -= dY;
-        Fuel fuel = new Fuel(gs);
-        fuel.init(picX, picY);
-        fuel.setScaleX(0.7f);
-        fuel.setScaleY(0.7f);
-
-        picY -= dY;
-        Storage storage = new Storage(gs);
-        storage.init(picX, picY);
-        storage.setScaleX(0.6f);
-        storage.setScaleY(0.6f);
-
-        picY -= dY;
-        MineralAsteroid mineralAsteroid = new MineralAsteroid(gs);
-        mineralAsteroid.init(picX, picY);
-        mineralAsteroid.setScaleX(1.0f);
-        mineralAsteroid.setScaleY(1.0f);
-
-        picY -= dY;
-        MetalAsteroid metalAsteroid = new MetalAsteroid(gs);
-        metalAsteroid.init(picX, picY);
-        metalAsteroid.setScaleX(1.0f);
-        metalAsteroid.setScaleY(1.0f);
+        //todo: anomalies should start with alpha = 1.0f
+        for (int i = 0; i < classes.size(); i++) {
+            picY -= dY;
+            try {
+                Constructor constructor = classes.get(i).getConstructor(GameScreen.class);
+                AbstractPoolable abstractPoolable = (AbstractPoolable) constructor.newInstance(gs);
+                abstractPoolable.init(picX, picY);
+                abstractPoolable.setScaleX(1.0f);
+                abstractPoolable.setScaleY(1.0f);
+                if (classes.get(i) == Storage.class || classes.get(i) == Fuel.class) {
+                    abstractPoolable.setScaleX(0.7f);
+                    abstractPoolable.setScaleY(0.7f);
+                }
+                poolable.add(abstractPoolable);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
 
         poolable.add(corrosiveAnomalyTAN);
         poolable.add(corrosiveAnomalyGREEN);
         poolable.add(corrosiveAnomalyYELLOW);
         poolable.add(corrosiveAnomalyRED);
-        poolable.add(electricalAnomaly);
-        poolable.add(magneticAnomaly);
-        poolable.add(radiationAnomaly);
-        poolable.add(astronaut);
-        poolable.add(crate);
-        poolable.add(fuel);
-        poolable.add(storage);
-        poolable.add(mineralAsteroid);
-        poolable.add(metalAsteroid);
 
         picY -= dY;
     }
@@ -176,44 +151,10 @@ public class GameOver {
                         anomaly.getColor().b,
                         tmpColor.a
                 );
-                anomaly.basicRender(batch);
-            } else if (abstractPoolable instanceof ElectricalAnomaly) {
+            } else {
                 batch.setColor(tmpColor);
-                ElectricalAnomaly anomaly = (ElectricalAnomaly) abstractPoolable;
-                anomaly.basicRender(batch);
-            } else if (abstractPoolable instanceof MagneticAnomaly) {
-                batch.setColor(tmpColor);
-                MagneticAnomaly anomaly = (MagneticAnomaly) abstractPoolable;
-                anomaly.basicRender(batch);
-            } else if (abstractPoolable instanceof RadiationAnomaly) {
-                batch.setColor(tmpColor);
-                RadiationAnomaly anomaly = (RadiationAnomaly) abstractPoolable;
-                anomaly.basicRender(batch);
-            } else if (abstractPoolable instanceof Astronaut) {
-                batch.setColor(tmpColor);
-                Astronaut astronaut = (Astronaut) abstractPoolable;
-                astronaut.basicRender(batch);
-            } else if (abstractPoolable instanceof Crate) {
-                batch.setColor(tmpColor);
-                Crate crate = (Crate) abstractPoolable;
-                crate.basicRender(batch);
-            } else if (abstractPoolable instanceof Fuel) {
-                batch.setColor(tmpColor);
-                Fuel fuel = (Fuel) abstractPoolable;
-                fuel.render(batch);
-            } else if (abstractPoolable instanceof Storage) {
-                batch.setColor(tmpColor);
-                Storage tmpStorage = (Storage) abstractPoolable;
-                tmpStorage.basicRender(batch);
-            } else if (abstractPoolable instanceof MineralAsteroid) {
-                batch.setColor(tmpColor);
-                MineralAsteroid asteroid = (MineralAsteroid) abstractPoolable;
-                asteroid.basicRender(batch);
-            } else if (abstractPoolable instanceof MetalAsteroid) {
-                batch.setColor(tmpColor);
-                MetalAsteroid asteroid = (MetalAsteroid) abstractPoolable;
-                asteroid.basicRender(batch);
             }
+            abstractPoolable.basicRender(batch);
             batch.setColor(tmpColor);
             resLabel.setText(
                     Standing.getInstance()

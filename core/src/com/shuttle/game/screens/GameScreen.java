@@ -458,8 +458,10 @@ public class GameScreen extends BaseScreen {
                             player.takeEffect(consumable);
                             if (consumable instanceof Astronaut) {
                                 Astronaut astronaut = (Astronaut) consumable;
-                                Standing.getInstance().changeAstronauts(astronaut.getProfession());
-                                uiBonusPanel.addBonus(astronaut.getProfession().getIndex());
+                                if (astronaut.getProfession() != Astronaut.Profession.REGULAR) {
+                                    Standing.getInstance().changeAstronauts(astronaut.getProfession());
+                                    uiBonusPanel.addBonus(astronaut.getProfession().getIndex());
+                                }
                             }
                             Standing.getInstance().addToStatistics(consumable.getType(), consumable.getLevel());
                         } else {

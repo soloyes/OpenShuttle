@@ -82,6 +82,9 @@ public class Fuel extends AbstractConsumable {
         this.shielded = false;
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
         this.golden = MathUtils.random(0, Rules.CONSUMABLE_GOLDEN_PROBABILITY) == 0;
+        if (Rules.GAME_OVER) {
+            golden = false;
+        }
         this.box.init();
     }
 
@@ -102,13 +105,19 @@ public class Fuel extends AbstractConsumable {
         labels.get(Label.Layer.LABEL).get(0).update(dt);
     }
 
+
     @Override
-    public void render(SpriteBatch batch) {
+    public void basicRender(SpriteBatch batch) {
         substrate.render(batch);
         for (int i = 0; i < PaintConstants.FUEL_BUBBLE_COUNT; i++) {
             bubble[i].render(batch);
         }
         box.render(batch);
+    }
+
+    @Override
+    public void render(SpriteBatch batch) {
+        basicRender(batch);
         labels.get(Label.Layer.LABEL).get(0).render(batch);
         if (shielded && !taken) {
             shield.render(batch);

@@ -97,6 +97,9 @@ public class Crate extends AbstractConsumable {
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
         this.scanned = false;
         this.scan.setTime(Rules.CONSUMABLE_SCAN_TIME);
+        if (Rules.GAME_OVER) {
+            golden = false;
+        }
         if (!golden) {
             this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_1_REGION);
         } else {
@@ -133,7 +136,7 @@ public class Crate extends AbstractConsumable {
     }
 
     private Sticker generateSafe() {
-        int r = 3;MathUtils.random(0, 6);
+        int r = MathUtils.random(0, 6);
         switch (r) {
             case 0:
                 return Sticker.BOOST;

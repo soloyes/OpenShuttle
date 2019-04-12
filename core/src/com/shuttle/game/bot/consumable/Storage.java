@@ -125,6 +125,9 @@ public class Storage extends AbstractConsumable {
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
         this.scanned = false;
         this.scan.setTime(Rules.CONSUMABLE_SCAN_TIME);
+        if (Rules.GAME_OVER) {
+            golden = false;
+        }
         if (!golden) {
             this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STORAGE_1_REGION);
         } else {
