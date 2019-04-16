@@ -23,7 +23,6 @@ import com.shuttle.game.utils.pool.AbstractPoolable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -31,7 +30,7 @@ import java.util.List;
  */
 public class GameOver {
     private Label titleLabel;
-    private Label resLabel;
+    private Label resultLabel;
     private ArrayList<AbstractPoolable> poolable;
     private GameScreen gs;
     private GlyphLayout glyphLayout;
@@ -49,7 +48,7 @@ public class GameOver {
         font96.setColor(0.8f, 0.43f, 0.33f, 1f);
 
         this.titleLabel = new Label("GAME OVER", style96);
-        this.resLabel = new Label("", style96);
+        this.resultLabel = new Label("", style96);
 
         picX = ScreenManager.getInstance().getViewport().getWorldWidth() / 4;
 
@@ -57,79 +56,55 @@ public class GameOver {
                         - titleLabel.getWidth() / 2,
                 picY);
 
+        picY -= dY;
         poolable = new ArrayList<AbstractPoolable>();
-        CorrosiveAnomaly corrosiveAnomalyTAN = new CorrosiveAnomaly(gs);
-        CorrosiveAnomaly corrosiveAnomalyGREEN = new CorrosiveAnomaly(gs);
-        CorrosiveAnomaly corrosiveAnomalyYELLOW = new CorrosiveAnomaly(gs);
-        CorrosiveAnomaly corrosiveAnomalyRED = new CorrosiveAnomaly(gs);
         int[] levels = new int[]{0, 1, 2, 3};
 
-        picY -= dY;
-        corrosiveAnomalyTAN.init(picX, picY);
-        corrosiveAnomalyTAN.setLevel(0);
-        corrosiveAnomalyTAN.setScaleX(1.0f + levels[0] * 0.15f);
-        corrosiveAnomalyTAN.setScaleY(1.0f + levels[0] * 0.15f);
-
-        picY -= dY;
-        corrosiveAnomalyGREEN.init(picX, picY);
-        corrosiveAnomalyGREEN.setLevel(1);
-        corrosiveAnomalyGREEN.setScaleX(1.0f + levels[1] * 0.15f);
-        corrosiveAnomalyGREEN.setScaleY(1.0f + levels[1] * 0.15f);
-
-        picY -= dY;
-        corrosiveAnomalyYELLOW.init(picX, picY);
-        corrosiveAnomalyYELLOW.setLevel(2);
-        corrosiveAnomalyYELLOW.setScaleX(1.0f + levels[2] * 0.15f);
-        corrosiveAnomalyYELLOW.setScaleY(1.0f + levels[2] * 0.15f);
-
-        picY -= dY;
-        corrosiveAnomalyRED.init(picX, picY);
-        corrosiveAnomalyRED.setLevel(3);
-        corrosiveAnomalyRED.setScaleX(1.0f + levels[3] * 0.15f);
-        corrosiveAnomalyRED.setScaleY(1.0f + levels[3] * 0.15f);
-
-        //todo: add Corrosive here
-        List<Class<? extends AbstractPoolable>> classes = new LinkedList<Class<? extends AbstractPoolable>>();
-        classes.add(ElectricalAnomaly.class);
-        classes.add(RadiationAnomaly.class);
-        classes.add(MagneticAnomaly.class);
-        classes.add(Crate.class);
-        classes.add(Storage.class);
-        classes.add(Fuel.class);
-        classes.add(Astronaut.class);
-        classes.add(MetalAsteroid.class);
-        classes.add(MineralAsteroid.class);
+        List<Class<? extends AbstractPoolable>> classes = new ArrayList<Class<? extends AbstractPoolable>>() {{
+            add(CorrosiveAnomaly.class);
+            add(ElectricalAnomaly.class);
+            add(RadiationAnomaly.class);
+            add(MagneticAnomaly.class);
+            add(Crate.class);
+            add(Storage.class);
+            add(Fuel.class);
+            add(Astronaut.class);
+            add(MetalAsteroid.class);
+            add(MineralAsteroid.class);
+        }};
 
         //todo: anomalies should start with alpha = 1.0f
         for (int i = 0; i < classes.size(); i++) {
-            picY -= dY;
-            try {
-                Constructor constructor = classes.get(i).getConstructor(GameScreen.class);
-                AbstractPoolable abstractPoolable = (AbstractPoolable) constructor.newInstance(gs);
-                abstractPoolable.init(picX, picY);
-                abstractPoolable.setScaleX(1.0f);
-                abstractPoolable.setScaleY(1.0f);
-                if (classes.get(i) == Storage.class || classes.get(i) == Fuel.class) {
-                    abstractPoolable.setScaleX(0.7f);
-                    abstractPoolable.setScaleY(0.7f);
+            if (classes.get(i) == Storage.class || classes.get(i) == Fuel.class) {
+                init(gs, classes.get(i), 0.7f, 0.7f, 0);
+            } else if (classes.get(i) == CorrosiveAnomaly.class) {
+                for (int j = 0; j < 4; j++) {
+                    init(gs, classes.get(i), 1.0f + levels[j] * 0.15f, 1.0f + levels[j] * 0.15f, j);
                 }
-                poolable.add(abstractPoolable);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
+            } else {
+                init(gs, classes.get(i), 1.0f, 1.0f, 0);
             }
         }
+    }
 
-        poolable.add(corrosiveAnomalyTAN);
-        poolable.add(corrosiveAnomalyGREEN);
-        poolable.add(corrosiveAnomalyYELLOW);
-        poolable.add(corrosiveAnomalyRED);
-
+    private void init(GameScreen gs, Class<? extends AbstractPoolable> abstractPoolableClass, float scaleX, float scaleY, int level) {
+        try {
+            Constructor constructor = abstractPoolableClass.getConstructor(GameScreen.class);
+            AbstractPoolable abstractPoolable = (AbstractPoolable) constructor.newInstance(gs);
+            abstractPoolable.init(picX, picY);
+            abstractPoolable.setScaleX(scaleX);
+            abstractPoolable.setScaleY(scaleY);
+            abstractPoolable.setLevel(level);
+            poolable.add(abstractPoolable);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
         picY -= dY;
     }
 
@@ -156,16 +131,16 @@ public class GameOver {
             }
             abstractPoolable.basicRender(batch);
             batch.setColor(tmpColor);
-            resLabel.setText(
+            resultLabel.setText(
                     Standing.getInstance()
                             .getFromStatistics(poolable.get(i).getType(), poolable.get(i).getLevel())
                             .toString()
             );
-            resLabel.setPosition(
+            resultLabel.setPosition(
                     3 * poolable.get(i).getPosition().x,
-                    poolable.get(i).getPosition().y - resLabel.getHeight() / 2
+                    poolable.get(i).getPosition().y - resultLabel.getHeight() / 2
             );
-            resLabel.draw(batch, batch.getColor().a);
+            resultLabel.draw(batch, batch.getColor().a);
         }
     }
 

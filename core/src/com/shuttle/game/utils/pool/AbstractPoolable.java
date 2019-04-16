@@ -93,11 +93,10 @@ public abstract class AbstractPoolable implements Poolable {
     @Setter
     protected boolean atRocketPoint;
 
+    //todo: why?
     public boolean isInCamera() {
         return boundCheck.checkAndHandleBoundsInCamera(this);
     }
-
-    protected boolean inCamera;
 
     @Override
     public void destroy() {
@@ -123,13 +122,9 @@ public abstract class AbstractPoolable implements Poolable {
                     this.getPosition().x,
                     this.getPosition().y,
                     MathUtils.random(-200, 200), MathUtils.random(-200, 200),
-                    0.4f,
-                    24,
-                    0,
-                    R, G, B,
-                    1f,
-                    R, G, B,
-                    0.0f
+                    0.4f, 24, 0,
+                    R, G, B, 1f,
+                    R, G, B, 0.0f
             );
         }
     }
@@ -146,13 +141,9 @@ public abstract class AbstractPoolable implements Poolable {
                     this.getPosition().x + MathUtils.random(-30, 30),
                     this.getPosition().y + MathUtils.random(-30, 30),
                     MathUtils.random(-600, 600), MathUtils.random(-600, 600),
-                    0.4f,
-                    8,
-                    0,
-                    R, G, B,
-                    1f,
-                    R, G, B,
-                    0.0f
+                    0.4f, 8, 0,
+                    R, G, B, 1f,
+                    R, G, B, 0.0f
             );
         }
     }
