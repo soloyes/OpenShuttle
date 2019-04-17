@@ -93,11 +93,6 @@ public abstract class AbstractPoolable implements Poolable {
     @Setter
     protected boolean atRocketPoint;
 
-    //todo: why?
-    public boolean isInCamera() {
-        return boundCheck.checkAndHandleBoundsInCamera(this);
-    }
-
     @Override
     public void destroy() {
         this.active = false;

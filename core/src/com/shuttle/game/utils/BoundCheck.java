@@ -119,7 +119,7 @@ public class BoundCheck {
         rectangle.set(
                 camera.position.x - Rules.WORLD_WIDTH / 2,
                 camera.position.y - Rules.WORLD_HEIGHT / 2,
-                Rules.WORLD_WIDTH, Rules.SPACE_HEIGHT
+                Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT
         );
         return rectangle.contains(poolable.getPosition());
     }
