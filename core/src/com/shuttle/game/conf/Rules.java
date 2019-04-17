@@ -215,7 +215,7 @@ public final class Rules {
     public static final float CAMERA_SMOOTH_VELOCITY = 1500.0f;
     //GAME
     //false
-    public static boolean GAME_OVER = true;
+    public static boolean GAME_OVER = false;
     //20000
     //todo: to be Balanced
     public static final int SCORE_TO_LIVE = 1000;
@@ -257,6 +257,10 @@ public final class Rules {
     public static final int ROCKETS_VELOCITY = 200;
     //3 means 1/3. 0 means 100%
     public static int CONSUMABLE_GOLDEN_PROBABILITY = 3;
+    //3 means 1/3. 0 means 100%
+    public static int CONSUMABLE_STORAGE_DANGER_PROBABILITY = 4;
+    //3 means 1/3. 0 means 100%
+    public static int CONSUMABLE_CRATE_DANGER_PROBABILITY = 4;
     //5
     public static final int SELECTOR_MAX_COUNT = 5;
     //3

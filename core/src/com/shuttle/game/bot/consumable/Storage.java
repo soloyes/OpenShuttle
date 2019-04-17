@@ -142,21 +142,19 @@ public class Storage extends AbstractConsumable {
 
     private void stickLabel() {
         for (int i = 0; i <= size.ordinal(); i++) {
-            int r = MathUtils.random(0, 10);
-            switch (r) {
-                case 0:
-                    labels.get(Label.Layer.LABEL).get(i).setSticker(generateDanger());
-                    danger = true;
-                    setLabelForSingle(labels.get(Label.Layer.LABEL).get(i));
-                    dangerLabel = labels.get(Label.Layer.LABEL).get(i);
-                    for (int j = 0; j <= size.ordinal(); j++) {
-                        labels.get(Label.Layer.HIDDEN).get(j).setSticker(generateSafe());
-                    }
-                    i = size.ordinal() + 1;
-                    break;
-                default:
-                    labels.get(Label.Layer.LABEL).get(i).setSticker(generateSafe());
-                    break;
+            boolean r = MathUtils.random(0, Rules.CONSUMABLE_STORAGE_DANGER_PROBABILITY) == 0;
+            if (r) {
+                labels.get(Label.Layer.LABEL).get(i).setSticker(generateDanger());
+                danger = true;
+                setLabelForSingle(labels.get(Label.Layer.LABEL).get(i));
+                dangerLabel = labels.get(Label.Layer.LABEL).get(i);
+                for (int j = 0; j <= size.ordinal(); j++) {
+                    labels.get(Label.Layer.HIDDEN).get(j).setSticker(generateSafe());
+                }
+                i = size.ordinal() + 1;
+
+            } else {
+                labels.get(Label.Layer.LABEL).get(i).setSticker(generateSafe());
             }
         }
 

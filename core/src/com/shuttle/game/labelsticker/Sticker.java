@@ -159,7 +159,7 @@ public enum Sticker {
     SCAN {
         @Override
         public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
-            if (isGolden) {
+            if (!isGolden) {
                 List<AbstractConsumable> list = gs.getCrateEmitter().getActiveList();
                 for (int i = 0; i < list.size(); i++) {
                     if (list.get(i).isDanger()) {
