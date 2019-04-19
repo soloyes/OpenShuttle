@@ -44,7 +44,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
                         Assets.getInstance()
                                 .getAtlas()
                                 .findRegion(PaintConstants.ANOMALY_MAGNETIC_REGION)),
-                4, 4, 16
+                4, 4, PaintConstants.ANOMALY_MAGNETIC_FRAMES
         );
         this.width = PaintConstants.ANOMALY_MAGNETIC_WIDTH;
         this.height = PaintConstants.ANOMALY_MAGNETIC_HEIGHT;

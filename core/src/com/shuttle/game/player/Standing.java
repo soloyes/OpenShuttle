@@ -170,9 +170,11 @@ public class Standing {
     }
 
     public void takeDamage(int amount) {
-        lifeShield -= amount * Rules.PLAYER_SHIELD_DAMAGE_FACTOR;
-        if (lifeShield <= 0.0f) {
-            changeHP(lifeShield);
+        if (!Rules.GAME_OVER) {
+            lifeShield -= amount * Rules.PLAYER_SHIELD_DAMAGE_FACTOR;
+            if (lifeShield <= 0.0f) {
+                changeHP(lifeShield);
+            }
         }
     }
 
@@ -209,7 +211,6 @@ public class Standing {
             Rules.GAME_OVER = true;
             writeResult();
         } else {
-            Shuttle.position.set(Rules.SPACE_WIDTH / 2, Rules.SPACE_HEIGHT / 2);
             GameInfoSystem.setup(
                     Shuttle.position.x,
                     Shuttle.position.y,
@@ -218,6 +219,7 @@ public class Standing {
                     true
             );
         }
+        Shuttle.respawn();
     }
 
     public void writeResult() {

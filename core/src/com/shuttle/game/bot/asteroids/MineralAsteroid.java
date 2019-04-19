@@ -17,7 +17,7 @@ public class MineralAsteroid extends AbstractAsteroid {
                         Assets.getInstance()
                                 .getAtlas()
                                 .findRegion(PaintConstants.ASTEROID_MINERAL_REGION)),
-                8, 8, 64
+                8, 8, PaintConstants.ASTEROID_MINERAL_FRAMES
         );
         type = Type.ASTEROID_MINERAL;
     }

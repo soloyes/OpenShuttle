@@ -37,8 +37,9 @@ public abstract class AbstractAnomalyEmitter extends ObjectPool<AbstractAnomaly>
         time += dt;
         if (time > respawnTime && !Rules.GAME_OVER) {
             time = 0.0f;
-            if (activeList.size() < anomaliesMaxCount)
+            if (activeList.size() < anomaliesMaxCount) {
                 createAnomaly();
+            }
         }
         for (int i = 0; i < activeList.size(); i++) {
             activeList.get(i).update(dt);

@@ -44,7 +44,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
                         Assets.getInstance()
                                 .getAtlas()
                                 .findRegion(PaintConstants.ANOMALY_RADIATION_REGION)),
-                4, 4, 16
+                4, 4, PaintConstants.ANOMALY_RADIATION_FRAMES
         );
         this.width = PaintConstants.ANOMALY_RADIATION_WIDTH;
         this.height = PaintConstants.ANOMALY_RADIATION_HEIGHT;
@@ -101,8 +101,17 @@ public class RadiationAnomaly extends AbstractAnomaly {
     @Override
     public void basicUpdate(float dt) {
         frame += 12 * dt;
-        if (frame >= textureRegions.length)
+        if (frame >= textureRegions.length) {
             frame = 0.0f;
+        }
+    }
+
+    @Override
+    public void destroyWithEffect() {
+        super.destroyWithEffect();
+        Standing.getInstance().addToStatistics(this.type, this.level);
+        Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
+        showSprayBoom(gs.getParticleEmitter());
     }
 
     @Override
@@ -163,13 +172,5 @@ public class RadiationAnomaly extends AbstractAnomaly {
 
     public void addEatTimer(float dt) {
         eatTimer += dt;
-    }
-
-    @Override
-    public void destroyWithEffect() {
-        super.destroyWithEffect();
-        Standing.getInstance().addToStatistics(this.type, this.level);
-        Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
-        showSprayBoom(gs.getParticleEmitter());
     }
 }

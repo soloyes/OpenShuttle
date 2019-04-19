@@ -43,9 +43,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                                 .getAtlas()
                                 .findRegion(PaintConstants.ANOMALY_CORROSIVE_REGION)
                 ),
-                3,
-                4,
-                PaintConstants.ANOMALY_CORROSIVE_FRAMES
+                3, 4, PaintConstants.ANOMALY_CORROSIVE_FRAMES
         );
         this.glowRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.ANOMALY_GLOW);
         this.width = PaintConstants.ANOMALY_CORROSIVE_WIDTH;

@@ -30,7 +30,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                         Assets.getInstance()
                                 .getAtlas()
                                 .findRegion(PaintConstants.ANOMALY_ELECTRIC_REGION)),
-                4, 4, 16
+                4, 4, PaintConstants.ANOMALY_ELECTRIC_FRAMES
         );
         this.width = PaintConstants.ANOMALY_ELECTRIC_WIDTH;
         this.height = PaintConstants.ANOMALY_ELECTRIC_HEIGHT;

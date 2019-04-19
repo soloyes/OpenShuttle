@@ -15,6 +15,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 
@@ -91,6 +92,7 @@ public class PauseGroup extends Group {
                 //
                 ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
                 Rules.GAME_OVER = false;
+                Shuttle.respawn();
             }
         });
 

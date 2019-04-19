@@ -17,8 +17,6 @@ import lombok.Setter;
  */
 public class Star {
     private Vector2 position;
-    @Setter
-    private Shuttle player;
     private Vector2 normal;
     @Setter
     private CloudSky cloudSky;
@@ -69,13 +67,13 @@ public class Star {
                 position.y -= 0.1 * normal.y * scaleX;
             }
         } else {
-            if (cloudSky.getBCdx() > PaintConstants.BACKGROUND_OSCILLATE_WIDTH) {
+            if (cloudSky.getBcDx() > PaintConstants.BACKGROUND_OSCILLATE_WIDTH) {
                 position.x += speed * dt + scaleX * dt * dt / 2;
             } else {
                 position.x += speed * dt - scaleX * dt * dt / 2;
             }
 
-            float tmp = cloudSky.getOscillatorBC().prettyOscillate(cloudSky.getBCdx(), cloudSky.getFrequency1(), 1f, 0, cloudSky.getWidthBC() / 4, dt);
+            float tmp = cloudSky.getBcOscillator().prettyOscillate(cloudSky.getBcDx(), cloudSky.getBcFrequency(), 1f, 0, cloudSky.getBcWidth() / 4, dt);
             if (tmp > PaintConstants.BACKGROUND_OSCILLATE_WIDTH) {
                 speed += scaleX * dt;
             } else {
