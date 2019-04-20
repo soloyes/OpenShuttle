@@ -10,10 +10,8 @@ import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.GameScreen;
-import com.shuttle.game.utils.ActiveListJoiner;
+import com.shuttle.game.utils.ListOfListsJoiner;
 import com.shuttle.game.utils.pool.AbstractPoolable;
-
-import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -35,7 +33,7 @@ public class Ray {
     private float takeRange;
     private BoomBox boomBox;
     private GameScreen gs;
-    private List<List<? extends AbstractAsteroid>> asteroidList;
+    private ListOfListsJoiner<AbstractAsteroid> asteroidsJoiner;
 
     public Ray(GameScreen gs) {
         this.gs = gs;
@@ -46,8 +44,10 @@ public class Ray {
         this.harvestVelocity = Rules.PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY;
         this.takeRange = Rules.PLAYER_CONSUMABLE_TAKE_RANGE;
         this.boomBox = new BoomBox();
-        ActiveListJoiner<AbstractAsteroid> joiner = new ActiveListJoiner<AbstractAsteroid>();
-        this.asteroidList = joiner.join(gs.getMetalAsteroidEmitter().getActiveList(), gs.getMineralAsteroidEmitter().getActiveList());
+        this.asteroidsJoiner = new ListOfListsJoiner<AbstractAsteroid>(
+                gs.getMetalAsteroidEmitter().getActiveList(),
+                gs.getMineralAsteroidEmitter().getActiveList()
+        );
     }
 
     public void harvest(Shuttle player, AbstractPoolable poolable, ParticleEmitter particleEmitter, float dt) {
@@ -153,7 +153,7 @@ public class Ray {
                 Standing.getInstance().addToStatistics(asteroid.getType(), asteroid.getLevel());
                 asteroid.setTimeToBurn(0.0f);
                 asteroid.setAtRayPoint(false);
-                Standing.getInstance().changeLaserChargeLevel( -1);
+                Standing.getInstance().changeLaserChargeLevel(-1);
                 if (Standing.getInstance().getLaserChargeLevel() <= 1) {
                     boomBox.stopMusicEffect(MSConstants.LASER);
                     player.setLaser(false);
@@ -166,11 +166,9 @@ public class Ray {
         }
 
         boolean anyAtLaserPoint = false;
-        for (int i = 0; i < asteroidList.size(); i++) {
-            for (int j = 0; j < asteroidList.get(i).size(); j++) {
-                if (!asteroidList.get(i).get(j).isFragmented()) {
-                    anyAtLaserPoint |= asteroidList.get(i).get(j).isAtRayPoint();
-                }
+        for (int i = 0; i < asteroidsJoiner.size(); i++) {
+            if (!asteroidsJoiner.get(i).isFragmented()) {
+                anyAtLaserPoint |= asteroidsJoiner.get(i).isAtRayPoint();
             }
         }
         if (!anyAtLaserPoint) {

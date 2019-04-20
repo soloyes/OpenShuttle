@@ -52,7 +52,7 @@ public abstract class AbstractConsumableEmitter extends ObjectPool<AbstractConsu
 
     public void emit() {
         if (consumablesAtStart != 0) {
-            for (int i = 0; i <= consumablesAtStart; i++) {
+            for (int i = 0; i < consumablesAtStart; i++) {
                 createConsumable();
             }
         }

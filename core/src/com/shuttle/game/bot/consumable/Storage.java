@@ -24,7 +24,6 @@ public class Storage extends AbstractConsumable {
 
     public Storage(GameScreen gs) {
         super(gs);
-        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STORAGE_1_REGION);
         this.width = PaintConstants.STORAGE_1_WIDTH;
         this.height = PaintConstants.STORAGE_1_HEIGHT;
         this.type = Type.STORAGE;
@@ -46,8 +45,7 @@ public class Storage extends AbstractConsumable {
     @Override
     public void badEffect(GameScreen gs) {
         GameInfoSystem.setup(
-                position.x,
-                position.y,
+                position.x, position.y,
                 GameInfoSystem.Preset.BOOM,
                 3.0f,
                 false
@@ -125,13 +123,13 @@ public class Storage extends AbstractConsumable {
         this.shield.setTime(Rules.CONSUMABLE_SHIELD_TIME);
         this.scanned = false;
         this.scan.setTime(Rules.CONSUMABLE_SCAN_TIME);
-        if (Rules.GAME_OVER) {
+        if (fake) {
             golden = false;
         }
-        if (!golden) {
-            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STORAGE_1_REGION);
-        } else {
+        if (golden) {
             this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STORAGE_GOLD_REGION);
+        } else {
+            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STORAGE_1_REGION);
         }
     }
 

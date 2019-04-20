@@ -15,11 +15,9 @@ import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Oscillator;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.GameScreen;
-import com.shuttle.game.utils.ActiveListJoiner;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.ListOfListsJoiner;
 import com.shuttle.game.utils.pool.AbstractPoolable;
-
-import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -41,8 +39,7 @@ public class Radar {
     private Color color;
     private BoomBox boomBox;
     private Oscillator oscillator;
-    private List<List<? extends AbstractConsumable>> listsActiveConsumable;
-
+    private ListOfListsJoiner<AbstractConsumable> consumableJoiner;
     private Color tanColor = new Color(Color.TAN.r, Color.TAN.g, Color.TAN.b, PaintConstants.RADAR_ALPHA);
     private Color greenColor = new Color(Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, PaintConstants.RADAR_ALPHA);
     private Color yellowColor = new Color(Color.YELLOW.r, Color.YELLOW.g, Color.YELLOW.b, PaintConstants.RADAR_ALPHA);
@@ -60,8 +57,7 @@ public class Radar {
         this.dotSize = 0.0f;
         this.color = new Color(Color.valueOf(PaintConstants.BACKGROUND_COLOR_HEX));
         this.boomBox = new BoomBox();
-        ActiveListJoiner<AbstractConsumable> joiner = new ActiveListJoiner<AbstractConsumable>();
-        listsActiveConsumable = joiner.join(
+        consumableJoiner = new ListOfListsJoiner<AbstractConsumable>(
                 gs.getAstronautEmitter().getActiveList(),
                 gs.getCrateEmitter().getActiveList(),
                 gs.getFuelEmitter().getActiveList(),
@@ -84,12 +80,10 @@ public class Radar {
             drawPoolable(batch, tmpAnomaly);
         }
 
-        for (int i = 0; i < listsActiveConsumable.size(); i++) {
-            for (int j = 0; j < listsActiveConsumable.get(i).size(); j++) {
-                AbstractConsumable tmpConsumable = listsActiveConsumable.get(i).get(j);
-                dot = dot1;
-                drawPoolable(batch, tmpConsumable);
-            }
+        for (int i = 0; i < consumableJoiner.size(); i++) {
+            AbstractConsumable tmpConsumable = consumableJoiner.get(i);
+            dot = dot1;
+            drawPoolable(batch, tmpConsumable);
         }
 
         for (int i = 0; i < gs.getElectricalAnomalyEmitter().getActiveList().size(); i++) {

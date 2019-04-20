@@ -79,9 +79,8 @@ public class Astronaut extends AbstractConsumable {
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.spiralRadius = MathUtils.random(20, 60);
         this.atRayPoint = false;
-        if (Rules.GAME_OVER){
+        if (fake) {
             this.multiplier = 0;
-            this.fake = true;
         } else {
             this.multiplier = MathUtils.random(0, Profession.values().length - 1);
         }

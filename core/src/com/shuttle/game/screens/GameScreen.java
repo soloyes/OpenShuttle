@@ -58,8 +58,8 @@ import com.shuttle.game.ui.panels.UIBonusPanel;
 import com.shuttle.game.ui.panels.UIInfoPanel;
 import com.shuttle.game.ui.panels.UILatestPanel;
 import com.shuttle.game.ui.panels.info.AnomalyTimer;
-import com.shuttle.game.utils.ActiveListJoiner;
 import com.shuttle.game.utils.BoundCheck;
+import com.shuttle.game.utils.ListOfListsJoiner;
 import com.shuttle.game.utils.ShaderManager;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
@@ -145,10 +145,10 @@ public class GameScreen extends BaseScreen {
     private float holeTime;
     private float fadeInAlpha;
     private boolean gameOverDeactivate;
-    private List<List<? extends AbstractConsumable>> consumableList;
+    private ListOfListsJoiner<AbstractConsumable> consumableJoiner;
+    private ListOfListsJoiner<AbstractAsteroid> asteroidsJoiner;
     @Getter
-    private List<List<? extends AbstractAnomaly>> anomalyList;
-    private List<List<? extends AbstractAsteroid>> asteroidsList;
+    private ListOfListsJoiner<AbstractAnomaly> anomalyJoiner;
     @Getter
     private UIInfoPanel uiInfoPanel;
     @Getter
@@ -220,12 +220,22 @@ public class GameScreen extends BaseScreen {
         prettyElectricKick = PrettySound.getPretty(Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY);
         prettyFragmentHarvest = PrettySound.getPretty(Rules.FRAGMENT_KICK_PRETTY_SOUND_DELAY);
         //
-        ActiveListJoiner<AbstractConsumable> consumableJoiner = new ActiveListJoiner<AbstractConsumable>();
-        ActiveListJoiner<AbstractAsteroid> asteroidsJoiner = new ActiveListJoiner<AbstractAsteroid>();
-        ActiveListJoiner<AbstractAnomaly> anomalyJoiner = new ActiveListJoiner<AbstractAnomaly>();
-        consumableList = consumableJoiner.join(astronautEmitter.getActiveList(), crateEmitter.getActiveList(), fuelEmitter.getActiveList(), storageEmitter.getActiveList());
-        anomalyList = anomalyJoiner.join(corrosiveAnomalyEmitter.getActiveList(), electricalAnomalyEmitter.getActiveList(), magneticAnomalyEmitter.getActiveList(), radiationAnomalyEmitter.getActiveList());
-        asteroidsList = asteroidsJoiner.join(metalAsteroidEmitter.getActiveList(), mineralAsteroidEmitter.getActiveList());
+        consumableJoiner = new ListOfListsJoiner<AbstractConsumable>(
+                astronautEmitter.getActiveList(),
+                crateEmitter.getActiveList(),
+                fuelEmitter.getActiveList(),
+                storageEmitter.getActiveList()
+        );
+        asteroidsJoiner = new ListOfListsJoiner<AbstractAsteroid>(
+                metalAsteroidEmitter.getActiveList(),
+                mineralAsteroidEmitter.getActiveList()
+        );
+        anomalyJoiner = new ListOfListsJoiner<AbstractAnomaly>(
+                corrosiveAnomalyEmitter.getActiveList(),
+                electricalAnomalyEmitter.getActiveList(),
+                magneticAnomalyEmitter.getActiveList(),
+                radiationAnomalyEmitter.getActiveList()
+        );
         //
         storageEmitter.emit();
     }
@@ -447,280 +457,283 @@ public class GameScreen extends BaseScreen {
         calcMusicEffectVolume();
 
         boolean anyAtHarvestPoint = false;
-        for (int i = 0; i < consumableList.size(); i++) {
-            for (int j = 0; j < consumableList.get(i).size(); j++) {
-                AbstractConsumable consumable = consumableList.get(i).get(j);
-                if (!consumable.isTaken()) {
-                    if (Shuttle.position.dst(consumable.getPosition()) <= PaintConstants.SHUTTLE_WIDTH / 2) {
-                        if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
-                            consumable.destroy();
-                            player.takeEffect(consumable);
-                            if (consumable instanceof Astronaut) {
-                                Astronaut astronaut = (Astronaut) consumable;
-                                if (astronaut.getProfession() != Astronaut.Profession.REGULAR) {
-                                    Standing.getInstance().changeAstronauts(astronaut.getProfession());
-                                    uiBonusPanel.addBonus(astronaut.getProfession().getIndex());
-                                }
-                            }
-                            Standing.getInstance().addToStatistics(consumable.getType(), consumable.getLevel());
-                        } else {
-                            if (!player.canCatch(consumable)) {
-                                consumable.destroyWithEffect();
-                                if (consumable instanceof Fuel) {
-                                    shake.shake(1, 35, 50);
-                                }
-                                player.badEffect(consumable);
-                            } else {
-                                consumable.destroy();
-                                player.takeEffect(consumable);
-                            }
+        for (int i = 0; i < consumableJoiner.size(); i++) {
+            AbstractConsumable consumable = consumableJoiner.get(i);
+            if (consumable.isTaken()) {
+                continue;
+            }
+            if (Shuttle.position.dst(consumable.getPosition()) <= PaintConstants.SHUTTLE_WIDTH / 2) {
+                if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
+                    consumable.destroy();
+                    player.takeEffect(consumable);
+                    if (consumable instanceof Astronaut) {
+                        Astronaut astronaut = (Astronaut) consumable;
+                        if (astronaut.getProfession() != Astronaut.Profession.REGULAR) {
+                            Standing.getInstance().changeAstronauts(astronaut.getProfession());
+                            uiBonusPanel.addBonus(astronaut.getProfession().getIndex());
                         }
                     }
-                    ray.setCount(24);
-                    ray.setSize(4);
-                    ray.setHarvestVelocity(Rules.PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY);
-                    ray.setTakeRange(Rules.PLAYER_CONSUMABLE_TAKE_RANGE);
-                    if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
-                        ray.setPreset(Ray.Preset.GREEN);
+                    Standing.getInstance().addToStatistics(consumable.getType(), consumable.getLevel());
+                } else {
+                    if (player.canCatch(consumable)) {
+                        consumable.destroy();
+                        player.takeEffect(consumable);
                     } else {
-                        if (player.canCatch(consumable)) {
-                            ray.setPreset(Ray.Preset.GREEN);
-                        } else {
-                            ray.setPreset(Ray.Preset.RED);
+                        consumable.destroyWithEffect();
+                        if (consumable instanceof Fuel) {
+                            shake.shake(1, 35, 50);
                         }
+                        player.badEffect(consumable);
                     }
-                    ray.harvest(player, consumable, particleEmitter, dt);
-                    anyAtHarvestPoint |= consumable.isAtRayPoint();
                 }
             }
+            ray.setCount(24);
+            ray.setSize(4);
+            ray.setHarvestVelocity(Rules.PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY);
+            ray.setTakeRange(Rules.PLAYER_CONSUMABLE_TAKE_RANGE);
+            if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
+                ray.setPreset(Ray.Preset.GREEN);
+            } else {
+                if (player.canCatch(consumable)) {
+                    ray.setPreset(Ray.Preset.GREEN);
+                } else {
+                    ray.setPreset(Ray.Preset.RED);
+                }
+            }
+            ray.harvest(player, consumable, particleEmitter, dt);
+            anyAtHarvestPoint |= consumable.isAtRayPoint();
+
         }
 
         player.showTakeRangeField(dt, anyAtHarvestPoint);
 
         for (int i = 0; i < corrosiveAnomalyEmitter.getActiveList().size(); i++) {
             CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(i);
-            if (!anomaly.isTaken()) {
-                if (Shuttle.position.dst(anomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && anomaly.isBorn()) {
-                    if (anomaly.getLevel() < player.getPushPower() || Shuttle.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
-                        if (Shuttle.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
-                            boomBox.playSound(MSConstants.BURST_CORROSIVE_ANOMALY);
-                        } else {
-                            boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
-                        }
-                        damageToAnomaly(anomaly);
-                        Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
+            collideWithRocket(anomaly);
+            if (anomaly.isTaken()) {
+                continue;
+            }
+            if (Shuttle.position.dst(anomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && anomaly.isBorn()) {
+                if (anomaly.getLevel() < player.getPushPower() || Shuttle.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
+                    if (Shuttle.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
+                        boomBox.playSound(MSConstants.BURST_CORROSIVE_ANOMALY);
                     } else {
-                        damageToPlayer(anomaly);
-                        if (anomaly.getLevel() != 4) {
-                            anomaly.takeDamage(player.getPushPower());
-                        }
-                        anomaly.setHungry(false);
-                        anomaly.setSlimTimer(0);
-                        prettyCorrosiveKick.playSound(MSConstants.KICKED_BY_CORROSIVE);
-                        Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
+                        boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
                     }
+                    damageToAnomaly(anomaly);
+                    Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
+                } else {
+                    damageToPlayer(anomaly);
+                    if (anomaly.getLevel() != 4) {
+                        anomaly.takeDamage(player.getPushPower());
+                    }
+                    anomaly.setHungry(false);
+                    anomaly.setSlimTimer(0);
+                    prettyCorrosiveKick.playSound(MSConstants.KICKED_BY_CORROSIVE);
+                    Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
                 }
             }
-            collideWithRocket(anomaly);
         }
 
         for (int i = 0; i < electricalAnomalyEmitter.getActiveList().size(); i++) {
             ElectricalAnomaly anomaly = (ElectricalAnomaly) electricalAnomalyEmitter.getActiveList().get(i);
-            if (!anomaly.isTaken()) {
-                if (Shuttle.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 && anomaly.isBorn()) {
-                    anomaly.setHungry(false);
-                    damageToPlayer(anomaly);
-                    Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
-                    prettyElectricKick.playSound(MSConstants.KICKED_BY_ELECTRIC);
-                    anomaly.setV(anomaly.getV() * Rules.ANOMALY_ELECTRIC_DECREASE_FACTOR);
-                }
+            if (anomaly.isTaken()) {
+                continue;
             }
             collideWithRocket(anomaly);
+            if (Shuttle.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 && anomaly.isBorn()) {
+                anomaly.setHungry(false);
+                damageToPlayer(anomaly);
+                Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
+                prettyElectricKick.playSound(MSConstants.KICKED_BY_ELECTRIC);
+                anomaly.setV(anomaly.getV() * Rules.ANOMALY_ELECTRIC_DECREASE_FACTOR);
+            }
         }
 
         //
         boolean tmp1 = false;
         for (int i = 0; i < radiationAnomalyEmitter.getActiveList().size(); i++) {
             RadiationAnomaly anomaly = (RadiationAnomaly) radiationAnomalyEmitter.getActiveList().get(i);
-            if (!anomaly.isTaken()) {
-                if (Shuttle.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_RADIATION_WIDTH / 3 && anomaly.isBorn()) {
-                    anomaly.setEat(true);
-                    anomaly.setGlued(true);
-                } else {
-                    anomaly.setEat(false);
-                    anomaly.setEatTimer(0.0f);
-                    anomaly.setGlued(false);
-                }
-
-                if (anomaly.isEat()) {
-                    anomaly.addEatTimer(dt);
-                    if (anomaly.getEatTimer() >= Rules.ANOMALIES_RADIATION_EAT_TIME) {
-                        anomaly.setEatTimer(0.0f);
-                        Standing.getInstance().changeScore(-Rules.ANOMALIES_RADIATION_SCORE_DECREASE);
-                        boomBox.playSound(MSConstants.LOSE_SCORE);
-                        GameInfoSystem.setup(
-                                Shuttle.position.x,
-                                Shuttle.position.y,
-                                "-[RED]" + GameInfoSystem.Preset.LOST_SCORE.getValue() + "[]",
-                                2.0f,
-                                true
-                        );
-                    }
-                }
-                tmp1 |= anomaly.isGlued();
+            if (anomaly.isTaken()) {
+                continue;
             }
             collideWithRocket(anomaly);
+            if (Shuttle.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_RADIATION_WIDTH / 3 && anomaly.isBorn()) {
+                anomaly.setEat(true);
+                anomaly.setGlued(true);
+            } else {
+                anomaly.setEat(false);
+                anomaly.setEatTimer(0.0f);
+                anomaly.setGlued(false);
+            }
+
+            if (anomaly.isEat()) {
+                anomaly.addEatTimer(dt);
+                if (anomaly.getEatTimer() >= Rules.ANOMALIES_RADIATION_EAT_TIME) {
+                    anomaly.setEatTimer(0.0f);
+                    Standing.getInstance().changeScore(-Rules.ANOMALIES_RADIATION_SCORE_DECREASE);
+                    boomBox.playSound(MSConstants.LOSE_SCORE);
+                    GameInfoSystem.setup(
+                            Shuttle.position.x,
+                            Shuttle.position.y,
+                            "-[RED]" + GameInfoSystem.Preset.LOST_SCORE.getValue() + "[]",
+                            2.0f,
+                            true
+                    );
+                }
+            }
+            tmp1 |= anomaly.isGlued();
         }
         Standing.getInstance().setScoreAlertRadiationAnomaly(tmp1);
 
         boolean tmp2 = false;
         for (int i = 0; i < magneticAnomalyEmitter.getActiveList().size(); i++) {
             MagneticAnomaly anomaly = (MagneticAnomaly) magneticAnomalyEmitter.getActiveList().get(i);
-            if (!anomaly.isTaken()) {
-                if (Shuttle.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_MAGNETIC_HEIGHT / 3 && anomaly.isBorn()) {
-                    anomaly.setEat(true);
-                    anomaly.setGlued(true);
-                } else {
-                    anomaly.setEat(false);
-                    anomaly.setEatTimer(0.0f);
-                    anomaly.setGlued(false);
-                }
-
-                if (anomaly.isEat()) {
-                    anomaly.addEatTimer(dt);
-                    if (anomaly.getEatTimer() >= Rules.ANOMALIES_MAGNETIC_EAT_TIME) {
-                        anomaly.setEatTimer(0.0f);
-                        Standing.getInstance().changeFuel(-Rules.ANOMALIES_MAGNETIC_FUEL_DECREASE);
-                        boomBox.playSound(MSConstants.LOSE_FUEL);
-                        GameInfoSystem.setup(
-                                Shuttle.position.x,
-                                Shuttle.position.y,
-                                "-[RED]" + GameInfoSystem.Preset.FUEL + "[]",
-                                4.0f,
-                                true
-                        );
-                    }
-                }
-                tmp2 |= anomaly.isGlued();
+            if (anomaly.isTaken()) {
+                continue;
             }
             collideWithRocket(anomaly);
+            if (Shuttle.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_MAGNETIC_HEIGHT / 3 && anomaly.isBorn()) {
+                anomaly.setEat(true);
+                anomaly.setGlued(true);
+            } else {
+                anomaly.setEat(false);
+                anomaly.setEatTimer(0.0f);
+                anomaly.setGlued(false);
+            }
+
+            if (anomaly.isEat()) {
+                anomaly.addEatTimer(dt);
+                if (anomaly.getEatTimer() >= Rules.ANOMALIES_MAGNETIC_EAT_TIME) {
+                    anomaly.setEatTimer(0.0f);
+                    Standing.getInstance().changeFuel(-Rules.ANOMALIES_MAGNETIC_FUEL_DECREASE);
+                    boomBox.playSound(MSConstants.LOSE_FUEL);
+                    GameInfoSystem.setup(
+                            Shuttle.position.x,
+                            Shuttle.position.y,
+                            "-[RED]" + GameInfoSystem.Preset.FUEL + "[]",
+                            4.0f,
+                            true
+                    );
+                }
+            }
+            tmp2 |= anomaly.isGlued();
         }
         Standing.getInstance().setFuelAlertMagneticAnomaly(tmp2);
         //
 
-        for (int i = 0; i < asteroidsList.size(); i++) {
-            for (int j = 0; j < asteroidsList.get(i).size(); j++) {
-                AbstractAsteroid asteroid = asteroidsList.get(i).get(j);
-                if (!asteroid.isTaken()) {
-                    if (Shuttle.position.dst(asteroid.getPosition()) < asteroid.getHeight() * asteroid.getScaleX()) {
-                        if (!asteroid.isFragmented()) {
-                            asteroid.destroyWithEffect();
-                            Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
-                            player.getLifeShield().blink(1.0f);
-                            switch (asteroid.getType()) {
-                                case ASTEROID_METAL:
-                                    metalAsteroidEmitter.boom(asteroid.getPosition(), player.getShieldLevel());
-                                    break;
-                                case ASTEROID_MINERAL:
-                                    mineralAsteroidEmitter.boom(asteroid.getPosition(), player.getShieldLevel());
-                                    break;
-                            }
-                            player.takeDamage(player.getShieldLevel().getLevel() + 1);
-                            GameInfoSystem.setup(
-                                    Shuttle.position.x, Shuttle.position.y,
-                                    GameInfoSystem.Preset.SCREECH,
-                                    3.0f,
-                                    true
-                            );
-                            boomBox.playSound(MSConstants.DESTROY_ASTEROID);
-                            Standing.getInstance().addToStatistics(asteroid.getType(), asteroid.getLevel());
-                        } else {
-                            player.getRamShield().blink(0.5f);
-                            Standing.getInstance().changeRamPower(asteroid.getSizeForHarvest());
-                            if (asteroid.getType() == AbstractPoolable.Type.ASTEROID_MINERAL && player.isLaser()) {
-                                Standing.getInstance().changeLaserChargeLevel(asteroid.getSizeForHarvest());
-                            }
-                            //pretty sound if collect much fragments in little time
-                            prettyFragmentHarvest.playSound(MSConstants.GET_FRAGMENT);
-                            asteroid.destroy();
-                        }
+        for (int i = 0; i < asteroidsJoiner.size(); i++) {
+            AbstractAsteroid asteroid = asteroidsJoiner.get(i);
+            if (asteroid.isTaken()) {
+                continue;
+            }
+            if (Shuttle.position.dst(asteroid.getPosition()) < asteroid.getHeight() * asteroid.getScaleX()) {
+                if (!asteroid.isFragmented()) {
+                    asteroid.destroyWithEffect();
+                    Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
+                    player.getLifeShield().blink(1.0f);
+                    switch (asteroid.getType()) {
+                        case ASTEROID_METAL:
+                            metalAsteroidEmitter.boom(asteroid.getPosition(), player.getShieldLevel());
+                            break;
+                        case ASTEROID_MINERAL:
+                            mineralAsteroidEmitter.boom(asteroid.getPosition(), player.getShieldLevel());
+                            break;
                     }
-
-                    for (int k = 0; k < corrosiveAnomalyEmitter.getActiveList().size(); k++) {
-                        CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(k);
-                        if (!asteroid.isFragmented() && anomaly.getPosition().dst(asteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
-                            asteroid.destroyWithEffect();
-                            switch (asteroid.getType()) {
-                                case ASTEROID_METAL:
-                                    metalAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
-                                    break;
-                                case ASTEROID_MINERAL:
-                                    mineralAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
-                                    break;
-                            }
-                            GameInfoSystem.setup(anomaly.getPosition().x, anomaly.getPosition().y, GameInfoSystem.Preset.BOOM, 3.0f, false);
-                            if (anomaly.getLevel() == 0) {
-                                anomaly.destroyWithEffect();
-                            } else {
-                                anomaly.takeDamage(1);
-                            }
-                        }
+                    player.takeDamage(player.getShieldLevel().getLevel() + 1);
+                    GameInfoSystem.setup(
+                            Shuttle.position.x, Shuttle.position.y,
+                            GameInfoSystem.Preset.SCREECH,
+                            3.0f,
+                            true
+                    );
+                    boomBox.playSound(MSConstants.DESTROY_ASTEROID);
+                    Standing.getInstance().addToStatistics(asteroid.getType(), asteroid.getLevel());
+                } else {
+                    player.getRamShield().blink(0.5f);
+                    Standing.getInstance().changeRamPower(asteroid.getSizeForHarvest());
+                    if (asteroid.getType() == AbstractPoolable.Type.ASTEROID_MINERAL && player.isLaser()) {
+                        Standing.getInstance().changeLaserChargeLevel(asteroid.getSizeForHarvest());
                     }
-
-                    for (int m = 0; m < consumableList.size(); m++) {
-                        for (int p = 0; p < consumableList.get(m).size(); p++) {
-                            AbstractConsumable consumable = consumableList.get(m).get(p);
-                            if (!asteroid.isFragmented() && consumable.getPosition().dst(asteroid.getPosition()) < 128) {
-                                asteroid.destroyWithEffect();
-                                if (!consumable.isShielded()) {
-                                    consumable.destroyWithEffect();
-                                }
-                                switch (asteroid.getType()) {
-                                    case ASTEROID_METAL:
-                                        metalAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
-                                        break;
-                                    case ASTEROID_MINERAL:
-                                        mineralAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
-                                        break;
-                                }
-                                GameInfoSystem.setup(
-                                        consumable.getPosition().x,
-                                        consumable.getPosition().y,
-                                        GameInfoSystem.Preset.SAD,
-                                        3.0f,
-                                        true
-                                );
-                            }
-                        }
-                    }
-
-                    //
-                    if (asteroid.isFragmented()) {
-                        ray.setCount(12);
-                        ray.setSize(2);
-                        ray.setPreset(Ray.Preset.GREY);
-                        ray.setHarvestVelocity(Rules.PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY);
-                        ray.setTakeRange(Rules.PLAYER_FRAGMENT_TAKE_RANGE);
-                        ray.harvest(player, asteroid, particleEmitter, dt);
-                    } else {
-                        if (player.isLaser()) {
-                            ray.setCount(5);
-                            ray.setSize(3);
-                            ray.setPreset(Ray.Preset.RED);
-                            ray.laser(player, asteroid, particleEmitter, dt);
-                        }
-                    }
-                    //
+                    //pretty sound if collect much fragments in little time
+                    prettyFragmentHarvest.playSound(MSConstants.GET_FRAGMENT);
+                    asteroid.destroy();
                 }
             }
+
+            for (int j = 0; j < corrosiveAnomalyEmitter.getActiveList().size(); j++) {
+                CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(j);
+                if (!asteroid.isFragmented() && anomaly.getPosition().dst(asteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
+                    asteroid.destroyWithEffect();
+                    switch (asteroid.getType()) {
+                        case ASTEROID_METAL:
+                            metalAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                            break;
+                        case ASTEROID_MINERAL:
+                            mineralAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                            break;
+                    }
+                    GameInfoSystem.setup(anomaly.getPosition().x, anomaly.getPosition().y, GameInfoSystem.Preset.BOOM, 3.0f, false);
+                    if (anomaly.getLevel() == 0) {
+                        anomaly.destroyWithEffect();
+                    } else {
+                        anomaly.takeDamage(1);
+                    }
+                }
+            }
+
+            for (int k = 0; k < consumableJoiner.size(); k++) {
+                AbstractConsumable consumable = consumableJoiner.get(k);
+                if (!asteroid.isFragmented() && consumable.getPosition().dst(asteroid.getPosition()) < 128) {
+                    asteroid.destroyWithEffect();
+                    if (!consumable.isShielded()) {
+                        consumable.destroyWithEffect();
+                    }
+                    switch (asteroid.getType()) {
+                        case ASTEROID_METAL:
+                            metalAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                            break;
+                        case ASTEROID_MINERAL:
+                            mineralAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                            break;
+                    }
+                    GameInfoSystem.setup(
+                            consumable.getPosition().x,
+                            consumable.getPosition().y,
+                            GameInfoSystem.Preset.SAD,
+                            3.0f,
+                            true
+                    );
+                }
+            }
+
+            //
+            if (asteroid.isFragmented()) {
+                ray.setCount(12);
+                ray.setSize(2);
+                ray.setPreset(Ray.Preset.GREY);
+                ray.setHarvestVelocity(Rules.PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY);
+                ray.setTakeRange(Rules.PLAYER_FRAGMENT_TAKE_RANGE);
+                ray.harvest(player, asteroid, particleEmitter, dt);
+            } else {
+                if (player.isLaser()) {
+                    ray.setCount(5);
+                    ray.setSize(3);
+                    ray.setPreset(Ray.Preset.RED);
+                    ray.laser(player, asteroid, particleEmitter, dt);
+                }
+            }
+            //
+
         }
         rocketLauncher.getRocketEmitter().checkCollision();
     }
 
     private void abstractAnomalyDeactivate(List<AbstractAnomaly> anomalies) {
         for (int i = 0; i < anomalies.size(); i++) {
-            if (anomalies.get(i).isActivated())
+            if (anomalies.get(i).isActivated()) {
                 anomalies.get(i).setActivated(false);
+            }
         }
     }
 
@@ -738,6 +751,15 @@ public class GameScreen extends BaseScreen {
             camera.position.y = Rules.SPACE_HEIGHT - Rules.WORLD_HEIGHT / 2;
         }
         camera.update();
+    }
+
+    private void collideWithRocket(AbstractAnomaly anomaly) {
+        float dst = Shuttle.position.dst(anomaly.getPosition());
+        if (dst <= Rules.ROCKETS_TAKE_RANGE && anomaly.isBorn() && !anomaly.isTaken()) {
+            anomaly.setAtRocketPoint(true);
+        } else {
+            anomaly.setAtRocketPoint(false);
+        }
     }
 
     private void damageToAnomaly(AbstractPoolable abstractPoolable) {
@@ -777,20 +799,11 @@ public class GameScreen extends BaseScreen {
         }
     }
 
-    private void collideWithRocket(AbstractAnomaly anomaly) {
-        float dst = Shuttle.position.dst(anomaly.getPosition());
-        if (dst <= Rules.ROCKETS_TAKE_RANGE && anomaly.isBorn() && !anomaly.isTaken()) {
-            anomaly.setAtRocketPoint(true);
-        } else {
-            anomaly.setAtRocketPoint(false);
-        }
-    }
-
     @Override
     public void dispose() {
         super.dispose();
         shaderManager.dispose();
-        Standing.getInstance().writeResult();
         uiInfoPanel.dispose();
+        Standing.getInstance().writeResult();
     }
 }

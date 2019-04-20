@@ -15,12 +15,12 @@ import lombok.Getter;
  * @author Shuttle on 20/01/19.
  */
 public class RocketLauncher {
+    public static boolean launched;
     @Getter
     private RocketEmitter rocketEmitter;
     private GameScreen gs;
     private BoomBox boomBox;
     private boolean charged;
-    public static boolean launched;
     private float time;
     private int amplitude;
 
@@ -29,6 +29,11 @@ public class RocketLauncher {
         this.rocketEmitter = new RocketEmitter(gs);
         this.charged = false;
         this.boomBox = new BoomBox();
+    }
+
+    public void launch() {
+        launched = true;
+        amplitude++;
     }
 
     public void render(SpriteBatch batch) {
@@ -49,13 +54,11 @@ public class RocketLauncher {
 
         if (charged && !gs.getPlayer().isTaken() && !Rules.GAME_OVER && BoundCheck.playerOnScreen) {
             int count = 0;
-            for (int i = 0; i < gs.getAnomalyList().size(); i++) {
-                for (int j = 0; j < gs.getAnomalyList().get(i).size(); j++) {
-                    AbstractAnomaly anomaly = gs.getAnomalyList().get(i).get(j);
-                    if (anomaly.isAtRocketPoint()) {
-                        count++;
-                        rocketEmitter.createRocket(Shuttle.position, anomaly);
-                    }
+            for (int i = 0; i < gs.getAnomalyJoiner().size(); i++) {
+                AbstractAnomaly anomaly = gs.getAnomalyJoiner().get(i);
+                if (anomaly.isAtRocketPoint()) {
+                    count++;
+                    rocketEmitter.createRocket(Shuttle.position, anomaly);
                 }
             }
             if (count > 0) {
@@ -65,10 +68,5 @@ public class RocketLauncher {
             charged = false;
             amplitude = 0;
         }
-    }
-
-    public void launch() {
-        launched = true;
-        amplitude++;
     }
 }

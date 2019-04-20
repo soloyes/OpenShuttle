@@ -17,7 +17,6 @@ import lombok.Setter;
 /**
  * @author Shuttle on 19/01/19.
  */
-
 public class Rocket extends AbstractPoolable {
     private Vector2 position;
     private GameScreen gs;
@@ -46,6 +45,13 @@ public class Rocket extends AbstractPoolable {
     }
 
     @Override
+    public void init(float x, float y) {
+        this.position.set(x, y);
+        this.active = true;
+        this.velocity.set(0, 0);
+        this.scaleX = this.scaleY = 1.0f;
+        this.aimed = true;
+    }    @Override
     public void basicRender(SpriteBatch batch) {
         batch.draw(
                 textureRegions[(int) (frame % PaintConstants.ROCKET_FRAMES)],
@@ -57,7 +63,19 @@ public class Rocket extends AbstractPoolable {
         );
     }
 
-    @Override
+    public void checkCollision() {
+        if (position.dst(targetAnomaly.getPosition()) <= PaintConstants.ROCKET_WIDTH && targetAnomaly.isActive()) {
+            destroy();
+            targetAnomaly.destroyWithEffect();
+            GameInfoSystem.setup(
+                    position.x,
+                    position.y,
+                    GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
+                    3.0f,
+                    true
+            );
+        }
+    }    @Override
     public void collideBlackhole() {
         float dst = gs.getBlackhole().getPosition().dst(position);
         if (dst <= Rules.BLACKHOLE_TAKE_RANGE) {
@@ -83,7 +101,7 @@ public class Rocket extends AbstractPoolable {
     public void update(float dt) {
         basicUpdate(dt);
         position.mulAdd(velocity, dt);
-        if (targetAnomaly.isActive() && !targetAnomaly.isTaken() && aimed) {
+        if (targetAnomaly.isActive() && !targetAnomaly.isTaken() && aimed && !Rules.GAME_OVER) {
             destination.set(targetAnomaly.getPosition());
             tmp2V2.set(destination);
         } else {
@@ -107,26 +125,7 @@ public class Rocket extends AbstractPoolable {
         return position;
     }
 
-    @Override
-    public void init(float x, float y) {
-        this.position.set(x, y);
-        this.active = true;
-        this.velocity.set(0, 0);
-        this.scaleX = this.scaleY = 1.0f;
-        this.aimed = true;
-    }
 
-    public void checkCollision() {
-        if (position.dst(targetAnomaly.getPosition()) <= PaintConstants.ROCKET_WIDTH && targetAnomaly.isActive()) {
-            destroy();
-            targetAnomaly.destroyWithEffect();
-            GameInfoSystem.setup(
-                    position.x,
-                    position.y,
-                    GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
-                    3.0f,
-                    true
-            );
-        }
-    }
+
+
 }

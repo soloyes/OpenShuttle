@@ -26,7 +26,7 @@ import lombok.Setter;
 /**
  * @author Shuttle on 8/2/18.
  */
-public class Standing {
+public final class Standing {
     private static Standing instance;
     private String username;
     @Getter

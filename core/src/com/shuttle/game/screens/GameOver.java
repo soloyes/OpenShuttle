@@ -76,25 +76,27 @@ public class GameOver {
         //todo: anomalies should start with alpha = 1.0f
         for (int i = 0; i < classes.size(); i++) {
             if (classes.get(i) == Storage.class || classes.get(i) == Fuel.class) {
-                init(gs, classes.get(i), 0.7f, 0.7f, 0);
+                init(gs, classes.get(i), 0.7f, 0.7f);
             } else if (classes.get(i) == CorrosiveAnomaly.class) {
                 for (int j = 0; j < 4; j++) {
-                    init(gs, classes.get(i), 1.0f + levels[j] * 0.15f, 1.0f + levels[j] * 0.15f, j);
+                    init(gs, classes.get(i), 1.0f + levels[j] * 0.15f, 1.0f + levels[j] * 0.15f);
+                    poolable.get(j).setLevel(j);
                 }
             } else {
-                init(gs, classes.get(i), 1.0f, 1.0f, 0);
+                init(gs, classes.get(i), 1.0f, 1.0f);
             }
         }
     }
 
-    private void init(GameScreen gs, Class<? extends AbstractPoolable> abstractPoolableClass, float scaleX, float scaleY, int level) {
+    private void init(GameScreen gs, Class<? extends AbstractPoolable> abstractPoolableClass, float scaleX, float scaleY) {
+        AbstractPoolable abstractPoolable;
         try {
             Constructor constructor = abstractPoolableClass.getConstructor(GameScreen.class);
-            AbstractPoolable abstractPoolable = (AbstractPoolable) constructor.newInstance(gs);
+            abstractPoolable = (AbstractPoolable) constructor.newInstance(gs);
+            abstractPoolable.setFake(true);
             abstractPoolable.init(picX, picY);
             abstractPoolable.setScaleX(scaleX);
             abstractPoolable.setScaleY(scaleY);
-            abstractPoolable.setLevel(level);
             poolable.add(abstractPoolable);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

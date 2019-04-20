@@ -52,7 +52,7 @@ public final class Rules {
     public static final int CONSUMABLE_FUEL_HP_DAMAGE = 2;
     //0
     public static final int CONSUMABLE_STORAGE_AT_START = 0;
-    //15.0f
+    //2.0f
     public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 2.0f;
     //2
     public static final int CONSUMABLE_STORAGE_MAX_COUNT = 2;

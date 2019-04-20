@@ -18,10 +18,10 @@ public class Box {
     }
 
     public void init() {
-        if (!fuel.isGolden()) {
-            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_1_REGION);
-        } else {
+        if (fuel.isGolden()) {
             this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_GOLD_REGION);
+        } else {
+            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_1_REGION);
         }
     }
 
