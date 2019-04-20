@@ -93,6 +93,7 @@ public class PauseGroup extends Group {
                 ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
                 Rules.GAME_OVER = false;
                 Shuttle.respawn();
+                //todo: Restart all. How? All buttons, + Score to 0. All shields to 0
             }
         });
 

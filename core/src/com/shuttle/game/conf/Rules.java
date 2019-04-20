@@ -350,6 +350,7 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(10);
                 Standing.getInstance().setLives(3);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
+                //todo:Standing setRamBlaBla?
                 player.setShieldLevel(GlobalInteractionLevels.NONE);
                 player.setRadialSpeed(PLAYER_RADIAL_SPEED);
                 player.setEnginePower(PLAYER_ENGINE_POWER);

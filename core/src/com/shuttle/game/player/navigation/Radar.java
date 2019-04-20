@@ -74,6 +74,7 @@ public class Radar {
     }
 
     private void drawRadar(SpriteBatch batch) {
+        //todo: to Joiner (therefore added radiation and magnetic, need to draw color)
         for (int i = 0; i < gs.getCorrosiveAnomalyEmitter().getActiveList().size(); i++) {
             CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) gs.getCorrosiveAnomalyEmitter().getActiveList().get(i);
             dot = dot2;

@@ -7,7 +7,11 @@ import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.utils.pool.AbstractPoolable;
 import com.shuttle.game.utils.pool.ObjectPool;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +36,9 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     private float scale;
     private float count;
     private GlobalInteractionLevels range;
+
+    public static Map<AbstractPoolable.Type, AbstractAsteroidEmitter> emitterMap =
+            new HashMap<AbstractPoolable.Type, AbstractAsteroidEmitter>();
 
     @Override
     protected abstract AbstractAsteroid newObject();

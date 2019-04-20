@@ -242,6 +242,12 @@ public class Shuttle extends AbstractShuttle {
         }
     }
 
+    public static void respawn() {
+        Shuttle.position.set(Rules.SPACE_WIDTH / 2, Rules.SPACE_HEIGHT / 2);
+        Shuttle.velocity.set(0.0f, 0.0f);
+        Standing.getInstance().setRamPower(0.0f);
+    }
+
     public void showTakeRangeField(float dt, boolean anyAtHarvestPoint) {
         float a = takeRangeField.getAlpha();
         if (anyAtHarvestPoint) {
@@ -441,10 +447,5 @@ public class Shuttle extends AbstractShuttle {
 
     public int getPushPower() {
         return (int) Standing.getInstance().getRamPower();
-    }
-
-    public static void respawn(){
-        Shuttle.position.set(Rules.SPACE_WIDTH / 2, Rules.SPACE_HEIGHT / 2);
-        Shuttle.velocity.set(0.0f, 0.0f);
     }
 }

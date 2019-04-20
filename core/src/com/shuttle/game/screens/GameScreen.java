@@ -24,6 +24,7 @@ import com.shuttle.game.bot.anomaly.MagneticAnomalyEmitter;
 import com.shuttle.game.bot.anomaly.RadiationAnomaly;
 import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
 import com.shuttle.game.bot.asteroids.AbstractAsteroid;
+import com.shuttle.game.bot.asteroids.AbstractAsteroidEmitter;
 import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
 import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
 import com.shuttle.game.bot.blackhole.Blackhole;
@@ -632,14 +633,7 @@ public class GameScreen extends BaseScreen {
                     asteroid.destroyWithEffect();
                     Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
                     player.getLifeShield().blink(1.0f);
-                    switch (asteroid.getType()) {
-                        case ASTEROID_METAL:
-                            metalAsteroidEmitter.boom(asteroid.getPosition(), player.getShieldLevel());
-                            break;
-                        case ASTEROID_MINERAL:
-                            mineralAsteroidEmitter.boom(asteroid.getPosition(), player.getShieldLevel());
-                            break;
-                    }
+                    AbstractAsteroidEmitter.emitterMap.get(asteroid.getType()).boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
                     player.takeDamage(player.getShieldLevel().getLevel() + 1);
                     GameInfoSystem.setup(
                             Shuttle.position.x, Shuttle.position.y,
@@ -665,14 +659,7 @@ public class GameScreen extends BaseScreen {
                 CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(j);
                 if (!asteroid.isFragmented() && anomaly.getPosition().dst(asteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
                     asteroid.destroyWithEffect();
-                    switch (asteroid.getType()) {
-                        case ASTEROID_METAL:
-                            metalAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
-                            break;
-                        case ASTEROID_MINERAL:
-                            mineralAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
-                            break;
-                    }
+                    AbstractAsteroidEmitter.emitterMap.get(asteroid.getType()).boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
                     GameInfoSystem.setup(anomaly.getPosition().x, anomaly.getPosition().y, GameInfoSystem.Preset.BOOM, 3.0f, false);
                     if (anomaly.getLevel() == 0) {
                         anomaly.destroyWithEffect();
@@ -689,14 +676,7 @@ public class GameScreen extends BaseScreen {
                     if (!consumable.isShielded()) {
                         consumable.destroyWithEffect();
                     }
-                    switch (asteroid.getType()) {
-                        case ASTEROID_METAL:
-                            metalAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
-                            break;
-                        case ASTEROID_MINERAL:
-                            mineralAsteroidEmitter.boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
-                            break;
-                    }
+                    AbstractAsteroidEmitter.emitterMap.get(asteroid.getType()).boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
                     GameInfoSystem.setup(
                             consumable.getPosition().x,
                             consumable.getPosition().y,
