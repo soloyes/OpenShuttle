@@ -209,7 +209,7 @@ public class GameScreen extends BaseScreen {
 
         BoundCheck.avoidPosition(blackhole.getPosition(), Shuttle.position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         playerPointer = new PlayerPointer(player);
-        Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel(player);
+        Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel();
         gameOver = new GameOver(this);
         shake = new Shake();
 

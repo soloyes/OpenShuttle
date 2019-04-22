@@ -1,6 +1,5 @@
 package com.shuttle.game.conf;
 
-import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 
 /**
@@ -276,7 +275,7 @@ public final class Rules {
     public enum StartLevel {
         LOW {
             @Override
-            public void setGameLevel(Shuttle player) {
+            public void setGameLevel() {
                 Standing.getInstance().setMaxFuel(250);
                 Standing.getInstance().setFuel(250);
                 Standing.getInstance().setHp(25);
@@ -286,21 +285,13 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(25);
                 Standing.getInstance().setLives(1);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                player.setShieldLevel(GlobalInteractionLevels.NONE);
-                player.setRadialSpeed(PLAYER_RADIAL_SPEED);
-                player.setEnginePower(PLAYER_ENGINE_POWER);
-                player.getRadar().setActive(true);
-                //Set Laser like that
-                player.setLaser(true);
-                Standing.getInstance().setLaserChargeLevel(Standing.getInstance().getMaxLaserChargeLevel());
-                //
                 Standing.getInstance().setPlayingLevel(25);
                 Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 3);
             }
         },
         MEDIUM {
             @Override
-            public void setGameLevel(Shuttle player) {
+            public void setGameLevel() {
                 Standing.getInstance().setMaxFuel(200);
                 Standing.getInstance().setFuel(200);
                 Standing.getInstance().setHp(20);
@@ -310,17 +301,13 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(20);
                 Standing.getInstance().setLives(2);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                player.setShieldLevel(GlobalInteractionLevels.NONE);
-                player.setRadialSpeed(PLAYER_RADIAL_SPEED);
-                player.setEnginePower(PLAYER_ENGINE_POWER);
-                player.getRadar().setActive(false);
                 Standing.getInstance().setPlayingLevel(20);
                 Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 8);
             }
         },
         HIGH {
             @Override
-            public void setGameLevel(Shuttle player) {
+            public void setGameLevel() {
                 Standing.getInstance().setMaxFuel(150);
                 Standing.getInstance().setFuel(150);
                 Standing.getInstance().setHp(15);
@@ -330,17 +317,13 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(15);
                 Standing.getInstance().setLives(2);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                player.setShieldLevel(GlobalInteractionLevels.NONE);
-                player.setRadialSpeed(PLAYER_RADIAL_SPEED);
-                player.setEnginePower(PLAYER_ENGINE_POWER);
-                player.getRadar().setActive(false);
                 Standing.getInstance().setPlayingLevel(15);
                 Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 13);
             }
         },
         EXTREME {
             @Override
-            public void setGameLevel(Shuttle player) {
+            public void setGameLevel() {
                 Standing.getInstance().setMaxFuel(100);
                 Standing.getInstance().setFuel(100);
                 Standing.getInstance().setHp(10);
@@ -350,16 +333,11 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(10);
                 Standing.getInstance().setLives(3);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                //todo:Standing setRamBlaBla?
-                player.setShieldLevel(GlobalInteractionLevels.NONE);
-                player.setRadialSpeed(PLAYER_RADIAL_SPEED);
-                player.setEnginePower(PLAYER_ENGINE_POWER);
-                player.getRadar().setActive(false);
                 Standing.getInstance().setPlayingLevel(10);
                 Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 18);
             }
         };
 
-        public abstract void setGameLevel(Shuttle player);
+        public abstract void setGameLevel();
     }
 }

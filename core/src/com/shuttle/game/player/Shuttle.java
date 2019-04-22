@@ -92,6 +92,8 @@ public class Shuttle extends AbstractShuttle {
         this.angleList = new LinkedList<Float>();
         this.alphaList = new LinkedList<Float>();
         this.killSeries = 1;
+        this.radialSpeed = Rules.PLAYER_RADIAL_SPEED;
+        this.enginePower = Rules.PLAYER_ENGINE_POWER;
         setShadowsCoordinates();
     }
 
