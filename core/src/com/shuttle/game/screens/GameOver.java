@@ -73,7 +73,6 @@ public class GameOver {
             add(MineralAsteroid.class);
         }};
 
-        //todo: anomalies should start with alpha = 1.0f
         for (int i = 0; i < classes.size(); i++) {
             if (classes.get(i) == Storage.class || classes.get(i) == Fuel.class) {
                 init(gs, classes.get(i), 0.7f, 0.7f);

@@ -104,6 +104,8 @@ public class Assets {
                 createStandartFont(48, "");
                 createStandartFont(64, "");
                 createStandartFont(64, "Coloured");
+                createStandartFont(60, "");
+                createStandartFont(60, "Coloured");
                 createStandartFont(96, "");
                 createStandartFont(128, "");
                 break;

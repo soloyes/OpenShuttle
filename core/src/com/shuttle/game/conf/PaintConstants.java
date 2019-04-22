@@ -242,6 +242,7 @@ public final class PaintConstants {
     public static final String FONT48 = "fonts/CollegeRegular48.ttf";
     public static final String FONT64 = "fonts/CollegeRegular64.ttf";
     public static final String FONT64_C = "fonts/CollegeRegular64Coloured.ttf";
+    public static final String FONT60_C = "fonts/CollegeRegular60Coloured.ttf";
     public static final String FONT96 = "fonts/CollegeRegular96.ttf";
     public static final String FONT128 = "fonts/CollegeRegular128.ttf";
     public static final String GAME_PACK = "pics/game.pack";

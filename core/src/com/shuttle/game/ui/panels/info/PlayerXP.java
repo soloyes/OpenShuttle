@@ -1,6 +1,8 @@
 package com.shuttle.game.ui.panels.info;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -9,6 +11,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.RadialSprite;
+import com.shuttle.game.utils.Rounder;
 
 /**
  * @author Shuttle on 3/3/19.
@@ -21,6 +24,9 @@ public class PlayerXP {
     private float alpha;
     private Color color;
     private Vector2 position;
+    private BitmapFont font60_C;
+    private StringBuilder stringBuilder;
+    private GlyphLayout glyphLayout;
 
     public PlayerXP() {
         this.width = PaintConstants.XP_WIDTH;
@@ -32,6 +38,9 @@ public class PlayerXP {
         this.color = new Color();
         this.position = new Vector2();
         this.position.set(44, Rules.WORLD_HEIGHT - height - 44);
+        this.font60_C = Assets.getInstance().getAssetManager().get(PaintConstants.FONT60_C, BitmapFont.class);
+        this.stringBuilder = new StringBuilder();
+        this.glyphLayout = new GlyphLayout();
     }
 
     public void render(SpriteBatch batch) {
@@ -57,6 +66,11 @@ public class PlayerXP {
                 1.0f, 1.0f,
                 0.0f
         );
+        font60_C.draw(
+                batch,
+                glyphLayout, position.x + width / 2 - glyphLayout.width / 2,
+                position.y + 2 * height / 3 - glyphLayout.height / 2
+        );
         batch.setColor(tmpColor);
     }
 
@@ -72,5 +86,8 @@ public class PlayerXP {
         } else {
             color.set(0.08f, 0.27f, 0.27f, 1.0f);
         }
+        stringBuilder.setLength(0);
+        stringBuilder = Rounder.round(Standing.getInstance().getScoreView());
+        glyphLayout.setText(font60_C, stringBuilder);
     }
 }

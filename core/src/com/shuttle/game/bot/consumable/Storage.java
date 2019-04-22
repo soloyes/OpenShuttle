@@ -18,6 +18,8 @@ import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Consumer;
 
+//todo: Grey storage with golden label! Need to fix still
+
 public class Storage extends AbstractConsumable {
     private Size size;
     private Label dangerLabel;

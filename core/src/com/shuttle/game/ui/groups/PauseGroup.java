@@ -29,7 +29,7 @@ public class PauseGroup extends Group {
     private final Button buttonMenu;
     private final Button buttonRestart;
     private final ImageButton playPauseBtn;
-    private final com.shuttle.game.ui.groups.ConfigGroup configGroup;
+    private final ConfigGroup configGroup;
     private BoomBox boomBox;
     @Getter
     @Setter

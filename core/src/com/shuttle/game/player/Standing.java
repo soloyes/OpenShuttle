@@ -31,7 +31,7 @@ public final class Standing {
     private String username;
     @Getter
     @Setter
-    private int score, scoreView, scoreToLive;
+    private long score, scoreView, scoreToLive;
     private Results results;
     @Getter
     @Setter
@@ -263,13 +263,13 @@ public final class Standing {
 
     private void scoreTicTac(float dt) {
         if (scoreView < score) {
-            scoreView += 5000 * dt;
+            scoreView += 10000 * dt;
             if (scoreView > score) {
                 scoreView = score;
             }
         }
         if (scoreView > score) {
-            scoreView -= 5000 * dt;
+            scoreView -= 10000 * dt;
             if (scoreView < score) {
                 scoreView = score;
             }
