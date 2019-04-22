@@ -31,8 +31,8 @@ public enum Sticker {
                 float d = Rules.PLAYER_BOOST_ENGINE_POWER - Shuttle.velocity.len();
                 player.setShadowsCoordinates();
                 Shuttle.velocity.add(
-                        d * (float) Math.cos(Math.toRadians(player.getAngle())),
-                        d * (float) Math.sin(Math.toRadians(player.getAngle()))
+                        d * (float) Math.cos(Math.toRadians(Shuttle.angle)),
+                        d * (float) Math.sin(Math.toRadians(Shuttle.angle))
                 );
             }
             GameInfoSystem.setup(

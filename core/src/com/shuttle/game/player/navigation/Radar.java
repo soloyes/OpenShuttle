@@ -35,7 +35,6 @@ public class Radar {
     @Setter
     private boolean active;
     private float dotSize;
-    private Shuttle player;
     private Color color;
     private BoomBox boomBox;
     private Oscillator oscillator;
@@ -47,11 +46,10 @@ public class Radar {
     private Color purpleColor = new Color(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.RADAR_ALPHA);
     private Color whiteColor = new Color(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.RADAR_ALPHA);
 
-    public Radar(GameScreen gs, Shuttle player) {
+    public Radar(GameScreen gs) {
         this.gs = gs;
         this.dot1 = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_CONSUMABLE_DOT_REGION);
         this.dot2 = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_ANOMALY_DOT_REGION);
-        this.player = player;
         this.tmp = new Vector2();
         this.oscillator = new Oscillator();
         this.dotSize = 0.0f;
@@ -67,7 +65,7 @@ public class Radar {
 
     public void render(SpriteBatch batch) {
         if (active) {
-            if (!player.isTaken()) {
+            if (!gs.getPlayer().isTaken()) {
                 drawRadar(batch);
             }
         }
@@ -137,7 +135,7 @@ public class Radar {
             updateRadar(dt);
             float d = Vector2.dst(Shuttle.position.x, Shuttle.position.y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
             if (d <= Rules.BLACKHOLE_NOISE_RANGE) {
-                if (!player.isTaken() && !Rules.GAME_OVER) {
+                if (!gs.getPlayer().isTaken() && !Rules.GAME_OVER) {
                     boomBox.playMusicEffectInLoop(MSConstants.RADAR_WHITE_NOISE_MUSIC, 1.0f);
                 } else {
                     boomBox.stopMusicEffect(MSConstants.RADAR_WHITE_NOISE_MUSIC);

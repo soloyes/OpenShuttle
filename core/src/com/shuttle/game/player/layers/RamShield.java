@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Standing;
 import com.shuttle.game.utils.Assets;
 
 import lombok.Getter;
@@ -16,7 +17,6 @@ import lombok.Setter;
  */
 public class RamShield {
     private TextureRegion texture;
-    private Shuttle player;
     private int width, height;
     private float alpha;
     private float fromAlpha;
@@ -26,8 +26,7 @@ public class RamShield {
     @Getter
     private Color tmpColor;
 
-    public RamShield(Shuttle player) {
-        this.player = player;
+    public RamShield() {
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_RAM_SHIELD);
         this.width = PaintConstants.SHUTTLE_RAM_SHIELD_WIDTH;
         this.height = PaintConstants.SHUTTLE_RAM_SHIELD_HEIGHT;
@@ -36,7 +35,8 @@ public class RamShield {
     }
 
     public void blink(float alpha) {
-        if (player.getShieldLevel() == GlobalInteractionLevels.NONE) {
+        float ramPower = Standing.getInstance().getRamPower();
+        if (ramPower <= GlobalInteractionLevels.TAN.getLevel()) {
             this.alpha = 0.0f;
         } else {
             this.alpha = alpha;
@@ -52,30 +52,28 @@ public class RamShield {
                 width / 2, height / 2,
                 width, height,
                 scaleX, scaleY,
-                player.getAngle()
+                Shuttle.angle
         );
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     public void update(float dt) {
         fromAlpha += dt;
-        if (fromAlpha >= 0.2f)
+        if (fromAlpha >= 0.2f) {
             fromAlpha = 0.2f;
-        switch (player.getShieldLevel()) {
-            case NONE:
-                fromAlpha = 0.0f;
-                break;
-            case TAN:
-                tmpColor.set(Color.TAN);
-                break;
-            case GREEN:
-                tmpColor.set(Color.GREEN);
-                break;
-            case YELLOW:
-                tmpColor.set(Color.YELLOW);
-                break;
-            case RED:
-                tmpColor.set(Color.RED);
+        }
+
+        float ramPower = Standing.getInstance().getRamPower();
+        if (ramPower < GlobalInteractionLevels.TAN.getLevel()) {
+            fromAlpha = 0.0f;
+        } else if (ramPower >= GlobalInteractionLevels.RED.getLevel()) {
+            tmpColor.set(Color.RED);
+        } else if (ramPower >= GlobalInteractionLevels.YELLOW.getLevel()) {
+            tmpColor.set(Color.YELLOW);
+        } else if (ramPower >= GlobalInteractionLevels.GREEN.getLevel()) {
+            tmpColor.set(Color.GREEN);
+        } else if (ramPower >= GlobalInteractionLevels.TAN.getLevel()) {
+            tmpColor.set(Color.TAN);
         }
 
         alpha -= dt;

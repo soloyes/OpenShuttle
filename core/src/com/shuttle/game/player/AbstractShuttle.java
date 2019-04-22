@@ -21,6 +21,8 @@ import lombok.Setter;
  * @author Shuttle on 10/24/18.
  */
 public class AbstractShuttle implements InputProcessor {
+    public static Vector2 position, velocity;
+    public static float angle;
     protected LinkedList<Integer> pointer;
     protected Joystick joystick;
     protected ParticleEmitter engineParticleEmitter;
@@ -33,7 +35,6 @@ public class AbstractShuttle implements InputProcessor {
     protected Standing standing;
     protected TextureRegion[] textureRegion;
     protected Vector2 tmpV2, tmp2V2;
-    public static Vector2 position, velocity;
     @Getter
     @Setter
     protected int width, height;
@@ -49,13 +50,13 @@ public class AbstractShuttle implements InputProcessor {
     @Getter
     @Setter
     protected int widthBlur, heightBlur;
-
     static {
         position = new Vector2(
                 ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
                 ScreenManager.getInstance().getViewport().getWorldHeight() / 2
         );
         velocity = new Vector2();
+        angle = 0.0f;
     }
 
     protected AbstractShuttle(GameScreen gs) {

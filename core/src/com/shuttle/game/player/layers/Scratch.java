@@ -17,7 +17,6 @@ import lombok.Setter;
  */
 public class Scratch {
     private TextureRegion[] textures;
-    private Shuttle player;
     private int width, height;
     @Getter
     @Setter
@@ -26,8 +25,7 @@ public class Scratch {
     private int frame;
     private Color tmpColor;
 
-    public Scratch(Shuttle player) {
-        this.player = player;
+    public Scratch() {
         this.textures = Regions.split(
                 Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_SCRATCH),
                 1,
@@ -49,7 +47,7 @@ public class Scratch {
                 width / 2, height / 2,
                 width, height,
                 scaleX, scaleY,
-                player.getAngle()
+                Shuttle.angle
         );
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }

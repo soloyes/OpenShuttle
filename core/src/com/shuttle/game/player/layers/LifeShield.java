@@ -16,15 +16,13 @@ import lombok.Setter;
  */
 public class LifeShield {
     private TextureRegion texture;
-    private Shuttle player;
     private int width, height;
     private float alpha;
     @Getter
     @Setter
     private float scaleX, scaleY;
 
-    public LifeShield(Shuttle player) {
-        this.player = player;
+    public LifeShield() {
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_LIFE_SHIELD);
         this.width = PaintConstants.SHUTTLE_LIFE_SHIELD_WIDTH;
         this.height = PaintConstants.SHUTTLE_LIFE_SHIELD_HEIGHT;
@@ -49,7 +47,7 @@ public class LifeShield {
                 width / 2, height / 2,
                 width, height,
                 scaleX, scaleY,
-                player.getAngle()
+                Shuttle.angle
         );
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }

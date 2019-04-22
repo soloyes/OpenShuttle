@@ -55,14 +55,7 @@ public class Shuttle extends AbstractShuttle {
     private float zigzagEffect;
     private float killTimer;
     private int killSeries;
-    @Getter
-    @Setter
-    private float angle;
-    @Getter
-    @Setter
     private float radialSpeed;
-    @Getter
-    @Setter
     private float enginePower;
     @Getter
     @Setter
@@ -81,12 +74,12 @@ public class Shuttle extends AbstractShuttle {
         super(gs);
         this.joystick = joystick;
         this.standing = Standing.getInstance();
-        this.radar = new Radar(gs, this);
+        this.radar = new Radar(gs);
         this.boundCheck = new BoundCheck();
-        this.lifeShield = new LifeShield(this);
-        this.ramShield = new RamShield(this);
-        this.takeRangeField = new TakeRangeField(this);
-        this.scratch = new Scratch(this);
+        this.lifeShield = new LifeShield();
+        this.ramShield = new RamShield();
+        this.takeRangeField = new TakeRangeField();
+        this.scratch = new Scratch();
         this.F = 2 * (int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Rules.PLAYER_ENGINE_POWER);
         this.vector2List = new LinkedList<Vector2>();
         this.angleList = new LinkedList<Float>();

@@ -15,7 +15,6 @@ import lombok.Setter;
  */
 public class TakeRangeField {
     private TextureRegion texture;
-    private Shuttle player;
     private int width, height;
     @Getter
     @Setter
@@ -25,8 +24,7 @@ public class TakeRangeField {
     private float scaleX, scaleY;
     private Color tmpColor;
 
-    public TakeRangeField(Shuttle player) {
-        this.player = player;
+    public TakeRangeField() {
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_TAKE_RANGE_FIELD_REGION);
 
         this.width = PaintConstants.SHUTTLE_TAKE_RANGE_FIELD_WIDTH;
@@ -44,7 +42,7 @@ public class TakeRangeField {
                 width / 2, height / 2,
                 width, height,
                 scaleX, scaleY,
-                player.getAngle()
+                Shuttle.angle
         );
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
