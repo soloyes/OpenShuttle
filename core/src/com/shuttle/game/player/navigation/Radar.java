@@ -5,8 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
-import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
+import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
@@ -26,11 +25,11 @@ import lombok.Setter;
  * @author Shuttle on 7/7/18.
  */
 public class Radar {
-    protected TextureRegion dot;
+    private TextureRegion dot;
     private GameScreen gs;
     private TextureRegion dot1;
     private TextureRegion dot2;
-    private Vector2 tmp;
+    private Vector2 tmp1V2;
     @Getter
     @Setter
     private boolean active;
@@ -38,7 +37,7 @@ public class Radar {
     private Color color;
     private BoomBox boomBox;
     private Oscillator oscillator;
-    private ListOfListsJoiner<AbstractConsumable> consumableJoiner;
+    private ListOfListsJoiner<AbstractPoolable> poolableJoiner;
     private Color tanColor = new Color(Color.TAN.r, Color.TAN.g, Color.TAN.b, PaintConstants.RADAR_ALPHA);
     private Color greenColor = new Color(Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, PaintConstants.RADAR_ALPHA);
     private Color yellowColor = new Color(Color.YELLOW.r, Color.YELLOW.g, Color.YELLOW.b, PaintConstants.RADAR_ALPHA);
@@ -50,16 +49,18 @@ public class Radar {
         this.gs = gs;
         this.dot1 = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_CONSUMABLE_DOT_REGION);
         this.dot2 = Assets.getInstance().getAtlas().findRegion(PaintConstants.RADAR_ANOMALY_DOT_REGION);
-        this.tmp = new Vector2();
+        this.tmp1V2 = new Vector2();
         this.oscillator = new Oscillator();
         this.dotSize = 0.0f;
         this.color = new Color(Color.valueOf(PaintConstants.BACKGROUND_COLOR_HEX));
         this.boomBox = new BoomBox();
-        consumableJoiner = new ListOfListsJoiner<AbstractConsumable>(
+        poolableJoiner = new ListOfListsJoiner<AbstractPoolable>(
                 gs.getAstronautEmitter().getActiveList(),
                 gs.getCrateEmitter().getActiveList(),
                 gs.getFuelEmitter().getActiveList(),
-                gs.getStorageEmitter().getActiveList()
+                gs.getStorageEmitter().getActiveList(),
+                gs.getCorrosiveAnomalyEmitter().getActiveList(),
+                gs.getElectricalAnomalyEmitter().getActiveList()
         );
     }
 
@@ -72,23 +73,14 @@ public class Radar {
     }
 
     private void drawRadar(SpriteBatch batch) {
-        //todo: to Joiner (therefore added radiation and magnetic, need to draw color)
-        for (int i = 0; i < gs.getCorrosiveAnomalyEmitter().getActiveList().size(); i++) {
-            CorrosiveAnomaly tmpAnomaly = (CorrosiveAnomaly) gs.getCorrosiveAnomalyEmitter().getActiveList().get(i);
-            dot = dot2;
-            drawPoolable(batch, tmpAnomaly);
-        }
-
-        for (int i = 0; i < consumableJoiner.size(); i++) {
-            AbstractConsumable tmpConsumable = consumableJoiner.get(i);
-            dot = dot1;
-            drawPoolable(batch, tmpConsumable);
-        }
-
-        for (int i = 0; i < gs.getElectricalAnomalyEmitter().getActiveList().size(); i++) {
-            ElectricalAnomaly tmpAnomaly = (ElectricalAnomaly) gs.getElectricalAnomalyEmitter().getActiveList().get(i);
-            dot = dot2;
-            drawPoolable(batch, tmpAnomaly);
+        for (int i = 0; i < poolableJoiner.size(); i++) {
+            AbstractPoolable poolable = poolableJoiner.get(i);
+            if (poolable instanceof AbstractAnomaly) {
+                dot = dot2;
+            } else if (poolable instanceof AbstractConsumable) {
+                dot = dot1;
+            }
+            drawPoolable(batch, poolable);
         }
         batch.setColor(1, 1, 1, 1);
     }
@@ -97,9 +89,9 @@ public class Radar {
         float d = Vector2.dst(Shuttle.position.x, Shuttle.position.y, abstractPoolable.getPosition().x, abstractPoolable.getPosition().y);
         if (d < 2000.0f) {
             float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f + dotSize;
-            tmp.set(abstractPoolable.getPosition()).sub(Shuttle.position).nor().scl(d / 2000.0f * 300.0f);
+            tmp1V2.set(abstractPoolable.getPosition()).sub(Shuttle.position).nor().scl(d / 2000.0f * 300.0f);
             batch.setColor(setPointColor(abstractPoolable));
-            batch.draw(dot, Shuttle.position.x + tmp.x, Shuttle.position.y + tmp.y, 8f, 8f, PaintConstants.RADAR_DOT_WIDTH, PaintConstants.RADAR_DOT_HEIGHT, sc, sc, 0);
+            batch.draw(dot, Shuttle.position.x + tmp1V2.x, Shuttle.position.y + tmp1V2.y, 8f, 8f, PaintConstants.RADAR_DOT_WIDTH, PaintConstants.RADAR_DOT_HEIGHT, sc, sc, 0);
         }
     }
 
