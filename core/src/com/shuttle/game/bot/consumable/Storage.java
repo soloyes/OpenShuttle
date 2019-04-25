@@ -29,7 +29,7 @@ public class Storage extends AbstractConsumable {
         this.width = PaintConstants.STORAGE_1_WIDTH;
         this.height = PaintConstants.STORAGE_1_HEIGHT;
         this.type = Type.STORAGE;
-        this.moveProcessor = new MoveProcessor(gs);
+        this.moveProcessor = new MoveProcessor();
         this.level = -3;
         this.shield = new Shield(this);
         this.scan = new Scan(this);

@@ -94,7 +94,7 @@ public class AnomalyTimer {
         }
 
         if (counter <= 0.0f) {
-            counter = Rules.ANOMALIES_CORROSIVE_HUNT_TIME + 1;
+            counter = Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
             List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
             for (int i = 0; i < anomalies.size(); i++) {
                 if (!anomalies.get(i).isActivated()) {
@@ -102,6 +102,6 @@ public class AnomalyTimer {
                 }
             }
         }
-        percentage = counter / Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
+        percentage = 1.0f * counter / Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
     }
 }

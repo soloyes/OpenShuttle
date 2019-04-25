@@ -33,7 +33,7 @@ public class Astronaut extends AbstractConsumable {
         this.width = PaintConstants.ASTRONAUT_WIDTH;
         this.height = PaintConstants.ASTRONAUT_HEIGHT;
         this.type = Type.ASTRONAUT;
-        this.moveProcessor = new MoveProcessor(gs);
+        this.moveProcessor = new MoveProcessor();
     }
 
     @Override

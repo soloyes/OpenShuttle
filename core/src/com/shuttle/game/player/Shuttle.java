@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.consumable.Consumable;
 import com.shuttle.game.conf.GamePreferences;
@@ -116,18 +117,18 @@ public class Shuttle extends AbstractShuttle {
     }
 
     public void collideBlackhole(float dt) {
-        if (position.dst(gs.getBlackhole().getPosition()) <= Rules.BLACKHOLE_TAKE_RANGE) {
+        if (position.dst(Blackhole.position) <= Rules.BLACKHOLE_TAKE_RANGE) {
             taken = true;
             velocity.scl(0.5f);
-            tmpV2.set(gs.getBlackhole().getPosition()).sub(position).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER);
+            tmpV2.set(Blackhole.position).sub(position).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER);
             position.mulAdd(tmpV2, dt);
-            float dst = gs.getBlackhole().getPosition().dst(position);
+            float dst = Blackhole.position.dst(position);
             float scaleX = dst / Rules.BLACKHOLE_TAKE_RANGE;
             float scaleY = dst / Rules.BLACKHOLE_TAKE_RANGE;
             setLayersScale(scaleX, scaleY);
             angle = angle + 365 * dt;
-            if (gs.getBlackhole().getPosition().dst(position) <= Rules.BLACKHOLE_EVENT_HORIZON) {
-                BoundCheck.avoidPosition(gs.getBlackhole().getPosition(), position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+            if (Blackhole.position.dst(position) <= Rules.BLACKHOLE_EVENT_HORIZON) {
+                BoundCheck.avoidPosition(Blackhole.position, position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
                 setLayersScale(1.0f, 1.0f);
                 taken = false;
                 boomBox.playSound(MSConstants.TELEPORT);

@@ -16,12 +16,10 @@ import lombok.Setter;
  * @author Shuttle on 9/15/18.
  */
 public class Blackhole {
+    public static Vector2 position;
     private TextureRegion texture;
     private TextureRegion spiralRegion;
     private TextureRegion glowRegion;
-    @Getter
-    @Setter
-    private Vector2 position;
     @Getter
     private Vector2 center;
     private int width, height;
@@ -40,6 +38,9 @@ public class Blackhole {
     private Oscillator oscillator;
     @Getter
     private float shaderDiameter;
+    static {
+        position = new Vector2();
+    }
 
     public Blackhole() {
         this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.BLACKHOLE_REGION);
@@ -49,7 +50,6 @@ public class Blackhole {
                 Rules.SPACE_WIDTH / 2,
                 Rules.SPACE_HEIGHT / 2
         );
-        this.position = new Vector2();
         this.width = PaintConstants.BLACKHOLE_WIDTH;
         this.height = PaintConstants.BLACKHOLE_HEIGHT;
         this.spiralWidth = PaintConstants.BLACKHOLE_SPIRAL_WIDTH;

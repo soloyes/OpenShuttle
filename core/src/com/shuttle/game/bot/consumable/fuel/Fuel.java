@@ -27,7 +27,7 @@ public class Fuel extends AbstractConsumable {
         this.width = PaintConstants.FUEL_1_WIDTH;
         this.height = PaintConstants.FUEL_1_HEIGHT;
         this.type = Type.FUEL;
-        this.moveProcessor = new MoveProcessor(gs);
+        this.moveProcessor = new MoveProcessor();
         this.level = -2;
         this.substrate = new Substrate(this);
         this.box = new Box(this);

@@ -49,7 +49,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
         this.width = PaintConstants.ANOMALY_MAGNETIC_WIDTH;
         this.height = PaintConstants.ANOMALY_MAGNETIC_HEIGHT;
         this.type = Type.MAGNETIC;
-        this.moveProcessor = new MoveProcessor(gs);
+        this.moveProcessor = new MoveProcessor();
     }
 
     @Override

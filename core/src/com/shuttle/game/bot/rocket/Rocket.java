@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
+import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.GameScreen;
@@ -77,7 +78,7 @@ public class Rocket extends AbstractPoolable {
         }
     }    @Override
     public void collideBlackhole() {
-        float dst = gs.getBlackhole().getPosition().dst(position);
+        float dst = Blackhole.position.dst(position);
         if (dst <= Rules.BLACKHOLE_TAKE_RANGE) {
             taken = true;
             velocity.scl(0.5f);

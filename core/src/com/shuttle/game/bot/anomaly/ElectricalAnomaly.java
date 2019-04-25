@@ -35,7 +35,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.width = PaintConstants.ANOMALY_ELECTRIC_WIDTH;
         this.height = PaintConstants.ANOMALY_ELECTRIC_HEIGHT;
         this.type = Type.ELECTRIC;
-        this.moveProcessor = new MoveProcessor(gs);
+        this.moveProcessor = new MoveProcessor();
     }
 
     @Override

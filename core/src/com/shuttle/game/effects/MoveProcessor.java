@@ -4,33 +4,32 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.asteroids.AbstractAsteroid;
+import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
-import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.player.Standing;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
 /**
  * @author Shuttle on 10/28/18.
  */
 public class MoveProcessor {
-    private Vector2 tmp;
-    private GameScreen gs;
     private float angle;
     private float radius;
     private float length;
+    private Vector2 tmp1V2;
 
-    public MoveProcessor(GameScreen gs) {
-        this.gs = gs;
-        this.tmp = new Vector2();
+    public MoveProcessor() {
+        this.tmp1V2 = new Vector2();
     }
 
     public void update(AbstractConsumable abstractConsumable, float dt) {
         if (abstractConsumable.isTaken()) {
             //*Archimedes spiral*//
             radius = radius - dt * abstractConsumable.getSpiralRadius();
-            abstractConsumable.getPosition().x = gs.getBlackhole().getPosition().x + radius * MathUtils.cos(angle);
-            abstractConsumable.getPosition().y = gs.getBlackhole().getPosition().y + radius * MathUtils.sin(angle);
+            abstractConsumable.getPosition().x = Blackhole.position.x + radius * MathUtils.cos(angle);
+            abstractConsumable.getPosition().y = Blackhole.position.y + radius * MathUtils.sin(angle);
             angle += dt;
             intoTheDark(abstractConsumable);
         } else {
@@ -40,7 +39,7 @@ public class MoveProcessor {
     }
 
     private void intoTheDark(AbstractPoolable abstractPoolable) {
-        float percentage = 1.0f - abstractPoolable.getPosition().dst(gs.getBlackhole().getPosition()) / length;
+        float percentage = 1.0f - abstractPoolable.getPosition().dst(Blackhole.position) / length;
         float currentR = MathUtils.lerp(1.0f, 0.5f, 2 * percentage);
         float currentG = MathUtils.lerp(1.0f, 0.5f, 2 * percentage);
         float currentA = MathUtils.lerp(1.0f, 0.5f, 2 * percentage);
@@ -50,10 +49,16 @@ public class MoveProcessor {
     }
 
     public void archimedesInit(AbstractPoolable abstractPoolable) {
-        tmp.set(abstractPoolable.getPosition()).sub(gs.getBlackhole().getPosition());
-        angle = tmp.angle() * MathUtils.degreesToRadians;
-        radius = tmp.len();
+        tmp1V2.set(abstractPoolable.getPosition()).sub(Blackhole.position);
+        angle = tmp1V2.angle() * MathUtils.degreesToRadians;
+        radius = tmp1V2.len();
         length = radius;
+    }
+
+    private void update(AbstractPoolable abstractPoolable) {
+        if (abstractPoolable.isActive()) {
+            abstractPoolable.collideBlackhole();
+        }
     }
 
     public void update(AbstractAnomaly abstractAnomaly, float dt) {
@@ -63,36 +68,36 @@ public class MoveProcessor {
             if (abstractAnomaly.isHungry() && abstractAnomaly.isActivated()) {
                 abstractAnomaly.getPosition().mulAdd(abstractAnomaly.getVelocity(), dt);
                 float dst = Shuttle.position.dst(abstractAnomaly.getPosition());
-                if (abstractAnomaly.getLevel() + 1 != gs.getPlayer().getShieldLevel().getLevel()) {
+                if (abstractAnomaly.getLevel() + 1 != (int) Standing.getInstance().getRamPower()) {
                     if (dst < 2400.0f + 200 * abstractAnomaly.getLevel()) {
-                        tmp.set(Shuttle.position)
+                        tmp1V2.set(Shuttle.position)
                                 .sub(abstractAnomaly.getPosition())
                                 .nor()
                                 .scl(abstractAnomaly.getV());
-                        abstractAnomaly.getVelocity().mulAdd(tmp, dt);
+                        abstractAnomaly.getVelocity().mulAdd(tmp1V2, dt);
                     }
                     if (dst < 240 * abstractAnomaly.getLevel()) {
-                        tmp.set(Shuttle.position)
+                        tmp1V2.set(Shuttle.position)
                                 .sub(abstractAnomaly.getPosition())
                                 .nor()
                                 .scl(250.0f - 20 * abstractAnomaly.getLevel()
                                 );
-                        abstractAnomaly.getVelocity().mulAdd(tmp, dt);
+                        abstractAnomaly.getVelocity().mulAdd(tmp1V2, dt);
                     }
                     //Anomaly afraid related shield level
                 } else {
-                    tmp.set(Shuttle.position)
+                    tmp1V2.set(Shuttle.position)
                             .sub(abstractAnomaly.getPosition())
                             .nor()
                             .scl(abstractAnomaly.getV() / Rules.ANOMALIES_CORROSIVE_AFRAID_FACTOR);
-                    abstractAnomaly.getVelocity().mulAdd(tmp, dt);
+                    abstractAnomaly.getVelocity().mulAdd(tmp1V2, dt);
                 }
             }
         } else {
             //*Archimedes spiral*//
             radius = radius - dt * abstractAnomaly.getSpiralRadius();
-            abstractAnomaly.getPosition().x = gs.getBlackhole().getPosition().x + radius * MathUtils.cos(angle);
-            abstractAnomaly.getPosition().y = gs.getBlackhole().getPosition().y + radius * MathUtils.sin(angle);
+            abstractAnomaly.getPosition().x = Blackhole.position.x + radius * MathUtils.cos(angle);
+            abstractAnomaly.getPosition().y = Blackhole.position.y + radius * MathUtils.sin(angle);
             angle += dt;
         }
         update(abstractAnomaly);
@@ -106,18 +111,12 @@ public class MoveProcessor {
         } else {
             //*Archimedes spiral*//
             radius = radius - dt * asteroid.getSpiralRadius();
-            asteroid.getPosition().x = gs.getBlackhole().getPosition().x + radius * MathUtils.cos(angle);
-            asteroid.getPosition().y = gs.getBlackhole().getPosition().y + radius * MathUtils.sin(angle);
+            asteroid.getPosition().x = Blackhole.position.x + radius * MathUtils.cos(angle);
+            asteroid.getPosition().y = Blackhole.position.y + radius * MathUtils.sin(angle);
             angle += dt;
 
             intoTheDark(asteroid);
         }
         update(asteroid);
-    }
-
-    private void update(AbstractPoolable abstractPoolable){
-        if (abstractPoolable.isActive()){
-            abstractPoolable.collideBlackhole();
-        }
     }
 }

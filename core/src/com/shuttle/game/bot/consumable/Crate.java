@@ -27,7 +27,7 @@ public class Crate extends AbstractConsumable {
         this.width = PaintConstants.CRATE_1_WIDTH;
         this.height = PaintConstants.CRATE_1_HEIGHT;
         this.type = Type.CRATE;
-        this.moveProcessor = new MoveProcessor(gs);
+        this.moveProcessor = new MoveProcessor();
         this.shield = new Shield(this);
         this.scan = new Scan(this);
     }

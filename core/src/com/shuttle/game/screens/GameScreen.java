@@ -207,7 +207,7 @@ public class GameScreen extends BaseScreen {
         uiBonusPanel = new UIBonusPanel(this);
         uiInfoPanel = new UIInfoPanel(this);
 
-        BoundCheck.avoidPosition(blackhole.getPosition(), Shuttle.position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+        BoundCheck.avoidPosition(Blackhole.position, Shuttle.position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         playerPointer = new PlayerPointer(player);
         Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel();
         gameOver = new GameOver(this);
@@ -243,12 +243,12 @@ public class GameScreen extends BaseScreen {
 
     private void calcMusicEffectVolume() {
         float v;
-        if (Shuttle.position.dst(blackhole.getPosition()) >= Rules.BLACKHOLE_ROAR_RANGE) {
+        if (Shuttle.position.dst(Blackhole.position) >= Rules.BLACKHOLE_ROAR_RANGE) {
             v = 0.0f;
-        } else if (Shuttle.position.dst(blackhole.getPosition()) <= Rules.BLACKHOLE_TAKE_RANGE) {
+        } else if (Shuttle.position.dst(Blackhole.position) <= Rules.BLACKHOLE_TAKE_RANGE) {
             v = 0.5f;
         } else {
-            v = 1 - Shuttle.position.dst(blackhole.getPosition()) / Rules.BLACKHOLE_ROAR_RANGE;
+            v = 1 - Shuttle.position.dst(Blackhole.position) / Rules.BLACKHOLE_ROAR_RANGE;
         }
         boomBox.setMusicEffectVolume(MSConstants.BLACKHOLE_ROAR_MUSIC, v);
     }
@@ -298,8 +298,8 @@ public class GameScreen extends BaseScreen {
         rocketLauncher.render(batch);
         batch.end();
 
-        float shaderHoleX = (blackhole.getPosition().x - camera.position.x + Rules.WORLD_WIDTH / 2) / Rules.WORLD_WIDTH;
-        float shaderHoleY = (blackhole.getPosition().y - camera.position.y + Rules.WORLD_HEIGHT / 2) / Rules.WORLD_HEIGHT;
+        float shaderHoleX = (Blackhole.position.x - camera.position.x + Rules.WORLD_WIDTH / 2) / Rules.WORLD_WIDTH;
+        float shaderHoleY = (Blackhole.position.y - camera.position.y + Rules.WORLD_HEIGHT / 2) / Rules.WORLD_HEIGHT;
 
         //
         ScreenManager.getInstance().resetCamera();

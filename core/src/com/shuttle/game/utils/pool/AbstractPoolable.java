@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
@@ -144,7 +145,7 @@ public abstract class AbstractPoolable implements Poolable {
     }
 
     public void collideBlackhole() {
-        float dst = gs.getBlackhole().getPosition().dst(position);
+        float dst = Blackhole.position.dst(position);
         if (dst <= Rules.BLACKHOLE_TAKE_RANGE) {
             taken = true;
             atRayPoint = false;

@@ -36,7 +36,7 @@ public abstract class AbstractAsteroid extends AbstractPoolable {
         this.angle = MathUtils.random(365f);
         this.active = true;
         this.boundCheck = new BoundCheck();
-        this.moveProcessor = new MoveProcessor(gs);
+        this.moveProcessor = new MoveProcessor();
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.spreeColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     }

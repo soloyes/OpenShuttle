@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
+import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
@@ -96,7 +97,7 @@ public class Radar {
     }
 
     private Color setPointColor(AbstractPoolable abstractPoolable) {
-        float d = Vector2.dst(Shuttle.position.x, Shuttle.position.y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
+        float d = Vector2.dst(Shuttle.position.x, Shuttle.position.y, Blackhole.position.x, Blackhole.position.y);
         int c;
         if (d <= Rules.BLACKHOLE_NOISE_RANGE && !gs.getPauseGroup().isPause()) {
             c = MathUtils.random(0, 4);
@@ -125,7 +126,7 @@ public class Radar {
     public void update(float dt) {
         if (active) {
             updateRadar(dt);
-            float d = Vector2.dst(Shuttle.position.x, Shuttle.position.y, gs.getBlackhole().getPosition().x, gs.getBlackhole().getPosition().y);
+            float d = Vector2.dst(Shuttle.position.x, Shuttle.position.y, Blackhole.position.x, Blackhole.position.y);
             if (d <= Rules.BLACKHOLE_NOISE_RANGE) {
                 if (!gs.getPlayer().isTaken() && !Rules.GAME_OVER) {
                     boomBox.playMusicEffectInLoop(MSConstants.RADAR_WHITE_NOISE_MUSIC, 1.0f);

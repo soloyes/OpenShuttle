@@ -51,7 +51,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         this.glowWidth = PaintConstants.ANOMALY_GLOW_WIDTH;
         this.glowHeight = PaintConstants.ANOMALY_GLOW_HEIGHT;
         this.type = Type.CORROSIVE;
-        this.moveProcessor = new MoveProcessor(gs);
+        this.moveProcessor = new MoveProcessor();
         this.oscillator = new Oscillator();
     }
 
@@ -82,7 +82,6 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 Rules.ANOMALIES_CORROSIVE_VELOCITY,
                 3 * Rules.ANOMALIES_CORROSIVE_VELOCITY
         );
-        this.moveProcessor = new MoveProcessor(gs);
         this.spiralRadius = MathUtils.random(20, 60);
         this.scaleX = this.scaleY = 0;
         this.saveScaleX = this.saveScaleY = 0;

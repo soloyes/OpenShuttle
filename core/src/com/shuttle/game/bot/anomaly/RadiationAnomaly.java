@@ -49,7 +49,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
         this.width = PaintConstants.ANOMALY_RADIATION_WIDTH;
         this.height = PaintConstants.ANOMALY_RADIATION_HEIGHT;
         this.type = Type.RADIATION;
-        this.moveProcessor = new MoveProcessor(gs);
+        this.moveProcessor = new MoveProcessor();
     }
 
     @Override

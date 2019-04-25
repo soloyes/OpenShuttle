@@ -13,6 +13,7 @@ import lombok.Setter;
  * @author Shuttle on 9/15/18.
  */
 public abstract class AbstractAnomalyEmitter extends ObjectPool<AbstractAnomaly> {
+    //todo: change single objects to singletone (constructor insight)
     protected GameScreen gs;
     private float time;
     @Getter
