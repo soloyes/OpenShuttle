@@ -39,8 +39,7 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     @Getter
     protected boolean golden;
 
-    public AbstractConsumable(GameScreen gs) {
-        this.gs = gs;
+    public AbstractConsumable() {
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.active = false;

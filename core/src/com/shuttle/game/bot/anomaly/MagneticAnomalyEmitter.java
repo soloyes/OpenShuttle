@@ -18,7 +18,7 @@ public class MagneticAnomalyEmitter extends AbstractAnomalyEmitter {
 
     @Override
     protected MagneticAnomaly newObject() {
-        return new MagneticAnomaly(gs);
+        return new MagneticAnomaly();
     }
 
     public void createBonusAnomaly(Vector2 position) {

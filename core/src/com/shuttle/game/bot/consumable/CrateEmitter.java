@@ -1,11 +1,11 @@
 package com.shuttle.game.bot.consumable;
 
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.GameScreen;
 
 public class CrateEmitter extends AbstractConsumableEmitter {
-    public CrateEmitter(GameScreen gs) {
-        super.gs = gs;
+    public static CrateEmitter instance;
+
+    public CrateEmitter() {
         super.setRespawnTime(Rules.CONSUMABLE_CRATE_RESPAWN_TIME);
         super.setConsumablesAtStart(Rules.CONSUMABLE_CRATE_AT_START);
         super.setConsumablesMaxCount(Rules.CONSUMABLE_CRATE_MAX_COUNT);
@@ -14,10 +14,17 @@ public class CrateEmitter extends AbstractConsumableEmitter {
 
     @Override
     protected Crate newObject() {
-        return new Crate(gs);
+        return new Crate();
     }
 
     public void createBonusAnomaly() {
         super.createConsumable();
+    }
+
+    public static CrateEmitter getInstance() {
+        if (instance == null) {
+            instance = new CrateEmitter();
+        }
+        return instance;
     }
 }

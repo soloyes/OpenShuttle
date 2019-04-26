@@ -15,7 +15,6 @@ import com.shuttle.game.effects.MoveProcessor;
 import com.shuttle.game.effects.Oscillator;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.player.Standing;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
@@ -35,8 +34,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     private Oscillator oscillator;
     private boolean touched;
 
-    public CorrosiveAnomaly(GameScreen gs) {
-        super(gs);
+    public CorrosiveAnomaly() {
         this.textureRegions = Regions.split(
                 new TextureRegion(
                         Assets.getInstance()
@@ -139,7 +137,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 boomTimer += dt;
                 if (boomTimer >= boomDelay) {
                     destroy();
-                    showSprayBoom(gs.getParticleEmitter());
+                    showSprayBoom();
                     boomBox.playSound(MSConstants.SPLASH_ANOMALY);
                     Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY);
                     GameInfoSystem.setup(
@@ -174,7 +172,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
                 Standing.getInstance().addToStatistics(this.type, this.level);
                 Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
-                showSprayBoom(gs.getParticleEmitter());
+                showSprayBoom();
                 GameInfoSystem.setup(
                         position.x,
                         position.y,
@@ -249,6 +247,6 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
-        showSprayCollision(gs.getParticleEmitter());
+        showSprayCollision();
     }
 }

@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.rocket.RocketLauncher;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.effects.BoomBox;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.pool.AbstractPoolable;
@@ -44,9 +43,8 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
 
     public abstract void update(float dt);
 
-    protected AbstractAnomaly(GameScreen gs) {
+    protected AbstractAnomaly() {
         this.boomBox = new BoomBox();
-        this.gs = gs;
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.tmp = new Vector2();

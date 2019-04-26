@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.effects.MoveProcessor;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
@@ -29,8 +28,7 @@ public abstract class AbstractAsteroid extends AbstractPoolable {
     @Setter
     private float timeToBurn;
 
-    public AbstractAsteroid(GameScreen gs) {
-        this.gs = gs;
+    public AbstractAsteroid() {
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.angle = MathUtils.random(365f);

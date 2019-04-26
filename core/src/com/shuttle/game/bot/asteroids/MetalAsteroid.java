@@ -2,7 +2,7 @@ package com.shuttle.game.bot.asteroids;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
 
@@ -10,8 +10,8 @@ import com.shuttle.game.utils.Regions;
  * @author Shuttle on 11/26/18.
  */
 public class MetalAsteroid extends AbstractAsteroid {
-    public MetalAsteroid(GameScreen gs) {
-        super(gs);
+    public MetalAsteroid() {
+        super();
         textureRegions = Regions.split(
                 new TextureRegion(
                         Assets.getInstance()
@@ -35,6 +35,6 @@ public class MetalAsteroid extends AbstractAsteroid {
     @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
-        gs.getParticleEmitter().getBuilder().buildDust(getPosition().x, getPosition().y, 180, 32 + 32);
+        ParticleEmitter.getInstance().getBuilder().buildDust(getPosition().x, getPosition().y, 180, 32 + 32);
     }
 }

@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
+import com.shuttle.game.bot.consumable.CrateEmitter;
+import com.shuttle.game.bot.consumable.StorageEmitter;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
@@ -57,9 +59,9 @@ public class Radar {
         this.boomBox = new BoomBox();
         poolableJoiner = new ListOfListsJoiner<AbstractPoolable>(
                 gs.getAstronautEmitter().getActiveList(),
-                gs.getCrateEmitter().getActiveList(),
+                CrateEmitter.getInstance().getActiveList(),
                 gs.getFuelEmitter().getActiveList(),
-                gs.getStorageEmitter().getActiveList(),
+                StorageEmitter.getInstance().getActiveList(),
                 gs.getCorrosiveAnomalyEmitter().getActiveList(),
                 gs.getElectricalAnomalyEmitter().getActiveList()
         );

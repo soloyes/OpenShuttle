@@ -10,11 +10,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
+import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
+import com.shuttle.game.bot.consumable.CrateEmitter;
+import com.shuttle.game.bot.consumable.StorageEmitter;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
@@ -93,6 +98,12 @@ public class PauseGroup extends Group {
                 ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
                 Rules.GAME_OVER = false;
                 Shuttle.respawn();
+                //todo: clear all. Oterwise black. Some registry need to be set  here (ListOfLists?)
+                ParticleEmitter.getInstance().clear();
+                MetalAsteroidEmitter.getInstance().clear();
+                MineralAsteroidEmitter.getInstance().clear();
+                CrateEmitter.getInstance().clear();
+                StorageEmitter.getInstance().clear();
                 //todo: Restart all. How? All buttons, + Score to 0. All shields to 0
             }
         });

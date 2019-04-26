@@ -4,13 +4,14 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.asteroids.AbstractAsteroid;
 import com.shuttle.game.bot.asteroids.AbstractAsteroidEmitter;
+import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
+import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.ListOfListsJoiner;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
@@ -33,11 +34,9 @@ public class Ray {
     @Setter
     private float takeRange;
     private BoomBox boomBox;
-    private GameScreen gs;
     private ListOfListsJoiner<AbstractAsteroid> asteroidsJoiner;
 
-    public Ray(GameScreen gs) {
-        this.gs = gs;
+    public Ray() {
         this.tmp1V2 = new Vector2();
         this.count = 24;
         this.preset = Preset.GREEN;
@@ -46,12 +45,12 @@ public class Ray {
         this.takeRange = Rules.PLAYER_CONSUMABLE_TAKE_RANGE;
         this.boomBox = new BoomBox();
         this.asteroidsJoiner = new ListOfListsJoiner<AbstractAsteroid>(
-                gs.getMetalAsteroidEmitter().getActiveList(),
-                gs.getMineralAsteroidEmitter().getActiveList()
+                MetalAsteroidEmitter.getInstance().getActiveList(),
+                MineralAsteroidEmitter.getInstance().getActiveList()
         );
     }
 
-    public void harvest(Shuttle player, AbstractPoolable poolable, ParticleEmitter particleEmitter, float dt) {
+    public void harvest(Shuttle player, AbstractPoolable poolable, float dt) {
         if (!player.isTaken()) {
             if (Shuttle.position.dst(poolable.getPosition()) <= takeRange) {
                 poolable.setAtRayPoint(true);
@@ -74,7 +73,7 @@ public class Ray {
                 poolable.setScaleX(scaleX);
                 poolable.setScaleY(scaleY);
 
-                particleEmitter.setupFromPointToPoint(
+                ParticleEmitter.getInstance().setupFromPointToPoint(
                         poolable.getPosition().x, poolable.getPosition().y,
                         Shuttle.position.x, Shuttle.position.y,
                         1, 2,
@@ -85,7 +84,7 @@ public class Ray {
                     float ang = 6.28f / count * j;
                     float radX = poolable.getWidth() / 2 * scaleX;
                     float radY = poolable.getHeight() / 2 * scaleY;
-                    particleEmitter.setup(
+                    ParticleEmitter.getInstance().setup(
                             poolable.getPosition().x + radX * (float) Math.cos(ang) + MathUtils.random(-10, 10),
                             poolable.getPosition().y + radY * (float) Math.sin(ang) + MathUtils.random(-10, 10),
                             0, 0, 0.1f, size, size,
@@ -112,14 +111,14 @@ public class Ray {
         }
     }
 
-    public void laser(Shuttle player, AbstractAsteroid asteroid, ParticleEmitter particleEmitter, float dt) {
+    public void laser(Shuttle player, AbstractAsteroid asteroid, float dt) {
         float dst = Shuttle.position.dst(asteroid.getPosition());
         if (dst <= Rules.PLAYER_LASER_TAKE_RANGE && !player.isTaken() && !asteroid.isTaken() && asteroid.isActive()) {
             asteroid.setAtRayPoint(true);
             boomBox.playMusicEffectInLoop(MSConstants.LASER, 1.0f);
             float scaleX = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleX();
             float scaleY = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleY();
-            particleEmitter.setupFromPointToPoint(
+            ParticleEmitter.getInstance().setupFromPointToPoint(
                     asteroid.getPosition().x, asteroid.getPosition().y,
                     Shuttle.position.x, Shuttle.position.y,
                     1.0f, 1.0f,
@@ -130,7 +129,7 @@ public class Ray {
                 float ang = 6.28f / count * j;
                 float radX = asteroid.getWidth() / 4 * scaleX;
                 float radY = asteroid.getHeight() / 4 * scaleY;
-                particleEmitter.setup(
+                ParticleEmitter.getInstance().setup(
                         asteroid.getPosition().x + radX * (float) Math.cos(ang) + MathUtils.random(-10, 10),
                         asteroid.getPosition().y + radY * (float) Math.sin(ang) + MathUtils.random(-10, 10),
                         0, 0, 0.1f, size, size,
@@ -143,7 +142,7 @@ public class Ray {
                 boomBox.playSound(MSConstants.DESTROY_ASTEROID_RAY);
                 AbstractAsteroidEmitter.emitterMap.get(asteroid.getType()).boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
                 asteroid.destroyWithEffect();
-                asteroid.showSprayCollision(particleEmitter);
+                asteroid.showSprayCollision();
                 Standing.getInstance().addToStatistics(asteroid.getType(), asteroid.getLevel());
                 asteroid.setTimeToBurn(0.0f);
                 asteroid.setAtRayPoint(false);

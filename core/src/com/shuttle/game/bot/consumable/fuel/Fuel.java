@@ -11,6 +11,7 @@ import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.MoveProcessor;
 import com.shuttle.game.effects.Shield;
 import com.shuttle.game.effects.Vibrator;
+import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.labelsticker.Label;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.screens.GameScreen;
@@ -22,8 +23,7 @@ public class Fuel extends AbstractConsumable {
     private Box box;
     private Bubble[] bubble;
 
-    public Fuel(GameScreen gs) {
-        super(gs);
+    public Fuel() {
         this.width = PaintConstants.FUEL_1_WIDTH;
         this.height = PaintConstants.FUEL_1_HEIGHT;
         this.type = Type.FUEL;
@@ -126,6 +126,6 @@ public class Fuel extends AbstractConsumable {
     @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
-        gs.getParticleEmitter().getBuilder().buildFuelDestroyFlame(position);
+        ParticleEmitter.getInstance().getBuilder().buildFuelDestroyFlame(position);
     }
 }

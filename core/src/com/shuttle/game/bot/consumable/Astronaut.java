@@ -26,8 +26,7 @@ public class Astronaut extends AbstractConsumable {
     private Profession profession;
     private int multiplier;
 
-    public Astronaut(GameScreen gs) {
-        super(gs);
+    public Astronaut() {
         this.regions = Regions.split(
                 Assets.getInstance().getAtlas().findRegion(PaintConstants.ASTRONAUT_REGION), 1, 5, 5);
         this.width = PaintConstants.ASTRONAUT_WIDTH;
@@ -105,7 +104,7 @@ public class Astronaut extends AbstractConsumable {
     @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
-        showSprayCollision(gs.getParticleEmitter());
+        showSprayCollision();
     }
 
     public enum Profession {

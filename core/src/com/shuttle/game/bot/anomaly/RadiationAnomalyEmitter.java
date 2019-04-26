@@ -18,7 +18,7 @@ public class RadiationAnomalyEmitter extends AbstractAnomalyEmitter {
 
     @Override
     protected RadiationAnomaly newObject() {
-        return new RadiationAnomaly(gs);
+        return new RadiationAnomaly();
     }
 
     public void createBonusAnomaly(Vector2 position) {

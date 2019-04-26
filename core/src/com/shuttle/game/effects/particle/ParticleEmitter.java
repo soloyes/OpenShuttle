@@ -17,11 +17,12 @@ import lombok.Setter;
  * Created by FlameXander on 02.07.2017.
  */
 public class ParticleEmitter extends ObjectPool<ParticleEmitter.Particle> {
+    private static ParticleEmitter instance;
     private TextureRegion particleTexture;
     private ParticleEffectBuilder builder;
     private Vector2 tmp;
 
-    public ParticleEmitter() {
+    private ParticleEmitter() {
         this.particleTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STAR16_REGION);
         this.builder = new ParticleEffectBuilder(this);
         this.tmp = new Vector2(0, 0);
@@ -30,6 +31,11 @@ public class ParticleEmitter extends ObjectPool<ParticleEmitter.Particle> {
     @Override
     protected Particle newObject() {
         return new Particle();
+    }
+
+    @Override
+    public void clear() {
+        instance = null;
     }
 
     public void render(SpriteBatch batch) {
@@ -69,6 +75,13 @@ public class ParticleEmitter extends ObjectPool<ParticleEmitter.Particle> {
 
     public ParticleEffectBuilder getBuilder() {
         return builder;
+    }
+
+    public static ParticleEmitter getInstance() {
+        if (instance == null) {
+            instance = new ParticleEmitter();
+        }
+        return instance;
     }
 
     public class Particle extends AbstractPoolable {

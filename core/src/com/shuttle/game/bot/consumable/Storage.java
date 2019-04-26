@@ -24,8 +24,7 @@ public class Storage extends AbstractConsumable {
     private Size size;
     private Label dangerLabel;
 
-    public Storage(GameScreen gs) {
-        super(gs);
+    public Storage() {
         this.width = PaintConstants.STORAGE_1_WIDTH;
         this.height = PaintConstants.STORAGE_1_HEIGHT;
         this.type = Type.STORAGE;
@@ -196,7 +195,7 @@ public class Storage extends AbstractConsumable {
                 r = MathUtils.random(0, 3);
                 boolean radar = false;
                 boolean laser = false;
-                for (AbstractConsumable consumable : gs.getStorageEmitter().getActiveList()) {
+                for (AbstractConsumable consumable : StorageEmitter.getInstance().getActiveList()) {
                     if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Sticker.LASER ||
                             consumable.getLabels().get(Label.Layer.HIDDEN).get(0).getSticker() == Sticker.LASER) {
                         laser = true;
@@ -204,7 +203,7 @@ public class Storage extends AbstractConsumable {
                     }
                 }
 
-                for (AbstractConsumable consumable : gs.getStorageEmitter().getActiveList()) {
+                for (AbstractConsumable consumable : StorageEmitter.getInstance().getActiveList()) {
                     if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Sticker.RADAR ||
                             consumable.getLabels().get(Label.Layer.HIDDEN).get(0).getSticker() == Sticker.RADAR) {
                         radar = true;
@@ -212,6 +211,7 @@ public class Storage extends AbstractConsumable {
                     }
                 }
 
+                //todo: NPE => Player to singleton
                 if (r == 0 && (gs.getPlayer().getRadar().isActive() || radar)) {
                     r += MathUtils.random(1, 3);
                 }
@@ -339,7 +339,7 @@ public class Storage extends AbstractConsumable {
     @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
-        showSprayCollision(gs.getParticleEmitter());
+        showSprayCollision();
     }
 
     private enum Size {

@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
+import com.shuttle.game.bot.consumable.CrateEmitter;
+import com.shuttle.game.bot.consumable.StorageEmitter;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
@@ -73,7 +75,7 @@ public enum Sticker {
         @Override
         public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
             if (!isGolden) {
-                List<AbstractConsumable> list = gs.getCrateEmitter().getActiveList();
+                List<AbstractConsumable> list = CrateEmitter.getInstance().getActiveList();
                 for (int i = 0; i < list.size(); i++) {
                     list.get(i).setShielded(true);
                 }
@@ -81,7 +83,7 @@ public enum Sticker {
                 for (int i = 0; i < list.size(); i++) {
                     list.get(i).setShielded(true);
                 }
-                list = gs.getStorageEmitter().getActiveList();
+                list = StorageEmitter.getInstance().getActiveList();
                 for (int i = 0; i < list.size(); i++) {
                     list.get(i).setShielded(true);
                 }
@@ -160,13 +162,13 @@ public enum Sticker {
         @Override
         public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
             if (!isGolden) {
-                List<AbstractConsumable> list = gs.getCrateEmitter().getActiveList();
+                List<AbstractConsumable> list = CrateEmitter.getInstance().getActiveList();
                 for (int i = 0; i < list.size(); i++) {
                     if (list.get(i).isDanger()) {
                         list.get(i).setScanned(true);
                     }
                 }
-                list = gs.getStorageEmitter().getActiveList();
+                list = StorageEmitter.getInstance().getActiveList();
                 for (int i = 0; i < list.size(); i++) {
                     if (list.get(i).isDanger()) {
                         list.get(i).setScanned(true);
@@ -435,11 +437,11 @@ public enum Sticker {
                                     true
                             );
                             for (int i = 0; i < (level + 1) * Rules.CONSUMABLE_GENERATE_BASE_BONUS; i++) {
-                                gs.getCrateEmitter().createBonusAnomaly();
+                                CrateEmitter.getInstance().createBonusAnomaly();
                             }
                             break;
                         case STORAGE:
-                            gs.getCrateEmitter().createBonusAnomaly();
+                            CrateEmitter.getInstance().createBonusAnomaly();
                             GameInfoSystem.setup(
                                     consumable.getPosition().x, consumable.getPosition().y,
                                     GameInfoSystem.Preset.BONUS_STORAGE.getValue(),
@@ -447,7 +449,7 @@ public enum Sticker {
                                     true
                             );
                             for (int i = 0; i < (level + 1) * Rules.CONSUMABLE_GENERATE_BASE_BONUS; i++) {
-                                gs.getStorageEmitter().createBonusAnomaly();
+                                StorageEmitter.getInstance().createBonusAnomaly();
                             }
                             break;
                     }
@@ -583,10 +585,10 @@ public enum Sticker {
                         List<AbstractConsumable> list;
                         GameInfoSystem.Preset preset;
                         if (consumable.isGolden()) {
-                            list = gs.getStorageEmitter().getActiveList();
+                            list = StorageEmitter.getInstance().getActiveList();
                             preset = GameInfoSystem.Preset.STORAGE_FLUSH;
                         } else {
-                            list = gs.getCrateEmitter().getActiveList();
+                            list = CrateEmitter.getInstance().getActiveList();
                             preset = GameInfoSystem.Preset.CRATE_FLUSH;
                         }
 

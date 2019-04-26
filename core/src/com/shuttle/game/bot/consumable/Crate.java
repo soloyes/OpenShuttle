@@ -22,8 +22,7 @@ import com.shuttle.game.utils.Consumer;
  * @author Shuttle on 10/11/18.
  */
 public class Crate extends AbstractConsumable {
-    public Crate(GameScreen gs) {
-        super(gs);
+    public Crate() {
         this.width = PaintConstants.CRATE_1_WIDTH;
         this.height = PaintConstants.CRATE_1_HEIGHT;
         this.type = Type.CRATE;
@@ -204,6 +203,6 @@ public class Crate extends AbstractConsumable {
     @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
-        showSprayCollision(gs.getParticleEmitter());
+        showSprayCollision();
     }
 }

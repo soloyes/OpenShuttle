@@ -19,7 +19,7 @@ public class CorrosiveAnomalyEmitter extends AbstractAnomalyEmitter {
 
     @Override
     protected CorrosiveAnomaly newObject() {
-        return new CorrosiveAnomaly(gs);
+        return new CorrosiveAnomaly();
     }
 
     public void createBonusAnomaly(Vector2 position, int level) {

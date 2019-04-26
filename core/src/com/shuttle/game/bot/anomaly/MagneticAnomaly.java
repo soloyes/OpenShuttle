@@ -12,7 +12,6 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.MoveProcessor;
 import com.shuttle.game.player.Standing;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
@@ -37,8 +36,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
     private float eatTimer;
     private boolean touched;
 
-    public MagneticAnomaly(GameScreen gs) {
-        super(gs);
+    public MagneticAnomaly() {
         this.textureRegions = Regions.split(
                 new TextureRegion(
                         Assets.getInstance()
@@ -175,6 +173,6 @@ public class MagneticAnomaly extends AbstractAnomaly {
         super.destroyWithEffect();
         Standing.getInstance().addToStatistics(this.type, this.level);
         Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
-        showSprayBoom(gs.getParticleEmitter());
+        showSprayBoom();
     }
 }

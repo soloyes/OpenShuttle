@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.effects.BoomBox;
-import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.Joystick;
@@ -25,7 +24,6 @@ public class AbstractShuttle implements InputProcessor {
     public static float angle;
     protected LinkedList<Integer> pointer;
     protected Joystick joystick;
-    protected ParticleEmitter engineParticleEmitter;
     protected BoomBox boomBox;
     @Getter
     @Setter
@@ -63,7 +61,6 @@ public class AbstractShuttle implements InputProcessor {
         this.pointer = new LinkedList<Integer>();
         this.boomBox = new BoomBox();
         this.gs = gs;
-        this.engineParticleEmitter = new ParticleEmitter();
         this.textureRegion = new TextureRegion[4];
         this.textureRegion[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_REGION);
         TextureRegion[] tmpRegion = Regions.split(

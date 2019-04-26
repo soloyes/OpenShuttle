@@ -15,6 +15,7 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.Fibonacci;
 import com.shuttle.game.effects.KillingSpree;
+import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.player.layers.LifeShield;
 import com.shuttle.game.player.layers.RamShield;
 import com.shuttle.game.player.layers.Scratch;
@@ -192,7 +193,6 @@ public class Shuttle extends AbstractShuttle {
     }
 
     public void render(SpriteBatch batch) {
-        engineParticleEmitter.render(batch);
         Color tmpColor = batch.getColor();
 
         for (int i = 0; i < vector2List.size(); i++) {
@@ -272,7 +272,6 @@ public class Shuttle extends AbstractShuttle {
 
     public void update(float dt) {
         makeShadow(dt);
-        engineParticleEmitter.update(dt);
         checkSeries(dt);
         checkRamPower();
         checkZigZagEffect(dt);
@@ -391,7 +390,7 @@ public class Shuttle extends AbstractShuttle {
                 );
                 angle += dir * radialSpeed * dt;
                 if (Math.abs(angle - angleToTarget) > 5.0f) {
-                    gs.getParticleEmitter()
+                    ParticleEmitter.getInstance()
                             .setupFromPointToPoint(
                                     position.x + dir * 80 * (float) Math.cos(Math.toRadians(90 - angle)),
                                     position.y - dir * 80 * (float) Math.sin(Math.toRadians(90 - angle)),
@@ -420,20 +419,20 @@ public class Shuttle extends AbstractShuttle {
         /*FPS hack*/
         for (int i = 0; i <= j; i++) {
             if (standing.getFuel() > 0.1f && velocity.len() >= 80 && !Rules.GAME_OVER) {
-                engineParticleEmitter.getBuilder().buildShuttleEngineFire(position, angle,  /*FPS hack*/70 - j * 0.5f /*FPS hack*/, 1.0f, 60 * dt);
+                ParticleEmitter.getInstance().getBuilder().buildShuttleEngineFire(position, angle,  /*FPS hack*/70 - j * 0.5f /*FPS hack*/, 1.0f, 60 * dt);
                 if (engineStarted) {
                     boomBox.playSound(MSConstants.START_ENGINE);
                     engineStarted = false;
                 }
             } else {
-                engineParticleEmitter.getBuilder().buildShuttleLowLevelEngineFire(position, angle, 80);
+                ParticleEmitter.getInstance().getBuilder().buildShuttleLowLevelEngineFire(position, angle, 80);
                 engineStarted = true;
             }
             if (velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
-                gs.getParticleEmitter().getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
+                ParticleEmitter.getInstance().getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
             }
             if (velocity.len() >= Rules.PLAYER_ENGINE_POWER) {
-                gs.getParticleEmitter().getBuilder().buildShuttleShield(
+                ParticleEmitter.getInstance().getBuilder().buildShuttleShield(
                         position, angle, 90, 45,
                         GlobalInteractionLevels.RED.getR(), GlobalInteractionLevels.RED.getG(), GlobalInteractionLevels.RED.getB()
                 );

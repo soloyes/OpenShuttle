@@ -76,13 +76,7 @@ public class GameScreen extends BaseScreen {
     private Background background;
     @Getter
     @Setter
-    private ParticleEmitter particleEmitter;
-    @Getter
-    @Setter
     private AstronautEmitter astronautEmitter;
-    @Getter
-    @Setter
-    private CrateEmitter crateEmitter;
     @Getter
     @Setter
     private CorrosiveAnomalyEmitter corrosiveAnomalyEmitter;
@@ -97,16 +91,7 @@ public class GameScreen extends BaseScreen {
     private MagneticAnomalyEmitter magneticAnomalyEmitter;
     @Getter
     @Setter
-    private MetalAsteroidEmitter metalAsteroidEmitter;
-    @Getter
-    @Setter
-    private MineralAsteroidEmitter mineralAsteroidEmitter;
-    @Getter
-    @Setter
     private FuelEmitter fuelEmitter;
-    @Getter
-    @Setter
-    private StorageEmitter storageEmitter;
     @Getter
     @Setter
     private Camera camera;
@@ -184,17 +169,12 @@ public class GameScreen extends BaseScreen {
         shaderPause = shaderManager.getProgram(ShaderManager.ShaderType.PAUSE);
         shaderBlackHole = shaderManager.getProgram(ShaderManager.ShaderType.BLACKHOLE);
 
-        particleEmitter = new ParticleEmitter();
         corrosiveAnomalyEmitter = new CorrosiveAnomalyEmitter(this);
         electricalAnomalyEmitter = new ElectricalAnomalyEmitter(this);
         radiationAnomalyEmitter = new RadiationAnomalyEmitter(this);
         magneticAnomalyEmitter = new MagneticAnomalyEmitter(this);
-        astronautEmitter = new AstronautEmitter(this);
-        crateEmitter = new CrateEmitter(this);
-        metalAsteroidEmitter = new MetalAsteroidEmitter(this);
-        mineralAsteroidEmitter = new MineralAsteroidEmitter(this);
-        fuelEmitter = new FuelEmitter(this);
-        storageEmitter = new StorageEmitter(this);
+        astronautEmitter = new AstronautEmitter();
+        fuelEmitter = new FuelEmitter();
         background = new Background();
         gameInfoSystem = new GameInfoSystem();
         joystick = new Joystick();
@@ -215,7 +195,7 @@ public class GameScreen extends BaseScreen {
 
         InputMultiplexer im = new InputMultiplexer(player, stage, joystick);
         Gdx.input.setInputProcessor(im);
-        ray = new Ray(this);
+        ray = new Ray();
         calcMusicEffectVolume();
         prettyCorrosiveKick = PrettySound.getPretty(Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY);
         prettyElectricKick = PrettySound.getPretty(Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY);
@@ -223,13 +203,13 @@ public class GameScreen extends BaseScreen {
         //
         consumableJoiner = new ListOfListsJoiner<AbstractConsumable>(
                 astronautEmitter.getActiveList(),
-                crateEmitter.getActiveList(),
+                CrateEmitter.getInstance().getActiveList(),
                 fuelEmitter.getActiveList(),
-                storageEmitter.getActiveList()
+                StorageEmitter.getInstance().getActiveList()
         );
         asteroidsJoiner = new ListOfListsJoiner<AbstractAsteroid>(
-                metalAsteroidEmitter.getActiveList(),
-                mineralAsteroidEmitter.getActiveList()
+                MetalAsteroidEmitter.getInstance().getActiveList(),
+                MineralAsteroidEmitter.getInstance().getActiveList()
         );
         anomalyJoiner = new ListOfListsJoiner<AbstractAnomaly>(
                 corrosiveAnomalyEmitter.getActiveList(),
@@ -238,7 +218,7 @@ public class GameScreen extends BaseScreen {
                 radiationAnomalyEmitter.getActiveList()
         );
         //
-        storageEmitter.emit();
+        StorageEmitter.getInstance().emit();
     }
 
     private void calcMusicEffectVolume() {
@@ -282,19 +262,19 @@ public class GameScreen extends BaseScreen {
         if (GamePreferences.getPrefEffectsLevel() == GamePreferences.EffectLevel.LOW.getValue() || shaderBlackHole == null) {
             blackhole.render(batch);
         }
-        metalAsteroidEmitter.render(batch);
-        mineralAsteroidEmitter.render(batch);
+        MetalAsteroidEmitter.getInstance().render(batch);
+        MineralAsteroidEmitter.getInstance().render(batch);
         fuelEmitter.render(batch);
-        storageEmitter.render(batch);
-        player.render(batch);
+        StorageEmitter.getInstance().render(batch);
         astronautEmitter.render(batch);
-        crateEmitter.render(batch);
+        CrateEmitter.getInstance().render(batch);
         corrosiveAnomalyEmitter.render(batch);
         electricalAnomalyEmitter.render(batch);
         radiationAnomalyEmitter.render(batch);
         magneticAnomalyEmitter.render(batch);
+        ParticleEmitter.getInstance().render(batch);
+        player.render(batch);
         player.getRamShield().render(batch);
-        particleEmitter.render(batch);
         rocketLauncher.render(batch);
         batch.end();
 
@@ -386,12 +366,12 @@ public class GameScreen extends BaseScreen {
             radiationAnomalyEmitter.update(dt);
             magneticAnomalyEmitter.update(dt);
             astronautEmitter.update(dt);
-            crateEmitter.update(dt);
-            metalAsteroidEmitter.update(dt);
-            mineralAsteroidEmitter.update(dt);
+            CrateEmitter.getInstance().update(dt);
+            MetalAsteroidEmitter.getInstance().update(dt);
+            MineralAsteroidEmitter.getInstance().update(dt);
             fuelEmitter.update(dt);
-            storageEmitter.update(dt);
-            particleEmitter.update(dt);
+            StorageEmitter.getInstance().update(dt);
+            ParticleEmitter.getInstance().update(dt);
             blackhole.update(dt);
             uiLatestPanel.update(dt);
             uiInfoPanel.update(dt);
@@ -501,7 +481,7 @@ public class GameScreen extends BaseScreen {
                     ray.setPreset(Ray.Preset.RED);
                 }
             }
-            ray.harvest(player, consumable, particleEmitter, dt);
+            ray.harvest(player, consumable, dt);
             anyAtHarvestPoint |= consumable.isAtRayPoint();
 
         }
@@ -694,13 +674,13 @@ public class GameScreen extends BaseScreen {
                 ray.setPreset(Ray.Preset.GREY);
                 ray.setHarvestVelocity(Rules.PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY);
                 ray.setTakeRange(Rules.PLAYER_FRAGMENT_TAKE_RANGE);
-                ray.harvest(player, asteroid, particleEmitter, dt);
+                ray.harvest(player, asteroid, dt);
             } else {
                 if (player.isLaser()) {
                     ray.setCount(5);
                     ray.setSize(3);
                     ray.setPreset(Ray.Preset.RED);
-                    ray.laser(player, asteroid, particleEmitter, dt);
+                    ray.laser(player, asteroid, dt);
                 }
             }
             //
@@ -749,7 +729,7 @@ public class GameScreen extends BaseScreen {
         if (Shuttle.velocity.len() <= Rules.PLAYER_ENGINE_POWER) {
             Standing.getInstance().changeRamPower(-abstractPoolable.getLevel());
         }
-        abstractPoolable.showSprayCollision(particleEmitter);
+        abstractPoolable.showSprayCollision();
         player.killPlusPlus(abstractPoolable);
         Standing.getInstance().addToStatistics(abstractPoolable.getType(), abstractPoolable.getLevel());
     }

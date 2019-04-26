@@ -108,13 +108,13 @@ public abstract class AbstractPoolable implements Poolable {
 
     public abstract void update(float dt);
 
-    public void showSprayBoom(ParticleEmitter particleEmitter) {
+    public void showSprayBoom() {
         float R, G, B;
         for (int j = 0; j < 8; j++) {
             R = this.getSpreeColor().r;
             G = this.getSpreeColor().g;
             B = this.getSpreeColor().b;
-            particleEmitter.setup(
+            ParticleEmitter.getInstance().setup(
                     this.getPosition().x,
                     this.getPosition().y,
                     MathUtils.random(-200, 200), MathUtils.random(-200, 200),
@@ -127,13 +127,13 @@ public abstract class AbstractPoolable implements Poolable {
 
     public abstract Vector2 getPosition();
 
-    public void showSprayCollision(ParticleEmitter particleEmitter) {
+    public void showSprayCollision() {
         float R, G, B;
         for (int j = 0; j < 60; j++) {
             R = this.getSpreeColor().r;
             G = this.getSpreeColor().g;
             B = this.getSpreeColor().b;
-            particleEmitter.setup(
+            ParticleEmitter.getInstance().setup(
                     this.getPosition().x + MathUtils.random(-30, 30),
                     this.getPosition().y + MathUtils.random(-30, 30),
                     MathUtils.random(-600, 600), MathUtils.random(-600, 600),

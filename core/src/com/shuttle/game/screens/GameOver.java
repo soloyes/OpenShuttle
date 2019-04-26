@@ -90,8 +90,8 @@ public class GameOver {
     private void init(GameScreen gs, Class<? extends AbstractPoolable> abstractPoolableClass, float scaleX, float scaleY) {
         AbstractPoolable abstractPoolable;
         try {
-            Constructor constructor = abstractPoolableClass.getConstructor(GameScreen.class);
-            abstractPoolable = (AbstractPoolable) constructor.newInstance(gs);
+            Constructor constructor = abstractPoolableClass.getConstructor();
+            abstractPoolable = (AbstractPoolable) constructor.newInstance();
             abstractPoolable.setFake(true);
             abstractPoolable.init(picX, picY);
             abstractPoolable.setScaleX(scaleX);
