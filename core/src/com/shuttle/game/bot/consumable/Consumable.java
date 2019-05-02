@@ -1,9 +1,7 @@
 package com.shuttle.game.bot.consumable;
 
-import com.shuttle.game.screens.GameScreen;
-
 public interface Consumable {
-    void consumed(GameScreen gs);
+    void consumed();
 
-    void badEffect(GameScreen gs);
+    void badEffect();
 }

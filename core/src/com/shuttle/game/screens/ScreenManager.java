@@ -15,7 +15,7 @@ import com.shuttle.game.utils.Assets;
 import lombok.Getter;
 
 public class ScreenManager {
-    private static ScreenManager ourInstance = new ScreenManager();
+    private static ScreenManager instance;
     private ShuttleGame game;
     private Screen targetScreen;
     private LoadingScreen loadingScreen;
@@ -89,7 +89,10 @@ public class ScreenManager {
     }
 
     public static ScreenManager getInstance() {
-        return ourInstance;
+        if (instance == null) {
+            instance = new ScreenManager();
+        }
+        return instance;
     }
 
     public Viewport getViewport() {

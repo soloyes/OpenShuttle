@@ -2,15 +2,13 @@ package com.shuttle.game.ui.panels.info;
 
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
 
 /**
  * @author Shuttle on 3/14/19.
  */
 public class BarHP extends AbstractBar {
-    public BarHP(GameScreen gs) {
-        super(gs);
+    public BarHP() {
         this.outBar = Assets.getInstance().getAtlas().findRegion(PaintConstants.HP_BAR_OUT);
         this.inBar = Assets.getInstance().getAtlas().findRegion(PaintConstants.HP_BAR_IN);
         this.icon = Assets.getInstance().getAtlas().findRegion(PaintConstants.HP_BAR_ICON);

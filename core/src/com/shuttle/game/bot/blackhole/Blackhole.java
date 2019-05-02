@@ -38,6 +38,7 @@ public class Blackhole {
     private Oscillator oscillator;
     @Getter
     private float shaderDiameter;
+
     static {
         position = new Vector2();
     }

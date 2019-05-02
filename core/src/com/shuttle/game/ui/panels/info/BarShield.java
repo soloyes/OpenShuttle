@@ -2,15 +2,13 @@ package com.shuttle.game.ui.panels.info;
 
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
 
 /**
  * @author Shuttle on 3/14/19.
  */
 public class BarShield extends AbstractBar {
-    public BarShield(GameScreen gs) {
-        super(gs);
+    public BarShield() {
         this.outBar = Assets.getInstance().getAtlas().findRegion(PaintConstants.SP_BAR_OUT);
         this.inBar = Assets.getInstance().getAtlas().findRegion(PaintConstants.SP_BAR_IN);
         this.icon = Assets.getInstance().getAtlas().findRegion(PaintConstants.SP_BAR_ICON);

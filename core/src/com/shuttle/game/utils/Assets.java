@@ -17,7 +17,7 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.screens.ScreenManager;
 
 public class Assets {
-    private static Assets ourInstance = new Assets();
+    private static Assets instance = new Assets();
     private AssetManager assetManager;
     private TextureAtlas atlas;
 
@@ -148,6 +148,6 @@ public class Assets {
     }
 
     public static Assets getInstance() {
-        return ourInstance;
+        return instance;
     }
 }

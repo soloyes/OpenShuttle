@@ -42,8 +42,7 @@ public final class ListOfListsJoiner<T> {
     }
 
     @SafeVarargs
-    public final List<List<? extends T>> join(List<? extends T>... list) {
+    private final void join(List<? extends T>... list) {
         this.list.addAll(Arrays.asList(list));
-        return this.list;
     }
 }

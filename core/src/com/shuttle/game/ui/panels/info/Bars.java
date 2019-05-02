@@ -1,21 +1,18 @@
 package com.shuttle.game.ui.panels.info;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.shuttle.game.screens.GameScreen;
 
 public class Bars {
     private BarFuel barFuel;
     private BarHP barHP;
     private BarLaser barLaser;
     private BarShield barShield;
-    private GameScreen gs;
 
-    public Bars(GameScreen gs) {
-        this.gs = gs;
-        this.barFuel = new BarFuel(gs);
-        this.barHP = new BarHP(gs);
-        this.barLaser = new BarLaser(gs);
-        this.barShield = new BarShield(gs);
+    public Bars() {
+        this.barFuel = new BarFuel();
+        this.barHP = new BarHP();
+        this.barLaser = new BarLaser();
+        this.barShield = new BarShield();
     }
 
     public void update(float dt) {

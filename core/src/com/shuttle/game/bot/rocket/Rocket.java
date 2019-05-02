@@ -7,7 +7,6 @@ import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
@@ -20,7 +19,6 @@ import lombok.Setter;
  */
 public class Rocket extends AbstractPoolable {
     private Vector2 position;
-    private GameScreen gs;
     private Vector2 velocity;
     private Vector2 destination;
     private TextureRegion[] textureRegions;
@@ -30,8 +28,7 @@ public class Rocket extends AbstractPoolable {
     private boolean aimed;
     private float angle;
 
-    public Rocket(GameScreen gs) {
-        this.gs = gs;
+    public Rocket() {
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.destination = new Vector2();
@@ -52,7 +49,9 @@ public class Rocket extends AbstractPoolable {
         this.velocity.set(0, 0);
         this.scaleX = this.scaleY = 1.0f;
         this.aimed = true;
-    }    @Override
+    }
+
+    @Override
     public void basicRender(SpriteBatch batch) {
         batch.draw(
                 textureRegions[(int) (frame % PaintConstants.ROCKET_FRAMES)],
@@ -76,7 +75,9 @@ public class Rocket extends AbstractPoolable {
                     true
             );
         }
-    }    @Override
+    }
+
+    @Override
     public void collideBlackhole() {
         float dst = Blackhole.position.dst(position);
         if (dst <= Rules.BLACKHOLE_TAKE_RANGE) {
@@ -125,8 +126,6 @@ public class Rocket extends AbstractPoolable {
     public Vector2 getPosition() {
         return position;
     }
-
-
 
 
 }

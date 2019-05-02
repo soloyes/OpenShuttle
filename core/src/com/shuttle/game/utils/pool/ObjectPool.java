@@ -15,12 +15,6 @@ public abstract class ObjectPool<T extends Poolable> {
         this.freeList = new ArrayList<T>();
     }
 
-    public void addObjectsToFreeList(int size) {
-        for (int i = 0; i < size; i++) {
-            freeList.add(newObject());
-        }
-    }
-
     protected abstract T newObject();
 
     public void checkPool() {
@@ -52,7 +46,7 @@ public abstract class ObjectPool<T extends Poolable> {
         return freeList;
     }
 
-    public void clear(){
+    public void doRestart() {
         activeList.clear();
         freeList.clear();
     }

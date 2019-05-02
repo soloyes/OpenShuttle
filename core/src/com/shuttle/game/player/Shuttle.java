@@ -21,7 +21,6 @@ import com.shuttle.game.player.layers.RamShield;
 import com.shuttle.game.player.layers.Scratch;
 import com.shuttle.game.player.layers.TakeRangeField;
 import com.shuttle.game.player.navigation.Radar;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.Joystick;
@@ -63,26 +62,22 @@ public class Shuttle extends AbstractShuttle {
     @Setter
     private boolean cameraSmooth;
     private boolean engineStarted;
-    private LinkedList<Integer> shadowsCoordinates;
+    private static LinkedList<Integer> shadowsCoordinates;
     private LinkedList<Vector2> vector2List;
     private LinkedList<Float> angleList;
     private LinkedList<Float> alphaList;
-    private int F;
-    @Getter
-    @Setter
-    private boolean laser;
+    private static int F = 2 * (int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Rules.PLAYER_ENGINE_POWER);
+    public static boolean isLaser;
 
-    public Shuttle(GameScreen gs, Joystick joystick) {
-        super(gs);
+    public Shuttle(Joystick joystick) {
         this.joystick = joystick;
         this.standing = Standing.getInstance();
-        this.radar = new Radar(gs);
+        this.radar = new Radar();
         this.boundCheck = new BoundCheck();
         this.lifeShield = new LifeShield();
         this.ramShield = new RamShield();
         this.takeRangeField = new TakeRangeField();
         this.scratch = new Scratch();
-        this.F = 2 * (int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Rules.PLAYER_ENGINE_POWER);
         this.vector2List = new LinkedList<Vector2>();
         this.angleList = new LinkedList<Float>();
         this.alphaList = new LinkedList<Float>();
@@ -90,10 +85,11 @@ public class Shuttle extends AbstractShuttle {
         this.radialSpeed = Rules.PLAYER_RADIAL_SPEED;
         this.enginePower = Rules.PLAYER_ENGINE_POWER;
         setShadowsCoordinates();
+        checkRamPower();
     }
 
-    public void setShadowsCoordinates() {
-        this.shadowsCoordinates = Fibonacci.generate(F);
+    public static void setShadowsCoordinates() {
+        shadowsCoordinates = Fibonacci.generate(F);
     }
 
     public boolean addZigZag(float amount) {
@@ -105,7 +101,7 @@ public class Shuttle extends AbstractShuttle {
     }
 
     public void badEffect(Consumable consumable) {
-        consumable.badEffect(gs);
+        consumable.badEffect();
     }
 
     public boolean canCatch(AbstractConsumable abstractConsumable) {
@@ -119,7 +115,7 @@ public class Shuttle extends AbstractShuttle {
 
     public void collideBlackhole(float dt) {
         if (position.dst(Blackhole.position) <= Rules.BLACKHOLE_TAKE_RANGE) {
-            taken = true;
+            isTaken = true;
             velocity.scl(0.5f);
             tmpV2.set(Blackhole.position).sub(position).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER);
             position.mulAdd(tmpV2, dt);
@@ -131,16 +127,16 @@ public class Shuttle extends AbstractShuttle {
             if (Blackhole.position.dst(position) <= Rules.BLACKHOLE_EVENT_HORIZON) {
                 BoundCheck.avoidPosition(Blackhole.position, position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
                 setLayersScale(1.0f, 1.0f);
-                taken = false;
+                isTaken = false;
                 boomBox.playSound(MSConstants.TELEPORT);
                 if (!GamePreferences.isChildEnabled()) {
-                    takeDamage(Rules.BLACKHOLE_GET_DAMAGE);
+                    Standing.getInstance().takeDamage(Rules.BLACKHOLE_GET_DAMAGE);
                 }
                 cameraSmooth = true;
             }
         } else {
             setLayersScale(1.0f, 1.0f);
-            taken = false;
+            isTaken = false;
         }
     }
 
@@ -155,10 +151,6 @@ public class Shuttle extends AbstractShuttle {
         scratch.setScaleY(scaleY);
         takeRangeField.setScaleX(scaleX);
         takeRangeField.setScaleY(scaleY);
-    }
-
-    public void takeDamage(int amount) {
-        standing.takeDamage(amount);
     }
 
     public void killPlusPlus(AbstractPoolable abstractPoolable) {
@@ -267,7 +259,7 @@ public class Shuttle extends AbstractShuttle {
     }
 
     public void takeEffect(Consumable consumable) {
-        consumable.consumed(gs);
+        consumable.consumed();
     }
 
     public void update(float dt) {
@@ -285,11 +277,11 @@ public class Shuttle extends AbstractShuttle {
 
         velocity.scl(/*FPS hack*/1.0f - dt/*FPS hack*/);
 
-        if (!taken) {
+        if (!isTaken) {
             position.mulAdd(velocity, dt);
         }
 
-        if (!taken) {
+        if (!isTaken) {
             if (joystick.isActive()) {
                 float angleToTarget = joystick.getAngle();
                 move(dt, angleToTarget);
@@ -310,7 +302,7 @@ public class Shuttle extends AbstractShuttle {
         radar.update(dt);
         boundCheck.checkAndHandleBounds(this, dt);
 
-        if (!taken) {
+        if (!isTaken) {
             startEngine(dt);
         }
     }

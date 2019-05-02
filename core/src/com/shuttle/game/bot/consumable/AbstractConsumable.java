@@ -8,7 +8,6 @@ import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Scan;
 import com.shuttle.game.effects.Shield;
 import com.shuttle.game.labelsticker.Label;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
@@ -62,8 +61,6 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
             this.labels.get(Label.Layer.HIDDEN).add(new Label());
         }
     }
-
-    public abstract void consumed(GameScreen gs);
 
     public abstract void init(float x, float y);
 

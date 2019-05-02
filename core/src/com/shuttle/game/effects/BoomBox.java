@@ -17,10 +17,11 @@ import java.util.Map;
  * @author Shuttle on 7/14/18.
  */
 public class BoomBox {
-    protected static Array<Sound> soundIdList = new Array<Sound>();
+    private static Array<Sound> soundIdList = new Array<Sound>();
     private static Array<Music> musicArray = new Array<Music>();
     private static ArrayList<String> musicEffects = new ArrayList<String>();
     private float t = 0.0f;
+
     static {
         musicEffects.add(MSConstants.HUM_MUSIC_EFFECT_1);
         musicEffects.add(MSConstants.HUM_MUSIC_EFFECT_2);
@@ -35,7 +36,7 @@ public class BoomBox {
             if (MathUtils.random(0, 100) <= Rules.MUSIC_EFFECT_PROBABILITY) {
                 boolean flag = true;
                 for (int i = 0; i < musicEffects.size(); i++) {
-                    if (isPlaying(musicEffects.get(i))){
+                    if (isPlaying(musicEffects.get(i))) {
                         flag = false;
                     }
                 }
@@ -58,7 +59,7 @@ public class BoomBox {
         }
     }
 
-    private boolean isPlaying(String music){
+    private boolean isPlaying(String music) {
         return Assets.getInstance()
                 .getAssetManager()
                 .get(music, Music.class)

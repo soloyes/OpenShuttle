@@ -3,7 +3,6 @@ package com.shuttle.game.bot.rocket;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.pool.ObjectPool;
 
@@ -12,15 +11,13 @@ import com.shuttle.game.utils.pool.ObjectPool;
  */
 public class RocketEmitter extends ObjectPool<Rocket> {
     private BoundCheck boundCheck;
-    private GameScreen gs;
 
     @Override
     protected Rocket newObject() {
-        return new Rocket(gs);
+        return new Rocket();
     }
 
-    public RocketEmitter(GameScreen gs) {
-        this.gs = gs;
+    public RocketEmitter() {
         this.boundCheck = new BoundCheck();
     }
 

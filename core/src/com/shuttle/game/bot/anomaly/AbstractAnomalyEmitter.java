@@ -3,7 +3,6 @@ package com.shuttle.game.bot.anomaly;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.pool.ObjectPool;
 
 import lombok.Getter;
@@ -13,8 +12,6 @@ import lombok.Setter;
  * @author Shuttle on 9/15/18.
  */
 public abstract class AbstractAnomalyEmitter extends ObjectPool<AbstractAnomaly> {
-    //todo: change single objects to singletone (constructor insight)
-    protected GameScreen gs;
     private float time;
     @Getter
     @Setter

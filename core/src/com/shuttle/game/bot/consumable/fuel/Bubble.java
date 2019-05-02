@@ -12,8 +12,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class Bubble {
-    //0.27f(отношение левой/правой полосы к размеру текстуры)
-    //0.156f(отношение верхней/нижней полосы к размеру текстуры)
+    //0.27f (texture size to left/right line)
+    //0.156f (texture size to up/down line)
     private static float A = 0.27f;
     private static float B = 0.156f;
 

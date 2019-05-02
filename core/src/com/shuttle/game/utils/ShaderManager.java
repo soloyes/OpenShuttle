@@ -7,54 +7,70 @@ import com.shuttle.game.conf.GamePreferences;
 /**
  * @author Shuttle on 10/8/18.
  */
-public class ShaderManager {
-    private ShaderProgram shaderBlackHole;
-    private ShaderProgram shaderPause;
+public interface ShaderManager {
+    void dispose();
 
-    public ShaderManager() {
-        shaderBlackHole = new ShaderProgram(
-                Gdx.files.internal("shaders/black_hole.vert").readString(),
-                Gdx.files.internal("shaders/black_hole.frag").readString()
-        );
+    ShaderProgram getProgram();
 
-        shaderPause = new ShaderProgram(
-                Gdx.files.internal("shaders/grey_screen.vert").readString(),
-                Gdx.files.internal("shaders/grey_screen.frag").readString()
-        );
-        ShaderProgram.pedantic = false;
-    }
+    void load();
 
-    public void dispose() {
-        if (shaderPause.isCompiled()) {
-            shaderPause.dispose();
+    ShaderManager PAUSE = new ShaderManager() {
+        private ShaderProgram shaderPause;
+
+        @Override
+        public ShaderProgram getProgram() {
+            if (shaderPause.isCompiled()) {
+                return shaderPause;
+            } else {
+                GamePreferences.setPrefEffectsLevel(0);
+                return null;
+            }
         }
-        if (shaderBlackHole.isCompiled()) {
-            shaderBlackHole.dispose();
-        }
-    }
 
-    public ShaderProgram getProgram(ShaderType type) {
-        switch (type) {
-            case PAUSE:
-                if (shaderPause.isCompiled()) {
-                    return shaderPause;
-                } else {
-                    GamePreferences.setPrefEffectsLevel(0);
-                    return null;
-                }
-            case BLACKHOLE:
-                if (shaderBlackHole.isCompiled()) {
-                    return shaderBlackHole;
-                } else {
-                    GamePreferences.setPrefEffectsLevel(0);
-                    return null;
-                }
+        @Override
+        public void load() {
+            shaderPause = new ShaderProgram(
+                    Gdx.files.internal("shaders/grey_screen.vert").readString(),
+                    Gdx.files.internal("shaders/grey_screen.frag").readString()
+            );
+            ShaderProgram.pedantic = false;
         }
-        return null;
-    }
 
-    public enum ShaderType {
-        PAUSE, BLACKHOLE
-    }
+        @Override
+        public void dispose() {
+            if (shaderPause.isCompiled()) {
+                shaderPause.dispose();
+            }
+        }
+    };
+
+    ShaderManager BLACKHOLE = new ShaderManager() {
+        private ShaderProgram shaderBlackHole;
+
+        @Override
+        public ShaderProgram getProgram() {
+            if (shaderBlackHole.isCompiled()) {
+                return shaderBlackHole;
+            } else {
+                GamePreferences.setPrefEffectsLevel(0);
+                return null;
+            }
+        }
+
+        @Override
+        public void load() {
+            shaderBlackHole = new ShaderProgram(
+                    Gdx.files.internal("shaders/black_hole.vert").readString(),
+                    Gdx.files.internal("shaders/black_hole.frag").readString()
+            );
+            ShaderProgram.pedantic = false;
+        }
+
+        @Override
+        public void dispose() {
+            if (shaderBlackHole.isCompiled()) {
+                shaderBlackHole.dispose();
+            }
+        }
+    };
 }
-

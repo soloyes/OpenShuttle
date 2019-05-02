@@ -2,7 +2,6 @@ package com.shuttle.game.ui.panels.info;
 
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.Assets;
 
 /**
@@ -10,8 +9,7 @@ import com.shuttle.game.utils.Assets;
  */
 public class BarFuel extends AbstractBar {
 
-    public BarFuel(GameScreen gs) {
-        super(gs);
+    public BarFuel() {
         this.outBar = Assets.getInstance().getAtlas().findRegion(PaintConstants.FP_BAR_OUT);
         this.inBar = Assets.getInstance().getAtlas().findRegion(PaintConstants.FP_BAR_IN);
         this.icon = Assets.getInstance().getAtlas().findRegion(PaintConstants.FP_BAR_ICON);

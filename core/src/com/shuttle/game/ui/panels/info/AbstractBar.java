@@ -5,14 +5,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.player.Standing;
-import com.shuttle.game.screens.GameScreen;
 
 /**
  * @author Shuttle on 3/14/19.
  */
 public abstract class AbstractBar {
     protected TextureRegion outBar, inBar, scale, icon;
-    protected GameScreen gs;
     protected int width, height;
     protected Standing standing;
     protected Color color;
@@ -21,8 +19,7 @@ public abstract class AbstractBar {
     protected float percentage;
     protected boolean redAlert;
 
-    public AbstractBar(GameScreen gs) {
-        this.gs = gs;
+    public AbstractBar() {
         this.standing = Standing.getInstance();
         this.color = new Color();
         this.outBar = new TextureRegion();

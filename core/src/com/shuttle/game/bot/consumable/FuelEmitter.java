@@ -5,7 +5,9 @@ import com.shuttle.game.conf.Rules;
 
 
 public class FuelEmitter extends AbstractConsumableEmitter {
-    public FuelEmitter() {
+    private static FuelEmitter instance;
+
+    private FuelEmitter() {
         super.setRespawnTime(Rules.CONSUMABLE_FUEL_RESPAWN_TIME);
         super.setConsumablesAtStart(Rules.CONSUMABLE_FUEL_AT_START);
         super.setConsumablesMaxCount(Rules.CONSUMABLE_FUEL_MAX_COUNT);
@@ -15,5 +17,12 @@ public class FuelEmitter extends AbstractConsumableEmitter {
     @Override
     protected Fuel newObject() {
         return new Fuel();
+    }
+
+    public static FuelEmitter getInstance() {
+        if (instance == null) {
+            instance = new FuelEmitter();
+        }
+        return instance;
     }
 }

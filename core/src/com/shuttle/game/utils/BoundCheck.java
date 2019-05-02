@@ -8,6 +8,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.effects.Shake;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
@@ -46,7 +47,7 @@ public class BoundCheck {
                 Rules.SPACE_HEIGHT + player.getHeight()
         );
         if (!rectangle.contains(Shuttle.position)) {
-            checkCount(player, dt);
+            checkCount(dt);
             playerOnScreen = false;
         } else {
             alertTimer = 0;
@@ -58,18 +59,18 @@ public class BoundCheck {
         }
     }
 
-    private void checkCount(Shuttle player, float dt) {
+    private void checkCount(float dt) {
         alertTimer += dt;
         fuelTimer += dt;
         hpTimer += dt;
         //every second
         if (alertTimer >= 1.0f) {
-            alert(player, alertTimer);
+            alert(alertTimer);
             alertTimer = 0.0f;
         }
 
         if (hpTimer >= Rules.PLAYER_TIMER_HP_OUT_OF_MAP) {
-            player.takeDamage(Rules.PLAYER_HP_OUT_OF_MAP);
+            Standing.getInstance().takeDamage(Rules.PLAYER_HP_OUT_OF_MAP);
             Standing.getInstance().setHpAlert(true);
             hpTimer = 0.0f;
         }
@@ -80,17 +81,17 @@ public class BoundCheck {
         }
     }
 
-    private void alert(Shuttle player, float duration) {
+    private void alert(float duration) {
         if (!Rules.GAME_OVER) {
             GameInfoSystem.setup(
-                    player.getGs().getCamera().position.x,
-                    player.getGs().getCamera().position.y,
+                    ScreenManager.getInstance().getCamera().position.x,
+                    ScreenManager.getInstance().getCamera().position.y,
                     GameInfoSystem.Preset.OUT,
                     3,
                     true
             );
             boomBox.playSound(MSConstants.OUT_OF_SCREEN);
-            player.getGs().getShake().shake(duration, 35, 10);
+            Shake.getInstance().shakeCamera(duration, 35, 10);
             Vibrator.vibrate(VConstants.PLAYER_OUT_OF_SCREEN);
         }
     }

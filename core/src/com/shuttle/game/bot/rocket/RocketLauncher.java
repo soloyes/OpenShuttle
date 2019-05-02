@@ -2,12 +2,17 @@ package com.shuttle.game.bot.rocket;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
+import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
+import com.shuttle.game.bot.anomaly.ElectricalAnomalyEmitter;
+import com.shuttle.game.bot.anomaly.MagneticAnomalyEmitter;
+import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.effects.Shake;
 import com.shuttle.game.player.Shuttle;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.BoundCheck;
+import com.shuttle.game.utils.ListOfListsJoiner;
 
 import lombok.Getter;
 
@@ -15,20 +20,39 @@ import lombok.Getter;
  * @author Shuttle on 20/01/19.
  */
 public class RocketLauncher {
-    public static boolean launched;
+    private static RocketLauncher instance;
+
+    public static RocketLauncher getInstance() {
+        if (instance == null) {
+            instance = new RocketLauncher();
+        }
+        return instance;
+    }
+
+    public void doRestart() {
+        instance = null;
+    }
+
+    @Getter
+    private boolean launched;
     @Getter
     private RocketEmitter rocketEmitter;
-    private GameScreen gs;
     private BoomBox boomBox;
     private boolean charged;
     private float time;
     private int amplitude;
+    private ListOfListsJoiner<AbstractAnomaly> anomalyJoiner;
 
-    public RocketLauncher(GameScreen gs) {
-        this.gs = gs;
-        this.rocketEmitter = new RocketEmitter(gs);
+    private RocketLauncher() {
+        this.rocketEmitter = new RocketEmitter();
         this.charged = false;
         this.boomBox = new BoomBox();
+        this.anomalyJoiner = new ListOfListsJoiner<AbstractAnomaly>(
+                CorrosiveAnomalyEmitter.getInstance().getActiveList(),
+                ElectricalAnomalyEmitter.getInstance().getActiveList(),
+                MagneticAnomalyEmitter.getInstance().getActiveList(),
+                RadiationAnomalyEmitter.getInstance().getActiveList()
+        );
     }
 
     public void launch() {
@@ -52,10 +76,10 @@ public class RocketLauncher {
             }
         }
 
-        if (charged && !gs.getPlayer().isTaken() && !Rules.GAME_OVER && BoundCheck.playerOnScreen) {
+        if (charged && !Shuttle.isTaken && !Rules.GAME_OVER && BoundCheck.playerOnScreen) {
             int count = 0;
-            for (int i = 0; i < gs.getAnomalyJoiner().size(); i++) {
-                AbstractAnomaly anomaly = gs.getAnomalyJoiner().get(i);
+            for (int i = 0; i < anomalyJoiner.size(); i++) {
+                AbstractAnomaly anomaly = anomalyJoiner.get(i);
                 if (anomaly.isAtRocketPoint()) {
                     count++;
                     rocketEmitter.createRocket(Shuttle.position, anomaly);
@@ -63,7 +87,7 @@ public class RocketLauncher {
             }
             if (count > 0) {
                 boomBox.playSound(MSConstants.LAUNCH_ROCKETS);
-                gs.getShake().shake(1, 35, 10 + 5 * amplitude);
+                Shake.getInstance().shakeCamera(1, 35, 10 + 5 * amplitude);
             }
             charged = false;
             amplitude = 0;

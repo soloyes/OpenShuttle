@@ -56,6 +56,7 @@ public class GamePreferences {
             setVibrationEnabled(true);
         }
     }
+
     private GamePreferences() {
     }
 

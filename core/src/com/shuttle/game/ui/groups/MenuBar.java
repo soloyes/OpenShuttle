@@ -14,7 +14,6 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
-import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 
@@ -89,7 +88,6 @@ public class MenuBar extends Group {
                 if (!group.isEmptyUserName()) {
                     group.getFile().writeString(group.getUsername().getText(), false);
                     ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
-                    Shuttle.respawn();
                 } else {
                     Actor[] actorArray = getStage().getActors().toArray();
                     for (int i = 0; i < actorArray.length; i++) {
@@ -101,7 +99,6 @@ public class MenuBar extends Group {
                             actorArray[i].setVisible(false);
                         }
                     }
-
                 }
             }
         });

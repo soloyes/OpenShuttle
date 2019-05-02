@@ -40,7 +40,7 @@ public class ParticleEffectBuilder {
         }
     }
 
-    public void buildFuelDestroyFlame(Vector2 position){
+    public void buildFuelDestroyFlame(Vector2 position) {
         for (int j = 0; j < 20; j++) {
             particleEmitter.setup(
                     position.x, position.y,

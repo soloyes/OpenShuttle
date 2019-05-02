@@ -58,7 +58,7 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
     }
 
     protected void drawAtRocketPoint(SpriteBatch batch) {
-        if (atRocketPoint && RocketLauncher.launched) {
+        if (atRocketPoint && RocketLauncher.getInstance().isLaunched()) {
             Color color = batch.getColor();
             batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.AT_ROCKET_POINT_ALPHA);
             batch.draw(atRocketRegion,

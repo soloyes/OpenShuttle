@@ -3,15 +3,21 @@ package com.shuttle.game.labelsticker;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
+import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
+import com.shuttle.game.bot.anomaly.ElectricalAnomalyEmitter;
+import com.shuttle.game.bot.anomaly.MagneticAnomalyEmitter;
+import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.consumable.CrateEmitter;
+import com.shuttle.game.bot.consumable.FuelEmitter;
 import com.shuttle.game.bot.consumable.StorageEmitter;
+import com.shuttle.game.bot.rocket.RocketLauncher;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
-import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.player.navigation.Radar;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Consumer;
@@ -27,11 +33,10 @@ public enum Sticker {
     //Crate
     BOOST {
         @Override
-        public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
+        public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
-                Shuttle player = gs.getPlayer();
                 float d = Rules.PLAYER_BOOST_ENGINE_POWER - Shuttle.velocity.len();
-                player.setShadowsCoordinates();
+                Shuttle.setShadowsCoordinates();
                 Shuttle.velocity.add(
                         d * (float) Math.cos(Math.toRadians(Shuttle.angle)),
                         d * (float) Math.sin(Math.toRadians(Shuttle.angle))
@@ -47,13 +52,13 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(GameScreen gs, AbstractConsumable consumable) {
-            consume(gs, consumable.getPosition(), consumable.isGolden());
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
         }
     },
     REPAIR {
         @Override
-        public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
+        public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
                 standing.changeHP(Rules.CONSUMABLE_REPAIR_ADD);
             }
@@ -67,19 +72,19 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(GameScreen gs, AbstractConsumable consumable) {
-            consume(gs, consumable.getPosition(), consumable.isGolden());
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
         }
     },
     SHIELD {
         @Override
-        public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
+        public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
                 List<AbstractConsumable> list = CrateEmitter.getInstance().getActiveList();
                 for (int i = 0; i < list.size(); i++) {
                     list.get(i).setShielded(true);
                 }
-                list = gs.getFuelEmitter().getActiveList();
+                list = FuelEmitter.getInstance().getActiveList();
                 for (int i = 0; i < list.size(); i++) {
                     list.get(i).setShielded(true);
                 }
@@ -98,13 +103,13 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(GameScreen gs, AbstractConsumable consumable) {
-            consume(gs, consumable.getPosition(), consumable.isGolden());
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
         }
     },
     TRASH {
         @Override
-        public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
+        public void consume(Vector2 position, boolean isGolden) {
             int score = Rules.CONSUMABLE_TRASH_BASE_SCORE *
                     ((isGolden) ?
                             Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_FACTOR * MathUtils.random(
@@ -125,15 +130,15 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(GameScreen gs, AbstractConsumable consumable) {
-            consume(gs, consumable.getPosition(), consumable.isGolden());
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
         }
     },
     SPLASH {
         @Override
-        public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
+        public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
-                List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
+                List<AbstractAnomaly> anomalies = CorrosiveAnomalyEmitter.getInstance().getActiveList();
                 for (int i = 0; i < anomalies.size(); i++) {
                     if (boundCheck.checkAndHandleBoundsInCamera(anomalies.get(i))) {
                         if (!anomalies.get(i).isTaken()) {
@@ -154,13 +159,13 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(GameScreen gs, AbstractConsumable consumable) {
-            consume(gs, consumable.getPosition(), consumable.isGolden());
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
         }
     },
     SCAN {
         @Override
-        public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
+        public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
                 List<AbstractConsumable> list = CrateEmitter.getInstance().getActiveList();
                 for (int i = 0; i < list.size(); i++) {
@@ -185,33 +190,33 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(GameScreen gs, AbstractConsumable consumable) {
-            consume(gs, consumable.getPosition(), consumable.isGolden());
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
         }
     },
     //Storage
     LASER {
         @Override
-        public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
+        public void consume(Vector2 position, boolean isGolden) {
             GameInfoSystem.setup(
                     position.x, position.y,
                     "[GREEN]" + GameInfoSystem.Preset.LASER + "[]",
                     7.0f,
                     true
             );
-            gs.getPlayer().setLaser(true);
+            Shuttle.isLaser = true;
             Standing.getInstance().setLaserChargeLevel(Standing.getInstance().getMaxLaserChargeLevel());
             boomBox.playSound(MSConstants.GET_LASER);
         }
 
         @Override
-        public void consume(GameScreen gs, AbstractConsumable consumable) {
-            consume(gs, consumable.getPosition(), consumable.isGolden());
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
         }
     },
     RADAR {
         @Override
-        public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
+        public void consume(Vector2 position, boolean isGolden) {
             GameInfoSystem.setup(
                     position.x, position.y,
                     "[GREEN]" + GameInfoSystem.Preset.RADAR + "[]",
@@ -219,19 +224,19 @@ public enum Sticker {
                     true
             );
             boomBox.playSound(MSConstants.GET_RADAR);
-            gs.getPlayer().getRadar().setActive(true);
+            Radar.isActive = true;
         }
 
         @Override
-        public void consume(GameScreen gs, AbstractConsumable consumable) {
-            consume(gs, consumable.getPosition(), consumable.isGolden());
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
         }
     },
     ROCKETS {
         @Override
-        public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
+        public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
-                gs.getRocketLauncher().launch();
+                RocketLauncher.getInstance().launch();
             }
             GameInfoSystem.setup(
                     position.x, position.y,
@@ -243,14 +248,14 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(GameScreen gs, AbstractConsumable consumable) {
-            consume(gs, consumable.getPosition(), consumable.isGolden());
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
         }
     },
     //Fuel
     FUEL {
         @Override
-        public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
+        public void consume(Vector2 position, boolean isGolden) {
             float fuel;
             if (isGolden) {
                 fuel = Standing.getInstance().getMaxFuel();
@@ -272,62 +277,62 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(GameScreen gs, AbstractConsumable consumable) {
-            consume(gs, consumable.getPosition(), consumable.isGolden());
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
         }
     },
     FUEL_UI {
         @Override
-        public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
+        public void consume(Vector2 position, boolean isGolden) {
 
         }
 
         @Override
-        public void consume(GameScreen gs, AbstractConsumable consumable) {
-            consume(gs, consumable.getPosition(), consumable.isGolden());
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
         }
     },
     //Surprise
     PATTERN {
         @Override
-        public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
+        public void consume(Vector2 position, boolean isGolden) {
         }
 
         @Override
-        public void consume(GameScreen gs, AbstractConsumable consumable) {
-            consume(gs, consumable.getPosition(), consumable.isGolden());
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
         }
     },
     PATTERN_GOLD {
         @Override
-        public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
+        public void consume(Vector2 position, boolean isGolden) {
         }
 
         @Override
-        public void consume(GameScreen gs, AbstractConsumable consumable) {
-            consume(gs, consumable.getPosition(), consumable.isGolden());
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
         }
     },
     SHABBY {
         @Override
-        public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
+        public void consume(Vector2 position, boolean isGolden) {
 
         }
 
         @Override
-        public void consume(GameScreen gs, AbstractConsumable consumable) {
-            Sticker.consumeShabby(gs, consumable);
+        public void consume(AbstractConsumable consumable) {
+            Sticker.consumeShabby(consumable);
         }
     },
     SHABBY_GOLD {
         @Override
-        public void consume(GameScreen gs, Vector2 position, boolean isGolden) {
+        public void consume(Vector2 position, boolean isGolden) {
 
         }
 
         @Override
-        public void consume(GameScreen gs, AbstractConsumable consumable) {
-            Sticker.consumeShabby(gs, consumable);
+        public void consume(AbstractConsumable consumable) {
+            Sticker.consumeShabby(consumable);
         }
     };
     public static List<Sticker> SELECTABLE = Arrays.asList(BOOST, REPAIR, SHIELD, SPLASH, SCAN, ROCKETS);
@@ -340,47 +345,47 @@ public enum Sticker {
         standing = Standing.getInstance();
     }
 
-    public abstract void consume(GameScreen gs, Vector2 position, boolean isGolden);
+    public abstract void consume(Vector2 position, boolean isGolden);
 
-    public abstract void consume(GameScreen gs, AbstractConsumable consumable);
+    public abstract void consume(AbstractConsumable consumable);
 
-    private static void consumeShabby(GameScreen gs, AbstractConsumable consumable) {
+    private static void consumeShabby(AbstractConsumable consumable) {
         int r = MathUtils.random(0, 1);
         switch (consumable.getType()) {
             case CRATE:
                 if (consumable.isGolden()) {
                     if (r == 0) {
-                        getPositive(gs, consumable, 1);
+                        getPositive(consumable, 1);
                     } else {
-                        getNegative(gs, consumable, 1);
+                        getNegative(consumable, 1);
                     }
                 } else {
                     if (r == 0) {
-                        getPositive(gs, consumable, 0);
+                        getPositive(consumable, 0);
                     } else {
-                        getNegative(gs, consumable, 0);
+                        getNegative(consumable, 0);
                     }
                 }
                 break;
             case STORAGE:
                 if (consumable.isGolden()) {
                     if (r == 0) {
-                        getPositive(gs, consumable, 3);
+                        getPositive(consumable, 3);
                     } else {
-                        getNegative(gs, consumable, 3);
+                        getNegative(consumable, 3);
                     }
                 } else {
                     if (r == 0) {
-                        getPositive(gs, consumable, 2);
+                        getPositive(consumable, 2);
                     } else {
-                        getNegative(gs, consumable, 2);
+                        getNegative(consumable, 2);
                     }
                 }
                 break;
         }
     }
 
-    public static void getPositive(GameScreen gs, AbstractConsumable consumable, int level) {
+    public static void getPositive(AbstractConsumable consumable, int level) {
         // 0 - Kill related level corrosive anomaly
         // 1 - Add score
         // 2 - Add manual activated loot, or generate Crate/Storage
@@ -389,7 +394,7 @@ public enum Sticker {
         int score;
         switch (r) {
             case 0:
-                List<AbstractAnomaly> anomalies = gs.getCorrosiveAnomalyEmitter().getActiveList();
+                List<AbstractAnomaly> anomalies = CorrosiveAnomalyEmitter.getInstance().getActiveList();
                 for (int i = 0; i < anomalies.size(); i++) {
                     AbstractAnomaly anomaly = anomalies.get(i);
                     if (anomaly.getLevel() == level && !anomaly.isTaken()) {
@@ -418,7 +423,7 @@ public enum Sticker {
                 if (consumable.isGolden()) {
                     for (int i = 0; i < Sticker.SELECTABLE.size(); i++) {
                         for (int j = 0; j < Rules.SELECTOR_SHABBY_BASE_BONUS; j++) {
-                            Consumer.consume(gs, Sticker.SELECTABLE.get(i), consumable);
+                            Consumer.consume(Sticker.SELECTABLE.get(i), consumable);
                         }
                     }
                     GameInfoSystem.setup(
@@ -471,10 +476,10 @@ public enum Sticker {
                         case CRATE:
                             List<AbstractAnomaly> list;
                             if (MathUtils.random(0, 1) == 0) {
-                                list = gs.getMagneticAnomalyEmitter().getActiveList();
+                                list = MagneticAnomalyEmitter.getInstance().getActiveList();
                                 score = Rules.ANOMALIES_MAGNETIC_BONUS_SCORE;
                             } else {
-                                list = gs.getRadiationAnomalyEmitter().getActiveList();
+                                list = RadiationAnomalyEmitter.getInstance().getActiveList();
                                 score = Rules.ANOMALIES_RADIATION_BONUS_SCORE;
                             }
                             for (int i = 0; i < list.size(); i++) {
@@ -492,8 +497,8 @@ public enum Sticker {
                             break;
                         case STORAGE:
                             score = Rules.ANOMALIES_MAGNETIC_BONUS_SCORE;
-                            for (int i = 0; i < gs.getMagneticAnomalyEmitter().getActiveList().size(); i++) {
-                                AbstractAnomaly anomaly = gs.getMagneticAnomalyEmitter().getActiveList().get(i);
+                            for (int i = 0; i < MagneticAnomalyEmitter.getInstance().getActiveList().size(); i++) {
+                                AbstractAnomaly anomaly = MagneticAnomalyEmitter.getInstance().getActiveList().get(i);
                                 if (!anomaly.isTaken()) {
                                     anomaly.destroyWithEffect();
                                     GameInfoSystem.setup(
@@ -505,8 +510,8 @@ public enum Sticker {
                                 }
                             }
                             score = Rules.ANOMALIES_RADIATION_BONUS_SCORE;
-                            for (int i = 0; i < gs.getRadiationAnomalyEmitter().getActiveList().size(); i++) {
-                                AbstractAnomaly anomaly = gs.getRadiationAnomalyEmitter().getActiveList().get(i);
+                            for (int i = 0; i <RadiationAnomalyEmitter.getInstance().getActiveList().size(); i++) {
+                                AbstractAnomaly anomaly = RadiationAnomalyEmitter.getInstance().getActiveList().get(i);
                                 if (!anomaly.isTaken()) {
                                     anomaly.destroyWithEffect();
                                     GameInfoSystem.setup(
@@ -530,7 +535,7 @@ public enum Sticker {
         }
     }
 
-    public static void getNegative(GameScreen gs, AbstractConsumable consumable, int level) {
+    public static void getNegative(AbstractConsumable consumable, int level) {
         // 0 - Add related level corrosive anomaly
         // 1 - Del score
         // 2 - Disable Laser/Radar, or del Crate/Storage
@@ -539,9 +544,9 @@ public enum Sticker {
         int score;
         switch (r) {
             case 0:
-                gs.getCorrosiveAnomalyEmitter().createBonusAnomaly(consumable.getPosition(), level);
+                CorrosiveAnomalyEmitter.getInstance().createBonusAnomaly(consumable.getPosition(), level);
                 for (int i = 0; i < (4 - level) * Rules.ANOMALY_GENERATE_BASE_BONUS; i++) {
-                    gs.getCorrosiveAnomalyEmitter().createBonusAnomaly(level);
+                    CorrosiveAnomalyEmitter.getInstance().createBonusAnomaly(level);
                 }
                 GameInfoSystem.setup(
                         consumable.getPosition().x, consumable.getPosition().y,
@@ -564,7 +569,7 @@ public enum Sticker {
                 switch (consumable.getType()) {
                     case CRATE:
                         if (consumable.isGolden()) {
-                            gs.getPlayer().getRadar().setActive(false);
+                            Radar.isActive = false;
                             GameInfoSystem.setup(
                                     consumable.getPosition().x, consumable.getPosition().y,
                                     "-[RED]" + GameInfoSystem.Preset.RADAR + "[]",
@@ -572,7 +577,7 @@ public enum Sticker {
                                     true
                             );
                         } else {
-                            gs.getPlayer().setLaser(false);
+                            Shuttle.isLaser = false;
                             GameInfoSystem.setup(
                                     consumable.getPosition().x, consumable.getPosition().y,
                                     "-[RED]" + GameInfoSystem.Preset.LASER + "[]",
@@ -640,12 +645,12 @@ public enum Sticker {
                         break;
                     case STORAGE:
                         if (consumable.isGolden()) {
-                            gs.getElectricalAnomalyEmitter().createBonusAnomaly(consumable.getPosition());
+                            ElectricalAnomalyEmitter.getInstance().createBonusAnomaly(consumable.getPosition());
                         } else {
                             if (MathUtils.random(0, 1) == 0) {
-                                gs.getMagneticAnomalyEmitter().createBonusAnomaly(consumable.getPosition());
+                                ElectricalAnomalyEmitter.getInstance().createBonusAnomaly(consumable.getPosition());
                             } else {
-                                gs.getRadiationAnomalyEmitter().createBonusAnomaly(consumable.getPosition());
+                                ElectricalAnomalyEmitter.getInstance().createBonusAnomaly(consumable.getPosition());
                             }
                         }
                         GameInfoSystem.setup(

@@ -10,7 +10,6 @@ import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Shake;
 import com.shuttle.game.effects.Vibrator;
-import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
@@ -75,7 +74,6 @@ public final class Standing {
     //Score to lives with formula scoreToLive*n*(28 - level)
     private int n;
     private BoomBox boomBox;
-    private Shake shake;
     //Type, level, score
     private Map<AbstractPoolable.Type, Map<Integer, Integer>> statistics;
 
@@ -85,8 +83,12 @@ public final class Standing {
         this.results = new Results();
         this.n = 1;
         this.statistics = new HashMap<AbstractPoolable.Type, Map<Integer, Integer>>();
-        this.shake = new Shake();
         this.astronauts = new HashMap<Astronaut.Profession, Integer>();
+    }
+
+    public void doRestart() {
+        statistics.clear();
+        Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel();
     }
 
     public void addToStatistics(AbstractPoolable.Type type, Integer level) {
@@ -190,7 +192,7 @@ public final class Standing {
             ramPower = 0.0f;
             changeLives(-1);
             if (lives != 0) {
-                shake.shake(1, 35, 50);
+                Shake.getInstance().shakeCamera(1, 35, 50);
                 fuel = maxFuel;
                 if (!Rules.GAME_OVER) {
                     Vibrator.vibrate(VConstants.PLAYER_LOST_LIVE);
@@ -211,6 +213,7 @@ public final class Standing {
             Rules.GAME_OVER = true;
             writeResult();
         } else {
+            Shuttle.respawn();
             GameInfoSystem.setup(
                     Shuttle.position.x,
                     Shuttle.position.y,
@@ -219,7 +222,6 @@ public final class Standing {
                     true
             );
         }
-        Shuttle.respawn();
     }
 
     public void writeResult() {
@@ -237,7 +239,6 @@ public final class Standing {
     }
 
     public void update(float dt) {
-        shake.update(dt, ScreenManager.getInstance().getCamera());
         lifeShieldTicTac(dt);
         scoreTicTac(dt);
     }

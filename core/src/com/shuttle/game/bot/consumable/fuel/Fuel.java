@@ -14,7 +14,7 @@ import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.labelsticker.Label;
 import com.shuttle.game.labelsticker.Sticker;
-import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.player.Standing;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Consumer;
 
@@ -39,7 +39,7 @@ public class Fuel extends AbstractConsumable {
     }
 
     @Override
-    public void badEffect(GameScreen gs) {
+    public void badEffect() {
         GameInfoSystem.setup(
                 position.x,
                 position.y,
@@ -48,13 +48,13 @@ public class Fuel extends AbstractConsumable {
                 false
         );
         boomBox.playSound(MSConstants.DESTROY_FUEL);
-        gs.getPlayer().takeDamage(Rules.CONSUMABLE_FUEL_HP_DAMAGE);
+        Standing.getInstance().takeDamage(Rules.CONSUMABLE_FUEL_HP_DAMAGE);
         Vibrator.vibrate(VConstants.PLAYER_FUEL_DESTROY);
     }
 
     @Override
-    public void consumed(GameScreen gs) {
-        Consumer.consume(gs, labels.get(Label.Layer.LABEL).get(0).getSticker(), this);
+    public void consumed() {
+        Consumer.consume(labels.get(Label.Layer.LABEL).get(0).getSticker(), this);
     }
 
     @Override

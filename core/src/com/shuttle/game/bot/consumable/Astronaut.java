@@ -10,7 +10,6 @@ import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.MoveProcessor;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.player.Standing;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
@@ -36,7 +35,7 @@ public class Astronaut extends AbstractConsumable {
     }
 
     @Override
-    public void badEffect(GameScreen gs) {
+    public void badEffect() {
         Standing standing = Standing.getInstance();
         standing.changeScore(-Rules.CONSUMABLE_MURDER_SCORE_DECREASE);
         GameInfoSystem.setup(
@@ -51,10 +50,10 @@ public class Astronaut extends AbstractConsumable {
     }
 
     @Override
-    public void consumed(GameScreen gs) {
+    public void consumed() {
         int score = Rules.CONSUMABLE_ASTRONAUT_BASE_SCORE_ADD +
                 multiplier * Rules.CONSUMABLE_ASTRONAUT_RANGE_SCORE_ADD +
-                gs.getPlayer().getShieldLevel().getLevel() * Rules.CONSUMABLE_ASTRONAUT_BONUS_SCORE_ADD;
+                (int) Standing.getInstance().getRamPower() * Rules.CONSUMABLE_ASTRONAUT_BONUS_SCORE_ADD;
         Standing.getInstance().changeScore(score);
         GameInfoSystem.setup(
                 position.x,

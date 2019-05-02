@@ -24,7 +24,6 @@ public class Scan {
     private float time;
     private float frequency;
     private float scaleFactor;
-    private Shake shake;
     private Vector2 position;
 
     public Scan(AbstractConsumable consumable) {
@@ -40,8 +39,8 @@ public class Scan {
                 this.scaleFactor = 0.5f;
                 break;
         }
-        this.shake = new Shake();
         this.position = new Vector2();
+        Shake.getInstance().subscribe(position);
     }
 
     public void render(SpriteBatch batch) {
@@ -77,12 +76,8 @@ public class Scan {
                 maxA = 0.0f;
             }
             color.a = oscillatorA.oscillate(color.a, frequency, minA, maxA, dt);
-            if (shake.getShakeDuration() <= 0.0f) {
-                shake.shake(1, 30, 20);
-            }
         }
         position.x = consumable.getPosition().x - consumable.getWidth() / 2;
         position.y = consumable.getPosition().y - consumable.getHeight() / 2;
-        shake.update(dt, position);
     }
 }

@@ -51,7 +51,7 @@ public class Ray {
     }
 
     public void harvest(Shuttle player, AbstractPoolable poolable, float dt) {
-        if (!player.isTaken()) {
+        if (!Shuttle.isTaken) {
             if (Shuttle.position.dst(poolable.getPosition()) <= takeRange) {
                 poolable.setAtRayPoint(true);
                 tmp1V2.set(
@@ -113,7 +113,7 @@ public class Ray {
 
     public void laser(Shuttle player, AbstractAsteroid asteroid, float dt) {
         float dst = Shuttle.position.dst(asteroid.getPosition());
-        if (dst <= Rules.PLAYER_LASER_TAKE_RANGE && !player.isTaken() && !asteroid.isTaken() && asteroid.isActive()) {
+        if (dst <= Rules.PLAYER_LASER_TAKE_RANGE && !Shuttle.isTaken && !asteroid.isTaken() && asteroid.isActive()) {
             asteroid.setAtRayPoint(true);
             boomBox.playMusicEffectInLoop(MSConstants.LASER, 1.0f);
             float scaleX = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleX();
@@ -149,7 +149,7 @@ public class Ray {
                 Standing.getInstance().changeLaserChargeLevel(-1);
                 if (Standing.getInstance().getLaserChargeLevel() <= 1) {
                     boomBox.stopMusicEffect(MSConstants.LASER);
-                    player.setLaser(false);
+                    Shuttle.isLaser = false;
                     Standing.getInstance().setLaserChargeLevel(0);
                 }
             }

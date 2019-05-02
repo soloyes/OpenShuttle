@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.ui.groups.leftright.SwitchGroup;
 import com.shuttle.game.utils.Assets;
 
 import java.util.ArrayList;
@@ -23,10 +23,8 @@ public class UIBonusPanel {
     private Color color;
     private float t1, t2, t3;
     private float x;
-    private GameScreen gs;
 
-    public UIBonusPanel(GameScreen gs) {
-        this.gs = gs;
+    public UIBonusPanel() {
         this.width = PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_WIDTH;
         this.height = PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_HEIGHT;
         this.bWidth = PaintConstants.BONUS_ICON_WIDTH;
@@ -155,7 +153,7 @@ public class UIBonusPanel {
             }
         }
 
-        if (gs.getSwitchGroup().getRightSwitch().isOn()) {
+        if (SwitchGroup.getInstance().getRightSwitch().isOn()) {
             x -= dt * 360;
         } else {
             x += dt * 360;

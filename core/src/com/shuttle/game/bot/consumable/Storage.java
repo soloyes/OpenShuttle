@@ -13,7 +13,8 @@ import com.shuttle.game.effects.Shield;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.labelsticker.Label;
 import com.shuttle.game.labelsticker.Sticker;
-import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.navigation.Radar;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Consumer;
@@ -44,7 +45,7 @@ public class Storage extends AbstractConsumable {
     }
 
     @Override
-    public void badEffect(GameScreen gs) {
+    public void badEffect() {
         GameInfoSystem.setup(
                 position.x, position.y,
                 GameInfoSystem.Preset.BOOM,
@@ -56,23 +57,23 @@ public class Storage extends AbstractConsumable {
     }
 
     @Override
-    public void consumed(GameScreen gs) {
+    public void consumed() {
         if (danger) {
             switch (dangerLabel.getSticker()) {
                 case PATTERN:
                 case PATTERN_GOLD:
                     for (int i = 0; i <= size.ordinal(); i++) {
-                        Consumer.consume(gs, labels.get(Label.Layer.HIDDEN).get(i).getSticker(), this);
+                        Consumer.consume(labels.get(Label.Layer.HIDDEN).get(i).getSticker(), this);
                     }
                     break;
                 case SHABBY:
                 case SHABBY_GOLD:
-                    Consumer.consume(gs, dangerLabel.getSticker(), this);
+                    Consumer.consume(dangerLabel.getSticker(), this);
                     break;
             }
         } else {
             for (int i = 0; i <= size.ordinal(); i++) {
-                Consumer.consume(gs, labels.get(Label.Layer.LABEL).get(i).getSticker(), this);
+                Consumer.consume(labels.get(Label.Layer.LABEL).get(i).getSticker(), this);
             }
         }
     }
@@ -211,11 +212,10 @@ public class Storage extends AbstractConsumable {
                     }
                 }
 
-                //todo: NPE => Player to singleton
-                if (r == 0 && (gs.getPlayer().getRadar().isActive() || radar)) {
+                if (r == 0 && (Radar.isActive || radar)) {
                     r += MathUtils.random(1, 3);
                 }
-                if (r == 1 && (gs.getPlayer().isLaser() || laser)) {
+                if (r == 1 && (Shuttle.isLaser || laser)) {
                     r += MathUtils.random(1, 2);
                 }
 

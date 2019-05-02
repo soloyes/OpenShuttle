@@ -18,7 +18,6 @@ public class Substrate {
         this.height = PaintConstants.FUEL_BACK_HEIGHT;
     }
 
-
     public void render(SpriteBatch batch) {
         Color tmpColor = batch.getColor();
         batch.setColor(fuel.getColor());

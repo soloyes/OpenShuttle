@@ -6,19 +6,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.labelsticker.Sticker;
-import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.ui.groups.leftright.SwitchGroup;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.StickerToTexture;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class UILatestPanel {
-    @Getter
-    @Setter
+    public static UILatestPanel instance;
     protected Color color;
     private ArrayList<LabelTime> activeLabel;
     private ArrayList<LabelTime> showLabel;
@@ -33,10 +29,15 @@ public class UILatestPanel {
     private int maxShowed;
     private StickerToTexture stickerToTexture;
     private float x;
-    private GameScreen gs;
 
-    public UILatestPanel(GameScreen gs) {
-        this.gs = gs;
+    public static UILatestPanel getInstance() {
+        if (instance == null) {
+            instance = new UILatestPanel();
+        }
+        return instance;
+    }
+
+    private UILatestPanel() {
         this.activeLabel = new ArrayList<LabelTime>();
         this.freeLabel = new ArrayList<LabelTime>();
         this.showLabel = new ArrayList<LabelTime>();
@@ -202,7 +203,7 @@ public class UILatestPanel {
             startPoint = Rules.WORLD_HEIGHT / 2 + height * (showLabel.size() - 1) / 2;
         }
 
-        if (gs.getSwitchGroup().getLeftSwitch().isOn()) {
+        if (SwitchGroup.getInstance().getLeftSwitch().isOn()) {
             x += dt * 360;
         } else {
             x -= dt * 360;

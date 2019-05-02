@@ -32,13 +32,11 @@ public class GameOver {
     private Label titleLabel;
     private Label resultLabel;
     private ArrayList<AbstractPoolable> poolable;
-    private GameScreen gs;
     private GlyphLayout glyphLayout;
     private BitmapFont font96;
     private float picX, picY = 1700.0f, dY = 100.0f;
 
-    public GameOver(GameScreen gs) {
-        this.gs = gs;
+    public GameOver() {
         this.glyphLayout = new GlyphLayout();
         Label.LabelStyle style96 = new Label.LabelStyle(
                 Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class),
@@ -75,19 +73,19 @@ public class GameOver {
 
         for (int i = 0; i < classes.size(); i++) {
             if (classes.get(i) == Storage.class || classes.get(i) == Fuel.class) {
-                init(gs, classes.get(i), 0.7f, 0.7f);
+                init(classes.get(i), 0.7f, 0.7f);
             } else if (classes.get(i) == CorrosiveAnomaly.class) {
                 for (int j = 0; j < 4; j++) {
-                    init(gs, classes.get(i), 1.0f + levels[j] * 0.15f, 1.0f + levels[j] * 0.15f);
+                    init(classes.get(i), 1.0f + levels[j] * 0.15f, 1.0f + levels[j] * 0.15f);
                     poolable.get(j).setLevel(j);
                 }
             } else {
-                init(gs, classes.get(i), 1.0f, 1.0f);
+                init(classes.get(i), 1.0f, 1.0f);
             }
         }
     }
 
-    private void init(GameScreen gs, Class<? extends AbstractPoolable> abstractPoolableClass, float scaleX, float scaleY) {
+    private void init(Class<? extends AbstractPoolable> abstractPoolableClass, float scaleX, float scaleY) {
         AbstractPoolable abstractPoolable;
         try {
             Constructor constructor = abstractPoolableClass.getConstructor();

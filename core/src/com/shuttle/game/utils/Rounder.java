@@ -16,8 +16,7 @@ public class Rounder {
         if (n < 0) {
             sign = false;
             n = -n;
-        }
-        else if (n <= 999) {
+        } else if (n <= 999) {
             return stringBuilder.append(n);
         }
 

@@ -34,7 +34,7 @@ public class ParticleEmitter extends ObjectPool<ParticleEmitter.Particle> {
     }
 
     @Override
-    public void clear() {
+    public void doRestart() {
         instance = null;
     }
 

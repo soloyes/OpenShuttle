@@ -13,7 +13,6 @@ import com.shuttle.game.effects.Shield;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.labelsticker.Label;
 import com.shuttle.game.labelsticker.Sticker;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Consumer;
@@ -32,7 +31,7 @@ public class Crate extends AbstractConsumable {
     }
 
     @Override
-    public void badEffect(GameScreen gs) {
+    public void badEffect() {
         GameInfoSystem.setup(
                 position.x,
                 position.y,
@@ -45,20 +44,20 @@ public class Crate extends AbstractConsumable {
     }
 
     @Override
-    public void consumed(GameScreen gs) {
+    public void consumed() {
         if (danger) {
             switch (labels.get(Label.Layer.LABEL).get(0).getSticker()) {
                 case PATTERN:
                 case PATTERN_GOLD:
-                    Consumer.consume(gs, labels.get(Label.Layer.HIDDEN).get(0).getSticker(), this);
+                    Consumer.consume(labels.get(Label.Layer.HIDDEN).get(0).getSticker(), this);
                     break;
                 case SHABBY:
                 case SHABBY_GOLD:
-                    Consumer.consume(gs, labels.get(Label.Layer.HIDDEN).get(0).getSticker(), this);
+                    Consumer.consume(labels.get(Label.Layer.HIDDEN).get(0).getSticker(), this);
                     break;
             }
         } else {
-            Consumer.consume(gs, labels.get(Label.Layer.LABEL).get(0).getSticker(), this);
+            Consumer.consume(labels.get(Label.Layer.LABEL).get(0).getSticker(), this);
         }
     }
 

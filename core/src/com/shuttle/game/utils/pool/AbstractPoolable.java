@@ -10,7 +10,6 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.MoveProcessor;
 import com.shuttle.game.effects.particle.ParticleEmitter;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.BoundCheck;
 
 import lombok.Getter;
@@ -20,8 +19,6 @@ import lombok.Setter;
  * @author Shuttle on 8/26/18.
  */
 public abstract class AbstractPoolable implements Poolable {
-    @Getter
-    protected GameScreen gs;
     protected Vector2 position;
     @Getter
     @Setter

@@ -287,6 +287,8 @@ public final class Rules {
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
                 Standing.getInstance().setPlayingLevel(25);
                 Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 3);
+                Standing.getInstance().setScore(0);
+                Standing.getInstance().setScoreView(0);
             }
         },
         MEDIUM {
@@ -303,6 +305,8 @@ public final class Rules {
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
                 Standing.getInstance().setPlayingLevel(20);
                 Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 8);
+                Standing.getInstance().setScore(0);
+                Standing.getInstance().setScoreView(0);
             }
         },
         HIGH {
@@ -319,6 +323,8 @@ public final class Rules {
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
                 Standing.getInstance().setPlayingLevel(15);
                 Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 13);
+                Standing.getInstance().setScore(0);
+                Standing.getInstance().setScoreView(0);
             }
         },
         EXTREME {
@@ -335,6 +341,8 @@ public final class Rules {
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
                 Standing.getInstance().setPlayingLevel(10);
                 Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 18);
+                Standing.getInstance().setScore(0);
+                Standing.getInstance().setScoreView(0);
             }
         };
 

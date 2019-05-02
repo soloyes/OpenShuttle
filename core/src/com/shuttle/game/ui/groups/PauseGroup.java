@@ -10,19 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
-import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
-import com.shuttle.game.bot.consumable.CrateEmitter;
-import com.shuttle.game.bot.consumable.StorageEmitter;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
-import com.shuttle.game.effects.particle.ParticleEmitter;
-import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.Restart;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +26,7 @@ import lombok.Setter;
  * @author Shuttle on 7/8/18.
  */
 public class PauseGroup extends Group {
+    private static PauseGroup instance;
     private final Button buttonMenu;
     private final Button buttonRestart;
     private final ImageButton playPauseBtn;
@@ -40,7 +36,18 @@ public class PauseGroup extends Group {
     @Setter
     private boolean pause;
 
-    public PauseGroup() {
+    public static PauseGroup getInstance() {
+        if (instance == null) {
+            instance = new PauseGroup();
+        }
+        return instance;
+    }
+
+    public void doRestart() {
+        instance = null;
+    }
+
+    private PauseGroup() {
         this.boomBox = new BoomBox();
         this.pause = false;
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
@@ -82,7 +89,7 @@ public class PauseGroup extends Group {
                 }
                 //
                 ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
-                Rules.GAME_OVER = false;
+                Restart.doRestart();
             }
         });
 
@@ -96,15 +103,7 @@ public class PauseGroup extends Group {
                 }
                 //
                 ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
-                Rules.GAME_OVER = false;
-                Shuttle.respawn();
-                //todo: clear all. Oterwise black. Some registry need to be set  here (ListOfLists?)
-                ParticleEmitter.getInstance().clear();
-                MetalAsteroidEmitter.getInstance().clear();
-                MineralAsteroidEmitter.getInstance().clear();
-                CrateEmitter.getInstance().clear();
-                StorageEmitter.getInstance().clear();
-                //todo: Restart all. How? All buttons, + Score to 0. All shields to 0
+                Restart.doRestart();
             }
         });
 

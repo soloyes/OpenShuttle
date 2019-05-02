@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.effects.BoomBox;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.Joystick;
 import com.shuttle.game.utils.Assets;
@@ -22,12 +21,10 @@ import lombok.Setter;
 public class AbstractShuttle implements InputProcessor {
     public static Vector2 position, velocity;
     public static float angle;
+    public static boolean isTaken;
     protected LinkedList<Integer> pointer;
     protected Joystick joystick;
     protected BoomBox boomBox;
-    @Getter
-    @Setter
-    protected GameScreen gs;
     @Getter
     @Setter
     protected Standing standing;
@@ -38,9 +35,6 @@ public class AbstractShuttle implements InputProcessor {
     protected int width, height;
     @Getter
     @Setter
-    protected boolean taken;
-    @Getter
-    @Setter
     protected float scaleX, scaleY;
     @Getter
     @Setter
@@ -48,6 +42,7 @@ public class AbstractShuttle implements InputProcessor {
     @Getter
     @Setter
     protected int widthBlur, heightBlur;
+
     static {
         position = new Vector2(
                 ScreenManager.getInstance().getViewport().getWorldWidth() / 2,
@@ -55,12 +50,12 @@ public class AbstractShuttle implements InputProcessor {
         );
         velocity = new Vector2();
         angle = 0.0f;
+        isTaken = false;
     }
 
-    protected AbstractShuttle(GameScreen gs) {
+    protected AbstractShuttle() {
         this.pointer = new LinkedList<Integer>();
         this.boomBox = new BoomBox();
-        this.gs = gs;
         this.textureRegion = new TextureRegion[4];
         this.textureRegion[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_REGION);
         TextureRegion[] tmpRegion = Regions.split(
@@ -74,7 +69,6 @@ public class AbstractShuttle implements InputProcessor {
         this.height = PaintConstants.SHUTTLE_HEIGHT;
         this.widthBlur = PaintConstants.SHUTTLE_BLUR_WIDTH;
         this.heightBlur = PaintConstants.SHUTTLE_BLUR_HEIGHT;
-        this.taken = false;
         this.scaleX = this.scaleY = 1.0f;
         this.scaleXBlur = this.scaleYBlur = 1.0f;
     }

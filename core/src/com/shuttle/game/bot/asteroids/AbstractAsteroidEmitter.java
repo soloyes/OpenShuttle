@@ -29,7 +29,7 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     @Setter
     private int asteroidsMaxCount;
     private boolean boom;
-    private  Vector2 tmp1V2;
+    private Vector2 tmp1V2;
     private Vector2 position;
     private Vector2 destination;
     private float size;
@@ -37,13 +37,12 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     private float count;
     private GlobalInteractionLevels range;
 
-    public static Map<AbstractPoolable.Type, AbstractAsteroidEmitter> emitterMap =
-            new HashMap<AbstractPoolable.Type, AbstractAsteroidEmitter>();
+    public static Map<AbstractPoolable.Type, AbstractAsteroidEmitter> emitterMap = new HashMap<AbstractPoolable.Type, AbstractAsteroidEmitter>();
 
     @Override
     protected abstract AbstractAsteroid newObject();
 
-    public AbstractAsteroidEmitter(){
+    public AbstractAsteroidEmitter() {
         this.position = new Vector2();
         this.destination = new Vector2();
         this.tmp1V2 = new Vector2();

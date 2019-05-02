@@ -1,7 +1,6 @@
 package com.shuttle.game.ui.panels;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.ui.panels.info.AnomalyTimer;
 import com.shuttle.game.ui.panels.info.Bars;
 import com.shuttle.game.ui.panels.info.PlayerHP;
@@ -15,13 +14,11 @@ public class UIInfoPanel {
     private PlayerHP playerHP;
     private Bars bars;
     private AnomalyTimer anomalyTimer;
-    private GameScreen gs;
 
-    public UIInfoPanel(GameScreen gs) {
-        this.gs = gs;
+    public UIInfoPanel() {
         this.playerXP = new PlayerXP();
-        this.bars = new Bars(gs);
-        this.anomalyTimer = new AnomalyTimer(gs);
+        this.bars = new Bars();
+        this.anomalyTimer = new AnomalyTimer();
         this.playerHP = new PlayerHP();
     }
 

@@ -29,7 +29,7 @@ public class GameInfoSystem {
     private static void setupElement(float x, float y, String text, float scale, boolean colored) {
         for (int i = 0; i < elements.length; i++) {
             float dy;
-            if (MathUtils.random(0,1) == 0){
+            if (MathUtils.random(0, 1) == 0) {
                 dy = MathUtils.random(-50, -20);
             } else {
                 dy = MathUtils.random(20, 50);

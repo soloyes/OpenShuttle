@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.utils.Assets;
 
 import lombok.Getter;
@@ -24,12 +24,10 @@ public class Switch extends ImageButton {
     private boolean on;
     private float width;
     private float height;
-    private GameScreen gs;
     private boolean paused;
 
-    public Switch(TextureRegionDrawable drawable, GameScreen gs, boolean isLeft) {
+    public Switch(TextureRegionDrawable drawable, boolean isLeft) {
         super(drawable);
-        this.gs = gs;
         this.onRegion = drawable;
         this.offRegion = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.SWITCH_OFF));
         this.width = PaintConstants.SWITCH_WIDTH;
@@ -63,7 +61,7 @@ public class Switch extends ImageButton {
 
     @Override
     public void act(float delta) {
-        paused = gs.getPauseGroup().isPause();
+        paused = PauseGroup.getInstance().isPause();
     }
 
     @Override

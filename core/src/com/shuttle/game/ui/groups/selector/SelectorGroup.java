@@ -14,9 +14,10 @@ import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.labelsticker.Sticker;
-import com.shuttle.game.screens.GameScreen;
+import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Consumer;
+import com.shuttle.game.utils.ShaderManager;
 
 import java.util.LinkedList;
 
@@ -24,7 +25,7 @@ import java.util.LinkedList;
  * @author Shuttle on 3/22/19.
  */
 public class SelectorGroup extends Group {
-    private GameScreen gs;
+    private static SelectorGroup instance;
     private LinkedList<Selector> selectors;
     private Selector leftSelector, centerSelector, rightSelector;
     private ImageButton leftButton, centerButton, rightButton;
@@ -36,8 +37,14 @@ public class SelectorGroup extends Group {
     private int pressedCount;
     private boolean paused;
 
-    public SelectorGroup(final GameScreen gs) {
-        this.gs = gs;
+    public static SelectorGroup getInstance() {
+        if (instance == null) {
+            instance = new SelectorGroup();
+        }
+        return instance;
+    }
+
+    private SelectorGroup() {
         this.selectors = new LinkedList<Selector>();
         this.circleIn = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_IN));
         this.leftButton = new ImageButton(circleIn);
@@ -117,13 +124,13 @@ public class SelectorGroup extends Group {
 
     @Override
     public void act(float delta) {
-        paused = gs.getPauseGroup().isPause();
+        paused = PauseGroup.getInstance().isPause();
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (gs.getPauseGroup().isPause()) {
-            batch.setShader(gs.getShaderPause());
+        if (PauseGroup.getInstance().isPause()) {
+            batch.setShader(ShaderManager.PAUSE.getProgram());
         } else {
             batch.setShader(null);
         }
@@ -225,6 +232,10 @@ public class SelectorGroup extends Group {
         batch.setColor(color);
     }
 
+    public void doRestart() {
+        instance = null;
+    }
+
     public void update(float dt) {
         if (leftButton.isPressed()) {
             leftArrow.setColor(Color.RED);
@@ -279,7 +290,7 @@ public class SelectorGroup extends Group {
 
     public void removeSelector() {
         if (selectors.size() != 0) {
-            Consumer.select(gs, selectors.get(select).getSticker());
+            Consumer.select(selectors.get(select).getSticker());
             selectors.get(select).changeCount(-1);
             if (selectors.get(select).getCount() == 0) {
                 selectors.remove(select);
