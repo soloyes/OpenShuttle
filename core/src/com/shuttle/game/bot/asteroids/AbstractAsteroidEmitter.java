@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 import com.shuttle.game.utils.pool.ObjectPool;
 
@@ -20,7 +19,6 @@ import lombok.Setter;
  * @author Shuttle on 11/26/18.
  */
 public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroid> {
-    protected GameScreen gs;
     private float time;
     @Getter
     @Setter

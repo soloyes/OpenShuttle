@@ -18,6 +18,7 @@ import com.shuttle.game.player.Standing;
 import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.ui.groups.leftright.SwitchGroup;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
+import com.shuttle.game.ui.panels.UILatestPanel;
 
 public class Restart {
     public static void doRestart() {
@@ -37,6 +38,7 @@ public class Restart {
         SelectorGroup.getInstance().doRestart();
         SwitchGroup.getInstance().doRestart();
         PauseGroup.getInstance().doRestart();
+        UILatestPanel.getInstance().doRestart();
         Standing.getInstance().doRestart();
         Shuttle.respawn();
     }

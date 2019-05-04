@@ -3,14 +3,12 @@ package com.shuttle.game.bot.consumable;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.utils.pool.ObjectPool;
 
 import lombok.Getter;
 import lombok.Setter;
 
 public abstract class AbstractConsumableEmitter extends ObjectPool<AbstractConsumable> {
-    protected GameScreen gs;
     private float time;
     @Getter
     @Setter

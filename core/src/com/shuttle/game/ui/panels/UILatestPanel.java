@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UILatestPanel {
-    public static UILatestPanel instance;
+    private static UILatestPanel instance;
     protected Color color;
     private ArrayList<LabelTime> activeLabel;
     private ArrayList<LabelTime> showLabel;
@@ -35,6 +35,10 @@ public class UILatestPanel {
             instance = new UILatestPanel();
         }
         return instance;
+    }
+
+    public void doRestart() {
+        instance = null;
     }
 
     private UILatestPanel() {
