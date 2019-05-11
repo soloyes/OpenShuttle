@@ -91,7 +91,7 @@ public class UILatestPanel {
             batch.setColor(color);
             for (int j = 0; j < circleTexture.length; j++) {
                 batch.draw(circleTexture[j],
-                        x - 10, startPoint - cHeight / 2 - lt.y,
+                        x - 10, startPoint - lt.y,
                         cWidth / 2, cHeight / 2,
                         cWidth, cHeight,
                         lt.scaleX, lt.scaleY,
@@ -100,7 +100,7 @@ public class UILatestPanel {
             }
             batch.setColor(color);
             batch.draw(lt.actTexture,
-                    x, startPoint - height / 2 - lt.y,
+                    x, startPoint - lt.y,
                     width / 2, height / 2,
                     width, height,
                     lt.scaleX, lt.scaleY,
@@ -110,7 +110,7 @@ public class UILatestPanel {
                 color.a = lt.fleshAlpha;
                 batch.setColor(color);
                 batch.draw(lt.actTexture,
-                        x, startPoint - height / 2 - lt.y,
+                        x, startPoint - lt.y,
                         width / 2, height / 2,
                         width, height,
                         lt.scaleX, lt.scaleY,
@@ -129,29 +129,30 @@ public class UILatestPanel {
                 if (temp.time > t1 - t2) {
                     for (int k = 0; k < showLabel.size(); k++) {
                         LabelTime labelTime = showLabel.get(k);
-                        labelTime.y += dt * (1.0f / t2) * height / 2;
+                        labelTime.y += dt * (1.0f / t2) * (height + 22) / 2.0f;
                         labelTime.alpha -= dt * (1.0f / t2) * (1.0f / (float) maxShowed);
-                        if (showLabel.size() < 5)
-                            startPoint += dt * (1.0f / t2) * height / 2;
+                        if (showLabel.size() < maxShowed)
+                            //startPoint += dt * (1.0f / t2) * (height + 22) / 2;
                         if (labelTime.alpha < 0) labelTime.alpha = 0;
                     }
                 } else {
-                    if (showLabel.size() >= 5) {
+                    if (showLabel.size() >= 4) {
                         freeLabel.add(showLabel.remove(0));
                     }
+
                     showLabel.add(temp);
                     needDel.add(i);
                     temp.time = t1;
                     for (int k = 0; k < showLabel.size(); k++) {
                         LabelTime labelTime = showLabel.get(k);
                         labelTime.y = (height + 22) * (showLabel.size() - k - 1);
-                        startPoint = Rules.WORLD_HEIGHT / 2 + height * (showLabel.size() - 1) / 2;
+                        //startPoint = Rules.WORLD_HEIGHT / 2 - (height + 22) * (4 - showLabel.size()) / 2;
                         if (labelTime.alpha > 1.0f - (1.0f / (float) maxShowed) * (showLabel.size() - k - 1))
                             labelTime.alpha = 1.0f - (1.0f / (float) maxShowed) * (showLabel.size() - k - 1);
                     }
                 }
             } else {
-                startPoint = Rules.WORLD_HEIGHT / 2;
+                //startPoint = Rules.WORLD_HEIGHT / 2 - (height + 22) * (4 - showLabel.size()) / 2;
                 showLabel.add(temp);
                 needDel.add(i);
             }
@@ -191,7 +192,8 @@ public class UILatestPanel {
         for (int i = 0; i < showLabel.size(); i++) {
             LabelTime sh = showLabel.get(i);
             if (sh.time < t2) {
-                startPoint -= dt * (1.0f / t2) * height / 2;
+                //startPoint -= dt * (1.0f / t2) * (height + 22) / 2;
+                //sh.y -= dt * (1.0f / t2) * (height + 22) / 2;
                 if (sh.time < 0) {
                     freeLabel.add(sh);
                     needDel.add(i);
@@ -204,7 +206,7 @@ public class UILatestPanel {
                 showLabel.remove((int) needDel.get(i));
                 needDel.remove(i);
             }
-            startPoint = Rules.WORLD_HEIGHT / 2 + height * (showLabel.size() - 1) / 2;
+            //startPoint = Rules.WORLD_HEIGHT / 2  - (height + 22) * (4 - showLabel.size()) / 2;
         }
 
         if (SwitchGroup.getInstance().getLeftSwitch().isOn()) {
