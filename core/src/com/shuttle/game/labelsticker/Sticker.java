@@ -21,6 +21,7 @@ import com.shuttle.game.player.navigation.Radar;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Consumer;
+import com.shuttle.game.utils.pool.AbstractPoolable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.List;
  * @author Shuttle on 3/27/19.
  */
 //todo: gold loot sounds??
+//todo: рефакториг Sticker, и удалить level только в Corrosive (Results повлияет)
 public enum Sticker {
     //Crate
     BOOST {
@@ -339,6 +341,7 @@ public enum Sticker {
     private static BoomBox boomBox;
     private static BoundCheck boundCheck;
     private static Standing standing;
+
     static {
         boomBox = new BoomBox();
         boundCheck = new BoundCheck();
@@ -350,46 +353,19 @@ public enum Sticker {
     public abstract void consume(AbstractConsumable consumable);
 
     private static void consumeShabby(AbstractConsumable consumable) {
-        int r = MathUtils.random(0, 1);
-        switch (consumable.getType()) {
-            case CRATE:
-                if (consumable.isGolden()) {
-                    if (r == 0) {
-                        getPositive(consumable, 1);
-                    } else {
-                        getNegative(consumable, 1);
-                    }
-                } else {
-                    if (r == 0) {
-                        getPositive(consumable, 0);
-                    } else {
-                        getNegative(consumable, 0);
-                    }
-                }
-                break;
-            case STORAGE:
-                if (consumable.isGolden()) {
-                    if (r == 0) {
-                        getPositive(consumable, 3);
-                    } else {
-                        getNegative(consumable, 3);
-                    }
-                } else {
-                    if (r == 0) {
-                        getPositive(consumable, 2);
-                    } else {
-                        getNegative(consumable, 2);
-                    }
-                }
-                break;
+        if (MathUtils.random(0, 1) == 0) {
+            getPositive(consumable);
+        } else {
+            getNegative(consumable);
         }
     }
 
-    public static void getPositive(AbstractConsumable consumable, int level) {
+    private static void getPositive(AbstractConsumable consumable) {
         // 0 - Kill related level corrosive anomaly
         // 1 - Add score
         // 2 - Add manual activated loot, or generate Crate/Storage
         // 3 - Kill Fuel/Radiation anomaly, or add HP/life
+        int level = Integer.parseInt(String.valueOf(consumable.isGolden() ? "1" : "0") + String.valueOf(consumable.getType() == AbstractPoolable.Type.CRATE ? "0" : "1"));
         int r = MathUtils.random(0, 3);
         int score;
         switch (r) {
@@ -510,7 +486,7 @@ public enum Sticker {
                                 }
                             }
                             score = Rules.ANOMALIES_RADIATION_BONUS_SCORE;
-                            for (int i = 0; i <RadiationAnomalyEmitter.getInstance().getActiveList().size(); i++) {
+                            for (int i = 0; i < RadiationAnomalyEmitter.getInstance().getActiveList().size(); i++) {
                                 AbstractAnomaly anomaly = RadiationAnomalyEmitter.getInstance().getActiveList().get(i);
                                 if (!anomaly.isTaken()) {
                                     anomaly.destroyWithEffect();
@@ -535,11 +511,12 @@ public enum Sticker {
         }
     }
 
-    public static void getNegative(AbstractConsumable consumable, int level) {
+    private static void getNegative(AbstractConsumable consumable) {
         // 0 - Add related level corrosive anomaly
         // 1 - Del score
         // 2 - Disable Laser/Radar, or del Crate/Storage
         // 3 - Add Electrical/Corrosive/Radiation anomaly, or del HP/fuel/life
+        int level = Integer.parseInt(String.valueOf(consumable.isGolden() ? "1" : "0") + String.valueOf(consumable.getType() == AbstractPoolable.Type.CRATE ? "0" : "1"));
         int r = MathUtils.random(0, 3);
         int score;
         switch (r) {
@@ -648,9 +625,9 @@ public enum Sticker {
                             ElectricalAnomalyEmitter.getInstance().createBonusAnomaly(consumable.getPosition());
                         } else {
                             if (MathUtils.random(0, 1) == 0) {
-                                ElectricalAnomalyEmitter.getInstance().createBonusAnomaly(consumable.getPosition());
+                                RadiationAnomalyEmitter.getInstance().createBonusAnomaly(consumable.getPosition());
                             } else {
-                                ElectricalAnomalyEmitter.getInstance().createBonusAnomaly(consumable.getPosition());
+                                MagneticAnomalyEmitter.getInstance().createBonusAnomaly(consumable.getPosition());
                             }
                         }
                         GameInfoSystem.setup(

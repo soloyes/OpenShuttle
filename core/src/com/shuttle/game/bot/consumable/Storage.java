@@ -19,7 +19,7 @@ import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Consumer;
 
-//todo: Grey storage with golden label! Need to fix still
+//todo: Grey storage with golden label! Need to fix still, and also shabby shown on left pannel
 
 public class Storage extends AbstractConsumable {
     private Size size;

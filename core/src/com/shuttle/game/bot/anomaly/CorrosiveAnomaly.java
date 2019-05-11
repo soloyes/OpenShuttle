@@ -140,6 +140,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                     showSprayBoom();
                     boomBox.playSound(MSConstants.SPLASH_ANOMALY);
                     Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY);
+                    //todo:: add score here (и сколько добавляется при вызове?)
                     GameInfoSystem.setup(
                             position.x,
                             position.y,
