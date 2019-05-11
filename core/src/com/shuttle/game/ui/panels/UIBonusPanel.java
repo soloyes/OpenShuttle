@@ -17,9 +17,13 @@ public class UIBonusPanel {
     private int width, height, bWidth, bHeight;
     private float startPoint;
     private TextureRegion circleTexture[];
+    private ArrayList<LabelTime> activeLabel;
+    private ArrayList<LabelTime> showLabel;
+    private ArrayList<LabelTime> freeLabel;
+    private ArrayList<Integer> needDel;
     private TextureRegion astronautBonus;
     private TextureRegion[] bonusRegions;
-    private ArrayList<LabelTime> activeLabel;
+    private int maxShowed;
     private Color color;
     private float t1, t2, t3;
     private float x;
@@ -32,6 +36,7 @@ public class UIBonusPanel {
         this.bWidth = PaintConstants.BONUS_ICON_WIDTH;
         this.bHeight = PaintConstants.BONUS_ICON_HEIGHT;
         this.startPoint = Rules.WORLD_HEIGHT / 2;
+        this.maxShowed = PaintConstants.PANEL_ELEMENTS_MAX;
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.circleTexture = new TextureRegion[2];
         this.circleTexture[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_FULL_CIRCLE);
@@ -42,35 +47,35 @@ public class UIBonusPanel {
         this.bonusRegions[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SCIENTIST_BONUS_ICON);
         this.bonusRegions[2] = Assets.getInstance().getAtlas().findRegion(PaintConstants.MECHANIC_BONUS_ICON);
         this.bonusRegions[3] = Assets.getInstance().getAtlas().findRegion(PaintConstants.MILITARY_BONUS_ICON);
+        this.freeLabel = new ArrayList<LabelTime>();
+        this.showLabel = new ArrayList<LabelTime>();
+        this.needDel = new ArrayList<Integer>();
         this.activeLabel = new ArrayList<LabelTime>();
-        for (int i = 0; i < 4; i++) {
-            this.activeLabel.add(new LabelTime());
-        }
         this.t1 = PaintConstants.PANEL_ELEMENT_LIFETIME;
-        //this.t2 = PaintConstants.PANEL_ELEMENT_FLASH_TIME;
-        this.t2 = 0.4f;
-        //this.t3 = PaintConstants.PANEL_ELEMENT_FADING_TIME;
-        this.t3 = 0.6f;
+        this.t2 = PaintConstants.PANEL_ELEMENT_FLASH_TIME;
+        this.t3 = PaintConstants.PANEL_ELEMENT_FADING_TIME;
         this.x = Rules.WORLD_WIDTH;
     }
 
     public void addBonus(int num) {
-        if (activeLabel.get(num - 1).time <= 0) {
-            activeLabel.get(num - 1).time = 10;
-            activeLabel.get(num - 1).active = true;
+
+        if (freeLabel.size() == 0) {
+            freeLabel.add(new LabelTime(num));
         }
+        LabelTime temp = freeLabel.remove(freeLabel.size() - 1);
+        temp.init(num);
+        activeLabel.add(temp);
     }
 
     public void render(SpriteBatch batch) {
         Color tmpColor = batch.getColor();
-
-        for (int i = 0; i < 4; i++) {
-            LabelTime tmp = activeLabel.get(i);
+        for (int i = 0; i < showLabel.size(); i++) {
+            LabelTime tmp = showLabel.get(i);
             color.a = tmp.alpha;
             batch.setColor(color);
             for (int j = 0; j < circleTexture.length; j++) {
                 batch.draw(circleTexture[j],
-                        x, startPoint - (22 + height) * i,
+                        x, startPoint - tmp.y,
                         width / 2, height / 2,
                         width, height,
                         1.0f, 1.0f,
@@ -78,14 +83,14 @@ public class UIBonusPanel {
                 );
             }
             batch.draw(astronautBonus,
-                    x, startPoint - (22 + bHeight) * i,
+                    x, startPoint - tmp.y,
                     bWidth / 2, bHeight / 2,
                     bWidth, bHeight,
                     tmp.scaleX, tmp.scaleY,
                     0.0f
             );
             batch.draw(bonusRegions[i],
-                    x, startPoint - (22 + bHeight) * i,
+                    x, startPoint - tmp.y,
                     bWidth / 2, bHeight / 2,
                     bWidth, bHeight,
                     tmp.scaleX, tmp.scaleY,
@@ -93,18 +98,18 @@ public class UIBonusPanel {
             );
 
 
-            if (tmp.time > t1 - 2.0f * t2 - t3) {
+            if (tmp.time > t1 - t2 - t3) {
                 color.a = tmp.fleshAlpha;
                 batch.setColor(color);
                 batch.draw(astronautBonus,
-                        x, startPoint - (22 + bHeight) * i,
+                        x, startPoint - tmp.y,
                         bWidth / 2, bHeight / 2,
                         bWidth, bHeight,
                         tmp.scaleX, tmp.scaleY,
                         0.0f
                 );
                 batch.draw(bonusRegions[i],
-                        x, startPoint - (22 + bHeight) * i,
+                        x, startPoint - tmp.y,
                         bWidth / 2, bHeight / 2,
                         bWidth, bHeight,
                         tmp.scaleX, tmp.scaleY,
@@ -116,43 +121,91 @@ public class UIBonusPanel {
     }
 
     public void update(float dt) {
-        for (int i = 0; i < 4; i++) {
-            LabelTime tmp = activeLabel.get(i);
+        for (int i = 0; i < activeLabel.size(); i++) {
+            LabelTime temp = activeLabel.get(i);
+            if (showLabel.size() > 0) {
+                temp.time -= dt;
+                if (temp.time > t1 - t2) {
+                    for (int k = 0; k < showLabel.size(); k++) {
+                        LabelTime labelTime = showLabel.get(k);
+                        labelTime.y += dt * (1.0f / t2) * (height + 22) / 2.0f;
+                        labelTime.alpha -= dt * (1.0f / t2) * (1.0f / (float) maxShowed);
+                        if (showLabel.size() < maxShowed)
+                            //startPoint += dt * (1.0f / t2) * (height + 22) / 2;
+                            if (labelTime.alpha < 0) labelTime.alpha = 0;
+                    }
+                } else {
+                    if (showLabel.size() >= 4) {
+                        freeLabel.add(showLabel.remove(0));
+                    }
 
-            if (tmp.active) {
-                if (tmp.time > 0) {
-                    tmp.time -= dt;
+                    showLabel.add(temp);
+                    needDel.add(i);
+                    temp.time = t1;
+                    for (int k = 0; k < showLabel.size(); k++) {
+                        LabelTime labelTime = showLabel.get(k);
+                        labelTime.y = (height + 22) * (showLabel.size() - k - 1);
+                        //startPoint = Rules.WORLD_HEIGHT / 2 - (height + 22) * (4 - showLabel.size()) / 2;
+                        if (labelTime.alpha > 1.0f - (1.0f / (float) maxShowed) * (showLabel.size() - k - 1))
+                            labelTime.alpha = 1.0f - (1.0f / (float) maxShowed) * (showLabel.size() - k - 1);
+                    }
                 }
-                if (10.0f - tmp.time <= t2) {
-                    tmp.x += dt * (1.0f / t2) * (width + 32) * 2.0f;
-                    tmp.alpha += dt * (1.0f / t2) * 2.0f;
-                    if (tmp.alpha > 1) tmp.alpha = 1.0f;
-                }
-                if (10.0f - tmp.time > t2 && 10.0f - tmp.time < t2 + t3) {
-                    tmp.x = (width + 32);
-                }
-                if (tmp.time < t2 && tmp.time > 0) {
-                    tmp.x -= dt * (1.0f / t2) * (width + 32) * 2.0f;
-                    tmp.alpha -= dt * (1.0f / t2) * 2.0f;
-                    if (tmp.alpha < 0) tmp.alpha = 0.0f;
-                }
-                if (tmp.time <= 0) {
-                    tmp.x = 0;
+            } else {
+                //startPoint = Rules.WORLD_HEIGHT / 2 - (height + 22) * (4 - showLabel.size()) / 2;
+                showLabel.add(temp);
+                needDel.add(i);
+            }
+        }
+
+        if (needDel.size() > 0) {
+            for (int i = needDel.size() - 1; i >= 0; i--) {
+                activeLabel.remove((int) needDel.get(i));
+                needDel.remove(i);
+            }
+        }
+
+        for (int i = 0; i < showLabel.size(); i++) {
+            LabelTime sh = showLabel.get(i);
+            sh.time -= dt;
+            if (sh.time > t1 - t2) {
+                sh.fleshAlpha = (t1 - sh.time) / t2;
+                sh.scaleX = sh.scaleY = 1.0f + (t1 - sh.time) / t2 / 10;
+            } else {
+                if (sh.time > t1 - t2 - t3) {
+                    sh.scaleX = sh.scaleY = 1.0f + (sh.time - (t1 - t2 - t3)) / t3 / 10;
+                    sh.fleshAlpha = (sh.time - (t1 - t2 - t3)) / t3;
                 }
             }
         }
-        for (int i = 0; i < activeLabel.size(); i++) {
-            LabelTime sh = activeLabel.get(i);
-            sh.time -= dt;
-            if (sh.time > 10.0f - 2.0f * t2) {
-                sh.fleshAlpha = (10.0f - sh.time) / t2;
-                sh.scaleX = sh.scaleY = 1.0f + (10.0f - sh.time) / (2.0f * t2) / 10;
-            } else {
-                if (sh.time > 10.0f - 2.0f * t2 - t3) {
-                    sh.scaleX = sh.scaleY = 1.0f + (sh.time - (10.0f - 2.0f * t2 - t3)) / t3 / 10.0f;
-                    sh.fleshAlpha = (sh.time - (10.0f - 2.0f * t2 - t3)) / t3;
+
+        for (int i = 0; i < showLabel.size(); i++) {
+            LabelTime labelTime = showLabel.get(i);
+            if (labelTime.time < t2 + t3 && labelTime.time > t2) {
+                labelTime.alpha -= dt * labelTime.alpha / (labelTime.time - t2);
+                if (labelTime.alpha < 0) {
+                    labelTime.alpha = 0;
                 }
             }
+        }
+
+        for (int i = 0; i < showLabel.size(); i++) {
+            LabelTime sh = showLabel.get(i);
+            if (sh.time < t2) {
+                //startPoint -= dt * (1.0f / t2) * (height + 22) / 2;
+                //sh.y -= dt * (1.0f / t2) * (height + 22) / 2;
+                if (sh.time < 0) {
+                    freeLabel.add(sh);
+                    needDel.add(i);
+
+                }
+            }
+        }
+        if (needDel.size() > 0) {
+            for (int i = needDel.size() - 1; i >= 0; i--) {
+                showLabel.remove((int) needDel.get(i));
+                needDel.remove(i);
+            }
+            //startPoint = Rules.WORLD_HEIGHT / 2  - (height + 22) * (4 - showLabel.size()) / 2;
         }
 
         if (gs.getSwitchGroup().getRightSwitch().isOn()) {
@@ -171,19 +224,33 @@ public class UIBonusPanel {
     //todo: separate class
     private class LabelTime {
         float x;
+        float y;
+        int num;
         float alpha;
         float fleshAlpha;
         private boolean active;
         private float time;
         private float scaleX, scaleY;
 
-        public LabelTime() {
+        public LabelTime(int num) {
             this.x = 0.0f;
-            this.alpha = 0.0f;
+            this.y = 0.0f;
+            this.alpha = 1.0f;
             this.active = false;
-            this.time = 0.0f;
+            this.time = t1;
             this.scaleX = this.scaleY = 1.0f;
             this.fleshAlpha = 0.0f;
+            this.num = num;
+        }
+        public void init(int num) {
+            this.x = 0.0f;
+            this.y = 0.0f;
+            this.alpha = 1.0f;
+            this.active = false;
+            this.time = t1;
+            this.scaleX = this.scaleY = 1.0f;
+            this.fleshAlpha = 0.0f;
+            this.num = num;
         }
     }
 }
