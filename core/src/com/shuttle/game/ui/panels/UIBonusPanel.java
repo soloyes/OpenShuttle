@@ -238,19 +238,19 @@ public class UIBonusPanel {
         public LabelTime() {
             this.x = 0.0f;
             this.y = 0.0f;
-            this.alpha = 1.0f;
-            this.time = t1;
             this.scaleX = this.scaleY = 1.0f;
+            this.alpha = 1.0f;
             this.fleshAlpha = 0.0f;
+            this.time = t1;
         }
 
         public void init() {
             this.x = 0.0f;
             this.y = 0.0f;
-            this.alpha = 1.0f;
-            this.time = t1;
             this.scaleX = this.scaleY = 1.0f;
+            this.alpha = 1.0f;
             this.fleshAlpha = 0.0f;
+            this.time = t1;
         }
     }
 }

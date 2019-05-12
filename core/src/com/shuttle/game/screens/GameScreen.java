@@ -395,20 +395,10 @@ public class GameScreen extends BaseScreen {
             }
             if (Shuttle.position.dst(consumable.getPosition()) <= PaintConstants.SHUTTLE_WIDTH / 2) {
                 if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
-                    consumable.destroy();
-                    player.takeEffect(consumable);
-                    if (consumable instanceof Astronaut) {
-                        Astronaut astronaut = (Astronaut) consumable;
-                        if (astronaut.getProfession() != Astronaut.Profession.REGULAR) {
-                            Standing.getInstance().changeAstronauts(astronaut.getProfession());
-                            UIBonusPanel.getInstance().addBonus();
-                        }
-                    }
-                    Standing.getInstance().addToStatistics(consumable.getType(), consumable.getLevel());
+                    consumeConsumable(consumable);
                 } else {
                     if (player.canCatch(consumable)) {
-                        consumable.destroy();
-                        player.takeEffect(consumable);
+                        consumeConsumable(consumable);
                     } else {
                         consumable.destroyWithEffect();
                         if (consumable instanceof Fuel) {
@@ -637,6 +627,19 @@ public class GameScreen extends BaseScreen {
 
         }
         RocketLauncher.getInstance().getRocketEmitter().checkCollision();
+    }
+
+    private void consumeConsumable(AbstractConsumable consumable) {
+        consumable.destroy();
+        player.takeEffect(consumable);
+        if (consumable instanceof Astronaut) {
+            Astronaut astronaut = (Astronaut) consumable;
+            if (astronaut.getProfession() != Astronaut.Profession.REGULAR) {
+                Standing.getInstance().changeAstronauts(astronaut.getProfession());
+                UIBonusPanel.getInstance().addBonus();
+            }
+        }
+        Standing.getInstance().addToStatistics(consumable.getType(), consumable.getLevel());
     }
 
     private void abstractAnomalyDeactivate(List<AbstractAnomaly> anomalies) {

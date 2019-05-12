@@ -72,7 +72,7 @@ public class UILatestPanel {
 
     public void addLabel(Sticker sticker) {
         if (freeLabel.size() == 0) {
-            freeLabel.add(new LabelTime(sticker, 0.0f));
+            freeLabel.add(new LabelTime(sticker));
         }
         LabelTime temp = freeLabel.remove(freeLabel.size() - 1);
         if (sticker == Sticker.FUEL) {
@@ -230,21 +230,21 @@ public class UILatestPanel {
         private float scaleX, scaleY;
         private TextureRegion actTexture;
 
-        public LabelTime(Sticker sticker, float time) {
-            this.actTexture = textureRegions.get(sticker);
-            this.time = time;
+        public LabelTime(Sticker sticker) {
             this.y = 0.0f;
             this.alpha = 1.0f;
-            this.fleshAlpha = 0f;
+            this.fleshAlpha = 0.0f;
+            this.actTexture = textureRegions.get(sticker);
+            this.time = t1;
         }
 
         public void init(Sticker sticker) {
-            this.actTexture = textureRegions.get(sticker);
-            this.time = t1;
             this.y = 0.0f;
-            this.alpha = 1.0f;
-            this.fleshAlpha = 0f;
             this.scaleX = this.scaleY = 1.0f;
+            this.alpha = 1.0f;
+            this.fleshAlpha = 0.0f;
+            this.time = t1;
+            this.actTexture = textureRegions.get(sticker);
         }
     }
 }
