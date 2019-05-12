@@ -106,7 +106,6 @@ public class GameScreen extends BaseScreen {
     private ListOfListsJoiner<AbstractAnomaly> anomalyJoiner;
     @Getter
     private UIInfoPanel uiInfoPanel;
-    private UIBonusPanel uiBonusPanel;
     private Standing standing;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
@@ -140,7 +139,6 @@ public class GameScreen extends BaseScreen {
         blackhole = new Blackhole();
         player = new Shuttle(joystick);
         standing = Standing.getInstance();
-        uiBonusPanel = new UIBonusPanel();
         uiInfoPanel = new UIInfoPanel();
 
         BoundCheck.avoidPosition(Blackhole.position, Shuttle.position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
@@ -273,7 +271,7 @@ public class GameScreen extends BaseScreen {
         //BEGIN
         if (!Rules.GAME_OVER) {
             UILatestPanel.getInstance().render(batch);
-            uiBonusPanel.render(batch);
+            UIBonusPanel.getInstance().render(batch);
             uiInfoPanel.render(batch);
             SelectorGroup.getInstance().render(batch);
         }
@@ -357,7 +355,7 @@ public class GameScreen extends BaseScreen {
             Shake.getInstance().update(dt, camera);
             standing.update(dt);
             SelectorGroup.getInstance().update(dt);
-            uiBonusPanel.update(dt);
+            UIBonusPanel.getInstance().update(dt);
         }
         stage.act();
     }
@@ -403,7 +401,7 @@ public class GameScreen extends BaseScreen {
                         Astronaut astronaut = (Astronaut) consumable;
                         if (astronaut.getProfession() != Astronaut.Profession.REGULAR) {
                             Standing.getInstance().changeAstronauts(astronaut.getProfession());
-                            uiBonusPanel.addBonus(astronaut.getProfession().getIndex());
+                            UIBonusPanel.getInstance().addBonus();
                         }
                     }
                     Standing.getInstance().addToStatistics(consumable.getType(), consumable.getLevel());

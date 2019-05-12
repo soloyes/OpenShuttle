@@ -10,25 +10,34 @@ import com.shuttle.game.utils.Assets;
 
 import java.util.ArrayList;
 
-/**
- * @author Shuttle on 3/1/19.
- */
 public class UIBonusPanel {
+    private static UIBonusPanel instance;
     private int width, height, bWidth, bHeight;
-    private float startPoint;
-    private TextureRegion circleTexture[];
+    private Color color;
     private ArrayList<LabelTime> activeLabel;
     private ArrayList<LabelTime> showLabel;
     private ArrayList<LabelTime> freeLabel;
     private ArrayList<Integer> needDel;
+    private TextureRegion circleTexture[];
     private TextureRegion astronautBonus;
     private TextureRegion[] bonusRegions;
+    private float startPoint;
     private int maxShowed;
-    private Color color;
     private float t1, t2, t3;
     private float x;
 
-    public UIBonusPanel() {
+    public static UIBonusPanel getInstance() {
+        if (instance == null) {
+            instance = new UIBonusPanel();
+        }
+        return instance;
+    }
+
+    public void doRestart() {
+        instance = null;
+    }
+
+    private UIBonusPanel() {
         this.width = PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_WIDTH;
         this.height = PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_HEIGHT;
         this.bWidth = PaintConstants.BONUS_ICON_WIDTH;
@@ -36,31 +45,31 @@ public class UIBonusPanel {
         this.startPoint = Rules.WORLD_HEIGHT / 2;
         this.maxShowed = PaintConstants.PANEL_ELEMENTS_MAX;
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        this.freeLabel = new ArrayList<LabelTime>();
+        this.showLabel = new ArrayList<LabelTime>();
+        this.needDel = new ArrayList<Integer>();
+        this.activeLabel = new ArrayList<LabelTime>();
         this.circleTexture = new TextureRegion[2];
         this.circleTexture[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_FULL_CIRCLE);
         this.circleTexture[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_EMPTY_CIRCLE);
+        this.t1 = PaintConstants.PANEL_ELEMENT_LIFETIME;
+        this.t2 = PaintConstants.PANEL_ELEMENT_FLASH_TIME;
+        this.t3 = PaintConstants.PANEL_ELEMENT_FADING_TIME;
+        this.x = Rules.WORLD_WIDTH;
         this.astronautBonus = Assets.getInstance().getAtlas().findRegion(PaintConstants.ASTRONAUT_BONUS_ICON);
         this.bonusRegions = new TextureRegion[4];
         this.bonusRegions[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.MEDIC_BONUS_ICON);
         this.bonusRegions[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SCIENTIST_BONUS_ICON);
         this.bonusRegions[2] = Assets.getInstance().getAtlas().findRegion(PaintConstants.MECHANIC_BONUS_ICON);
         this.bonusRegions[3] = Assets.getInstance().getAtlas().findRegion(PaintConstants.MILITARY_BONUS_ICON);
-        this.freeLabel = new ArrayList<LabelTime>();
-        this.showLabel = new ArrayList<LabelTime>();
-        this.needDel = new ArrayList<Integer>();
-        this.activeLabel = new ArrayList<LabelTime>();
-        this.t1 = PaintConstants.PANEL_ELEMENT_LIFETIME;
-        this.t2 = PaintConstants.PANEL_ELEMENT_FLASH_TIME;
-        this.t3 = PaintConstants.PANEL_ELEMENT_FADING_TIME;
-        this.x = Rules.WORLD_WIDTH;
     }
 
-    public void addBonus(int num) {
+    public void addBonus() {
         if (freeLabel.size() == 0) {
-            freeLabel.add(new LabelTime(num));
+            freeLabel.add(new LabelTime());
         }
         LabelTime temp = freeLabel.remove(freeLabel.size() - 1);
-        temp.init(num);
+        temp.init();
         activeLabel.add(temp);
     }
 
@@ -220,35 +229,28 @@ public class UIBonusPanel {
 
     //todo: separate class
     private class LabelTime {
-        float x;
-        float y;
-        int num;
+        float x, y;
         float alpha;
         float fleshAlpha;
-        private boolean active;
         private float time;
         private float scaleX, scaleY;
 
-        public LabelTime(int num) {
+        public LabelTime() {
             this.x = 0.0f;
             this.y = 0.0f;
             this.alpha = 1.0f;
-            this.active = false;
             this.time = t1;
             this.scaleX = this.scaleY = 1.0f;
             this.fleshAlpha = 0.0f;
-            this.num = num;
         }
 
-        public void init(int num) {
+        public void init() {
             this.x = 0.0f;
             this.y = 0.0f;
             this.alpha = 1.0f;
-            this.active = false;
             this.time = t1;
             this.scaleX = this.scaleY = 1.0f;
             this.fleshAlpha = 0.0f;
-            this.num = num;
         }
     }
 }

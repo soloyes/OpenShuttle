@@ -15,20 +15,20 @@ import java.util.HashMap;
 
 public class UILatestPanel {
     private static UILatestPanel instance;
-    protected Color color;
+    private int width, height, cWidth, cHeight;
+    private Color color;
     private ArrayList<LabelTime> activeLabel;
     private ArrayList<LabelTime> showLabel;
     private ArrayList<LabelTime> freeLabel;
     private ArrayList<Integer> needDel;
-    private int width, height, cWidth, cHeight;
     private TextureRegion textureRegion;
     private TextureRegion circleTexture[];
-    private HashMap<Sticker, TextureRegion> textureRegions;
-    private float t1, t2, t3;
     private float startPoint;
     private int maxShowed;
-    private StickerToTexture stickerToTexture;
+    private float t1, t2, t3;
     private float x;
+    private HashMap<Sticker, TextureRegion> textureRegions;
+    private StickerToTexture stickerToTexture;
 
     public static UILatestPanel getInstance() {
         if (instance == null) {
@@ -42,33 +42,32 @@ public class UILatestPanel {
     }
 
     private UILatestPanel() {
-        this.activeLabel = new ArrayList<LabelTime>();
-        this.freeLabel = new ArrayList<LabelTime>();
-        this.showLabel = new ArrayList<LabelTime>();
-        this.needDel = new ArrayList<Integer>();
-        this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.width = PaintConstants.PANEL_ELEMENT_WIDTH;
         this.height = PaintConstants.PANEL_ELEMENT_HEIGHT;
         this.cWidth = PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_WIDTH;
         this.cHeight = PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_HEIGHT;
-        this.t1 = PaintConstants.PANEL_ELEMENT_LIFETIME;
-        this.t2 = PaintConstants.PANEL_ELEMENT_FLASH_TIME;
-        this.t3 = PaintConstants.PANEL_ELEMENT_FADING_TIME;
-        this.maxShowed = PaintConstants.PANEL_ELEMENTS_MAX;
         this.startPoint = Rules.WORLD_HEIGHT / 2;
-        this.textureRegion = new TextureRegion();
+        this.maxShowed = PaintConstants.PANEL_ELEMENTS_MAX;
+        this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        this.freeLabel = new ArrayList<LabelTime>();
+        this.showLabel = new ArrayList<LabelTime>();
+        this.needDel = new ArrayList<Integer>();
+        this.activeLabel = new ArrayList<LabelTime>();
         this.circleTexture = new TextureRegion[2];
         this.circleTexture[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_FULL_CIRCLE);
         this.circleTexture[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_EMPTY_CIRCLE);
+        this.t1 = PaintConstants.PANEL_ELEMENT_LIFETIME;
+        this.t2 = PaintConstants.PANEL_ELEMENT_FLASH_TIME;
+        this.t3 = PaintConstants.PANEL_ELEMENT_FADING_TIME;
+        this.x = 0.0f;
+        this.textureRegion = new TextureRegion();
         this.textureRegions = new HashMap<Sticker, TextureRegion>();
         this.stickerToTexture = new StickerToTexture();
-
         for (int i = 0; i < Sticker.values().length; i++) {
             Sticker sticker = Sticker.values()[i];
             textureRegion = stickerToTexture.getRegion(sticker);
             textureRegions.put(sticker, textureRegion);
         }
-        this.x = 0.0f;
     }
 
     public void addLabel(Sticker sticker) {
@@ -222,13 +221,14 @@ public class UILatestPanel {
         }
     }
 
+    //todo: separate class
     private class LabelTime {
-        float y;
+        float x, y;
         float alpha;
         float fleshAlpha;
-        private TextureRegion actTexture;
         private float time;
         private float scaleX, scaleY;
+        private TextureRegion actTexture;
 
         public LabelTime(Sticker sticker, float time) {
             this.actTexture = textureRegions.get(sticker);
