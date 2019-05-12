@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.GameScreen;
 import com.shuttle.game.ui.groups.leftright.SwitchGroup;
 import com.shuttle.game.utils.Assets;
 
@@ -240,6 +239,7 @@ public class UIBonusPanel {
             this.fleshAlpha = 0.0f;
             this.num = num;
         }
+
         public void init(int num) {
             this.x = 0.0f;
             this.y = 0.0f;

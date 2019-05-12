@@ -133,7 +133,7 @@ public class UILatestPanel {
                         labelTime.alpha -= dt * (1.0f / t2) * (1.0f / (float) maxShowed);
                         if (showLabel.size() < maxShowed)
                             //startPoint += dt * (1.0f / t2) * (height + 22) / 2;
-                        if (labelTime.alpha < 0) labelTime.alpha = 0;
+                            if (labelTime.alpha < 0) labelTime.alpha = 0;
                     }
                 } else {
                     if (showLabel.size() >= 4) {
