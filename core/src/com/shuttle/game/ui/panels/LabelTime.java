@@ -36,30 +36,22 @@ public class LabelTime {
     private TextureRegion actTexture;
 
     public LabelTime(TextureRegion textureRegion) {
-        this();
+        this.x = 0.0f;
+        this.y = 0.0f;
+        this.scaleX = this.scaleY = 1.0f;
+        this.alpha = 1.0f;
+        this.fleshAlpha = 0.0f;
+        this.time = PaintConstants.PANEL_ELEMENT_LIFETIME;
         this.actTexture = textureRegion;
     }
 
     public void init(TextureRegion textureRegion) {
-        this.init();
+        this.x = 0.0f;
+        this.y = 0.0f;
+        this.scaleX = this.scaleY = 1.0f;
+        this.alpha = 1.0f;
+        this.fleshAlpha = 0.0f;
+        this.time = PaintConstants.PANEL_ELEMENT_LIFETIME;
         this.actTexture = textureRegion;
-    }
-
-    public LabelTime() {
-        this.x = 0.0f;
-        this.y = 0.0f;
-        this.scaleX = this.scaleY = 1.0f;
-        this.alpha = 1.0f;
-        this.fleshAlpha = 0.0f;
-        this.time = PaintConstants.PANEL_ELEMENT_LIFETIME;
-    }
-
-    public void init() {
-        this.x = 0.0f;
-        this.y = 0.0f;
-        this.scaleX = this.scaleY = 1.0f;
-        this.alpha = 1.0f;
-        this.fleshAlpha = 0.0f;
-        this.time = PaintConstants.PANEL_ELEMENT_LIFETIME;
     }
 }
