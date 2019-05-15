@@ -55,9 +55,9 @@ import com.shuttle.game.ui.PlayerPointer;
 import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.ui.groups.leftright.SwitchGroup;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
-import com.shuttle.game.ui.panels.UIBonusPanel;
-import com.shuttle.game.ui.panels.UIInfoPanel;
-import com.shuttle.game.ui.panels.UILatestPanel;
+import com.shuttle.game.ui.panels.UILeftPanel;
+import com.shuttle.game.ui.panels.UIRightPanel;
+import com.shuttle.game.ui.panels.UITopPanel;
 import com.shuttle.game.ui.panels.info.AnomalyTimer;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.ListOfListsJoiner;
@@ -105,7 +105,7 @@ public class GameScreen extends BaseScreen {
     @Getter
     private ListOfListsJoiner<AbstractAnomaly> anomalyJoiner;
     @Getter
-    private UIInfoPanel uiInfoPanel;
+    private UITopPanel uiTopPanel;
     private Standing standing;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
@@ -139,7 +139,7 @@ public class GameScreen extends BaseScreen {
         blackhole = new Blackhole();
         player = new Shuttle(joystick);
         standing = Standing.getInstance();
-        uiInfoPanel = new UIInfoPanel();
+        uiTopPanel = new UITopPanel();
 
         BoundCheck.avoidPosition(Blackhole.position, Shuttle.position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         playerPointer = new PlayerPointer(player);
@@ -270,9 +270,9 @@ public class GameScreen extends BaseScreen {
 
         //BEGIN
         if (!Rules.GAME_OVER) {
-            UILatestPanel.getInstance().render(batch);
-            UIBonusPanel.getInstance().render(batch);
-            uiInfoPanel.render(batch);
+            UILeftPanel.getInstance().render(batch);
+            UIRightPanel.getInstance().render(batch);
+            uiTopPanel.render(batch);
             SelectorGroup.getInstance().render(batch);
         }
 
@@ -323,8 +323,8 @@ public class GameScreen extends BaseScreen {
             StorageEmitter.getInstance().update(dt);
             ParticleEmitter.getInstance().update(dt);
             blackhole.update(dt);
-            UILatestPanel.getInstance().update(dt);
-            uiInfoPanel.update(dt);
+            UILeftPanel.getInstance().update(dt);
+            uiTopPanel.update(dt);
             RocketLauncher.getInstance().update(dt);
             if (!Rules.GAME_OVER) {
                 anomalyTimer.update(dt);
@@ -355,7 +355,7 @@ public class GameScreen extends BaseScreen {
             Shake.getInstance().update(dt, camera);
             standing.update(dt);
             SelectorGroup.getInstance().update(dt);
-            UIBonusPanel.getInstance().update(dt);
+            UIRightPanel.getInstance().update(dt);
         }
         stage.act();
     }
@@ -636,7 +636,7 @@ public class GameScreen extends BaseScreen {
             Astronaut astronaut = (Astronaut) consumable;
             if (astronaut.getProfession() != Astronaut.Profession.REGULAR) {
                 Standing.getInstance().changeAstronauts(astronaut.getProfession());
-                UIBonusPanel.getInstance().addBonus();
+                UIRightPanel.getInstance().add(null);
             }
         }
         Standing.getInstance().addToStatistics(consumable.getType(), consumable.getLevel());
@@ -717,7 +717,7 @@ public class GameScreen extends BaseScreen {
         super.dispose();
         ShaderManager.PAUSE.dispose();
         ShaderManager.BLACKHOLE.dispose();
-        uiInfoPanel.dispose();
+        uiTopPanel.dispose();
         Standing.getInstance().writeResult();
     }
 }

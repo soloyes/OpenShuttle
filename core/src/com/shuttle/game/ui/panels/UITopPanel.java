@@ -9,13 +9,13 @@ import com.shuttle.game.ui.panels.info.PlayerXP;
 /**
  * @author Shuttle on 3/1/19.
  */
-public class UIInfoPanel {
+public class UITopPanel {
     private PlayerXP playerXP;
     private PlayerHP playerHP;
     private Bars bars;
     private AnomalyTimer anomalyTimer;
 
-    public UIInfoPanel() {
+    public UITopPanel() {
         this.playerXP = new PlayerXP();
         this.bars = new Bars();
         this.anomalyTimer = new AnomalyTimer();

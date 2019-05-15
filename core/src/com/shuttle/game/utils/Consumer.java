@@ -4,7 +4,7 @@ import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
-import com.shuttle.game.ui.panels.UILatestPanel;
+import com.shuttle.game.ui.panels.UILeftPanel;
 
 public class Consumer {
     public static void consume(Sticker sticker, AbstractConsumable consumable) {
@@ -14,7 +14,7 @@ public class Consumer {
     }
 
     private static void addToUI(Sticker sticker, AbstractConsumable consumable) {
-        UILatestPanel.getInstance().addLabel(sticker);
+        UILeftPanel.getInstance().add(sticker);
     }
 
     private static void addToSelector(Sticker sticker, AbstractConsumable consumable) {

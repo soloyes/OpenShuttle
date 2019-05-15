@@ -172,8 +172,8 @@ public final class PaintConstants {
     public static final float PANEL_ELEMENT_FLASH_TIME = 0.2f;
     public static final float PANEL_ELEMENT_FADING_TIME = 0.4f;
     public static final int PANEL_ELEMENTS_MAX = 4;
-    public static final int PANEL_ELEMENT_WIDTH = 128;
-    public static final int PANEL_ELEMENT_HEIGHT = 128;
+    public static final int LEFT_RIGHT_PANEL_ELEMENT_WIDTH = 148;
+    public static final int LEFT_RIGHT_PANEL_ELEMENT_HEIGHT = 128;
     public static final String LEFT_RIGHT_PANEL_FULL_CIRCLE = "fullcirclev1";
     public static final String LEFT_RIGHT_PANEL_EMPTY_CIRCLE = "emptycirclev1";
     public static final int LEFT_RIGHT_PANEL_CIRCLE_WIDTH = 148;
@@ -183,8 +183,6 @@ public final class PaintConstants {
     public static final String MILITARY_BONUS_ICON = "militarybonusicon";
     public static final String MEDIC_BONUS_ICON = "medicbonusicon";
     public static final String SCIENTIST_BONUS_ICON = "scientistbonusicon";
-    public static final int BONUS_ICON_WIDTH = 148;
-    public static final int BONUS_ICON_HEIGHT = 128;
     public static final String PLAY_BUTTON = "playbutton";
     public static final String PAUSE_BUTTON = "pausebutton";
     public static final int PLAY_PAUSE_BUTTON_WIDTH = 184;
