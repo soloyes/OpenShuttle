@@ -158,7 +158,7 @@ public class Storage extends AbstractConsumable {
             }
         }
 
-        //Make different labels insight of storage
+        //Make different labels insight of storage. If add new Sticker, please add to the end of enumeration.
         if (size.ordinal() == 1) {
             if (labels.get(Label.Layer.LABEL).get(0).getSticker() == labels.get(Label.Layer.LABEL).get(1).getSticker()) {
                 int r = (labels.get(Label.Layer.LABEL).get(0).getSticker().ordinal() + 1) % 6;

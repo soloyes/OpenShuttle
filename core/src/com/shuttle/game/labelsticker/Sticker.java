@@ -336,8 +336,60 @@ public enum Sticker {
         public void consume(AbstractConsumable consumable) {
             Sticker.consumeShabby(consumable);
         }
+    },
+    //Astronaut
+    REGULAR {
+        @Override
+        public void consume(Vector2 position, boolean isGolden) {
+        }
+
+        @Override
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
+        }
+    }, MECHANIC {
+        @Override
+        public void consume(Vector2 position, boolean isGolden) {
+
+        }
+
+        @Override
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
+        }
+    }, MEDIC {
+        @Override
+        public void consume(Vector2 position, boolean isGolden) {
+
+        }
+
+        @Override
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
+        }
+    }, MILITARY {
+        @Override
+        public void consume(Vector2 position, boolean isGolden) {
+
+        }
+
+        @Override
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
+        }
+    }, SCIENTIST {
+        @Override
+        public void consume(Vector2 position, boolean isGolden) {
+
+        }
+
+        @Override
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
+        }
     };
     public static List<Sticker> SELECTABLE = Arrays.asList(BOOST, REPAIR, SHIELD, SPLASH, SCAN, ROCKETS);
+    public static List<Sticker> ASTRONAUTS = Arrays.asList(REGULAR, MEDIC, MECHANIC, SCIENTIST, MILITARY);
     private static BoomBox boomBox;
     private static BoundCheck boundCheck;
     private static Standing standing;

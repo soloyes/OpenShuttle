@@ -63,6 +63,22 @@ public class StickerToTexture {
             case PATTERN_GOLD:
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_GOLD_LABEL_REGION);
                 break;
+            //todo:// нужна иконка
+            case REGULAR:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.ASTRONAUT_BONUS_ICON);
+                break;
+            case MEDIC:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.MEDIC_BONUS_ICON);
+                break;
+            case MECHANIC:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.MECHANIC_BONUS_ICON);
+                break;
+            case MILITARY:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.MILITARY_BONUS_ICON);
+                break;
+            case SCIENTIST:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.SCIENTIST_BONUS_ICON);
+                break;
         }
         return textureRegion;
     }

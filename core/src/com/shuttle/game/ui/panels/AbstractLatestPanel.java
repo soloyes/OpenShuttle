@@ -6,10 +6,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.labelsticker.Sticker;
+import com.shuttle.game.utils.StickerToTexture;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class AbstractLatestPanel {
+    protected HashMap<Sticker, TextureRegion> textureRegions;
     protected int width, height, cWidth, cHeight;
     protected Color color;
     protected ArrayList<LabelTime> activeLabel;
@@ -22,7 +25,29 @@ public abstract class AbstractLatestPanel {
     protected float t1, t2, t3;
     protected float x;
 
-    public abstract void render(SpriteBatch batch);
+    public void render(SpriteBatch batch) {
+        Color tmpColor = batch.getColor();
+        for (int i = 0; i < showLabel.size(); i++) {
+            LabelTime lt = showLabel.get(i);
+            color.a = lt.getAlpha();
+            batch.setColor(color);
+            for (int j = 0; j < circleTexture.length; j++) {
+                batch.draw(circleTexture[j],
+                        x, startPoint - lt.getY(),
+                        cWidth / 2, cHeight / 2,
+                        cWidth, cHeight,
+                        lt.getScaleX(), lt.getScaleY(),
+                        0.0f
+                );
+            }
+            basicRender(batch, lt);
+            if (lt.getTime() > t1 - t2 - t3) {
+                color.a = lt.getFleshAlpha();
+                basicRender(batch, lt);
+            }
+        }
+        batch.setColor(tmpColor);
+    }
 
     public void update(float dt) {
         for (int i = 0; i < activeLabel.size(); i++) {
@@ -115,7 +140,20 @@ public abstract class AbstractLatestPanel {
         updateEnable(dt);
     }
 
-    public abstract void add(Sticker sticker);
+    public void add(Sticker sticker) {
+        TextureRegion region = textureRegions.get(sticker);
+        if (freeLabel.size() == 0) {
+            freeLabel.add(new LabelTime(region));
+        }
+        LabelTime temp = freeLabel.remove(freeLabel.size() - 1);
+        if (sticker == Sticker.FUEL) {
+            region = textureRegions.get(Sticker.FUEL_UI);
+        }
+        temp.init(region);
+        activeLabel.add(temp);
+    }
+
+    public abstract void basicRender(SpriteBatch batch, LabelTime lt);
 
     public abstract void updateEnable(float dt);
 
@@ -134,5 +172,11 @@ public abstract class AbstractLatestPanel {
         this.t1 = PaintConstants.PANEL_ELEMENT_LIFETIME;
         this.t2 = PaintConstants.PANEL_ELEMENT_FLASH_TIME;
         this.t3 = PaintConstants.PANEL_ELEMENT_FADING_TIME;
+        this.textureRegions = new HashMap<Sticker, TextureRegion>();
+        StickerToTexture stickerToTexture = new StickerToTexture();
+        for (int i = 0; i < Sticker.values().length; i++) {
+            Sticker sticker = Sticker.values()[i];
+            textureRegions.put(sticker, stickerToTexture.getRegion(sticker));
+        }
     }
 }

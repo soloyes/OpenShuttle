@@ -53,8 +53,8 @@ public final class Rules {
     public static final int CONSUMABLE_STORAGE_AT_START = 0;
     //2.0f
     public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 2.0f;
-    //2
-    public static final int CONSUMABLE_STORAGE_MAX_COUNT = 2;
+    //3
+    public static final int CONSUMABLE_STORAGE_MAX_COUNT = 3;
     //2
     public static final int CONSUMABLE_REPAIR_ADD = 2;
     //ANOMALY
@@ -129,7 +129,7 @@ public final class Rules {
     public static final int ANOMALIES_CORROSIVE_AFRAID_FACTOR = 2;
     //ASTEROID
     //4.0f
-    public static final float ASTEROID_METAL_RESPAWN_TIME = 1.0f;
+    public static final float ASTEROID_METAL_RESPAWN_TIME = 4.0f;
     //50
     public static final int ASTEROID_METAL_MAX_COUNT = 50;
     //4.0f

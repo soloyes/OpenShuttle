@@ -1,7 +1,6 @@
 package com.shuttle.game.player;
 
 import com.badlogic.gdx.Gdx;
-import com.shuttle.game.bot.consumable.Astronaut;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Results;
@@ -10,6 +9,7 @@ import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Shake;
 import com.shuttle.game.effects.Vibrator;
+import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
@@ -65,7 +65,7 @@ public final class Standing {
     @Getter
     @Setter
     private float laserChargeLevel, maxLaserChargeLevel;
-    private Map<Astronaut.Profession, Integer> astronauts;
+    private Map<Sticker, Integer> astronauts;
     @Getter
     @Setter
     private float lifeShield, maxLifeShield;
@@ -83,7 +83,7 @@ public final class Standing {
         this.results = new Results();
         this.n = 1;
         this.statistics = new HashMap<AbstractPoolable.Type, Map<Integer, Integer>>();
-        this.astronauts = new HashMap<Astronaut.Profession, Integer>();
+        this.astronauts = new HashMap<Sticker, Integer>();
     }
 
     public void doRestart() {
@@ -107,7 +107,7 @@ public final class Standing {
         }
     }
 
-    public void changeAstronauts(Astronaut.Profession profession) {
+    public void changeAstronauts(Sticker profession) {
         if (astronauts.get(profession) == null) {
             astronauts.put(profession, 1);
         } else {

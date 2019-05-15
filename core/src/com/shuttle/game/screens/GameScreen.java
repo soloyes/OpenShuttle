@@ -46,6 +46,7 @@ import com.shuttle.game.effects.Ray;
 import com.shuttle.game.effects.Shake;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.effects.particle.ParticleEmitter;
+import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.player.navigation.Radar;
@@ -634,9 +635,10 @@ public class GameScreen extends BaseScreen {
         player.takeEffect(consumable);
         if (consumable instanceof Astronaut) {
             Astronaut astronaut = (Astronaut) consumable;
-            if (astronaut.getProfession() != Astronaut.Profession.REGULAR) {
+            //todo:// delete if when add icon
+            if (astronaut.getProfession() != Sticker.REGULAR) {
                 Standing.getInstance().changeAstronauts(astronaut.getProfession());
-                UIRightPanel.getInstance().add(null);
+                UIRightPanel.getInstance().add(astronaut.getProfession());
             }
         }
         Standing.getInstance().addToStatistics(consumable.getType(), consumable.getLevel());

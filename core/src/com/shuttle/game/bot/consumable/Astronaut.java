@@ -9,20 +9,18 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.MoveProcessor;
 import com.shuttle.game.effects.Vibrator;
+import com.shuttle.game.labelsticker.Label;
+import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
-
-import lombok.Getter;
 
 /**
  * @author Shuttle on 10/11/18.
  */
 public class Astronaut extends AbstractConsumable {
     private TextureRegion[] regions;
-    @Getter
-    private Profession profession;
     private int multiplier;
 
     public Astronaut() {
@@ -32,6 +30,7 @@ public class Astronaut extends AbstractConsumable {
         this.height = PaintConstants.ASTRONAUT_HEIGHT;
         this.type = Type.ASTRONAUT;
         this.moveProcessor = new MoveProcessor();
+        this.labels.get(Label.Layer.LABEL).get(0).setSticker(Sticker.REGULAR);
     }
 
     @Override
@@ -80,11 +79,15 @@ public class Astronaut extends AbstractConsumable {
         if (fake) {
             this.multiplier = 0;
         } else {
-            this.multiplier = MathUtils.random(0, Profession.values().length - 1);
+            this.multiplier = MathUtils.random(0, 4);
         }
-        this.profession = Profession.values()[multiplier];
+        this.labels.get(Label.Layer.LABEL).get(0).setSticker(Sticker.ASTRONAUTS.get(multiplier));
         this.texture = regions[multiplier];
         playSound();
+    }
+
+    public Sticker getProfession() {
+        return labels.get(Label.Layer.LABEL).get(0).getSticker();
     }
 
     private void playSound() {
@@ -104,15 +107,5 @@ public class Astronaut extends AbstractConsumable {
     public void destroyWithEffect() {
         super.destroyWithEffect();
         showSprayCollision();
-    }
-
-    public enum Profession {
-        REGULAR(0), MECHANIC(1), MEDIC(2), MILITARY(3), SCIENTIST(4);
-        @Getter
-        private int index;
-
-        Profession(int index) {
-            this.index = index;
-        }
     }
 }
