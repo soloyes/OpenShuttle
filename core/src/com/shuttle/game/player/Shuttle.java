@@ -109,8 +109,9 @@ public class Shuttle extends AbstractShuttle {
         tmp2V2.sub(position);
 
         float dif = angle - tmp2V2.angle();
+        System.out.println(angle);
 
-        return (dif >= -100 && dif <= -30) || (dif <= 100 && dif >= 30);
+        return (dif >= -100 && dif <= -30) || (dif <= 100 && dif >= 30)||(dif >= -260 && dif <= -330) || (dif <= 260 && dif >= 330);
     }
 
     public void collideBlackhole(float dt) {
