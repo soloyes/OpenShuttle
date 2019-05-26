@@ -32,6 +32,7 @@ public class ScreenManager {
     private ScreenManager() {
     }
 
+
     public void changeScreen(ScreenType type) {
         Screen screen = game.getScreen();
         Gdx.input.setInputProcessor(null);
@@ -63,7 +64,7 @@ public class ScreenManager {
     }
 
     public void resetCamera() {
-        camera.position.set(540, 960, 0);
+        camera.position.set(Rules.WORLD_WIDTH / 2, Rules.WORLD_HEIGHT / 2, 0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
     }
