@@ -118,6 +118,9 @@ public abstract class AbstractLatestPanel {
                     labelTime.setAlpha(0);
                 }
             }
+            if (labelTime.getAlpha() < 0){
+                labelTime.setAlpha(0);
+            }
         }
 
         for (int i = 0; i < showLabel.size(); i++) {

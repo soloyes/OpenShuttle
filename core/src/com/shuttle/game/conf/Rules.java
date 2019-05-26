@@ -1,5 +1,6 @@
 package com.shuttle.game.conf;
 
+import com.badlogic.gdx.Gdx;
 import com.shuttle.game.player.Standing;
 
 /**
@@ -14,10 +15,10 @@ public final class Rules {
     public static int STARS_COUNT;
     //300
     private static final int STARS = 300;
-    //1080
-    public static final int WORLD_WIDTH = 1080;
     //1920
     public static final int WORLD_HEIGHT = 1920;
+    //1080
+    public static final int WORLD_WIDTH =  WORLD_HEIGHT * Gdx.graphics.getWidth() / Gdx.graphics.getHeight();
     //
     public static int SPACE_WIDTH;
     //
@@ -63,7 +64,7 @@ public final class Rules {
     //30.0f
     public static final float ANOMALIES_ELECTRIC_RESPAWN_TIME = 30.0f;
     //1
-    public static final int ANOMALIES_ELECTRIC_MAX_COUNT = 1;
+    public static final int ANOMALIES_ELECTRIC_MAX_COUNT = 0;
     //600.0f
     public static final float ANOMALY_ELECTRIC_VELOCITY = 600.0f;
     //0.5
@@ -76,7 +77,7 @@ public final class Rules {
     //12
     public static final float ANOMALIES_RADIATION_RESPAWN_TIME = 12.0f;
     //2
-    public static final int ANOMALIES_RADIATION_MAX_COUNT = 2;
+    public static final int ANOMALIES_RADIATION_MAX_COUNT = 0;
     //50.0f
     public static final float ANOMALIES_RADIATION_VELOCITY = 50.0f;
     //2000
@@ -95,7 +96,7 @@ public final class Rules {
     //15.0f
     public static final float ANOMALIES_MAGNETIC_RESPAWN_TIME = 15.0f;
     //2
-    public static final int ANOMALIES_MAGNETIC_MAX_COUNT = 2;
+    public static final int ANOMALIES_MAGNETIC_MAX_COUNT = 0;
     //50.0f
     public static final float ANOMALIES_MAGNETIC_VELOCITY = 50.0f;
     //1.0f
@@ -110,11 +111,11 @@ public final class Rules {
     public static final int ANOMALIES_MAGNETIC_BONUS_SCORE = 5000;
     //
     //2
-    public static final int ANOMALIES_CORROSIVE_AT_START = 2;
+    public static final int ANOMALIES_CORROSIVE_AT_START = 0;
     //4.0f
     public static final float ANOMALIES_CORROSIVE_RESPAWN_TIME = 4.0f;
     //30
-    public static final int ANOMALIES_CORROSIVE_MAX_COUNT = 30;
+    public static final int ANOMALIES_CORROSIVE_MAX_COUNT = 0;
     //60.0f
     public static final float ANOMALIES_CORROSIVE_VELOCITY = 60.0f;
     //0.15f
@@ -131,11 +132,11 @@ public final class Rules {
     //4.0f
     public static final float ASTEROID_METAL_RESPAWN_TIME = 4.0f;
     //50
-    public static final int ASTEROID_METAL_MAX_COUNT = 50;
+    public static final int ASTEROID_METAL_MAX_COUNT = 0;
     //4.0f
     public static final float ASTEROID_MINERAL_RESPAWN_TIME = 4.0f;
     //50
-    public static final int ASTEROID_MINERAL_MAX_COUNT = 50;
+    public static final int ASTEROID_MINERAL_MAX_COUNT = 0;
     //0.5f
     public static final float ASTEROID_SIZE_FOR_HARVEST_FACTOR = 0.5f;
     //0.3f
