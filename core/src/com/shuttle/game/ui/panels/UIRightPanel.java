@@ -11,17 +11,6 @@ public class UIRightPanel extends AbstractLatestPanel {
     private static UIRightPanel instance = new UIRightPanel();
     private TextureRegion astronautBonus;
 
-    public void doRestart() {
-        instance = null;
-    }
-
-    public static UIRightPanel getInstance() {
-        if (instance == null) {
-            instance = new UIRightPanel();
-        }
-        return instance;
-    }
-
     private UIRightPanel() {
         this.circleTexture = new TextureRegion[2];
         this.circleTexture[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_FULL_CIRCLE);
@@ -61,5 +50,16 @@ public class UIRightPanel extends AbstractLatestPanel {
         if (x <= Rules.WORLD_WIDTH - width - 32) {
             x = Rules.WORLD_WIDTH - width - 32;
         }
+    }
+
+    public void doRestart() {
+        instance = null;
+    }
+
+    public static UIRightPanel getInstance() {
+        if (instance == null) {
+            instance = new UIRightPanel();
+        }
+        return instance;
     }
 }

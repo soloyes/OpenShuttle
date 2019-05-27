@@ -9,17 +9,6 @@ import com.shuttle.game.utils.Assets;
 public class UILeftPanel extends AbstractLatestPanel {
     private static UILeftPanel instance = new UILeftPanel();
 
-    public void doRestart() {
-        instance = null;
-    }
-
-    public static UILeftPanel getInstance() {
-        if (instance == null) {
-            instance = new UILeftPanel();
-        }
-        return instance;
-    }
-
     private UILeftPanel() {
         this.circleTexture = new TextureRegion[2];
         this.circleTexture[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_FULL_CIRCLE);
@@ -51,5 +40,16 @@ public class UILeftPanel extends AbstractLatestPanel {
         if (x <= -cWidth) {
             x = -cWidth;
         }
+    }
+
+    public void doRestart() {
+        instance = null;
+    }
+
+    public static UILeftPanel getInstance() {
+        if (instance == null) {
+            instance = new UILeftPanel();
+        }
+        return instance;
     }
 }

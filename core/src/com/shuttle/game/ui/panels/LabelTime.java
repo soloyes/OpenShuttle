@@ -16,19 +16,6 @@ public class LabelTime {
     @Getter
     @Setter
     private float time;
-
-    public void changeTime(float time) {
-        this.time += time;
-    }
-
-    public void changeY(float y) {
-        this.y += y;
-    }
-
-    public void changeAlpha(float alpha) {
-        this.alpha += alpha;
-    }
-
     @Getter
     @Setter
     private float scaleX, scaleY;
@@ -43,6 +30,18 @@ public class LabelTime {
         this.fleshAlpha = 0.0f;
         this.time = PaintConstants.PANEL_ELEMENT_LIFETIME;
         this.actTexture = textureRegion;
+    }
+
+    public void changeAlpha(float alpha) {
+        this.alpha += alpha;
+    }
+
+    public void changeTime(float time) {
+        this.time += time;
+    }
+
+    public void changeY(float y) {
+        this.y += y;
     }
 
     public void init(TextureRegion textureRegion) {

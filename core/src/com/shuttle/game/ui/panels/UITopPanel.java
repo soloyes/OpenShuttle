@@ -22,11 +22,8 @@ public class UITopPanel {
         this.playerHP = new PlayerHP();
     }
 
-    public void update(float dt) {
-        playerXP.update(dt);
-        bars.update(dt);
-        anomalyTimer.update(dt);
-        playerHP.update(dt);
+    public void dispose() {
+        anomalyTimer.dispose();
     }
 
     public void render(SpriteBatch batch) {
@@ -36,7 +33,10 @@ public class UITopPanel {
         playerHP.render(batch);
     }
 
-    public void dispose() {
-        anomalyTimer.dispose();
+    public void update(float dt) {
+        playerXP.update(dt);
+        bars.update(dt);
+        anomalyTimer.update(dt);
+        playerHP.update(dt);
     }
 }

@@ -15,14 +15,14 @@ public abstract class AbstractLatestPanel {
     protected HashMap<Sticker, TextureRegion> textureRegions;
     protected int width, height, cWidth, cHeight;
     protected Color color;
-    protected ArrayList<LabelTime> activeLabel;
-    protected ArrayList<LabelTime> showLabel;
-    protected ArrayList<LabelTime> freeLabel;
-    protected ArrayList<Integer> needDel;
+    private ArrayList<LabelTime> activeLabel;
+    private ArrayList<LabelTime> showLabel;
+    private ArrayList<LabelTime> freeLabel;
+    private ArrayList<Integer> needDel;
     protected TextureRegion circleTexture[];
     protected float startPoint;
-    protected int maxShowed;
-    protected float t1, t2, t3;
+    private int maxShowed;
+    private float t1, t2, t3;
     protected float x;
 
     public void render(SpriteBatch batch) {
