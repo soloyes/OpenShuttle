@@ -6,10 +6,15 @@ public class CrateEmitter extends AbstractConsumableEmitter {
     public static CrateEmitter instance;
 
     private CrateEmitter() {
+        this(Crate.class);
         super.setRespawnTime(Rules.CONSUMABLE_CRATE_RESPAWN_TIME);
         super.setConsumablesAtStart(Rules.CONSUMABLE_CRATE_AT_START);
         super.setConsumablesMaxCount(Rules.CONSUMABLE_CRATE_MAX_COUNT);
         emit();
+    }
+
+    private CrateEmitter(Class<? extends AbstractConsumable> clazz) {
+        super(clazz);
     }
 
     @Override

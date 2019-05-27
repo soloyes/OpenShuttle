@@ -3,7 +3,6 @@ package com.shuttle.game.effects;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.asteroids.AbstractAsteroid;
-import com.shuttle.game.bot.asteroids.AbstractAsteroidEmitter;
 import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
 import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
 import com.shuttle.game.conf.GlobalInteractionLevels;
@@ -14,6 +13,7 @@ import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.utils.ListOfListsJoiner;
 import com.shuttle.game.utils.pool.AbstractPoolable;
+import com.shuttle.game.utils.pool.ObjectPool;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -140,7 +140,8 @@ public class Ray {
             asteroid.setTimeToBurn(asteroid.getTimeToBurn() + dt);
             if (asteroid.getTimeToBurn() >= 0.5f + Rules.ASTEROID_BURN_TIME / Standing.getInstance().getLaserChargeLevel()) {
                 boomBox.playSound(MSConstants.DESTROY_ASTEROID_RAY);
-                AbstractAsteroidEmitter.emitterMap.get(asteroid.getType()).boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                ObjectPool.EMITTERS.get(asteroid.getClass())
+                        .boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
                 asteroid.destroyWithEffect();
                 asteroid.showSprayCollision();
                 Standing.getInstance().addToStatistics(asteroid.getType(), asteroid.getLevel());

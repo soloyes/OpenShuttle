@@ -10,10 +10,15 @@ public class RadiationAnomalyEmitter extends AbstractAnomalyEmitter {
     private static RadiationAnomalyEmitter instance;
 
     private RadiationAnomalyEmitter() {
+        this(RadiationAnomaly.class);
         super.setRespawnTime(Rules.ANOMALIES_RADIATION_RESPAWN_TIME);
         super.setAnomaliesAtStart(Rules.ANOMALIES_RADIATION_AT_START);
         super.setAnomaliesMaxCount(Rules.ANOMALIES_RADIATION_MAX_COUNT);
         emit();
+    }
+
+    private RadiationAnomalyEmitter(Class<? extends AbstractAnomaly> clazz) {
+        super(clazz);
     }
 
     @Override

@@ -7,8 +7,6 @@ import com.shuttle.game.bot.rocket.RocketEmitter;
  * @author Shuttle on 6/28/18.
  */
 public class TestScreen extends BaseScreen {
-    private RocketEmitter rocketEmitter;
-
     public TestScreen(SpriteBatch batch) {
         super(batch);
     }
@@ -16,7 +14,6 @@ public class TestScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        this.rocketEmitter = new RocketEmitter();
     }
 
     @Override
@@ -28,11 +25,11 @@ public class TestScreen extends BaseScreen {
         super.render(dt);
         update(dt);
         batch.begin();
-        rocketEmitter.render(batch);
+        RocketEmitter.getInstance().render(batch);
         batch.end();
     }
 
     private void update(float dt) {
-        rocketEmitter.update(dt);
+        RocketEmitter.getInstance().update(dt);
     }
 }

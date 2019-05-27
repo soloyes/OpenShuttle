@@ -23,9 +23,14 @@ public class ParticleEmitter extends ObjectPool<ParticleEmitter.Particle> {
     private Vector2 tmp;
 
     private ParticleEmitter() {
+        this(Particle.class);
         this.particleTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STAR16_REGION);
         this.builder = new ParticleEffectBuilder(this);
         this.tmp = new Vector2(0, 0);
+    }
+
+    private ParticleEmitter(Class<? extends Particle> clazz) {
+        super(clazz);
     }
 
     @Override

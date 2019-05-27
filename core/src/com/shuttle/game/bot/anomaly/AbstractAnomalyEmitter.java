@@ -23,6 +23,10 @@ public abstract class AbstractAnomalyEmitter extends ObjectPool<AbstractAnomaly>
     @Setter
     private int anomaliesMaxCount;
 
+    AbstractAnomalyEmitter(Class<? extends AbstractAnomaly> clazz) {
+        super(clazz);
+    }
+
     protected abstract AbstractAnomaly newObject();
 
     public void render(SpriteBatch batch) {

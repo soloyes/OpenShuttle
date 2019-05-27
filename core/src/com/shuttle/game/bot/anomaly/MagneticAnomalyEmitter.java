@@ -10,10 +10,15 @@ public class MagneticAnomalyEmitter extends AbstractAnomalyEmitter {
     private static MagneticAnomalyEmitter instance;
 
     private MagneticAnomalyEmitter() {
+        this(MagneticAnomaly.class);
         super.setRespawnTime(Rules.ANOMALIES_MAGNETIC_RESPAWN_TIME);
         super.setAnomaliesAtStart(Rules.ANOMALIES_MAGNETIC_AT_START);
         super.setAnomaliesMaxCount(Rules.ANOMALIES_MAGNETIC_MAX_COUNT);
         emit();
+    }
+
+    public MagneticAnomalyEmitter(Class<? extends AbstractAnomaly> clazz) {
+        super(clazz);
     }
 
     @Override

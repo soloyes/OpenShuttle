@@ -23,7 +23,6 @@ import com.shuttle.game.bot.anomaly.MagneticAnomalyEmitter;
 import com.shuttle.game.bot.anomaly.RadiationAnomaly;
 import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
 import com.shuttle.game.bot.asteroids.AbstractAsteroid;
-import com.shuttle.game.bot.asteroids.AbstractAsteroidEmitter;
 import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
 import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
 import com.shuttle.game.bot.blackhole.Blackhole;
@@ -34,6 +33,7 @@ import com.shuttle.game.bot.consumable.CrateEmitter;
 import com.shuttle.game.bot.consumable.FuelEmitter;
 import com.shuttle.game.bot.consumable.StorageEmitter;
 import com.shuttle.game.bot.consumable.fuel.Fuel;
+import com.shuttle.game.bot.rocket.RocketEmitter;
 import com.shuttle.game.bot.rocket.RocketLauncher;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.GlobalInteractionLevels;
@@ -64,6 +64,7 @@ import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.ListOfListsJoiner;
 import com.shuttle.game.utils.ShaderManager;
 import com.shuttle.game.utils.pool.AbstractPoolable;
+import com.shuttle.game.utils.pool.ObjectPool;
 
 import java.util.List;
 
@@ -554,7 +555,8 @@ public class GameScreen extends BaseScreen {
                     asteroid.destroyWithEffect();
                     Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
                     player.getLifeShield().blink(1.0f);
-                    AbstractAsteroidEmitter.emitterMap.get(asteroid.getType()).boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                    ObjectPool.EMITTERS.get(asteroid.getClass())
+                            .boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
                     Standing.getInstance().takeDamage(player.getShieldLevel().getLevel() + 1);
                     GameInfoSystem.setup(
                             Shuttle.position.x, Shuttle.position.y,
@@ -580,7 +582,8 @@ public class GameScreen extends BaseScreen {
                 CorrosiveAnomaly anomaly = (CorrosiveAnomaly) CorrosiveAnomalyEmitter.getInstance().getActiveList().get(j);
                 if (!asteroid.isFragmented() && anomaly.getPosition().dst(asteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
                     asteroid.destroyWithEffect();
-                    AbstractAsteroidEmitter.emitterMap.get(asteroid.getType()).boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                    ObjectPool.EMITTERS.get(asteroid.getClass())
+                            .boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
                     GameInfoSystem.setup(anomaly.getPosition().x, anomaly.getPosition().y, GameInfoSystem.Preset.BOOM, 3.0f, false);
                     if (anomaly.getLevel() == 0) {
                         anomaly.destroyWithEffect();
@@ -597,7 +600,8 @@ public class GameScreen extends BaseScreen {
                     if (!consumable.isShielded()) {
                         consumable.destroyWithEffect();
                     }
-                    AbstractAsteroidEmitter.emitterMap.get(asteroid.getType()).boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                    ObjectPool.EMITTERS.get(asteroid.getClass())
+                            .boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
                     GameInfoSystem.setup(
                             consumable.getPosition().x,
                             consumable.getPosition().y,
@@ -627,21 +631,7 @@ public class GameScreen extends BaseScreen {
             //
 
         }
-        RocketLauncher.getInstance().getRocketEmitter().checkCollision();
-    }
-
-    private void consumeConsumable(AbstractConsumable consumable) {
-        consumable.destroy();
-        player.takeEffect(consumable);
-        if (consumable instanceof Astronaut) {
-            Astronaut astronaut = (Astronaut) consumable;
-            //todo:// delete if when add icon
-            if (astronaut.getProfession() != Sticker.REGULAR) {
-                Standing.getInstance().changeAstronauts(astronaut.getProfession());
-                UIRightPanel.getInstance().add(astronaut.getProfession());
-            }
-        }
-        Standing.getInstance().addToStatistics(consumable.getType(), consumable.getLevel());
+        RocketEmitter.getInstance().checkCollision();
     }
 
     private void abstractAnomalyDeactivate(List<AbstractAnomaly> anomalies) {
@@ -666,6 +656,20 @@ public class GameScreen extends BaseScreen {
             camera.position.y = Rules.SPACE_HEIGHT - Rules.WORLD_HEIGHT / 2;
         }
         camera.update();
+    }
+
+    private void consumeConsumable(AbstractConsumable consumable) {
+        consumable.destroy();
+        player.takeEffect(consumable);
+        if (consumable instanceof Astronaut) {
+            Astronaut astronaut = (Astronaut) consumable;
+            //todo:// delete if when add icon
+            if (astronaut.getProfession() != Sticker.REGULAR) {
+                Standing.getInstance().changeAstronauts(astronaut.getProfession());
+                UIRightPanel.getInstance().add(astronaut.getProfession());
+            }
+        }
+        Standing.getInstance().addToStatistics(consumable.getType(), consumable.getLevel());
     }
 
     private void collideWithRocket(AbstractAnomaly anomaly) {

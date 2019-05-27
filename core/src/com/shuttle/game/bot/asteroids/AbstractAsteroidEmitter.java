@@ -6,11 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.utils.pool.AbstractPoolable;
 import com.shuttle.game.utils.pool.ObjectPool;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -35,17 +31,17 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     private float count;
     private GlobalInteractionLevels range;
 
-    public static Map<AbstractPoolable.Type, AbstractAsteroidEmitter> emitterMap = new HashMap<AbstractPoolable.Type, AbstractAsteroidEmitter>();
-
-    @Override
-    protected abstract AbstractAsteroid newObject();
-
-    public AbstractAsteroidEmitter() {
+    AbstractAsteroidEmitter(Class<? extends AbstractAsteroid> clazz) {
+        super(clazz);
         this.position = new Vector2();
         this.destination = new Vector2();
         this.tmp1V2 = new Vector2();
     }
 
+    @Override
+    protected abstract AbstractAsteroid newObject();
+
+    @Override
     public void boom(Vector2 position, GlobalInteractionLevels range) {
         this.range = range;
         this.count = range.getFragmentAsteroidCount();

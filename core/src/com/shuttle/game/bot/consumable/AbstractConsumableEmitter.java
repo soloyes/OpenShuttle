@@ -20,7 +20,26 @@ public abstract class AbstractConsumableEmitter extends ObjectPool<AbstractConsu
     @Setter
     private int consumablesMaxCount;
 
+    AbstractConsumableEmitter(Class<? extends AbstractConsumable> clazz) {
+        super(clazz);
+    }
+
     protected abstract AbstractConsumable newObject();
+
+    public void emit() {
+        if (consumablesAtStart != 0) {
+            for (int i = 0; i < consumablesAtStart; i++) {
+                createConsumable();
+            }
+        }
+    }
+
+    protected void createConsumable() {
+        getActiveElement().init(
+                MathUtils.random(0, Rules.SPACE_WIDTH),
+                MathUtils.random(0, Rules.SPACE_HEIGHT)
+        );
+    }
 
     public void render(SpriteBatch batch) {
         for (int i = 0; i < activeList.size(); i++) {
@@ -39,20 +58,5 @@ public abstract class AbstractConsumableEmitter extends ObjectPool<AbstractConsu
             activeList.get(i).update(dt);
         }
         checkPool();
-    }
-
-    protected void createConsumable() {
-        getActiveElement().init(
-                MathUtils.random(0, Rules.SPACE_WIDTH),
-                MathUtils.random(0, Rules.SPACE_HEIGHT)
-        );
-    }
-
-    public void emit() {
-        if (consumablesAtStart != 0) {
-            for (int i = 0; i < consumablesAtStart; i++) {
-                createConsumable();
-            }
-        }
     }
 }

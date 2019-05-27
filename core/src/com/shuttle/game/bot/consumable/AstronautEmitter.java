@@ -6,10 +6,15 @@ public class AstronautEmitter extends AbstractConsumableEmitter {
     private static AstronautEmitter instance;
 
     private AstronautEmitter() {
+        this(Astronaut.class);
         super.setRespawnTime(Rules.CONSUMABLE_ASTRONAUT_RESPAWN_TIME);
         super.setConsumablesAtStart(Rules.CONSUMABLE_ASTRONAUT_AT_START);
         super.setConsumablesMaxCount(Rules.CONSUMABLE_ASTRONAUT_MAX_COUNT);
         emit();
+    }
+
+    private AstronautEmitter(Class<? extends AbstractConsumable> clazz) {
+        super(clazz);
     }
 
     @Override

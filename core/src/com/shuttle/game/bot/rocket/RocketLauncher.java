@@ -35,8 +35,7 @@ public class RocketLauncher {
 
     @Getter
     private boolean launched;
-    @Getter
-    private RocketEmitter rocketEmitter;
+
     private BoomBox boomBox;
     private boolean charged;
     private float time;
@@ -44,7 +43,6 @@ public class RocketLauncher {
     private ListOfListsJoiner<AbstractAnomaly> anomalyJoiner;
 
     private RocketLauncher() {
-        this.rocketEmitter = new RocketEmitter();
         this.charged = false;
         this.boomBox = new BoomBox();
         this.anomalyJoiner = new ListOfListsJoiner<AbstractAnomaly>(
@@ -61,11 +59,11 @@ public class RocketLauncher {
     }
 
     public void render(SpriteBatch batch) {
-        rocketEmitter.render(batch);
+        RocketEmitter.getInstance().render(batch);
     }
 
     public void update(float dt) {
-        rocketEmitter.update(dt);
+        RocketEmitter.getInstance().update(dt);
         if (launched) {
             boomBox.playMusicEffectOnce(MSConstants.CHARGING_ROCKETS);
             time += dt;
@@ -82,7 +80,7 @@ public class RocketLauncher {
                 AbstractAnomaly anomaly = anomalyJoiner.get(i);
                 if (anomaly.isAtRocketPoint()) {
                     count++;
-                    rocketEmitter.createRocket(Shuttle.position, anomaly);
+                    RocketEmitter.getInstance().createRocket(Shuttle.position, anomaly);
                 }
             }
             if (count > 0) {

@@ -10,15 +10,34 @@ import com.shuttle.game.utils.pool.ObjectPool;
  * @author Shuttle on 19/01/19.
  */
 public class RocketEmitter extends ObjectPool<Rocket> {
+    private static RocketEmitter instance;
     private BoundCheck boundCheck;
+
+    private RocketEmitter() {
+        this(Rocket.class);
+        this.boundCheck = new BoundCheck();
+    }
+
+    private RocketEmitter(Class<? extends Rocket> clazz) {
+        super(clazz);
+    }
 
     @Override
     protected Rocket newObject() {
         return new Rocket();
     }
 
-    public RocketEmitter() {
-        this.boundCheck = new BoundCheck();
+    public void checkCollision() {
+        for (int i = 0; i < activeList.size(); i++) {
+            Rocket rocket = activeList.get(i);
+            rocket.checkCollision();
+        }
+    }
+
+    public void createRocket(Vector2 position, AbstractAnomaly anomaly) {
+        Rocket rocket = getActiveElement();
+        rocket.setTargetAnomaly(anomaly);
+        rocket.init(position.x, position.y);
     }
 
     public void render(SpriteBatch batch) {
@@ -38,16 +57,10 @@ public class RocketEmitter extends ObjectPool<Rocket> {
         checkPool();
     }
 
-    public void createRocket(Vector2 position, AbstractAnomaly anomaly) {
-        Rocket rocket = getActiveElement();
-        rocket.setTargetAnomaly(anomaly);
-        rocket.init(position.x, position.y);
-    }
-
-    public void checkCollision() {
-        for (int i = 0; i < activeList.size(); i++) {
-            Rocket rocket = activeList.get(i);
-            rocket.checkCollision();
+    public static RocketEmitter getInstance() {
+        if (instance == null) {
+            instance = new RocketEmitter();
         }
+        return instance;
     }
 }

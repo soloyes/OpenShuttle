@@ -11,10 +11,15 @@ public class CorrosiveAnomalyEmitter extends AbstractAnomalyEmitter {
     private static CorrosiveAnomalyEmitter instance;
 
     private CorrosiveAnomalyEmitter() {
+        this(CorrosiveAnomaly.class);
         super.setRespawnTime(Rules.ANOMALIES_CORROSIVE_RESPAWN_TIME);
         super.setAnomaliesAtStart(Rules.ANOMALIES_CORROSIVE_AT_START);
         super.setAnomaliesMaxCount(Rules.ANOMALIES_CORROSIVE_MAX_COUNT);
         emit();
+    }
+
+    private CorrosiveAnomalyEmitter(Class<? extends AbstractAnomaly> clazz) {
+        super(clazz);
     }
 
     @Override

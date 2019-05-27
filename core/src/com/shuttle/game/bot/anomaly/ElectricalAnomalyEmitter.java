@@ -10,10 +10,15 @@ public class ElectricalAnomalyEmitter extends AbstractAnomalyEmitter {
     private static ElectricalAnomalyEmitter instance;
 
     private ElectricalAnomalyEmitter() {
+        this(ElectricalAnomaly.class);
         super.setRespawnTime(Rules.ANOMALIES_ELECTRIC_RESPAWN_TIME);
         super.setAnomaliesAtStart(Rules.ANOMALIES_ELECTRIC_AT_START);
         super.setAnomaliesMaxCount(Rules.ANOMALIES_ELECTRIC_MAX_COUNT);
         emit();
+    }
+
+    public ElectricalAnomalyEmitter(Class<? extends AbstractAnomaly> clazz) {
+        super(clazz);
     }
 
     @Override
