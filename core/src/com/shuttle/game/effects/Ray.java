@@ -3,8 +3,6 @@ package com.shuttle.game.effects;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.asteroids.AbstractAsteroid;
-import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
-import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
 import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
@@ -44,10 +42,7 @@ public class Ray {
         this.harvestVelocity = Rules.PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY;
         this.takeRange = Rules.PLAYER_CONSUMABLE_TAKE_RANGE;
         this.boomBox = new BoomBox();
-        this.asteroidsJoiner = new ListOfListsJoiner<AbstractAsteroid>(
-                MetalAsteroidEmitter.getInstance().getActiveList(),
-                MineralAsteroidEmitter.getInstance().getActiveList()
-        );
+        this.asteroidsJoiner = ListOfListsJoiner.newAbstractAsteroidList();
     }
 
     public void harvest(Shuttle player, AbstractPoolable poolable, float dt) {

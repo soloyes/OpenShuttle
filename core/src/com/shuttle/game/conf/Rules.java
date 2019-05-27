@@ -184,6 +184,8 @@ public final class Rules {
     public static final float PLAYER_SHIELD_REPAIR_FACTOR = 2.0f;
     //1.5f
     public static final float PLAYER_SHIELD_DAMAGE_FACTOR = 1.5f;
+    //5
+    public static final int PLAYER_BLACKHOLE_ROTATION = 5;
     //
     //BLACKHOLE
     //750

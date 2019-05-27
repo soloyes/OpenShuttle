@@ -34,6 +34,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class Shuttle extends AbstractShuttle {
+    public static boolean isLaser;
+    private static LinkedList<Integer> shadowsCoordinates;
+    private static int F = 2 * (int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Rules.PLAYER_ENGINE_POWER);
     private BoundCheck boundCheck;
     @Getter
     @Setter
@@ -62,12 +65,10 @@ public class Shuttle extends AbstractShuttle {
     @Setter
     private boolean cameraSmooth;
     private boolean engineStarted;
-    private static LinkedList<Integer> shadowsCoordinates;
     private LinkedList<Vector2> vector2List;
     private LinkedList<Float> angleList;
     private LinkedList<Float> alphaList;
-    private static int F = 2 * (int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Rules.PLAYER_ENGINE_POWER);
-    public static boolean isLaser;
+    private float a;
 
     public Shuttle(Joystick joystick) {
         this.joystick = joystick;
@@ -92,6 +93,10 @@ public class Shuttle extends AbstractShuttle {
         shadowsCoordinates = Fibonacci.generate(F);
     }
 
+    private void checkRamPower() {
+        shieldLevel = GlobalInteractionLevels.getFromLevel((int) (Standing.getInstance().getRamPower()));
+    }
+
     public boolean addZigZag(float amount) {
         if (zigzagEffect < 0.1f) {
             zigzagEffect += amount;
@@ -107,10 +112,11 @@ public class Shuttle extends AbstractShuttle {
     public boolean canCatch(AbstractConsumable abstractConsumable) {
         tmp2V2.set(abstractConsumable.getPosition());
         tmp2V2.sub(position);
-
         float dif = angle - tmp2V2.angle();
-
-        return (dif >= -100 && dif <= -30) || (dif <= 100 && dif >= 30)||(dif >= -260 && dif <= -330) || (dif <= 260 && dif >= 330);
+        return (dif >= -100 && dif <= -30) ||
+                (dif <= 100 && dif >= 30) ||
+                (dif >= -260 && dif <= -330) ||
+                (dif <= 260 && dif >= 330);
     }
 
     public void collideBlackhole(float dt) {
@@ -122,8 +128,9 @@ public class Shuttle extends AbstractShuttle {
             float dst = Blackhole.position.dst(position);
             float scaleX = dst / Rules.BLACKHOLE_TAKE_RANGE;
             float scaleY = dst / Rules.BLACKHOLE_TAKE_RANGE;
+            a = dst / Rules.BLACKHOLE_TAKE_RANGE;
             setLayersScale(scaleX, scaleY);
-            angle = angle + 365 * dt;
+            angle += 365 * dt * Rules.PLAYER_BLACKHOLE_ROTATION;
             if (Blackhole.position.dst(position) <= Rules.BLACKHOLE_EVENT_HORIZON) {
                 BoundCheck.avoidPosition(Blackhole.position, position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
                 setLayersScale(1.0f, 1.0f);
@@ -181,12 +188,10 @@ public class Shuttle extends AbstractShuttle {
                     false
             );
         }
-
     }
 
     public void render(SpriteBatch batch) {
         Color tmpColor = batch.getColor();
-
         for (int i = 0; i < vector2List.size(); i++) {
             tmpColor.a = alphaList.get(i);
             batch.setColor(tmpColor);
@@ -202,11 +207,14 @@ public class Shuttle extends AbstractShuttle {
             tmpColor.a = 1.0f;
             batch.setColor(tmpColor);
         }
-
         if (Rules.GAME_OVER) {
             tmpColor.a = 0.3f;
-            batch.setColor(tmpColor);
         }
+        if (isTaken) {
+            tmpColor.a = a;
+        }
+
+        batch.setColor(tmpColor);
         batch.draw(
                 textureRegion[!Rules.GAME_OVER ? 0 : 1],
                 position.x - width / 2, position.y - height / 2,
@@ -215,11 +223,12 @@ public class Shuttle extends AbstractShuttle {
                 scaleX, scaleY,
                 angle
         );
-        if (Rules.GAME_OVER) {
-            tmpColor.a = 1.0f;
-            batch.setColor(tmpColor);
-        }
-        //ramShield.render(batch); - render from GameScreen with layer's order
+
+        tmpColor.a = 1.0f;
+        batch.setColor(tmpColor);
+
+        //ramShield.render(batch); is no need here
+        //render from GameScreen with layer's order: player.getRamShield().render(batch);
         if (!Rules.GAME_OVER) {
             if (getShieldLevel().getLevel() >= 2) {
                 takeRangeField.render(batch);
@@ -233,6 +242,7 @@ public class Shuttle extends AbstractShuttle {
     public static void respawn() {
         Shuttle.position.set(Rules.SPACE_WIDTH / 2, Rules.SPACE_HEIGHT / 2);
         Shuttle.velocity.set(0.0f, 0.0f);
+        Radar.isActive = false;
         Standing.getInstance().setRamPower(0.0f);
     }
 
@@ -348,10 +358,6 @@ public class Shuttle extends AbstractShuttle {
                 killSeries = 1;
             }
         }
-    }
-
-    private void checkRamPower() {
-        shieldLevel = GlobalInteractionLevels.getFromLevel((int) (Standing.getInstance().getRamPower()));
     }
 
     private void checkZigZagEffect(float dt) {

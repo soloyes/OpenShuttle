@@ -2,10 +2,6 @@ package com.shuttle.game.bot.rocket;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
-import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
-import com.shuttle.game.bot.anomaly.ElectricalAnomalyEmitter;
-import com.shuttle.game.bot.anomaly.MagneticAnomalyEmitter;
-import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
@@ -45,12 +41,7 @@ public class RocketLauncher {
     private RocketLauncher() {
         this.charged = false;
         this.boomBox = new BoomBox();
-        this.anomalyJoiner = new ListOfListsJoiner<AbstractAnomaly>(
-                CorrosiveAnomalyEmitter.getInstance().getActiveList(),
-                ElectricalAnomalyEmitter.getInstance().getActiveList(),
-                MagneticAnomalyEmitter.getInstance().getActiveList(),
-                RadiationAnomalyEmitter.getInstance().getActiveList()
-        );
+        this.anomalyJoiner = ListOfListsJoiner.newAbstractAnomalyList();
     }
 
     public void launch() {

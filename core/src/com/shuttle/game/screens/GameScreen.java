@@ -105,8 +105,6 @@ public class GameScreen extends BaseScreen {
     private ListOfListsJoiner<AbstractConsumable> consumableJoiner;
     private ListOfListsJoiner<AbstractAsteroid> asteroidsJoiner;
     @Getter
-    private ListOfListsJoiner<AbstractAnomaly> anomalyJoiner;
-    @Getter
     private UITopPanel uiTopPanel;
     private Standing standing;
 
@@ -156,22 +154,8 @@ public class GameScreen extends BaseScreen {
         prettyElectricKick = PrettySound.getPretty(Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY);
         prettyFragmentHarvest = PrettySound.getPretty(Rules.FRAGMENT_KICK_PRETTY_SOUND_DELAY);
         //
-        consumableJoiner = new ListOfListsJoiner<AbstractConsumable>(
-                AstronautEmitter.getInstance().getActiveList(),
-                CrateEmitter.getInstance().getActiveList(),
-                FuelEmitter.getInstance().getActiveList(),
-                StorageEmitter.getInstance().getActiveList()
-        );
-        asteroidsJoiner = new ListOfListsJoiner<AbstractAsteroid>(
-                MetalAsteroidEmitter.getInstance().getActiveList(),
-                MineralAsteroidEmitter.getInstance().getActiveList()
-        );
-        anomalyJoiner = new ListOfListsJoiner<AbstractAnomaly>(
-                CorrosiveAnomalyEmitter.getInstance().getActiveList(),
-                ElectricalAnomalyEmitter.getInstance().getActiveList(),
-                MagneticAnomalyEmitter.getInstance().getActiveList(),
-                RadiationAnomalyEmitter.getInstance().getActiveList()
-        );
+        consumableJoiner = ListOfListsJoiner.newAbstractConsumableList();
+        asteroidsJoiner = ListOfListsJoiner.newAbstractAsteroidList();
         //
         StorageEmitter.getInstance().emit();
     }
