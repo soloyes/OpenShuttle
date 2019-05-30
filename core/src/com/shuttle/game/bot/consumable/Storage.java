@@ -19,20 +19,19 @@ import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Consumer;
 
-//todo: Grey storage with golden label! Need to fix still, and also shabby shown on left pannel
-
 public class Storage extends AbstractConsumable {
     private Size size;
     private Label dangerLabel;
 
     public Storage() {
-        this.width = PaintConstants.STORAGE_1_WIDTH;
-        this.height = PaintConstants.STORAGE_1_HEIGHT;
+        this.width = PaintConstants.STORAGE_WIDTH;
+        this.height = PaintConstants.STORAGE_HEIGHT;
         this.type = Type.STORAGE;
         this.moveProcessor = new MoveProcessor();
         this.level = -3;
         this.shield = new Shield(this);
         this.scan = new Scan(this);
+        //todo: labels.get(Label.Layer.BACK).size() --> labels.getLayer.size() and so on, Do refactor. Everywhere
         while (this.labels.get(Label.Layer.BACK).size() < Size.values().length) {
             this.labels.get(Label.Layer.BACK).add(new Label());
         }
@@ -130,8 +129,16 @@ public class Storage extends AbstractConsumable {
         }
         if (golden) {
             this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STORAGE_GOLD_REGION);
+            if (danger) {
+                if (dangerLabel.getSticker() == Sticker.PATTERN) {
+                    dangerLabel.setSticker(Sticker.PATTERN_GOLD);
+                }
+                if (dangerLabel.getSticker() == Sticker.SHABBY) {
+                    dangerLabel.setSticker(Sticker.SHABBY_GOLD);
+                }
+            }
         } else {
-            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STORAGE_1_REGION);
+            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STORAGE_REGION);
         }
     }
 
@@ -152,7 +159,6 @@ public class Storage extends AbstractConsumable {
                     labels.get(Label.Layer.HIDDEN).get(j).setSticker(generateSafe());
                 }
                 i = size.ordinal() + 1;
-
             } else {
                 labels.get(Label.Layer.LABEL).get(i).setSticker(generateSafe());
             }
@@ -175,13 +181,7 @@ public class Storage extends AbstractConsumable {
     }
 
     private Sticker generateDanger() {
-        int r = MathUtils.random(0, 5);
-        switch (r) {
-            case 0:
-                return golden ? Sticker.SHABBY_GOLD : Sticker.SHABBY;
-            default:
-                return golden ? Sticker.PATTERN_GOLD : Sticker.PATTERN;
-        }
+        return MathUtils.random(0, 5) == 0 ? Sticker.SHABBY : Sticker.PATTERN;
     }
 
     private void setLabelForSingle(Label label) {

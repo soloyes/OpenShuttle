@@ -13,15 +13,15 @@ public class Box {
 
     public Box(Fuel fuel) {
         this.fuel = fuel;
-        this.width = PaintConstants.FUEL_1_WIDTH;
-        this.height = PaintConstants.FUEL_1_HEIGHT;
+        this.width = PaintConstants.FUEL_WIDTH;
+        this.height = PaintConstants.FUEL_HEIGHT;
     }
 
     public void init() {
         if (fuel.isGolden()) {
             this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_GOLD_REGION);
         } else {
-            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_1_REGION);
+            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_REGION);
         }
     }
 

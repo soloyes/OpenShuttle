@@ -17,6 +17,14 @@ import lombok.Getter;
  */
 public class RocketLauncher {
     private static RocketLauncher instance;
+    @Getter
+    private boolean launched;
+    private BoomBox boomBox;
+    private boolean charged;
+    private float time;
+    private int amplitude;
+    private ListOfListsJoiner<AbstractAnomaly> anomalyJoiner;
+
 
     public static RocketLauncher getInstance() {
         if (instance == null) {
@@ -24,19 +32,6 @@ public class RocketLauncher {
         }
         return instance;
     }
-
-    public void doRestart() {
-        instance = null;
-    }
-
-    @Getter
-    private boolean launched;
-
-    private BoomBox boomBox;
-    private boolean charged;
-    private float time;
-    private int amplitude;
-    private ListOfListsJoiner<AbstractAnomaly> anomalyJoiner;
 
     private RocketLauncher() {
         this.charged = false;

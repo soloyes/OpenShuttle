@@ -9,7 +9,9 @@ import com.shuttle.game.ui.panels.UILeftPanel;
 public class Consumer {
     public static void consume(Sticker sticker, AbstractConsumable consumable) {
         sticker.consume(consumable);
-        addToUI(sticker, consumable);
+        if (sticker != Sticker.SHABBY && sticker != Sticker.SHABBY_GOLD) {
+            addToUI(sticker, consumable);
+        }
         addToSelector(sticker, consumable);
     }
 

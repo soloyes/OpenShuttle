@@ -10,7 +10,7 @@ import com.shuttle.game.bot.consumable.AstronautEmitter;
 import com.shuttle.game.bot.consumable.CrateEmitter;
 import com.shuttle.game.bot.consumable.FuelEmitter;
 import com.shuttle.game.bot.consumable.StorageEmitter;
-import com.shuttle.game.bot.rocket.RocketLauncher;
+import com.shuttle.game.bot.rocket.RocketEmitter;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.player.Shuttle;
@@ -35,7 +35,7 @@ public class Restart {
         MagneticAnomalyEmitter.getInstance().doRestart();
         RadiationAnomalyEmitter.getInstance().doRestart();
         FuelEmitter.getInstance().doRestart();
-        RocketLauncher.getInstance().doRestart();
+        RocketEmitter.getInstance().doRestart();
         SelectorGroup.getInstance().doRestart();
         SwitchGroup.getInstance().doRestart();
         PauseGroup.getInstance().doRestart();

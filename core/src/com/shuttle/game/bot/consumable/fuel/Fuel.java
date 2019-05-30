@@ -24,8 +24,8 @@ public class Fuel extends AbstractConsumable {
     private Bubble[] bubble;
 
     public Fuel() {
-        this.width = PaintConstants.FUEL_1_WIDTH;
-        this.height = PaintConstants.FUEL_1_HEIGHT;
+        this.width = PaintConstants.FUEL_WIDTH;
+        this.height = PaintConstants.FUEL_HEIGHT;
         this.type = Type.FUEL;
         this.moveProcessor = new MoveProcessor();
         this.level = -2;

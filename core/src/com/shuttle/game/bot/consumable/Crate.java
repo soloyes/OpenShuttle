@@ -22,8 +22,8 @@ import com.shuttle.game.utils.Consumer;
  */
 public class Crate extends AbstractConsumable {
     public Crate() {
-        this.width = PaintConstants.CRATE_1_WIDTH;
-        this.height = PaintConstants.CRATE_1_HEIGHT;
+        this.width = PaintConstants.CRATE_WIDTH;
+        this.height = PaintConstants.CRATE_HEIGHT;
         this.type = Type.CRATE;
         this.moveProcessor = new MoveProcessor();
         this.shield = new Shield(this);
@@ -101,7 +101,7 @@ public class Crate extends AbstractConsumable {
         if (golden) {
             this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_GOLD_REGION);
         } else {
-            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_1_REGION);
+            this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_REGION);
         }
     }
 

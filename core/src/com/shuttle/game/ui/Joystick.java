@@ -36,7 +36,7 @@ public class Joystick extends Actor implements InputProcessor {
     private Color color;
 
     public Joystick() {
-        TextureRegion[] textureRegions = Regions.split(Assets.getInstance().getAtlas().findRegion(PaintConstants.JOYSTICK_1_REGION), 1, 2, 2);
+        TextureRegion[] textureRegions = Regions.split(Assets.getInstance().getAtlas().findRegion(PaintConstants.JOYSTICK_REGION), 1, 2, 2);
         this.joy1 = new TextureRegion(textureRegions[0], 0, 0, PaintConstants.JOYSTICK_WIDTH, PaintConstants.JOYSTICK_HEIGHT);
         this.stick1 = new TextureRegion(textureRegions[0], 0, PaintConstants.JOYSTICK_HEIGHT, PaintConstants.JOYSTICK_STICK_WIDTH, PaintConstants.JOYSTICK_STICK_HEIGHT);
         this.joy2 = new TextureRegion(textureRegions[1], 0, 0, PaintConstants.JOYSTICK_WIDTH, PaintConstants.JOYSTICK_HEIGHT);
