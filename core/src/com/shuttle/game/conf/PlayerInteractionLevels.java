@@ -1,19 +1,30 @@
 package com.shuttle.game.conf;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 
-public enum GlobalInteractionLevels {
+import lombok.Getter;
+
+public enum PlayerInteractionLevels {
     NONE(0, 0, 0, 0, 0, 1.0f, 0.5f, 0.6f),
     TAN(1, Color.TAN.r, Color.TAN.g, Color.TAN.b, 1f, 1.5f, 0.35f, 0.5f),
     GREEN(2, Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, 1f, 2.0f, 0.3f, 0.45f),
     YELLOW(3, Color.YELLOW.r, Color.YELLOW.g, Color.YELLOW.b, 1f, 2.5f, 0.25f, 0.4f),
     RED(4, Color.RED.r, Color.RED.g, Color.RED.b, 1f, 3.0f, 0.15f, 0.35f);
+    @Getter
     private int level;
+    @Getter
     private float r, g, b, a;
+    @Getter
     private float fragmentAsteroidCount;
     private float fragmentAsteroidSize1, fragmentAsteroidSize2;
 
-    GlobalInteractionLevels(int level, float r, float g, float b, float a, float fragmentAsteroidCount, float fragmentAsteroidSize1, float fragmentAsteroidSize2) {
+    PlayerInteractionLevels
+            (
+                    int level,
+                    float r, float g, float b, float a,
+                    float fragmentAsteroidCount, float fragmentAsteroidSize1, float fragmentAsteroidSize2
+            ) {
         this.level = level;
         this.r = r;
         this.g = g;
@@ -24,42 +35,11 @@ public enum GlobalInteractionLevels {
         this.fragmentAsteroidSize2 = fragmentAsteroidSize2;
     }
 
-    public static GlobalInteractionLevels getFromLevel(int level) {
-        if (level > 4) {
-            level = 4;
-        }
-        return values()[level];
+    public static PlayerInteractionLevels getFromLevel(int level) {
+        return values()[level % (values().length - 1)];
     }
 
-    public float getA() {
-        return a;
-    }
-
-    public float getB() {
-        return b;
-    }
-
-    public float getFragmentAsteroidCount() {
-        return fragmentAsteroidCount;
-    }
-
-    public float getFragmentAsteroidSize1() {
-        return fragmentAsteroidSize1;
-    }
-
-    public float getFragmentAsteroidSize2() {
-        return fragmentAsteroidSize2;
-    }
-
-    public float getG() {
-        return g;
-    }
-
-    public float getR() {
-        return r;
-    }
-
-    public int getLevel() {
-        return level;
+    public float getSize() {
+        return MathUtils.random(fragmentAsteroidSize1, fragmentAsteroidSize2);
     }
 }

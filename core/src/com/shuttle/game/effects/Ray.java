@@ -3,8 +3,8 @@ package com.shuttle.game.effects;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.asteroids.AbstractAsteroid;
-import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
+import com.shuttle.game.conf.PlayerInteractionLevels;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.player.Shuttle;
@@ -136,7 +136,7 @@ public class Ray {
             if (asteroid.getTimeToBurn() >= 0.5f + Rules.ASTEROID_BURN_TIME / Standing.getInstance().getLaserChargeLevel()) {
                 boomBox.playSound(MSConstants.DESTROY_ASTEROID_RAY);
                 ObjectPool.EMITTERS.get(asteroid.getClass())
-                        .boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                        .boom(asteroid.getPosition(), PlayerInteractionLevels.NONE);
                 asteroid.destroyWithEffect();
                 asteroid.showSprayCollision();
                 Standing.getInstance().addToStatistics(asteroid.getType(), asteroid.getLevel());

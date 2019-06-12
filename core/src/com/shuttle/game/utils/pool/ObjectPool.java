@@ -1,7 +1,7 @@
 package com.shuttle.game.utils.pool;
 
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.conf.GlobalInteractionLevels;
+import com.shuttle.game.conf.PlayerInteractionLevels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public abstract class ObjectPool<T extends Poolable> {
         EMITTERS.put(clazz, this);
     }
 
-    public void boom(Vector2 position, GlobalInteractionLevels none) {
+    public void boom(Vector2 position, PlayerInteractionLevels none) {
     }
 
     public void checkPool() {

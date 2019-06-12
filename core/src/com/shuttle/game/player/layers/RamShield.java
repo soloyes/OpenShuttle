@@ -3,8 +3,8 @@ package com.shuttle.game.player.layers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.PlayerInteractionLevels;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.utils.Assets;
@@ -36,7 +36,7 @@ public class RamShield {
 
     public void blink(float alpha) {
         float ramPower = Standing.getInstance().getRamPower();
-        if (ramPower <= GlobalInteractionLevels.TAN.getLevel()) {
+        if (ramPower <= PlayerInteractionLevels.TAN.getLevel()) {
             this.alpha = 0.0f;
         } else {
             this.alpha = alpha;
@@ -64,15 +64,15 @@ public class RamShield {
         }
 
         float ramPower = Standing.getInstance().getRamPower();
-        if (ramPower < GlobalInteractionLevels.TAN.getLevel()) {
+        if (ramPower < PlayerInteractionLevels.TAN.getLevel()) {
             fromAlpha = 0.0f;
-        } else if (ramPower >= GlobalInteractionLevels.RED.getLevel()) {
+        } else if (ramPower >= PlayerInteractionLevels.RED.getLevel()) {
             tmpColor.set(Color.RED);
-        } else if (ramPower >= GlobalInteractionLevels.YELLOW.getLevel()) {
+        } else if (ramPower >= PlayerInteractionLevels.YELLOW.getLevel()) {
             tmpColor.set(Color.YELLOW);
-        } else if (ramPower >= GlobalInteractionLevels.GREEN.getLevel()) {
+        } else if (ramPower >= PlayerInteractionLevels.GREEN.getLevel()) {
             tmpColor.set(Color.GREEN);
-        } else if (ramPower >= GlobalInteractionLevels.TAN.getLevel()) {
+        } else if (ramPower >= PlayerInteractionLevels.TAN.getLevel()) {
             tmpColor.set(Color.TAN);
         }
 

@@ -9,9 +9,9 @@ import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.consumable.Consumable;
 import com.shuttle.game.conf.GamePreferences;
-import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.PlayerInteractionLevels;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.Fibonacci;
 import com.shuttle.game.effects.KillingSpree;
@@ -43,7 +43,7 @@ public class Shuttle extends AbstractShuttle {
     private Radar radar;
     @Getter
     @Setter
-    private GlobalInteractionLevels shieldLevel;
+    private PlayerInteractionLevels shieldLevel;
     @Getter
     @Setter
     private LifeShield lifeShield;
@@ -94,7 +94,7 @@ public class Shuttle extends AbstractShuttle {
     }
 
     private void checkRamPower() {
-        shieldLevel = GlobalInteractionLevels.getFromLevel((int) (Standing.getInstance().getRamPower()));
+        shieldLevel = PlayerInteractionLevels.getFromLevel((int) (Standing.getInstance().getRamPower()));
     }
 
     public boolean addZigZag(float amount) {
@@ -432,7 +432,7 @@ public class Shuttle extends AbstractShuttle {
             if (velocity.len() >= Rules.PLAYER_ENGINE_POWER) {
                 ParticleEmitter.getInstance().getBuilder().buildShuttleShield(
                         position, angle, 90, 45,
-                        GlobalInteractionLevels.RED.getR(), GlobalInteractionLevels.RED.getG(), GlobalInteractionLevels.RED.getB()
+                        PlayerInteractionLevels.RED.getR(), PlayerInteractionLevels.RED.getG(), PlayerInteractionLevels.RED.getB()
                 );
             }
         }

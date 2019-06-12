@@ -36,9 +36,9 @@ import com.shuttle.game.bot.consumable.fuel.Fuel;
 import com.shuttle.game.bot.rocket.RocketEmitter;
 import com.shuttle.game.bot.rocket.RocketLauncher;
 import com.shuttle.game.conf.GamePreferences;
-import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.PlayerInteractionLevels;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.PrettySound;
@@ -346,8 +346,8 @@ public class GameScreen extends BaseScreen {
         stage.act();
     }
 
-    //todo: It is works, somehow.
-    //todo: Cam position is reset when fbo.end(), copy-paste from cameraHelper is the hack.
+    //It is works, somehow.
+    //Cam position is reset when fbo.end(), copy-paste from cameraHelper is the hack.
     private void cameraUpdate(float dt) {
         if (player.isCameraSmooth()) {
             tmp1V3.set(Shuttle.position, 0.0f).sub(cameraHelper.position.x, cameraHelper.position.y, 0.0f).nor();
@@ -380,7 +380,7 @@ public class GameScreen extends BaseScreen {
                 continue;
             }
             if (Shuttle.position.dst(consumable.getPosition()) <= PaintConstants.SHUTTLE_WIDTH / 2) {
-                if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
+                if (player.getShieldLevel().getLevel() < PlayerInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
                     consumeConsumable(consumable);
                 } else {
                     if (player.canCatch(consumable)) {
@@ -398,7 +398,7 @@ public class GameScreen extends BaseScreen {
             ray.setSize(4);
             ray.setHarvestVelocity(Rules.PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY);
             ray.setTakeRange(Rules.PLAYER_CONSUMABLE_TAKE_RANGE);
-            if (player.getShieldLevel().getLevel() < GlobalInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
+            if (player.getShieldLevel().getLevel() < PlayerInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
                 ray.setPreset(Ray.Preset.GREEN);
             } else {
                 if (player.canCatch(consumable)) {
@@ -540,7 +540,7 @@ public class GameScreen extends BaseScreen {
                     Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
                     player.getLifeShield().blink(1.0f);
                     ObjectPool.EMITTERS.get(asteroid.getClass())
-                            .boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                            .boom(asteroid.getPosition(), PlayerInteractionLevels.NONE);
                     Standing.getInstance().takeDamage(player.getShieldLevel().getLevel() + 1);
                     GameInfoSystem.setup(
                             Shuttle.position.x, Shuttle.position.y,
@@ -567,7 +567,7 @@ public class GameScreen extends BaseScreen {
                 if (!asteroid.isFragmented() && anomaly.getPosition().dst(asteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
                     asteroid.destroyWithEffect();
                     ObjectPool.EMITTERS.get(asteroid.getClass())
-                            .boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                            .boom(asteroid.getPosition(), PlayerInteractionLevels.NONE);
                     GameInfoSystem.setup(anomaly.getPosition().x, anomaly.getPosition().y, GameInfoSystem.Preset.BOOM, 3.0f, false);
                     if (anomaly.getLevel() == 0) {
                         anomaly.destroyWithEffect();
@@ -585,7 +585,7 @@ public class GameScreen extends BaseScreen {
                         consumable.destroyWithEffect();
                     }
                     ObjectPool.EMITTERS.get(asteroid.getClass())
-                            .boom(asteroid.getPosition(), GlobalInteractionLevels.NONE);
+                            .boom(asteroid.getPosition(), PlayerInteractionLevels.NONE);
                     GameInfoSystem.setup(
                             consumable.getPosition().x,
                             consumable.getPosition().y,

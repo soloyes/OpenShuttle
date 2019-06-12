@@ -3,8 +3,8 @@ package com.shuttle.game.bot.asteroids;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.conf.GlobalInteractionLevels;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.PlayerInteractionLevels;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.pool.ObjectPool;
 
@@ -29,7 +29,7 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     private float size;
     private float scale;
     private float count;
-    private GlobalInteractionLevels range;
+    private PlayerInteractionLevels range;
 
     AbstractAsteroidEmitter(Class<? extends AbstractAsteroid> clazz) {
         super(clazz);
@@ -42,7 +42,7 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     protected abstract AbstractAsteroid newObject();
 
     @Override
-    public void boom(Vector2 position, GlobalInteractionLevels range) {
+    public void boom(Vector2 position, PlayerInteractionLevels range) {
         this.range = range;
         this.count = range.getFragmentAsteroidCount();
         this.position.set(position);
@@ -66,7 +66,7 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
 
         if (boom) {
             for (int i = 0; i < MathUtils.random(2 * count, 4 * count); i++) {
-                size = scale = MathUtils.random(range.getFragmentAsteroidSize1(), range.getFragmentAsteroidSize2());
+                scale = size = range.getSize();
                 createFragment();
             }
             boom = false;
