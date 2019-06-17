@@ -243,9 +243,12 @@ public final class PaintConstants {
     public static final String FONT60_C = "fonts/CollegeRegular60Coloured.ttf";
     public static final String FONT96 = "fonts/CollegeRegular96.ttf";
     public static final String FONT128 = "fonts/CollegeRegular128.ttf";
+    public static final String FONT256 = "fonts/CollegeRegular256.ttf";
     public static final String GAME_PACK = "pics/game.pack";
     public static final String BACKGROUND_COLOR_HEX = "100514ff";
     public static final float BACKGROUND_OSCILLATE_WIDTH = 50;
+    public static final int DUMMY_PROFILES = 5;
+
     private PaintConstants() {
     }
 }

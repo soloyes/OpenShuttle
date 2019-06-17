@@ -1,6 +1,5 @@
 package com.shuttle.game.conf;
 
-import com.badlogic.gdx.Gdx;
 import com.shuttle.game.player.Standing;
 
 /**
@@ -8,6 +7,8 @@ import com.shuttle.game.player.Standing;
  * Game rules constants (Rules)
  */
 public final class Rules {
+    public static final boolean DEBUG = true;
+
     private Rules() {
     }
 
@@ -15,10 +16,10 @@ public final class Rules {
     public static int STARS_COUNT;
     //300
     private static final int STARS = 300;
+    //1080
+    public static final int WORLD_WIDTH = 1080;
     //1920
     public static final int WORLD_HEIGHT = 1920;
-    //1080
-    public static final int WORLD_WIDTH =  WORLD_HEIGHT * Gdx.graphics.getWidth() / Gdx.graphics.getHeight();
     //
     public static int SPACE_WIDTH;
     //
@@ -54,8 +55,8 @@ public final class Rules {
     public static final int CONSUMABLE_STORAGE_AT_START = 0;
     //2.0f
     public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 2.0f;
-    //3
-    public static final int CONSUMABLE_STORAGE_MAX_COUNT = 3;
+    //2
+    public static final int CONSUMABLE_STORAGE_MAX_COUNT = 2;
     //2
     public static final int CONSUMABLE_REPAIR_ADD = 2;
     //ANOMALY
@@ -63,8 +64,8 @@ public final class Rules {
     public static final int ANOMALIES_ELECTRIC_AT_START = 0;
     //30.0f
     public static final float ANOMALIES_ELECTRIC_RESPAWN_TIME = 30.0f;
-    //2
-    public static final int ANOMALIES_ELECTRIC_MAX_COUNT = 2;
+    //1
+    public static final int ANOMALIES_ELECTRIC_MAX_COUNT = 1;
     //600.0f
     public static final float ANOMALY_ELECTRIC_VELOCITY = 600.0f;
     //0.5
@@ -111,7 +112,7 @@ public final class Rules {
     public static final int ANOMALIES_MAGNETIC_BONUS_SCORE = 5000;
     //
     //2
-    public static final int ANOMALIES_CORROSIVE_AT_START = 0;
+    public static final int ANOMALIES_CORROSIVE_AT_START = 2;
     //4.0f
     public static final float ANOMALIES_CORROSIVE_RESPAWN_TIME = 4.0f;
     //30
@@ -130,7 +131,7 @@ public final class Rules {
     public static final int ANOMALIES_CORROSIVE_AFRAID_FACTOR = 2;
     //ASTEROID
     //4.0f
-    public static final float ASTEROID_METAL_RESPAWN_TIME = 4.0f;
+    public static final float ASTEROID_METAL_RESPAWN_TIME = 1.0f;
     //50
     public static final int ASTEROID_METAL_MAX_COUNT = 50;
     //4.0f
@@ -267,6 +268,11 @@ public final class Rules {
     public static final int SELECTOR_MAX_COUNT = 5;
     //3
     public static final int SELECTOR_SHABBY_BASE_BONUS = 3;
+
+    //1.0f
+    public static final float LINE_PRESSED_WAIT = 0.5f;
+    //3.0f
+    public static final float LINE_DELETE_WAIT = 0.5f;
 
     public static void setSpace(int n) {
         STARS_COUNT = STARS * n;

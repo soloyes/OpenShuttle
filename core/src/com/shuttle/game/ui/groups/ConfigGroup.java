@@ -48,12 +48,12 @@ public class ConfigGroup extends Group {
 
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
 
-        CheckBox.CheckBoxStyle checkBoxStyle48 = new CheckBox.CheckBoxStyle(
-                skin.getDrawable("checkbox-c1"),
-                skin.getDrawable("checkbox-pressed-c1"),
-                Assets.getInstance().getAssetManager().get(PaintConstants.FONT48, BitmapFont.class),
-                new Color(0.8f, 0.43f, 0.33f, 1f)
-        );
+        CheckBox.CheckBoxStyle checkBoxStyle48 = skin.get("default", CheckBox.CheckBoxStyle.class);//new CheckBox.CheckBoxStyle(
+//                skin.getDrawable("checkbox-c1"),
+//                skin.getDrawable("checkbox-pressed-c1"),
+//                Assets.getInstance().getAssetManager().get(PaintConstants.FONT48, BitmapFont.class),
+//                new Color(0.8f, 0.43f, 0.33f, 1f)
+//        );
         checkBoxStyle48.checkboxOn.setMinHeight(50);
         checkBoxStyle48.checkboxOn.setMinWidth(50);
         checkBoxStyle48.checkboxOff.setMinWidth(50);
@@ -85,9 +85,9 @@ public class ConfigGroup extends Group {
 
         Slider.SliderStyle sliderStyle = new Slider.SliderStyle(skin.get("default-horizontal", Slider.SliderStyle.class));
         sliderStyle.knob.setMinHeight(50);
-        sliderStyle.knobOver.setMinHeight(50);
+        //sliderStyle.knobOver.setMinHeight(50);
         sliderStyle.knob.setMinWidth(50);
-        sliderStyle.knobOver.setMinWidth(50);
+        //sliderStyle.knobOver.setMinWidth(50);
 
         final Slider musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, sliderStyle);
         musicSlider.setValue(GamePreferences.getMusicVolume());

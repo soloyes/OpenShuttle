@@ -15,7 +15,7 @@ public class Results {
     private List<String> results = new ArrayList<String>();
 
     public Results() {
-        resultsFile = Gdx.files.local("results");
+        resultsFile = Gdx.files.internal(FileConstants.RESULTS);
         if (!resultsFile.exists()) {
             resultsFile.writeString("results", true);
         }

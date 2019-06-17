@@ -39,10 +39,14 @@ public class Assets {
 
                 assetManager.load(MSConstants.UI_MENU, Sound.class);
                 assetManager.load(MSConstants.UI_CHECKBOX, Sound.class);
-                createStandartFont(32, "");
-                createStandartFont(48, "");
-                createStandartFont(64, "");
-                createStandartFont(96, "");
+                createStandardFont(19, "");
+                createStandardFont(36, "");
+                createStandardFont(32, "");
+                createStandardFont(48, "");
+                createStandardFont(64, "");
+                createStandardFont(96, "");
+                createStandardFont(128, "");
+                createStandardFont(256, "");
                 break;
             case GAME:
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
@@ -99,27 +103,27 @@ public class Assets {
                 assetManager.load(MSConstants.GET_LASER, Sound.class);
                 assetManager.load(MSConstants.GET_ROCKETS, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
-                createStandartFont(32, "");
-                createStandartFont(32, "Coloured");
-                createStandartFont(48, "");
-                createStandartFont(64, "");
-                createStandartFont(64, "Coloured");
-                createStandartFont(60, "");
-                createStandartFont(60, "Coloured");
-                createStandartFont(96, "");
-                createStandartFont(128, "");
+                createStandardFont(32, "");
+                createStandardFont(32, "Coloured");
+                createStandardFont(48, "");
+                createStandardFont(64, "");
+                createStandardFont(64, "Coloured");
+                createStandardFont(60, "");
+                createStandardFont(60, "Coloured");
+                createStandardFont(96, "");
+                createStandardFont(128, "");
                 break;
             case TEST:
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
-                createStandartFont(32, "");
-                createStandartFont(64, "");
-                createStandartFont(96, "");
+                createStandardFont(32, "");
+                createStandardFont(64, "");
+                createStandardFont(96, "");
                 break;
         }
     }
 
-    private void createStandartFont(int size, String postfix) {
+    private void createStandardFont(int size, String postfix) {
         FileHandleResolver resolver = new InternalFileHandleResolver();
         assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
         assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));

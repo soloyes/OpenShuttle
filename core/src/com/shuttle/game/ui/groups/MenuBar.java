@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
@@ -48,24 +47,29 @@ public class MenuBar extends Group {
         this.buttonResults.setSize(128, 128);
         this.buttonShare.setSize(128, 128);
 
-        buttonExit.setPosition(
-                Rules.WORLD_WIDTH - buttonExit.getWidth(),
-                0
-        );
-
-        buttonConfig.setPosition(
-                3 * Rules.WORLD_WIDTH / 4 - buttonExit.getWidth() / 2,
-                0
+        buttonPlay.setPosition(
+                22,
+                22
         );
 
         buttonResults.setPosition(
-                Rules.WORLD_WIDTH / 4 - buttonResults.getWidth() / 2,
-                0
+                249,
+                22
         );
 
         buttonShare.setPosition(
-                Rules.WORLD_WIDTH / 2 - buttonShare.getWidth() / 2,
-                0
+                476,
+                22
+        );
+
+        buttonConfig.setPosition(
+                703,
+                22
+        );
+
+        buttonExit.setPosition(
+                930,
+                22
         );
 
         buttonExit.addListener(new ChangeListener() {
@@ -85,8 +89,7 @@ public class MenuBar extends Group {
                 }
                 //
 
-                if (!group.isEmptyUserName()) {
-                    group.getFile().writeString(group.getUsername().getText(), false);
+                if (!MenuGroup.isValidProfile()) {
                     ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
                 } else {
                     Actor[] actorArray = getStage().getActors().toArray();
@@ -201,9 +204,5 @@ public class MenuBar extends Group {
         buttonConfig.draw(batch, parentAlpha);
         buttonResults.draw(batch, parentAlpha);
         buttonShare.draw(batch, parentAlpha);
-    }
-
-    public void setGroup(MenuGroup group) {
-        this.group = group;
     }
 }

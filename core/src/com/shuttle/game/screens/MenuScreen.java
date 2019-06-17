@@ -32,7 +32,6 @@ public class MenuScreen extends BaseScreen {
         MenuBar menuBar = new MenuBar();
         ResultGroup resultGroup = new ResultGroup();
         ShareGroup shareGroup = new ShareGroup();
-        menuBar.setGroup(menuGroup);
         stage.addActor(menuGroup);
         stage.addActor(new ConfigGroup(ScreenManager.ScreenType.MENU));
         stage.addActor(menuBar);

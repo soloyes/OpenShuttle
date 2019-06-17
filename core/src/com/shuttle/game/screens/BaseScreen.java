@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
 
 /**
@@ -24,6 +25,7 @@ public abstract class BaseScreen implements Screen {
     public BaseScreen(SpriteBatch batch) {
         this.stage = new Stage(ScreenManager.getInstance().getViewport(), batch);
         this.batch = batch;
+        this.stage.setDebugAll(Rules.DEBUG);
         this.color = new Color(Color.valueOf(PaintConstants.BACKGROUND_COLOR_HEX));
     }
 

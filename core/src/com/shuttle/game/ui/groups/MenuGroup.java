@@ -1,88 +1,98 @@
 package com.shuttle.game.ui.groups;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.ui.groups.profilesMVC.VerticalGroupView;
 import com.shuttle.game.utils.Assets;
 
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author Shuttle on 6/23/18.
  */
 public class MenuGroup extends Group {
-    private BitmapFont font96;
     private BitmapFont font64;
-    @Getter
-    @Setter
-    private boolean isEmptyUserName;
-    @Getter
-    @Setter
+    private BitmapFont font256;
+    private static boolean isValidUserName;
     private TextField username;
-    private Skin skin;
-    @Getter
-    @Setter
-    private FileHandle file;
+    private Button buttonProfile;
+    private GlyphLayout glyphLayout;
+    private String notice;
+
+    private VerticalGroupView verticalGroupView;
 
     public MenuGroup() {
-        this.setName(com.shuttle.game.ui.groups.GroupType.MENU.name());
+        this.setName(GroupType.MENU.name());
         this.setVisible(true);
-        this.skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        this.font96 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
+        Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
+        this.verticalGroupView = new VerticalGroupView();
+        this.font256 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT256, BitmapFont.class);
         this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
-
-        this.file = Gdx.files.local("username");
-        TextField.TextFieldStyle tfs = skin.get("login", TextField.TextFieldStyle.class);
+        this.buttonProfile = new Button(skin, "default");
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = font64;
+        TextField.TextFieldStyle tfs = skin.get("default", TextField.TextFieldStyle.class);
         tfs.font = font64;
         tfs.fontColor = Color.valueOf("ffffffff");
         tfs.cursor.setMinWidth(10);
-
-        this.username = new TextField(
-                "",
-                skin,
-                "login");
-
-        this.username.setAlignment(Align.center);
-        username.setPosition(
-                Rules.WORLD_WIDTH / 4,
-                Rules.WORLD_HEIGHT / 2
-        );
+        this.username = new TextField("", skin, "default");
+        username.setAlignment(Align.center);
         username.setMaxLength(10);
+
+        this.glyphLayout = new GlyphLayout();
+        this.notice = "";
+        glyphLayout.setText(font64, "");
+
+        username.setPosition(Rules.WORLD_WIDTH / 4, username.getHeight() + verticalGroupView.getY() + verticalGroupView.getHeight());
         username.setWidth(Rules.WORLD_WIDTH / 2);
+        buttonProfile.setSize(128, 128);
+        buttonProfile.setPosition(Rules.WORLD_WIDTH / 2 - buttonProfile.getWidth() / 2, buttonProfile.getHeight() + verticalGroupView.getY() + verticalGroupView.getHeight() + username.getHeight() - 22);
+
+        buttonProfile.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                verticalGroupView.switchVisible();
+            }
+        });
 
         username.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                isEmptyUserName = username.getText().isEmpty();
+                isValidUserName = username.getText().isEmpty();
             }
         });
 
-        if (file.exists()) {
-            username.setText(file.readString());
-        }
+        isValidUserName = username.getText().isEmpty();
 
-        isEmptyUserName = username.getText().isEmpty();
-
+        this.addActor(buttonProfile);
         this.addActor(username);
+        this.addActor(verticalGroupView);
+    }
+
+    public static boolean isValidProfile() {
+        return isValidUserName;
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        font96.draw(batch, "Shuttle", 0, 1800, 1080, 1, false);
-        username.draw(batch, parentAlpha);
-        if (isEmptyUserName) {
-            font96.draw(batch, "Empty username", 0, 900, 1080, 1, false);
-        }
+        super.draw(batch, parentAlpha);
+        font256.draw(batch, "SHUTTLE", 0, 1800, 1080, 1, false);
+        font64.draw(batch, glyphLayout,
+                Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
+                verticalGroupView.getY() + verticalGroupView.getHeight() + glyphLayout.height + 22
+        );
     }
 }
