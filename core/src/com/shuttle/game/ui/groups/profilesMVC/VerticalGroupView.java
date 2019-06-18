@@ -16,6 +16,14 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author Shuttle on 17/06/19.
  */
@@ -24,10 +32,15 @@ public class VerticalGroupView extends VerticalGroup {
     private final ScrollPane scrollPane;
     private VerticalGroup verticalGroup;
     private VerticalGroupController controller;
-
+    private java.util.Map<String, Line> currentLines;
+    private Map<String, Line> previousLines;
+    private List<String> id;
 
     public VerticalGroupView() {
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
+        this.currentLines = new HashMap<String, Line>();
+        this.previousLines = new HashMap<String, Line>();
+        this.id = new ArrayList<String>();
         this.verticalGroup = new VerticalGroup();
         this.controller = new VerticalGroupController(this);
         scrollPane = new ScrollPane(verticalGroup, skin);
@@ -50,46 +63,90 @@ public class VerticalGroupView extends VerticalGroup {
     public void init() {
         verticalGroup.clear();
         verticalGroup.addActor(new Header());
-        for (int i = 0; i < Profiles.getProfiles().size(); i++) {
-            ProfileDAO profile = Profiles.getProfiles().get(i);
-            verticalGroup.addActor(new Line(profile));
+        for (int i = 0; i < Profiles.getProfileList().size(); i++) {
+            ProfileDAO profile = Profiles.getProfileList().get(i);
+            Line line = new Line(profile);
+            currentLines.put(profile.getId(), line);
+            verticalGroup.addActor(line);
         }
+        id.clear();
+        id.addAll(previousLines.keySet());
+        for (int i = 0; i < id.size(); i++) {
+            Line line = currentLines.get(id.get(i));
+            if (line != null) {
+                line
+                        .getTimeAndFlag()
+                        .copy(previousLines.get(id.get(i)).getTimeAndFlag());
+            }
+        }
+        previousLines.clear();
+        previousLines.putAll(currentLines);
+        currentLines.clear();
     }
 
     public void switchVisible() {
         scrollPane.setVisible(!scrollPane.isVisible());
     }
 
+    private class TimeAndFlag {
+        @Getter
+        @Setter
+        private boolean pressed;
+        @Getter
+        @Setter
+        private boolean confirm;
+        @Getter
+        @Setter
+        private float pressedWait;
+        @Getter
+        @Setter
+        private float deleteWait;
+
+        void addPressedWait(float amount) {
+            pressedWait += amount;
+        }
+
+        void addDeleteWait(float amount) {
+            deleteWait += amount;
+        }
+
+        public void copy(TimeAndFlag timeAndFlag) {
+            this.confirm = timeAndFlag.confirm;
+            this.pressed = timeAndFlag.pressed;
+            this.pressedWait = timeAndFlag.pressedWait;
+            this.deleteWait = timeAndFlag.deleteWait;
+        }
+    }
+
     private class Line extends Group {
         private Table table;
-        private boolean pressed;
-        private boolean confirm;
-        private float pressedWait;
-        private float deleteWait;
         private ProfileDAO profile;
+        @Getter
+        private TimeAndFlag timeAndFlag;
 
         @Override
         public void act(float delta) {
             super.act(delta);
-            if (pressed) {
-                pressedWait += delta;
+            if (timeAndFlag.isPressed()) {
+                timeAndFlag.addPressedWait(delta);
             }
-            if (pressedWait >= Rules.LINE_PRESSED_WAIT) {
-                pressedWait = 0.0f;
-                pressed = false;
-                confirm = true;
+            if (timeAndFlag.getPressedWait() >= Rules.LINE_PRESSED_WAIT) {
+                timeAndFlag.setPressedWait(0.0f);
+                timeAndFlag.setPressed(false);
+                timeAndFlag.setConfirm(true);
             }
-            if (confirm) {
-                deleteWait += delta;
+            if (timeAndFlag.isConfirm()) {
+                timeAndFlag.addDeleteWait(delta);
             }
-            if (deleteWait >= Rules.LINE_DELETE_WAIT) {
-                deleteWait = 0.0f;
-                confirm = false;
+            if (timeAndFlag.getDeleteWait() >= Rules.LINE_DELETE_WAIT) {
+                timeAndFlag.setDeleteWait(0.0f);
+                timeAndFlag.setConfirm(false);
                 controller.removeProfile(Line.this.profile);
             }
         }
 
         Line(ProfileDAO profile) {
+            this.timeAndFlag = new TimeAndFlag();
             this.profile = profile;
             this.table = new Table();
             table.row().padBottom(22).expandX();
@@ -101,17 +158,19 @@ public class VerticalGroupView extends VerticalGroup {
             minus.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    if (!confirm) {
-                        pressed = true;
-                    } else confirm = false;
+                    if (!timeAndFlag.isConfirm()) {
+                        timeAndFlag.setPressed(true);
+                    } else {
+                        timeAndFlag.setConfirm(false);
+                    }
                     return true;
                 }
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    pressed = false;
-                    deleteWait = 0.0f;
-                    pressedWait = 0.0f;
+                    timeAndFlag.setPressed(false);
+                    timeAndFlag.setDeleteWait(0.0f);
+                    timeAndFlag.setPressedWait(0.0f);
                 }
             });
 

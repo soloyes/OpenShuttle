@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.databind.type.MapLikeType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.shuttle.game.conf.FileConstants;
 import com.shuttle.game.conf.GamePreferences;
@@ -12,7 +12,9 @@ import com.shuttle.game.conf.PaintConstants;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Shuttle on 17/06/19.
@@ -20,7 +22,7 @@ import java.util.List;
 
 public class Profiles {
     @JsonIgnore
-    private List<ProfileDAO> profiles;
+    private Map<String, ProfileDAO> profiles;
 
     @JsonIgnore
     private static Profiles instance;
@@ -28,16 +30,26 @@ public class Profiles {
     @JsonIgnore
     private FileHandle file;
 
+    @JsonIgnore
     private ProfileDAO empty;
 
+    @JsonIgnore
+    private static List<ProfileDAO> list = new ArrayList<ProfileDAO>();
+
     private Profiles() {
-        this.profiles = new ArrayList<ProfileDAO>();
+        this.profiles = new HashMap<String, ProfileDAO>();
         this.file = Gdx.files.internal(FileConstants.PROFILES);
         this.empty = asEmpty();
     }
 
-    public static List<ProfileDAO> getProfiles() {
+    public static Map<String, ProfileDAO> getProfileMap() {
         return getInstance().profiles;
+    }
+
+    public static List<ProfileDAO> getProfileList() {
+        list.clear();
+        list.addAll(getInstance().profiles.values());
+        return list;
     }
 
     private static Profiles getInstance() {
@@ -47,17 +59,18 @@ public class Profiles {
             ObjectMapper mapper = new ObjectMapper();
             try {
                 if (instance.file.exists()) {
-                    CollectionType collectionType =
+                    MapLikeType mapLikeType =
                             TypeFactory
                                     .defaultInstance()
-                                    .constructCollectionType(ArrayList.class, ProfileDAO.class);
-                    instance.profiles = mapper.readValue(instance.file.file(), collectionType);
+                                    .constructMapLikeType(Map.class, String.class, ProfileDAO.class);
+                    instance.profiles = mapper.readValue(instance.file.file(), mapLikeType);
                 } else {
                     initProfiles();
                     mapper.writeValue(instance.file.file(), instance.profiles);
                 }
             } catch (IOException e) {
                 initProfiles();
+                e.printStackTrace();
             }
             //
         }
@@ -66,7 +79,8 @@ public class Profiles {
 
     private static void initProfiles() {
         for (int i = 0; i < PaintConstants.DUMMY_PROFILES; i++) {
-            instance.profiles.add(new ProfileDAO(ProfileDAO.Type.DUMMY, "", null, false));
+            ProfileDAO dummy = asDummy();
+            instance.profiles.put(dummy.getId(), dummy);
         }
     }
 
@@ -84,11 +98,13 @@ public class Profiles {
     }
 
     public static void addEmptyProfile() {
-        instance.profiles.add(asEmpty());
+        ProfileDAO empty = asEmpty();
+        instance.profiles.put(empty.getId(), empty);
     }
 
     public static void addDummyProfile() {
-        instance.profiles.add(asDummy());
+        ProfileDAO dummy = asDummy();
+        instance.profiles.put(dummy.getId(), dummy);
     }
 
     public static void write() {

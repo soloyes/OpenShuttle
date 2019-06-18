@@ -45,11 +45,11 @@ public class ProfileDAO {
     }
 
     public ProfileDAO(Type type, String username, GamePreferences preferences, boolean active) {
-        this.id = UUID.randomUUID().toString();
         this.type = type;
         this.username = username;
         this.preferences = preferences;
         this.active = active;
+        this.id = UUID.randomUUID().toString();
     }
 
     public enum Type {
