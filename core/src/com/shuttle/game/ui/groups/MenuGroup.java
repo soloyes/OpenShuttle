@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.ui.groups.profilesMVC.VerticalGroupController;
 import com.shuttle.game.ui.groups.profilesMVC.VerticalGroupView;
 import com.shuttle.game.utils.Assets;
 
@@ -27,18 +28,20 @@ public class MenuGroup extends Group {
     private BitmapFont font64;
     private BitmapFont font256;
     private static boolean isValidUserName;
-    private TextField username;
+    private static TextField username;
     private Button buttonProfile;
     private GlyphLayout glyphLayout;
     private String notice;
-
     private VerticalGroupView verticalGroupView;
 
-    public MenuGroup() {
-        this.setName(GroupType.MENU.name());
+    public static void setUsername(String username) {
+        MenuGroup.username.setText(username);
+    }
+
+    private MenuGroup(String name) {
+        this.setName(name);
         this.setVisible(true);
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        this.verticalGroupView = new VerticalGroupView();
         this.font256 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT256, BitmapFont.class);
         this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
         this.buttonProfile = new Button(skin, "default");
@@ -48,12 +51,20 @@ public class MenuGroup extends Group {
         tfs.font = font64;
         tfs.fontColor = Color.valueOf("ffffffff");
         tfs.cursor.setMinWidth(10);
-        this.username = new TextField("", skin, "default");
-        username.setAlignment(Align.center);
-        username.setMaxLength(10);
-
+        username = new TextField("", skin, "default");
         this.glyphLayout = new GlyphLayout();
-        this.notice = "";
+        //MVC
+        this.verticalGroupView = new VerticalGroupView();
+        VerticalGroupController verticalGroupController = new VerticalGroupController(verticalGroupView);
+        verticalGroupView.setController(verticalGroupController);
+        //
+    }
+
+    public MenuGroup() {
+        this(GroupType.MENU.name());
+        username.setAlignment(Align.center);
+        username.setMaxLength(14);
+        notice = "";
         glyphLayout.setText(font64, "");
 
         username.setPosition(Rules.WORLD_WIDTH / 4, username.getHeight() + verticalGroupView.getY() + verticalGroupView.getHeight());
@@ -67,7 +78,6 @@ public class MenuGroup extends Group {
                 verticalGroupView.switchVisible();
             }
         });
-
         username.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

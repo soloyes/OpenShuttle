@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.ui.groups.MenuGroup;
 import com.shuttle.game.utils.Assets;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import lombok.Setter;
 public class VerticalGroupView extends VerticalGroup {
     private final ScrollPane scrollPane;
     private VerticalGroup verticalGroup;
+    @Setter
     private VerticalGroupController controller;
     private java.util.Map<String, Line> currentLines;
     private Map<String, Line> previousLines;
@@ -42,7 +44,6 @@ public class VerticalGroupView extends VerticalGroup {
         this.previousLines = new HashMap<String, Line>();
         this.id = new ArrayList<String>();
         this.verticalGroup = new VerticalGroup();
-        this.controller = new VerticalGroupController(this);
         scrollPane = new ScrollPane(verticalGroup, skin);
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollingDisabled(true, false);
@@ -63,10 +64,18 @@ public class VerticalGroupView extends VerticalGroup {
     public void init() {
         verticalGroup.clear();
         verticalGroup.addActor(new Header());
+        boolean hasActive = false;
         for (int i = 0; i < Profiles.getProfileList().size(); i++) {
             ProfileDAO profile = Profiles.getProfileList().get(i);
             Line line = new Line(profile);
             currentLines.put(profile.getId(), line);
+            if (profile.isActive()) {
+                MenuGroup.setUsername(profile.getUsername());
+                hasActive = true;
+            }
+            if (!hasActive) {
+                MenuGroup.setUsername("");
+            }
             verticalGroup.addActor(line);
         }
         id.clear();
