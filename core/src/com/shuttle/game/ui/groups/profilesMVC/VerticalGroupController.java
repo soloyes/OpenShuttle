@@ -3,7 +3,6 @@ package com.shuttle.game.ui.groups.profilesMVC;
 import com.shuttle.game.conf.PaintConstants;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Shuttle on 17/06/19.
@@ -18,7 +17,7 @@ public class VerticalGroupController {
     }
 
     private void initView() {
-        Map<String, ProfileDAO> profiles = Profiles.getProfileMap();
+        List<ProfileDAO> profiles = Profiles.getProfileList();
         //if not enough dummy lines -> to show scroll from very begin
         while (profiles.size() < PaintConstants.DUMMY_PROFILES) {
             Profiles.addDummyProfile();
@@ -45,6 +44,11 @@ public class VerticalGroupController {
 
     public void removeProfile(ProfileDAO profile) {
         Profiles.removeProfile(profile);
+        initView();
+    }
+
+    public void selectProfile(ProfileDAO profile) {
+        Profiles.activateProfile(profile);
         initView();
     }
 }

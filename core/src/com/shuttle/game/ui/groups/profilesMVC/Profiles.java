@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.MapLikeType;
+import com.fasterxml.jackson.databind.type.CollectionLikeType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.shuttle.game.conf.FileConstants;
 import com.shuttle.game.conf.GamePreferences;
@@ -12,9 +12,8 @@ import com.shuttle.game.conf.PaintConstants;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * @author Shuttle on 17/06/19.
@@ -22,7 +21,7 @@ import java.util.Map;
 
 public class Profiles {
     @JsonIgnore
-    private Map<String, ProfileDAO> profiles;
+    private List<ProfileDAO> profiles;
 
     @JsonIgnore
     private static Profiles instance;
@@ -33,25 +32,18 @@ public class Profiles {
     @JsonIgnore
     private ProfileDAO empty;
 
-    @JsonIgnore
-    private static List<ProfileDAO> list = new ArrayList<ProfileDAO>();
 
     private Profiles() {
-        this.profiles = new HashMap<String, ProfileDAO>();
+        this.profiles = new ArrayList<ProfileDAO>();
         this.file = Gdx.files.internal(FileConstants.PROFILES);
         this.empty = asEmpty();
     }
 
-    public static Map<String, ProfileDAO> getProfileMap() {
+    public static List<ProfileDAO> getProfileList() {
         return getInstance().profiles;
     }
 
-    public static List<ProfileDAO> getProfileList() {
-        list.clear();
-        list.addAll(getInstance().profiles.values());
-        return list;
-    }
-
+    //Why? Because it is not good to work with static resources (file e.g.)
     private static Profiles getInstance() {
         if (instance == null) {
             instance = new Profiles();
@@ -59,11 +51,11 @@ public class Profiles {
             ObjectMapper mapper = new ObjectMapper();
             try {
                 if (instance.file.exists()) {
-                    MapLikeType mapLikeType =
+                    CollectionLikeType collectionLikeType =
                             TypeFactory
                                     .defaultInstance()
-                                    .constructMapLikeType(Map.class, String.class, ProfileDAO.class);
-                    instance.profiles = mapper.readValue(instance.file.file(), mapLikeType);
+                                    .constructCollectionLikeType(List.class, ProfileDAO.class);
+                    instance.profiles = mapper.readValue(instance.file.file(), collectionLikeType);
                 } else {
                     initProfiles();
                     mapper.writeValue(instance.file.file(), instance.profiles);
@@ -80,7 +72,7 @@ public class Profiles {
     private static void initProfiles() {
         for (int i = 0; i < PaintConstants.DUMMY_PROFILES; i++) {
             ProfileDAO dummy = asDummy();
-            instance.profiles.put(dummy.getId(), dummy);
+            getProfileList().add(dummy);
             GamePreferences.apply(GamePreferences.defaults);
         }
     }
@@ -98,16 +90,35 @@ public class Profiles {
     }
 
     public static void removeProfile(ProfileDAO profile) {
-        Map<String, ProfileDAO> profiles = getProfileMap();
-        profiles.remove(profile.getId());
+        List<ProfileDAO> profiles = getProfileList();
+        for (int i = 0; i < profiles.size(); i++) {
+            if (profiles.get(i).getId().equals(profile.getId())) {
+                if (profile.isActive()) {
+                    if (i == 0) {
+                        profiles.get(i + 1).setActive(true);
+                    } else {
+                        profiles.get(i - 1).setActive(true);
+                    }
+                }
+
+                profiles.remove(profile);
+
+                //If have we deleted all from list
+                ProfileDAO tmpProfile = profiles.get(0);
+                if (tmpProfile.getType() == ProfileDAO.Type.DUMMY) {
+                    tmpProfile.setActive(false);
+                }
+                break;
+            }
+        }
     }
 
     public static void addEmptyProfile() {
         ProfileDAO empty = asEmpty();
-        instance.profiles.put(empty.getId(), empty);
+        getProfileList().add(empty);
     }
 
-    private static void activateProfile(ProfileDAO profile) {
+    public static void activateProfile(ProfileDAO profile) {
         List<ProfileDAO> profiles = getProfileList();
         for (int i = 0; i < profiles.size(); i++) {
             profiles.get(i).setActive(false);
@@ -117,7 +128,7 @@ public class Profiles {
 
     public static void addDummyProfile() {
         ProfileDAO dummy = asDummy();
-        instance.profiles.put(dummy.getId(), dummy);
+        getProfileList().add(dummy);
     }
 
     public static void write() {

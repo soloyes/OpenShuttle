@@ -120,7 +120,7 @@ public class VerticalGroupView extends VerticalGroup {
 
     private class Line extends Group {
         private Table table;
-        private ProfileDAO profile;
+        private final ProfileDAO profile;
         @Getter
         private TimeAndFlag timeAndFlag;
 
@@ -145,7 +145,7 @@ public class VerticalGroupView extends VerticalGroup {
             }
         }
 
-        Line(ProfileDAO profile) {
+        Line(final ProfileDAO profile) {
             this.timeAndFlag = new TimeAndFlag();
             this.profile = profile;
             this.table = new Table();
@@ -180,7 +180,14 @@ public class VerticalGroupView extends VerticalGroup {
                 table.add();
             } else {
                 table.add(minus);
-                table.add(new Label(profile.getUsername(), style64)).center();
+                Label label = new Label(profile.getUsername(), style64);
+                label.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        controller.selectProfile(profile);
+                    }
+                });
+                table.add(label).center();
                 table.add();
             }
 
