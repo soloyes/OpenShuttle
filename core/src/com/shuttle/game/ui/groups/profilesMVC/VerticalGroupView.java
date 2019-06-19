@@ -206,7 +206,7 @@ public class VerticalGroupView extends VerticalGroup {
             plus.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    controller.addEmptyProfile();
+                    controller.addProfile();
                 }
             });
             table.add(plus);

@@ -27,7 +27,7 @@ public class VerticalGroupController {
         verticalGroupView.init();
     }
 
-    public void addEmptyProfile() {
+    public void addProfile() {
         int i;
         List<ProfileDAO> profiles = Profiles.getProfileList();
         for (i = 0; i < profiles.size(); i++) {
@@ -44,8 +44,7 @@ public class VerticalGroupController {
     }
 
     public void removeProfile(ProfileDAO profile) {
-        Map<String, ProfileDAO> profiles = Profiles.getProfileMap();
-        profiles.remove(profile.getId());
+        Profiles.removeProfile(profile);
         initView();
     }
 }

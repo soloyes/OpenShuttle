@@ -81,12 +81,12 @@ public class Profiles {
         for (int i = 0; i < PaintConstants.DUMMY_PROFILES; i++) {
             ProfileDAO dummy = asDummy();
             instance.profiles.put(dummy.getId(), dummy);
+            GamePreferences.apply(GamePreferences.defaults);
         }
     }
 
     private static ProfileDAO asEmpty() {
-        GamePreferences preferences = null;
-        return new ProfileDAO(ProfileDAO.Type.PROFILE, "Empty Profile", preferences, false);
+        return new ProfileDAO(ProfileDAO.Type.PROFILE, "Empty Profile", GamePreferences.defaults, false);
     }
 
     private static ProfileDAO asDummy() {
@@ -97,9 +97,22 @@ public class Profiles {
         profile.copy(instance.empty);
     }
 
+    public static void removeProfile(ProfileDAO profile) {
+        Map<String, ProfileDAO> profiles = getProfileMap();
+        profiles.remove(profile.getId());
+    }
+
     public static void addEmptyProfile() {
         ProfileDAO empty = asEmpty();
         instance.profiles.put(empty.getId(), empty);
+    }
+
+    private static void activateProfile(ProfileDAO profile) {
+        List<ProfileDAO> profiles = getProfileList();
+        for (int i = 0; i < profiles.size(); i++) {
+            profiles.get(i).setActive(false);
+        }
+        profile.setActive(true);
     }
 
     public static void addDummyProfile() {

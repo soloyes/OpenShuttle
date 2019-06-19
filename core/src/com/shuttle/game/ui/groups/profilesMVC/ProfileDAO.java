@@ -1,7 +1,6 @@
 package com.shuttle.game.ui.groups.profilesMVC;
 
-import com.shuttle.game.conf.GamePreferences;
-
+import java.util.Map;
 import java.util.UUID;
 
 import lombok.Getter;
@@ -24,7 +23,7 @@ public class ProfileDAO {
 
     @Getter
     @Setter
-    private GamePreferences preferences;
+    private Map<String, Object> preferences;
 
     @Getter
     @Setter
@@ -44,7 +43,7 @@ public class ProfileDAO {
         this.active = profile.isActive();
     }
 
-    public ProfileDAO(Type type, String username, GamePreferences preferences, boolean active) {
+    public ProfileDAO(Type type, String username, Map<String, Object> preferences, boolean active) {
         this.type = type;
         this.username = username;
         this.preferences = preferences;
