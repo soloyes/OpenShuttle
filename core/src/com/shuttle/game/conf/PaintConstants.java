@@ -248,6 +248,21 @@ public final class PaintConstants {
     public static final String BACKGROUND_COLOR_HEX = "100514ff";
     public static final float BACKGROUND_OSCILLATE_WIDTH = 50;
     public static final int DUMMY_PROFILES = 5;
+    public static final float NOTICE_BLINK_TIME = 1.0f;
+
+    public static final String UI_YOUR_USERNAME = "Your profile username";
+    public static final String UI_PROFILE_SAVED = "Profile saved";
+    public static final String UI_PROFILE_EDIT = "Profile edit";
+    public static final String UI_EMPTY_USERNAME = "Empty username";
+    public static final String UI_CAN_SAVE = "Can save username";
+    public static final String UI_DELETION_PROCESS = "PROFILE DELETION PROCESS...";
+    public static final String UI_PROFILE_DELETED = "Profile is deleted";
+    public static final String UI_PROFILE_DEL = "Del. profile...";
+    public static final String UI_CANCEL_DELETION = "Cancel profile deletion";
+    public static final String UI_SELECT_PROFILE = "Select profile";
+    public static final String UI_NEW_PROFILE = "Save profile";
+    public static final String UI_ADD_NEW_LINE = "Add new line";
+    public static final String UI_EMPTY_PROFILE = "Empty profile";
 
     private PaintConstants() {
     }

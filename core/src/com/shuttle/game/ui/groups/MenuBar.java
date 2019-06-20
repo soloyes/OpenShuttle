@@ -14,6 +14,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.screens.ScreenManager;
+import com.shuttle.game.ui.groups.profilesMVC.Profiles;
 import com.shuttle.game.utils.Assets;
 
 /**
@@ -25,7 +26,6 @@ public class MenuBar extends Group {
     private Button buttonConfig;
     private Button buttonResults;
     private Button buttonShare;
-    private MenuGroup group;
     private BoomBox boomBox;
 
     public MenuBar() {
@@ -89,7 +89,7 @@ public class MenuBar extends Group {
                 }
                 //
 
-                if (!MenuGroup.isValidProfile()) {
+                if (MenuGroup.isValidUserName()) {
                     ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
                 } else {
                     Actor[] actorArray = getStage().getActors().toArray();
@@ -204,5 +204,21 @@ public class MenuBar extends Group {
         buttonConfig.draw(batch, parentAlpha);
         buttonResults.draw(batch, parentAlpha);
         buttonShare.draw(batch, parentAlpha);
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        if (Profiles.isEmpty) {
+            buttonShare.setDisabled(true);
+            buttonPlay.setDisabled(true);
+            buttonConfig.setDisabled(true);
+            buttonResults.setDisabled(true);
+        } else {
+            buttonShare.setDisabled(false);
+            buttonPlay.setDisabled(false);
+            buttonConfig.setDisabled(false);
+            buttonResults.setDisabled(false);
+        }
     }
 }

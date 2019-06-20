@@ -1,7 +1,5 @@
 package com.shuttle.game.ui.groups.profilesMVC;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.Map;
 import java.util.UUID;
 
@@ -35,14 +33,12 @@ public class ProfileDAO {
     @Setter
     private String id;
 
-    @JsonIgnore
-    private static int i;
     private ProfileDAO() {
     }
 
     public void copy(ProfileDAO profile) {
         this.type = profile.getType();
-        this.username = profile.getUsername() + ++i;
+        this.username = profile.getUsername();
         this.preferences = profile.getPreferences();
         this.active = profile.isActive();
     }

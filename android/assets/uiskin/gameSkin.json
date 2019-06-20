@@ -79,6 +79,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
       up: round-gray
       down: round-dark-gray
       over: round-light-gray
+      disabled: open
     }
   toggle: {
     up: round-gray
@@ -94,6 +95,8 @@ com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
       checkboxOff: checkbox
 		font: font
       fontColor: black
+      downFontColor: black
+      checkedFontColor: black
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
@@ -158,7 +161,7 @@ com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
 	default: {
       hScroll: round-white-small
-      hScrollKnob: round-gray-small
+      hScrollKnob: slider-knob
       vScroll: round-white-small
       vScrollKnob: round-gray-small
 	}

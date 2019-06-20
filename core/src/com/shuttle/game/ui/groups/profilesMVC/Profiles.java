@@ -32,6 +32,8 @@ public class Profiles {
     @JsonIgnore
     private ProfileDAO empty;
 
+    @JsonIgnore
+    public static boolean isEmpty;
 
     private Profiles() {
         this.profiles = new ArrayList<ProfileDAO>();
@@ -39,6 +41,7 @@ public class Profiles {
         this.empty = asEmpty();
     }
 
+    //todo: make implements Model => controller need to know about model. Exit from statics
     public static List<ProfileDAO> getProfileList() {
         return getInstance().profiles;
     }
@@ -78,7 +81,7 @@ public class Profiles {
     }
 
     private static ProfileDAO asEmpty() {
-        return new ProfileDAO(ProfileDAO.Type.PROFILE, "Empty Profile", GamePreferences.defaults, false);
+        return new ProfileDAO(ProfileDAO.Type.PROFILE, PaintConstants.UI_EMPTY_PROFILE, GamePreferences.defaults, false);
     }
 
     private static ProfileDAO asDummy() {
@@ -87,6 +90,17 @@ public class Profiles {
 
     public static void setEmptyProfile(ProfileDAO profile) {
         profile.copy(instance.empty);
+    }
+
+    public static ProfileDAO getActive() {
+        List<ProfileDAO> profiles = getProfileList();
+        ProfileDAO profile = null;
+        for (int i = 0; i < profiles.size(); i++) {
+            if (profiles.get(i).isActive()) {
+                profile = profiles.get(i);
+            }
+        }
+        return profile;
     }
 
     public static void removeProfile(ProfileDAO profile) {
@@ -113,9 +127,10 @@ public class Profiles {
         }
     }
 
-    public static void addEmptyProfile() {
+    public static ProfileDAO addEmptyProfile() {
         ProfileDAO empty = asEmpty();
         getProfileList().add(empty);
+        return empty;
     }
 
     public static void activateProfile(ProfileDAO profile) {
@@ -141,6 +156,15 @@ public class Profiles {
             }
         } catch (IOException e) {
             initProfiles();
+        }
+
+        isEmpty = true;
+        for (int i = 0; i < getProfileList().size(); i++) {
+            ProfileDAO profile = getProfileList().get(i);
+            if (profile.getType() != ProfileDAO.Type.DUMMY) {
+                isEmpty = false;
+                break;
+            }
         }
     }
 }

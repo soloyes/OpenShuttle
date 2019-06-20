@@ -143,6 +143,7 @@ public class VerticalGroupView extends VerticalGroup {
                 timeAndFlag.setPressedWait(0.0f);
                 timeAndFlag.setPressed(false);
                 timeAndFlag.setConfirm(true);
+                MenuGroup.setNotice(PaintConstants.UI_DELETION_PROCESS);
             }
             if (timeAndFlag.isConfirm()) {
                 timeAndFlag.addDeleteWait(delta);
@@ -151,6 +152,7 @@ public class VerticalGroupView extends VerticalGroup {
                 timeAndFlag.setDeleteWait(0.0f);
                 timeAndFlag.setConfirm(false);
                 controller.removeProfile(Line.this.profile);
+                MenuGroup.setNotice(PaintConstants.UI_PROFILE_DELETED);
             }
         }
 
@@ -169,8 +171,10 @@ public class VerticalGroupView extends VerticalGroup {
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     if (!timeAndFlag.isConfirm()) {
                         timeAndFlag.setPressed(true);
+                        MenuGroup.setNotice(PaintConstants.UI_PROFILE_DEL);
                     } else {
                         timeAndFlag.setConfirm(false);
+                        MenuGroup.setNotice(PaintConstants.UI_CANCEL_DELETION);
                     }
                     return true;
                 }
@@ -194,6 +198,7 @@ public class VerticalGroupView extends VerticalGroup {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         controller.selectProfile(profile);
+                        MenuGroup.setNotice(PaintConstants.UI_SELECT_PROFILE);
                     }
                 });
                 table.add(label).center();
@@ -223,10 +228,11 @@ public class VerticalGroupView extends VerticalGroup {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     controller.addProfile();
+                    MenuGroup.setNotice(PaintConstants.UI_NEW_PROFILE);
                 }
             });
             table.add(plus);
-            table.add(new Label("Add New Line", style64)).center();
+            table.add(new Label(PaintConstants.UI_ADD_NEW_LINE, style64)).center();
             table.add();
             table.align(Align.bottomLeft);
             table.setFillParent(true);
@@ -234,5 +240,10 @@ public class VerticalGroupView extends VerticalGroup {
             this.setHeight(90);
             this.addActor(table);
         }
+    }
+
+    public ProfileDAO addProfile(String username) {
+        setVisible(true);
+        return controller.addProfile(username);
     }
 }

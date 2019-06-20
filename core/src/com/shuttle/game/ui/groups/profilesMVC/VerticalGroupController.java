@@ -8,7 +8,7 @@ import java.util.List;
  * @author Shuttle on 17/06/19.
  */
 
-public class VerticalGroupController {
+public class VerticalGroupController implements Controller {
     private VerticalGroupView verticalGroupView;
 
     public VerticalGroupController(VerticalGroupView verticalGroupView) {
@@ -26,20 +26,33 @@ public class VerticalGroupController {
         verticalGroupView.init();
     }
 
-    public void addProfile() {
+    public ProfileDAO addProfile(String username) {
+        ProfileDAO profile = addProfile();
+        profile.setUsername(username);
+        return profile;
+    }
+
+    public void updateProfiles() {
+        initView();
+    }
+
+    public ProfileDAO addProfile() {
         int i;
+        ProfileDAO tmpProfile = null;
         List<ProfileDAO> profiles = Profiles.getProfileList();
         for (i = 0; i < profiles.size(); i++) {
             ProfileDAO profile = profiles.get(i);
             if (profile.getType() == ProfileDAO.Type.DUMMY) {
+                tmpProfile = profile;
                 Profiles.setEmptyProfile(profile);
                 break;
             }
         }
         if (i == profiles.size()) {
-            Profiles.addEmptyProfile();
+            tmpProfile = Profiles.addEmptyProfile();
         }
         initView();
+        return tmpProfile;
     }
 
     public void removeProfile(ProfileDAO profile) {
