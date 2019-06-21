@@ -1,13 +1,22 @@
 package com.shuttle.game.ui.groups.profilesMVC;
 
-public interface Controller {
-    ProfileDAO addProfile();
+import java.util.List;
 
-    ProfileDAO addProfile(String username);
+/**
+ * @author Shuttle on 21/06/19.
+ */
+
+public interface Controller {
 
     void updateProfiles();
 
     void removeProfile(ProfileDAO profile);
 
     void selectProfile(ProfileDAO profile);
+
+    ProfileDAO addProfile();
+
+    ProfileDAO addProfile(String username);
+
+    List<ProfileDAO> getProfileList();
 }

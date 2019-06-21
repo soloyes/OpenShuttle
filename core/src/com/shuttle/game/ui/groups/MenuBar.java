@@ -14,7 +14,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.screens.ScreenManager;
-import com.shuttle.game.ui.groups.profilesMVC.Profiles;
+import com.shuttle.game.ui.groups.profilesMVC.GroupController;
 import com.shuttle.game.utils.Assets;
 
 /**
@@ -98,7 +98,7 @@ public class MenuBar extends Group {
                             actorArray[i].setVisible(true);
                         } else if (actorArray[i].getName().equals(GroupType.MENU_BAR.name())) {
                             actorArray[i].setVisible(true);
-                        } else{
+                        } else {
                             actorArray[i].setVisible(false);
                         }
                     }
@@ -209,7 +209,7 @@ public class MenuBar extends Group {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (Profiles.isEmpty) {
+        if (GroupController.isEmpty()) {
             buttonShare.setDisabled(true);
             buttonPlay.setDisabled(true);
             buttonConfig.setDisabled(true);

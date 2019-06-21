@@ -29,16 +29,16 @@ import lombok.Setter;
  * @author Shuttle on 17/06/19.
  */
 
-public class VerticalGroupView extends VerticalGroup {
+public class VerticalGroupList extends VerticalGroup implements View {
     private final ScrollPane scrollPane;
     private VerticalGroup verticalGroup;
     @Setter
-    private VerticalGroupController controller;
+    private GroupController controller;
     private java.util.Map<String, Line> currentLines;
     private Map<String, Line> previousLines;
     private List<String> id;
 
-    public VerticalGroupView() {
+    public VerticalGroupList() {
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.currentLines = new HashMap<String, Line>();
         this.previousLines = new HashMap<String, Line>();
@@ -61,12 +61,13 @@ public class VerticalGroupView extends VerticalGroup {
         this.addActor(container);
     }
 
+    @Override
     public void init() {
         verticalGroup.clear();
         verticalGroup.addActor(new Header());
         boolean hasActive = false;
-        for (int i = 0; i < Profiles.getProfileList().size(); i++) {
-            ProfileDAO profile = Profiles.getProfileList().get(i);
+        for (int i = 0; i < controller.getProfileList().size(); i++) {
+            ProfileDAO profile = controller.getProfileList().get(i);
             Line line = new Line(profile);
             currentLines.put(profile.getId(), line);
             if (profile.isActive()) {
@@ -169,12 +170,14 @@ public class VerticalGroupView extends VerticalGroup {
             minus.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    if (!timeAndFlag.isConfirm()) {
-                        timeAndFlag.setPressed(true);
-                        MenuGroup.setNotice(PaintConstants.UI_PROFILE_DEL);
-                    } else {
-                        timeAndFlag.setConfirm(false);
-                        MenuGroup.setNotice(PaintConstants.UI_CANCEL_DELETION);
+                    if (MenuGroup.isValidUserName()) {
+                        if (!timeAndFlag.isConfirm()) {
+                            timeAndFlag.setPressed(true);
+                            MenuGroup.setNotice(PaintConstants.UI_PROFILE_DEL);
+                        } else {
+                            timeAndFlag.setConfirm(false);
+                            MenuGroup.setNotice(PaintConstants.UI_CANCEL_DELETION);
+                        }
                     }
                     return true;
                 }
@@ -197,8 +200,10 @@ public class VerticalGroupView extends VerticalGroup {
                 label.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        controller.selectProfile(profile);
-                        MenuGroup.setNotice(PaintConstants.UI_SELECT_PROFILE);
+                        if (MenuGroup.isValidUserName()) {
+                            controller.selectProfile(profile);
+                            MenuGroup.setNotice(PaintConstants.UI_SELECT_PROFILE);
+                        }
                     }
                 });
                 table.add(label).center();
@@ -227,8 +232,10 @@ public class VerticalGroupView extends VerticalGroup {
             plus.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    controller.addProfile();
-                    MenuGroup.setNotice(PaintConstants.UI_NEW_PROFILE);
+                    if (MenuGroup.isValidUserName()) {
+                        controller.addProfile();
+                        MenuGroup.setNotice(PaintConstants.UI_NEW_PROFILE);
+                    }
                 }
             });
             table.add(plus);

@@ -2,8 +2,11 @@ package com.shuttle.game.ui.groups.profilesMVC;
 
 import java.util.List;
 
+/**
+ * @author Shuttle on 21/06/19.
+ */
+
 public interface Model {
-    List<ProfileDAO> getProfileList();
 
     void setEmptyProfile(ProfileDAO profile);
 
@@ -11,9 +14,13 @@ public interface Model {
 
     void activateProfile(ProfileDAO profile);
 
-    ProfileDAO addEmptyProfile();
-
     void addDummyProfile();
 
     void write();
+
+    ProfileDAO getActive();
+
+    ProfileDAO addEmptyProfile();
+
+    List<ProfileDAO> getProfileList();
 }

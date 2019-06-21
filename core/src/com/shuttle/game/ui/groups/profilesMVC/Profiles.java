@@ -19,7 +19,7 @@ import java.util.List;
  * @author Shuttle on 17/06/19.
  */
 
-public class Profiles {
+public class Profiles implements Model {
     @JsonIgnore
     private List<ProfileDAO> profiles;
 
@@ -30,24 +30,28 @@ public class Profiles {
     private FileHandle file;
 
     @JsonIgnore
-    private ProfileDAO empty;
+    private ProfileDAO emptyProfile;
 
     @JsonIgnore
-    public static boolean isEmpty;
+    private static boolean empty;
 
-    private Profiles() {
-        this.profiles = new ArrayList<ProfileDAO>();
-        this.file = Gdx.files.internal(FileConstants.PROFILES);
-        this.empty = asEmpty();
+    public static boolean isEmpty() {
+        return empty;
     }
 
-    //todo: make implements Model => controller need to know about model. Exit from statics
-    public static List<ProfileDAO> getProfileList() {
+    public Profiles() {
+        this.profiles = new ArrayList<ProfileDAO>();
+        this.file = Gdx.files.internal(FileConstants.PROFILES);
+        this.emptyProfile = asEmpty();
+    }
+
+    @Override
+    public List<ProfileDAO> getProfileList() {
         return getInstance().profiles;
     }
 
     //Why? Because it is not good to work with static resources (file e.g.)
-    private static Profiles getInstance() {
+    private Profiles getInstance() {
         if (instance == null) {
             instance = new Profiles();
             //First game start
@@ -72,7 +76,7 @@ public class Profiles {
         return instance;
     }
 
-    private static void initProfiles() {
+    private void initProfiles() {
         for (int i = 0; i < PaintConstants.DUMMY_PROFILES; i++) {
             ProfileDAO dummy = asDummy();
             getProfileList().add(dummy);
@@ -88,11 +92,13 @@ public class Profiles {
         return new ProfileDAO(ProfileDAO.Type.DUMMY, "", null, false);
     }
 
-    public static void setEmptyProfile(ProfileDAO profile) {
-        profile.copy(instance.empty);
+    @Override
+    public void setEmptyProfile(ProfileDAO profile) {
+        profile.copy(instance.emptyProfile);
     }
 
-    public static ProfileDAO getActive() {
+    @Override
+    public ProfileDAO getActive() {
         List<ProfileDAO> profiles = getProfileList();
         ProfileDAO profile = null;
         for (int i = 0; i < profiles.size(); i++) {
@@ -103,7 +109,8 @@ public class Profiles {
         return profile;
     }
 
-    public static void removeProfile(ProfileDAO profile) {
+    @Override
+    public void removeProfile(ProfileDAO profile) {
         List<ProfileDAO> profiles = getProfileList();
         for (int i = 0; i < profiles.size(); i++) {
             if (profiles.get(i).getId().equals(profile.getId())) {
@@ -127,13 +134,15 @@ public class Profiles {
         }
     }
 
-    public static ProfileDAO addEmptyProfile() {
+    @Override
+    public ProfileDAO addEmptyProfile() {
         ProfileDAO empty = asEmpty();
         getProfileList().add(empty);
         return empty;
     }
 
-    public static void activateProfile(ProfileDAO profile) {
+    @Override
+    public void activateProfile(ProfileDAO profile) {
         List<ProfileDAO> profiles = getProfileList();
         for (int i = 0; i < profiles.size(); i++) {
             profiles.get(i).setActive(false);
@@ -141,12 +150,14 @@ public class Profiles {
         profile.setActive(true);
     }
 
-    public static void addDummyProfile() {
+    @Override
+    public void addDummyProfile() {
         ProfileDAO dummy = asDummy();
         getProfileList().add(dummy);
     }
 
-    public static void write() {
+    @Override
+    public void write() {
         ObjectMapper mapper = new ObjectMapper();
         try {
             if (instance.file.exists()) {
@@ -158,11 +169,11 @@ public class Profiles {
             initProfiles();
         }
 
-        isEmpty = true;
+        empty = true;
         for (int i = 0; i < getProfileList().size(); i++) {
             ProfileDAO profile = getProfileList().get(i);
             if (profile.getType() != ProfileDAO.Type.DUMMY) {
-                isEmpty = false;
+                empty = false;
                 break;
             }
         }

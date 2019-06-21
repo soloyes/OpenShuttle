@@ -19,10 +19,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.ui.groups.profilesMVC.GroupController;
 import com.shuttle.game.ui.groups.profilesMVC.ProfileDAO;
 import com.shuttle.game.ui.groups.profilesMVC.Profiles;
-import com.shuttle.game.ui.groups.profilesMVC.VerticalGroupController;
-import com.shuttle.game.ui.groups.profilesMVC.VerticalGroupView;
+import com.shuttle.game.ui.groups.profilesMVC.VerticalGroupList;
 import com.shuttle.game.utils.Assets;
 
 
@@ -36,8 +36,8 @@ public class MenuGroup extends Group {
     private static TextField username;
     private Button buttonProfile;
     private GlyphLayout glyphLayout;
-    private VerticalGroupView verticalGroupView;
-    private VerticalGroupController verticalGroupController;
+    private VerticalGroupList verticalGroupList;
+    private GroupController groupController;
     private float a;
     private float blinkTime;
     private static float shadowTime;
@@ -69,11 +69,12 @@ public class MenuGroup extends Group {
         username = new TextField("", skin, "default");
         this.glyphLayout = new GlyphLayout();
         //MVC
-        this.verticalGroupView = new VerticalGroupView();
-        this.verticalGroupController = new VerticalGroupController(verticalGroupView);
-        verticalGroupView.setController(verticalGroupController);
+        this.verticalGroupList = new VerticalGroupList();
+        this.groupController = new GroupController(verticalGroupList, new Profiles());
+        verticalGroupList.setController(groupController);
+        groupController.updateProfiles();
         //
-        if (Profiles.getActive() != null) {
+        if (groupController.getActive() != null) {
             setNotice(PaintConstants.UI_YOUR_USERNAME);
         }
     }
@@ -84,16 +85,16 @@ public class MenuGroup extends Group {
         username.setMaxLength(14);
         glyphLayout.setText(font64, notice);
 
-        username.setPosition(Rules.WORLD_WIDTH / 4, username.getHeight() + verticalGroupView.getY() + verticalGroupView.getHeight());
+        username.setPosition(Rules.WORLD_WIDTH / 4, username.getHeight() + verticalGroupList.getY() + verticalGroupList.getHeight());
         username.setWidth(Rules.WORLD_WIDTH / 2);
         buttonProfile.setSize(128, 128);
-        buttonProfile.setPosition(Rules.WORLD_WIDTH / 2 - buttonProfile.getWidth() / 2, buttonProfile.getHeight() + verticalGroupView.getY() + verticalGroupView.getHeight() + username.getHeight() - 22);
+        buttonProfile.setPosition(Rules.WORLD_WIDTH / 2 - buttonProfile.getWidth() / 2, buttonProfile.getHeight() + verticalGroupList.getY() + verticalGroupList.getHeight() + username.getHeight() - 22);
 
         buttonProfile.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (!buttonProfile.isDisabled()) {
-                    verticalGroupView.switchVisible();
+                    verticalGroupList.switchVisible();
                     setNotice(PaintConstants.UI_YOUR_USERNAME);
                 }
             }
@@ -110,15 +111,15 @@ public class MenuGroup extends Group {
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.ENTER) {
                     if (validUserName) {
-                        ProfileDAO profile = Profiles.getActive();
+                        ProfileDAO profile = groupController.getActive();
                         if (profile == null) {
-                            profile = verticalGroupView.addProfile(username.getText());
-                            verticalGroupController.selectProfile(profile);
+                            profile = verticalGroupList.addProfile(username.getText());
+                            groupController.selectProfile(profile);
                             setNotice(PaintConstants.UI_YOUR_USERNAME);
                         } else {
                             setNotice(PaintConstants.UI_PROFILE_SAVED);
                             profile.setUsername(username.getText());
-                            verticalGroupController.updateProfiles();
+                            groupController.updateProfiles();
                         }
                     }
                 }
@@ -136,7 +137,7 @@ public class MenuGroup extends Group {
 
         this.addActor(buttonProfile);
         this.addActor(username);
-        this.addActor(verticalGroupView);
+        this.addActor(verticalGroupList);
     }
 
     public static boolean isValidUserName() {
@@ -150,7 +151,7 @@ public class MenuGroup extends Group {
         font64.getColor().a = a;
         font64.draw(batch, glyphLayout,
                 Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
-                verticalGroupView.getY() + verticalGroupView.getHeight() + glyphLayout.height + 22
+                verticalGroupList.getY() + verticalGroupList.getHeight() + glyphLayout.height + 22
         );
     }
 
@@ -174,9 +175,9 @@ public class MenuGroup extends Group {
                 a = 1.0f;
             }
         }
-        if (Profiles.isEmpty) {
+        if (GroupController.isEmpty()) {
             buttonProfile.setDisabled(true);
-            verticalGroupView.setVisible(false);
+            verticalGroupList.setVisible(false);
         } else {
             buttonProfile.setDisabled(false);
         }
