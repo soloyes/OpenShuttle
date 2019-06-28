@@ -11,5 +11,5 @@ public final class FileConstants {
 
     //todo: add here all of files declaration (including MSConstants.java)
     public static final String PROFILES = "profiles.json";
-    public static final String RESULTS = "results";
+    public static final String RESULTS = "results.json";
 }

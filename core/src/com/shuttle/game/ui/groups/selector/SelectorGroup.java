@@ -232,7 +232,7 @@ public class SelectorGroup extends Group {
         batch.setColor(color);
     }
 
-    public void doRestart() {
+    public void dispose() {
         instance = null;
     }
 

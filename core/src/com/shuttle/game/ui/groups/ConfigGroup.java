@@ -29,31 +29,71 @@ import com.shuttle.game.utils.Assets;
  * @author Shuttle on 6/23/18.
  */
 public class ConfigGroup extends Group {
-    private Table table;
+    private static ConfigGroup instance;
+    private final Table table;
     private Array<Music> musicArray;
-    private ScreenManager.ScreenType screenType;
     private BoomBox boomBox;
-    private Joystick joystick;
 
-    public ConfigGroup(ScreenManager.ScreenType screenType) {
+    private final Table joystickTable;
+    private final Slider musicSlider;
+    private final Slider soundSlider;
+    private final Slider levelSlider;
+    private final Slider effectsSlider;
+    private final Slider joyStickModeSlider;
+    private final CheckBox musicCheckBox;
+    private final CheckBox soundCheckBox;
+    private final CheckBox joyStickCheckBox;
+    private final CheckBox joyStickColorCheckBox;
+    private final CheckBox childCheckBox;
+    private final CheckBox vibrationCheckBox;
+    private final String on = "ON";
+    private final String off = "OFF";
+    private final String cyan = "CYAN";
+    private final String white = "WHITE";
+
+    public static ConfigGroup getInstance() {
+        if (instance == null) {
+            instance = new ConfigGroup();
+        }
+        return instance;
+    }
+
+    public void dispose() {
+        instance = null;
+    }
+
+    public void refresh() {
+        musicSlider.setValue(GamePreferences.getMusicVolume());
+        soundSlider.setValue(GamePreferences.getSoundVolume());
+        levelSlider.setValue(GamePreferences.getLevel());
+        effectsSlider.setValue(GamePreferences.getPrefEffectsLevel());
+        joyStickModeSlider.setValue(GamePreferences.getJoyStickMode());
+        musicCheckBox.setText(GamePreferences.isMusicEnabled() ? on : off);
+        musicCheckBox.setChecked(GamePreferences.isMusicEnabled());
+        soundCheckBox.setText(GamePreferences.isSoundEnabled() ? on : off);
+        soundCheckBox.setChecked(GamePreferences.isSoundEnabled());
+        joyStickCheckBox.setText(GamePreferences.isJoyStickEnabled() ? on : off);
+        joyStickCheckBox.setChecked(GamePreferences.isJoyStickEnabled());
+        joystickTable.setVisible(joyStickCheckBox.isChecked());
+        joyStickColorCheckBox.setText(GamePreferences.isJoyStickColorEnabled() ? cyan : white);
+        joyStickColorCheckBox.setChecked(GamePreferences.isJoyStickColorEnabled());
+        childCheckBox.setText(GamePreferences.isChildEnabled() ? on : off);
+        childCheckBox.setChecked(GamePreferences.isChildEnabled());
+        vibrationCheckBox.setText(GamePreferences.isVibrationEnabled() ? on : off);
+        vibrationCheckBox.setChecked(GamePreferences.isVibrationEnabled());
+    }
+
+    private ConfigGroup() {
         /////////
         this.boomBox = new BoomBox();
-        this.joystick = new Joystick();
+        Joystick joystick = new Joystick();
         this.setName(GroupType.CONFIG.name());
         this.setVisible(false);
-        this.screenType = screenType;
-
-        final String on = "ON";
-        final String off = "OFF";
+        ScreenManager.ScreenType screenType = ScreenManager.getInstance().getCurrentScreen();
 
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
 
-        CheckBox.CheckBoxStyle checkBoxStyle48 = skin.get("default", CheckBox.CheckBoxStyle.class);//new CheckBox.CheckBoxStyle(
-//                skin.getDrawable("checkbox-c1"),
-//                skin.getDrawable("checkbox-pressed-c1"),
-//                Assets.getInstance().getAssetManager().get(PaintConstants.FONT48, BitmapFont.class),
-//                new Color(0.8f, 0.43f, 0.33f, 1f)
-//        );
+        CheckBox.CheckBoxStyle checkBoxStyle48 = skin.get("default", CheckBox.CheckBoxStyle.class);
         checkBoxStyle48.checkboxOn.setMinHeight(50);
         checkBoxStyle48.checkboxOn.setMinWidth(50);
         checkBoxStyle48.checkboxOff.setMinWidth(50);
@@ -80,7 +120,8 @@ public class ConfigGroup extends Group {
                 Rules.WORLD_WIDTH / 2,
                 Rules.WORLD_HEIGHT / 2
         );
-        final Table joystickTable = new Table();
+
+        joystickTable = new Table();
         final Table innerTable = new Table();
 
         Slider.SliderStyle sliderStyle = new Slider.SliderStyle(skin.get("default-horizontal", Slider.SliderStyle.class));
@@ -89,8 +130,7 @@ public class ConfigGroup extends Group {
         sliderStyle.knob.setMinWidth(50);
         //sliderStyle.knobOver.setMinWidth(50);
 
-        final Slider musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, sliderStyle);
-        musicSlider.setValue(GamePreferences.getMusicVolume());
+        musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, sliderStyle);
         musicSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -100,59 +140,62 @@ public class ConfigGroup extends Group {
                     musicArray.get(i).setVolume(musicSlider.getValue());
                 }
                 GamePreferences.setMusicVolume(musicSlider.getValue());
-                boomBox.playSound(MSConstants.UI_MENU);
+                if (musicSlider.isDragging()) {
+                    boomBox.playSound(MSConstants.UI_MENU);
+                }
             }
         });
 
-        final Slider soundSlider = new Slider(0.0f, 1.0f, 0.1f, false, sliderStyle);
-        soundSlider.setValue(GamePreferences.getSoundVolume());
+        soundSlider = new Slider(0.0f, 1.0f, 0.1f, false, sliderStyle);
         soundSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 GamePreferences.setSoundVolume(soundSlider.getValue());
-                boomBox.playSound(MSConstants.UI_MENU);
+                if (soundSlider.isDragging()) {
+                    boomBox.playSound(MSConstants.UI_MENU);
+                }
             }
         });
 
         final Label levelLabelDynamic = new Label(Rules.StartLevel.values()[GamePreferences.getLevel()].toString(), style48);
         final Label effectsLabelDynamic = new Label(GamePreferences.EffectLevel.values()[GamePreferences.getPrefEffectsLevel()].toString(), style48);
 
-        final Slider levelSlider = new Slider(0.0f, Rules.StartLevel.values().length - 1, 1.0f, false, sliderStyle);
-        levelSlider.setValue(GamePreferences.getLevel());
+        levelSlider = new Slider(0.0f, Rules.StartLevel.values().length - 1, 1.0f, false, sliderStyle);
         levelSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 GamePreferences.setLevel((int) levelSlider.getValue());
                 levelLabelDynamic.setText(Rules.StartLevel.values()[(int) levelSlider.getValue()].toString());
-                boomBox.playSound(MSConstants.UI_MENU);
-
+                if (levelSlider.isDragging()) {
+                    boomBox.playSound(MSConstants.UI_MENU);
+                }
             }
         });
 
-        final Slider effectsSlider = new Slider(0.0f, GamePreferences.EffectLevel.values().length - 1, 1.0f, false, sliderStyle);
-        effectsSlider.setValue(GamePreferences.getPrefEffectsLevel());
+        effectsSlider = new Slider(0.0f, GamePreferences.EffectLevel.values().length - 1, 1.0f, false, sliderStyle);
         effectsSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 GamePreferences.setPrefEffectsLevel((int) effectsSlider.getValue());
                 effectsLabelDynamic.setText(GamePreferences.EffectLevel.values()[(int) effectsSlider.getValue()].toString());
-                boomBox.playSound(MSConstants.UI_MENU);
+                if (effectsSlider.isDragging()) {
+                    boomBox.playSound(MSConstants.UI_MENU);
+                }
             }
         });
 
-        final Slider joyStickModeSlider = new Slider(0, 4, 1, false, sliderStyle);
-        joyStickModeSlider.setValue(GamePreferences.getJoyStickMode());
+        joyStickModeSlider = new Slider(0, 4, 1, false, sliderStyle);
         joyStickModeSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 GamePreferences.setJoyStickMode((int) joyStickModeSlider.getValue());
-                boomBox.playSound(MSConstants.UI_MENU);
+                if (joyStickModeSlider.isDragging()) {
+                    boomBox.playSound(MSConstants.UI_MENU);
+                }
             }
         });
 
-        final CheckBox musicCheckBox = new CheckBox("", checkBoxStyle48);
-        musicCheckBox.setText(GamePreferences.isMusicEnabled() ? on : off);
-        musicCheckBox.setChecked(GamePreferences.isMusicEnabled());
+        musicCheckBox = new CheckBox("", checkBoxStyle48);
         musicCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -161,27 +204,26 @@ public class ConfigGroup extends Group {
                 musicCheckBox.setText(enabled ? on : off);
                 boomBox.setAllMusicVolume(GamePreferences.getMusicVolume());
                 boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
-                boomBox.playSound(MSConstants.UI_CHECKBOX);
+                if (musicCheckBox.isPressed()) {
+                    boomBox.playSound(MSConstants.UI_CHECKBOX);
+                }
             }
         });
 
-        final CheckBox soundCheckBox = new CheckBox("", checkBoxStyle48);
-        soundCheckBox.setText(GamePreferences.isSoundEnabled() ? on : off);
-        soundCheckBox.setChecked(GamePreferences.isSoundEnabled());
+        soundCheckBox = new CheckBox("", checkBoxStyle48);
         soundCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                boomBox.playSound(MSConstants.UI_CHECKBOX);
                 boolean enabled = soundCheckBox.isChecked();
                 soundCheckBox.setText(enabled ? on : off);
                 GamePreferences.setSoundEnabled(enabled);
+                if (soundCheckBox.isPressed()) {
+                    boomBox.playSound(MSConstants.UI_CHECKBOX);
+                }
             }
         });
 
-        final CheckBox joyStickCheckBox = new CheckBox("", checkBoxStyle48);
-        joyStickCheckBox.setText(GamePreferences.isJoyStickEnabled() ? on : off);
-        joyStickCheckBox.setChecked(GamePreferences.isJoyStickEnabled());
-        joystickTable.setVisible(joyStickCheckBox.isChecked());
+        joyStickCheckBox = new CheckBox("", checkBoxStyle48);
         joyStickCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -189,39 +231,39 @@ public class ConfigGroup extends Group {
                 joyStickCheckBox.setText(enabled ? on : off);
                 GamePreferences.setJoyStickEnabled(enabled);
                 joystickTable.setVisible(enabled);
-                boomBox.playSound(MSConstants.UI_CHECKBOX);
+                if (joyStickCheckBox.isPressed()) {
+                    boomBox.playSound(MSConstants.UI_CHECKBOX);
+                }
             }
         });
 
-        final CheckBox joyStickColorCheckBox = new CheckBox("", checkBoxStyle48);
-        joyStickColorCheckBox.setText(GamePreferences.isJoyStickColorEnabled() ? "CYAN" : "WHITE");
-        joyStickColorCheckBox.setChecked(GamePreferences.isJoyStickColorEnabled());
+        joyStickColorCheckBox = new CheckBox("", checkBoxStyle48);
         joyStickColorCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = joyStickColorCheckBox.isChecked();
-                joyStickColorCheckBox.setText(enabled ? "CYAN" : "WHITE");
+                joyStickColorCheckBox.setText(enabled ? cyan : white);
                 GamePreferences.setJoyStickColor(enabled);
-                boomBox.playSound(MSConstants.UI_CHECKBOX);
+                if (joyStickColorCheckBox.isPressed()) {
+                    boomBox.playSound(MSConstants.UI_CHECKBOX);
+                }
             }
         });
 
-        final CheckBox childCheckBox = new CheckBox("", checkBoxStyle48);
-        childCheckBox.setText(GamePreferences.isChildEnabled() ? on : off);
-        childCheckBox.setChecked(GamePreferences.isChildEnabled());
+        childCheckBox = new CheckBox("", checkBoxStyle48);
         childCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = childCheckBox.isChecked();
                 childCheckBox.setText(enabled ? on : off);
                 GamePreferences.setChildEnabled(enabled);
-                boomBox.playSound(MSConstants.UI_CHECKBOX);
+                if (childCheckBox.isPressed()) {
+                    boomBox.playSound(MSConstants.UI_CHECKBOX);
+                }
             }
         });
 
-        final CheckBox vibrationCheckBox = new CheckBox("", checkBoxStyle48);
-        vibrationCheckBox.setText(GamePreferences.isVibrationEnabled() ? on : off);
-        vibrationCheckBox.setChecked(GamePreferences.isVibrationEnabled());
+        vibrationCheckBox = new CheckBox("", checkBoxStyle48);
         vibrationCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -231,7 +273,9 @@ public class ConfigGroup extends Group {
                 if (enabled) {
                     Vibrator.vibrate(VConstants.VIBRATION_ENABLED);
                 }
-                boomBox.playSound(MSConstants.UI_CHECKBOX);
+                if (vibrationCheckBox.isPressed()) {
+                    boomBox.playSound(MSConstants.UI_CHECKBOX);
+                }
             }
         });
 
@@ -310,6 +354,7 @@ public class ConfigGroup extends Group {
         //table.setDebug(true);
         //innerTable.setDebug(true);
         //joystickTable.setDebug(true);
+        this.refresh();
         this.addActor(table);
     }
 

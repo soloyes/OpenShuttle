@@ -52,7 +52,7 @@ public class UIRightPanel extends AbstractLatestPanel {
         }
     }
 
-    public void doRestart() {
+    public void dispose() {
         instance = null;
     }
 

@@ -1,9 +1,7 @@
 package com.shuttle.game.player;
 
-import com.badlogic.gdx.Gdx;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
-import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
@@ -11,6 +9,10 @@ import com.shuttle.game.effects.Shake;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.ui.GameInfoSystem;
+import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
+import com.shuttle.game.ui.groups.mvc.results.ResultDAO;
+import com.shuttle.game.ui.groups.mvc.results.Results;
+import com.shuttle.game.utils.Rounder;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
 import java.text.SimpleDateFormat;
@@ -27,7 +29,6 @@ import lombok.Setter;
  */
 public final class Standing {
     private static Standing instance;
-    private String username;
     @Getter
     @Setter
     private long score, scoreView, scoreToLive;
@@ -76,17 +77,18 @@ public final class Standing {
     private BoomBox boomBox;
     //Type, level, score
     private Map<AbstractPoolable.Type, Map<Integer, Integer>> statistics;
+    private Profiles profiles;
 
     private Standing() {
         this.boomBox = new BoomBox();
-        this.username = Gdx.files.local("username").readString();
         this.results = new Results();
         this.n = 1;
         this.statistics = new HashMap<AbstractPoolable.Type, Map<Integer, Integer>>();
         this.astronauts = new HashMap<Sticker, Integer>();
+        this.profiles = new Profiles();
     }
 
-    public void doRestart() {
+    public void dispose() {
         statistics.clear();
         Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel();
     }
@@ -225,16 +227,14 @@ public final class Standing {
     }
 
     public void writeResult() {
-        if (!GamePreferences.isChildEnabled()) {
-            results.setResult(
-                    username +
-                            " " +
-                            scoreView +
-                            " "
-                            + new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()) +
-                            " " +
-                            Rules.StartLevel.values()[GamePreferences.getLevel()].name()
+        if (profiles.getActive() != null) {
+            ResultDAO result = new ResultDAO(
+                    profiles.getActive().getUsername(),
+                    new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()),
+                    scoreView <= Integer.MAX_VALUE ? String.valueOf(scoreView) : String.valueOf(Rounder.round(scoreView)),
+                    Rules.StartLevel.values()[GamePreferences.getLevel()].name()
             );
+            results.addResult(result);
         }
     }
 

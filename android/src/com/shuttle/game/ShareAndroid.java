@@ -10,13 +10,12 @@ public class ShareAndroid implements Share {
 
     public ShareAndroid() {
         shareIntent = new Intent(Intent.ACTION_SEND);
-
     }
 
     @Override
     public void share(String text) {
         shareIntent.setType("text/plain");
-        String out = text.split("\n").length == 1 ? "No results until now..." : text;
+        String out = text.isEmpty() ? "No results until now..." : text;
         shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey, check my achievements in Shuttle!\n" + out);
         androidApplication.startActivity(Intent.createChooser(shareIntent, "Share results"));
     }

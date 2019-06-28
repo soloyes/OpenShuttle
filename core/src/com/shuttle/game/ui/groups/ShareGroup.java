@@ -10,9 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.shuttle.game.ShuttleGame;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.ui.groups.mvc.results.Results;
 import com.shuttle.game.utils.Assets;
 
 import lombok.Getter;
@@ -21,7 +21,7 @@ import lombok.Getter;
 public class ShareGroup extends Group {
     private Label titleLabel;
     @Getter
-    private final Label socialLabel;
+    private final Label shareLabel;
     private final Label rateLabel;
     private final Label aboutLabel;
     private final Label introLabel;
@@ -40,7 +40,7 @@ public class ShareGroup extends Group {
         Label.LabelStyle style96 = new Label.LabelStyle(Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class), color);
 
         titleLabel = new Label("Shares:", style96);
-        socialLabel = new Label("Share Results", style64);
+        shareLabel = new Label("Share Results", style64);
         rateLabel = new Label("Rate Shuttle", style64);
         aboutLabel = new Label("About Us", style64);
         introLabel = new Label("Intro", style64);
@@ -48,8 +48,8 @@ public class ShareGroup extends Group {
         float total = 20;
         titleLabel.setPosition(Rules.WORLD_WIDTH / 2 - titleLabel.getWidth() / 2, Rules.WORLD_HEIGHT / 2);
         total += titleLabel.getHeight();
-        socialLabel.setPosition(Rules.WORLD_WIDTH / 2 - socialLabel.getWidth() / 2, Rules.WORLD_HEIGHT / 2 - total);
-        total += socialLabel.getHeight();
+        shareLabel.setPosition(Rules.WORLD_WIDTH / 2 - shareLabel.getWidth() / 2, Rules.WORLD_HEIGHT / 2 - total);
+        total += shareLabel.getHeight();
         rateLabel.setPosition(Rules.WORLD_WIDTH / 2 - rateLabel.getWidth() / 2, Rules.WORLD_HEIGHT / 2 - total);
         total += rateLabel.getHeight();
         aboutLabel.setPosition(Rules.WORLD_WIDTH / 2 - aboutLabel.getWidth() / 2, Rules.WORLD_HEIGHT / 2 - total);
@@ -57,21 +57,21 @@ public class ShareGroup extends Group {
         introLabel.setPosition(Rules.WORLD_WIDTH / 2 - introLabel.getWidth() / 2, Rules.WORLD_HEIGHT / 2 - total);
 
 
-        socialLabel.addListener(new ClickListener() {
+        shareLabel.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 boomBox.playSound(MSConstants.UI_MENU);
                 float scale = 0.9f;
-                socialLabel.setFontScale(scale);
-                socialLabel.setX(Rules.WORLD_WIDTH / 2 - scale * socialLabel.getWidth() / 2);
+                shareLabel.setFontScale(scale);
+                shareLabel.setX(Rules.WORLD_WIDTH / 2 - scale * shareLabel.getWidth() / 2);
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                socialLabel.setFontScale(1.0f);
-                socialLabel.setX(Rules.WORLD_WIDTH / 2 - socialLabel.getWidth() / 2);
-                ShuttleGame.getShare().share(results.getTopResults());
+                shareLabel.setFontScale(1.0f);
+                shareLabel.setX(Rules.WORLD_WIDTH / 2 - shareLabel.getWidth() / 2);
+                ShuttleGame.getShare().share(results.shareResults());
             }
         });
 
@@ -130,7 +130,7 @@ public class ShareGroup extends Group {
             }
         });
 
-        this.addActor(socialLabel);
+        this.addActor(shareLabel);
         this.addActor(rateLabel);
         this.addActor(aboutLabel);
         this.addActor(introLabel);
@@ -139,7 +139,7 @@ public class ShareGroup extends Group {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         titleLabel.draw(batch, parentAlpha);
-        socialLabel.draw(batch, parentAlpha);
+        shareLabel.draw(batch, parentAlpha);
         rateLabel.draw(batch, parentAlpha);
         aboutLabel.draw(batch, parentAlpha);
         introLabel.draw(batch, parentAlpha);

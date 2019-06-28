@@ -39,8 +39,6 @@ public class Assets {
 
                 assetManager.load(MSConstants.UI_MENU, Sound.class);
                 assetManager.load(MSConstants.UI_CHECKBOX, Sound.class);
-                createStandardFont(19, "");
-                createStandardFont(36, "");
                 createStandardFont(32, "");
                 createStandardFont(48, "");
                 createStandardFont(64, "");

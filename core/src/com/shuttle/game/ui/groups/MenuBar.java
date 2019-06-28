@@ -5,16 +5,18 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.screens.ScreenManager;
-import com.shuttle.game.ui.groups.profilesMVC.GroupController;
+import com.shuttle.game.ui.groups.mvc.profiles.GroupController;
 import com.shuttle.game.utils.Assets;
 
 /**
@@ -47,143 +49,123 @@ public class MenuBar extends Group {
         this.buttonResults.setSize(128, 128);
         this.buttonShare.setSize(128, 128);
 
-        buttonPlay.setPosition(
-                22,
-                22
-        );
+        buttonPlay.setPosition(22, 22);
+        buttonResults.setPosition(249, 22);
+        buttonShare.setPosition(476, 22);
+        buttonConfig.setPosition(703, 22);
+        buttonExit.setPosition(930, 22);
 
-        buttonResults.setPosition(
-                249,
-                22
-        );
-
-        buttonShare.setPosition(
-                476,
-                22
-        );
-
-        buttonConfig.setPosition(
-                703,
-                22
-        );
-
-        buttonExit.setPosition(
-                930,
-                22
-        );
-
-        buttonExit.addListener(new ChangeListener() {
+        buttonExit.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
+            public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
             }
         });
 
-        buttonPlay.addListener(new ChangeListener() {
+        buttonPlay.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
+            public void clicked(InputEvent event, float x, float y) {
                 //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
                 if (GamePreferences.isSoundEnabled()) {
                     Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.UI_MENU));
                     sound.play(GamePreferences.getSoundVolume());
                 }
                 //
-
                 if (MenuGroup.isValidUserName()) {
                     ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
                 } else {
-                    Actor[] actorArray = getStage().getActors().toArray();
-                    for (int i = 0; i < actorArray.length; i++) {
-                        if (actorArray[i].getName().equals(GroupType.MENU.name())) {
-                            actorArray[i].setVisible(true);
-                        } else if (actorArray[i].getName().equals(GroupType.MENU_BAR.name())) {
-                            actorArray[i].setVisible(true);
+                    Array<Actor> actors = getStage().getActors();
+                    for (int i = 0; i < actors.size; i++) {
+                        if (actors.get(i).getName().equals(GroupType.MENU.name())) {
+                            actors.get(i).setVisible(true);
+                        } else if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
+                            actors.get(i).setVisible(true);
                         } else {
-                            actorArray[i].setVisible(false);
+                            actors.get(i).setVisible(false);
                         }
                     }
                 }
             }
         });
 
-        buttonConfig.addListener(new ChangeListener() {
+        buttonConfig.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Actor[] actorArray = getStage().getActors().toArray();
+            public void clicked(InputEvent event, float x, float y) {
+                Array<Actor> actors = getStage().getActors();
                 Actor tmp = new Actor();
-                for (int i = 0; i < actorArray.length; i++) {
-                    if (actorArray[i].getName().equals(GroupType.CONFIG.name())) {
-                        tmp = actorArray[i];
+                for (int i = 0; i < actors.size; i++) {
+                    if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
+                        tmp = actors.get(i);
                     }
                 }
-                for (int i = 0; i < actorArray.length; i++) {
-                    if (actorArray[i].getName().equals(GroupType.CONFIG.name())) {
-                        actorArray[i].setVisible(!actorArray[i].isVisible());
+                for (int i = 0; i < actors.size; i++) {
+                    if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
+                        actors.get(i).setVisible(!actors.get(i).isVisible());
                     }
-                    if (actorArray[i].getName().equals(GroupType.MENU.name())) {
-                        actorArray[i].setVisible(tmp.isVisible());
+                    if (actors.get(i).getName().equals(GroupType.MENU.name())) {
+                        actors.get(i).setVisible(tmp.isVisible());
                     }
-                    if (actorArray[i].getName().equals(GroupType.RESULTS.name())) {
-                        actorArray[i].setVisible(false);
+                    if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
+                        actors.get(i).setVisible(false);
                     }
-                    if (actorArray[i].getName().equals(GroupType.SHARE.name())) {
-                        actorArray[i].setVisible(false);
+                    if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
+                        actors.get(i).setVisible(false);
                     }
                 }
                 boomBox.playSound(MSConstants.UI_MENU);
             }
         });
 
-        buttonResults.addListener(new ChangeListener() {
+        buttonResults.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Actor[] actorArray = getStage().getActors().toArray();
+            public void clicked(InputEvent event, float x, float y) {
+                Array<Actor> actors = getStage().getActors();
                 Actor tmp = new Actor();
-                for (int i = 0; i < actorArray.length; i++) {
-                    if (actorArray[i].getName().equals(GroupType.RESULTS.name())) {
-                        tmp = actorArray[i];
+                for (int i = 0; i < actors.size; i++) {
+                    if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
+                        tmp = actors.get(i);
                     }
                 }
-                for (int i = 0; i < actorArray.length; i++) {
-                    if (actorArray[i].getName().equals(GroupType.RESULTS.name())) {
-                        actorArray[i].setVisible(!actorArray[i].isVisible());
+                for (int i = 0; i < actors.size; i++) {
+                    if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
+                        actors.get(i).setVisible(!actors.get(i).isVisible());
                     }
-                    if (actorArray[i].getName().equals(GroupType.MENU.name())) {
-                        actorArray[i].setVisible(tmp.isVisible());
+                    if (actors.get(i).getName().equals(GroupType.MENU.name())) {
+                        actors.get(i).setVisible(tmp.isVisible());
                     }
-                    if (actorArray[i].getName().equals(GroupType.CONFIG.name())) {
-                        actorArray[i].setVisible(false);
+                    if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
+                        actors.get(i).setVisible(false);
                     }
-                    if (actorArray[i].getName().equals(GroupType.SHARE.name())) {
-                        actorArray[i].setVisible(false);
+                    if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
+                        actors.get(i).setVisible(false);
                     }
                 }
                 boomBox.playSound(MSConstants.UI_MENU);
             }
         });
 
-        buttonShare.addListener(new ChangeListener() {
+        buttonShare.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Actor[] actorArray = getStage().getActors().toArray();
+            public void clicked(InputEvent event, float x, float y) {
+                Array<Actor> actors = getStage().getActors();
                 Actor tmp = new Actor();
-                for (int i = 0; i < actorArray.length; i++) {
-                    if (actorArray[i].getName().equals(GroupType.SHARE.name())) {
-                        tmp = actorArray[i];
+                for (int i = 0; i < actors.size; i++) {
+                    if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
+                        tmp = actors.get(i);
                     }
                 }
-                for (int i = 0; i < actorArray.length; i++) {
-                    if (actorArray[i].getName().equals(GroupType.SHARE.name())) {
-                        actorArray[i].setVisible(!actorArray[i].isVisible());
+                for (int i = 0; i < actors.size; i++) {
+                    if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
+                        actors.get(i).setVisible(!actors.get(i).isVisible());
                     }
-                    if (actorArray[i].getName().equals(GroupType.MENU.name())) {
-                        actorArray[i].setVisible(tmp.isVisible());
+                    if (actors.get(i).getName().equals(GroupType.MENU.name())) {
+                        actors.get(i).setVisible(tmp.isVisible());
                     }
-                    if (actorArray[i].getName().equals(GroupType.CONFIG.name())) {
-                        actorArray[i].setVisible(false);
+                    if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
+                        actors.get(i).setVisible(false);
                     }
-                    if (actorArray[i].getName().equals(GroupType.RESULTS.name())) {
-                        actorArray[i].setVisible(false);
+                    if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
+                        actors.get(i).setVisible(false);
                     }
                 }
                 boomBox.playSound(MSConstants.UI_MENU);

@@ -36,7 +36,7 @@ public abstract class ObjectPool<T extends Poolable> {
         freeList.add(activeList.remove(index));
     }
 
-    public void doRestart() {
+    public void dispose() {
         activeList.clear();
         freeList.clear();
     }

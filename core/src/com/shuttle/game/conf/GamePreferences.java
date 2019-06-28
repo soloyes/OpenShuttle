@@ -43,6 +43,10 @@ public class GamePreferences {
         getInstance().flush();
     }
 
+    public static Map<String, Object> getCurrent() {
+        return new HashMap<String, Object>(getInstance().get());
+    }
+
     private GamePreferences() {
     }
 

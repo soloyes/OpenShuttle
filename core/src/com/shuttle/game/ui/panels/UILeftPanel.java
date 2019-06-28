@@ -42,7 +42,7 @@ public class UILeftPanel extends AbstractLatestPanel {
         }
     }
 
-    public void doRestart() {
+    public void dispose() {
         instance = null;
     }
 

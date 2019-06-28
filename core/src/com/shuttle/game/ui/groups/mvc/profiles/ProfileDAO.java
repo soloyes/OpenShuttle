@@ -1,4 +1,4 @@
-package com.shuttle.game.ui.groups.profilesMVC;
+package com.shuttle.game.ui.groups.mvc.profiles;
 
 import java.util.Map;
 import java.util.UUID;

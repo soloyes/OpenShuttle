@@ -1,4 +1,4 @@
-package com.shuttle.game.ui.groups.profilesMVC;
+package com.shuttle.game.ui.groups.mvc.profiles;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,9 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.ui.groups.MenuGroup;
+import com.shuttle.game.ui.groups.mvc.Controller;
+import com.shuttle.game.ui.groups.mvc.View;
 import com.shuttle.game.utils.Assets;
 
 import java.util.ArrayList;
@@ -29,16 +33,18 @@ import lombok.Setter;
  * @author Shuttle on 17/06/19.
  */
 
-public class VerticalGroupList extends VerticalGroup implements View {
+//todo: Add, remove and cancel sounds
+public class VerticalGroupList extends VerticalGroup implements View<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> {
+    private com.shuttle.game.ui.groups.mvc.Controller<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> controller;
     private final ScrollPane scrollPane;
     private VerticalGroup verticalGroup;
-    @Setter
-    private GroupController controller;
-    private java.util.Map<String, Line> currentLines;
+    private Map<String, Line> currentLines;
     private Map<String, Line> previousLines;
     private List<String> id;
+    private BoomBox boomBox;
 
     public VerticalGroupList() {
+        this.boomBox = new BoomBox();
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.currentLines = new HashMap<String, Line>();
         this.previousLines = new HashMap<String, Line>();
@@ -62,12 +68,17 @@ public class VerticalGroupList extends VerticalGroup implements View {
     }
 
     @Override
+    public void setController(Controller<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> controller) {
+        this.controller = controller;
+    }
+
+    @Override
     public void init() {
         verticalGroup.clear();
         verticalGroup.addActor(new Header());
         boolean hasActive = false;
-        for (int i = 0; i < controller.getProfileList().size(); i++) {
-            ProfileDAO profile = controller.getProfileList().get(i);
+        for (int i = 0; i < controller.getList().size(); i++) {
+            com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO profile = controller.getList().get(i);
             Line line = new Line(profile);
             currentLines.put(profile.getId(), line);
             if (profile.isActive()) {
@@ -130,7 +141,7 @@ public class VerticalGroupList extends VerticalGroup implements View {
 
     private class Line extends Group {
         private Table table;
-        private final ProfileDAO profile;
+        private final com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO profile;
         @Getter
         private TimeAndFlag timeAndFlag;
 
@@ -152,12 +163,12 @@ public class VerticalGroupList extends VerticalGroup implements View {
             if (timeAndFlag.getDeleteWait() >= Rules.LINE_DELETE_WAIT) {
                 timeAndFlag.setDeleteWait(0.0f);
                 timeAndFlag.setConfirm(false);
-                controller.removeProfile(Line.this.profile);
+                controller.remove(Line.this.profile);
                 MenuGroup.setNotice(PaintConstants.UI_PROFILE_DELETED);
             }
         }
 
-        Line(final ProfileDAO profile) {
+        Line(final com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO profile) {
             this.timeAndFlag = new TimeAndFlag();
             this.profile = profile;
             this.table = new Table();
@@ -190,7 +201,7 @@ public class VerticalGroupList extends VerticalGroup implements View {
                 }
             });
 
-            if (profile.getType() == ProfileDAO.Type.DUMMY) {
+            if (profile.getType() == com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO.Type.DUMMY) {
                 table.add();
                 table.add();
                 table.add();
@@ -201,8 +212,11 @@ public class VerticalGroupList extends VerticalGroup implements View {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         if (MenuGroup.isValidUserName()) {
-                            controller.selectProfile(profile);
+                            controller.select(profile);
                             MenuGroup.setNotice(PaintConstants.UI_SELECT_PROFILE);
+                            boomBox.playSound(MSConstants.UI_CHECKBOX);
+                        } else {
+                            //todo: block sound
                         }
                     }
                 });
@@ -233,7 +247,7 @@ public class VerticalGroupList extends VerticalGroup implements View {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     if (MenuGroup.isValidUserName()) {
-                        controller.addProfile();
+                        controller.add();
                         MenuGroup.setNotice(PaintConstants.UI_NEW_PROFILE);
                     }
                 }
@@ -249,8 +263,8 @@ public class VerticalGroupList extends VerticalGroup implements View {
         }
     }
 
-    public ProfileDAO addProfile(String username) {
+    public com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO addProfile(String username) {
         setVisible(true);
-        return controller.addProfile(username);
+        return controller.add(username);
     }
 }

@@ -34,7 +34,7 @@ public class SwitchGroup extends Group {
         this.addActor(rightSwitch);
     }
 
-    public void doRestart() {
+    public void dispose() {
         instance = null;
     }
 }

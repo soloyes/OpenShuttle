@@ -17,12 +17,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.ui.groups.profilesMVC.GroupController;
-import com.shuttle.game.ui.groups.profilesMVC.ProfileDAO;
-import com.shuttle.game.ui.groups.profilesMVC.Profiles;
-import com.shuttle.game.ui.groups.profilesMVC.VerticalGroupList;
+import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.ui.groups.mvc.profiles.GroupController;
+import com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO;
+import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
+import com.shuttle.game.ui.groups.mvc.profiles.VerticalGroupList;
 import com.shuttle.game.utils.Assets;
 
 
@@ -42,6 +44,7 @@ public class MenuGroup extends Group {
     private float blinkTime;
     private static float shadowTime;
     private static StringBuilder notice = new StringBuilder();
+    private BoomBox boomBox;
 
     public static void setNotice(String text) {
         notice.setLength(0);
@@ -72,11 +75,12 @@ public class MenuGroup extends Group {
         this.verticalGroupList = new VerticalGroupList();
         this.groupController = new GroupController(verticalGroupList, new Profiles());
         verticalGroupList.setController(groupController);
-        groupController.updateProfiles();
+        groupController.update();
         //
         if (groupController.getActive() != null) {
             setNotice(PaintConstants.UI_YOUR_USERNAME);
         }
+        this.boomBox = new BoomBox();
     }
 
     public MenuGroup() {
@@ -96,9 +100,11 @@ public class MenuGroup extends Group {
                 if (!buttonProfile.isDisabled()) {
                     verticalGroupList.switchVisible();
                     setNotice(PaintConstants.UI_YOUR_USERNAME);
+                    boomBox.playSound(MSConstants.UI_MENU);
                 }
             }
         });
+
         username.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -114,12 +120,12 @@ public class MenuGroup extends Group {
                         ProfileDAO profile = groupController.getActive();
                         if (profile == null) {
                             profile = verticalGroupList.addProfile(username.getText());
-                            groupController.selectProfile(profile);
+                            groupController.select(profile);
                             setNotice(PaintConstants.UI_YOUR_USERNAME);
                         } else {
                             setNotice(PaintConstants.UI_PROFILE_SAVED);
                             profile.setUsername(username.getText());
-                            groupController.updateProfiles();
+                            groupController.update();
                         }
                     }
                 }
@@ -148,7 +154,6 @@ public class MenuGroup extends Group {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         font256.draw(batch, "SHUTTLE", 0, 1800, 1080, 1, false);
-        font64.getColor().a = a;
         font64.draw(batch, glyphLayout,
                 Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
                 verticalGroupList.getY() + verticalGroupList.getHeight() + glyphLayout.height + 22
@@ -175,6 +180,7 @@ public class MenuGroup extends Group {
                 a = 1.0f;
             }
         }
+        font64.getColor().a = a;
         if (GroupController.isEmpty()) {
             buttonProfile.setDisabled(true);
             verticalGroupList.setVisible(false);
@@ -195,5 +201,9 @@ public class MenuGroup extends Group {
         if (blinkTime >= PaintConstants.NOTICE_BLINK_TIME * 2) {
             blinkTime = 0.0f;
         }
+    }
+
+    public void dispose() {
+        groupController.dispose();
     }
 }

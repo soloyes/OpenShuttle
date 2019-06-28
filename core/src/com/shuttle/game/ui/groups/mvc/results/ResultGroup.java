@@ -1,4 +1,4 @@
-package com.shuttle.game.ui.groups;
+package com.shuttle.game.ui.groups.mvc.results;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -8,27 +8,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Results;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.ui.groups.GroupType;
 import com.shuttle.game.utils.Assets;
 
 /**
  * @author Shuttle on 7/14/18.
  */
+//todo: to MVC
 public class ResultGroup extends Group {
     public ResultGroup() {
         this.setName(GroupType.RESULTS.name());
         this.setVisible(false);
         Table table = new Table();
-        Results results = new Results();
-
+        com.shuttle.game.ui.groups.mvc.results.Results results = new com.shuttle.game.ui.groups.mvc.results.Results();
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         ScrollPane scrollPane = new ScrollPane(table, skin);
-
-        Label.LabelStyle style32 = new Label.LabelStyle(
-                Assets.getInstance().getAssetManager().get(PaintConstants.FONT32, BitmapFont.class),
-                new Color(1.0f, 1.0f, 0.5f, 1f)
-        );
         Label.LabelStyle style64 = new Label.LabelStyle(
                 Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
                 new Color(0.8f, 0.43f, 0.33f, 1f)
@@ -39,21 +34,19 @@ public class ResultGroup extends Group {
         );
 
         Label titleLabel = new Label("Results:", style96);
-        Label subTitleLabel = new Label("(only  non-child  mode)", style32);
 
         table.add(titleLabel).colspan(4);
         table.row();
-        table.add(subTitleLabel).colspan(4);
 
+        //todo: use Line.class here
         if (results.getResults() != null) {
-            for (int i = 1; i < results.getResults().size(); i++) {
-                String[] result = results.getResults().get(i).split(" ");
-                if (result.length == 4) {
+            for (ResultDAO r : results.getResults()) {
+                if (!r.getUsername().isEmpty()) {
                     table.row();
-                    table.add(new Label(result[0], style64)).left();
-                    table.add(new Label(" " + result[1] + " ", style64)).right();
-                    table.add(new Label(result[2], style64)).right();
-                    table.add(new Label(" " + result[3], style64)).right();
+                    table.add(new Label(r.getUsername(), style64)).left();
+                    table.add(new Label(" " + r.getScore() + " ", style64)).right();
+                    table.add(new Label(r.getDate(), style64)).right();
+                    table.add(new Label(" " + r.getLevel(), style64)).right();
                 }
             }
         }

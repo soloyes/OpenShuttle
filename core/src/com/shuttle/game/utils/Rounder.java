@@ -12,6 +12,7 @@ public class Rounder {
     private static String plus = "";
 
     public static StringBuilder round(long n) {
+        stringBuilder.setLength(0);
         boolean sign = true;
         if (n < 0) {
             sign = false;
@@ -20,7 +21,7 @@ public class Rounder {
             return stringBuilder.append(n);
         }
 
-        final String[] units = new String[]{"", "K", "M", "B", "P"};
+        final String[] units = new String[]{"", "K", "M", "B", "T", "P", "E"};
         int digitGroups = (int) (Math.log10(n) / Math.log10(1000));
         return stringBuilder
                 .append(sign ? plus : minus)

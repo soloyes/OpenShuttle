@@ -55,6 +55,7 @@ import com.shuttle.game.ui.Joystick;
 import com.shuttle.game.ui.PlayerPointer;
 import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.ui.groups.leftright.SwitchGroup;
+import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
 import com.shuttle.game.ui.panels.UILeftPanel;
 import com.shuttle.game.ui.panels.UIRightPanel;
@@ -107,6 +108,7 @@ public class GameScreen extends BaseScreen {
     @Getter
     private UITopPanel uiTopPanel;
     private Standing standing;
+    private Profiles profiles;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -158,6 +160,7 @@ public class GameScreen extends BaseScreen {
         asteroidsJoiner = ListOfListsJoiner.newAbstractAsteroidList();
         //
         StorageEmitter.getInstance().emit();
+        this.profiles = new Profiles();
     }
 
     private void calcMusicEffectVolume() {
@@ -708,6 +711,7 @@ public class GameScreen extends BaseScreen {
         ShaderManager.PAUSE.dispose();
         ShaderManager.BLACKHOLE.dispose();
         uiTopPanel.dispose();
+        profiles.dispose();
         Standing.getInstance().writeResult();
     }
 }

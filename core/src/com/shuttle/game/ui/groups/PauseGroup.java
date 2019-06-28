@@ -2,12 +2,12 @@ package com.shuttle.game.ui.groups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.GamePreferences;
@@ -43,7 +43,7 @@ public class PauseGroup extends Group {
         return instance;
     }
 
-    public void doRestart() {
+    public void dispose() {
         instance = null;
     }
 
@@ -61,7 +61,7 @@ public class PauseGroup extends Group {
                 Rules.WORLD_HEIGHT - playPauseBtn.getHeight() - 44
         );
 
-        this.configGroup = new com.shuttle.game.ui.groups.ConfigGroup(ScreenManager.ScreenType.GAME);
+        this.configGroup = ConfigGroup.getInstance();
         configGroup.setVisible(false);
         this.buttonMenu = new Button(skin, "default");
         buttonMenu.setVisible(false);
@@ -74,14 +74,12 @@ public class PauseGroup extends Group {
         buttonMenu.setSize(128f, 128f);
         buttonRestart.setSize(128f, 128f);
 
-        buttonRestart.setPosition(
-                Rules.WORLD_WIDTH - buttonRestart.getWidth(),
-                0
-        );
+        buttonRestart.setPosition(930, 22);
+        buttonMenu.setPosition(22, 22);
 
-        buttonMenu.addListener(new ChangeListener() {
+        buttonMenu.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+            public void clicked(InputEvent event, float x, float y) {
                 //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
                 if (GamePreferences.isSoundEnabled()) {
                     Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.UI_MENU));
@@ -93,9 +91,9 @@ public class PauseGroup extends Group {
             }
         });
 
-        buttonRestart.addListener(new ChangeListener() {
+        buttonRestart.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+            public void clicked(InputEvent event, float x, float y) {
                 //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
                 if (GamePreferences.isSoundEnabled()) {
                     Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.UI_MENU));
@@ -107,9 +105,10 @@ public class PauseGroup extends Group {
             }
         });
 
-        playPauseBtn.addListener(new ChangeListener() {
+        //todo: add sound here
+        playPauseBtn.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+            public void clicked(InputEvent event, float x, float y) {
                 PauseGroup.this.pause = !PauseGroup.this.pause;
                 if (PauseGroup.this.pause) {
                     boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
