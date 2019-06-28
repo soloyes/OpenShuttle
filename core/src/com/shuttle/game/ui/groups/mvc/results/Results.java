@@ -35,7 +35,7 @@ public class Results {
 
     public Results() {
         stringBuffer = new StringBuffer();
-        file = Gdx.files.local(FileConstants.RESULTS);
+        file = Gdx.files.internal(FileConstants.RESULTS);
         if (!file.exists()) {
             ObjectMapper mapper = new ObjectMapper();
             try {

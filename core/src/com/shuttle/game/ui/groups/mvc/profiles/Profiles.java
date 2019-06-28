@@ -43,7 +43,7 @@ public class Profiles implements Model<com.shuttle.game.ui.groups.mvc.profiles.P
 
     public Profiles() {
         this.profiles = new ArrayList<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO>();
-        this.file = Gdx.files.local(FileConstants.PROFILES);
+        this.file = Gdx.files.internal(FileConstants.PROFILES);
         this.emptyProfile = asEmpty();
     }
 
