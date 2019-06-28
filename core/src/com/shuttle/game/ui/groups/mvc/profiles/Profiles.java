@@ -2,7 +2,6 @@ package com.shuttle.game.ui.groups.mvc.profiles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionLikeType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
@@ -21,20 +20,15 @@ import java.util.List;
  */
 
 //todo: remove results also when remove profile (после того как дизайнер заапрувит таблицу результатов). А также удялять результаты построчно. Надо MVC.
-public class Profiles implements Model<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> {
-    @JsonIgnore
-    private List<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> profiles;
+public class Profiles implements Model<ProfileDAO> {
+    private List<ProfileDAO> profiles;
 
-    @JsonIgnore
     private static Profiles instance;
 
-    @JsonIgnore
     private FileHandle file;
 
-    @JsonIgnore
-    private com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO emptyProfile;
+    private ProfileDAO emptyProfile;
 
-    @JsonIgnore
     private static boolean empty;
 
     public static boolean isEmpty() {
@@ -42,13 +36,13 @@ public class Profiles implements Model<com.shuttle.game.ui.groups.mvc.profiles.P
     }
 
     public Profiles() {
-        this.profiles = new ArrayList<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO>();
+        this.profiles = new ArrayList<ProfileDAO>();
         this.file = Gdx.files.internal(FileConstants.PROFILES);
         this.emptyProfile = asEmpty();
     }
 
     @Override
-    public List<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> getList() {
+    public List<ProfileDAO> getList() {
         return getInstance().profiles;
     }
 
@@ -63,7 +57,7 @@ public class Profiles implements Model<com.shuttle.game.ui.groups.mvc.profiles.P
                     CollectionLikeType collectionLikeType =
                             TypeFactory
                                     .defaultInstance()
-                                    .constructCollectionLikeType(List.class, com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO.class);
+                                    .constructCollectionLikeType(List.class, ProfileDAO.class);
                     instance.profiles = mapper.readValue(instance.file.file(), collectionLikeType);
                 } else {
                     initDefaultProfiles();
@@ -80,21 +74,21 @@ public class Profiles implements Model<com.shuttle.game.ui.groups.mvc.profiles.P
 
     private void initDefaultProfiles() {
         for (int i = 0; i < PaintConstants.DUMMY_PROFILES; i++) {
-            com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO dummy = asDummy();
+            ProfileDAO dummy = asDummy();
             getList().add(dummy);
         }
     }
 
-    private static com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO asEmpty() {
-        return new com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO(com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO.Type.PROFILE, PaintConstants.UI_EMPTY_PROFILE, GamePreferences.defaults, false);
+    private static ProfileDAO asEmpty() {
+        return new ProfileDAO(ProfileDAO.Type.PROFILE, PaintConstants.UI_EMPTY_PROFILE, GamePreferences.defaults, false);
     }
 
-    private static com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO asDummy() {
-        return new com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO(com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO.Type.DUMMY, "", null, false);
+    private static ProfileDAO asDummy() {
+        return new ProfileDAO(ProfileDAO.Type.DUMMY, "", null, false);
     }
 
     @Override
-    public void setEmpty(com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO profile) {
+    public void setEmpty(ProfileDAO profile) {
         preferencesToActiveProfile();
         profile.copy(instance.emptyProfile);
     }
@@ -106,9 +100,9 @@ public class Profiles implements Model<com.shuttle.game.ui.groups.mvc.profiles.P
     }
 
     @Override
-    public com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO getActive() {
-        List<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> profiles = getList();
-        com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO profile = null;
+    public ProfileDAO getActive() {
+        List<ProfileDAO> profiles = getList();
+        ProfileDAO profile = null;
         for (int i = 0; i < profiles.size(); i++) {
             if (profiles.get(i).isActive()) {
                 profile = profiles.get(i);
@@ -118,8 +112,8 @@ public class Profiles implements Model<com.shuttle.game.ui.groups.mvc.profiles.P
     }
 
     @Override
-    public void remove(com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO profile) {
-        List<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> profiles = getList();
+    public void remove(ProfileDAO profile) {
+        List<ProfileDAO> profiles = getList();
         for (int i = 0; i < profiles.size(); i++) {
             if (profiles.get(i).getId().equals(profile.getId())) {
                 if (profile.isActive()) {
@@ -133,8 +127,8 @@ public class Profiles implements Model<com.shuttle.game.ui.groups.mvc.profiles.P
                 profiles.remove(profile);
 
                 //If have we deleted all from list
-                com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO tmpProfile = profiles.get(0);
-                if (tmpProfile.getType() == com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO.Type.DUMMY) {
+                ProfileDAO tmpProfile = profiles.get(0);
+                if (tmpProfile.getType() == ProfileDAO.Type.DUMMY) {
                     tmpProfile.setActive(false);
                 }
                 break;
@@ -143,16 +137,16 @@ public class Profiles implements Model<com.shuttle.game.ui.groups.mvc.profiles.P
     }
 
     @Override
-    public com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO addEmpty() {
+    public ProfileDAO addEmpty() {
         preferencesToActiveProfile();
-        com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO empty = asEmpty();
+        ProfileDAO empty = asEmpty();
         getList().add(empty);
         return empty;
     }
 
     @Override
-    public void activate(com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO profile) {
-        List<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> profiles = getList();
+    public void activate(ProfileDAO profile) {
+        List<ProfileDAO> profiles = getList();
         preferencesToActiveProfile();
         for (int i = 0; i < profiles.size(); i++) {
             profiles.get(i).setActive(false);
@@ -162,7 +156,7 @@ public class Profiles implements Model<com.shuttle.game.ui.groups.mvc.profiles.P
 
     @Override
     public void addDummy() {
-        com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO dummy = asDummy();
+        ProfileDAO dummy = asDummy();
         getList().add(dummy);
     }
 
@@ -181,8 +175,8 @@ public class Profiles implements Model<com.shuttle.game.ui.groups.mvc.profiles.P
 
         empty = true;
         for (int i = 0; i < getList().size(); i++) {
-            com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO profile = getList().get(i);
-            if (profile.getType() != com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO.Type.DUMMY) {
+            ProfileDAO profile = getList().get(i);
+            if (profile.getType() != ProfileDAO.Type.DUMMY) {
                 empty = false;
                 break;
             }

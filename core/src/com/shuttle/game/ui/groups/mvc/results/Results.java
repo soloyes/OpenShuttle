@@ -15,52 +15,48 @@ import java.util.Set;
  * @author Shuttle on 7/14/18.
  */
 public class Results {
+    private static Results instance;
     private FileHandle file;
-    private Set<ResultDAO> results = new LinkedHashSet<ResultDAO>();
+    private Set<ResultDAO> results;
     private StringBuffer stringBuffer;
 
-    public Set<ResultDAO> getResults() {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            CollectionLikeType collectionLikeType =
-                    TypeFactory
-                            .defaultInstance()
-                            .constructCollectionLikeType(Set.class, ResultDAO.class);
-            results = mapper.readValue(file.file(), collectionLikeType);
-        } catch (IOException e) {
-            e.printStackTrace();
+    private Results getInstance() {
+        if (instance == null) {
+            instance = new Results();
+            //First game start
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                if (file.exists()) {
+                    CollectionLikeType collectionLikeType =
+                            TypeFactory
+                                    .defaultInstance()
+                                    .constructCollectionLikeType(Set.class, ResultDAO.class);
+                    instance.results = mapper.readValue(instance.file.file(), collectionLikeType);
+                } else {
+                    instance.results.add(new ResultDAO());
+                }
+            } catch (IOException e) {
+                instance.results.add(new ResultDAO());
+                e.printStackTrace();
+            }
+            //
         }
-        return results;
+        return instance;
+    }
+
+    public Set<ResultDAO> getResults() {
+        return getInstance().results;
     }
 
     public Results() {
-        stringBuffer = new StringBuffer();
-        file = Gdx.files.internal(FileConstants.RESULTS);
-        if (!file.exists()) {
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-                Set<ResultDAO> results = new LinkedHashSet<ResultDAO>();
-                results.add(new ResultDAO());
-                mapper.writeValue(file.file(), results);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        this.stringBuffer = new StringBuffer();
+        this.results = new LinkedHashSet<ResultDAO>();
+        this.file = Gdx.files.internal(FileConstants.RESULTS);
     }
 
     public String shareResults() {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            CollectionLikeType collectionLikeType =
-                    TypeFactory
-                            .defaultInstance()
-                            .constructCollectionLikeType(Set.class, ResultDAO.class);
-            results = mapper.readValue(file.file(), collectionLikeType);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         stringBuffer.setLength(0);
-        for (ResultDAO r : results) {
+        for (ResultDAO r : getInstance().results) {
             if (!r.getUsername().isEmpty()) {
                 stringBuffer
                         .append(r.getUsername())
@@ -79,14 +75,9 @@ public class Results {
     public void addResult(ResultDAO result) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            CollectionLikeType collectionLikeType =
-                    TypeFactory
-                            .defaultInstance()
-                            .constructCollectionLikeType(Set.class, ResultDAO.class);
-            results = mapper.readValue(file.file(), collectionLikeType);
-            results.remove(result);
-            results.add(result);
-            mapper.writeValue(file.file(), results);
+            instance.results.remove(result);
+            instance.results.add(result);
+            mapper.writeValue(instance.file.file(), instance.results);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -34,8 +34,8 @@ import lombok.Setter;
  */
 
 //todo: Add, remove and cancel sounds
-public class VerticalGroupList extends VerticalGroup implements View<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> {
-    private com.shuttle.game.ui.groups.mvc.Controller<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> controller;
+public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO> {
+    private com.shuttle.game.ui.groups.mvc.Controller<ProfileDAO> controller;
     private final ScrollPane scrollPane;
     private VerticalGroup verticalGroup;
     private Map<String, Line> currentLines;
@@ -68,7 +68,7 @@ public class VerticalGroupList extends VerticalGroup implements View<com.shuttle
     }
 
     @Override
-    public void setController(Controller<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> controller) {
+    public void setController(Controller<ProfileDAO> controller) {
         this.controller = controller;
     }
 
@@ -78,7 +78,7 @@ public class VerticalGroupList extends VerticalGroup implements View<com.shuttle
         verticalGroup.addActor(new Header());
         boolean hasActive = false;
         for (int i = 0; i < controller.getList().size(); i++) {
-            com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO profile = controller.getList().get(i);
+            ProfileDAO profile = controller.getList().get(i);
             Line line = new Line(profile);
             currentLines.put(profile.getId(), line);
             if (profile.isActive()) {
@@ -141,7 +141,7 @@ public class VerticalGroupList extends VerticalGroup implements View<com.shuttle
 
     private class Line extends Group {
         private Table table;
-        private final com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO profile;
+        private final ProfileDAO profile;
         @Getter
         private TimeAndFlag timeAndFlag;
 
@@ -168,7 +168,7 @@ public class VerticalGroupList extends VerticalGroup implements View<com.shuttle
             }
         }
 
-        Line(final com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO profile) {
+        Line(final ProfileDAO profile) {
             this.timeAndFlag = new TimeAndFlag();
             this.profile = profile;
             this.table = new Table();
@@ -201,7 +201,7 @@ public class VerticalGroupList extends VerticalGroup implements View<com.shuttle
                 }
             });
 
-            if (profile.getType() == com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO.Type.DUMMY) {
+            if (profile.getType() == ProfileDAO.Type.DUMMY) {
                 table.add();
                 table.add();
                 table.add();

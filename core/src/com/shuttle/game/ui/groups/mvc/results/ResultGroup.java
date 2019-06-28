@@ -21,7 +21,7 @@ public class ResultGroup extends Group {
         this.setName(GroupType.RESULTS.name());
         this.setVisible(false);
         Table table = new Table();
-        com.shuttle.game.ui.groups.mvc.results.Results results = new com.shuttle.game.ui.groups.mvc.results.Results();
+        Results results = new Results();
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         ScrollPane scrollPane = new ScrollPane(table, skin);
         Label.LabelStyle style64 = new Label.LabelStyle(
@@ -39,15 +39,13 @@ public class ResultGroup extends Group {
         table.row();
 
         //todo: use Line.class here
-        if (results.getResults() != null) {
-            for (ResultDAO r : results.getResults()) {
-                if (!r.getUsername().isEmpty()) {
-                    table.row();
-                    table.add(new Label(r.getUsername(), style64)).left();
-                    table.add(new Label(" " + r.getScore() + " ", style64)).right();
-                    table.add(new Label(r.getDate(), style64)).right();
-                    table.add(new Label(" " + r.getLevel(), style64)).right();
-                }
+        for (ResultDAO r : results.getResults()) {
+            if (!r.getUsername().isEmpty()) {
+                table.row();
+                table.add(new Label(r.getUsername(), style64)).left();
+                table.add(new Label(" " + r.getScore() + " ", style64)).right();
+                table.add(new Label(r.getDate(), style64)).right();
+                table.add(new Label(" " + r.getLevel(), style64)).right();
             }
         }
 

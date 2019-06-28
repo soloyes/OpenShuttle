@@ -11,25 +11,25 @@ import java.util.List;
  * @author Shuttle on 17/06/19.
  */
 
-public class GroupController implements Controller<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> {
-    private com.shuttle.game.ui.groups.mvc.View<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> view;
-    private com.shuttle.game.ui.groups.mvc.Model<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> model;
+public class GroupController implements Controller<ProfileDAO> {
+    private View<ProfileDAO> view;
+    private Model<ProfileDAO> model;
 
     @Override
-    public List<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> getList() {
+    public List<ProfileDAO> getList() {
         return model.getList();
     }
 
-    public GroupController(View<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> view, Model<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> model) {
+    public GroupController(View<ProfileDAO> view, Model<ProfileDAO> model) {
         this.view = view;
         this.model = model;
     }
 
     public static boolean isEmpty() {
-        return com.shuttle.game.ui.groups.mvc.profiles.Profiles.isEmpty();
+        return Profiles.isEmpty();
     }
 
-    public com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO getActive() {
+    public ProfileDAO getActive() {
         return model.getActive();
     }
 
@@ -43,8 +43,8 @@ public class GroupController implements Controller<com.shuttle.game.ui.groups.mv
     }
 
     @Override
-    public com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO add(String s) {
-        com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO profile = add();
+    public ProfileDAO add(String s) {
+        ProfileDAO profile = add();
         profile.setUsername(s);
         return profile;
     }
@@ -55,13 +55,13 @@ public class GroupController implements Controller<com.shuttle.game.ui.groups.mv
     }
 
     @Override
-    public com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO add() {
+    public ProfileDAO add() {
         int i;
-        com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO tmpProfile = null;
-        List<com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO> profiles = model.getList();
+        ProfileDAO tmpProfile = null;
+        List<ProfileDAO> profiles = model.getList();
         for (i = 0; i < profiles.size(); i++) {
-            com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO profile = profiles.get(i);
-            if (profile.getType() == com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO.Type.DUMMY) {
+            ProfileDAO profile = profiles.get(i);
+            if (profile.getType() == ProfileDAO.Type.DUMMY) {
                 tmpProfile = profile;
                 model.setEmpty(profile);
                 break;
@@ -75,13 +75,13 @@ public class GroupController implements Controller<com.shuttle.game.ui.groups.mv
     }
 
     @Override
-    public void remove(com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO profile) {
+    public void remove(ProfileDAO profile) {
         model.remove(profile);
         initView();
     }
 
     @Override
-    public void select(com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO profile) {
+    public void select(ProfileDAO profile) {
         model.activate(profile);
         initView();
     }
