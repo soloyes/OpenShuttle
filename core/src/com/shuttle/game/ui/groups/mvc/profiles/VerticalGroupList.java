@@ -172,6 +172,7 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
             this.timeAndFlag = new TimeAndFlag();
             this.profile = profile;
             this.table = new Table();
+            //todo: padding to PaintConstants
             table.row().padBottom(22).expandX();
             Label.LabelStyle style64 = new Label.LabelStyle(
                     Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
@@ -263,7 +264,7 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
         }
     }
 
-    public com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO addProfile(String username) {
+    public ProfileDAO addProfile(String username) {
         setVisible(true);
         return controller.add(username);
     }
