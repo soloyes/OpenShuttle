@@ -2,9 +2,12 @@ package com.shuttle.game.ui.groups;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -14,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.shuttle.game.conf.GamePreferences;
@@ -29,6 +33,13 @@ import com.shuttle.game.utils.Assets;
  */
 public class ConfigGroup extends VerticalGroup {
     private static ConfigGroup instance;
+    private final Label titleLabel;
+
+    private BitmapFont font64;
+    private BitmapFont font96;
+    private BitmapFont font256;
+
+    private final ScrollPane scrollPane;
 
     private Label.LabelStyle labelStyle48;
     private Label.LabelStyle labelStyle64;
@@ -40,6 +51,9 @@ public class ConfigGroup extends VerticalGroup {
     private final Skin skin;
     private Array<Music> musicArray;
     private BoomBox boomBox;
+    private Label noticeLabel;
+    private GlyphLayout glyphLayout;
+
 
     private Table joystickTable;
     private Slider musicSlider;
@@ -77,20 +91,22 @@ public class ConfigGroup extends VerticalGroup {
 //        private Actor icon;
 //        private Actor slider;
 
-        public Line(Actor icon, Actor label, Actor slider) {
+        public Line(Actor icon, Actor label, int align, Actor slider) {
             this.table = new Table();
 //            this.label = label;
 //            this.icon = icon;
 //            this.slider = slider;
-            table.row().padBottom(22).expandX();
-            table.add(icon);
-            table.add(label);
+            table.row().padBottom(22);
+            //todo: to PaintCost
+            table.add(icon).width(44).padRight(44).padLeft(44);
+            table.add(label).expandX().align(align);
+
             if (slider != null) {
-                table.add(slider);
+                table.add(slider).width(250).padRight(22).padLeft(22);
             }
-            table.align(Align.bottomLeft);
+            table.align(Align.top);
             table.setFillParent(true);
-            this.setWidth(Rules.WORLD_WIDTH / 2);
+            this.setWidth(3 * Rules.WORLD_WIDTH / 4);
             this.setHeight(90);
             this.addActor(table);
         }
@@ -110,7 +126,7 @@ public class ConfigGroup extends VerticalGroup {
         //joyStickCheckBox.setText(GamePreferences.isJoyStickEnabled() ? on : off);
         joyStickCheckBox.setChecked(GamePreferences.isJoyStickEnabled());
         //joystickTable.setVisible(joyStickCheckBox.isChecked());
-        joyStickColorCheckBox.setText(GamePreferences.isJoyStickColorEnabled() ? cyan : white);
+        //joyStickColorCheckBox.setText(GamePreferences.isJoyStickColorEnabled() ? cyan : white);
         joyStickColorCheckBox.setChecked(GamePreferences.isJoyStickColorEnabled());
         //childCheckBox.setText(GamePreferences.isChildEnabled() ? on : off);
         childCheckBox.setChecked(GamePreferences.isChildEnabled());
@@ -121,40 +137,38 @@ public class ConfigGroup extends VerticalGroup {
     private ConfigGroup() {
         this.setName(GroupType.CONFIG.name());
         this.setVisible(false);
+        this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
+        this.font96 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
+        this.font256 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT256, BitmapFont.class);
         this.skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.setPosition(Rules.WORLD_WIDTH / 8, Rules.WORLD_HEIGHT / 4);
         this.setWidth(3 * Rules.WORLD_WIDTH / 4);
-        this.setHeight(Rules.WORLD_HEIGHT / 4);
+        this.setHeight(Rules.WORLD_HEIGHT / 2);
         this.boomBox = new BoomBox();
+        this.glyphLayout = new GlyphLayout();
+        this.noticeLabel = new Label("", labelStyle64);
 
         VerticalGroup verticalGroup = new VerticalGroup();
-        ScrollPane scrollPane = new ScrollPane(verticalGroup, skin);
-        scrollPane.setFadeScrollBars(false);
+        scrollPane = new ScrollPane(verticalGroup, skin);
+        scrollPane.setScrollbarsOnTop(false);
+        scrollPane.setForceScroll(false, true);
         scrollPane.setScrollingDisabled(true, false);
-        //scrollPane.setVariableSizeKnobs(false);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setVariableSizeKnobs(false);
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
-        container.setPosition(Rules.WORLD_WIDTH / 8, Rules.WORLD_HEIGHT / 2);
-        container.width(3 * Rules.WORLD_WIDTH / 4);
-        container.height(Rules.WORLD_HEIGHT / 4);
+        container.setHeight(Rules.WORLD_HEIGHT / 2);
         container.align(Align.top);
         Joystick joystick = new Joystick();
+        joystick.setWidth(PaintConstants.JOYSTICK_WIDTH + PaintConstants.JOYSTICK_STICK_WIDTH);
+        joystick.setHeight(PaintConstants.JOYSTICK_HEIGHT);
         ScreenManager.ScreenType screenType = ScreenManager.getInstance().getCurrentScreen();
 
         initStyles();
         initSliders();
         initCheckBoxes();
 
-
-//        Table table = new Table();
-//        table.setPosition(
-//                Rules.WORLD_WIDTH / 2,
-//                Rules.WORLD_HEIGHT / 2
-//        );
-//
-//        joystickTable = new Table();
-//        final Table innerTable = new Table();
-//
-        Label titleLabel = new Label("Preferences", labelStyle96);
+        titleLabel = new Label("SETTINGS", labelStyle96);
+        Label space = new Label("", labelStyle96);
         Label soundLabel = new Label("SOUND", labelStyle64);
         Label musicLabel = new Label("MUSIC", labelStyle64);
         Label effectsLabel = new Label("EFFECTS", labelStyle64);
@@ -164,101 +178,27 @@ public class ConfigGroup extends VerticalGroup {
         Label vibrationLabel = new Label("VIBRATION", labelStyle64);
         Label joyStickLabel = new Label("JOYSTICK", labelStyle64);
 
-        Line soundLine = new Line(soundCheckBox, soundLabel, soundSlider);
-        Line musicLine = new Line(musicCheckBox, musicLabel, musicSlider);
-        Line effectsLine = new Line(effectsCheckBox, effectsLabel, effectsSlider);
-        Line shadersLine = new Line(shadersCheckBox, shadersLabel, null);
-        Line childLine = new Line(childCheckBox, childLabel, null);
-        Line levelLine = new Line(levelCheckBox, levelLabel, null);
-        Line vibrationLine = new Line(vibrationCheckBox, vibrationLabel, null);
-        Line joystickLine = new Line(joyStickCheckBox, joyStickLabel, null);
+        Line soundLine = new Line(soundCheckBox, soundLabel, Align.left, soundSlider);
+        Line musicLine = new Line(musicCheckBox, musicLabel, Align.left, musicSlider);
+        Line effectsLine = new Line(effectsCheckBox, effectsLabel, Align.left, effectsSlider);
+        Line shadersLine = new Line(shadersCheckBox, shadersLabel, Align.left, null);
+        Line childLine = new Line(childCheckBox, childLabel, Align.left, null);
+        Line levelLine = new Line(levelCheckBox, levelLabel, Align.left, null);
+        Line vibrationLine = new Line(vibrationCheckBox, vibrationLabel, Align.left, null);
+        Line joystickLine = new Line(joyStickCheckBox, joyStickLabel, Align.left, null);
+
         Table innerTable = new Table();
         Table joystickTable = new Table();
-        Table table = new Table();
-        table.add(joystickTable).colspan(3);
-
-        joystickTable.row();
-        joystickTable.add(innerTable);
         joystickTable.add(joystick)
-                .width(PaintConstants.JOYSTICK_WIDTH)
-                .height(PaintConstants.JOYSTICK_HEIGHT)
-                .align(Align.center);
-        joystickTable.add();
+                .height(PaintConstants.JOYSTICK_HEIGHT);
 
-        innerTable.row().width(200).padRight(45);
-        innerTable.add(joyStickModeSlider);
+        innerTable.add(joyStickModeSlider).width(250);
         innerTable.row();
         innerTable.add(joyStickColorCheckBox).left();
 
-        Line p = new Line(joyStickPresetCheckBox, table, null);
-//        Label effectsLabel = new Label("Effects ", labelStyle64);
-//
-//        table.add(titleLabel).colspan(3);
-//        table.row();
-//        table.add(volumeMusicLabel).left();
-//        table.add().padRight(10).width(300);
-//        table.add(musicSlider).left().fillX().width(200);
-//        table.row();
-//        table.add(musicOnOffLabel).left();
-//        table.add();
-//        table.add(musicCheckBox).left();
-//        table.row();
-//        table.add(volumeSoundLabel).left();
-//        table.add();
-//        table.add(soundSlider).left().fillX();
-//        table.row();
-//        table.add(soundOnOffLabel).left();
-//        table.add();
-//        table.add(soundCheckBox).left();
-//
-//        switch (screenType) {
-//            case MENU:
-//                table.row();
-//                table.add(childLabel).left();
-//                table.add();
-//                table.add(childCheckBox).left();
-//
-//                table.row();
-//                table.add(levelLabel).left();
-//                table.add(levelSlider).padRight(10).width(300);
-//                table.add(levelLabelDynamic).left().width(200);
-//
-//                table.row();
-//                table.add(effectsLabel).left();
-//                table.add(effectsSlider).padRight(10).width(300);
-//                table.add(effectsLabelDynamic).left().width(200);
-//                break;
-//        }
-//
-//        table.row();
-//        table.add(vibrationLabel).left();
-//        table.add();
-//        table.add(vibrationCheckBox).left();
-//        table.row();
-//        table.add(joyStickOnOffLabel).left();
-//        table.add();
-//        table.add(joyStickCheckBox).left();
-//        table.row();
-//        table.add(joystickTable).colspan(3);
-//
-//        joystickTable.row();
-//        joystickTable.add(innerTable);
-//        joystickTable.add(joystick)
-//                .width(PaintConstants.JOYSTICK_WIDTH)
-//                .height(PaintConstants.JOYSTICK_HEIGHT)
-//                .align(Align.center);
-//        joystickTable.add();
-//
-//        innerTable.row().width(200).padRight(45);
-//        innerTable.add(joyStickModeSlider);
-//        innerTable.row();
-//        innerTable.add(joyStickColorCheckBox).left();
-//
-//        table.setDebug(true);
-//        innerTable.setDebug(true);
-//        joystickTable.setDebug(true);
-        //this.refresh();
-        //verticalGroup.addActor(table);
+        Line joystickPresetLine = new Line(joyStickPresetCheckBox, joystickTable, Align.center, innerTable);
+        joystickPresetLine.setHeight(PaintConstants.JOYSTICK_HEIGHT);
+
         verticalGroup.addActor(soundLine);
         verticalGroup.addActor(musicLine);
         verticalGroup.addActor(effectsLine);
@@ -267,10 +207,21 @@ public class ConfigGroup extends VerticalGroup {
         verticalGroup.addActor(levelLine);
         verticalGroup.addActor(vibrationLine);
         verticalGroup.addActor(joystickLine);
-        verticalGroup.addActor(p);
+        verticalGroup.addActor(joystickPresetLine);
         this.addActor(titleLabel);
+        this.addActor(space);
         this.addActor(container);
-        //this.addActor(table);
+        this.refresh();
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        glyphLayout.setText(font64, "STRING HELPER");
+        font64.draw(batch, glyphLayout,
+                Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
+                this.getY() + this.getHeight() - 3 * titleLabel.getHeight() / 2
+        );
     }
 
     private void initStyles() {
@@ -290,10 +241,8 @@ public class ConfigGroup extends VerticalGroup {
                 new Color(0.8f, 0.43f, 0.33f, 1f)
         );
 
-        labelStyle96 = new Label.LabelStyle(
-                Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class),
-                new Color(0.8f, 0.43f, 0.33f, 1f)
-        );
+        labelStyle96 = new Label.LabelStyle();
+        labelStyle96.font = font96;
         /////////
 
         sliderStyle = new Slider.SliderStyle(skin.get("default-horizontal", Slider.SliderStyle.class));
@@ -314,6 +263,19 @@ public class ConfigGroup extends VerticalGroup {
 //                }
             }
         });
+        soundSlider.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(true);
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
 
         musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, sliderStyle);
         musicSlider.addListener(new ChangeListener() {
@@ -330,6 +292,19 @@ public class ConfigGroup extends VerticalGroup {
 //                }
             }
         });
+        musicSlider.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(true);
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
 
         effectsSlider = new Slider(0.0f, GamePreferences.EffectLevel.values().length - 1, 1.0f, false, sliderStyle);
         effectsSlider.addListener(new ChangeListener() {
@@ -340,6 +315,19 @@ public class ConfigGroup extends VerticalGroup {
 //                if (effectsSlider.isDragging()) {
 //                    boomBox.playSound(MSConstants.UI_MENU);
 //                }
+            }
+        });
+        effectsSlider.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(true);
+                super.touchUp(event, x, y, pointer, button);
             }
         });
 
@@ -368,6 +356,19 @@ public class ConfigGroup extends VerticalGroup {
 //                }
             }
         });
+        joyStickModeSlider.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(true);
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
     }
 
     private void initCheckBoxes() {
@@ -379,6 +380,19 @@ public class ConfigGroup extends VerticalGroup {
 //                if (soundCheckBox.isPressed()) {
 //                    boomBox.playSound(MSConstants.UI_CHECKBOX);
 //                }
+            }
+        });
+        soundCheckBox.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(true);
+                super.touchUp(event, x, y, pointer, button);
             }
         });
 
@@ -394,6 +408,19 @@ public class ConfigGroup extends VerticalGroup {
 //                }
             }
         });
+        musicCheckBox.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(true);
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
 
         effectsCheckBox = new CheckBox("", checkBoxStyle48);
         effectsCheckBox.addListener(new ChangeListener() {
@@ -402,10 +429,38 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
+        effectsCheckBox.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(true);
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
+
         shadersCheckBox = new CheckBox("", checkBoxStyle48);
         shadersCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+            }
+        });
+
+        shadersCheckBox.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(true);
+                super.touchUp(event, x, y, pointer, button);
             }
         });
 
@@ -422,10 +477,38 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
+        childCheckBox.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(true);
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
+
         levelCheckBox = new CheckBox("", checkBoxStyle48);
         levelCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+            }
+        });
+
+        levelCheckBox.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(true);
+                super.touchUp(event, x, y, pointer, button);
             }
         });
 
@@ -445,6 +528,20 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
+        vibrationCheckBox.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(true);
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
+
         joyStickCheckBox = new CheckBox("", checkBoxStyle48);
         joyStickCheckBox.addListener(new ChangeListener() {
             @Override
@@ -456,6 +553,20 @@ public class ConfigGroup extends VerticalGroup {
 //                if (joyStickCheckBox.isPressed()) {
 //                    boomBox.playSound(MSConstants.UI_CHECKBOX);
 //                }
+            }
+        });
+
+        joyStickCheckBox.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(true);
+                super.touchUp(event, x, y, pointer, button);
             }
         });
 
@@ -473,7 +584,21 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        joyStickColorCheckBox = new CheckBox("", checkBoxStyle48);
+        joyStickPresetCheckBox.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(true);
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
+
+        joyStickColorCheckBox = new CheckBox("COLOR", checkBoxStyle48);
         joyStickColorCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -483,6 +608,20 @@ public class ConfigGroup extends VerticalGroup {
 //                if (joyStickColorCheckBox.isPressed()) {
 //                    boomBox.playSound(MSConstants.UI_CHECKBOX);
 //                }
+            }
+        });
+
+        joyStickColorCheckBox.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(true);
+                super.touchUp(event, x, y, pointer, button);
             }
         });
     }

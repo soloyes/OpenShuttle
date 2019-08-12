@@ -33,7 +33,6 @@ import com.shuttle.game.utils.Assets;
  */
 public class MenuGroup extends Group {
     private BitmapFont font64;
-    private BitmapFont font256;
     private static boolean validUserName;
     private static TextField username;
     private Button buttonProfile;
@@ -44,6 +43,7 @@ public class MenuGroup extends Group {
     private float blinkTime;
     private static float shadowTime;
     private static StringBuilder notice = new StringBuilder();
+    private Label noticeLabel;
     private BoomBox boomBox;
 
     public static void setNotice(String text) {
@@ -60,11 +60,11 @@ public class MenuGroup extends Group {
         this.setName(name);
         this.setVisible(true);
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        this.font256 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT256, BitmapFont.class);
         this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
+        Label.LabelStyle labelStyle64 = new Label.LabelStyle();
+        labelStyle64.font = font64;
+        noticeLabel = new Label(notice, labelStyle64);
         this.buttonProfile = new Button(skin, "default");
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = font64;
         TextField.TextFieldStyle tfs = skin.get("default", TextField.TextFieldStyle.class);
         tfs.font = font64;
         tfs.fontColor = Color.valueOf("ffffffff");
@@ -153,11 +153,10 @@ public class MenuGroup extends Group {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        font256.draw(batch, "SHUTTLE", 0, 1800, 1080, 1, false);
-        font64.draw(batch, glyphLayout,
-                Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
-                verticalGroupList.getY() + verticalGroupList.getHeight() + glyphLayout.height + 22
-        );
+        noticeLabel.setText(notice);
+        noticeLabel.setPosition(Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
+                verticalGroupList.getY() + verticalGroupList.getHeight() + glyphLayout.height / 2 + 22);
+        noticeLabel.draw(batch, a);
     }
 
     @Override
@@ -180,7 +179,6 @@ public class MenuGroup extends Group {
                 a = 1.0f;
             }
         }
-        font64.getColor().a = a;
         if (GroupController.isEmpty()) {
             buttonProfile.setDisabled(true);
             verticalGroupList.setVisible(false);

@@ -32,21 +32,30 @@ public class Assets {
     public void loadAssets(ScreenManager.ScreenType type) {
         switch (type) {
             case MENU:
-                assetManager.load(MSConstants.MENU_SONG, Music.class);
-                assetManager.load(MSConstants.BLACKHOLE_ROAR_MUSIC, Music.class);
-                assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
-                assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
-
-                assetManager.load(MSConstants.UI_MENU, Sound.class);
-                assetManager.load(MSConstants.UI_CHECKBOX, Sound.class);
                 createStandardFont(32, "");
                 createStandardFont(48, "");
                 createStandardFont(64, "");
                 createStandardFont(96, "");
                 createStandardFont(128, "");
                 createStandardFont(256, "");
+                assetManager.load(MSConstants.MENU_SONG, Music.class);
+                assetManager.load(MSConstants.BLACKHOLE_ROAR_MUSIC, Music.class);
+                assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
+                assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
+                assetManager.load(MSConstants.UI_MENU, Sound.class);
+                assetManager.load(MSConstants.UI_CHECKBOX, Sound.class);
                 break;
             case GAME:
+                createStandardFont(32, "");
+                createStandardFont(32, "Coloured");
+                createStandardFont(48, "");
+                createStandardFont(64, "");
+                createStandardFont(64, "Coloured");
+                createStandardFont(60, "");
+                createStandardFont(60, "Coloured");
+                createStandardFont(96, "");
+                createStandardFont(128, "");
+                createStandardFont(256, "");
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
                 assetManager.load(MSConstants.MENU_SONG, Music.class);
                 assetManager.load(MSConstants.GAME_SONG, Music.class);
@@ -101,15 +110,6 @@ public class Assets {
                 assetManager.load(MSConstants.GET_LASER, Sound.class);
                 assetManager.load(MSConstants.GET_ROCKETS, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
-                createStandardFont(32, "");
-                createStandardFont(32, "Coloured");
-                createStandardFont(48, "");
-                createStandardFont(64, "");
-                createStandardFont(64, "Coloured");
-                createStandardFont(60, "");
-                createStandardFont(60, "Coloured");
-                createStandardFont(96, "");
-                createStandardFont(128, "");
                 break;
             case TEST:
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
