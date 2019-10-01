@@ -160,6 +160,7 @@ public class ConfigGroup extends VerticalGroup {
         public void act(float delta) {
             super.act(delta);
             checkBox.setChecked(active);
+            levelCheckBox.setChecked(active);
         }
     }
 
@@ -663,7 +664,6 @@ public class ConfigGroup extends VerticalGroup {
                     holdSettingsMessage = PaintConstants.UI_LEVEL_HOLD;
                     disableSettingsMessage = PaintConstants.UI_LEVEL_DISABLE;
                     enableSettingsMessage = PaintConstants.UI_LEVEL_ENABLE;
-                    tmpLine = levelLine;
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
