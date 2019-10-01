@@ -7,7 +7,7 @@ import com.shuttle.game.player.Standing;
  * Game rules constants (Rules)
  */
 public final class Rules {
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     private Rules() {
     }
@@ -274,6 +274,10 @@ public final class Rules {
     public static final float LINE_DELETE_WAIT = 3.0f;
     //2.0f better less than LINE_DELETE_WAIT
     public static final float NOTICE_WAIT = 2.0f;
+    //2.0f
+    public static final float SETTINGS_WAIT_TOUCH = 2.0f;
+    //5.0f
+    public static final float SETTINGS_WAIT_DISABLE = 3.0f + SETTINGS_WAIT_TOUCH;
 
     public static void setSpace(int n) {
         STARS_COUNT = STARS * n;

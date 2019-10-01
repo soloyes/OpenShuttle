@@ -101,6 +101,7 @@ public class MenuBar extends Group {
                 for (int i = 0; i < actors.size; i++) {
                     if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
                         actors.get(i).setVisible(!actors.get(i).isVisible());
+                        ConfigGroup.getInstance().setNoticeAndAlpha(PaintConstants.UI_STRING_HELPER);
                     }
                     if (actors.get(i).getName().equals(GroupType.MENU.name())) {
                         actors.get(i).setVisible(tmp.isVisible());

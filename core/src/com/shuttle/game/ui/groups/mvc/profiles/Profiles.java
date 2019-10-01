@@ -96,6 +96,7 @@ public class Profiles implements Model<ProfileDAO> {
     private void preferencesToActiveProfile() {
         if (getActive() != null) {
             getActive().setPreferences(GamePreferences.getCurrent());
+            System.out.println(GamePreferences.getCurrent());
         }
     }
 

@@ -198,7 +198,7 @@ public class GameScreen extends BaseScreen {
         //BEGIN
         batch.begin();
         background.render(batch);
-        if (GamePreferences.getPrefEffectsLevel() == GamePreferences.EffectLevel.LOW.getValue() || ShaderManager.BLACKHOLE.getProgram() == null) {
+        if (!GamePreferences.isShaderEnabled() || ShaderManager.BLACKHOLE.getProgram() == null) {
             blackhole.render(batch);
         }
         MetalAsteroidEmitter.getInstance().render(batch);
@@ -228,7 +228,7 @@ public class GameScreen extends BaseScreen {
         //BEGIN
         batch.begin();
         super.render(dt);
-        if (GamePreferences.getPrefEffectsLevel() == GamePreferences.EffectLevel.LOW.getValue() || ShaderManager.BLACKHOLE.getProgram() == null) {
+        if (!GamePreferences.isShaderEnabled() || ShaderManager.BLACKHOLE.getProgram() == null) {
             batch.setShader(null);
             //BEGIN
             batch.draw(fboTexRegion, 0, 0, Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);

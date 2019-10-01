@@ -264,6 +264,47 @@ public final class PaintConstants {
     public static final String UI_ADD_NEW_LINE = "Add new line";
     public static final String UI_EMPTY_PROFILE = "Empty profile";
 
+    public static final String UI_STRING_HELPER = "STRING HELPER";
+    public static final String UI_SOUND_NOTICE = "OVERALL SOUND VOLUME";
+    public static final String UI_SOUND_ENABLE = "SOUND ON";
+    public static final String UI_SOUND_DISABLE = "SOUND OFF";
+    public static final String UI_SOUND_HOLD = "HOLD TO MUTE/UNMUTE";
+
+    public static final String UI_MUSIC_NOTICE = "MUSIC VOLUME";
+    public static final String UI_MUSIC_ENABLE = "MUSIC ON";
+    public static final String UI_MUSIC_DISABLE = "MUSIC OFF";
+    public static final String UI_MUSIC_HOLD = "HOLD TO MUTE/UNMUTE";
+
+    public static final String UI_EFFECTS_NOTICE = "EFFECTS VOLUME";
+    public static final String UI_EFFECTS_ENABLE = "EFFECTS ON";
+    public static final String UI_EFFECTS_DISABLE = "EFFECTS OFF";
+    public static final String UI_EFFECTS_HOLD = "HOLD TO MUTE/UNMUTE";
+
+    public static final String UI_SHADERS_NOTICE = "GRAPHIC EFFECTS";
+    public static final String UI_SHADERS_ENABLE = "GRAPHIC EFFECTS ENABLED";
+    public static final String UI_SHADERS_DISABLE = "GRAPHIC EFFECTS DISABLED";
+    public static final String UI_SHADERS_HOLD = "HOLD TO ON/OFF EFFECTS";
+
+    public static final String UI_CHILD_NOTICE = "MODE FOR KIDS";
+    public static final String UI_CHILD_ENABLE = "CHILD MODE ENABLED";
+    public static final String UI_CHILD_DISABLE = "CHILD MODE DISABLED";
+    public static final String UI_CHILD_HOLD = "HOLD TO ON/OFF CHILD MODE";
+
+    public static final String UI_LEVEL_NOTICE = "GAME LEVEL";
+    public static final String UI_LEVEL_ENABLE = "LEVEL CHANGED";
+    public static final String UI_LEVEL_DISABLE = "LEVEL CHANGED";
+    public static final String UI_LEVEL_HOLD = "HOLD TO CHANGE LEVEL";
+
+    public static final String UI_VIBRATION_NOTICE = "DEVICE VIBRATION";
+    public static final String UI_VIBRATION_ENABLE = "VIBRATION ENABLED";
+    public static final String UI_VIBRATION_DISABLE = "VIBRATION DISABLED";
+    public static final String UI_VIBRATION_HOLD = "HOLD TO ON/OFF VIBRATION";
+
+    public static final String UI_JOYSTICK_NOTICE = "GRAPHICAL JOYSTICK";
+    public static final String UI_JOYSTICK_ENABLE = "JOYSTICK ENABLED";
+    public static final String UI_JOYSTICK_DISABLE = "JOYSTICK DISABLED";
+    public static final String UI_JOYSTICK_HOLD = "HOLD TO ON/OFF JOYSTICK";
+
     private PaintConstants() {
     }
 }
