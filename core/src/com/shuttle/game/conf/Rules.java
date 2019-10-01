@@ -275,7 +275,7 @@ public final class Rules {
     //2.0f better less than LINE_DELETE_WAIT
     public static final float NOTICE_WAIT = 2.0f;
     //2.0f
-    public static final float SETTINGS_WAIT_TOUCH = 2.0f;
+    public static final float SETTINGS_WAIT_TOUCH = 1.0f;
     //5.0f
     public static final float SETTINGS_WAIT_DISABLE = 3.0f + SETTINGS_WAIT_TOUCH;
 
