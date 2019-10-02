@@ -798,34 +798,30 @@ public class ConfigGroup extends VerticalGroup {
 
             settingsTouched = false;
             touchTime = 0.0f;
+            tmpLine.setActive(!tmpLine.isActive());
             if (tmpLine == soundLine) {
-                soundLine.setActive(!soundLine.isActive());
                 effectsLine.setActive(soundLine.isActive());
                 effectsLine.setSlave(!soundLine.isActive());
                 musicLine.setActive(soundLine.isActive());
                 musicLine.setSlave(!soundLine.isActive());
                 soundSlider.setDisabled(!soundLine.isActive());
+                effectsSlider.setDisabled(!soundLine.isActive());
+                musicSlider.setDisabled(!soundLine.isActive());
             } else if (tmpLine == joystickLine) {
-                joystickLine.setActive(!joystickLine.isActive());
                 joystickPresetLine.setActive(joystickLine.isActive());
                 joystickPresetLine.setSlave(!joystickLine.isActive());
                 joyStickModeSlider.setDisabled(!joystickLine.isActive());
             } else if (tmpLine == effectsLine) {
-                tmpLine.setActive(!tmpLine.isActive());
                 effectsSlider.setDisabled(!effectsLine.isActive());
             } else if (tmpLine == musicLine) {
                 musicSlider.setDisabled(!musicLine.isActive());
-                tmpLine.setActive(!tmpLine.isActive());
             } else if (tmpLine == levelLine) {
                 tmpLine.setActive(true);
                 level++;
                 level = level % (Rules.StartLevel.values().length);
                 levelLabel.setText("LEVEL " + level + " (" + Rules.StartLevel.values()[level].name() + ")");
-            } else {
-                tmpLine.setActive(!tmpLine.isActive());
             }
         }
-
         glyphLayout.setText(font64, notice);
     }
 }
