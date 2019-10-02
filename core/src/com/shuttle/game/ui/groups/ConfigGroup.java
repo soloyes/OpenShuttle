@@ -718,17 +718,19 @@ public class ConfigGroup extends VerticalGroup {
         @Getter
         @Setter
         private boolean slave;
+        private Actor actor;
 
-        private Line(CheckBox checkBox, Actor label, int align, Actor slider) {
+        private Line(CheckBox checkBox, Actor label, int align, Actor actor) {
             this.table = new Table();
             this.checkBox = checkBox;
+            this.actor = actor;
             table.row().padBottom(22);
             //todo: to PaintCost
             table.add(checkBox).width(44).padRight(44).padLeft(44);
             table.add(label).expandX().align(align);
 
-            if (slider != null) {
-                table.add(slider).width(250).padRight(22).padLeft(22);
+            if (actor != null) {
+                table.add(actor).width(250).padRight(22).padLeft(22);
             }
             table.align(Align.top);
             table.setFillParent(true);
@@ -802,10 +804,18 @@ public class ConfigGroup extends VerticalGroup {
                 effectsLine.setSlave(!soundLine.isActive());
                 musicLine.setActive(soundLine.isActive());
                 musicLine.setSlave(!soundLine.isActive());
+                soundSlider.setDisabled(!soundLine.isActive());
             } else if (tmpLine == joystickLine) {
                 joystickLine.setActive(!joystickLine.isActive());
                 joystickPresetLine.setActive(joystickLine.isActive());
                 joystickPresetLine.setSlave(!joystickLine.isActive());
+                joyStickModeSlider.setDisabled(!joystickLine.isActive());
+            } else if (tmpLine == effectsLine) {
+                tmpLine.setActive(!tmpLine.isActive());
+                effectsSlider.setDisabled(!effectsLine.isActive());
+            } else if (tmpLine == musicLine) {
+                musicSlider.setDisabled(!musicLine.isActive());
+                tmpLine.setActive(!tmpLine.isActive());
             } else if (tmpLine == levelLine) {
                 tmpLine.setActive(true);
                 level++;
