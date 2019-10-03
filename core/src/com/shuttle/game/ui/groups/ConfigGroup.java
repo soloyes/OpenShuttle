@@ -49,12 +49,10 @@ public class ConfigGroup extends VerticalGroup {
     private BitmapFont font256;
     private Label.LabelStyle labelStyle48;
     private Label.LabelStyle labelStyle64;
-    private Label.LabelStyle noticelStyle64;
+    private Label.LabelStyle noticeStyle64;
     private Label.LabelStyle labelStyle96;
     private CheckBox.CheckBoxStyle checkBoxStyle48;
     private Slider.SliderStyle sliderStyle;
-    private Label levelLabelDynamic;
-    private Label effectsLabelDynamic;
     private Array<Music> musicArray;
     private BoomBox boomBox;
     private Label noticeLabel;
@@ -69,7 +67,7 @@ public class ConfigGroup extends VerticalGroup {
     private Line soundLine;
     private Line musicLine;
     private Line effectsLine;
-    private Line shadersLine;
+    private Line shaderLine;
     private Line childLine;
     private Line levelLine;
     private Line vibrationLine;
@@ -79,7 +77,7 @@ public class ConfigGroup extends VerticalGroup {
     private CheckBox soundCheckBox;
     private CheckBox musicCheckBox;
     private CheckBox effectsCheckBox;
-    private CheckBox shadersCheckBox;
+    private CheckBox shaderCheckBox;
     private CheckBox childCheckBox;
     private CheckBox levelCheckBox;
     private CheckBox vibrationCheckBox;
@@ -124,7 +122,7 @@ public class ConfigGroup extends VerticalGroup {
 
         initLines();
 
-        this.noticeLabel = new Label(notice, noticelStyle64);
+        this.noticeLabel = new Label(notice, noticeStyle64);
 
         VerticalGroup verticalGroup = new VerticalGroup();
         scrollPane = new ScrollPane(verticalGroup, skin);
@@ -142,7 +140,7 @@ public class ConfigGroup extends VerticalGroup {
         verticalGroup.addActor(soundLine);
         verticalGroup.addActor(musicLine);
         verticalGroup.addActor(effectsLine);
-        verticalGroup.addActor(shadersLine);
+        verticalGroup.addActor(shaderLine);
         verticalGroup.addActor(childLine);
         verticalGroup.addActor(levelLine);
         verticalGroup.addActor(vibrationLine);
@@ -171,7 +169,7 @@ public class ConfigGroup extends VerticalGroup {
                 new Color(0.8f, 0.43f, 0.33f, 1f)
         );
 
-        noticelStyle64 = new Label.LabelStyle(
+        noticeStyle64 = new Label.LabelStyle(
                 Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
                 new Color(1.0f, 1.0f, 1.0f, 1f)
         );
@@ -192,10 +190,49 @@ public class ConfigGroup extends VerticalGroup {
         soundSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                GamePreferences.setSoundVolume(soundSlider.getValue());
+                musicArray = new Array<Music>();
+                Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
+                for (int i = 0; i < musicArray.size; i++) {
+                    musicArray.get(i).setVolume(GamePreferences.getOverallMusicVolume());
+                }
+                if (soundSlider.isDragging()) {
+                    boomBox.playSound(MSConstants.UI_MENU);
+                }
+                soundLine.setMuted(soundSlider.getValue() == 0.0f);
             }
         });
         soundSlider.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                scrollPane.setFlickScroll(true);
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
+
+        musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, sliderStyle);
+        musicSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                GamePreferences.setMusicVolume(musicSlider.getValue());
+                musicArray = new Array<Music>();
+                Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
+                for (int i = 0; i < musicArray.size; i++) {
+                    musicArray.get(i).setVolume(GamePreferences.getOverallMusicVolume());
+                }
+                if (musicSlider.isDragging()) {
+                    boomBox.playSound(MSConstants.UI_MENU);
+                }
+                musicLine.setMuted(musicSlider.getValue() == 0.0f);
+            }
+        });
+        musicSlider.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 scrollPane.setFlickScroll(false);
@@ -217,6 +254,7 @@ public class ConfigGroup extends VerticalGroup {
                 if (effectsSlider.isDragging()) {
                     boomBox.playSound(MSConstants.UI_MENU);
                 }
+                effectsLine.setMuted(effectsSlider.getValue() == 0.0f);
             }
         });
         effectsSlider.addListener(new ClickListener() {
@@ -232,50 +270,6 @@ public class ConfigGroup extends VerticalGroup {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-
-        musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, sliderStyle);
-        musicSlider.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                musicArray = new Array<Music>();
-                Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
-                for (int i = 0; i < musicArray.size; i++) {
-                    musicArray.get(i).setVolume(musicSlider.getValue());
-                }
-                GamePreferences.setMusicVolume(musicSlider.getValue());
-                if (musicSlider.isDragging()) {
-                    boomBox.playSound(MSConstants.UI_MENU);
-                }
-            }
-        });
-        musicSlider.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                scrollPane.setFlickScroll(false);
-                return super.touchDown(event, x, y, pointer, button);
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                scrollPane.setFlickScroll(true);
-                super.touchUp(event, x, y, pointer, button);
-            }
-        });
-
-//        levelLabelDynamic = new Label(Rules.StartLevel.values()[GamePreferences.getLevel()].toString(), labelStyle48);
-//        effectsLabelDynamic = new Label(GamePreferences.EffectLevel.values()[GamePreferences.isShaderEnabled()].toString(), labelStyle48);
-
-//        levelSlider = new Slider(0.0f, Rules.StartLevel.values().length - 1, 1.0f, false, sliderStyle);
-//        levelSlider.addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-////                GamePreferences.setLevel((int) levelSlider.getValue());
-////                levelLabelDynamic.setText(Rules.StartLevel.values()[(int) levelSlider.getValue()].toString());
-////                if (levelSlider.isDragging()) {
-////                    boomBox.playSound(MSConstants.UI_MENU);
-////                }
-//            }
-//        });
 
         joyStickModeSlider = new Slider(0, 4, 1, false, sliderStyle);
         joyStickModeSlider.addListener(new ChangeListener() {
@@ -302,17 +296,15 @@ public class ConfigGroup extends VerticalGroup {
         });
     }
 
+    //todo: затестить мультитач. Надо чтобы несколько пальцев не мгли одновременно нажимать на опции
     private void initCheckBoxes() {
         soundCheckBox = new CheckBox("", checkBoxStyle48);
+        soundCheckBox.setDisabled(true);
         soundCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (soundCheckBox.isPressed()) {
-                    boomBox.playSound(MSConstants.UI_CHECKBOX);
-                }
             }
         });
-        //todo: затестить мультитач. Надо чтобы несколько пальцев не мгли одновременно нажимать на опции
         soundCheckBox.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -333,21 +325,21 @@ public class ConfigGroup extends VerticalGroup {
                 }
                 super.touchUp(event, x, y, pointer, button);
             }
-
         });
 
         musicCheckBox = new CheckBox("", checkBoxStyle48);
+        musicCheckBox.setDisabled(true);
+
         musicCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-//                GamePreferences.setMusicEnabled(musicCheckBox.isChecked());
-//                boomBox.setAllMusicVolume(GamePreferences.getMusicVolume());
-//                boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
-                if (musicCheckBox.isPressed()) {
-                    boomBox.playSound(MSConstants.UI_CHECKBOX);
-                }
+                boolean enabled = musicCheckBox.isChecked();
+                GamePreferences.setMusicEnabled(enabled);
+                boomBox.setAllMusicVolume(GamePreferences.getMusicVolume());
+                boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
             }
         });
+
         musicCheckBox.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -371,12 +363,12 @@ public class ConfigGroup extends VerticalGroup {
         });
 
         effectsCheckBox = new CheckBox("", checkBoxStyle48);
+        effectsCheckBox.setDisabled(true);
         effectsCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (effectsCheckBox.isPressed()) {
-                    boomBox.playSound(MSConstants.UI_CHECKBOX);
-                }
+                boolean enabled = effectsCheckBox.isChecked();
+                GamePreferences.setEffectsEnabled(enabled);
             }
         });
 
@@ -402,23 +394,23 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        shadersCheckBox = new CheckBox("", checkBoxStyle48);
-        shadersCheckBox.addListener(new ChangeListener() {
+        shaderCheckBox = new CheckBox("", checkBoxStyle48);
+        shaderCheckBox.setDisabled(true);
+        shaderCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (shadersCheckBox.isPressed()) {
-                    boomBox.playSound(MSConstants.UI_CHECKBOX);
-                }
+                boolean enabled = shaderCheckBox.isChecked();
+                GamePreferences.setShaderEnabled(enabled);
             }
         });
 
-        shadersCheckBox.addListener(new ClickListener() {
+        shaderCheckBox.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     settingsTouched = true;
                     scrollPane.setFlickScroll(false);
-                    tmpLine = shadersLine;
+                    tmpLine = shaderLine;
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -435,15 +427,12 @@ public class ConfigGroup extends VerticalGroup {
         });
 
         childCheckBox = new CheckBox("", checkBoxStyle48);
+        childCheckBox.setDisabled(true);
         childCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-//                boolean enabled = childCheckBox.isChecked();
-//                childCheckBox.setText(enabled ? on : off);
-//                GamePreferences.setChildEnabled(enabled);
-                if (childCheckBox.isPressed()) {
-                    boomBox.playSound(MSConstants.UI_CHECKBOX);
-                }
+                boolean enabled = childCheckBox.isChecked();
+                GamePreferences.setChildEnabled(enabled);
             }
         });
 
@@ -470,14 +459,7 @@ public class ConfigGroup extends VerticalGroup {
         });
 
         levelCheckBox = new CheckBox("", checkBoxStyle48);
-        levelCheckBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (levelCheckBox.isPressed()) {
-                    boomBox.playSound(MSConstants.UI_CHECKBOX);
-                }
-            }
-        });
+        levelCheckBox.setDisabled(true);
 
         levelCheckBox.addListener(new ClickListener() {
             @Override
@@ -502,17 +484,14 @@ public class ConfigGroup extends VerticalGroup {
         });
 
         vibrationCheckBox = new CheckBox("", checkBoxStyle48);
+        vibrationCheckBox.setDisabled(true);
         vibrationCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = vibrationCheckBox.isChecked();
-//                vibrationCheckBox.setText(enabled ? on : off);
-//                GamePreferences.setVibrationEnabled(enabled);
+                GamePreferences.setVibrationEnabled(enabled);
                 if (enabled) {
                     Vibrator.vibrate(VConstants.VIBRATION_ENABLED);
-                }
-                if (vibrationCheckBox.isPressed()) {
-                    boomBox.playSound(MSConstants.UI_CHECKBOX);
                 }
             }
         });
@@ -540,12 +519,12 @@ public class ConfigGroup extends VerticalGroup {
         });
 
         joyStickCheckBox = new CheckBox("", checkBoxStyle48);
+        joyStickCheckBox.setDisabled(true);
         joyStickCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (joyStickCheckBox.isPressed()) {
-                    boomBox.playSound(MSConstants.UI_CHECKBOX);
-                }
+                boolean enabled = joyStickCheckBox.isChecked();
+                GamePreferences.setJoyStickEnabled(enabled);
             }
         });
         joyStickCheckBox.addListener(new ClickListener() {
@@ -571,6 +550,7 @@ public class ConfigGroup extends VerticalGroup {
         });
 
         joyStickPresetCheckBox = new CheckBox("", checkBoxStyle48);
+        joyStickPresetCheckBox.setDisabled(true);
 
         joyStickColorCheckBox = new CheckBox("COLOR", checkBoxStyle48);
         joyStickColorCheckBox.addListener(new ChangeListener() {
@@ -605,9 +585,9 @@ public class ConfigGroup extends VerticalGroup {
         Label soundLabel = new Label("SOUND", labelStyle64);
         Label musicLabel = new Label("MUSIC", labelStyle64);
         Label effectsLabel = new Label("EFFECTS", labelStyle64);
-        Label shadersLabel = new Label("SHADERS", labelStyle64);
+        Label shaderLabel = new Label("SHADERS", labelStyle64);
         Label childLabel = new Label("CHILD MODE", labelStyle64);
-        levelLabel = new Label("LEVEL " + level + " (" + Rules.StartLevel.values()[level].name() + ")", labelStyle64);
+        levelLabel = new Label("LEVEL", labelStyle64);
         Label vibrationLabel = new Label("VIBRATION", labelStyle64);
         Label joyStickLabel = new Label("JOYSTICK", labelStyle64);
 
@@ -616,21 +596,21 @@ public class ConfigGroup extends VerticalGroup {
         soundLine.setHoldMessage(PaintConstants.UI_SOUND_HOLD);
         soundLine.setEnabledMessage(PaintConstants.UI_SOUND_ENABLE);
         soundLine.setDisabledMessage(PaintConstants.UI_SOUND_DISABLE);
-        effectsLine = new Line(effectsCheckBox, effectsLabel, Align.left, effectsSlider);
-        effectsLine.setNoticeMessage(PaintConstants.UI_EFFECTS_NOTICE);
-        effectsLine.setHoldMessage(PaintConstants.UI_EFFECTS_HOLD);
-        effectsLine.setEnabledMessage(PaintConstants.UI_EFFECTS_ENABLE);
-        effectsLine.setDisabledMessage(PaintConstants.UI_EFFECTS_DISABLE);
         musicLine = new Line(musicCheckBox, musicLabel, Align.left, musicSlider);
         musicLine.setNoticeMessage(PaintConstants.UI_MUSIC_NOTICE);
         musicLine.setHoldMessage(PaintConstants.UI_MUSIC_HOLD);
         musicLine.setEnabledMessage(PaintConstants.UI_MUSIC_ENABLE);
         musicLine.setDisabledMessage(PaintConstants.UI_MUSIC_DISABLE);
-        shadersLine = new Line(shadersCheckBox, shadersLabel, Align.left, null);
-        shadersLine.setNoticeMessage(PaintConstants.UI_SHADERS_NOTICE);
-        shadersLine.setHoldMessage(PaintConstants.UI_SHADERS_HOLD);
-        shadersLine.setEnabledMessage(PaintConstants.UI_SHADERS_ENABLE);
-        shadersLine.setDisabledMessage(PaintConstants.UI_SHADERS_DISABLE);
+        effectsLine = new Line(effectsCheckBox, effectsLabel, Align.left, effectsSlider);
+        effectsLine.setNoticeMessage(PaintConstants.UI_EFFECTS_NOTICE);
+        effectsLine.setHoldMessage(PaintConstants.UI_EFFECTS_HOLD);
+        effectsLine.setEnabledMessage(PaintConstants.UI_EFFECTS_ENABLE);
+        effectsLine.setDisabledMessage(PaintConstants.UI_EFFECTS_DISABLE);
+        shaderLine = new Line(shaderCheckBox, shaderLabel, Align.left, null);
+        shaderLine.setNoticeMessage(PaintConstants.UI_SHADERS_NOTICE);
+        shaderLine.setHoldMessage(PaintConstants.UI_SHADERS_HOLD);
+        shaderLine.setEnabledMessage(PaintConstants.UI_SHADERS_ENABLE);
+        shaderLine.setDisabledMessage(PaintConstants.UI_SHADERS_DISABLE);
         childLine = new Line(childCheckBox, childLabel, Align.left, null);
         childLine.setNoticeMessage(PaintConstants.UI_CHILD_NOTICE);
         childLine.setHoldMessage(PaintConstants.UI_CHILD_HOLD);
@@ -660,20 +640,162 @@ public class ConfigGroup extends VerticalGroup {
     }
 
     public void refresh() {
-        soundLine.setActive(GamePreferences.isSoundEnabled());
+        soundLine.setActive(GamePreferences.isEffectsEnabled() || GamePreferences.isMusicEnabled());
         soundSlider.setValue(GamePreferences.getSoundVolume());
-        effectsLine.setActive(GamePreferences.isEffectsEnabled());
-        effectsSlider.setValue(GamePreferences.getEffectsVolume());
+        refreshSoundLine();
         musicLine.setActive(GamePreferences.isMusicEnabled());
         musicSlider.setValue(GamePreferences.getMusicVolume());
-
-        shadersLine.setActive(GamePreferences.isShaderEnabled());
+        refreshMusicLine();
+        effectsLine.setActive(GamePreferences.isEffectsEnabled());
+        effectsSlider.setValue(GamePreferences.getEffectsVolume());
+        refreshEffectsLine();
+        shaderLine.setActive(GamePreferences.isShaderEnabled());
+        refreshShaderLine();
         childLine.setActive(GamePreferences.isChildEnabled());
+        refreshChildLine();
         level = GamePreferences.getLevel();
+        refreshLevelLine();
         vibrationLine.setActive(GamePreferences.isVibrationEnabled());
+        refreshVibrationLine();
         joystickLine.setActive(GamePreferences.isJoyStickEnabled());
+        refreshJoystickPresetLine();
         joyStickModeSlider.setValue(GamePreferences.getJoyStickMode());
         joyStickColorCheckBox.setChecked(GamePreferences.isJoyStickColorEnabled());
+    }
+
+    private void refreshSoundLine() {
+        soundCheckBox.setChecked(soundLine.isActive());
+
+        musicLine.setActive(soundLine.isActive());
+        musicLine.setSlave(!soundLine.isActive());
+        musicCheckBox.setChecked(soundLine.isActive());
+        effectsLine.setActive(soundLine.isActive());
+        effectsLine.setSlave(!soundLine.isActive());
+        effectsCheckBox.setChecked(soundLine.isActive());
+
+        soundSlider.setDisabled(!soundLine.isActive());
+        musicSlider.setDisabled(!soundLine.isActive());
+        effectsSlider.setDisabled(!soundLine.isActive());
+        soundLine.setMuted(soundSlider.getValue() == 0.0f);
+    }
+
+    private void refreshMusicLine() {
+        musicSlider.setDisabled(!musicLine.isActive());
+        musicCheckBox.setChecked(musicLine.isActive());
+        musicLine.setMuted(musicSlider.getValue() == 0.0f);
+
+    }
+
+    private void refreshEffectsLine() {
+        effectsSlider.setDisabled(!effectsLine.isActive());
+        effectsCheckBox.setChecked(effectsLine.isActive());
+        effectsLine.setMuted(effectsSlider.getValue() == 0.0f);
+    }
+
+    private void refreshShaderLine() {
+        shaderCheckBox.setChecked(shaderLine.isActive());
+    }
+
+    private void refreshChildLine() {
+        childCheckBox.setChecked(childLine.isActive());
+    }
+
+    private void refreshLevelLine() {
+        levelLine.setActive(true);
+        levelCheckBox.setChecked(true);
+        level = level % (Rules.StartLevel.values().length);
+        levelLabel.setText("LEVEL " + level + " (" + Rules.StartLevel.values()[level].name() + ")");
+        GamePreferences.setLevel(level);
+    }
+
+    private void refreshVibrationLine() {
+        vibrationCheckBox.setChecked(vibrationLine.isActive());
+    }
+
+    private void refreshJoystickPresetLine() {
+        joystickPresetLine.setActive(joystickLine.isActive());
+        joystickPresetLine.setSlave(!joystickLine.isActive());
+        joyStickModeSlider.setDisabled(!joystickLine.isActive());
+        joyStickColorCheckBox.setDisabled(!joystickLine.isActive());
+        joyStickCheckBox.setChecked(joystickPresetLine.isActive());
+        joyStickPresetCheckBox.setChecked(joystickPresetLine.isActive());
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        shadowTime -= delta;
+        if (shadowTime <= 0.0f) {
+            shadowTime = 0.0f;
+            a = 0.0f;
+        }
+
+        if (settingsTouched) {
+            setNoticeAndAlpha(tmpLine.getNoticeMessage());
+            touchTime += delta;
+        }
+
+        if (touchTime >= Rules.SETTINGS_WAIT_TOUCH) {
+            setNoticeAndAlpha(tmpLine.getHoldMessage());
+        }
+
+        if (touchTime >= Rules.SETTINGS_WAIT_DISABLE) {
+            boomBox.playSound(MSConstants.UI_CHECKBOX);
+            if (tmpLine.isActive()) {
+                setNoticeAndAlpha(tmpLine.getDisabledMessage());
+            } else {
+                setNoticeAndAlpha(tmpLine.getEnabledMessage());
+            }
+
+            tmpLine.setActive(!tmpLine.isActive());
+            settingsTouched = false;
+            touchTime = 0.0f;
+
+            if (tmpLine == soundLine) {
+                refreshSoundLine();
+            } else if (tmpLine == musicLine) {
+                refreshMusicLine();
+            } else if (tmpLine == effectsLine) {
+                refreshEffectsLine();
+            } else if (tmpLine == shaderLine) {
+                refreshShaderLine();
+            } else if (tmpLine == childLine) {
+                refreshChildLine();
+            } else if (tmpLine == levelLine) {
+                level++;
+                refreshLevelLine();
+            } else if (tmpLine == vibrationLine) {
+                refreshVibrationLine();
+            } else if (tmpLine == joystickLine) {
+                refreshJoystickPresetLine();
+            }
+
+            if (!effectsLine.isActive() && !musicLine.isActive()) {
+                soundLine.setActive(false);
+                musicLine.setSlave(true);
+                effectsLine.setSlave(true);
+                soundCheckBox.setChecked(false);
+                soundSlider.setDisabled(true);
+            } else if (effectsLine.isActive() || musicLine.isActive()) {
+                soundLine.setActive(true);
+                musicLine.setSlave(false);
+                effectsLine.setSlave(false);
+                soundCheckBox.setChecked(true);
+                soundSlider.setDisabled(false);
+            }
+        }
+        glyphLayout.setText(font64, notice);
+    }
+
+    public void setNoticeAndAlpha(String text) {
+        setNotice(text);
+        a = 1.0f;
+    }
+
+    public void setNotice(String text) {
+        notice.setLength(0);
+        notice.append(text);
+        shadowTime = Rules.NOTICE_WAIT;
     }
 
     @Override
@@ -712,18 +834,17 @@ public class ConfigGroup extends VerticalGroup {
         @Getter
         @Setter
         private boolean active;
+        @Getter
+        @Setter
+        private boolean muted;
         private Table table;
-        private CheckBox checkBox;
         private float a;
         @Getter
         @Setter
         private boolean slave;
-        private Actor actor;
 
         private Line(CheckBox checkBox, Actor label, int align, Actor actor) {
             this.table = new Table();
-            this.checkBox = checkBox;
-            this.actor = actor;
             table.row().padBottom(22);
             //todo: to PaintCost
             table.add(checkBox).width(44).padRight(44).padLeft(44);
@@ -740,12 +861,6 @@ public class ConfigGroup extends VerticalGroup {
         }
 
         @Override
-        public void act(float delta) {
-            super.act(delta);
-            checkBox.setChecked(active);
-        }
-
-        @Override
         public void draw(Batch batch, float parentAlpha) {
             //todo: to Const
             if (active) {
@@ -755,73 +870,15 @@ public class ConfigGroup extends VerticalGroup {
             } else {
                 a = 0.75f;
             }
+
+            float tmp = a;
+            if (muted) {
+                a = 0.75f;
+            } else {
+                a = tmp;
+            }
+
             super.draw(batch, a);
         }
-
-    }
-
-    public void setNotice(String text) {
-        notice.setLength(0);
-        notice.append(text);
-        shadowTime = Rules.NOTICE_WAIT;
-    }
-
-    public void setNoticeAndAlpha(String text) {
-        setNotice(text);
-        a = 1.0f;
-    }
-
-    @Override
-    public void act(float delta) {
-        super.act(delta);
-        shadowTime -= delta;
-        if (shadowTime <= 0.0f) {
-            shadowTime = 0.0f;
-            a = 0.0f;
-        }
-
-        if (settingsTouched) {
-            setNoticeAndAlpha(tmpLine.getNoticeMessage());
-            touchTime += delta;
-        }
-
-        if (touchTime >= Rules.SETTINGS_WAIT_TOUCH) {
-            setNoticeAndAlpha(tmpLine.getHoldMessage());
-        }
-
-        if (touchTime >= Rules.SETTINGS_WAIT_DISABLE) {
-            if (tmpLine.isActive()) {
-                setNoticeAndAlpha(tmpLine.getDisabledMessage());
-            } else {
-                setNoticeAndAlpha(tmpLine.getEnabledMessage());
-            }
-
-            settingsTouched = false;
-            touchTime = 0.0f;
-            tmpLine.setActive(!tmpLine.isActive());
-            if (tmpLine == soundLine) {
-                effectsLine.setActive(soundLine.isActive());
-                effectsLine.setSlave(!soundLine.isActive());
-                musicLine.setActive(soundLine.isActive());
-                musicLine.setSlave(!soundLine.isActive());
-                soundSlider.setDisabled(!soundLine.isActive());
-                effectsSlider.setDisabled(!soundLine.isActive());
-                musicSlider.setDisabled(!soundLine.isActive());
-            } else if (tmpLine == joystickLine) {
-                joystickPresetLine.setActive(joystickLine.isActive());
-                joystickPresetLine.setSlave(!joystickLine.isActive());
-                joyStickModeSlider.setDisabled(!joystickLine.isActive());
-            } else if (tmpLine == effectsLine) {
-                effectsSlider.setDisabled(!effectsLine.isActive());
-            } else if (tmpLine == musicLine) {
-                musicSlider.setDisabled(!musicLine.isActive());
-            } else if (tmpLine == levelLine) {
-                tmpLine.setActive(true);
-                level++;
-                level = level % (Rules.StartLevel.values().length);
-                levelLabel.setText("LEVEL " + level + " (" + Rules.StartLevel.values()[level].name() + ")");
-            }
-        }
-        glyphLayout.setText(font64, notice);
     }
 }

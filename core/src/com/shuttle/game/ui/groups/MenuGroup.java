@@ -27,61 +27,23 @@ import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.mvc.profiles.VerticalGroupList;
 import com.shuttle.game.utils.Assets;
 
-
 /**
  * @author Shuttle on 6/23/18.
  */
 public class MenuGroup extends Group {
-    private BitmapFont font64;
     private static boolean validUserName;
     private static TextField username;
+    private static float shadowTime;
+    private static StringBuilder notice = new StringBuilder();
+    private BitmapFont font64;
     private Button buttonProfile;
     private GlyphLayout glyphLayout;
     private VerticalGroupList verticalGroupList;
     private GroupController groupController;
     private float a;
     private float blinkTime;
-    private static float shadowTime;
-    private static StringBuilder notice = new StringBuilder();
     private Label noticeLabel;
     private BoomBox boomBox;
-
-    public static void setNotice(String text) {
-        notice.setLength(0);
-        notice.append(text);
-        shadowTime = Rules.NOTICE_WAIT;
-    }
-
-    public static void setUsername(String username) {
-        MenuGroup.username.setText(username);
-    }
-
-    private MenuGroup(String name) {
-        this.setName(name);
-        this.setVisible(true);
-        Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
-        Label.LabelStyle labelStyle64 = new Label.LabelStyle();
-        labelStyle64.font = font64;
-        noticeLabel = new Label(notice, labelStyle64);
-        this.buttonProfile = new Button(skin, "default");
-        TextField.TextFieldStyle tfs = skin.get("default", TextField.TextFieldStyle.class);
-        tfs.font = font64;
-        tfs.fontColor = Color.valueOf("ffffffff");
-        tfs.cursor.setMinWidth(10);
-        username = new TextField("", skin, "default");
-        this.glyphLayout = new GlyphLayout();
-        //MVC
-        this.verticalGroupList = new VerticalGroupList();
-        this.groupController = new GroupController(verticalGroupList, new Profiles());
-        verticalGroupList.setController(groupController);
-        groupController.update();
-        //
-        if (groupController.getActive() != null) {
-            setNotice(PaintConstants.UI_YOUR_USERNAME);
-        }
-        this.boomBox = new BoomBox();
-    }
 
     public MenuGroup() {
         this(GroupType.MENU.name());
@@ -114,6 +76,14 @@ public class MenuGroup extends Group {
 
         username.addListener(new InputListener() {
             @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (validUserName) {
+                    setNotice(PaintConstants.UI_PROFILE_EDIT);
+                }
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.ENTER) {
                     if (validUserName) {
@@ -125,19 +95,12 @@ public class MenuGroup extends Group {
                         } else {
                             setNotice(PaintConstants.UI_PROFILE_SAVED);
                             profile.setUsername(username.getText());
+                            groupController.flush();
                             groupController.update();
                         }
                     }
                 }
                 return super.keyDown(event, keycode);
-            }
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (validUserName) {
-                    setNotice(PaintConstants.UI_PROFILE_EDIT);
-                }
-                return super.touchDown(event, x, y, pointer, button);
             }
         });
 
@@ -146,17 +109,37 @@ public class MenuGroup extends Group {
         this.addActor(verticalGroupList);
     }
 
-    public static boolean isValidUserName() {
-        return validUserName;
+    private MenuGroup(String name) {
+        this.setName(name);
+        this.setVisible(true);
+        Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
+        this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
+        Label.LabelStyle labelStyle64 = new Label.LabelStyle();
+        labelStyle64.font = font64;
+        noticeLabel = new Label(notice, labelStyle64);
+        this.buttonProfile = new Button(skin, "default");
+        TextField.TextFieldStyle tfs = skin.get("default", TextField.TextFieldStyle.class);
+        tfs.font = font64;
+        tfs.fontColor = Color.valueOf("ffffffff");
+        tfs.cursor.setMinWidth(10);
+        username = new TextField("", skin, "default");
+        this.glyphLayout = new GlyphLayout();
+        //MVC
+        this.verticalGroupList = new VerticalGroupList();
+        this.groupController = new GroupController(verticalGroupList, new Profiles());
+        verticalGroupList.setController(groupController);
+        groupController.update();
+        //
+        if (groupController.getActive() != null) {
+            setNotice(PaintConstants.UI_YOUR_USERNAME);
+        }
+        this.boomBox = new BoomBox();
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
-        noticeLabel.setText(notice);
-        noticeLabel.setPosition(Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
-                verticalGroupList.getY() + verticalGroupList.getHeight() + glyphLayout.height / 2 + 22);
-        noticeLabel.draw(batch, a);
+    public static void setNotice(String text) {
+        notice.setLength(0);
+        notice.append(text);
+        shadowTime = Rules.NOTICE_WAIT;
     }
 
     @Override
@@ -188,6 +171,10 @@ public class MenuGroup extends Group {
         glyphLayout.setText(font64, notice);
     }
 
+    public static boolean isValidUserName() {
+        return validUserName;
+    }
+
     private void blink(float delta) {
         blinkTime += delta;
         if (blinkTime >= 0.0f) {
@@ -201,7 +188,20 @@ public class MenuGroup extends Group {
         }
     }
 
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        noticeLabel.setText(notice);
+        noticeLabel.setPosition(Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
+                verticalGroupList.getY() + verticalGroupList.getHeight() + glyphLayout.height / 2 + 22);
+        noticeLabel.draw(batch, a);
+    }
+
     public void dispose() {
         groupController.dispose();
+    }
+
+    public static void setUsername(String username) {
+        MenuGroup.username.setText(username);
     }
 }

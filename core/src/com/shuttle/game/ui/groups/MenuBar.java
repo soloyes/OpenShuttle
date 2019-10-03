@@ -66,9 +66,9 @@ public class MenuBar extends Group {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
-                if (GamePreferences.isSoundEnabled()) {
+                if (GamePreferences.isEffectsEnabled()) {
                     Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.UI_MENU));
-                    sound.play(GamePreferences.getSoundVolume());
+                    sound.play(GamePreferences.getOverallEffectsVolume());
                 }
                 //
                 if (MenuGroup.isValidUserName()) {

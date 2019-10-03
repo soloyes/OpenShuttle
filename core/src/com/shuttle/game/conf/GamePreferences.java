@@ -12,7 +12,6 @@ import java.util.Map;
 public class GamePreferences {
     private static final String PREFS_NAME = "shuttleGame_preferences";
 
-    private static final String PREF_SOUND_ENABLED = "sound.enabled";
     private static final String PREF_SOUND_VOLUME = "sound";
     private static final String PREF_EFFECTS_ENABLED = "effects.enabled";
     private static final String PREF_EFFECTS_VOLUME = "effects";
@@ -31,12 +30,11 @@ public class GamePreferences {
     private static Preferences preferences;
 
     public static Map<String, Object> defaults = new HashMap<String, Object>() {{
-        put(PREF_SOUND_ENABLED, true);
-        put(PREF_SOUND_VOLUME, 0.6f);
+        put(PREF_SOUND_VOLUME, 1.0f);
         put(PREF_EFFECTS_ENABLED, true);
-        put(PREF_EFFECTS_VOLUME, 0.7f);
+        put(PREF_EFFECTS_VOLUME, 0.5f);
         put(PREF_MUSIC_ENABLED, true);
-        put(PREF_MUSIC_VOLUME, 0.8f);
+        put(PREF_MUSIC_VOLUME, 0.5f);
         put(PREF_SHADER_ENABLED, true);
         put(PREF_CHILD_ENABLED, false);
         put(PREF_LEVEL, 0);
@@ -64,13 +62,12 @@ public class GamePreferences {
         return preferences;
     }
 
-    public static boolean isSoundEnabled() {
-        return getInstance().getBoolean(PREF_SOUND_ENABLED);
+    public static float getOverallMusicVolume(){
+        return getMusicVolume() * getSoundVolume();
     }
 
-    public static void setSoundEnabled(boolean enabled) {
-        getInstance().putBoolean(PREF_SOUND_ENABLED, enabled);
-        getInstance().flush();
+    public static float getOverallEffectsVolume(){
+        return getEffectsVolume() * getSoundVolume();
     }
 
     public static float getSoundVolume() {
@@ -79,6 +76,24 @@ public class GamePreferences {
 
     public static void setSoundVolume(float volume) {
         getInstance().putFloat(PREF_SOUND_VOLUME, volume);
+        getInstance().flush();
+    }
+
+    public static boolean isMusicEnabled() {
+        return getInstance().getBoolean(PREF_MUSIC_ENABLED);
+    }
+
+    public static void setMusicEnabled(boolean enabled) {
+        getInstance().putBoolean(PREF_MUSIC_ENABLED, enabled);
+        getInstance().flush();
+    }
+
+    public static float getMusicVolume() {
+        return getInstance().getFloat(PREF_MUSIC_VOLUME);
+    }
+
+    public static void setMusicVolume(float volume) {
+        getInstance().putFloat(PREF_MUSIC_VOLUME, volume);
         getInstance().flush();
     }
 
@@ -100,23 +115,6 @@ public class GamePreferences {
         getInstance().flush();
     }
 
-    public static boolean isMusicEnabled() {
-        return getInstance().getBoolean(PREF_MUSIC_ENABLED);
-    }
-
-    public static void setMusicEnabled(boolean enabled) {
-        getInstance().putBoolean(PREF_MUSIC_ENABLED, enabled);
-        getInstance().flush();
-    }
-
-    public static float getMusicVolume() {
-        return getInstance().getFloat(PREF_MUSIC_VOLUME);
-    }
-
-    public static void setMusicVolume(float volume) {
-        getInstance().putFloat(PREF_MUSIC_VOLUME, volume);
-        getInstance().flush();
-    }
 
     public static boolean isShaderEnabled() {
         return getInstance().getBoolean(PREF_SHADER_ENABLED);

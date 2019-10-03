@@ -89,4 +89,8 @@ public class GroupController implements Controller<ProfileDAO> {
     public void dispose() {
         model.dispose();
     }
+
+    public void flush(){
+        model.flush();
+    }
 }

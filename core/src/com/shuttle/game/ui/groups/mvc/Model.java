@@ -20,6 +20,8 @@ public interface Model<T> {
 
     void dispose();
 
+    void flush();
+
     void activate(T t);
 
     T getActive();
