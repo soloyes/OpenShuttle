@@ -114,9 +114,12 @@ public class MenuGroup extends Group {
         this.setVisible(true);
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
-        Label.LabelStyle labelStyle64 = new Label.LabelStyle();
-        labelStyle64.font = font64;
-        noticeLabel = new Label(notice, labelStyle64);
+        Label.LabelStyle noticeStyle64 = new Label.LabelStyle(
+                Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
+                new Color(1.0f, 1.0f, 1.0f, 1f)
+        );
+
+        noticeLabel = new Label(notice, noticeStyle64);
         this.buttonProfile = new Button(skin, "default");
         TextField.TextFieldStyle tfs = skin.get("default", TextField.TextFieldStyle.class);
         tfs.font = font64;
