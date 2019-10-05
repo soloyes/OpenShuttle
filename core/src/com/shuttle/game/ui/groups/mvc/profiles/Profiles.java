@@ -62,6 +62,7 @@ public class Profiles implements Model<ProfileDAO> {
             }
         } catch (IOException e) {
             initDefaultProfiles();
+            e.printStackTrace();
         }
 
         empty = true;

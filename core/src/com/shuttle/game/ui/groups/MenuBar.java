@@ -65,7 +65,9 @@ public class MenuBar extends Group {
         buttonPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!buttonPlay.isDisabled()) {
+                if (buttonPlay.isDisabled()) {
+                    boomBox.playSound(MSConstants.UI_CLICK);
+                } else {
                     //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
                     if (GamePreferences.isEffectsEnabled()) {
                         Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.UI_MENU));
@@ -93,7 +95,9 @@ public class MenuBar extends Group {
         buttonConfig.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!buttonConfig.isDisabled()) {
+                if (    buttonConfig.isDisabled()) {
+                    boomBox.playSound(MSConstants.UI_CLICK);
+                } else {
                     Array<Actor> actors = getStage().getActors();
                     Actor tmp = new Actor();
                     for (int i = 0; i < actors.size; i++) {
@@ -124,7 +128,9 @@ public class MenuBar extends Group {
         buttonResults.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!buttonResults.isDisabled()) {
+                if (buttonResults.isDisabled()) {
+                    boomBox.playSound(MSConstants.UI_CLICK);
+                } else {
                     Array<Actor> actors = getStage().getActors();
                     Actor tmp = new Actor();
                     for (int i = 0; i < actors.size; i++) {
@@ -154,7 +160,9 @@ public class MenuBar extends Group {
         buttonShare.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!buttonShare.isDisabled()) {
+                if (buttonShare.isDisabled()) {
+                    boomBox.playSound(MSConstants.UI_CLICK);
+                } else {
                     Array<Actor> actors = getStage().getActors();
                     Actor tmp = new Actor();
                     for (int i = 0; i < actors.size; i++) {

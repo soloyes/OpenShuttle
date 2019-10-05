@@ -442,7 +442,7 @@ public class ConfigGroup extends VerticalGroup {
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = vibrationCheckBox.isChecked();
                 GamePreferences.setVibrationEnabled(enabled);
-                if (enabled) {
+                if (enabled && vibrationCheckBox.isPressed()) {
                     Vibrator.vibrate(VConstants.VIBRATION_ENABLED);
                 }
             }
@@ -494,7 +494,7 @@ public class ConfigGroup extends VerticalGroup {
                 boolean enabled = joyStickColorCheckBox.isChecked();
                 GamePreferences.setJoyStickColorEnabled(enabled);
                 if (joyStickColorCheckBox.isPressed()) {
-                    boomBox.playSound(MSConstants.UI_CHECKBOX);
+                    boomBox.playSound(MSConstants.UI_CHANGED);
                 }
             }
         });
@@ -706,8 +706,6 @@ public class ConfigGroup extends VerticalGroup {
     }
 
     public void refresh() {
-        soundLine.setActive(GamePreferences.isEffectsEnabled() || GamePreferences.isMusicEnabled());
-        soundSlider.setValue(GamePreferences.getSoundVolume());
         refreshSoundLine();
         musicLine.setActive(GamePreferences.isMusicEnabled());
         musicSlider.setValue(GamePreferences.getMusicVolume());
@@ -735,6 +733,7 @@ public class ConfigGroup extends VerticalGroup {
             scrollPane.setFlickScroll(false);
             tmpLine = line;
         }
+        boomBox.playSound(MSConstants.UI_CLICK);
     }
 
     private void touchUp(int pointer) {
@@ -754,8 +753,12 @@ public class ConfigGroup extends VerticalGroup {
     }
 
     private void refreshSoundLine() {
+        soundLine.setActive(GamePreferences.isEffectsEnabled() || GamePreferences.isMusicEnabled());
+        soundSlider.setValue(GamePreferences.getSoundVolume());
         soundCheckBox.setChecked(soundLine.isActive());
+    }
 
+    private void refreshOverallSound(){
         musicLine.setActive(soundLine.isActive());
         musicLine.setSlave(!soundLine.isActive());
         musicCheckBox.setChecked(soundLine.isActive());
@@ -773,7 +776,6 @@ public class ConfigGroup extends VerticalGroup {
         musicSlider.setDisabled(!musicLine.isActive());
         musicCheckBox.setChecked(musicLine.isActive());
         musicLine.setMuted(musicSlider.getValue() == 0.0f);
-
     }
 
     private void refreshEffectsLine() {
@@ -849,7 +851,7 @@ public class ConfigGroup extends VerticalGroup {
         }
 
         if (touchTime >= Rules.SETTINGS_WAIT_DISABLE) {
-            boomBox.playSound(MSConstants.UI_CHECKBOX);
+            boomBox.playSound(MSConstants.UI_CHANGED);
             if (tmpLine.isActive()) {
                 setNoticeAndAlpha(tmpLine.getDisabledMessage());
             } else {
@@ -861,7 +863,7 @@ public class ConfigGroup extends VerticalGroup {
             touchTime = 0.0f;
 
             if (tmpLine == soundLine) {
-                refreshSoundLine();
+                refreshOverallSound();
             } else if (tmpLine == musicLine) {
                 refreshMusicLine();
             } else if (tmpLine == effectsLine) {

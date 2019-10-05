@@ -43,7 +43,9 @@ public class Assets {
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 assetManager.load(MSConstants.UI_MENU, Sound.class);
-                assetManager.load(MSConstants.UI_CHECKBOX, Sound.class);
+                assetManager.load(MSConstants.UI_CHANGED, Sound.class);
+                assetManager.load(MSConstants.UI_INPUT, Sound.class);
+                assetManager.load(MSConstants.UI_CLICK, Sound.class);
                 break;
             case GAME:
                 createStandardFont(32, "");
@@ -70,6 +72,7 @@ public class Assets {
                 assetManager.load(MSConstants.LASER, Music.class);
                 assetManager.load(MSConstants.UI_MENU, Sound.class);
                 assetManager.load(MSConstants.UI_PAUSE, Sound.class);
+                assetManager.load(MSConstants.UI_CLICK, Sound.class);
                 assetManager.load(MSConstants.DESTROY_CORROSIVE_ANOMALY, Sound.class);
                 assetManager.load(MSConstants.DESTROY_MAGNETIC_ANOMALY, Sound.class);
                 assetManager.load(MSConstants.DESTROY_RADIATION_ANOMALY, Sound.class);
@@ -104,7 +107,7 @@ public class Assets {
                 assetManager.load(MSConstants.DESTROY_ASTEROID_RAY, Sound.class);
                 assetManager.load(MSConstants.DESTROY_FUEL, Sound.class);
                 assetManager.load(MSConstants.BURST_CORROSIVE_ANOMALY, Sound.class);
-                assetManager.load(MSConstants.UI_CHECKBOX, Sound.class);
+                assetManager.load(MSConstants.UI_CHANGED, Sound.class);
                 assetManager.load(MSConstants.GET_SCANNER, Sound.class);
                 assetManager.load(MSConstants.GET_SHIELD, Sound.class);
                 assetManager.load(MSConstants.GET_LASER, Sound.class);

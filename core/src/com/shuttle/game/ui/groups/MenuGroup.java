@@ -58,7 +58,9 @@ public class MenuGroup extends Group {
         buttonProfile.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!buttonProfile.isDisabled()) {
+                if (buttonProfile.isDisabled()) {
+                    boomBox.playSound(MSConstants.UI_CLICK);
+                } else {
                     verticalGroupList.switchVisible();
                     setNotice(PaintConstants.UI_YOUR_USERNAME);
                     boomBox.playSound(MSConstants.UI_MENU);
@@ -70,6 +72,7 @@ public class MenuGroup extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 setNotice(PaintConstants.UI_CAN_SAVE);
+                boomBox.playSound(MSConstants.UI_INPUT);
             }
         });
 
