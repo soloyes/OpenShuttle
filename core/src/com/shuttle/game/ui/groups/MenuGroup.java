@@ -3,7 +3,6 @@ package com.shuttle.game.ui.groups;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -44,12 +43,12 @@ public class MenuGroup extends Group {
     private float blinkTime;
     private Label noticeLabel;
     private BoomBox boomBox;
+    private Group noticeGroup;
 
     public MenuGroup() {
         this(GroupType.MENU.name());
         username.setAlignment(Align.center);
         username.setMaxLength(14);
-        glyphLayout.setText(font64, notice);
 
         username.setPosition(Rules.WORLD_WIDTH / 4, username.getHeight() + verticalGroupList.getY() + verticalGroupList.getHeight());
         username.setWidth(Rules.WORLD_WIDTH / 2);
@@ -104,7 +103,11 @@ public class MenuGroup extends Group {
             }
         });
 
+        noticeGroup = new Group();
+        noticeGroup.addActor(noticeLabel);
+        noticeLabel.setFillParent(true);
         this.addActor(buttonProfile);
+        this.addActor(noticeGroup);
         this.addActor(username);
         this.addActor(verticalGroupList);
     }
@@ -171,7 +174,12 @@ public class MenuGroup extends Group {
         } else {
             buttonProfile.setDisabled(false);
         }
+
         glyphLayout.setText(font64, notice);
+        noticeLabel.setText(notice);
+        noticeGroup.setPosition(Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
+                verticalGroupList.getY() + verticalGroupList.getHeight() + glyphLayout.height / 2 + 22);
+        noticeGroup.getColor().a = a;
     }
 
     public static boolean isValidUserName() {
@@ -189,15 +197,6 @@ public class MenuGroup extends Group {
         if (blinkTime >= PaintConstants.NOTICE_BLINK_TIME * 2) {
             blinkTime = 0.0f;
         }
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
-        noticeLabel.setText(notice);
-        noticeLabel.setPosition(Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
-                verticalGroupList.getY() + verticalGroupList.getHeight() + glyphLayout.height / 2 + 22);
-        noticeLabel.draw(batch, a);
     }
 
     public void dispose() {

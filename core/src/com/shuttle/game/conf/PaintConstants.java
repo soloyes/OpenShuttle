@@ -264,7 +264,6 @@ public final class PaintConstants {
     public static final String UI_ADD_NEW_LINE = "Add new line";
     public static final String UI_EMPTY_PROFILE = "Empty profile";
 
-    public static final String UI_STRING_HELPER = "STRING HELPER";
     public static final String UI_SOUND_NOTICE = "HOLD TO MUTE/UNMUTE";
     public static final String UI_SOUND_ENABLE = "SOUND ON";
     public static final String UI_SOUND_DISABLE = "SOUND OFF";

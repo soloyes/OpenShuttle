@@ -85,6 +85,7 @@ public class ConfigGroup extends VerticalGroup {
     private Label levelLabel;
     private Label titleLabel;
     private Label space;
+    private Group noticeGroup;
     private GlyphLayout glyphLayout;
     private Array<Music> musicArray;
     private BoomBox boomBox;
@@ -99,8 +100,6 @@ public class ConfigGroup extends VerticalGroup {
         this.setWidth(3 * Rules.WORLD_WIDTH / 4);
         this.setHeight(Rules.WORLD_HEIGHT / 2);
         this.boomBox = new BoomBox();
-        this.glyphLayout = new GlyphLayout();
-        glyphLayout.setText(font64, notice);
 
         initStyles();
         initSliders();
@@ -120,7 +119,11 @@ public class ConfigGroup extends VerticalGroup {
 
         initLines();
 
+        this.glyphLayout = new GlyphLayout();
         this.noticeLabel = new Label(notice, noticeStyle64);
+        this.noticeGroup = new Group();
+        noticeGroup.addActor(noticeLabel);
+        noticeLabel.setFillParent(true);
 
         VerticalGroup verticalGroup = new VerticalGroup();
         scrollPane = new ScrollPane(verticalGroup, skin);
@@ -146,6 +149,7 @@ public class ConfigGroup extends VerticalGroup {
         verticalGroup.addActor(joystickPresetLine);
         this.addActor(titleLabel);
         this.addActor(space);
+        this.addActor(noticeGroup);
         this.addActor(container);
         this.refresh();
     }
@@ -823,6 +827,12 @@ public class ConfigGroup extends VerticalGroup {
     @Override
     public void act(float delta) {
         super.act(delta);
+        noticeGroup.getColor().a = a;
+        glyphLayout.setText(font64, notice);
+        noticeLabel.setText(notice);
+        noticeGroup.setPosition(Rules.WORLD_WIDTH / 2 - this.getX() - glyphLayout.width / 2,
+                this.getHeight() - 3 * titleLabel.getHeight() / 2);
+
         shadowTime -= delta;
         if (shadowTime <= 0.0f) {
             shadowTime = 0.0f;
@@ -883,27 +893,13 @@ public class ConfigGroup extends VerticalGroup {
                 soundSlider.setDisabled(false);
             }
         }
-        glyphLayout.setText(font64, notice);
     }
 
     public void setNoticeAndAlpha(String text) {
-        setNotice(text);
-        a = 1.0f;
-    }
-
-    private void setNotice(String text) {
         notice.setLength(0);
         notice.append(text);
         shadowTime = Rules.NOTICE_WAIT;
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
-        noticeLabel.setText(notice);
-        noticeLabel.setPosition(Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
-                this.getY() + this.getHeight() - 3 * titleLabel.getHeight() / 2);
-        noticeLabel.draw(batch, a);
+        a = 1.0f;
     }
 
     public void dispose() {
@@ -960,8 +956,8 @@ public class ConfigGroup extends VerticalGroup {
         }
 
         @Override
-        public void draw(Batch batch, float parentAlpha) {
-            //todo: to Const
+        public void act(float delta) {
+            super.act(delta);
             if (active) {
                 a = 1.0f;
             } else if (slave) {
@@ -976,6 +972,10 @@ public class ConfigGroup extends VerticalGroup {
             } else {
                 a = tmp;
             }
+        }
+
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
             super.draw(batch, a);
         }
     }

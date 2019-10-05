@@ -7,7 +7,7 @@ import com.shuttle.game.player.Standing;
  * Game rules constants (Rules)
  */
 public final class Rules {
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     private Rules() {
     }

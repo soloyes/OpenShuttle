@@ -113,7 +113,6 @@ public class PauseGroup extends Group {
                 if (PauseGroup.this.pause) {
                     boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
                     playPauseBtn.getStyle().imageUp = play;
-                    ConfigGroup.getInstance().setNoticeAndAlpha(PaintConstants.UI_STRING_HELPER);
                 } else {
                     boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
                     playPauseBtn.getStyle().imageUp = pause;
