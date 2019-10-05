@@ -113,6 +113,7 @@ public class SelectorGroup extends Group {
             }
         });
 
+        //todo:// need name?
         leftButton.setName("leftButton");
         rightButton.setName("rightButton");
         this.addActor(leftArrow);

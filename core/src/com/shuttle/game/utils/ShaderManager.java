@@ -22,7 +22,7 @@ public interface ShaderManager {
             if (shaderPause.isCompiled()) {
                 return shaderPause;
             } else {
-                GamePreferences.setPrefEffectsLevel(0);
+                GamePreferences.setShaderEnabled(false);
                 return null;
             }
         }
@@ -52,7 +52,7 @@ public interface ShaderManager {
             if (shaderBlackHole.isCompiled()) {
                 return shaderBlackHole;
             } else {
-                GamePreferences.setPrefEffectsLevel(0);
+                GamePreferences.setShaderEnabled(false);
                 return null;
             }
         }

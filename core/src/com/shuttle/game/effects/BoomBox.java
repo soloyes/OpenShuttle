@@ -50,8 +50,8 @@ public class BoomBox {
     }
 
     public void setMusicEffectVolume(String musicEffect, float volume) {
-        if (GamePreferences.isSoundEnabled()) {
-            volume *= GamePreferences.getSoundVolume();
+        if (GamePreferences.isEffectsEnabled()) {
+            volume *= GamePreferences.getOverallEffectsVolume();
             Assets.getInstance()
                     .getAssetManager()
                     .get(musicEffect, Music.class)
@@ -67,8 +67,8 @@ public class BoomBox {
     }
 
     public void playMusicEffectOnce(String musicEffect) {
-        setMusicEffectVolume(musicEffect, GamePreferences.getSoundVolume());
-        if (GamePreferences.isSoundEnabled()) {
+        setMusicEffectVolume(musicEffect, GamePreferences.getOverallEffectsVolume());
+        if (GamePreferences.isEffectsEnabled()) {
             if (!isPlaying(musicEffect)) {
                 Assets.getInstance()
                         .getAssetManager()
@@ -83,8 +83,8 @@ public class BoomBox {
                 .getAssetManager()
                 .get(sound, Sound.class);
         soundIdList.add(tmp);
-        if (GamePreferences.isSoundEnabled()) {
-            return tmp.play(GamePreferences.getSoundVolume());
+        if (GamePreferences.isEffectsEnabled()) {
+            return tmp.play(GamePreferences.getOverallEffectsVolume());
         }
         return -1;
     }
@@ -118,7 +118,7 @@ public class BoomBox {
             Assets.getInstance()
                     .getAssetManager()
                     .get(music, Music.class)
-                    .setVolume(GamePreferences.getMusicVolume());
+                    .setVolume(GamePreferences.getOverallMusicVolume());
             Assets.getInstance()
                     .getAssetManager()
                     .get(music, Music.class)
@@ -133,8 +133,8 @@ public class BoomBox {
     }
 
     public void playMusicEffectInLoop(String musicEffect, float volume) {
-        if (GamePreferences.isSoundEnabled()) {
-            volume *= GamePreferences.getSoundVolume();
+        if (GamePreferences.isEffectsEnabled()) {
+            volume *= GamePreferences.getOverallEffectsVolume();
             Assets.getInstance()
                     .getAssetManager()
                     .get(musicEffect, Music.class)

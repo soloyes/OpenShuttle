@@ -165,6 +165,7 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
                 timeAndFlag.setConfirm(false);
                 controller.remove(Line.this.profile);
                 MenuGroup.setNotice(PaintConstants.UI_PROFILE_DELETED);
+                boomBox.playSound(MSConstants.UI_CHANGED);
             }
         }
 
@@ -172,6 +173,7 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
             this.timeAndFlag = new TimeAndFlag();
             this.profile = profile;
             this.table = new Table();
+            //todo: padding to PaintConstants
             table.row().padBottom(22).expandX();
             Label.LabelStyle style64 = new Label.LabelStyle(
                     Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
@@ -189,6 +191,7 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
                             timeAndFlag.setConfirm(false);
                             MenuGroup.setNotice(PaintConstants.UI_CANCEL_DELETION);
                         }
+                        boomBox.playSound(MSConstants.UI_CLICK);
                     }
                     return true;
                 }
@@ -214,7 +217,8 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
                         if (MenuGroup.isValidUserName()) {
                             controller.select(profile);
                             MenuGroup.setNotice(PaintConstants.UI_SELECT_PROFILE);
-                            boomBox.playSound(MSConstants.UI_CHECKBOX);
+                            boomBox.playSound(MSConstants.UI_CHANGED);
+                            System.out.println(controller.getList().size());
                         } else {
                             //todo: block sound
                         }
@@ -250,6 +254,7 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
                         controller.add();
                         MenuGroup.setNotice(PaintConstants.UI_NEW_PROFILE);
                     }
+                    boomBox.playSound(MSConstants.UI_CLICK);
                 }
             });
             table.add(plus);
@@ -263,7 +268,7 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
         }
     }
 
-    public com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO addProfile(String username) {
+    public ProfileDAO addProfile(String username) {
         setVisible(true);
         return controller.add(username);
     }

@@ -21,19 +21,11 @@ import java.util.List;
 
 //todo: remove results also when remove profile (после того как дизайнер заапрувит таблицу результатов). А также удялять результаты построчно. Надо MVC.
 public class Profiles implements Model<ProfileDAO> {
-    private List<ProfileDAO> profiles;
-
     private static Profiles instance;
-
-    private FileHandle file;
-
-    private ProfileDAO emptyProfile;
-
     private static boolean empty;
-
-    public static boolean isEmpty() {
-        return empty;
-    }
+    private List<ProfileDAO> profiles;
+    private FileHandle file;
+    private ProfileDAO emptyProfile;
 
     public Profiles() {
         this.profiles = new ArrayList<ProfileDAO>();
@@ -41,9 +33,70 @@ public class Profiles implements Model<ProfileDAO> {
         this.emptyProfile = asEmpty();
     }
 
+    private static ProfileDAO asEmpty() {
+        return new ProfileDAO(ProfileDAO.Type.PROFILE, PaintConstants.UI_EMPTY_PROFILE, GamePreferences.defaults, false);
+    }
+
     @Override
-    public List<ProfileDAO> getList() {
-        return getInstance().profiles;
+    public ProfileDAO addEmpty() {
+        preferencesToActiveProfile();
+        ProfileDAO empty = asEmpty();
+        getList().add(empty);
+        return empty;
+    }
+
+    @Override
+    public void addDummy() {
+        ProfileDAO dummy = asDummy();
+        getList().add(dummy);
+    }
+
+    @Override
+    public void write() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            if (instance.file.exists()) {
+                mapper.writeValue(instance.file.file(), instance.profiles);
+            } else {
+                initDefaultProfiles();
+            }
+        } catch (IOException e) {
+            initDefaultProfiles();
+            e.printStackTrace();
+        }
+
+        empty = true;
+        for (int i = 0; i < getList().size(); i++) {
+            ProfileDAO profile = getList().get(i);
+            if (profile.getType() != ProfileDAO.Type.DUMMY) {
+                empty = false;
+                break;
+            }
+        }
+
+        if (getActive() != null) {
+            GamePreferences.apply(getActive().getPreferences());
+        } else {
+            GamePreferences.apply(GamePreferences.defaults);
+        }
+        ConfigGroup.getInstance().refresh();
+    }
+
+    private static ProfileDAO asDummy() {
+        return new ProfileDAO(ProfileDAO.Type.DUMMY, "", null, false);
+    }
+
+    private void initDefaultProfiles() {
+        for (int i = 0; i < PaintConstants.DUMMY_PROFILES; i++) {
+            ProfileDAO dummy = asDummy();
+            getList().add(dummy);
+        }
+    }
+
+    private void preferencesToActiveProfile() {
+        if (getActive() != null) {
+            getActive().setPreferences(GamePreferences.getCurrent());
+        }
     }
 
     //Why? Because it is not good to work with static resources (file e.g.)
@@ -72,43 +125,14 @@ public class Profiles implements Model<ProfileDAO> {
         return instance;
     }
 
-    private void initDefaultProfiles() {
-        for (int i = 0; i < PaintConstants.DUMMY_PROFILES; i++) {
-            ProfileDAO dummy = asDummy();
-            getList().add(dummy);
-        }
-    }
-
-    private static ProfileDAO asEmpty() {
-        return new ProfileDAO(ProfileDAO.Type.PROFILE, PaintConstants.UI_EMPTY_PROFILE, GamePreferences.defaults, false);
-    }
-
-    private static ProfileDAO asDummy() {
-        return new ProfileDAO(ProfileDAO.Type.DUMMY, "", null, false);
+    public static boolean isEmpty() {
+        return empty;
     }
 
     @Override
     public void setEmpty(ProfileDAO profile) {
         preferencesToActiveProfile();
         profile.copy(instance.emptyProfile);
-    }
-
-    private void preferencesToActiveProfile() {
-        if (getActive() != null) {
-            getActive().setPreferences(GamePreferences.getCurrent());
-        }
-    }
-
-    @Override
-    public ProfileDAO getActive() {
-        List<ProfileDAO> profiles = getList();
-        ProfileDAO profile = null;
-        for (int i = 0; i < profiles.size(); i++) {
-            if (profiles.get(i).isActive()) {
-                profile = profiles.get(i);
-            }
-        }
-        return profile;
     }
 
     @Override
@@ -136,12 +160,13 @@ public class Profiles implements Model<ProfileDAO> {
         }
     }
 
-    @Override
-    public ProfileDAO addEmpty() {
+    public void dispose() {
         preferencesToActiveProfile();
-        ProfileDAO empty = asEmpty();
-        getList().add(empty);
-        return empty;
+        write();
+    }
+
+    public void flush(){
+        dispose();
     }
 
     @Override
@@ -155,43 +180,19 @@ public class Profiles implements Model<ProfileDAO> {
     }
 
     @Override
-    public void addDummy() {
-        ProfileDAO dummy = asDummy();
-        getList().add(dummy);
+    public ProfileDAO getActive() {
+        List<ProfileDAO> profiles = getList();
+        ProfileDAO profile = null;
+        for (int i = 0; i < profiles.size(); i++) {
+            if (profiles.get(i).isActive()) {
+                profile = profiles.get(i);
+            }
+        }
+        return profile;
     }
 
     @Override
-    public void write() {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            if (instance.file.exists()) {
-                mapper.writeValue(instance.file.file(), instance.profiles);
-            } else {
-                initDefaultProfiles();
-            }
-        } catch (IOException e) {
-            initDefaultProfiles();
-        }
-
-        empty = true;
-        for (int i = 0; i < getList().size(); i++) {
-            ProfileDAO profile = getList().get(i);
-            if (profile.getType() != ProfileDAO.Type.DUMMY) {
-                empty = false;
-                break;
-            }
-        }
-
-        if (getActive() != null) {
-            GamePreferences.apply(getActive().getPreferences());
-        } else {
-            GamePreferences.apply(GamePreferences.defaults);
-        }
-        ConfigGroup.getInstance().refresh();
-    }
-
-    public void dispose() {
-        preferencesToActiveProfile();
-        write();
+    public List<ProfileDAO> getList() {
+        return getInstance().profiles;
     }
 }

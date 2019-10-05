@@ -57,118 +57,141 @@ public class MenuBar extends Group {
 
         buttonExit.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (pointer == 0) {
+                    Gdx.app.exit();
+                }
+                return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         buttonPlay.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
-                if (GamePreferences.isSoundEnabled()) {
-                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.UI_MENU));
-                    sound.play(GamePreferences.getSoundVolume());
-                }
-                //
-                if (MenuGroup.isValidUserName()) {
-                    ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
-                } else {
-                    Array<Actor> actors = getStage().getActors();
-                    for (int i = 0; i < actors.size; i++) {
-                        if (actors.get(i).getName().equals(GroupType.MENU.name())) {
-                            actors.get(i).setVisible(true);
-                        } else if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
-                            actors.get(i).setVisible(true);
-                        } else {
-                            actors.get(i).setVisible(false);
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (buttonPlay.isDisabled()) {
+                    boomBox.playSound(MSConstants.UI_CLICK);
+                } else if (pointer == 0) {
+                    //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
+                    if (GamePreferences.isEffectsEnabled()) {
+                        Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.UI_MENU));
+                        sound.play(GamePreferences.getOverallEffectsVolume());
+                    }
+                    //
+                    if (MenuGroup.isValidUserName()) {
+                        ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
+                    } else {
+                        Array<Actor> actors = getStage().getActors();
+                        for (int i = 0; i < actors.size; i++) {
+                            if (actors.get(i).getName().equals(GroupType.MENU.name())) {
+                                actors.get(i).setVisible(true);
+                            } else if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
+                                actors.get(i).setVisible(true);
+                            } else {
+                                actors.get(i).setVisible(false);
+                            }
                         }
                     }
                 }
+                return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         buttonConfig.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Array<Actor> actors = getStage().getActors();
-                Actor tmp = new Actor();
-                for (int i = 0; i < actors.size; i++) {
-                    if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
-                        tmp = actors.get(i);
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (buttonConfig.isDisabled()) {
+                    boomBox.playSound(MSConstants.UI_CLICK);
+                } else if (pointer == 0) {
+                    Array<Actor> actors = getStage().getActors();
+                    Actor tmp = new Actor();
+                    for (int i = 0; i < actors.size; i++) {
+                        if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
+                            tmp = actors.get(i);
+                        }
                     }
+                    for (int i = 0; i < actors.size; i++) {
+                        if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
+                            actors.get(i).setVisible(!actors.get(i).isVisible());
+                        }
+                        if (actors.get(i).getName().equals(GroupType.MENU.name())) {
+                            actors.get(i).setVisible(tmp.isVisible());
+                        }
+                        if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
+                            actors.get(i).setVisible(false);
+                        }
+                        if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
+                            actors.get(i).setVisible(false);
+                        }
+                    }
+                    boomBox.playSound(MSConstants.UI_MENU);
                 }
-                for (int i = 0; i < actors.size; i++) {
-                    if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
-                        actors.get(i).setVisible(!actors.get(i).isVisible());
-                    }
-                    if (actors.get(i).getName().equals(GroupType.MENU.name())) {
-                        actors.get(i).setVisible(tmp.isVisible());
-                    }
-                    if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
-                        actors.get(i).setVisible(false);
-                    }
-                    if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
-                        actors.get(i).setVisible(false);
-                    }
-                }
-                boomBox.playSound(MSConstants.UI_MENU);
+                return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         buttonResults.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Array<Actor> actors = getStage().getActors();
-                Actor tmp = new Actor();
-                for (int i = 0; i < actors.size; i++) {
-                    if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
-                        tmp = actors.get(i);
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (buttonResults.isDisabled()) {
+                    boomBox.playSound(MSConstants.UI_CLICK);
+                } else if (pointer == 0) {
+                    Array<Actor> actors = getStage().getActors();
+                    Actor tmp = new Actor();
+                    for (int i = 0; i < actors.size; i++) {
+                        if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
+                            tmp = actors.get(i);
+                        }
                     }
+                    for (int i = 0; i < actors.size; i++) {
+                        if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
+                            actors.get(i).setVisible(!actors.get(i).isVisible());
+                        }
+                        if (actors.get(i).getName().equals(GroupType.MENU.name())) {
+                            actors.get(i).setVisible(tmp.isVisible());
+                        }
+                        if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
+                            actors.get(i).setVisible(false);
+                        }
+                        if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
+                            actors.get(i).setVisible(false);
+                        }
+                    }
+                    boomBox.playSound(MSConstants.UI_MENU);
                 }
-                for (int i = 0; i < actors.size; i++) {
-                    if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
-                        actors.get(i).setVisible(!actors.get(i).isVisible());
-                    }
-                    if (actors.get(i).getName().equals(GroupType.MENU.name())) {
-                        actors.get(i).setVisible(tmp.isVisible());
-                    }
-                    if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
-                        actors.get(i).setVisible(false);
-                    }
-                    if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
-                        actors.get(i).setVisible(false);
-                    }
-                }
-                boomBox.playSound(MSConstants.UI_MENU);
+                return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         buttonShare.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Array<Actor> actors = getStage().getActors();
-                Actor tmp = new Actor();
-                for (int i = 0; i < actors.size; i++) {
-                    if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
-                        tmp = actors.get(i);
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (buttonShare.isDisabled()) {
+                    boomBox.playSound(MSConstants.UI_CLICK);
+                } else if (pointer == 0) {
+                    Array<Actor> actors = getStage().getActors();
+                    Actor tmp = new Actor();
+                    for (int i = 0; i < actors.size; i++) {
+                        if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
+                            tmp = actors.get(i);
+                        }
                     }
+                    for (int i = 0; i < actors.size; i++) {
+                        if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
+                            actors.get(i).setVisible(!actors.get(i).isVisible());
+                        }
+                        if (actors.get(i).getName().equals(GroupType.MENU.name())) {
+                            actors.get(i).setVisible(tmp.isVisible());
+                        }
+                        if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
+                            actors.get(i).setVisible(false);
+                        }
+                        if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
+                            actors.get(i).setVisible(false);
+                        }
+                    }
+                    boomBox.playSound(MSConstants.UI_MENU);
                 }
-                for (int i = 0; i < actors.size; i++) {
-                    if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
-                        actors.get(i).setVisible(!actors.get(i).isVisible());
-                    }
-                    if (actors.get(i).getName().equals(GroupType.MENU.name())) {
-                        actors.get(i).setVisible(tmp.isVisible());
-                    }
-                    if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
-                        actors.get(i).setVisible(false);
-                    }
-                    if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
-                        actors.get(i).setVisible(false);
-                    }
-                }
-                boomBox.playSound(MSConstants.UI_MENU);
+                return super.touchDown(event, x, y, pointer, button);
             }
         });
 
@@ -177,15 +200,6 @@ public class MenuBar extends Group {
         this.addActor(buttonConfig);
         this.addActor(buttonResults);
         this.addActor(buttonShare);
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        buttonPlay.draw(batch, parentAlpha);
-        buttonExit.draw(batch, parentAlpha);
-        buttonConfig.draw(batch, parentAlpha);
-        buttonResults.draw(batch, parentAlpha);
-        buttonShare.draw(batch, parentAlpha);
     }
 
     @Override
@@ -202,5 +216,14 @@ public class MenuBar extends Group {
             buttonConfig.setDisabled(false);
             buttonResults.setDisabled(false);
         }
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        buttonPlay.draw(batch, parentAlpha);
+        buttonExit.draw(batch, parentAlpha);
+        buttonConfig.draw(batch, parentAlpha);
+        buttonResults.draw(batch, parentAlpha);
+        buttonShare.draw(batch, parentAlpha);
     }
 }

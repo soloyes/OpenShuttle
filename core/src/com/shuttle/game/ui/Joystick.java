@@ -172,16 +172,8 @@ public class Joystick extends Actor implements InputProcessor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        vs.set(Gdx.input.getX(), Gdx.input.getY());
-        ScreenManager.getInstance().getViewport().unproject(vs);
-        tmp.set(getX() + PaintConstants.JOYSTICK_WIDTH / 2, getY() + PaintConstants.JOYSTICK_HEIGHT / 2);
-        joyCenter.set(tmp);
-        vs.sub(tmp);
-
-        if (vs.len() > stickDeviation) {
-            vs.nor().scl(stickDeviation);
-        }
-
+        joyCenter.set(getX(), getY());
+        vs.set(PaintConstants.JOYSTICK_WIDTH + PaintConstants.JOYSTICK_STICK_WIDTH / 2, PaintConstants.JOYSTICK_HEIGHT / 2);
         drawJoystick((SpriteBatch) batch, getX(), getY());
     }
 

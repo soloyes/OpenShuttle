@@ -3,7 +3,6 @@ package com.shuttle.game.ui.groups;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -27,44 +26,108 @@ import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.mvc.profiles.VerticalGroupList;
 import com.shuttle.game.utils.Assets;
 
-
 /**
  * @author Shuttle on 6/23/18.
  */
 public class MenuGroup extends Group {
-    private BitmapFont font64;
-    private BitmapFont font256;
     private static boolean validUserName;
     private static TextField username;
+    private static float shadowTime;
+    private static StringBuilder notice = new StringBuilder();
+    private BitmapFont font64;
     private Button buttonProfile;
     private GlyphLayout glyphLayout;
     private VerticalGroupList verticalGroupList;
     private GroupController groupController;
     private float a;
     private float blinkTime;
-    private static float shadowTime;
-    private static StringBuilder notice = new StringBuilder();
+    private Label noticeLabel;
     private BoomBox boomBox;
+    private Group noticeGroup;
 
-    public static void setNotice(String text) {
-        notice.setLength(0);
-        notice.append(text);
-        shadowTime = Rules.NOTICE_WAIT;
-    }
+    public MenuGroup() {
+        this(GroupType.MENU.name());
+        username.setAlignment(Align.center);
+        username.setMaxLength(14);
 
-    public static void setUsername(String username) {
-        MenuGroup.username.setText(username);
+        username.setPosition(Rules.WORLD_WIDTH / 4, username.getHeight() + verticalGroupList.getY() + verticalGroupList.getHeight());
+        username.setWidth(Rules.WORLD_WIDTH / 2);
+        buttonProfile.setSize(128, 128);
+        buttonProfile.setPosition(Rules.WORLD_WIDTH / 2 - buttonProfile.getWidth() / 2, buttonProfile.getHeight() + verticalGroupList.getY() + verticalGroupList.getHeight() + username.getHeight() - 22);
+
+        buttonProfile.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (buttonProfile.isDisabled()) {
+                    boomBox.playSound(MSConstants.UI_CLICK);
+                } else if (pointer == 0) {
+                    verticalGroupList.switchVisible();
+                    setNotice(PaintConstants.UI_YOUR_USERNAME);
+                    boomBox.playSound(MSConstants.UI_MENU);
+                }
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        username.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                setNotice(PaintConstants.UI_CAN_SAVE);
+                boomBox.playSound(MSConstants.UI_INPUT);
+            }
+        });
+
+        username.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (validUserName) {
+                    setNotice(PaintConstants.UI_PROFILE_EDIT);
+                }
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.ENTER) {
+                    if (validUserName) {
+                        ProfileDAO profile = groupController.getActive();
+                        if (profile == null) {
+                            profile = verticalGroupList.addProfile(username.getText());
+                            groupController.select(profile);
+                            setNotice(PaintConstants.UI_YOUR_USERNAME);
+                        } else {
+                            setNotice(PaintConstants.UI_PROFILE_SAVED);
+                            profile.setUsername(username.getText());
+                            groupController.flush();
+                            groupController.update();
+                        }
+                    }
+                }
+                return super.keyDown(event, keycode);
+            }
+        });
+
+        noticeGroup = new Group();
+        noticeGroup.addActor(noticeLabel);
+        noticeLabel.setFillParent(true);
+        this.addActor(buttonProfile);
+        this.addActor(noticeGroup);
+        this.addActor(username);
+        this.addActor(verticalGroupList);
     }
 
     private MenuGroup(String name) {
         this.setName(name);
         this.setVisible(true);
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        this.font256 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT256, BitmapFont.class);
         this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
+        Label.LabelStyle noticeStyle64 = new Label.LabelStyle(
+                Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
+                new Color(1.0f, 1.0f, 1.0f, 1f)
+        );
+
+        noticeLabel = new Label(notice, noticeStyle64);
         this.buttonProfile = new Button(skin, "default");
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = font64;
         TextField.TextFieldStyle tfs = skin.get("default", TextField.TextFieldStyle.class);
         tfs.font = font64;
         tfs.fontColor = Color.valueOf("ffffffff");
@@ -83,81 +146,10 @@ public class MenuGroup extends Group {
         this.boomBox = new BoomBox();
     }
 
-    public MenuGroup() {
-        this(GroupType.MENU.name());
-        username.setAlignment(Align.center);
-        username.setMaxLength(14);
-        glyphLayout.setText(font64, notice);
-
-        username.setPosition(Rules.WORLD_WIDTH / 4, username.getHeight() + verticalGroupList.getY() + verticalGroupList.getHeight());
-        username.setWidth(Rules.WORLD_WIDTH / 2);
-        buttonProfile.setSize(128, 128);
-        buttonProfile.setPosition(Rules.WORLD_WIDTH / 2 - buttonProfile.getWidth() / 2, buttonProfile.getHeight() + verticalGroupList.getY() + verticalGroupList.getHeight() + username.getHeight() - 22);
-
-        buttonProfile.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!buttonProfile.isDisabled()) {
-                    verticalGroupList.switchVisible();
-                    setNotice(PaintConstants.UI_YOUR_USERNAME);
-                    boomBox.playSound(MSConstants.UI_MENU);
-                }
-            }
-        });
-
-        username.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                setNotice(PaintConstants.UI_CAN_SAVE);
-            }
-        });
-
-        username.addListener(new InputListener() {
-            @Override
-            public boolean keyDown(InputEvent event, int keycode) {
-                if (keycode == Input.Keys.ENTER) {
-                    if (validUserName) {
-                        ProfileDAO profile = groupController.getActive();
-                        if (profile == null) {
-                            profile = verticalGroupList.addProfile(username.getText());
-                            groupController.select(profile);
-                            setNotice(PaintConstants.UI_YOUR_USERNAME);
-                        } else {
-                            setNotice(PaintConstants.UI_PROFILE_SAVED);
-                            profile.setUsername(username.getText());
-                            groupController.update();
-                        }
-                    }
-                }
-                return super.keyDown(event, keycode);
-            }
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (validUserName) {
-                    setNotice(PaintConstants.UI_PROFILE_EDIT);
-                }
-                return super.touchDown(event, x, y, pointer, button);
-            }
-        });
-
-        this.addActor(buttonProfile);
-        this.addActor(username);
-        this.addActor(verticalGroupList);
-    }
-
-    public static boolean isValidUserName() {
-        return validUserName;
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
-        font256.draw(batch, "SHUTTLE", 0, 1800, 1080, 1, false);
-        font64.draw(batch, glyphLayout,
-                Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
-                verticalGroupList.getY() + verticalGroupList.getHeight() + glyphLayout.height + 22
-        );
+    public static void setNotice(String text) {
+        notice.setLength(0);
+        notice.append(text);
+        shadowTime = Rules.NOTICE_WAIT;
     }
 
     @Override
@@ -180,14 +172,22 @@ public class MenuGroup extends Group {
                 a = 1.0f;
             }
         }
-        font64.getColor().a = a;
         if (GroupController.isEmpty()) {
             buttonProfile.setDisabled(true);
             verticalGroupList.setVisible(false);
         } else {
             buttonProfile.setDisabled(false);
         }
+
         glyphLayout.setText(font64, notice);
+        noticeLabel.setText(notice);
+        noticeGroup.setPosition(Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
+                verticalGroupList.getY() + verticalGroupList.getHeight() + glyphLayout.height / 2 + 22);
+        noticeGroup.getColor().a = a;
+    }
+
+    public static boolean isValidUserName() {
+        return validUserName;
     }
 
     private void blink(float delta) {
@@ -205,5 +205,9 @@ public class MenuGroup extends Group {
 
     public void dispose() {
         groupController.dispose();
+    }
+
+    public static void setUsername(String username) {
+        MenuGroup.username.setText(username);
     }
 }

@@ -21,7 +21,9 @@ public final class MSConstants {
     private static final String SONG_FOLDER = MUSIC_ROOT_FOLDER + MUSIC_FOLDER;
 
     //SOUND
-    public static final String UI_CHECKBOX = UI + "ui_checkbox.ogg";
+    public static final String UI_CHANGED = UI + "ui_changed.ogg";
+    public static final String UI_INPUT = UI + "ui_input.ogg";
+    public static final String UI_CLICK = UI + "ui_click.ogg";
     public static final String UI_MENU = UI + "ui_menu_button.ogg";
     public static final String UI_PAUSE = UI + "ui_pause_button.ogg";
 
