@@ -1,5 +1,6 @@
 package com.shuttle.game.ui.groups;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -442,7 +443,7 @@ public class ConfigGroup extends VerticalGroup {
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = vibrationCheckBox.isChecked();
                 GamePreferences.setVibrationEnabled(enabled);
-                if (enabled && vibrationCheckBox.isPressed()) {
+                if (enabled && Gdx.input.isTouched() && isVisible()) {
                     Vibrator.vibrate(VConstants.VIBRATION_ENABLED);
                 }
             }
@@ -468,6 +469,9 @@ public class ConfigGroup extends VerticalGroup {
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = joyStickCheckBox.isChecked();
                 GamePreferences.setJoyStickEnabled(enabled);
+                if (joyStickCheckBox.isPressed()) {
+                    boomBox.playSound(MSConstants.UI_CHANGED);
+                }
             }
         });
         joyStickCheckBox.addListener(new ClickListener() {
@@ -732,8 +736,8 @@ public class ConfigGroup extends VerticalGroup {
             settingsTouched = true;
             scrollPane.setFlickScroll(false);
             tmpLine = line;
+            boomBox.playSound(MSConstants.UI_CLICK);
         }
-        boomBox.playSound(MSConstants.UI_CLICK);
     }
 
     private void touchUp(int pointer) {
@@ -969,7 +973,7 @@ public class ConfigGroup extends VerticalGroup {
             }
 
             float tmp = a;
-            if (muted) {
+            if (muted && !slave) {
                 a = 0.75f;
             } else {
                 a = tmp;

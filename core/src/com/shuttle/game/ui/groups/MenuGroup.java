@@ -57,14 +57,15 @@ public class MenuGroup extends Group {
 
         buttonProfile.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (buttonProfile.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
-                } else {
+                } else if (pointer == 0) {
                     verticalGroupList.switchVisible();
                     setNotice(PaintConstants.UI_YOUR_USERNAME);
                     boomBox.playSound(MSConstants.UI_MENU);
                 }
+                return super.touchDown(event, x, y, pointer, button);
             }
         });
 

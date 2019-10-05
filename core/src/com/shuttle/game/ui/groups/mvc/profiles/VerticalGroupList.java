@@ -218,6 +218,7 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
                             controller.select(profile);
                             MenuGroup.setNotice(PaintConstants.UI_SELECT_PROFILE);
                             boomBox.playSound(MSConstants.UI_CHANGED);
+                            System.out.println(controller.getList().size());
                         } else {
                             //todo: block sound
                         }

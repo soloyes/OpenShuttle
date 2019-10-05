@@ -57,17 +57,20 @@ public class MenuBar extends Group {
 
         buttonExit.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (pointer == 0) {
+                    Gdx.app.exit();
+                }
+                return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         buttonPlay.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (buttonPlay.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
-                } else {
+                } else if (pointer == 0) {
                     //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
                     if (GamePreferences.isEffectsEnabled()) {
                         Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.UI_MENU));
@@ -89,15 +92,16 @@ public class MenuBar extends Group {
                         }
                     }
                 }
+                return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         buttonConfig.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (    buttonConfig.isDisabled()) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (buttonConfig.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
-                } else {
+                } else if (pointer == 0) {
                     Array<Actor> actors = getStage().getActors();
                     Actor tmp = new Actor();
                     for (int i = 0; i < actors.size; i++) {
@@ -121,16 +125,16 @@ public class MenuBar extends Group {
                     }
                     boomBox.playSound(MSConstants.UI_MENU);
                 }
+                return super.touchDown(event, x, y, pointer, button);
             }
-
         });
 
         buttonResults.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (buttonResults.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
-                } else {
+                } else if (pointer == 0) {
                     Array<Actor> actors = getStage().getActors();
                     Actor tmp = new Actor();
                     for (int i = 0; i < actors.size; i++) {
@@ -154,15 +158,16 @@ public class MenuBar extends Group {
                     }
                     boomBox.playSound(MSConstants.UI_MENU);
                 }
+                return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         buttonShare.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (buttonShare.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
-                } else {
+                } else if (pointer == 0) {
                     Array<Actor> actors = getStage().getActors();
                     Actor tmp = new Actor();
                     for (int i = 0; i < actors.size; i++) {
@@ -186,6 +191,7 @@ public class MenuBar extends Group {
                     }
                     boomBox.playSound(MSConstants.UI_MENU);
                 }
+                return super.touchDown(event, x, y, pointer, button);
             }
         });
 
