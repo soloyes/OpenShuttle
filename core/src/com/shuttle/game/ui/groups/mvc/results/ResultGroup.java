@@ -16,6 +16,7 @@ import com.shuttle.game.utils.Assets;
  * @author Shuttle on 7/14/18.
  */
 //todo: to MVC
+//todo: Table must be draw lower.
 public class ResultGroup extends Group {
     public ResultGroup() {
         this.setName(GroupType.RESULTS.name());

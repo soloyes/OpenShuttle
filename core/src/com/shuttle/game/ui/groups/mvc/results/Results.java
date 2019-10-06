@@ -51,7 +51,7 @@ public class Results {
     public Results() {
         this.stringBuffer = new StringBuffer();
         this.results = new LinkedHashSet<ResultDAO>();
-        this.file = Gdx.files.internal(FileConstants.RESULTS);
+        this.file = Gdx.files.local(FileConstants.RESULTS);
     }
 
     public String shareResults() {

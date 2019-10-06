@@ -29,7 +29,7 @@ public class Profiles implements Model<ProfileDAO> {
 
     public Profiles() {
         this.profiles = new ArrayList<ProfileDAO>();
-        this.file = Gdx.files.internal(FileConstants.PROFILES);
+        this.file = Gdx.files.local(FileConstants.PROFILES);
         this.emptyProfile = asEmpty();
     }
 
@@ -87,9 +87,11 @@ public class Profiles implements Model<ProfileDAO> {
     }
 
     private void initDefaultProfiles() {
-        for (int i = 0; i < PaintConstants.DUMMY_PROFILES; i++) {
-            ProfileDAO dummy = asDummy();
-            getList().add(dummy);
+        //todo: Add notice, that profiles will be not saved. Somewhere.
+        if (getList().size() < PaintConstants.DUMMY_PROFILES) {
+            for (int i = 0; i < PaintConstants.DUMMY_PROFILES; i++) {
+                getList().add(asDummy());
+            }
         }
     }
 
