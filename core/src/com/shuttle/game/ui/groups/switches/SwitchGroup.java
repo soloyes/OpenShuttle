@@ -1,4 +1,4 @@
-package com.shuttle.game.ui.groups.leftright;
+package com.shuttle.game.ui.groups.switches;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;

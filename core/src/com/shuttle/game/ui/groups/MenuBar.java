@@ -113,6 +113,9 @@ public class MenuBar extends Group {
                         if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
                             actors.get(i).setVisible(!actors.get(i).isVisible());
                         }
+                        if (actors.get(i).getName().equals(GroupType.LEFT.name())) {
+                            actors.get(i).setVisible(!actors.get(i).isVisible());
+                        }
                         if (actors.get(i).getName().equals(GroupType.MENU.name())) {
                             actors.get(i).setVisible(tmp.isVisible());
                         }
@@ -152,6 +155,9 @@ public class MenuBar extends Group {
                         if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
                             actors.get(i).setVisible(false);
                         }
+                        if (actors.get(i).getName().equals(GroupType.LEFT.name())) {
+                            actors.get(i).setVisible(false);
+                        }
                         if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
                             actors.get(i).setVisible(false);
                         }
@@ -183,6 +189,9 @@ public class MenuBar extends Group {
                             actors.get(i).setVisible(tmp.isVisible());
                         }
                         if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
+                            actors.get(i).setVisible(false);
+                        }
+                        if (actors.get(i).getName().equals(GroupType.LEFT.name())) {
                             actors.get(i).setVisible(false);
                         }
                         if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {

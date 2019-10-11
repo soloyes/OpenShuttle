@@ -1,4 +1,4 @@
-package com.shuttle.game.ui.groups;
+package com.shuttle.game.ui.groups.configs;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -30,6 +30,7 @@ import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.Joystick;
+import com.shuttle.game.ui.groups.GroupType;
 import com.shuttle.game.utils.Assets;
 
 import lombok.Getter;
@@ -97,8 +98,8 @@ public class ConfigGroup extends VerticalGroup {
         this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
         this.font96 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
         this.skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        this.setPosition(Rules.WORLD_WIDTH / 8, Rules.WORLD_HEIGHT / 4);
-        this.setWidth(3 * Rules.WORLD_WIDTH / 4);
+        this.setPosition(178, 477);
+        this.setWidth(724);
         this.setHeight(Rules.WORLD_HEIGHT / 2);
         this.boomBox = new BoomBox();
 
@@ -114,7 +115,7 @@ public class ConfigGroup extends VerticalGroup {
         joystickTable.add(joystick)
                 .height(PaintConstants.JOYSTICK_HEIGHT);
 
-        innerTable.add(joyStickModeSlider).width(250).height(100);
+        innerTable.add(joyStickModeSlider).width(220).height(100);
         innerTable.row();
         innerTable.add(joyStickColorCheckBox).left();
 
@@ -671,32 +672,32 @@ public class ConfigGroup extends VerticalGroup {
         effectsLine.setHoldMessage(PaintConstants.UI_EFFECTS_HOLD);
         effectsLine.setEnabledMessage(PaintConstants.UI_EFFECTS_ENABLE);
         effectsLine.setDisabledMessage(PaintConstants.UI_EFFECTS_DISABLE);
-        Group shaderGroup = makeGroup(shaderLabel, 682, 68);
+        Group shaderGroup = makeGroup(shaderLabel, 652, 68);
         shaderLine = new Line(shaderCheckBox, shaderGroup, null);
         shaderLine.setNoticeMessage(PaintConstants.UI_SHADERS_NOTICE);
         shaderLine.setHoldMessage(PaintConstants.UI_SHADERS_HOLD);
         shaderLine.setEnabledMessage(PaintConstants.UI_SHADERS_ENABLE);
         shaderLine.setDisabledMessage(PaintConstants.UI_SHADERS_DISABLE);
-        Group childGroup = makeGroup(childLabel, 682, 68);
+        Group childGroup = makeGroup(childLabel, 652, 68);
         childLine = new Line(childCheckBox, childGroup, null);
         childLine.setNoticeMessage(PaintConstants.UI_CHILD_NOTICE);
         childLine.setHoldMessage(PaintConstants.UI_CHILD_HOLD);
         childLine.setEnabledMessage(PaintConstants.UI_CHILD_ENABLE);
         childLine.setDisabledMessage(PaintConstants.UI_CHILD_DISABLE);
-        Group levelGroup = makeGroup(levelLabel, 682, 68);
+        Group levelGroup = makeGroup(levelLabel, 652, 68);
         levelLine = new Line(levelCheckBox, levelGroup, null);
         levelLine.setActive(true);
         levelLine.setNoticeMessage(PaintConstants.UI_LEVEL_NOTICE);
         levelLine.setHoldMessage(PaintConstants.UI_LEVEL_HOLD);
         levelLine.setEnabledMessage(PaintConstants.UI_LEVEL_ENABLE);
         levelLine.setDisabledMessage(PaintConstants.UI_LEVEL_DISABLE);
-        Group vibrationGroup = makeGroup(vibrationLabel, 682, 68);
+        Group vibrationGroup = makeGroup(vibrationLabel, 652, 68);
         vibrationLine = new Line(vibrationCheckBox, vibrationGroup, null);
         vibrationLine.setNoticeMessage(PaintConstants.UI_VIBRATION_NOTICE);
         vibrationLine.setHoldMessage(PaintConstants.UI_VIBRATION_HOLD);
         vibrationLine.setEnabledMessage(PaintConstants.UI_VIBRATION_ENABLE);
         vibrationLine.setDisabledMessage(PaintConstants.UI_VIBRATION_DISABLE);
-        Group joystickGroup = makeGroup(joyStickLabel, 682, 68);
+        Group joystickGroup = makeGroup(joyStickLabel, 652, 68);
         joystickLine = new Line(joyStickCheckBox, joystickGroup, null);
         joystickLine.setNoticeMessage(PaintConstants.UI_JOYSTICK_NOTICE);
         joystickLine.setHoldMessage(PaintConstants.UI_JOYSTICK_HOLD);
@@ -952,11 +953,11 @@ public class ConfigGroup extends VerticalGroup {
             table.add(centerActor).expandX();
 
             if (rightActor != null) {
-                table.add(rightActor).width(250).padRight(22).padLeft(22);
+                table.add(rightActor).width(220).padRight(22).padLeft(22);
             }
             table.align(Align.top);
             table.setFillParent(true);
-            this.setWidth(3 * Rules.WORLD_WIDTH / 4);
+            this.setWidth(724);
             this.setHeight(90);
             this.addActor(table);
         }

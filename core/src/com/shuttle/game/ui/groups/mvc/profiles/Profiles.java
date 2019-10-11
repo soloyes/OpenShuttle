@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.shuttle.game.conf.FileConstants;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.ui.groups.ConfigGroup;
+import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.mvc.Model;
 
 import java.io.IOException;

@@ -3,7 +3,7 @@ package com.shuttle.game.ui.panels;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.ui.groups.leftright.SwitchGroup;
+import com.shuttle.game.ui.groups.switches.SwitchGroup;
 import com.shuttle.game.utils.Assets;
 
 public class UILeftPanel extends AbstractLatestPanel {
