@@ -174,10 +174,25 @@ public final class PaintConstants {
     public static final int PANEL_ELEMENTS_MAX = 4;
     public static final int LEFT_RIGHT_PANEL_ELEMENT_WIDTH = 148;
     public static final int LEFT_RIGHT_PANEL_ELEMENT_HEIGHT = 128;
-    public static final String LEFT_RIGHT_PANEL_FULL_CIRCLE = "fullcirclev1";
-    public static final String LEFT_RIGHT_PANEL_EMPTY_CIRCLE = "emptycirclev1";
+    public static final String LEFT_RIGHT_PANEL_FULL_CIRCLE = "fullcircle";
+    public static final String LEFT_RIGHT_PANEL_EMPTY_CIRCLE = "emptycircle";
     public static final int LEFT_RIGHT_PANEL_CIRCLE_WIDTH = 148;
     public static final int LEFT_RIGHT_PANEL_CIRCLE_HEIGHT = 128;
+    public static final String LEFT_RIGHT_UI_CENTER_CELL = "cellselectcenter";
+    public static final String LEFT_RIGHT_UI_UPDOWN_CELL = "cellselectupdown";
+    public static final String LEFT_RIGHT_UI_CLICK_CELL = "cellclick";
+    public static final int LEFT_RIGHT_UI_CELL_WIDTH = 118;
+    public static final int LEFT_RIGHT_UI_CELL_HEIGHT = 118;
+    public static final String LEFT_RIGHT_UI_EMPTY_BOX = "emptybox";
+    public static final int LEFT_RIGHT_UI_EMPTY_BOX_WIDTH = 64;
+    public static final int LEFT_RIGHT_UI_EMPTY_BOX_HEIGHT = 64;
+    public static final String LEFT_RIGHT_UI_GLOW_UPDOWN = "glowupdown";
+    public static final int LEFT_RIGHT_UI_GLOW_UPDOWN_WIDTH = 172;
+    public static final int LEFT_RIGHT_UI_GLOW_UPDOWN_HEIGHT = 98;
+    public static final String LEFT_RIGHT_UI_GLOW_CELL = "glowcell";
+    public static final int LEFT_RIGHT_UI_GLOW_CELL_WIDTH = 206;
+    public static final int LEFT_RIGHT_UI_GLOW_CELL_HEIGHT = 206;
+
     public static final String ASTRONAUT_BONUS_ICON = "astronautbonusicon";
     public static final String MECHANIC_BONUS_ICON = "mechanicbonusicon";
     public static final String MILITARY_BONUS_ICON = "militarybonusicon";

@@ -258,9 +258,12 @@ public class GameScreen extends BaseScreen {
         }
 
         //BEGIN
-        if (!Rules.GAME_OVER) {
+        if (!PauseGroup.getInstance().isPause() && !Rules.GAME_OVER) {
             UILeftPanel.getInstance().render(batch);
             UIRightPanel.getInstance().render(batch);
+        }
+
+        if (!Rules.GAME_OVER) {
             uiTopPanel.render(batch);
             SelectorGroup.getInstance().render(batch);
         }

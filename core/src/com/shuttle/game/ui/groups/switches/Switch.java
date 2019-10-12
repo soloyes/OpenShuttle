@@ -24,7 +24,6 @@ public class Switch extends ImageButton {
     private boolean on;
     private float width;
     private float height;
-    private boolean paused;
 
     public Switch(TextureRegionDrawable drawable, boolean isLeft) {
         super(drawable);
@@ -34,7 +33,7 @@ public class Switch extends ImageButton {
         this.height = PaintConstants.SWITCH_HEIGHT;
         setPosition(
                 isLeft ? width / 2 : Rules.WORLD_WIDTH - 3 * width / 2,
-                Rules.WORLD_HEIGHT / 2 - (PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_HEIGHT) * 2 + 36
+                477 + (5 * PaintConstants.LEFT_RIGHT_UI_CELL_HEIGHT) / 2 - height / 2
         );
 
         setOrigin(Align.center);
@@ -44,29 +43,21 @@ public class Switch extends ImageButton {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (isPressed()) {
-                    if (!paused) {
-                        if (on) {
-                            getStyle().imageUp = onRegion;
-                            on = false;
-                        } else {
-                            getStyle().imageUp = offRegion;
-                            on = true;
-                        }
+                    if (on) {
+                        getStyle().imageUp = onRegion;
+                        on = false;
+                    } else {
+                        getStyle().imageUp = offRegion;
+                        on = true;
                     }
                 }
             }
         });
-
-    }
-
-    @Override
-    public void act(float delta) {
-        paused = PauseGroup.getInstance().isPause();
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (!Rules.GAME_OVER) {
+        if (!PauseGroup.getInstance().isPause() && !Rules.GAME_OVER) {
             super.draw(batch, parentAlpha);
         }
     }

@@ -12,20 +12,11 @@ import lombok.Getter;
  */
 public class SwitchGroup extends Group {
     private static SwitchGroup instance;
-
-    public static SwitchGroup getInstance() {
-        if (instance == null) {
-            instance = new SwitchGroup();
-        }
-        return instance;
-    }
-
     private TextureRegionDrawable onRegion;
     @Getter
     private Switch leftSwitch;
     @Getter
     private Switch rightSwitch;
-
     private SwitchGroup() {
         this.onRegion = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.SWITCH_ON));
         this.leftSwitch = new Switch(onRegion, true);
@@ -36,5 +27,12 @@ public class SwitchGroup extends Group {
 
     public void dispose() {
         instance = null;
+    }
+
+    public static SwitchGroup getInstance() {
+        if (instance == null) {
+            instance = new SwitchGroup();
+        }
+        return instance;
     }
 }

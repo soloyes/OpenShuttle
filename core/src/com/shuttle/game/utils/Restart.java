@@ -17,6 +17,8 @@ import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.ui.groups.configs.ConfigGroup;
+import com.shuttle.game.ui.groups.configs.LeftGroup;
+import com.shuttle.game.ui.groups.configs.RightGroup;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
 import com.shuttle.game.ui.groups.switches.SwitchGroup;
 import com.shuttle.game.ui.panels.UILeftPanel;
@@ -43,6 +45,8 @@ public class Restart {
         ConfigGroup.getInstance().dispose();
         UILeftPanel.getInstance().dispose();
         UIRightPanel.getInstance().dispose();
+        LeftGroup.getInstance().dispose();
+        RightGroup.getInstance().dispose();
         Standing.getInstance().dispose();
         Shuttle.respawn();
     }

@@ -11,7 +11,6 @@ import com.shuttle.game.ui.groups.MenuBar;
 import com.shuttle.game.ui.groups.MenuGroup;
 import com.shuttle.game.ui.groups.ShareGroup;
 import com.shuttle.game.ui.groups.configs.ConfigGroup;
-import com.shuttle.game.ui.groups.configs.LeftGroup;
 import com.shuttle.game.ui.groups.mvc.results.ResultGroup;
 import com.shuttle.game.utils.Assets;
 
@@ -55,7 +54,6 @@ public class MenuScreen extends BaseScreen {
         underHead.setPosition(Rules.WORLD_WIDTH / 2 - underHead.getWidth() / 2, Rules.WORLD_HEIGHT - head.getHeight() - underHead.getHeight() / 2);
         stage.addActor(menuGroup);
         stage.addActor(ConfigGroup.getInstance());
-        stage.addActor(LeftGroup.getInstance());
         stage.addActor(menuBar);
         stage.addActor(resultGroup);
         stage.addActor(shareGroup);

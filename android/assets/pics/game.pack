@@ -52,6 +52,13 @@ map512
   orig: 512, 512
   offset: 0, 0
   index: -1
+emptybox
+  rotate: false
+  xy: 1028, 1028
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
 takefield384
   rotate: false
   xy: 3594, 2
@@ -61,14 +68,14 @@ takefield384
   index: -1
 scratch
   rotate: false
-  xy: 1028, 1028
+  xy: 1542, 1028
   size: 1280, 256
   orig: 1280, 256
   offset: 0, 0
   index: -1
 astronaut
   rotate: false
-  xy: 2310, 1028
+  xy: 1028, 1542
   size: 1280, 256
   orig: 1280, 256
   offset: 0, 0
@@ -82,238 +89,238 @@ shuttleblur
   index: -1
 rockets
   rotate: false
-  xy: 3592, 1028
+  xy: 2824, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 ramshield
   rotate: false
-  xy: 1028, 1286
+  xy: 3082, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 storage
   rotate: false
-  xy: 1028, 1544
+  xy: 3340, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 repair
   rotate: false
-  xy: 1028, 1802
+  xy: 3598, 1028
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outarrow
   rotate: false
-  xy: 1028, 2060
+  xy: 2310, 1542
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 boost
   rotate: false
-  xy: 1028, 2318
+  xy: 2568, 1542
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 lifeshield
   rotate: false
-  xy: 1028, 2576
+  xy: 2826, 1542
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shieldfuel
   rotate: false
-  xy: 1028, 2834
+  xy: 3084, 1542
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 splash
   rotate: false
-  xy: 1028, 3092
+  xy: 3342, 1542
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 glow
   rotate: false
-  xy: 1028, 3350
+  xy: 3600, 1542
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 fuelbox
   rotate: false
-  xy: 1028, 3608
+  xy: 1028, 1800
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 storagegold
   rotate: false
-  xy: 1286, 1286
+  xy: 1028, 2058
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 laser
   rotate: false
-  xy: 1544, 1286
+  xy: 1028, 2316
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 trash
   rotate: false
-  xy: 1802, 1286
+  xy: 1028, 2574
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 fuelv2
   rotate: false
-  xy: 2060, 1286
+  xy: 1028, 2832
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outmark
   rotate: false
-  xy: 2318, 1286
+  xy: 1028, 3090
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 radar
   rotate: false
-  xy: 2576, 1286
+  xy: 1028, 3348
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 blackholespiral
   rotate: false
-  xy: 2834, 1286
+  xy: 1028, 3606
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 fuelboxgold
   rotate: false
-  xy: 3092, 1286
+  xy: 1286, 1800
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shieldstorage
   rotate: false
-  xy: 3350, 1286
+  xy: 1286, 2058
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 boxscan
   rotate: false
-  xy: 3608, 1286
+  xy: 1286, 2316
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shabby
   rotate: false
-  xy: 1286, 1544
+  xy: 1286, 2574
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 boxshield
   rotate: false
-  xy: 1286, 1802
+  xy: 1286, 2832
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 crate
   rotate: false
-  xy: 1286, 2060
+  xy: 1286, 3090
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shieldcrate
   rotate: false
-  xy: 1286, 2318
+  xy: 1286, 3348
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 crategold
   rotate: false
-  xy: 1286, 2576
+  xy: 1286, 3606
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 scan
   rotate: false
-  xy: 1286, 2834
+  xy: 1544, 1800
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 fuelback
   rotate: false
-  xy: 1286, 3092
+  xy: 1544, 2058
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 patterngold
   rotate: false
-  xy: 1286, 3350
+  xy: 1544, 2316
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 blackhole
   rotate: false
-  xy: 1286, 3608
+  xy: 1544, 2574
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 fuelv1
   rotate: false
-  xy: 1544, 1544
+  xy: 1544, 2832
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shabbygold
   rotate: false
-  xy: 1802, 1544
+  xy: 1544, 3090
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 pattern
   rotate: false
-  xy: 2060, 1544
+  xy: 1544, 3348
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shuttle
   rotate: false
-  xy: 2318, 1544
+  xy: 1544, 3606
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -325,37 +332,44 @@ joystick
   orig: 400, 250
   offset: 0, 0
   index: -1
-xpincircle
+glowcell
   rotate: false
   xy: 3850, 516
-  size: 184, 184
-  orig: 184, 184
+  size: 206, 206
+  orig: 206, 206
   offset: 0, 0
   index: -1
-pausebutton
+xpincircle
   rotate: false
   xy: 3482, 774
   size: 184, 184
   orig: 184, 184
   offset: 0, 0
   index: -1
-playbutton
+pausebutton
   rotate: false
   xy: 3668, 774
   size: 184, 184
   orig: 184, 184
   offset: 0, 0
   index: -1
-xpscale
+playbutton
   rotate: false
   xy: 3854, 774
   size: 184, 184
   orig: 184, 184
   offset: 0, 0
   index: -1
-xpoutcircle
+xpscale
   rotate: false
   xy: 2, 3850
+  size: 184, 184
+  orig: 184, 184
+  offset: 0, 0
+  index: -1
+xpoutcircle
+  rotate: false
+  xy: 188, 3850
   size: 184, 184
   orig: 184, 184
   offset: 0, 0
@@ -376,217 +390,245 @@ timerbackground
   index: -1
 timerbox
   rotate: false
-  xy: 188, 3850
+  xy: 374, 3850
   size: 110, 162
   orig: 110, 162
   offset: 0, 0
   index: -1
 militarybonusicon
   rotate: false
-  xy: 300, 3850
+  xy: 486, 3850
+  size: 148, 128
+  orig: 148, 128
+  offset: 0, 0
+  index: -1
+fullcircle
+  rotate: false
+  xy: 636, 3850
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
   index: -1
 mechanicbonusicon
   rotate: false
-  xy: 450, 3850
+  xy: 786, 3850
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
   index: -1
 scientistbonusicon
   rotate: false
-  xy: 600, 3850
+  xy: 1542, 1286
+  size: 148, 128
+  orig: 148, 128
+  offset: 0, 0
+  index: -1
+emptycircle
+  rotate: false
+  xy: 1692, 1286
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
   index: -1
 astronautbonusicon
   rotate: false
-  xy: 750, 3850
-  size: 148, 128
-  orig: 148, 128
-  offset: 0, 0
-  index: -1
-emptycirclev1
-  rotate: false
-  xy: 3850, 1028
+  xy: 1842, 1286
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
   index: -1
 medicbonusicon
   rotate: false
-  xy: 1028, 3866
-  size: 148, 128
-  orig: 148, 128
-  offset: 0, 0
-  index: -1
-fullcirclev1
-  rotate: false
-  xy: 3866, 1286
+  xy: 1992, 1286
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
   index: -1
 selectorout
   rotate: false
-  xy: 1286, 3866
+  xy: 2142, 1286
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 selectorright
   rotate: false
-  xy: 2576, 1544
+  xy: 2272, 1286
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 selectorin
   rotate: false
-  xy: 2706, 1544
+  xy: 2402, 1286
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 selectorscale
   rotate: false
-  xy: 2836, 1544
+  xy: 2532, 1286
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 selectorleft
   rotate: false
-  xy: 2966, 1544
+  xy: 2662, 1286
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-switchoff
+cellclick
   rotate: false
   xy: 3594, 388
+  size: 126, 126
+  orig: 126, 126
+  offset: 0, 0
+  index: -1
+cellselectupdown
+  rotate: false
+  xy: 3722, 388
+  size: 126, 126
+  orig: 126, 126
+  offset: 0, 0
+  index: -1
+cellselectcenter
+  rotate: false
+  xy: 3850, 388
+  size: 126, 126
+  orig: 126, 126
+  offset: 0, 0
+  index: -1
+switchoff
+  rotate: false
+  xy: 3978, 388
   size: 37, 103
   orig: 37, 103
   offset: 0, 0
   index: -1
 switchon
   rotate: false
-  xy: 3633, 388
+  xy: 4017, 388
   size: 37, 103
   orig: 37, 103
   offset: 0, 0
   index: -1
+glowupdown
+  rotate: false
+  xy: 786, 3980
+  size: 172, 98
+  orig: 172, 98
+  offset: 0, 0
+  index: -1
 spicon
   rotate: false
-  xy: 3672, 388
+  xy: 3850, 724
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 lpscale
   rotate: false
-  xy: 3672, 438
+  xy: 3854, 960
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpicon
   rotate: false
-  xy: 3850, 702
+  xy: 2824, 1286
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpscale
   rotate: false
-  xy: 3854, 960
+  xy: 2824, 1336
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 spscale
   rotate: false
-  xy: 3850, 1158
+  xy: 2824, 1386
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 lpin
   rotate: false
-  xy: 3850, 1208
+  xy: 2824, 1436
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpin
   rotate: false
-  xy: 3850, 1208
+  xy: 2824, 1436
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpicon
   rotate: false
-  xy: 3096, 1544
+  xy: 2824, 1486
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 spin
   rotate: false
-  xy: 3096, 1594
+  xy: 3082, 1286
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpin
   rotate: false
-  xy: 3096, 1594
+  xy: 3082, 1286
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 lpicon
   rotate: false
-  xy: 3096, 1644
+  xy: 3082, 1336
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 spout
   rotate: false
-  xy: 3096, 1694
+  xy: 3082, 1386
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpout
   rotate: false
-  xy: 3096, 1694
+  xy: 3082, 1386
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpscale
   rotate: false
-  xy: 3096, 1744
+  xy: 3082, 1436
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpout
   rotate: false
-  xy: 3336, 1544
+  xy: 3082, 1486
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 lpout
   rotate: false
-  xy: 3336, 1544
+  xy: 3082, 1486
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
@@ -600,7 +642,7 @@ rocket
   index: -1
 atrocketpoint
   rotate: false
-  xy: 3912, 388
+  xy: 4056, 388
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

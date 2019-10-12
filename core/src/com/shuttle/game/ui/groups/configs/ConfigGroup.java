@@ -92,6 +92,8 @@ public class ConfigGroup extends VerticalGroup {
     private Array<Music> musicArray;
     private BoomBox boomBox;
 
+    //todo:// No sound when line inactive
+    //todo: Если звук выключен, то при рестарте игры не правильно сделаны альфы. надо поправить.
     private ConfigGroup() {
         this.setName(GroupType.CONFIG.name());
         this.setVisible(false);
@@ -133,7 +135,7 @@ public class ConfigGroup extends VerticalGroup {
         scrollPane.setForceScroll(false, true);
         scrollPane.setScrollingDisabled(true, false);
         scrollPane.setFadeScrollBars(false);
-        scrollPane.setVariableSizeKnobs(false);
+        scrollPane.setVariableSizeKnobs(true);
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
         container.setHeight(Rules.WORLD_HEIGHT / 2);
         container.align(Align.top);

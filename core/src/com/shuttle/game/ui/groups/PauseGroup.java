@@ -17,6 +17,8 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.groups.configs.ConfigGroup;
+import com.shuttle.game.ui.groups.configs.LeftGroup;
+import com.shuttle.game.ui.groups.configs.RightGroup;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Restart;
 
@@ -32,6 +34,8 @@ public class PauseGroup extends Group {
     private final Button buttonRestart;
     private final ImageButton playPauseBtn;
     private final ConfigGroup configGroup;
+    private final LeftGroup leftGroup;
+    private final RightGroup rightGroup;
     private BoomBox boomBox;
     @Getter
     @Setter
@@ -63,7 +67,8 @@ public class PauseGroup extends Group {
         );
 
         this.configGroup = ConfigGroup.getInstance();
-        configGroup.setVisible(false);
+        this.leftGroup = LeftGroup.getInstance();
+        this.rightGroup = RightGroup.getInstance();
         this.buttonMenu = new Button(skin, "default");
         buttonMenu.setVisible(false);
         this.buttonRestart = new Button(skin, "default");
@@ -75,8 +80,8 @@ public class PauseGroup extends Group {
         buttonMenu.setSize(128f, 128f);
         buttonRestart.setSize(128f, 128f);
 
-        buttonRestart.setPosition(930, 22);
-        buttonMenu.setPosition(22, 22);
+        buttonRestart.setPosition(22, 22);
+        buttonMenu.setPosition(930, 22);
 
         buttonMenu.addListener(new ClickListener() {
             @Override
@@ -119,6 +124,8 @@ public class PauseGroup extends Group {
                     playPauseBtn.getStyle().imageUp = pause;
                 }
                 configGroup.setVisible(PauseGroup.this.pause);
+                leftGroup.setVisible(PauseGroup.this.pause);
+                rightGroup.setVisible(PauseGroup.this.pause);
                 buttonMenu.setVisible(PauseGroup.this.pause);
                 buttonRestart.setVisible(PauseGroup.this.pause);
                 boomBox.playSound(MSConstants.UI_PAUSE);
@@ -128,6 +135,8 @@ public class PauseGroup extends Group {
 
         this.addActor(playPauseBtn);
         this.addActor(configGroup);
+        this.addActor(leftGroup);
+        this.addActor(rightGroup);
         this.addActor(buttonMenu);
         this.addActor(buttonRestart);
     }
@@ -135,6 +144,8 @@ public class PauseGroup extends Group {
     public void setGameOver() {
         playPauseBtn.setVisible(false);
         configGroup.setVisible(false);
+        leftGroup.setVisible(false);
+        rightGroup.setVisible(false);
         buttonMenu.setVisible(true);
         buttonRestart.setVisible(true);
     }
