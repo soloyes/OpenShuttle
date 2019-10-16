@@ -1,5 +1,6 @@
 package com.shuttle.game.ui.groups.configs;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -12,7 +13,6 @@ import com.shuttle.game.utils.Assets;
  */
 public class ConfigImageButton extends ImageButton {
     private ImageButton imageButton;
-    private TextureRegion click;
     private TextureRegion glow;
 
     public ConfigImageButton(Drawable imageUp) {
@@ -20,7 +20,7 @@ public class ConfigImageButton extends ImageButton {
         this.imageButton = new ImageButton(imageUp);
         imageUp.setMinWidth(PaintConstants.LEFT_RIGHT_UI_EMPTY_BOX_WIDTH);
         imageUp.setMinHeight(PaintConstants.LEFT_RIGHT_UI_EMPTY_BOX_HEIGHT);
-        this.click = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_CLICK_CELL);
+
         this.glow = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_GLOW_CELL);
     }
 
@@ -30,9 +30,16 @@ public class ConfigImageButton extends ImageButton {
                 PaintConstants.LEFT_RIGHT_UI_CELL_WIDTH,
                 PaintConstants.LEFT_RIGHT_UI_CELL_HEIGHT
         );
-        super.draw(batch, parentAlpha);
+        float a = 0.5f;
         if (isPressed()) {
-            batch.draw(click, getX(), getY(), PaintConstants.LEFT_RIGHT_UI_CELL_WIDTH, PaintConstants.LEFT_RIGHT_UI_CELL_HEIGHT);
+            a = 1.0f;
         }
+        Color color = batch.getColor();
+        batch.setColor(color.r, color.g, color.b, a);
+        imageButton.getImage().getDrawable().draw(batch,
+                getX() + 26, getY() + 26,
+                PaintConstants.LEFT_RIGHT_UI_EMPTY_BOX_WIDTH, PaintConstants.LEFT_RIGHT_UI_EMPTY_BOX_HEIGHT
+        );
+        batch.setColor(color);
     }
 }

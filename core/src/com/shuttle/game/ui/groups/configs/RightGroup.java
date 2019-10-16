@@ -30,7 +30,7 @@ public class RightGroup extends AbstractInfoGroup {
 
     @Override
     protected void setPosition() {
-        scrollPane.setPosition(893, 477);
+        scrollPane.setPosition(894, 477);
         group.align(Align.right);
     }
 

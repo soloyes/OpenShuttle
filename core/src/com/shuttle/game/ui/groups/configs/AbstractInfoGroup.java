@@ -98,7 +98,6 @@ public abstract class AbstractInfoGroup extends Group {
         if (r < 0) {
             z = 0;
         }
-
         scrollPane.setScrollY(a1 + z * r * cellHeight);
     }
 }
