@@ -9,25 +9,16 @@ import com.shuttle.game.utils.Assets;
 
 public class UIRightPanel extends AbstractLatestPanel {
     private static UIRightPanel instance = new UIRightPanel();
-    private TextureRegion astronautBonus;
 
     private UIRightPanel() {
         this.circleTexture = new TextureRegion[2];
         this.circleTexture[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_FULL_CIRCLE);
         this.circleTexture[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_EMPTY_CIRCLE);
-        this.astronautBonus = Assets.getInstance().getAtlas().findRegion(PaintConstants.ASTRONAUT_BONUS_ICON);
         this.x = Rules.WORLD_WIDTH;
     }
 
     @Override
     public void basicRender(SpriteBatch batch, LabelTime lt) {
-        batch.draw(astronautBonus,
-                x, startPoint - lt.getY(),
-                cWidth / 2, cHeight / 2,
-                cWidth, cHeight,
-                lt.getScaleX(), lt.getScaleY(),
-                0.0f
-        );
         batch.draw(lt.getActTexture(),
                 x, startPoint - lt.getY(),
                 width / 2, height / 2,

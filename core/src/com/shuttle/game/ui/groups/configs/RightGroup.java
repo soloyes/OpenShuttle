@@ -1,7 +1,10 @@
 package com.shuttle.game.ui.groups.configs;
 
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.ui.groups.GroupType;
+import com.shuttle.game.utils.Assets;
 
 /**
  * @author Shuttle on 10/11/19.
@@ -11,11 +14,14 @@ public class RightGroup extends AbstractInfoGroup {
 
     public RightGroup() {
         this.setName(GroupType.RIGHT.name());
+        this.up = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_EMPTY_ASTRONAUT));
 
-        for (int i = 0; i < 5; i++) {
-            ConfigImageButton button = new ConfigImageButton(up);
-            table.row().width(cellWidth).height(cellHeight);
-            table.add(button);
+        ConfigImageButton button = new ConfigImageButton(up, false);
+        group.addActor(new Line(button, true));
+        buttonList.add(button);
+        for (int i = 1; i < N; i++) {
+            button = new ConfigImageButton(up, false);
+            group.addActor(new Line(button, false));
             buttonList.add(button);
         }
 

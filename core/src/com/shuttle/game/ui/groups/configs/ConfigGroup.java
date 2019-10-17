@@ -92,8 +92,9 @@ public class ConfigGroup extends VerticalGroup {
     private Array<Music> musicArray;
     private BoomBox boomBox;
 
-    //todo:// No sound when line inactive
+    //todo: No sound when line inactive
     //todo: Если звук выключен, то при рестарте игры не правильно сделаны альфы. надо поправить.
+    //todo: Во время игры надо галки выставить, что три пункта не работают, но в каких они режимах?
     private ConfigGroup() {
         this.setName(GroupType.CONFIG.name());
         this.setVisible(false);

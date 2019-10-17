@@ -31,6 +31,8 @@ import java.util.List;
  */
 //todo: gold loot sounds??
 //todo: рефакториг Sticker, и удалить level только в Corrosive (Results повлияет)
+//todo: Для золотых коробок надо увеличить объем добавленного лута. Это основное отличие, помимо того, что в детсвом режмипе
+//оно просто добавляется в инвентарь.
 public enum Sticker {
     //Crate
     BOOST {
@@ -44,18 +46,23 @@ public enum Sticker {
                         d * (float) Math.sin(Math.toRadians(Shuttle.angle))
                 );
             }
-            GameInfoSystem.setup(
-                    position.x, position.y,
-                    (isGolden ? "[GOLD]" : "[GREEN]") + GameInfoSystem.Preset.TURBO + "[]",
-                    (isGolden ? 7.0f : 3.0f),
-                    true
-            );
-            boomBox.playSound(MSConstants.GET_BOOST);
         }
 
         @Override
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
+            notify(consumable);
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.TURBO);
+            sound();
+        }
+
+        @Override
+        public void sound() {
+            boomBox.playSound(MSConstants.GET_BOOST);
         }
     },
     REPAIR {
@@ -64,18 +71,23 @@ public enum Sticker {
             if (!isGolden) {
                 standing.changeHP(Rules.CONSUMABLE_REPAIR_ADD);
             }
-            GameInfoSystem.setup(
-                    position.x, position.y,
-                    (isGolden ? "[GOLD]" : "[GREEN]") + GameInfoSystem.Preset.REPAIR + "[]",
-                    (isGolden ? 7.0f : 3.0f),
-                    true
-            );
-            boomBox.playSound(MSConstants.GET_REPAIR);
         }
 
         @Override
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
+            notify(consumable);
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.REPAIR);
+            sound();
+        }
+
+        @Override
+        public void sound() {
+            boomBox.playSound(MSConstants.GET_REPAIR);
         }
     },
     SHIELD {
@@ -95,24 +107,31 @@ public enum Sticker {
                     list.get(i).setShielded(true);
                 }
             }
-            GameInfoSystem.setup(
-                    position.x, position.y,
-                    (isGolden ? "[GOLD]" : "[GREEN]") + GameInfoSystem.Preset.SHIELD + "[]",
-                    (isGolden ? 7.0f : 3.0f),
-                    true
-            );
-            boomBox.playSound(MSConstants.GET_SHIELD);
         }
 
         @Override
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
+            notify(consumable);
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.SHIELD);
+            sound();
+        }
+
+        @Override
+        public void sound() {
+            boomBox.playSound(MSConstants.GET_SHIELD);
         }
     },
     TRASH {
+        int score;
+
         @Override
         public void consume(Vector2 position, boolean isGolden) {
-            int score = Rules.CONSUMABLE_TRASH_BASE_SCORE *
+            score = Rules.CONSUMABLE_TRASH_BASE_SCORE *
                     ((isGolden) ?
                             Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_FACTOR * MathUtils.random(
                                     Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MIN,
@@ -121,19 +140,29 @@ public enum Sticker {
                             Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MIN,
                             Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MAX)
                     );
-            GameInfoSystem.setup(
-                    position.x, position.y,
-                    "+" + score + (isGolden ? "[GOLD]" : "[GREEN]") + GameInfoSystem.Preset.TRASH + "[]",
-                    (isGolden ? 7.0f : 3.0f),
-                    true
-            );
             standing.changeScore(score);
-            boomBox.playSound(MSConstants.GET_TRASH);
         }
 
         @Override
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
+            notify(consumable);
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+            GameInfoSystem.setup(
+                    consumable.getPosition().x, consumable.getPosition().y,
+                    "+" + score + (consumable.isGolden() ? "[GOLD]" : "[GREEN]") + GameInfoSystem.Preset.TRASH + "[]",
+                    (consumable.isGolden() ? 7.0f : 3.0f),
+                    true
+            );
+            sound();
+        }
+
+        @Override
+        public void sound() {
+            boomBox.playSound(MSConstants.GET_TRASH);
         }
     },
     SPLASH {
@@ -151,18 +180,23 @@ public enum Sticker {
                     }
                 }
             }
-            GameInfoSystem.setup(
-                    position.x, position.y,
-                    (isGolden ? "[GOLD]" : "[GREEN]") + GameInfoSystem.Preset.SPLASH + "[]",
-                    (isGolden ? 7.0f : 3.0f),
-                    true
-            );
-            boomBox.playSound(MSConstants.GET_SPLASH);
         }
 
         @Override
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
+            notify(consumable);
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.SPLASH);
+            sound();
+        }
+
+        @Override
+        public void sound() {
+            boomBox.playSound(MSConstants.GET_SPLASH);
         }
     },
     SCAN {
@@ -182,56 +216,71 @@ public enum Sticker {
                     }
                 }
             }
-            GameInfoSystem.setup(
-                    position.x, position.y,
-                    (isGolden ? "[GOLD]" : "[GREEN]") + GameInfoSystem.Preset.SCAN + "[]",
-                    (isGolden ? 7.0f : 3.0f),
-                    true
-            );
-            boomBox.playSound(MSConstants.GET_SCANNER);
         }
 
         @Override
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
+            notify(consumable);
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.SCAN);
+            sound();
+        }
+
+        @Override
+        public void sound() {
+            boomBox.playSound(MSConstants.GET_SCANNER);
         }
     },
     //Storage
     LASER {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
-            GameInfoSystem.setup(
-                    position.x, position.y,
-                    "[GREEN]" + GameInfoSystem.Preset.LASER + "[]",
-                    7.0f,
-                    true
-            );
             Shuttle.isLaser = true;
             Standing.getInstance().setLaserChargeLevel(Standing.getInstance().getMaxLaserChargeLevel());
-            boomBox.playSound(MSConstants.GET_LASER);
         }
 
         @Override
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
+            notify(consumable);
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.LASER);
+            sound();
+        }
+
+        @Override
+        public void sound() {
+            boomBox.playSound(MSConstants.GET_LASER);
         }
     },
     RADAR {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
-            GameInfoSystem.setup(
-                    position.x, position.y,
-                    "[GREEN]" + GameInfoSystem.Preset.RADAR + "[]",
-                    7.0f,
-                    true
-            );
-            boomBox.playSound(MSConstants.GET_RADAR);
             Radar.isActive = true;
         }
 
         @Override
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
+            notify(consumable);
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.RADAR);
+            sound();
+        }
+
+        @Override
+        public void sound() {
+            boomBox.playSound(MSConstants.GET_RADAR);
         }
     },
     ROCKETS {
@@ -240,25 +289,30 @@ public enum Sticker {
             if (!isGolden) {
                 RocketLauncher.getInstance().launch();
             }
-            GameInfoSystem.setup(
-                    position.x, position.y,
-                    (isGolden ? "[GOLD]" : "[GREEN]") + GameInfoSystem.Preset.ROCKETS + "[]",
-                    (isGolden ? 7.0f : 3.0f),
-                    true
-            );
-            boomBox.playSound(MSConstants.GET_ROCKETS);
         }
 
         @Override
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
+            notify(consumable);
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.ROCKETS);
+            boomBox.playSound(MSConstants.GET_ROCKETS);
+        }
+
+        @Override
+        public void sound() {
         }
     },
     //Fuel
     FUEL {
+        float fuel;
+
         @Override
         public void consume(Vector2 position, boolean isGolden) {
-            float fuel;
             if (isGolden) {
                 fuel = Standing.getInstance().getMaxFuel();
             } else {
@@ -268,19 +322,25 @@ public enum Sticker {
                                 Rules.CONSUMABLE_FUEL_MAX_ADD
                         );
             }
-            GameInfoSystem.setup(
-                    position.x, position.y,
-                    GameInfoSystem.Preset.FUEL + (isGolden ? "[GOLD]" : "[GREEN]") + "+" + fuel + "[]",
-                    (isGolden ? 7.0f : 3.0f),
-                    true
-            );
             Standing.getInstance().changeFuel(fuel);
-            boomBox.playSound(MSConstants.GET_FUEL);
+
         }
 
         @Override
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
+            notify(consumable);
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.FUEL);
+            sound();
+        }
+
+        @Override
+        public void sound() {
+            boomBox.playSound(MSConstants.GET_FUEL);
         }
     },
     FUEL_UI {
@@ -293,6 +353,16 @@ public enum Sticker {
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
         }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+
+        }
+
+        @Override
+        public void sound() {
+
+        }
     },
     //Surprise
     PATTERN {
@@ -304,6 +374,16 @@ public enum Sticker {
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
         }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+
+        }
+
+        @Override
+        public void sound() {
+
+        }
     },
     PATTERN_GOLD {
         @Override
@@ -313,6 +393,16 @@ public enum Sticker {
         @Override
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+
+        }
+
+        @Override
+        public void sound() {
+
         }
     },
     SHABBY {
@@ -325,6 +415,16 @@ public enum Sticker {
         public void consume(AbstractConsumable consumable) {
             Sticker.consumeShabby(consumable);
         }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+
+        }
+
+        @Override
+        public void sound() {
+
+        }
     },
     SHABBY_GOLD {
         @Override
@@ -335,6 +435,16 @@ public enum Sticker {
         @Override
         public void consume(AbstractConsumable consumable) {
             Sticker.consumeShabby(consumable);
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+
+        }
+
+        @Override
+        public void sound() {
+
         }
     },
     //Astronaut
@@ -347,6 +457,16 @@ public enum Sticker {
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
         }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+
+        }
+
+        @Override
+        public void sound() {
+
+        }
     }, MECHANIC {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
@@ -356,6 +476,16 @@ public enum Sticker {
         @Override
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+
+        }
+
+        @Override
+        public void sound() {
+
         }
     }, MEDIC {
         @Override
@@ -367,6 +497,16 @@ public enum Sticker {
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
         }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+
+        }
+
+        @Override
+        public void sound() {
+
+        }
     }, MILITARY {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
@@ -376,6 +516,16 @@ public enum Sticker {
         @Override
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+
+        }
+
+        @Override
+        public void sound() {
+
         }
     }, SCIENTIST {
         @Override
@@ -387,13 +537,22 @@ public enum Sticker {
         public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
         }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+
+        }
+
+        @Override
+        public void sound() {
+
+        }
     };
     public static List<Sticker> SELECTABLE = Arrays.asList(BOOST, REPAIR, SHIELD, SPLASH, SCAN, ROCKETS);
     public static List<Sticker> ASTRONAUTS = Arrays.asList(REGULAR, MEDIC, MECHANIC, SCIENTIST, MILITARY);
     private static BoomBox boomBox;
     private static BoundCheck boundCheck;
     private static Standing standing;
-
     static {
         boomBox = new BoomBox();
         boundCheck = new BoundCheck();
@@ -403,6 +562,10 @@ public enum Sticker {
     public abstract void consume(Vector2 position, boolean isGolden);
 
     public abstract void consume(AbstractConsumable consumable);
+
+    public abstract void notify(AbstractConsumable consumable);
+
+    public abstract void sound();
 
     private static void consumeShabby(AbstractConsumable consumable) {
         if (MathUtils.random(0, 1) == 0) {
@@ -692,5 +855,14 @@ public enum Sticker {
                 }
                 break;
         }
+    }
+
+    private static void print(AbstractConsumable consumable, GameInfoSystem.Preset p) {
+        GameInfoSystem.setup(
+                consumable.getPosition().x, consumable.getPosition().y,
+                (consumable.isGolden() ? "[GOLD]" : "[GREEN]") + p + "[]",
+                (consumable.isGolden() ? 7.0f : 3.0f),
+                true
+        );
     }
 }

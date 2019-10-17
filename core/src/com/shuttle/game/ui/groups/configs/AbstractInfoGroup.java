@@ -1,5 +1,6 @@
 package com.shuttle.game.ui.groups.configs;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -22,13 +23,14 @@ public abstract class AbstractInfoGroup extends Group {
     protected final List<ConfigImageButton> buttonList;
     protected final ConfigScrollPane scrollPane;
     protected final Table table;
-    protected final TextureRegionDrawable up;
     protected final int cellWidth;
     protected final int cellHeight;
-    protected boolean barClicked;
+    protected final int delimiter = 24;
     protected final int N = 5;
-    private float d;
+    protected TextureRegionDrawable up;
+    protected boolean barClicked;
     protected int x;
+    private float d;
     private boolean touched;
 
     public AbstractInfoGroup() {
@@ -39,10 +41,9 @@ public abstract class AbstractInfoGroup extends Group {
         this.scrollPane = new ConfigScrollPane(group, skin);
         this.table = new Table();
         this.cellWidth = PaintConstants.LEFT_RIGHT_UI_CELL_WIDTH;
-        this.cellHeight = PaintConstants.LEFT_RIGHT_UI_CELL_HEIGHT;
-        this.up = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_EMPTY_BOX));
+        this.cellHeight = PaintConstants.LEFT_RIGHT_UI_CELL_HEIGHT + delimiter;
         float scrollPaneWidth = cellWidth + 44;
-        float scrollPainHeight = N * cellHeight;
+        float scrollPainHeight = N * cellHeight - delimiter;
 
         scrollPane.setSize(scrollPaneWidth, scrollPainHeight);
         scrollPane.setScrollbarsOnTop(false);
@@ -99,5 +100,16 @@ public abstract class AbstractInfoGroup extends Group {
             z = 0;
         }
         scrollPane.setScrollY(a1 + z * r * cellHeight);
+    }
+
+    public class Line extends Table {
+        public Line(Actor actor, boolean isTop) {
+            if (!isTop) {
+                this.row().height(delimiter);
+                this.add();
+            }
+            this.row().width(cellWidth).height(cellHeight - delimiter);
+            this.add(actor);
+        }
     }
 }

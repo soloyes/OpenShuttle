@@ -266,6 +266,8 @@ public final class Rules {
     public static int CONSUMABLE_CRATE_DANGER_PROBABILITY = 4;
     //5
     public static final int SELECTOR_MAX_COUNT = 5;
+    //2
+    public static final int SELECTOR_GOLDEN_COUNT = 2;
     //3
     public static final int SELECTOR_SHABBY_BASE_BONUS = 3;
     //1.0f

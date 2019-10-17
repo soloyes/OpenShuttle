@@ -2,7 +2,7 @@ package com.shuttle.game.ui.groups.selector;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.labelsticker.Sticker;
-import com.shuttle.game.utils.StickerToTexture;
+import com.shuttle.game.utils.StickerResolver;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,19 +18,19 @@ public class Selector {
     private TextureRegion textureRegion;
     @Getter
     private Sticker sticker;
-    private StickerToTexture stickerToTexture;
+    private StickerResolver stickerResolver;
 
     public Selector(Sticker sticker) {
         this.count = 1;
         this.textureRegion = new TextureRegion();
         this.sticker = Sticker.PATTERN;
-        this.stickerToTexture = new StickerToTexture();
+        this.stickerResolver = new StickerResolver();
         init(sticker);
     }
 
     private void init(Sticker sticker) {
         this.sticker = sticker;
-        this.textureRegion = stickerToTexture.getRegion(sticker);
+        this.textureRegion = stickerResolver.getRegion(sticker);
     }
 
     public void changeCount(int amount) {

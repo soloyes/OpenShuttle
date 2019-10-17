@@ -2,6 +2,7 @@ package com.shuttle.game.ui.groups.configs;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.ui.groups.GroupType;
@@ -17,15 +18,17 @@ public class LeftGroup extends AbstractInfoGroup {
     public LeftGroup() {
         this.setName(GroupType.LEFT.name());
         this.textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_GLOW_UPDOWN);
+        this.up = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_EMPTY_BOX));
 
-        for (int i = 0; i < 10; i++) {
-            ConfigImageButton button = new ConfigImageButton(up);
-            table.row().width(cellWidth).height(cellHeight);
-            table.add(button);
+        ConfigImageButton button = new ConfigImageButton(up, true);
+        group.addActor(new Line(button, true));
+        buttonList.add(button);
+        for (int i = 1; i < N+5; i++) {
+            button = new ConfigImageButton(up, true);
+            group.addActor(new Line(button, false));
             buttonList.add(button);
         }
 
-        group.addActor(table);
         this.addActor(scrollPane);
     }
 
@@ -36,10 +39,10 @@ public class LeftGroup extends AbstractInfoGroup {
             batch.draw(textureRegion, -2, 430);
         }
         if (x != 0 && buttonList.size() > N) {
-            batch.draw(textureRegion, -2, 1016,
+            batch.draw(textureRegion, -2, 1112,
                     PaintConstants.LEFT_RIGHT_UI_GLOW_UPDOWN_WIDTH / 2, PaintConstants.LEFT_RIGHT_UI_GLOW_UPDOWN_HEIGHT / 2,
                     PaintConstants.LEFT_RIGHT_UI_GLOW_UPDOWN_WIDTH, PaintConstants.LEFT_RIGHT_UI_GLOW_UPDOWN_HEIGHT,
-                    1.0f, 1.0f,  180
+                    1.0f, 1.0f, 180
             );
         }
     }

@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.utils.StickerToTexture;
+import com.shuttle.game.utils.StickerResolver;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,19 +31,19 @@ public class Label {
     @Setter
     private float d;
     private Vector2 offset;
-    private StickerToTexture stickerToTexture;
+    private StickerResolver stickerResolver;
 
     public Label() {
         this.textureRegion = new TextureRegion();
         this.color = new Color();
-        this.stickerToTexture = new StickerToTexture();
+        this.stickerResolver = new StickerResolver();
         setSticker(Sticker.PATTERN);
         this.offset = new Vector2();
     }
 
     public void setSticker(Sticker sticker) {
         this.sticker = sticker;
-        this.textureRegion = stickerToTexture.getRegion(sticker);
+        this.textureRegion = stickerResolver.getRegion(sticker);
     }
 
     public void render(SpriteBatch batch) {
