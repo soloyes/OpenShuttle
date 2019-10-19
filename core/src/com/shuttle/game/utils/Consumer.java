@@ -5,12 +5,14 @@ import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.ui.groups.configs.LeftGroup;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
 import com.shuttle.game.ui.panels.UILeftPanel;
 
 public class Consumer {
     public static void consume(Sticker sticker, AbstractConsumable consumable) {
 
+        //todo pattertn вроде тоже рисуется..
         if (sticker != Sticker.SHABBY && sticker != Sticker.SHABBY_GOLD) {
             addToUI(sticker, consumable);
         }
@@ -26,6 +28,7 @@ public class Consumer {
             if (Sticker.SELECTABLE.contains(sticker) && consumable.isGolden()) {
                 SelectorGroup.getInstance().addSelector(sticker, 1);
                 sticker.notify(consumable);
+                LeftGroup.getInstance().update(sticker);
             } else {
                 sticker.consume(consumable);
             }
@@ -37,6 +40,7 @@ public class Consumer {
                 }
                 SelectorGroup.getInstance().addSelector(sticker, amount);
                 sticker.notify(consumable);
+                LeftGroup.getInstance().update(sticker);
             } else {
                 sticker.consume(consumable);
             }

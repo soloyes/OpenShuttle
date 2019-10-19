@@ -19,6 +19,7 @@ import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.player.navigation.Radar;
 import com.shuttle.game.ui.GameInfoSystem;
+import com.shuttle.game.ui.groups.configs.RightGroup;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Consumer;
 import com.shuttle.game.utils.pool.AbstractPoolable;
@@ -451,6 +452,7 @@ public enum Sticker {
     REGULAR {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
+            RightGroup.getInstance().update(this);
         }
 
         @Override
@@ -470,7 +472,7 @@ public enum Sticker {
     }, MECHANIC {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
-
+            RightGroup.getInstance().update(this);
         }
 
         @Override
@@ -490,7 +492,7 @@ public enum Sticker {
     }, MEDIC {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
-
+            RightGroup.getInstance().update(this);
         }
 
         @Override
@@ -510,7 +512,7 @@ public enum Sticker {
     }, MILITARY {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
-
+            RightGroup.getInstance().update(this);
         }
 
         @Override
@@ -530,7 +532,7 @@ public enum Sticker {
     }, SCIENTIST {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
-
+            RightGroup.getInstance().update(this);
         }
 
         @Override
@@ -549,7 +551,7 @@ public enum Sticker {
         }
     };
     public static List<Sticker> SELECTABLE = Arrays.asList(BOOST, REPAIR, SHIELD, SPLASH, SCAN, ROCKETS);
-    public static List<Sticker> ASTRONAUTS = Arrays.asList(REGULAR, MEDIC, MECHANIC, SCIENTIST, MILITARY);
+    public static List<Sticker> ASTRONAUTS = Arrays.asList(REGULAR, MEDIC, SCIENTIST, MECHANIC, MILITARY);
     private static BoomBox boomBox;
     private static BoundCheck boundCheck;
     private static Standing standing;

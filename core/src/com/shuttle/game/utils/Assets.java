@@ -50,6 +50,7 @@ public class Assets {
             case GAME:
                 createStandardFont(32, "");
                 createStandardFont(32, "Coloured");
+                createStandardFont(36, "");
                 createStandardFont(48, "");
                 createStandardFont(64, "");
                 createStandardFont(64, "Coloured");

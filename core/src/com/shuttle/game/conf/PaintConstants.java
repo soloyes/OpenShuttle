@@ -195,9 +195,9 @@ public final class PaintConstants {
     public static final String LEFT_RIGHT_UI_ITEM_NEW_STAR = "itemnewstar";
     public static final int LEFT_RIGHT_UI_ITEM_NEW_WIDTH = 16;
     public static final int LEFT_RIGHT_UI_ITEM_NEW_HEIGHT = 16;
-    public static final String LEFT_RIGHT_UI_ITEM_TYPE_CIRCLE = "itemtypecircle";
-    public static final String LEFT_RIGHT_UI_ITEM_TYPE_TRIANGLE = "itemtypetriangle";
-    public static final String LEFT_RIGHT_UI_ITEM_TYPE_SQUARE = "itemtypesquare";
+    public static final String LEFT_RIGHT_UI_ITEM_TYPE_SELF = "itemtypeself";
+    public static final String LEFT_RIGHT_UI_ITEM_TYPE_ATTACK = "itemtypeattack";
+    public static final String LEFT_RIGHT_UI_ITEM_TYPE_PROTECTION = "itemtypeprotection";
     public static final int LEFT_RIGHT_UI_ITEM_TYPE_WIDTH = 16;
     public static final int LEFT_RIGHT_UI_ITEM_TYPE_HEIGHT = 16;
 
@@ -259,6 +259,7 @@ public final class PaintConstants {
 
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
     public static final String FONT32 = "fonts/CollegeRegular32.ttf";
+    public static final String FONT36 = "fonts/CollegeRegular36.ttf";
     public static final String FONT32_C = "fonts/CollegeRegular32Coloured.ttf";
     public static final String FONT48 = "fonts/CollegeRegular48.ttf";
     public static final String FONT64 = "fonts/CollegeRegular64.ttf";

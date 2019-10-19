@@ -682,21 +682,21 @@ itemnewstar
   orig: 16, 16
   offset: 0, 0
   index: -1
-itemtypetriangle
+consumabledot
   rotate: false
   xy: 4016, 364
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-consumabledot
+bubble16
   rotate: false
   xy: 4034, 364
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-bubble16
+itemtypeself
   rotate: false
   xy: 4052, 364
   size: 16, 16
@@ -717,7 +717,7 @@ itemnewcircle
   orig: 16, 16
   offset: 0, 0
   index: -1
-itemtypecircle
+itemtypeattack
   rotate: false
   xy: 3996, 493
   size: 16, 16

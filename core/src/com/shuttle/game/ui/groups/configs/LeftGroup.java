@@ -20,11 +20,11 @@ public class LeftGroup extends AbstractInfoGroup {
         this.textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_GLOW_UPDOWN);
         this.up = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_EMPTY_BOX));
 
-        ConfigImageButton button = new ConfigImageButton(up, true);
+        ConfigImageButton button = new ConfigImageButton(up, isLeft);
         group.addActor(new Line(button, true));
         buttonList.add(button);
-        for (int i = 1; i < N+5; i++) {
-            button = new ConfigImageButton(up, true);
+        for (int i = 1; i < N; i++) {
+            button = new ConfigImageButton(up, isLeft);
             group.addActor(new Line(button, false));
             buttonList.add(button);
         }
@@ -54,6 +54,7 @@ public class LeftGroup extends AbstractInfoGroup {
 
     @Override
     protected void setPosition() {
+        this.isLeft = true;
         scrollPane.setPosition(25, 477);
         group.align(Align.left);
     }

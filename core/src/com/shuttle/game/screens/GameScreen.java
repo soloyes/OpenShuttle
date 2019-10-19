@@ -46,6 +46,7 @@ import com.shuttle.game.effects.Ray;
 import com.shuttle.game.effects.Shake;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.effects.particle.ParticleEmitter;
+import com.shuttle.game.labelsticker.Label;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.player.navigation.Radar;
@@ -53,6 +54,7 @@ import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.Joystick;
 import com.shuttle.game.ui.PlayerPointer;
 import com.shuttle.game.ui.groups.PauseGroup;
+import com.shuttle.game.ui.groups.configs.RightGroup;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
 import com.shuttle.game.ui.groups.switches.SwitchGroup;
@@ -414,7 +416,6 @@ public class GameScreen extends BaseScreen {
             }
             ray.harvest(player, consumable, dt);
             anyAtHarvestPoint |= consumable.isAtRayPoint();
-
         }
 
         player.showTakeRangeField(dt, anyAtHarvestPoint);
@@ -654,6 +655,7 @@ public class GameScreen extends BaseScreen {
             Astronaut astronaut = (Astronaut) consumable;
             Standing.getInstance().changeAstronauts(astronaut.getProfession());
             UIRightPanel.getInstance().add(astronaut.getProfession());
+            RightGroup.getInstance().update(astronaut.getLabels().get(Label.Layer.LABEL).get(0).getSticker());
         }
         Standing.getInstance().addToStatistics(consumable.getType(), consumable.getLevel());
     }

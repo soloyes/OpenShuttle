@@ -9,10 +9,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.StickerResolver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Shuttle on 10/12/19.
@@ -21,6 +25,7 @@ public abstract class AbstractInfoGroup extends Group {
     protected final VerticalGroup group;
     protected final Skin skin;
     protected final List<ConfigImageButton> buttonList;
+    private final Map<Sticker, ConfigImageButton> buttonMap;
     protected final ConfigScrollPane scrollPane;
     protected final Table table;
     protected final int cellWidth;
@@ -28,16 +33,20 @@ public abstract class AbstractInfoGroup extends Group {
     protected final int delimiter = 24;
     protected final int N = 5;
     protected TextureRegionDrawable up;
+    protected StickerResolver stickerResolver;
     protected boolean barClicked;
     protected int x;
+    protected boolean isLeft;
     private float d;
     private boolean touched;
 
     public AbstractInfoGroup() {
         this.setVisible(false);
+        this.stickerResolver = new StickerResolver();
         this.skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.group = new VerticalGroup();
         this.buttonList = new ArrayList<ConfigImageButton>();
+        this.buttonMap = new HashMap<Sticker, ConfigImageButton>();
         this.scrollPane = new ConfigScrollPane(group, skin);
         this.table = new Table();
         this.cellWidth = PaintConstants.LEFT_RIGHT_UI_CELL_WIDTH;
@@ -100,6 +109,28 @@ public abstract class AbstractInfoGroup extends Group {
             z = 0;
         }
         scrollPane.setScrollY(a1 + z * r * cellHeight);
+    }
+
+    public void update(Sticker sticker) {
+        if (buttonMap.containsKey(sticker)) {
+            return;
+        }
+        int i;
+        for (i = 0; i < buttonList.size(); i++) {
+            ConfigImageButton button = buttonList.get(i);
+            if (button.isEmpty()) {
+                button.setupButton(stickerResolver.getRegion(sticker), stickerResolver.getOperation(sticker));
+                buttonMap.put(sticker, button);
+                break;
+            }
+        }
+        if (i == buttonList.size()) {
+            ConfigImageButton button = new ConfigImageButton(up, isLeft);
+            button.setupButton(stickerResolver.getRegion(sticker), stickerResolver.getOperation(sticker));
+            buttonMap.put(sticker, button);
+            buttonList.add(button);
+            group.addActor(new Line(button, false));
+        }
     }
 
     public class Line extends Table {

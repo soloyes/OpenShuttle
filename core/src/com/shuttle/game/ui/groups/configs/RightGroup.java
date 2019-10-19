@@ -16,11 +16,11 @@ public class RightGroup extends AbstractInfoGroup {
         this.setName(GroupType.RIGHT.name());
         this.up = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_EMPTY_ASTRONAUT));
 
-        ConfigImageButton button = new ConfigImageButton(up, false);
+        ConfigImageButton button = new ConfigImageButton(up, isLeft);
         group.addActor(new Line(button, true));
         buttonList.add(button);
         for (int i = 1; i < N; i++) {
-            button = new ConfigImageButton(up, false);
+            button = new ConfigImageButton(up, isLeft);
             group.addActor(new Line(button, false));
             buttonList.add(button);
         }
@@ -36,6 +36,7 @@ public class RightGroup extends AbstractInfoGroup {
 
     @Override
     protected void setPosition() {
+        this.isLeft = false;
         scrollPane.setPosition(894, 477);
         group.align(Align.right);
     }
