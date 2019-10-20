@@ -47,6 +47,7 @@ import com.shuttle.game.effects.Shake;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.labelsticker.Label;
+import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.player.navigation.Radar;
@@ -54,6 +55,7 @@ import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.Joystick;
 import com.shuttle.game.ui.PlayerPointer;
 import com.shuttle.game.ui.groups.PauseGroup;
+import com.shuttle.game.ui.groups.configs.ConfigImageButton;
 import com.shuttle.game.ui.groups.configs.RightGroup;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
@@ -653,9 +655,14 @@ public class GameScreen extends BaseScreen {
         player.takeEffect(consumable);
         if (consumable instanceof Astronaut) {
             Astronaut astronaut = (Astronaut) consumable;
-            Standing.getInstance().changeAstronauts(astronaut.getProfession());
-            UIRightPanel.getInstance().add(astronaut.getProfession());
-            RightGroup.getInstance().update(astronaut.getLabels().get(Label.Layer.LABEL).get(0).getSticker());
+            Sticker profession = astronaut.getProfession();
+            Standing.getInstance().changeAstronauts(profession);
+            UIRightPanel.getInstance().add(profession);
+            RightGroup.getInstance().updateScroll(astronaut.getLabels().get(Label.Layer.LABEL).get(0).getSticker());
+            ConfigImageButton button = RightGroup.getInstance().getButtonMap().get(profession);
+            if (button != null){
+                button.changeCount(1);
+            }
         }
         Standing.getInstance().addToStatistics(consumable.getType(), consumable.getLevel());
     }

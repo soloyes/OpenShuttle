@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.Getter;
+
 /**
  * @author Shuttle on 10/12/19.
  */
@@ -25,7 +27,6 @@ public abstract class AbstractInfoGroup extends Group {
     protected final VerticalGroup group;
     protected final Skin skin;
     protected final List<ConfigImageButton> buttonList;
-    private final Map<Sticker, ConfigImageButton> buttonMap;
     protected final ConfigScrollPane scrollPane;
     protected final Table table;
     protected final int cellWidth;
@@ -37,6 +38,8 @@ public abstract class AbstractInfoGroup extends Group {
     protected boolean barClicked;
     protected int x;
     protected boolean isLeft;
+    @Getter
+    protected final Map<Sticker, ConfigImageButton> buttonMap;
     private float d;
     private boolean touched;
 
@@ -111,7 +114,7 @@ public abstract class AbstractInfoGroup extends Group {
         scrollPane.setScrollY(a1 + z * r * cellHeight);
     }
 
-    public void update(Sticker sticker) {
+    public void updateScroll(Sticker sticker) {
         if (buttonMap.containsKey(sticker)) {
             return;
         }
@@ -121,6 +124,7 @@ public abstract class AbstractInfoGroup extends Group {
             if (button.isEmpty()) {
                 button.setupButton(stickerResolver.getRegion(sticker), stickerResolver.getOperation(sticker));
                 buttonMap.put(sticker, button);
+                //button.changeCount(1);
                 break;
             }
         }
@@ -129,6 +133,7 @@ public abstract class AbstractInfoGroup extends Group {
             button.setupButton(stickerResolver.getRegion(sticker), stickerResolver.getOperation(sticker));
             buttonMap.put(sticker, button);
             buttonList.add(button);
+            //button.changeCount(1);
             group.addActor(new Line(button, false));
         }
     }

@@ -15,6 +15,7 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.ui.groups.PauseGroup;
+import com.shuttle.game.ui.groups.configs.LeftGroup;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Consumer;
 import com.shuttle.game.utils.ShaderManager;
@@ -135,6 +136,7 @@ public class SelectorGroup extends Group {
     }
 
     public void addSelector(Sticker sticker, int amount) {
+        LeftGroup.getInstance().updateScroll(sticker);
         boolean present = false;
         int i;
         for (i = 0; i < selectors.size(); i++) {
@@ -149,7 +151,7 @@ public class SelectorGroup extends Group {
             }
         } else {
             Selector selector = new Selector(sticker);
-            selector.setCount(amount);
+            selector.changeCount(amount);
             selectors.add(selector);
         }
     }
@@ -270,7 +272,11 @@ public class SelectorGroup extends Group {
             }
         } else if (selectors.size() == 1) {
             centerSelector = selectors.get(0);
+        } else {
+            centerSelector = null;
         }
+
+        LeftGroup.getInstance().setCenter(centerSelector);
         press();
     }
 

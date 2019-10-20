@@ -11,6 +11,23 @@ public class Rounder {
     private static String minus = "-";
     private static String plus = "";
 
+    public static float convert(long n, long max) {
+        stringBuilder.setLength(0);
+        if (n >= max) {
+            return 2.0f;
+        } else if (n >= 0.8f * max) {
+            return 1.8f;
+        } else if (n >= 0.6f * max) {
+            return 1.6f;
+        } else if (n >= 0.4f * max) {
+            return 1.4f;
+        } else if (n >= 0.2f * max) {
+            return 1.2f;
+        } else {
+            return 1.0f;
+        }
+    }
+
     public static StringBuilder round(long n) {
         stringBuilder.setLength(0);
         boolean sign = true;

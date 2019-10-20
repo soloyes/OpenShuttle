@@ -178,9 +178,7 @@ public final class PaintConstants {
     public static final String LEFT_RIGHT_PANEL_EMPTY_CIRCLE = "emptycircle";
     public static final int LEFT_RIGHT_PANEL_CIRCLE_WIDTH = 148;
     public static final int LEFT_RIGHT_PANEL_CIRCLE_HEIGHT = 128;
-    public static final String LEFT_RIGHT_UI_CENTER_CELL = "cellselectcenter";
-    public static final String LEFT_RIGHT_UI_UPDOWN_CELL = "cellselectupdown";
-    public static final String LEFT_RIGHT_UI_CLICK_CELL = "cellclick";
+    public static final String LEFT_RIGHT_UI_CELL_CENTER = "cellcenter";
     public static final int LEFT_RIGHT_UI_CELL_WIDTH = 118;
     public static final int LEFT_RIGHT_UI_CELL_HEIGHT = 118;
     public static final String LEFT_RIGHT_UI_EMPTY_BOX = "emptybox";

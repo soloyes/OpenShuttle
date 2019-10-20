@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.ui.groups.GroupType;
+import com.shuttle.game.ui.groups.selector.Selector;
 import com.shuttle.game.utils.Assets;
 
 /**
@@ -68,5 +69,23 @@ public class LeftGroup extends AbstractInfoGroup {
             instance = new LeftGroup();
         }
         return instance;
+    }
+
+    public void setCenter(Selector selector) {
+        if (selector == null){
+            for (int i = 0; i < buttonList.size(); i++) {
+                ConfigImageButton b = buttonList.get(i);
+                b.setCenter(false);
+            }
+            return;
+        }
+        ConfigImageButton button = buttonMap.get(selector.getSticker());
+        if (button != null) {
+            for (int i = 0; i < buttonList.size(); i++) {
+                ConfigImageButton b = buttonList.get(i);
+                b.setCenter(false);
+            }
+            button.setCenter(true);
+        }
     }
 }
