@@ -19,7 +19,6 @@ import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.player.navigation.Radar;
 import com.shuttle.game.ui.GameInfoSystem;
-import com.shuttle.game.ui.groups.configs.RightGroup;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Consumer;
 import com.shuttle.game.utils.pool.AbstractPoolable;
@@ -452,7 +451,6 @@ public enum Sticker {
     REGULAR {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
-            RightGroup.getInstance().update(this);
         }
 
         @Override
@@ -471,7 +469,6 @@ public enum Sticker {
     }, MECHANIC {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
-            RightGroup.getInstance().update(this);
         }
 
         @Override
@@ -490,7 +487,6 @@ public enum Sticker {
     }, MEDIC {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
-            RightGroup.getInstance().update(this);
         }
 
         @Override
