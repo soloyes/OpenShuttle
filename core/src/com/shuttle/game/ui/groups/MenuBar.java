@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.shuttle.game.conf.GamePreferences;
@@ -34,8 +35,8 @@ public class MenuBar extends Group {
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.boomBox = new BoomBox();
         this.setName(GroupType.MENU_BAR.name());
-        this.buttonPlay = new Button(skin, "default");
-        this.buttonExit = new Button(skin, "default");
+        this.buttonPlay = new Button(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PLAY_BUTTON_MENU)));
+        this.buttonExit = new Button(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.EXIT_BUTTON_MENU)));
         this.buttonConfig = new Button(skin, "default");
         this.buttonResults = new Button(skin, "default");
         this.buttonShare = new Button(skin, "default");
@@ -43,17 +44,17 @@ public class MenuBar extends Group {
         this.buttonExit.setOrigin(Align.center);
         this.buttonConfig.setOrigin(Align.center);
         this.buttonResults.setOrigin(Align.center);
-        this.buttonPlay.setSize(128, 128);
-        this.buttonExit.setSize(128, 128);
-        this.buttonConfig.setSize(128, 128);
-        this.buttonResults.setSize(128, 128);
-        this.buttonShare.setSize(128, 128);
+        this.buttonPlay.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
+        this.buttonExit.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
+        this.buttonConfig.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
+        this.buttonResults.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
+        this.buttonShare.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
 
-        buttonPlay.setPosition(22, 22);
-        buttonResults.setPosition(249, 22);
-        buttonShare.setPosition(476, 22);
-        buttonConfig.setPosition(703, 22);
-        buttonExit.setPosition(930, 22);
+        buttonPlay.setPosition(24, 24);
+        buttonResults.setPosition(254, 24);
+        buttonShare.setPosition(484, 24);
+        buttonConfig.setPosition(714, 24);
+        buttonExit.setPosition(944, 24);
 
         buttonExit.addListener(new ClickListener() {
             @Override
