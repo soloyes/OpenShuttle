@@ -457,7 +457,6 @@ public enum Sticker {
 
         @Override
         public void consume(AbstractConsumable consumable) {
-            consume(consumable.getPosition(), consumable.isGolden());
         }
 
         @Override
@@ -477,7 +476,6 @@ public enum Sticker {
 
         @Override
         public void consume(AbstractConsumable consumable) {
-            consume(consumable.getPosition(), consumable.isGolden());
         }
 
         @Override
@@ -497,7 +495,6 @@ public enum Sticker {
 
         @Override
         public void consume(AbstractConsumable consumable) {
-            consume(consumable.getPosition(), consumable.isGolden());
         }
 
         @Override
@@ -512,12 +509,10 @@ public enum Sticker {
     }, MILITARY {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
-            RightGroup.getInstance().update(this);
         }
 
         @Override
         public void consume(AbstractConsumable consumable) {
-            consume(consumable.getPosition(), consumable.isGolden());
         }
 
         @Override
@@ -532,12 +527,10 @@ public enum Sticker {
     }, SCIENTIST {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
-            RightGroup.getInstance().update(this);
         }
 
         @Override
         public void consume(AbstractConsumable consumable) {
-            consume(consumable.getPosition(), consumable.isGolden());
         }
 
         @Override
