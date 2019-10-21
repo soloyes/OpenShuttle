@@ -31,8 +31,6 @@ import java.util.List;
  */
 //todo: gold loot sounds??
 //todo: рефакториг Sticker, и удалить level только в Corrosive (Results повлияет)
-//todo: Для золотых коробок надо увеличить объем добавленного лута. Это основное отличие, помимо того, что в детсвом режмипе
-//оно просто добавляется в инвентарь.
 public enum Sticker {
     //Crate
     BOOST {
