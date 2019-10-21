@@ -32,12 +32,17 @@ public class Assets {
     public void loadAssets(ScreenManager.ScreenType type) {
         switch (type) {
             case MENU:
-                createStandardFont(32, "");
-                createStandardFont(48, "");
-                createStandardFont(64, "");
-                createStandardFont(96, "");
-                createStandardFont(128, "");
-                createStandardFont(256, "");
+                createStandardFont(32, "fonts/college.regular", "");
+                createStandardFont(48, "fonts/college.regular", "");
+                createStandardFont(48, "fonts/college.regular", "");
+                createStandardFont(44, "fonts/college.regular", "");
+                createStandardFont(64, "fonts/college.regular", "");
+                createStandardFont(72, "fonts/college.regular", "");
+                createStandardFont(96, "fonts/college.regular", "");
+                createStandardFont(128, "fonts/college.regular", "");
+                createStandardFont(188, "fonts/college.regular", "");
+                createStandardFont(188, "fonts/college.regular", "");
+                createStandardFont(256, "fonts/college.regular", "");
                 assetManager.load(MSConstants.MENU_SONG, Music.class);
                 assetManager.load(MSConstants.BLACKHOLE_ROAR_MUSIC, Music.class);
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
@@ -48,17 +53,20 @@ public class Assets {
                 assetManager.load(MSConstants.UI_CLICK, Sound.class);
                 break;
             case GAME:
-                createStandardFont(32, "");
-                createStandardFont(32, "Coloured");
-                createStandardFont(36, "");
-                createStandardFont(48, "");
-                createStandardFont(64, "");
-                createStandardFont(64, "Coloured");
-                createStandardFont(60, "");
-                createStandardFont(60, "Coloured");
-                createStandardFont(96, "");
-                createStandardFont(128, "");
-                createStandardFont(256, "");
+                createStandardFont(32, "fonts/college.regular", "");
+                createStandardFont(32, "fonts/college.regular", "Coloured");
+                createStandardFont(36, "fonts/college.regular", "");
+                createStandardFont(44, "fonts/college.regular", "");
+                createStandardFont(48, "fonts/college.regular", "");
+                createStandardFont(48, "fonts/college.regular", "");
+                createStandardFont(64, "fonts/college.regular", "");
+                createStandardFont(64, "fonts/college.regular", "Coloured");
+                createStandardFont(60, "fonts/college.regular", "");
+                createStandardFont(60, "fonts/college.regular", "Coloured");
+                createStandardFont(96, "fonts/college.regular", "");
+                createStandardFont(128, "fonts/college.regular", "");
+                createStandardFont(188, "fonts/college.regular", "");
+                createStandardFont(256, "fonts/college.regular", "");
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
                 assetManager.load(MSConstants.MENU_SONG, Music.class);
                 assetManager.load(MSConstants.GAME_SONG, Music.class);
@@ -118,19 +126,19 @@ public class Assets {
             case TEST:
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
-                createStandardFont(32, "");
-                createStandardFont(64, "");
-                createStandardFont(96, "");
+                createStandardFont(32, "fonts/college.regular", "");
+                createStandardFont(64, "fonts/college.regular", "");
+                createStandardFont(96, "fonts/college.regular", "");
                 break;
         }
     }
 
-    private void createStandardFont(int size, String postfix) {
+    private void createStandardFont(int size, String font, String postfix) {
         FileHandleResolver resolver = new InternalFileHandleResolver();
         assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
         assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
         FreetypeFontLoader.FreeTypeFontLoaderParameter fontParameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
-        fontParameter.fontFileName = "fonts/CollegeRegular.ttf";
+        fontParameter.fontFileName = font + ".ttf";
         fontParameter.fontParameters.size = size;
         fontParameter.fontParameters.color = Color.valueOf("ffffffff");
         fontParameter.fontParameters.borderWidth = 1;
@@ -138,7 +146,7 @@ public class Assets {
         fontParameter.fontParameters.shadowOffsetX = 3;
         fontParameter.fontParameters.shadowOffsetY = 3;
         fontParameter.fontParameters.shadowColor = Color.valueOf("000000ff");
-        assetManager.load("fonts/CollegeRegular" + size + postfix + ".ttf", BitmapFont.class, fontParameter);
+        assetManager.load(font + size + postfix + ".ttf", BitmapFont.class, fontParameter);
     }
 
     public void makeLinks() {

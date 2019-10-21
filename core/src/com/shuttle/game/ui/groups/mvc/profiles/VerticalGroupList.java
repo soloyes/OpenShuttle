@@ -60,7 +60,7 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
         container.height(Rules.WORLD_HEIGHT / 4);
         container.width(Rules.WORLD_WIDTH / 2);
         container.align(Align.top);
-        this.setPosition(Rules.WORLD_WIDTH / 4, Rules.WORLD_HEIGHT / 4);
+        this.setPosition(Rules.WORLD_WIDTH / 4, 430);
         this.setWidth(Rules.WORLD_WIDTH / 2);
         this.setHeight(Rules.WORLD_HEIGHT / 4);
 

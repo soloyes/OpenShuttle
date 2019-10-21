@@ -222,7 +222,7 @@ com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 		font: font
       fontColor: black
       background: round-white
-      cursor: cursor
+      cursor: white
       selection: gray
 	}
 }
