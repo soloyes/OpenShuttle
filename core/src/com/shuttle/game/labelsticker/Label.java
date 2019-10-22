@@ -80,9 +80,7 @@ public class Label {
             color.a = PaintConstants.LABEL_ALPHA;
         }
     }
-
-    //todo: make easier: not stronaut.getLabels().get(Label.Layer.LABEL).get(0).getSticker()
-    //but astronaut.getSticker(Layer layer, int pos)
+    
     public enum Layer {
         BACK, LABEL, HIDDEN
     }
