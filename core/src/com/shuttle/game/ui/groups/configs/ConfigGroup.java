@@ -98,9 +98,9 @@ public class ConfigGroup extends VerticalGroup {
         this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
         this.font96 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
         this.skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        this.setPosition(178, 477);
-        this.setWidth(724);
-        this.setHeight(Rules.WORLD_HEIGHT / 2);
+        this.setPosition(PaintConstants.UI_SETTINGS_X, PaintConstants.UI_SETTINGS_Y);
+        this.setWidth(PaintConstants.UI_SETTINGS_WIDTH);
+        this.setHeight(PaintConstants.UI_SETTINGS_HEIGHT);
         this.boomBox = new BoomBox();
 
         initStyles();
@@ -135,7 +135,7 @@ public class ConfigGroup extends VerticalGroup {
         scrollPane.setFadeScrollBars(false);
         scrollPane.setVariableSizeKnobs(true);
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
-        container.setHeight(Rules.WORLD_HEIGHT / 2);
+        container.setHeight(PaintConstants.UI_SETTINGS_HEIGHT);
         container.align(Align.top);
 
         screenType = ScreenManager.getInstance().getCurrentScreen();

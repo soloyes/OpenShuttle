@@ -44,7 +44,7 @@ public class ConfigImageButton extends ImageButton {
     private boolean empty = true;
     private boolean justNew = true;
     private int count;
-    //todo: depends from game level. Need to cange here
+    //todo: depends from game level. Need to change here
     private int maxCount = 10;
     private StringBuilder stringBuilder;
 

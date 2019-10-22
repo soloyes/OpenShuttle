@@ -80,7 +80,7 @@ public class Label {
             color.a = PaintConstants.LABEL_ALPHA;
         }
     }
-    
+
     public enum Layer {
         BACK, LABEL, HIDDEN
     }
