@@ -92,8 +92,6 @@ public class ConfigGroup extends VerticalGroup {
     private Array<Music> musicArray;
     private BoomBox boomBox;
 
-    //todo: Если звук выключен, то при рестарте игры не правильно сделаны альфы. надо поправить.
-    //todo: Во время игры надо галки выставить, что три пункта не работают, но в каких они режимах?
     private ConfigGroup() {
         this.setName(GroupType.CONFIG.name());
         this.setVisible(false);
@@ -713,13 +711,14 @@ public class ConfigGroup extends VerticalGroup {
     }
 
     public void refresh() {
-        refreshSoundLine();
         musicLine.setActive(GamePreferences.isMusicEnabled());
         musicSlider.setValue(GamePreferences.getMusicVolume());
         refreshMusicLine();
         effectsLine.setActive(GamePreferences.isEffectsEnabled());
         effectsSlider.setValue(GamePreferences.getEffectsVolume());
         refreshEffectsLine();
+        soundSlider.setValue(GamePreferences.getSoundVolume());
+        refreshSoundLine();
         shaderLine.setActive(GamePreferences.isShaderEnabled() && screenType == ScreenManager.ScreenType.MENU);
         refreshShaderLine();
         childLine.setActive(GamePreferences.isChildEnabled() && screenType == ScreenManager.ScreenType.MENU);
@@ -759,43 +758,46 @@ public class ConfigGroup extends VerticalGroup {
         return soundGroup;
     }
 
-    private void refreshSoundLine() {
-        soundLine.setActive(GamePreferences.isEffectsEnabled() || GamePreferences.isMusicEnabled());
-        soundSlider.setValue(GamePreferences.getSoundVolume());
-        soundCheckBox.setChecked(soundLine.isActive());
-    }
-
-    private void refreshOverallSound(){
-        musicLine.setActive(soundLine.isActive());
-        musicLine.setSlave(!soundLine.isActive());
-        musicCheckBox.setChecked(soundLine.isActive());
-        effectsLine.setActive(soundLine.isActive());
-        effectsLine.setSlave(!soundLine.isActive());
-        effectsCheckBox.setChecked(soundLine.isActive());
-
-        soundSlider.setDisabled(!soundLine.isActive());
-        musicSlider.setDisabled(!soundLine.isActive());
-        effectsSlider.setDisabled(!soundLine.isActive());
-        soundLine.setMuted(soundSlider.getValue() == 0.0f);
-    }
-
     private void refreshMusicLine() {
         musicSlider.setDisabled(!musicLine.isActive());
         musicCheckBox.setChecked(musicLine.isActive());
         musicLine.setMuted(musicSlider.getValue() == 0.0f);
+        if (!GamePreferences.isMusicEnabled() && !GamePreferences.isEffectsEnabled()) {
+            musicLine.setSlave(true);
+        }
+        soundLine.setMuted(!GamePreferences.isEffectsEnabled() && !GamePreferences.isMusicEnabled());
     }
 
     private void refreshEffectsLine() {
         effectsSlider.setDisabled(!effectsLine.isActive());
         effectsCheckBox.setChecked(effectsLine.isActive());
         effectsLine.setMuted(effectsSlider.getValue() == 0.0f);
+        if (!GamePreferences.isMusicEnabled() && !GamePreferences.isEffectsEnabled()) {
+            effectsLine.setSlave(true);
+        }
+        soundLine.setMuted(!GamePreferences.isEffectsEnabled() && !GamePreferences.isMusicEnabled());
+    }
+
+    private void refreshSoundLine() {
+        soundSlider.setDisabled(!soundLine.isActive());
+        soundLine.setActive(GamePreferences.isEffectsEnabled() || GamePreferences.isMusicEnabled());
+        soundCheckBox.setChecked(soundLine.isActive());
+        if (GamePreferences.isEffectsEnabled() || GamePreferences.isMusicEnabled()) {
+            soundLine.setMuted(false);
+        } else {
+            soundLine.setMuted(true);
+        }
+        if (soundSlider.getValue() == 0) {
+            soundLine.setMuted(true);
+        }
     }
 
     private void refreshShaderLine() {
         if (screenType == ScreenManager.ScreenType.MENU) {
             shaderCheckBox.setChecked(shaderLine.isActive());
         } else {
-            shaderCheckBox.setChecked(false);
+            shaderCheckBox.setChecked(GamePreferences.isShaderEnabled());
+            shaderLine.setSlave(true);
         }
     }
 
@@ -803,21 +805,22 @@ public class ConfigGroup extends VerticalGroup {
         if (screenType == ScreenManager.ScreenType.MENU) {
             childCheckBox.setChecked(childLine.isActive());
         } else {
-            childCheckBox.setChecked(false);
+            childCheckBox.setChecked(GamePreferences.isChildEnabled());
+            childLine.setSlave(true);
         }
     }
 
     private void refreshLevelLine() {
         if (screenType == ScreenManager.ScreenType.MENU) {
             levelLine.setActive(true);
-            levelCheckBox.setChecked(true);
             level = level % (Rules.StartLevel.values().length);
-            levelLabel.setText("LEVEL " + level + " (" + Rules.StartLevel.values()[level].name() + ")");
             GamePreferences.setLevel(level);
         } else {
             levelLine.setActive(false);
-            levelCheckBox.setChecked(false);
+            levelLine.setSlave(true);
         }
+        levelCheckBox.setChecked(true);
+        levelLabel.setText("LEVEL " + level + " (" + Rules.StartLevel.values()[level].name() + ")");
     }
 
     private void refreshVibrationLine() {
@@ -911,6 +914,20 @@ public class ConfigGroup extends VerticalGroup {
         a = 1.0f;
     }
 
+    private void refreshOverallSound() {
+        musicLine.setActive(soundLine.isActive());
+        musicLine.setSlave(!soundLine.isActive());
+        musicCheckBox.setChecked(soundLine.isActive());
+        effectsLine.setActive(soundLine.isActive());
+        effectsLine.setSlave(!soundLine.isActive());
+        effectsCheckBox.setChecked(soundLine.isActive());
+
+        soundSlider.setDisabled(!soundLine.isActive());
+        musicSlider.setDisabled(!soundLine.isActive());
+        effectsSlider.setDisabled(!soundLine.isActive());
+        soundLine.setMuted(soundSlider.getValue() == 0.0f);
+    }
+
     public void dispose() {
         instance = null;
     }
@@ -950,7 +967,6 @@ public class ConfigGroup extends VerticalGroup {
         private Line(Actor leftActor, Actor centerActor, Actor rightActor) {
             this.table = new Table();
             table.row().padBottom(22);
-            //todo: to PaintCost
             table.add(leftActor).width(44).padRight(44).padLeft(44);
             table.add(centerActor).expandX();
 

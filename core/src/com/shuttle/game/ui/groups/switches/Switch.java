@@ -6,8 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.utils.Assets;
 
@@ -16,7 +18,6 @@ import lombok.Getter;
 /**
  * @author Shuttle on 3/30/19.
  */
-//todo:// sound here
 public class Switch extends ImageButton {
     private TextureRegionDrawable onRegion;
     private TextureRegionDrawable offRegion;
@@ -24,9 +25,11 @@ public class Switch extends ImageButton {
     private boolean on;
     private float width;
     private float height;
+    private BoomBox boomBox;
 
     public Switch(TextureRegionDrawable drawable, boolean isLeft) {
         super(drawable);
+        this.boomBox = new BoomBox();
         this.onRegion = drawable;
         this.offRegion = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.SWITCH_OFF));
         this.width = PaintConstants.SWITCH_WIDTH;
@@ -50,6 +53,7 @@ public class Switch extends ImageButton {
                         getStyle().imageUp = offRegion;
                         on = true;
                     }
+                    boomBox.playSound(MSConstants.UI_SWITCH);
                 }
             }
         });

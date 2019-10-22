@@ -81,6 +81,7 @@ public class Assets {
                 assetManager.load(MSConstants.LASER, Music.class);
                 assetManager.load(MSConstants.UI_MENU, Sound.class);
                 assetManager.load(MSConstants.UI_PAUSE, Sound.class);
+                assetManager.load(MSConstants.UI_SWITCH, Sound.class);
                 assetManager.load(MSConstants.UI_CLICK, Sound.class);
                 assetManager.load(MSConstants.DESTROY_CORROSIVE_ANOMALY, Sound.class);
                 assetManager.load(MSConstants.DESTROY_MAGNETIC_ANOMALY, Sound.class);

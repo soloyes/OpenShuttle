@@ -111,7 +111,6 @@ public class PauseGroup extends Group {
             }
         });
 
-        //todo: add sound here
         playPauseBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -128,8 +127,8 @@ public class PauseGroup extends Group {
                 rightGroup.setVisible(PauseGroup.this.pause);
                 buttonMenu.setVisible(PauseGroup.this.pause);
                 buttonRestart.setVisible(PauseGroup.this.pause);
-                boomBox.playSound(MSConstants.UI_PAUSE);
                 boomBox.stopAllSound();
+                boomBox.playSound(MSConstants.UI_PAUSE);
             }
         });
 

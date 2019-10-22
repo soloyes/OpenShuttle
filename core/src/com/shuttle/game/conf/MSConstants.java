@@ -26,6 +26,7 @@ public final class MSConstants {
     public static final String UI_CLICK = UI + "ui_click.ogg";
     public static final String UI_MENU = UI + "ui_menu_button.ogg";
     public static final String UI_PAUSE = UI + "ui_pause_button.ogg";
+    public static final String UI_SWITCH = UI + "ui_switch_button.ogg";
 
     public static final String GET_RADAR = GAME + "get_radar.ogg";
     public static final String GET_ROCKETS = GAME + "get_rockets.ogg";
