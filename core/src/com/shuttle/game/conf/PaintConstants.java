@@ -345,7 +345,7 @@ public final class PaintConstants {
     public static final String UI_JOYSTICK_DISABLE = "JOYSTICK DISABLED";
     public static final String UI_JOYSTICK_HOLD = "SWITCHING JOYSTICK";
 
-    public static final float UI_SETTINGS_WIDTH = 724;
+    public static final float UI_SETTINGS_WIDTH = 720;
     public static final float UI_SETTINGS_HEIGHT = Rules.WORLD_HEIGHT / 2;
     public static final float UI_SETTINGS_X = 178;
     public static final float UI_SETTINGS_Y = 477;
