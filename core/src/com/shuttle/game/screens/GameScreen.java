@@ -277,7 +277,7 @@ public class GameScreen extends BaseScreen {
 
         Color tmpColor = batch.getColor();
         if (Rules.GAME_OVER) {
-            boomBox.stopAllMusicAndPlayThis(MSConstants.MENU_SONG);
+            boomBox.stopAllMusicAndPlayThis(MSConstants.GAME_OVER);
             PauseGroup.getInstance().setGameOver();
             fadeInAlpha += dt / 2;
             if (fadeInAlpha >= 1.0f)

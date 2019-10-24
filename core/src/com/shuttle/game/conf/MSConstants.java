@@ -73,6 +73,7 @@ public final class MSConstants {
     //SONG/MUSIC
     public static final String MENU_SONG = SONG_FOLDER + "menu.ogg";
     public static final String GAME_SONG = SONG_FOLDER + "game.ogg";
+    public static final String GAME_OVER = SONG_FOLDER + "gameover.ogg";
     //
 
     //MUSIC EFFECT

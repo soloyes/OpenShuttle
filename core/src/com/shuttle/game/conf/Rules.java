@@ -288,6 +288,8 @@ public final class Rules {
         BLACKHOLE_ROAR_RANGE = n * BLACKHOLE_ROAR_FACTOR;
     }
 
+    //todo: Когда GameOver, то твари все равно нападают. + скорость шаттла большая, надо сделать мелкую
+    // Двигатель но не работает
     public enum StartLevel {
         LOW {
             @Override

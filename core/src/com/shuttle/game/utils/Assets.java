@@ -70,6 +70,7 @@ public class Assets {
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
                 assetManager.load(MSConstants.MENU_SONG, Music.class);
                 assetManager.load(MSConstants.GAME_SONG, Music.class);
+                assetManager.load(MSConstants.GAME_OVER, Music.class);
                 assetManager.load(MSConstants.BLACKHOLE_ROAR_MUSIC, Music.class);
                 assetManager.load(MSConstants.RADAR_WHITE_NOISE_MUSIC, Music.class);
                 assetManager.load(MSConstants.HUM_MUSIC_EFFECT_1, Music.class);
