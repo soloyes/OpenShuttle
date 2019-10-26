@@ -131,7 +131,7 @@ public final class Rules {
     public static final int ANOMALIES_CORROSIVE_AFRAID_FACTOR = 2;
     //ASTEROID
     //4.0f
-    public static final float ASTEROID_METAL_RESPAWN_TIME = 1.0f;
+    public static final float ASTEROID_METAL_RESPAWN_TIME = 4.0f;
     //50
     public static final int ASTEROID_METAL_MAX_COUNT = 50;
     //4.0f
@@ -155,8 +155,8 @@ public final class Rules {
     public static final float PLAYER_ENGINE_POWER = 700.0f;
     //1200.0f
     public static final float PLAYER_TURBO_THRESHOLD_VELOCITY = 1200.0f;
-    //5.0f
-    public static final float PLAYER_MAX_POWER = 5.0f;
+    //4.0f
+    private static final float PLAYER_MAX_POWER = 4.0f;
     //5.0f
     public static final float PLAYER_TIMER_HP_OUT_OF_MAP = 5.0f;
     //5
@@ -266,6 +266,8 @@ public final class Rules {
     public static int CONSUMABLE_CRATE_DANGER_PROBABILITY = 4;
     //5
     public static final int SELECTOR_MAX_COUNT = 5;
+    //2
+    public static final int SELECTOR_GOLDEN_COUNT = 2;
     //3
     public static final int SELECTOR_SHABBY_BASE_BONUS = 3;
     //1.0f
@@ -286,6 +288,8 @@ public final class Rules {
         BLACKHOLE_ROAR_RANGE = n * BLACKHOLE_ROAR_FACTOR;
     }
 
+    //todo: Когда GameOver, то твари все равно нападают. + скорость шаттла большая, надо сделать мелкую
+    // Двигатель но не работает
     public enum StartLevel {
         LOW {
             @Override

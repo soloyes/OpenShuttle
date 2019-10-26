@@ -1,4 +1,4 @@
-package com.shuttle.game.ui.groups;
+package com.shuttle.game.ui.groups.configs;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -30,6 +30,7 @@ import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.Joystick;
+import com.shuttle.game.ui.groups.GroupType;
 import com.shuttle.game.utils.Assets;
 
 import lombok.Getter;
@@ -97,9 +98,9 @@ public class ConfigGroup extends VerticalGroup {
         this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
         this.font96 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
         this.skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        this.setPosition(Rules.WORLD_WIDTH / 8, Rules.WORLD_HEIGHT / 4);
-        this.setWidth(3 * Rules.WORLD_WIDTH / 4);
-        this.setHeight(Rules.WORLD_HEIGHT / 2);
+        this.setPosition(PaintConstants.UI_SETTINGS_X, PaintConstants.UI_SETTINGS_Y);
+        this.setWidth(PaintConstants.UI_SETTINGS_WIDTH);
+        this.setHeight(PaintConstants.UI_SETTINGS_HEIGHT);
         this.boomBox = new BoomBox();
 
         initStyles();
@@ -114,7 +115,7 @@ public class ConfigGroup extends VerticalGroup {
         joystickTable.add(joystick)
                 .height(PaintConstants.JOYSTICK_HEIGHT);
 
-        innerTable.add(joyStickModeSlider).width(250).height(100);
+        innerTable.add(joyStickModeSlider).width(220).height(100);
         innerTable.row();
         innerTable.add(joyStickColorCheckBox).left();
 
@@ -132,9 +133,9 @@ public class ConfigGroup extends VerticalGroup {
         scrollPane.setForceScroll(false, true);
         scrollPane.setScrollingDisabled(true, false);
         scrollPane.setFadeScrollBars(false);
-        scrollPane.setVariableSizeKnobs(false);
+        scrollPane.setVariableSizeKnobs(true);
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
-        container.setHeight(Rules.WORLD_HEIGHT / 2);
+        container.setHeight(PaintConstants.UI_SETTINGS_HEIGHT);
         container.align(Align.top);
 
         screenType = ScreenManager.getInstance().getCurrentScreen();
@@ -671,32 +672,32 @@ public class ConfigGroup extends VerticalGroup {
         effectsLine.setHoldMessage(PaintConstants.UI_EFFECTS_HOLD);
         effectsLine.setEnabledMessage(PaintConstants.UI_EFFECTS_ENABLE);
         effectsLine.setDisabledMessage(PaintConstants.UI_EFFECTS_DISABLE);
-        Group shaderGroup = makeGroup(shaderLabel, 682, 68);
+        Group shaderGroup = makeGroup(shaderLabel, 652, 68);
         shaderLine = new Line(shaderCheckBox, shaderGroup, null);
         shaderLine.setNoticeMessage(PaintConstants.UI_SHADERS_NOTICE);
         shaderLine.setHoldMessage(PaintConstants.UI_SHADERS_HOLD);
         shaderLine.setEnabledMessage(PaintConstants.UI_SHADERS_ENABLE);
         shaderLine.setDisabledMessage(PaintConstants.UI_SHADERS_DISABLE);
-        Group childGroup = makeGroup(childLabel, 682, 68);
+        Group childGroup = makeGroup(childLabel, 652, 68);
         childLine = new Line(childCheckBox, childGroup, null);
         childLine.setNoticeMessage(PaintConstants.UI_CHILD_NOTICE);
         childLine.setHoldMessage(PaintConstants.UI_CHILD_HOLD);
         childLine.setEnabledMessage(PaintConstants.UI_CHILD_ENABLE);
         childLine.setDisabledMessage(PaintConstants.UI_CHILD_DISABLE);
-        Group levelGroup = makeGroup(levelLabel, 682, 68);
+        Group levelGroup = makeGroup(levelLabel, 652, 68);
         levelLine = new Line(levelCheckBox, levelGroup, null);
         levelLine.setActive(true);
         levelLine.setNoticeMessage(PaintConstants.UI_LEVEL_NOTICE);
         levelLine.setHoldMessage(PaintConstants.UI_LEVEL_HOLD);
         levelLine.setEnabledMessage(PaintConstants.UI_LEVEL_ENABLE);
         levelLine.setDisabledMessage(PaintConstants.UI_LEVEL_DISABLE);
-        Group vibrationGroup = makeGroup(vibrationLabel, 682, 68);
+        Group vibrationGroup = makeGroup(vibrationLabel, 652, 68);
         vibrationLine = new Line(vibrationCheckBox, vibrationGroup, null);
         vibrationLine.setNoticeMessage(PaintConstants.UI_VIBRATION_NOTICE);
         vibrationLine.setHoldMessage(PaintConstants.UI_VIBRATION_HOLD);
         vibrationLine.setEnabledMessage(PaintConstants.UI_VIBRATION_ENABLE);
         vibrationLine.setDisabledMessage(PaintConstants.UI_VIBRATION_DISABLE);
-        Group joystickGroup = makeGroup(joyStickLabel, 682, 68);
+        Group joystickGroup = makeGroup(joyStickLabel, 652, 68);
         joystickLine = new Line(joyStickCheckBox, joystickGroup, null);
         joystickLine.setNoticeMessage(PaintConstants.UI_JOYSTICK_NOTICE);
         joystickLine.setHoldMessage(PaintConstants.UI_JOYSTICK_HOLD);
@@ -710,13 +711,14 @@ public class ConfigGroup extends VerticalGroup {
     }
 
     public void refresh() {
-        refreshSoundLine();
         musicLine.setActive(GamePreferences.isMusicEnabled());
         musicSlider.setValue(GamePreferences.getMusicVolume());
         refreshMusicLine();
         effectsLine.setActive(GamePreferences.isEffectsEnabled());
         effectsSlider.setValue(GamePreferences.getEffectsVolume());
         refreshEffectsLine();
+        soundSlider.setValue(GamePreferences.getSoundVolume());
+        refreshSoundLine();
         shaderLine.setActive(GamePreferences.isShaderEnabled() && screenType == ScreenManager.ScreenType.MENU);
         refreshShaderLine();
         childLine.setActive(GamePreferences.isChildEnabled() && screenType == ScreenManager.ScreenType.MENU);
@@ -756,43 +758,46 @@ public class ConfigGroup extends VerticalGroup {
         return soundGroup;
     }
 
-    private void refreshSoundLine() {
-        soundLine.setActive(GamePreferences.isEffectsEnabled() || GamePreferences.isMusicEnabled());
-        soundSlider.setValue(GamePreferences.getSoundVolume());
-        soundCheckBox.setChecked(soundLine.isActive());
-    }
-
-    private void refreshOverallSound(){
-        musicLine.setActive(soundLine.isActive());
-        musicLine.setSlave(!soundLine.isActive());
-        musicCheckBox.setChecked(soundLine.isActive());
-        effectsLine.setActive(soundLine.isActive());
-        effectsLine.setSlave(!soundLine.isActive());
-        effectsCheckBox.setChecked(soundLine.isActive());
-
-        soundSlider.setDisabled(!soundLine.isActive());
-        musicSlider.setDisabled(!soundLine.isActive());
-        effectsSlider.setDisabled(!soundLine.isActive());
-        soundLine.setMuted(soundSlider.getValue() == 0.0f);
-    }
-
     private void refreshMusicLine() {
         musicSlider.setDisabled(!musicLine.isActive());
         musicCheckBox.setChecked(musicLine.isActive());
         musicLine.setMuted(musicSlider.getValue() == 0.0f);
+        if (!GamePreferences.isMusicEnabled() && !GamePreferences.isEffectsEnabled()) {
+            musicLine.setSlave(true);
+        }
+        soundLine.setMuted(!GamePreferences.isEffectsEnabled() && !GamePreferences.isMusicEnabled());
     }
 
     private void refreshEffectsLine() {
         effectsSlider.setDisabled(!effectsLine.isActive());
         effectsCheckBox.setChecked(effectsLine.isActive());
         effectsLine.setMuted(effectsSlider.getValue() == 0.0f);
+        if (!GamePreferences.isMusicEnabled() && !GamePreferences.isEffectsEnabled()) {
+            effectsLine.setSlave(true);
+        }
+        soundLine.setMuted(!GamePreferences.isEffectsEnabled() && !GamePreferences.isMusicEnabled());
+    }
+
+    private void refreshSoundLine() {
+        soundSlider.setDisabled(!soundLine.isActive());
+        soundLine.setActive(GamePreferences.isEffectsEnabled() || GamePreferences.isMusicEnabled());
+        soundCheckBox.setChecked(soundLine.isActive());
+        if (GamePreferences.isEffectsEnabled() || GamePreferences.isMusicEnabled()) {
+            soundLine.setMuted(false);
+        } else {
+            soundLine.setMuted(true);
+        }
+        if (soundSlider.getValue() == 0) {
+            soundLine.setMuted(true);
+        }
     }
 
     private void refreshShaderLine() {
         if (screenType == ScreenManager.ScreenType.MENU) {
             shaderCheckBox.setChecked(shaderLine.isActive());
         } else {
-            shaderCheckBox.setChecked(false);
+            shaderCheckBox.setChecked(GamePreferences.isShaderEnabled());
+            shaderLine.setSlave(true);
         }
     }
 
@@ -800,21 +805,22 @@ public class ConfigGroup extends VerticalGroup {
         if (screenType == ScreenManager.ScreenType.MENU) {
             childCheckBox.setChecked(childLine.isActive());
         } else {
-            childCheckBox.setChecked(false);
+            childCheckBox.setChecked(GamePreferences.isChildEnabled());
+            childLine.setSlave(true);
         }
     }
 
     private void refreshLevelLine() {
         if (screenType == ScreenManager.ScreenType.MENU) {
             levelLine.setActive(true);
-            levelCheckBox.setChecked(true);
             level = level % (Rules.StartLevel.values().length);
-            levelLabel.setText("LEVEL " + level + " (" + Rules.StartLevel.values()[level].name() + ")");
             GamePreferences.setLevel(level);
         } else {
             levelLine.setActive(false);
-            levelCheckBox.setChecked(false);
+            levelLine.setSlave(true);
         }
+        levelCheckBox.setChecked(true);
+        levelLabel.setText("LEVEL " + level + " (" + Rules.StartLevel.values()[level].name() + ")");
     }
 
     private void refreshVibrationLine() {
@@ -908,6 +914,20 @@ public class ConfigGroup extends VerticalGroup {
         a = 1.0f;
     }
 
+    private void refreshOverallSound() {
+        musicLine.setActive(soundLine.isActive());
+        musicLine.setSlave(!soundLine.isActive());
+        musicCheckBox.setChecked(soundLine.isActive());
+        effectsLine.setActive(soundLine.isActive());
+        effectsLine.setSlave(!soundLine.isActive());
+        effectsCheckBox.setChecked(soundLine.isActive());
+
+        soundSlider.setDisabled(!soundLine.isActive());
+        musicSlider.setDisabled(!soundLine.isActive());
+        effectsSlider.setDisabled(!soundLine.isActive());
+        soundLine.setMuted(soundSlider.getValue() == 0.0f);
+    }
+
     public void dispose() {
         instance = null;
     }
@@ -947,16 +967,15 @@ public class ConfigGroup extends VerticalGroup {
         private Line(Actor leftActor, Actor centerActor, Actor rightActor) {
             this.table = new Table();
             table.row().padBottom(22);
-            //todo: to PaintCost
             table.add(leftActor).width(44).padRight(44).padLeft(44);
             table.add(centerActor).expandX();
 
             if (rightActor != null) {
-                table.add(rightActor).width(250).padRight(22).padLeft(22);
+                table.add(rightActor).width(220).padRight(22).padLeft(22);
             }
             table.align(Align.top);
             table.setFillParent(true);
-            this.setWidth(3 * Rules.WORLD_WIDTH / 4);
+            this.setWidth(724);
             this.setHeight(90);
             this.addActor(table);
         }

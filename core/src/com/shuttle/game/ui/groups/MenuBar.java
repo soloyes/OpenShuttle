@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.shuttle.game.conf.GamePreferences;
@@ -25,35 +25,39 @@ import com.shuttle.game.utils.Assets;
 public class MenuBar extends Group {
     private Button buttonExit;
     private Button buttonPlay;
-    private Button buttonConfig;
+    private Button buttonSettings;
     private Button buttonResults;
-    private Button buttonShare;
+    private Button buttonInfo;
     private BoomBox boomBox;
 
     public MenuBar() {
-        Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.boomBox = new BoomBox();
         this.setName(GroupType.MENU_BAR.name());
-        this.buttonPlay = new Button(skin, "default");
-        this.buttonExit = new Button(skin, "default");
-        this.buttonConfig = new Button(skin, "default");
-        this.buttonResults = new Button(skin, "default");
-        this.buttonShare = new Button(skin, "default");
+        this.buttonPlay = new Button(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PLAY_BUTTON_MENU)));
+        buttonPlay.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
+        this.buttonExit = new Button(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.EXIT_BUTTON_MENU)));
+        buttonExit.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
+        this.buttonSettings = new Button(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.SETTINGS_BUTTON_MENU)));
+        buttonSettings.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
+        this.buttonResults = new Button(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.RESULTS_BUTTON_MENU)));
+        buttonResults.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
+        this.buttonInfo = new Button(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.INFO_BUTTON_MENU)));
+        buttonInfo.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
         this.buttonPlay.setOrigin(Align.center);
         this.buttonExit.setOrigin(Align.center);
-        this.buttonConfig.setOrigin(Align.center);
+        this.buttonSettings.setOrigin(Align.center);
         this.buttonResults.setOrigin(Align.center);
-        this.buttonPlay.setSize(128, 128);
-        this.buttonExit.setSize(128, 128);
-        this.buttonConfig.setSize(128, 128);
-        this.buttonResults.setSize(128, 128);
-        this.buttonShare.setSize(128, 128);
+        this.buttonPlay.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
+        this.buttonExit.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
+        this.buttonSettings.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
+        this.buttonResults.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
+        this.buttonInfo.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
 
-        buttonPlay.setPosition(22, 22);
-        buttonResults.setPosition(249, 22);
-        buttonShare.setPosition(476, 22);
-        buttonConfig.setPosition(703, 22);
-        buttonExit.setPosition(930, 22);
+        buttonPlay.setPosition(24, 24);
+        buttonResults.setPosition(254, 24);
+        buttonInfo.setPosition(484, 24);
+        buttonSettings.setPosition(714, 24);
+        buttonExit.setPosition(944, 24);
 
         buttonExit.addListener(new ClickListener() {
             @Override
@@ -96,10 +100,10 @@ public class MenuBar extends Group {
             }
         });
 
-        buttonConfig.addListener(new ClickListener() {
+        buttonSettings.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (buttonConfig.isDisabled()) {
+                if (buttonSettings.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
                 } else if (pointer == 0) {
                     Array<Actor> actors = getStage().getActors();
@@ -162,10 +166,10 @@ public class MenuBar extends Group {
             }
         });
 
-        buttonShare.addListener(new ClickListener() {
+        buttonInfo.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (buttonShare.isDisabled()) {
+                if (buttonInfo.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
                 } else if (pointer == 0) {
                     Array<Actor> actors = getStage().getActors();
@@ -197,23 +201,23 @@ public class MenuBar extends Group {
 
         this.addActor(buttonExit);
         this.addActor(buttonPlay);
-        this.addActor(buttonConfig);
+        this.addActor(buttonSettings);
         this.addActor(buttonResults);
-        this.addActor(buttonShare);
+        this.addActor(buttonInfo);
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
         if (GroupController.isEmpty()) {
-            buttonShare.setDisabled(true);
+            buttonInfo.setDisabled(true);
             buttonPlay.setDisabled(true);
-            buttonConfig.setDisabled(true);
+            buttonSettings.setDisabled(true);
             buttonResults.setDisabled(true);
         } else {
-            buttonShare.setDisabled(false);
+            buttonInfo.setDisabled(false);
             buttonPlay.setDisabled(false);
-            buttonConfig.setDisabled(false);
+            buttonSettings.setDisabled(false);
             buttonResults.setDisabled(false);
         }
     }
@@ -222,8 +226,8 @@ public class MenuBar extends Group {
     public void draw(Batch batch, float parentAlpha) {
         buttonPlay.draw(batch, parentAlpha);
         buttonExit.draw(batch, parentAlpha);
-        buttonConfig.draw(batch, parentAlpha);
+        buttonSettings.draw(batch, parentAlpha);
         buttonResults.draw(batch, parentAlpha);
-        buttonShare.draw(batch, parentAlpha);
+        buttonInfo.draw(batch, parentAlpha);
     }
 }

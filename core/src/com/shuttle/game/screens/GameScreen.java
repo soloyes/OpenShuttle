@@ -46,6 +46,7 @@ import com.shuttle.game.effects.Ray;
 import com.shuttle.game.effects.Shake;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.effects.particle.ParticleEmitter;
+import com.shuttle.game.labelsticker.Label;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
@@ -54,9 +55,11 @@ import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.Joystick;
 import com.shuttle.game.ui.PlayerPointer;
 import com.shuttle.game.ui.groups.PauseGroup;
-import com.shuttle.game.ui.groups.leftright.SwitchGroup;
+import com.shuttle.game.ui.groups.configs.ConfigImageButton;
+import com.shuttle.game.ui.groups.configs.RightGroup;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
+import com.shuttle.game.ui.groups.switches.SwitchGroup;
 import com.shuttle.game.ui.panels.UILeftPanel;
 import com.shuttle.game.ui.panels.UIRightPanel;
 import com.shuttle.game.ui.panels.UITopPanel;
@@ -258,9 +261,12 @@ public class GameScreen extends BaseScreen {
         }
 
         //BEGIN
-        if (!Rules.GAME_OVER) {
+        if (!PauseGroup.getInstance().isPause() && !Rules.GAME_OVER) {
             UILeftPanel.getInstance().render(batch);
             UIRightPanel.getInstance().render(batch);
+        }
+
+        if (!Rules.GAME_OVER) {
             uiTopPanel.render(batch);
             SelectorGroup.getInstance().render(batch);
         }
@@ -271,7 +277,7 @@ public class GameScreen extends BaseScreen {
 
         Color tmpColor = batch.getColor();
         if (Rules.GAME_OVER) {
-            boomBox.stopAllMusicAndPlayThis(MSConstants.MENU_SONG);
+            boomBox.stopAllMusicAndPlayThis(MSConstants.GAME_OVER);
             PauseGroup.getInstance().setGameOver();
             fadeInAlpha += dt / 2;
             if (fadeInAlpha >= 1.0f)
@@ -412,7 +418,6 @@ public class GameScreen extends BaseScreen {
             }
             ray.harvest(player, consumable, dt);
             anyAtHarvestPoint |= consumable.isAtRayPoint();
-
         }
 
         player.showTakeRangeField(dt, anyAtHarvestPoint);
@@ -431,6 +436,7 @@ public class GameScreen extends BaseScreen {
                         boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
                     }
                     damageToAnomaly(anomaly);
+                    //todo: duration must be positive. Here may be 0
                     Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
                 } else {
                     damageToPlayer(anomaly);
@@ -650,10 +656,13 @@ public class GameScreen extends BaseScreen {
         player.takeEffect(consumable);
         if (consumable instanceof Astronaut) {
             Astronaut astronaut = (Astronaut) consumable;
-            //todo:// delete if when add icon
-            if (astronaut.getProfession() != Sticker.REGULAR) {
-                Standing.getInstance().changeAstronauts(astronaut.getProfession());
-                UIRightPanel.getInstance().add(astronaut.getProfession());
+            Sticker profession = astronaut.getProfession();
+            Standing.getInstance().changeAstronauts(profession);
+            UIRightPanel.getInstance().add(profession);
+            RightGroup.getInstance().updateScroll(astronaut.getLabels().get(Label.Layer.LABEL).get(0).getSticker());
+            ConfigImageButton button = RightGroup.getInstance().getButtonMap().get(profession);
+            if (button != null){
+                button.changeCount(1);
             }
         }
         Standing.getInstance().addToStatistics(consumable.getType(), consumable.getLevel());

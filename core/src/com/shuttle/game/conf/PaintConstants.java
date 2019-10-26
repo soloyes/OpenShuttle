@@ -174,19 +174,56 @@ public final class PaintConstants {
     public static final int PANEL_ELEMENTS_MAX = 4;
     public static final int LEFT_RIGHT_PANEL_ELEMENT_WIDTH = 148;
     public static final int LEFT_RIGHT_PANEL_ELEMENT_HEIGHT = 128;
-    public static final String LEFT_RIGHT_PANEL_FULL_CIRCLE = "fullcirclev1";
-    public static final String LEFT_RIGHT_PANEL_EMPTY_CIRCLE = "emptycirclev1";
+    public static final String LEFT_RIGHT_PANEL_FULL_CIRCLE = "fullcircle";
+    public static final String LEFT_RIGHT_PANEL_EMPTY_CIRCLE = "emptycircle";
     public static final int LEFT_RIGHT_PANEL_CIRCLE_WIDTH = 148;
     public static final int LEFT_RIGHT_PANEL_CIRCLE_HEIGHT = 128;
-    public static final String ASTRONAUT_BONUS_ICON = "astronautbonusicon";
-    public static final String MECHANIC_BONUS_ICON = "mechanicbonusicon";
-    public static final String MILITARY_BONUS_ICON = "militarybonusicon";
-    public static final String MEDIC_BONUS_ICON = "medicbonusicon";
-    public static final String SCIENTIST_BONUS_ICON = "scientistbonusicon";
+    public static final String LEFT_RIGHT_UI_CELL_CENTER = "cellcenter";
+    public static final String LEFT_RIGHT_UI_CELL_UPDOWN = "cellupdown";
+    public static final int LEFT_RIGHT_UI_CELL_WIDTH = 118;
+    public static final int LEFT_RIGHT_UI_CELL_HEIGHT = 118;
+    public static final String LEFT_RIGHT_UI_EMPTY_BOX = "emptybox";
+    public static final int LEFT_RIGHT_UI_EMPTY_BOX_WIDTH = 82;
+    public static final int LEFT_RIGHT_UI_EMPTY_BOX_HEIGHT = 82;
+    public static final String LEFT_RIGHT_UI_EMPTY_ASTRONAUT = "emptyastronaut";
+    public static final String LEFT_RIGHT_UI_GLOW_UPDOWN = "glowupdown";
+    public static final int LEFT_RIGHT_UI_GLOW_UPDOWN_WIDTH = 172;
+    public static final int LEFT_RIGHT_UI_GLOW_UPDOWN_HEIGHT = 98;
+    public static final String LEFT_RIGHT_UI_GLOW_CELL = "glowcell";
+    public static final String LEFT_RIGHT_UI_ITEM_NEW_CIRCLE = "itemnewcircle";
+    public static final String LEFT_RIGHT_UI_ITEM_NEW_STAR = "itemnewstar";
+    public static final int LEFT_RIGHT_UI_ITEM_NEW_WIDTH = 16;
+    public static final int LEFT_RIGHT_UI_ITEM_NEW_HEIGHT = 16;
+    public static final String LEFT_RIGHT_UI_ITEM_TYPE_SELF = "itemtypeself";
+    public static final String LEFT_RIGHT_UI_ITEM_TYPE_ATTACK = "itemtypeattack";
+    public static final String LEFT_RIGHT_UI_ITEM_TYPE_PROTECTION = "itemtypeprotection";
+    public static final int LEFT_RIGHT_UI_ITEM_TYPE_WIDTH = 16;
+    public static final int LEFT_RIGHT_UI_ITEM_TYPE_HEIGHT = 16;
+
+    public static final String ASTRONAUT_ICON = "astronauticon";
+    public static final String MECHANIC_ICON = "mechanicicon";
+    public static final String MILITARY_ICON = "militaryicon";
+    public static final String MEDIC_ICON = "medicicon";
+    public static final String SCIENTIST_ICON = "scientisticon";
+    public static final String LOCK_BUTTON = "lock";
     public static final String PLAY_BUTTON = "playbutton";
     public static final String PAUSE_BUTTON = "pausebutton";
     public static final int PLAY_PAUSE_BUTTON_WIDTH = 184;
     public static final int PLAY_PAUSE_BUTTON_HEIGHT = 184;
+    public static final String PROFILES_BUTTON_MENU = "profilesbuttonmenu";
+    public static final int PROFILES_BUTTON_WIDTH = 118;
+    public static final int PROFILES_BUTTON_HEIGHT = 118;
+    public static final String PLAY_BUTTON_MENU = "playbuttonmenu";
+    public static final String RESULTS_BUTTON_MENU = "resultsbuttonmenu";
+    public static final String INFO_BUTTON_MENU = "infobuttonmenu";
+    public static final String SETTINGS_BUTTON_MENU = "settingsbuttonmenu";
+    public static final String EXIT_BUTTON_MENU = "exitbuttonmenu";
+    public static final int MENU_BUTTON_WIDTH = 112;
+    public static final int MENU_BUTTON_HEIGHT = 112;
+    public static final String PROFILES_BORDER = "profilesborder";
+    public static final int ROFILES_BORDER_WIDTH = 510;
+    public static final int ROFILES_BORDER_HEIGHT = 109;
+
     public static final String TIMER_BACKGROUND = "timerbackground";
     public static final String TIMER_BOX = "timerbox";
     public static final String TIMER_ICON = "timericon";
@@ -235,15 +272,19 @@ public final class PaintConstants {
     public static final float SWITCH_HEIGHT = 103.0f;
 
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
-    public static final String FONT32 = "fonts/CollegeRegular32.ttf";
-    public static final String FONT32_C = "fonts/CollegeRegular32Coloured.ttf";
-    public static final String FONT48 = "fonts/CollegeRegular48.ttf";
-    public static final String FONT64 = "fonts/CollegeRegular64.ttf";
-    public static final String FONT64_C = "fonts/CollegeRegular64Coloured.ttf";
-    public static final String FONT60_C = "fonts/CollegeRegular60Coloured.ttf";
-    public static final String FONT96 = "fonts/CollegeRegular96.ttf";
-    public static final String FONT128 = "fonts/CollegeRegular128.ttf";
-    public static final String FONT256 = "fonts/CollegeRegular256.ttf";
+    public static final String FONT32 = "fonts/college.regular32.ttf";
+    public static final String FONT36 = "fonts/college.regular36.ttf";
+    public static final String FONT32_C = "fonts/college.regular32Coloured.ttf";
+    public static final String FONT44 = "fonts/college.regular44.ttf";
+    public static final String FONT48 = "fonts/college.regular48.ttf";
+    public static final String FONT60_C = "fonts/college.regular60Coloured.ttf";
+    public static final String FONT64 = "fonts/college.regular64.ttf";
+    public static final String FONT64_C = "fonts/college.regular64Coloured.ttf";
+    public static final String FONT72 = "fonts/college.regular72.ttf";
+    public static final String FONT96 = "fonts/college.regular96.ttf";
+    public static final String FONT128 = "fonts/college.regular128.ttf";
+    public static final String FONT188 = "fonts/college.regular188.ttf";
+    public static final String FONT256 = "fonts/college.regular256.ttf";
     public static final String GAME_PACK = "pics/game.pack";
     public static final String BACKGROUND_COLOR_HEX = "100514ff";
     public static final float BACKGROUND_OSCILLATE_WIDTH = 50;
@@ -303,6 +344,11 @@ public final class PaintConstants {
     public static final String UI_JOYSTICK_ENABLE = "JOYSTICK ENABLED";
     public static final String UI_JOYSTICK_DISABLE = "JOYSTICK DISABLED";
     public static final String UI_JOYSTICK_HOLD = "SWITCHING JOYSTICK";
+
+    public static final float UI_SETTINGS_WIDTH = 720;
+    public static final float UI_SETTINGS_HEIGHT = Rules.WORLD_HEIGHT / 2;
+    public static final float UI_SETTINGS_X = 178;
+    public static final float UI_SETTINGS_Y = 477;
 
     private PaintConstants() {
     }

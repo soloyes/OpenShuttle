@@ -16,7 +16,6 @@ import com.shuttle.game.utils.Assets;
  * @author Shuttle on 7/14/18.
  */
 //todo: to MVC
-//todo: Table must be draw lower.
 public class ResultGroup extends Group {
     public ResultGroup() {
         this.setName(GroupType.RESULTS.name());
@@ -39,7 +38,7 @@ public class ResultGroup extends Group {
         table.add(titleLabel).colspan(4);
         table.row();
 
-        //todo: use Line.class here
+        //todo: use Line.class here. Or table going to be used. Waiting docs.
         for (ResultDAO r : results.getResults()) {
             if (!r.getUsername().isEmpty()) {
                 table.row();
@@ -54,7 +53,7 @@ public class ResultGroup extends Group {
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollbarsOnTop(true);
         scrollPane.setWidth(Rules.WORLD_WIDTH);
-        scrollPane.setHeight(2 * Rules.WORLD_HEIGHT / 3);
+        scrollPane.setHeight(Rules.WORLD_HEIGHT / 2);
         scrollPane.setY(Rules.WORLD_HEIGHT / 3);
         this.addActor(scrollPane);
     }

@@ -15,18 +15,20 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.ui.groups.PauseGroup;
+import com.shuttle.game.ui.groups.configs.LeftGroup;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Consumer;
 import com.shuttle.game.utils.ShaderManager;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Shuttle on 3/22/19.
  */
 public class SelectorGroup extends Group {
     private static SelectorGroup instance;
-    private LinkedList<Selector> selectors;
+    private List<Selector> selectors;
     private Selector leftSelector, centerSelector, rightSelector;
     private ImageButton leftButton, centerButton, rightButton;
     private TextureRegionDrawable circleIn;
@@ -36,13 +38,6 @@ public class SelectorGroup extends Group {
     private int select;
     private int pressedCount;
     private boolean paused;
-
-    public static SelectorGroup getInstance() {
-        if (instance == null) {
-            instance = new SelectorGroup();
-        }
-        return instance;
-    }
 
     private SelectorGroup() {
         this.selectors = new LinkedList<Selector>();
@@ -113,9 +108,6 @@ public class SelectorGroup extends Group {
             }
         });
 
-        //todo:// need name?
-        leftButton.setName("leftButton");
-        rightButton.setName("rightButton");
         this.addActor(leftArrow);
         this.addActor(rightArrow);
         this.addActor(leftButton);
@@ -140,22 +132,29 @@ public class SelectorGroup extends Group {
         }
     }
 
-    public void addSelector(Sticker sticker) {
-        boolean isPresent = false;
+    public void addSelector(Sticker sticker, int amount) {
+        LeftGroup.getInstance().updateScroll(sticker);
+        boolean present = false;
         int i;
         for (i = 0; i < selectors.size(); i++) {
             if (selectors.get(i).getSticker() == sticker) {
-                isPresent = true;
+                present = true;
                 break;
             }
         }
-        if (isPresent) {
-            if (selectors.get(i).getCount() < Rules.SELECTOR_MAX_COUNT)
-                selectors.get(i).changeCount(1);
+        if (present) {
+            if (selectors.get(i).getCount() < Rules.SELECTOR_MAX_COUNT) {
+                selectors.get(i).changeCount(amount);
+            }
         } else {
             Selector selector = new Selector(sticker);
+            selector.changeCount(amount);
             selectors.add(selector);
         }
+    }
+
+    public void dispose() {
+        instance = null;
     }
 
     public void render(SpriteBatch batch) {
@@ -233,10 +232,6 @@ public class SelectorGroup extends Group {
         batch.setColor(color);
     }
 
-    public void dispose() {
-        instance = null;
-    }
-
     public void update(float dt) {
         if (leftButton.isPressed()) {
             leftArrow.setColor(Color.RED);
@@ -274,7 +269,11 @@ public class SelectorGroup extends Group {
             }
         } else if (selectors.size() == 1) {
             centerSelector = selectors.get(0);
+        } else {
+            centerSelector = null;
         }
+
+        LeftGroup.getInstance().setCenter(centerSelector);
         press();
     }
 
@@ -301,5 +300,12 @@ public class SelectorGroup extends Group {
                 }
             }
         }
+    }
+
+    public static SelectorGroup getInstance() {
+        if (instance == null) {
+            instance = new SelectorGroup();
+        }
+        return instance;
     }
 }

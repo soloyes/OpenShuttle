@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
@@ -34,8 +35,9 @@ public class MenuGroup extends Group {
     private static TextField username;
     private static float shadowTime;
     private static StringBuilder notice = new StringBuilder();
-    private BitmapFont font64;
-    private Button buttonProfile;
+    private BitmapFont font44;
+    private BitmapFont font72;
+    private Button buttonProfiles;
     private GlyphLayout glyphLayout;
     private VerticalGroupList verticalGroupList;
     private GroupController groupController;
@@ -49,16 +51,16 @@ public class MenuGroup extends Group {
         this(GroupType.MENU.name());
         username.setAlignment(Align.center);
         username.setMaxLength(14);
+        username.setPosition(285, 960);
+        username.setWidth(510);
+        username.setHeight(108);
+        buttonProfiles.setSize(PaintConstants.PROFILES_BUTTON_WIDTH, PaintConstants.PROFILES_BUTTON_HEIGHT);
+        buttonProfiles.setPosition(487, 1096);
 
-        username.setPosition(Rules.WORLD_WIDTH / 4, username.getHeight() + verticalGroupList.getY() + verticalGroupList.getHeight());
-        username.setWidth(Rules.WORLD_WIDTH / 2);
-        buttonProfile.setSize(128, 128);
-        buttonProfile.setPosition(Rules.WORLD_WIDTH / 2 - buttonProfile.getWidth() / 2, buttonProfile.getHeight() + verticalGroupList.getY() + verticalGroupList.getHeight() + username.getHeight() - 22);
-
-        buttonProfile.addListener(new ClickListener() {
+        buttonProfiles.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (buttonProfile.isDisabled()) {
+                if (buttonProfiles.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
                 } else if (pointer == 0) {
                     verticalGroupList.switchVisible();
@@ -110,7 +112,7 @@ public class MenuGroup extends Group {
         noticeGroup = new Group();
         noticeGroup.addActor(noticeLabel);
         noticeLabel.setFillParent(true);
-        this.addActor(buttonProfile);
+        this.addActor(buttonProfiles);
         this.addActor(noticeGroup);
         this.addActor(username);
         this.addActor(verticalGroupList);
@@ -120,18 +122,22 @@ public class MenuGroup extends Group {
         this.setName(name);
         this.setVisible(true);
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
+        this.font44 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT44, BitmapFont.class);
+        this.font72 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT72, BitmapFont.class);
         Label.LabelStyle noticeStyle64 = new Label.LabelStyle(
-                Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
-                new Color(1.0f, 1.0f, 1.0f, 1f)
+                font44,
+                new Color(1.0f, 1.0f, 1.0f, 1.0f)
         );
 
         noticeLabel = new Label(notice, noticeStyle64);
-        this.buttonProfile = new Button(skin, "default");
+        this.buttonProfiles = new Button(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PROFILES_BUTTON_MENU)));
+        buttonProfiles.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
+
         TextField.TextFieldStyle tfs = skin.get("default", TextField.TextFieldStyle.class);
-        tfs.font = font64;
+        tfs.font = font72;
         tfs.fontColor = Color.valueOf("ffffffff");
         tfs.cursor.setMinWidth(10);
+        tfs.background = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PROFILES_BORDER));
         username = new TextField("", skin, "default");
         this.glyphLayout = new GlyphLayout();
         //MVC
@@ -173,16 +179,16 @@ public class MenuGroup extends Group {
             }
         }
         if (GroupController.isEmpty()) {
-            buttonProfile.setDisabled(true);
+            buttonProfiles.setDisabled(true);
             verticalGroupList.setVisible(false);
         } else {
-            buttonProfile.setDisabled(false);
+            buttonProfiles.setDisabled(false);
         }
 
-        glyphLayout.setText(font64, notice);
+        glyphLayout.setText(font44, notice);
         noticeLabel.setText(notice);
         noticeGroup.setPosition(Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
-                verticalGroupList.getY() + verticalGroupList.getHeight() + glyphLayout.height / 2 + 22);
+                904 + glyphLayout.height / 2 + 22);
         noticeGroup.getColor().a = a;
     }
 

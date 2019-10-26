@@ -4,5 +4,11 @@ package com.shuttle.game.ui.groups;
  * @author Shuttle on 6/23/18.
  */
 public enum GroupType {
-    MENU, CONFIG, MENU_BAR, RESULTS, SHARE;
+    MENU,
+    MENU_BAR,
+    CONFIG,
+    RESULTS,
+    SHARE,
+    LEFT,
+    RIGHT
 }

@@ -325,310 +325,58 @@ joystick
   orig: 400, 250
   offset: 0, 0
   index: -1
-xpincircle
-  rotate: false
-  xy: 3850, 516
-  size: 184, 184
-  orig: 184, 184
-  offset: 0, 0
-  index: -1
-pausebutton
-  rotate: false
-  xy: 3482, 774
-  size: 184, 184
-  orig: 184, 184
-  offset: 0, 0
-  index: -1
-playbutton
-  rotate: false
-  xy: 3668, 774
-  size: 184, 184
-  orig: 184, 184
-  offset: 0, 0
-  index: -1
-xpscale
-  rotate: false
-  xy: 3854, 774
-  size: 184, 184
-  orig: 184, 184
-  offset: 0, 0
-  index: -1
-xpoutcircle
-  rotate: false
-  xy: 2, 3850
-  size: 184, 184
-  orig: 184, 184
-  offset: 0, 0
-  index: -1
-timericon
-  rotate: false
-  xy: 3980, 2
-  size: 110, 162
-  orig: 110, 162
-  offset: 0, 0
-  index: -1
-timerbackground
-  rotate: false
-  xy: 3980, 166
-  size: 110, 162
-  orig: 110, 162
-  offset: 0, 0
-  index: -1
-timerbox
-  rotate: false
-  xy: 188, 3850
-  size: 110, 162
-  orig: 110, 162
-  offset: 0, 0
-  index: -1
-militarybonusicon
-  rotate: false
-  xy: 300, 3850
-  size: 148, 128
-  orig: 148, 128
-  offset: 0, 0
-  index: -1
-mechanicbonusicon
-  rotate: false
-  xy: 450, 3850
-  size: 148, 128
-  orig: 148, 128
-  offset: 0, 0
-  index: -1
-scientistbonusicon
-  rotate: false
-  xy: 600, 3850
-  size: 148, 128
-  orig: 148, 128
-  offset: 0, 0
-  index: -1
-astronautbonusicon
-  rotate: false
-  xy: 750, 3850
-  size: 148, 128
-  orig: 148, 128
-  offset: 0, 0
-  index: -1
 emptycirclev1
   rotate: false
-  xy: 3850, 1028
-  size: 148, 128
-  orig: 148, 128
-  offset: 0, 0
-  index: -1
-medicbonusicon
-  rotate: false
-  xy: 1028, 3866
+  xy: 3850, 516
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
   index: -1
 fullcirclev1
   rotate: false
-  xy: 3866, 1286
+  xy: 3482, 774
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
   index: -1
-selectorout
-  rotate: false
-  xy: 1286, 3866
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-selectorright
-  rotate: false
-  xy: 2576, 1544
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-selectorin
-  rotate: false
-  xy: 2706, 1544
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-selectorscale
-  rotate: false
-  xy: 2836, 1544
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-selectorleft
-  rotate: false
-  xy: 2966, 1544
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-switchoff
-  rotate: false
-  xy: 3594, 388
-  size: 37, 103
-  orig: 37, 103
-  offset: 0, 0
-  index: -1
-switchon
-  rotate: false
-  xy: 3633, 388
-  size: 37, 103
-  orig: 37, 103
-  offset: 0, 0
-  index: -1
-spicon
-  rotate: false
-  xy: 3672, 388
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
-lpscale
-  rotate: false
-  xy: 3672, 438
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
-fpicon
-  rotate: false
-  xy: 3850, 702
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
-fpscale
-  rotate: false
-  xy: 3854, 960
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
-spscale
-  rotate: false
-  xy: 3850, 1158
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
-lpin
-  rotate: false
-  xy: 3850, 1208
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
-hpin
-  rotate: false
-  xy: 3850, 1208
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
-hpicon
-  rotate: false
-  xy: 3096, 1544
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
-spin
-  rotate: false
-  xy: 3096, 1594
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
-fpin
-  rotate: false
-  xy: 3096, 1594
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
-lpicon
-  rotate: false
-  xy: 3096, 1644
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
-spout
-  rotate: false
-  xy: 3096, 1694
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
-fpout
-  rotate: false
-  xy: 3096, 1694
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
-hpscale
-  rotate: false
-  xy: 3096, 1744
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
-hpout
-  rotate: false
-  xy: 3336, 1544
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
-lpout
-  rotate: false
-  xy: 3336, 1544
-  size: 238, 48
-  orig: 238, 48
-  offset: 0, 0
-  index: -1
 rocket
   rotate: false
-  xy: 3980, 330
+  xy: 3980, 2
   size: 96, 32
   orig: 96, 32
   offset: 0, 0
   index: -1
 atrocketpoint
   rotate: false
-  xy: 3912, 388
+  xy: 3980, 36
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 anomalydot
   rotate: false
-  xy: 4078, 330
+  xy: 4078, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 star16
   rotate: false
-  xy: 3980, 364
+  xy: 4014, 36
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 consumabledot
   rotate: false
-  xy: 3998, 364
+  xy: 4032, 36
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 bubble16
   rotate: false
-  xy: 4016, 364
+  xy: 4050, 36
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

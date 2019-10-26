@@ -36,7 +36,7 @@ public enum PlayerInteractionLevels {
     }
 
     public static PlayerInteractionLevels getFromLevel(int level) {
-        return values()[level % (values().length - 1)];
+        return values()[level % (values().length)];
     }
 
     public float getSize() {

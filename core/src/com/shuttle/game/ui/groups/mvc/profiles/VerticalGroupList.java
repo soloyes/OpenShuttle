@@ -33,7 +33,6 @@ import lombok.Setter;
  * @author Shuttle on 17/06/19.
  */
 
-//todo: Add, remove and cancel sounds
 public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO> {
     private com.shuttle.game.ui.groups.mvc.Controller<ProfileDAO> controller;
     private final ScrollPane scrollPane;
@@ -60,7 +59,7 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
         container.height(Rules.WORLD_HEIGHT / 4);
         container.width(Rules.WORLD_WIDTH / 2);
         container.align(Align.top);
-        this.setPosition(Rules.WORLD_WIDTH / 4, Rules.WORLD_HEIGHT / 4);
+        this.setPosition(Rules.WORLD_WIDTH / 4, 430);
         this.setWidth(Rules.WORLD_WIDTH / 2);
         this.setHeight(Rules.WORLD_HEIGHT / 4);
 
@@ -173,7 +172,6 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
             this.timeAndFlag = new TimeAndFlag();
             this.profile = profile;
             this.table = new Table();
-            //todo: padding to PaintConstants
             table.row().padBottom(22).expandX();
             Label.LabelStyle style64 = new Label.LabelStyle(
                     Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
@@ -218,9 +216,6 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
                             controller.select(profile);
                             MenuGroup.setNotice(PaintConstants.UI_SELECT_PROFILE);
                             boomBox.playSound(MSConstants.UI_CHANGED);
-                            System.out.println(controller.getList().size());
-                        } else {
-                            //todo: block sound
                         }
                     }
                 });

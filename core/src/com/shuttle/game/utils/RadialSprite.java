@@ -162,9 +162,9 @@ public class RadialSprite implements Drawable {
         final float y2 = y + height;
         final float xc = x + centerX;
         final float yc = y + centerY;
-        final float ax = MathUtils.cosDeg(angle + angleOffset); // positive right, negative left
+        final float ax = MathUtils.cosDeg(angle + angleOffset); // positive right, negative isLeft
         final float ay = MathUtils.sinDeg(angle + angleOffset); // positive top, negative bottom
-        final float txa = ax != 0f ? Math.abs(centerX / ax) : 99999999f; // intersection on left or right "wall"
+        final float txa = ax != 0f ? Math.abs(centerX / ax) : 99999999f; // intersection on isLeft or right "wall"
         final float tya = ay != 0f ? Math.abs(centerY / ay) : 99999999f; // intersection on top or bottom "wall"
         final float t = Math.min(txa, tya);
         // tx and ty are the intersection points relative to centerX and centerY.
@@ -194,9 +194,9 @@ public class RadialSprite implements Drawable {
                 vert(verts, BOTTOMRIGHT3, xc + tx * 0.5f, y);
                 draw = 3;
             }
-        } else { // rotation on the left half
+        } else { // rotation on the isLeft half
             vert(verts, TOPRIGHT1, x + centerX, y + centerY);
-            if (txa < tya) { // rotation on the left side
+            if (txa < tya) { // rotation on the isLeft side
                 vert(verts, BOTTOMLEFT1, x, y);
                 vert(verts, TOPLEFT1, x, yc + ty);
                 draw = 1;
