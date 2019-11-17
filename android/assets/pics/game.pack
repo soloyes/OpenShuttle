@@ -1,0 +1,782 @@
+
+images1.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+magnetic
+  rotate: false
+  xy: 2, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+asteroidmetal
+  rotate: false
+  xy: 1028, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+radiation
+  rotate: false
+  xy: 2054, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+electric
+  rotate: false
+  xy: 2, 1028
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+asteroidmineral
+  rotate: false
+  xy: 2, 2054
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+corrosive
+  rotate: false
+  xy: 2, 3080
+  size: 1024, 768
+  orig: 1024, 768
+  offset: 0, 0
+  index: -1
+map512
+  rotate: false
+  xy: 3080, 2
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+takefield384
+  rotate: false
+  xy: 3594, 2
+  size: 384, 384
+  orig: 384, 384
+  offset: 0, 0
+  index: -1
+scratch
+  rotate: false
+  xy: 1028, 1028
+  size: 1280, 256
+  orig: 1280, 256
+  offset: 0, 0
+  index: -1
+astronaut
+  rotate: false
+  xy: 2310, 1028
+  size: 1280, 256
+  orig: 1280, 256
+  offset: 0, 0
+  index: -1
+shuttleblur
+  rotate: false
+  xy: 3080, 516
+  size: 768, 256
+  orig: 768, 256
+  offset: 0, 0
+  index: -1
+rockets
+  rotate: false
+  xy: 3592, 1028
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+ramshield
+  rotate: false
+  xy: 1028, 1286
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+storage
+  rotate: false
+  xy: 1028, 1544
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+repair
+  rotate: false
+  xy: 1028, 1802
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outarrow
+  rotate: false
+  xy: 1028, 2060
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+boost
+  rotate: false
+  xy: 1028, 2318
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+lifeshield
+  rotate: false
+  xy: 1028, 2576
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+shieldfuel
+  rotate: false
+  xy: 1028, 2834
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+splash
+  rotate: false
+  xy: 1028, 3092
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+glow
+  rotate: false
+  xy: 1028, 3350
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+fuelbox
+  rotate: false
+  xy: 1028, 3608
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+storagegold
+  rotate: false
+  xy: 1286, 1286
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+laser
+  rotate: false
+  xy: 1544, 1286
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+trash
+  rotate: false
+  xy: 1802, 1286
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+fuelv2
+  rotate: false
+  xy: 2060, 1286
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outmark
+  rotate: false
+  xy: 2318, 1286
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+radar
+  rotate: false
+  xy: 2576, 1286
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+blackholespiral
+  rotate: false
+  xy: 2834, 1286
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+fuelboxgold
+  rotate: false
+  xy: 3092, 1286
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+shieldstorage
+  rotate: false
+  xy: 3350, 1286
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+boxscan
+  rotate: false
+  xy: 3608, 1286
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+shabby
+  rotate: false
+  xy: 1286, 1544
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+boxshield
+  rotate: false
+  xy: 1286, 1802
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+crate
+  rotate: false
+  xy: 1286, 2060
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+emptybox
+  rotate: false
+  xy: 1286, 2318
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+shieldcrate
+  rotate: false
+  xy: 1286, 2576
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+crategold
+  rotate: false
+  xy: 1286, 2834
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+scan
+  rotate: false
+  xy: 1286, 3092
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+fuelback
+  rotate: false
+  xy: 1286, 3350
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+patterngold
+  rotate: false
+  xy: 1286, 3608
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+blackhole
+  rotate: false
+  xy: 1544, 1544
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+fuelv1
+  rotate: false
+  xy: 1802, 1544
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+shabbygold
+  rotate: false
+  xy: 2060, 1544
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+pattern
+  rotate: false
+  xy: 2318, 1544
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+shuttle
+  rotate: false
+  xy: 2576, 1544
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+joystick
+  rotate: false
+  xy: 3080, 774
+  size: 400, 250
+  orig: 400, 250
+  offset: 0, 0
+  index: -1
+lock
+  rotate: false
+  xy: 3850, 516
+  size: 192, 192
+  orig: 192, 192
+  offset: 0, 0
+  index: -1
+xpincircle
+  rotate: false
+  xy: 3482, 774
+  size: 184, 184
+  orig: 184, 184
+  offset: 0, 0
+  index: -1
+pausebutton
+  rotate: false
+  xy: 3668, 774
+  size: 184, 184
+  orig: 184, 184
+  offset: 0, 0
+  index: -1
+playbutton
+  rotate: false
+  xy: 3854, 774
+  size: 184, 184
+  orig: 184, 184
+  offset: 0, 0
+  index: -1
+xpscale
+  rotate: false
+  xy: 2, 3850
+  size: 184, 184
+  orig: 184, 184
+  offset: 0, 0
+  index: -1
+xpoutcircle
+  rotate: false
+  xy: 188, 3850
+  size: 184, 184
+  orig: 184, 184
+  offset: 0, 0
+  index: -1
+timericon
+  rotate: false
+  xy: 3980, 2
+  size: 110, 162
+  orig: 110, 162
+  offset: 0, 0
+  index: -1
+timerbackground
+  rotate: false
+  xy: 3980, 166
+  size: 110, 162
+  orig: 110, 162
+  offset: 0, 0
+  index: -1
+timerbox
+  rotate: false
+  xy: 374, 3850
+  size: 110, 162
+  orig: 110, 162
+  offset: 0, 0
+  index: -1
+fullcircle
+  rotate: false
+  xy: 486, 3850
+  size: 148, 128
+  orig: 148, 128
+  offset: 0, 0
+  index: -1
+emptycircle
+  rotate: false
+  xy: 636, 3850
+  size: 148, 128
+  orig: 148, 128
+  offset: 0, 0
+  index: -1
+astronautbonusicon
+  rotate: false
+  xy: 786, 3850
+  size: 148, 128
+  orig: 148, 128
+  offset: 0, 0
+  index: -1
+selectorout
+  rotate: false
+  xy: 3850, 1028
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+selectorright
+  rotate: false
+  xy: 1028, 3866
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+selectorin
+  rotate: false
+  xy: 3866, 1286
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+selectorscale
+  rotate: false
+  xy: 1286, 3866
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+selectorleft
+  rotate: false
+  xy: 2834, 1544
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+cellcenter
+  rotate: false
+  xy: 3594, 388
+  size: 126, 126
+  orig: 126, 126
+  offset: 0, 0
+  index: -1
+profilesbuttonmenu
+  rotate: false
+  xy: 3722, 388
+  size: 118, 119
+  orig: 118, 119
+  offset: 0, 0
+  index: -1
+militaryicon
+  rotate: false
+  xy: 3842, 388
+  size: 118, 118
+  orig: 118, 118
+  offset: 0, 0
+  index: -1
+glowcell
+  rotate: false
+  xy: 3962, 388
+  size: 118, 118
+  orig: 118, 118
+  offset: 0, 0
+  index: -1
+mechanicicon
+  rotate: false
+  xy: 3850, 1158
+  size: 118, 118
+  orig: 118, 118
+  offset: 0, 0
+  index: -1
+astronauticon
+  rotate: false
+  xy: 3970, 1158
+  size: 118, 118
+  orig: 118, 118
+  offset: 0, 0
+  index: -1
+scientisticon
+  rotate: false
+  xy: 1158, 3866
+  size: 118, 118
+  orig: 118, 118
+  offset: 0, 0
+  index: -1
+emptyastronaut
+  rotate: false
+  xy: 3866, 1416
+  size: 118, 118
+  orig: 118, 118
+  offset: 0, 0
+  index: -1
+medicicon
+  rotate: false
+  xy: 1416, 3866
+  size: 118, 118
+  orig: 118, 118
+  offset: 0, 0
+  index: -1
+settingsbuttonmenu
+  rotate: false
+  xy: 486, 3980
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+playbuttonmenu
+  rotate: false
+  xy: 636, 3980
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+infobuttonmenu
+  rotate: false
+  xy: 786, 3980
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+exitbuttonmenu
+  rotate: false
+  xy: 900, 3980
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+resultsbuttonmenu
+  rotate: false
+  xy: 3980, 1028
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+profilesborder
+  rotate: false
+  xy: 2964, 1544
+  size: 510, 108
+  orig: 510, 108
+  offset: 0, 0
+  index: -1
+switchoff
+  rotate: false
+  xy: 4044, 516
+  size: 37, 103
+  orig: 37, 103
+  offset: 0, 0
+  index: -1
+switchon
+  rotate: false
+  xy: 4040, 774
+  size: 37, 103
+  orig: 37, 103
+  offset: 0, 0
+  index: -1
+glowupdown
+  rotate: false
+  xy: 2964, 1654
+  size: 172, 98
+  orig: 172, 98
+  offset: 0, 0
+  index: -1
+spicon
+  rotate: false
+  xy: 3850, 710
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+lpscale
+  rotate: false
+  xy: 3854, 960
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+fpicon
+  rotate: false
+  xy: 3138, 1654
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+fpscale
+  rotate: false
+  xy: 3138, 1704
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+spscale
+  rotate: false
+  xy: 3476, 1544
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+lpin
+  rotate: false
+  xy: 3476, 1594
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+hpin
+  rotate: false
+  xy: 3476, 1594
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+hpicon
+  rotate: false
+  xy: 3476, 1644
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+spin
+  rotate: false
+  xy: 3476, 1694
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+fpin
+  rotate: false
+  xy: 3476, 1694
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+lpicon
+  rotate: false
+  xy: 3476, 1744
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+spout
+  rotate: false
+  xy: 3716, 1544
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+fpout
+  rotate: false
+  xy: 3716, 1544
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+hpscale
+  rotate: false
+  xy: 3716, 1594
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+hpout
+  rotate: false
+  xy: 3716, 1644
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+lpout
+  rotate: false
+  xy: 3716, 1644
+  size: 238, 48
+  orig: 238, 48
+  offset: 0, 0
+  index: -1
+rocket
+  rotate: false
+  xy: 3980, 330
+  size: 96, 32
+  orig: 96, 32
+  offset: 0, 0
+  index: -1
+scroll.9
+  rotate: false
+  xy: 4044, 621
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+scrollback.9
+  rotate: false
+  xy: 4044, 655
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+atrocketpoint
+  rotate: false
+  xy: 3482, 960
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+anomalydot
+  rotate: false
+  xy: 4078, 330
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+star16
+  rotate: false
+  xy: 3980, 364
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+itemnewstar
+  rotate: false
+  xy: 3998, 364
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+consumabledot
+  rotate: false
+  xy: 4016, 364
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+bubble16
+  rotate: false
+  xy: 4034, 364
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+itemtypeself
+  rotate: false
+  xy: 4052, 364
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+itemtypeprotection
+  rotate: false
+  xy: 4070, 364
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+itemnewcircle
+  rotate: false
+  xy: 4078, 621
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+itemtypeattack
+  rotate: false
+  xy: 4078, 655
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
