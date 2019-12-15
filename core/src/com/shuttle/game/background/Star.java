@@ -67,6 +67,7 @@ public class Star {
                 position.y -= 0.1 * normal.y * scaleX;
             }
         } else {
+            if (dt > 1) dt = 1;
             if (cloudSky.getBcDx() > PaintConstants.BACKGROUND_OSCILLATE_WIDTH) {
                 position.x += speed * dt + scaleX * dt * dt / 2;
             } else {
@@ -82,16 +83,16 @@ public class Star {
         }
 
         if (position.x < -width) {
-            position.x = Rules.SPACE_WIDTH;
+            position.x = Rules.SPACE_WIDTH + position.x%Rules.SPACE_WIDTH ;
         }
         if (position.x > Rules.SPACE_WIDTH) {
-            position.x = -width;
+            position.x = -width + position.x%Rules.SPACE_WIDTH ;
         }
         if (position.y < height) {
-            position.y = Rules.SPACE_HEIGHT;
+            position.y = Rules.SPACE_HEIGHT + position.y%Rules.SPACE_HEIGHT;
         }
         if (position.y > Rules.SPACE_HEIGHT) {
-            position.y = height;
+            position.y = height + position.y%Rules.SPACE_HEIGHT;
         }
     }
 
