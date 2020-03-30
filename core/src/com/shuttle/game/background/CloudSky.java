@@ -103,7 +103,7 @@ public class CloudSky {
                 bcDy += 0.1 * normal.y;
             }
         } else {
-
+            if (dt > 1) dt = 1;
             if (bcDx > bcWidth / 8) {
                 mcDx += mcFrequency * dt - 2f * dt * dt / 2;
                 scDx += scFrequency * dt - 3f * dt * dt / 2;
