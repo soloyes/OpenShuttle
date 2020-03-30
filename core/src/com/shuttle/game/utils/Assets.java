@@ -33,6 +33,7 @@ public class Assets {
         switch (type) {
             case MENU:
                 createStandardFont(32, "fonts/college.regular", "");
+                createStandardFont(54, "fonts/college.regular", "");
                 createStandardFont(48, "fonts/college.regular", "");
                 createStandardFont(48, "fonts/college.regular", "");
                 createStandardFont(44, "fonts/college.regular", "");
@@ -59,6 +60,7 @@ public class Assets {
                 createStandardFont(44, "fonts/college.regular", "");
                 createStandardFont(48, "fonts/college.regular", "");
                 createStandardFont(48, "fonts/college.regular", "");
+                createStandardFont(54, "fonts/college.regular", "");
                 createStandardFont(64, "fonts/college.regular", "");
                 createStandardFont(64, "fonts/college.regular", "Coloured");
                 createStandardFont(60, "fonts/college.regular", "");

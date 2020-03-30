@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -17,8 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.shuttle.game.conf.GamePreferences;
@@ -49,10 +52,19 @@ public class ConfigGroup extends VerticalGroup {
     private Table joystickTable;
     private BitmapFont font64;
     private BitmapFont font96;
-    private Label.LabelStyle labelStyle64;
+    private Label.LabelStyle labelStyle54;
     private Label.LabelStyle noticeStyle64;
     private Label.LabelStyle labelStyle96;
-    private CheckBox.CheckBoxStyle checkBoxStyle48;
+    private SoundConfigCheckBoxStyle soundCheckBoxStyle;
+    private ConfigCheckBoxStyle musicCheckBoxStyle;
+    private ConfigCheckBoxStyle effectsCheckBoxStyle;
+    private ConfigCheckBoxStyle shadersCheckBoxStyle;
+    private ConfigCheckBoxStyle childCheckBoxStyle;
+    private LevelConfigCheckBoxStyle levelCheckBoxStyle;
+    private ConfigCheckBoxStyle vibrationCheckBoxStyle;
+    private ConfigCheckBoxStyle joystickCheckBoxStyle;
+    private ConfigCheckBoxStyle joystickPresetCheckBoxStyle;
+
     private Slider.SliderStyle sliderStyle;
     private int level;
     private float a;
@@ -76,9 +88,9 @@ public class ConfigGroup extends VerticalGroup {
     private CheckBox soundCheckBox;
     private CheckBox musicCheckBox;
     private CheckBox effectsCheckBox;
-    private CheckBox shaderCheckBox;
-    private CheckBox childCheckBox;
-    private CheckBox levelCheckBox;
+    private ConfigCheckBox shadersCheckBox;
+    private ConfigCheckBox childCheckBox;
+    private ConfigCheckBox levelCheckBox;
     private CheckBox vibrationCheckBox;
     private CheckBox joyStickCheckBox;
     private CheckBox joyStickColorCheckBox;
@@ -91,6 +103,8 @@ public class ConfigGroup extends VerticalGroup {
     private GlyphLayout glyphLayout;
     private Array<Music> musicArray;
     private BoomBox boomBox;
+    private Label shaderLabel;
+    private Label childLabel;
 
     private ConfigGroup() {
         this.setName(GroupType.CONFIG.name());
@@ -112,12 +126,13 @@ public class ConfigGroup extends VerticalGroup {
         joystick.setHeight(PaintConstants.JOYSTICK_HEIGHT);
         innerTable = new Table();
         joystickTable = new Table();
+        joystickTable.setHeight(PaintConstants.JOYSTICK_HEIGHT);
         joystickTable.add(joystick)
                 .height(PaintConstants.JOYSTICK_HEIGHT);
 
-        innerTable.add(joyStickModeSlider).width(220).height(100);
+        innerTable.add(joyStickModeSlider).width(204).height(PaintConstants.JOYSTICK_HEIGHT / 2);
         innerTable.row();
-        innerTable.add(joyStickColorCheckBox).left();
+        innerTable.add(joyStickColorCheckBox).height(PaintConstants.JOYSTICK_HEIGHT / 2).left();
 
         initLines();
 
@@ -133,7 +148,8 @@ public class ConfigGroup extends VerticalGroup {
         scrollPane.setForceScroll(false, true);
         scrollPane.setScrollingDisabled(true, false);
         scrollPane.setFadeScrollBars(false);
-        scrollPane.setVariableSizeKnobs(true);
+        scrollPane.setVariableSizeKnobs(false);
+        scrollPane.getStyle().vScrollKnob.setMinHeight(100);
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
         container.setHeight(PaintConstants.UI_SETTINGS_HEIGHT);
         container.align(Align.top);
@@ -157,16 +173,56 @@ public class ConfigGroup extends VerticalGroup {
     }
 
     private void initStyles() {
-        checkBoxStyle48 = skin.get("default", CheckBox.CheckBoxStyle.class);
-        checkBoxStyle48.checkboxOn.setMinHeight(50);
-        checkBoxStyle48.checkboxOn.setMinWidth(50);
-        checkBoxStyle48.checkboxOff.setMinWidth(50);
-        checkBoxStyle48.checkboxOff.setMinHeight(50);
+        soundCheckBoxStyle = new SoundConfigCheckBoxStyle(
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_SOUND1)),
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_SOUND1))
+        );
 
-        labelStyle64 = new Label.LabelStyle(
-                Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
+        musicCheckBoxStyle = new ConfigCheckBoxStyle(
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_MUSIC)),
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_MUSIC))
+        );
+
+        effectsCheckBoxStyle = new ConfigCheckBoxStyle(
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_EFFECTS)),
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_EFFECTS))
+        );
+
+        shadersCheckBoxStyle = new ConfigCheckBoxStyle(
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_SHADERS)),
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_SHADERS))
+        );
+
+        childCheckBoxStyle = new ConfigCheckBoxStyle(
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_CHILD)),
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_CHILD))
+        );
+
+        vibrationCheckBoxStyle = new ConfigCheckBoxStyle(
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_VIBRATION)),
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_VIBRATION))
+        );
+
+        levelCheckBoxStyle = new LevelConfigCheckBoxStyle(
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_LEVEL1)),
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_LEVEL1))
+        );
+
+        joystickCheckBoxStyle = new ConfigCheckBoxStyle(
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_JOYSTICK)),
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_JOYSTICK))
+        );
+
+        joystickPresetCheckBoxStyle = new ConfigCheckBoxStyle(
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_JOYSTICK_OFF)),
+                new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_JOYSTICK_ON))
+        );
+
+        labelStyle54 = new Label.LabelStyle(
+                Assets.getInstance().getAssetManager().get(PaintConstants.FONT54, BitmapFont.class),
                 new Color(0.8f, 0.43f, 0.33f, 1f)
         );
+
 
         noticeStyle64 = new Label.LabelStyle(
                 Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
@@ -178,9 +234,9 @@ public class ConfigGroup extends VerticalGroup {
         /////////
 
         sliderStyle = new Slider.SliderStyle(skin.get("default-horizontal", Slider.SliderStyle.class));
-        sliderStyle.knob.setMinHeight(50);
+        sliderStyle.knob.setMinHeight(36);
         //sliderStyle.knobOver.setMinHeight(50);
-        sliderStyle.knob.setMinWidth(50);
+        sliderStyle.knob.setMinWidth(36);
         //sliderStyle.knobOver.setMinWidth(50);
     }
 
@@ -199,6 +255,7 @@ public class ConfigGroup extends VerticalGroup {
                     boomBox.playSound(MSConstants.UI_MENU);
                 }
                 soundLine.setMuted(soundSlider.getValue() == 0.0f);
+                soundCheckBoxStyle.setFront(soundSlider.getPercent());
             }
         });
         soundSlider.addListener(new ClickListener() {
@@ -297,7 +354,7 @@ public class ConfigGroup extends VerticalGroup {
 
     //todo: затестить мультитач. Надо чтобы несколько пальцев не мгли одновременно нажимать на опции
     private void initCheckBoxes() {
-        soundCheckBox = new CheckBox("", checkBoxStyle48);
+        soundCheckBox = new ConfigCheckBox("", soundCheckBoxStyle);
         soundCheckBox.setDisabled(true);
         soundCheckBox.addListener(new ClickListener() {
             @Override
@@ -312,8 +369,9 @@ public class ConfigGroup extends VerticalGroup {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
+        soundCheckBoxStyle.setFront(soundSlider.getPercent());
 
-        musicCheckBox = new CheckBox("", checkBoxStyle48);
+        musicCheckBox = new ConfigCheckBox("", musicCheckBoxStyle);
         musicCheckBox.setDisabled(true);
         musicCheckBox.addListener(new ChangeListener() {
             @Override
@@ -339,7 +397,7 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        effectsCheckBox = new CheckBox("", checkBoxStyle48);
+        effectsCheckBox = new ConfigCheckBox("", effectsCheckBoxStyle);
         effectsCheckBox.setDisabled(true);
         effectsCheckBox.addListener(new ChangeListener() {
             @Override
@@ -363,16 +421,16 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        shaderCheckBox = new CheckBox("", checkBoxStyle48);
-        shaderCheckBox.setDisabled(true);
-        shaderCheckBox.addListener(new ChangeListener() {
+        shadersCheckBox = new ConfigCheckBox("", shadersCheckBoxStyle);
+        shadersCheckBox.setDisabled(true);
+        shadersCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                boolean enabled = shaderCheckBox.isChecked();
+                boolean enabled = shadersCheckBox.isChecked();
                 GamePreferences.setShaderEnabled(enabled);
             }
         });
-        shaderCheckBox.addListener(new ClickListener() {
+        shadersCheckBox.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (screenType == ScreenManager.ScreenType.MENU) {
@@ -390,7 +448,7 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        childCheckBox = new CheckBox("", checkBoxStyle48);
+        childCheckBox = new ConfigCheckBox("", childCheckBoxStyle);
         childCheckBox.setDisabled(true);
         childCheckBox.addListener(new ChangeListener() {
             @Override
@@ -417,7 +475,7 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        levelCheckBox = new CheckBox("", checkBoxStyle48);
+        levelCheckBox = new ConfigCheckBox("", levelCheckBoxStyle);
         levelCheckBox.setDisabled(true);
         levelCheckBox.addListener(new ClickListener() {
             @Override
@@ -437,7 +495,7 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        vibrationCheckBox = new CheckBox("", checkBoxStyle48);
+        vibrationCheckBox = new ConfigCheckBox("", vibrationCheckBoxStyle);
         vibrationCheckBox.setDisabled(true);
         vibrationCheckBox.addListener(new ChangeListener() {
             @Override
@@ -463,7 +521,7 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        joyStickCheckBox = new CheckBox("", checkBoxStyle48);
+        joyStickCheckBox = new ConfigCheckBox("", joystickCheckBoxStyle);
         joyStickCheckBox.setDisabled(true);
         joyStickCheckBox.addListener(new ChangeListener() {
             @Override
@@ -489,10 +547,10 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        joyStickPresetCheckBox = new CheckBox("", checkBoxStyle48);
+        joyStickPresetCheckBox = new ConfigCheckBox("", joystickCheckBoxStyle);
         joyStickPresetCheckBox.setDisabled(true);
 
-        joyStickColorCheckBox = new CheckBox("COLOR", checkBoxStyle48);
+        joyStickColorCheckBox = new CheckBox(" COLOR", joystickPresetCheckBoxStyle);
         joyStickColorCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -522,7 +580,7 @@ public class ConfigGroup extends VerticalGroup {
         titleLabel = new Label("SETTINGS", labelStyle96);
         space = new Label("", labelStyle96);
 
-        Label soundLabel = new Label("SOUND", labelStyle64);
+        Label soundLabel = new Label("SOUND", labelStyle54);
         soundLabel.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -537,7 +595,7 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        Label musicLabel = new Label("MUSIC", labelStyle64);
+        Label musicLabel = new Label("MUSIC", labelStyle54);
         musicLabel.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -552,7 +610,7 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        Label effectsLabel = new Label("EFFECTS", labelStyle64);
+        Label effectsLabel = new Label("EFFECTS", labelStyle54);
         effectsLabel.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -567,7 +625,7 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        Label shaderLabel = new Label("SHADERS", labelStyle64);
+        shaderLabel = new Label("SHADERS", labelStyle54);
         shaderLabel.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -586,7 +644,7 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        Label childLabel = new Label("CHILD MODE", labelStyle64);
+        childLabel = new Label("CHILD MODE", labelStyle54);
         childLabel.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -605,7 +663,7 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        levelLabel = new Label("LEVEL", labelStyle64);
+        levelLabel = new Label("LEVEL", labelStyle54);
         levelLabel.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -624,7 +682,7 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        Label vibrationLabel = new Label("VIBRATION", labelStyle64);
+        Label vibrationLabel = new Label("VIBRATION", labelStyle54);
         vibrationLabel.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -639,7 +697,7 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        Label joyStickLabel = new Label("JOYSTICK", labelStyle64);
+        Label joyStickLabel = new Label("JOYSTICK", labelStyle54);
         joyStickLabel.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -654,59 +712,102 @@ public class ConfigGroup extends VerticalGroup {
             }
         });
 
-        Group soundGroup = makeGroup(soundLabel, 384, 68);
-        soundLine = new Line(soundCheckBox, soundGroup, soundSlider);
+        Group soundGroup = makeGroup(soundLabel, 273, 82);
+        soundLine = new Line(
+                soundCheckBox,
+                soundGroup,
+                soundSlider,
+                new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE1))
+        );
         soundLine.setNoticeMessage(PaintConstants.UI_SOUND_NOTICE);
         soundLine.setHoldMessage(PaintConstants.UI_SOUND_HOLD);
         soundLine.setEnabledMessage(PaintConstants.UI_SOUND_ENABLE);
         soundLine.setDisabledMessage(PaintConstants.UI_SOUND_DISABLE);
-        Group musicGroup = makeGroup(musicLabel, 384, 68);
-        musicLine = new Line(musicCheckBox, musicGroup, musicSlider);
+        Group musicGroup = makeGroup(musicLabel, 273, 82);
+        musicLine = new Line(
+                musicCheckBox,
+                musicGroup,
+                musicSlider,
+                new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE1))
+        );
         musicLine.setNoticeMessage(PaintConstants.UI_MUSIC_NOTICE);
         musicLine.setHoldMessage(PaintConstants.UI_MUSIC_HOLD);
         musicLine.setEnabledMessage(PaintConstants.UI_MUSIC_ENABLE);
         musicLine.setDisabledMessage(PaintConstants.UI_MUSIC_DISABLE);
-        Group effectsGroup = makeGroup(effectsLabel, 384, 68);
-        effectsLine = new Line(effectsCheckBox, effectsGroup, effectsSlider);
+        Group effectsGroup = makeGroup(effectsLabel, 273, 82);
+        effectsLine = new Line(
+                effectsCheckBox,
+                effectsGroup,
+                effectsSlider,
+                new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE1))
+        );
         effectsLine.setNoticeMessage(PaintConstants.UI_EFFECTS_NOTICE);
         effectsLine.setHoldMessage(PaintConstants.UI_EFFECTS_HOLD);
         effectsLine.setEnabledMessage(PaintConstants.UI_EFFECTS_ENABLE);
         effectsLine.setDisabledMessage(PaintConstants.UI_EFFECTS_DISABLE);
-        Group shaderGroup = makeGroup(shaderLabel, 652, 68);
-        shaderLine = new Line(shaderCheckBox, shaderGroup, null);
+        Group shaderGroup = makeGroup(shaderLabel, 535, 82);
+        shaderLine = new Line(
+                shadersCheckBox,
+                shaderGroup,
+                null,
+                new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE2))
+        );
         shaderLine.setNoticeMessage(PaintConstants.UI_SHADERS_NOTICE);
         shaderLine.setHoldMessage(PaintConstants.UI_SHADERS_HOLD);
         shaderLine.setEnabledMessage(PaintConstants.UI_SHADERS_ENABLE);
         shaderLine.setDisabledMessage(PaintConstants.UI_SHADERS_DISABLE);
-        Group childGroup = makeGroup(childLabel, 652, 68);
-        childLine = new Line(childCheckBox, childGroup, null);
+        Group childGroup = makeGroup(childLabel, 535, 82);
+        childLine = new Line(
+                childCheckBox,
+                childGroup,
+                null,
+                new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE2))
+        );
         childLine.setNoticeMessage(PaintConstants.UI_CHILD_NOTICE);
         childLine.setHoldMessage(PaintConstants.UI_CHILD_HOLD);
         childLine.setEnabledMessage(PaintConstants.UI_CHILD_ENABLE);
         childLine.setDisabledMessage(PaintConstants.UI_CHILD_DISABLE);
-        Group levelGroup = makeGroup(levelLabel, 652, 68);
-        levelLine = new Line(levelCheckBox, levelGroup, null);
+        Group levelGroup = makeGroup(levelLabel, 535, 82);
+        levelLine = new Line(
+                levelCheckBox,
+                levelGroup,
+                null,
+                new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE2))
+        );
         levelLine.setActive(true);
         levelLine.setNoticeMessage(PaintConstants.UI_LEVEL_NOTICE);
         levelLine.setHoldMessage(PaintConstants.UI_LEVEL_HOLD);
         levelLine.setEnabledMessage(PaintConstants.UI_LEVEL_ENABLE);
         levelLine.setDisabledMessage(PaintConstants.UI_LEVEL_DISABLE);
-        Group vibrationGroup = makeGroup(vibrationLabel, 652, 68);
-        vibrationLine = new Line(vibrationCheckBox, vibrationGroup, null);
+        Group vibrationGroup = makeGroup(vibrationLabel, 535, 82);
+        vibrationLine = new Line(
+                vibrationCheckBox,
+                vibrationGroup,
+                null,
+                new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE2))
+        );
         vibrationLine.setNoticeMessage(PaintConstants.UI_VIBRATION_NOTICE);
         vibrationLine.setHoldMessage(PaintConstants.UI_VIBRATION_HOLD);
         vibrationLine.setEnabledMessage(PaintConstants.UI_VIBRATION_ENABLE);
         vibrationLine.setDisabledMessage(PaintConstants.UI_VIBRATION_DISABLE);
-        Group joystickGroup = makeGroup(joyStickLabel, 652, 68);
-        joystickLine = new Line(joyStickCheckBox, joystickGroup, null);
+        Group joystickGroup = makeGroup(joyStickLabel, 535, 82);
+        joystickLine = new Line(
+                joyStickCheckBox,
+                joystickGroup,
+                null,
+                new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE2))
+        );
         joystickLine.setNoticeMessage(PaintConstants.UI_JOYSTICK_NOTICE);
         joystickLine.setHoldMessage(PaintConstants.UI_JOYSTICK_HOLD);
         joystickLine.setEnabledMessage(PaintConstants.UI_JOYSTICK_ENABLE);
         joystickLine.setDisabledMessage(PaintConstants.UI_JOYSTICK_DISABLE);
 
-        joystickPresetLine = new Line(joyStickPresetCheckBox, joystickTable, innerTable);
-        joystickPresetLine.setHeight(PaintConstants.JOYSTICK_HEIGHT);
-
+        joystickPresetLine = new Line(
+                joyStickPresetCheckBox,
+                joystickTable,
+                innerTable,
+                new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE3))
+        );
         return space;
     }
 
@@ -750,12 +851,26 @@ public class ConfigGroup extends VerticalGroup {
         }
     }
 
-    private Group makeGroup(Label label, int width, int height) {
-        label.setFillParent(true);
-        Group soundGroup = new Group();
-        soundGroup.addActor(label);
-        soundGroup.setSize(width, height);
-        return soundGroup;
+    private Group makeGroup(Widget widget, int width, int height) {
+        widget.setFillParent(true);
+        Group group = new Group();
+        group.addActor(widget);
+        group.setSize(width, height);
+        return group;
+    }
+
+    private void refreshSoundLine() {
+        //soundSlider.setDisabled(!soundLine.isActive());
+        soundLine.setActive(GamePreferences.isEffectsEnabled() || GamePreferences.isMusicEnabled());
+        soundCheckBox.setChecked(soundLine.isActive());
+        if (GamePreferences.isEffectsEnabled() || GamePreferences.isMusicEnabled()) {
+            soundLine.setMuted(false);
+        } else {
+            soundLine.setMuted(true);
+        }
+        if (soundSlider.getValue() == 0) {
+            soundLine.setMuted(true);
+        }
     }
 
     private void refreshMusicLine() {
@@ -778,35 +893,27 @@ public class ConfigGroup extends VerticalGroup {
         soundLine.setMuted(!GamePreferences.isEffectsEnabled() && !GamePreferences.isMusicEnabled());
     }
 
-    private void refreshSoundLine() {
-        soundSlider.setDisabled(!soundLine.isActive());
-        soundLine.setActive(GamePreferences.isEffectsEnabled() || GamePreferences.isMusicEnabled());
-        soundCheckBox.setChecked(soundLine.isActive());
-        if (GamePreferences.isEffectsEnabled() || GamePreferences.isMusicEnabled()) {
-            soundLine.setMuted(false);
-        } else {
-            soundLine.setMuted(true);
-        }
-        if (soundSlider.getValue() == 0) {
-            soundLine.setMuted(true);
-        }
-    }
-
     private void refreshShaderLine() {
         if (screenType == ScreenManager.ScreenType.MENU) {
-            shaderCheckBox.setChecked(shaderLine.isActive());
+            shadersCheckBox.setChecked(shaderLine.isActive());
+            shadersCheckBox.setLocked(false);
         } else {
-            shaderCheckBox.setChecked(GamePreferences.isShaderEnabled());
+            shadersCheckBox.setChecked(GamePreferences.isShaderEnabled());
             shaderLine.setSlave(true);
+            shadersCheckBox.setLocked(true);
+            shaderLabel.setText("SHADERS " + (GamePreferences.isShaderEnabled() ? "(ON)" : "(OFF)"));
         }
     }
 
     private void refreshChildLine() {
         if (screenType == ScreenManager.ScreenType.MENU) {
             childCheckBox.setChecked(childLine.isActive());
+            childCheckBox.setLocked(false);
         } else {
             childCheckBox.setChecked(GamePreferences.isChildEnabled());
+            childCheckBox.setLocked(true);
             childLine.setSlave(true);
+            childLabel.setText("CHILD MODE " + (GamePreferences.isChildEnabled() ? "(ON)" : "(OFF)"));
         }
     }
 
@@ -815,12 +922,15 @@ public class ConfigGroup extends VerticalGroup {
             levelLine.setActive(true);
             level = level % (Rules.StartLevel.values().length);
             GamePreferences.setLevel(level);
+            levelCheckBox.setLocked(false);
         } else {
             levelLine.setActive(false);
             levelLine.setSlave(true);
+            levelCheckBox.setLocked(true);
         }
         levelCheckBox.setChecked(true);
         levelLabel.setText("LEVEL " + level + " (" + Rules.StartLevel.values()[level].name() + ")");
+        levelCheckBoxStyle.setFront(level);
     }
 
     private void refreshVibrationLine() {
@@ -963,20 +1073,26 @@ public class ConfigGroup extends VerticalGroup {
         @Getter
         @Setter
         private boolean slave;
+        private TextureRegion textureRegion;
 
-        private Line(Actor leftActor, Actor centerActor, Actor rightActor) {
+        private Line(Actor leftActor, Actor centerActor, Actor rightActor, TextureRegion textureRegion) {
             this.table = new Table();
-            table.row().padBottom(22);
-            table.add(leftActor).width(44).padRight(44).padLeft(44);
-            table.add(centerActor).expandX();
+            this.textureRegion = textureRegion;
+            table.row().padBottom(12);
+
+            table.add(leftActor).width(82).height(82);
 
             if (rightActor != null) {
-                table.add(rightActor).width(220).padRight(22).padLeft(22);
+                table.add(centerActor).width(273).padLeft(23);
+                table.add(rightActor).width(204).height(82).padRight(29).padLeft(29);
+            } else {
+                table.add(centerActor).width(535).padLeft(23);
             }
             table.align(Align.top);
             table.setFillParent(true);
-            this.setWidth(724);
-            this.setHeight(90);
+            this.setWidth(PaintConstants.UI_CONFIG_CELL_WIDTH);
+
+            this.setHeight(centerActor.getHeight() + 12);
             this.addActor(table);
         }
 
@@ -1001,6 +1117,12 @@ public class ConfigGroup extends VerticalGroup {
 
         @Override
         public void draw(Batch batch, float parentAlpha) {
+            Color color = batch.getColor();
+            color.a = a;
+            batch.setColor(color);
+            batch.draw(textureRegion, getX(), getY() + 12);
+            color.a = parentAlpha;
+            batch.setColor(color);
             super.draw(batch, a);
         }
     }

@@ -48,7 +48,7 @@ public class MenuScreen extends BaseScreen {
         Label.LabelStyle labelStyle256 = new Label.LabelStyle();
         labelStyle256.font = font188;
         this.head = new Label("SHUTTLE", labelStyle256);
-        head.setPosition(285, 1685);
+        head.setPosition(285, 1686);
         this.underHead = new Label("2D GAME ARCADE", labelStyle64);
         underHead.setPosition(408, 1658);
         stage.addActor(menuGroup);

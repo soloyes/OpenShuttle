@@ -200,6 +200,33 @@ public final class PaintConstants {
     public static final int LEFT_RIGHT_UI_ITEM_TYPE_WIDTH = 16;
     public static final int LEFT_RIGHT_UI_ITEM_TYPE_HEIGHT = 16;
 
+    public static final String UI_CONFIG_CELL_TYPE1 = "configcelltype1";
+    public static final String UI_CONFIG_CELL_TYPE2 = "configcelltype2";
+    public static final String UI_CONFIG_CELL_TYPE3 = "configcelltype3";
+    public static final String UI_ICO_CONFIG_SOUND1 = "icoconfigsound1";
+    public static final String UI_ICO_CONFIG_SOUND2 = "icoconfigsound2";
+    public static final String UI_ICO_CONFIG_SOUND3 = "icoconfigsound3";
+    public static final String UI_ICO_CONFIG_MUSIC = "icoconfigmusic";
+    public static final String UI_ICO_CONFIG_EFFECTS = "icoconfigeffects";
+    public static final String UI_ICO_CONFIG_SHADERS = "icoconfigshaders";
+    public static final String UI_ICO_CONFIG_CHILD = "icoconfigchild";
+    public static final String UI_ICO_CONFIG_LEVEL1 = "icoconfiglevel1";
+    public static final String UI_ICO_CONFIG_LEVEL2 = "icoconfiglevel2";
+    public static final String UI_ICO_CONFIG_LEVEL3 = "icoconfiglevel3";
+    public static final String UI_ICO_CONFIG_LEVEL4 = "icoconfiglevel4";
+    public static final String UI_ICO_CONFIG_VIBRATION = "icoconfigvibration";
+    public static final String UI_ICO_CONFIG_JOYSTICK = "icoconfigjoystick";
+    public static final String UI_ICO_CONFIG_JOYSTICK_ON = "icoconfigjoystickpreseton";
+    public static final String UI_ICO_CONFIG_JOYSTICK_OFF = "icoconfigjoystickpresetoff";
+    public static final String UI_ICO_CONFIG_OFF = "icoconfigoff";
+    public static final String UI_ICO_CONFIG_LOCK = "icoconfiglock";
+
+    public static final int UI_ICO_CONFIG_WIDTH = 38;
+    public static final int UI_ICO_CONFIG_HEIGHT = 38;
+
+    public static final int UI_CONFIG_CELL_WIDTH = 640;
+    public static final int UI_CONFIG_CELL_HEIGHT = 82;
+
     public static final String ASTRONAUT_ICON = "astronauticon";
     public static final String MECHANIC_ICON = "mechanicicon";
     public static final String MILITARY_ICON = "militaryicon";
@@ -274,6 +301,7 @@ public final class PaintConstants {
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
     public static final String FONT32 = "fonts/college.regular32.ttf";
     public static final String FONT36 = "fonts/college.regular36.ttf";
+    public static final String FONT54 = "fonts/college.regular54.ttf";
     public static final String FONT32_C = "fonts/college.regular32Coloured.ttf";
     public static final String FONT44 = "fonts/college.regular44.ttf";
     public static final String FONT48 = "fonts/college.regular48.ttf";
@@ -346,9 +374,9 @@ public final class PaintConstants {
     public static final String UI_JOYSTICK_HOLD = "SWITCHING JOYSTICK";
 
     public static final float UI_SETTINGS_WIDTH = 720;
-    public static final float UI_SETTINGS_HEIGHT = Rules.WORLD_HEIGHT / 2;
+    public static final float UI_SETTINGS_HEIGHT = 1200;
     public static final float UI_SETTINGS_X = 178;
-    public static final float UI_SETTINGS_Y = 477;
+    public static final float UI_SETTINGS_Y = 300;
 
     private PaintConstants() {
     }
