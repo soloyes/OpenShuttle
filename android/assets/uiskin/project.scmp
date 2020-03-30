@@ -3,7 +3,7 @@ atlasData: {
 	atlasCurrent: true
 	drawables: [
 		{
-			file: "/home/sol/Desktop/skin/project_data/minus.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/minus.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -20,7 +20,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/plus.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/plus.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -37,7 +37,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/progress-bar.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/progress-bar.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -54,7 +54,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/progress-bar-fill.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/progress-bar-fill.png
 			bgColor: {
 				r: 0
 				g: 0
@@ -71,7 +71,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/radio.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/radio.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -88,7 +88,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/radio-on.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/radio-on.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -105,7 +105,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/round-gray.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/round-gray.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -122,7 +122,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/round-white.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/round-white.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -139,7 +139,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/selectbox.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/selectbox.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -156,7 +156,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/slider-horizontal.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/slider-horizontal.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -173,7 +173,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/slider-knob.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/slider-knob.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -190,7 +190,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/slider-vertical.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/slider-vertical.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -207,7 +207,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/textfield.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/textfield.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -224,7 +224,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/vertical-split-pane.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/vertical-split-pane.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -241,7 +241,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/window.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/window.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -258,7 +258,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/checkbox.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/checkbox.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -275,7 +275,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/checkbox-on.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/checkbox-on.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -292,7 +292,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/cursor.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/cursor.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -309,7 +309,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/horizontal-split-pane.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/horizontal-split-pane.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -326,7 +326,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/list.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/list.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -343,7 +343,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/round-white.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/round-white.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -365,7 +365,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/round-white.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/round-white.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -387,7 +387,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/selection.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/selection.9.png
 			bgColor: {
 				r: 0
 				g: 0
@@ -404,7 +404,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/round-white-small.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/round-white-small.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -421,7 +421,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/round-white-small.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/round-white-small.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -443,7 +443,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/round-white-small.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/round-white-small.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -465,7 +465,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/white.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/white.png
 			bgColor: {
 				r: 0
 				g: 0
@@ -482,7 +482,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/white.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/white.png
 			bgColor: {
 				r: 0
 				g: 0
@@ -504,7 +504,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/progress-bar-fill-vert.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/progress-bar-fill-vert.png
 			bgColor: {
 				r: 0
 				g: 0
@@ -521,7 +521,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/touchpad.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/touchpad.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -538,7 +538,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/touchpad-knob.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/touchpad-knob.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -555,7 +555,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/scroll.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/scroll.9.png
 			bgColor: {
 				r: 0
 				g: 0
@@ -572,7 +572,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/scrollback.9.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/scrollback.9.png
 			bgColor: {
 				r: 0
 				g: 0
@@ -588,10 +588,61 @@ atlasData: {
 			customized: false
 			tenPatchData: null
 		}
+		{
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/background.9.png
+			bgColor: {
+				r: 0
+				g: 0
+				b: 0
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: background
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+		}
+		{
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/knobBefore.9.png
+			bgColor: {
+				r: 0
+				g: 0
+				b: 0
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: knobBefore
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+		}
+		{
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/sett_sld_p3_36x36_noA_point.png
+			bgColor: {
+				r: 0
+				g: 0
+				b: 0
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: sett_sld_p3_36x36_noA_point
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+		}
 	]
 	fontDrawables: [
 		{
-			file: "/home/sol/Desktop/skin/project_data/font-export.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/font-export.png
 			bgColor: {
 				r: 0
 				g: 0
@@ -608,7 +659,7 @@ atlasData: {
 			tenPatchData: null
 		}
 		{
-			file: "/home/sol/Desktop/skin/project_data/font-title-export.png"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/font-title-export.png
 			bgColor: {
 				r: 0
 				g: 0
@@ -663,12 +714,12 @@ jsonData: {
 		{
 			class: com.ray3k.skincomposer.data.FontData
 			name: font
-			file: "/home/sol/Desktop/skin/project_data/font-export.fnt"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/font-export.fnt
 		}
 		{
 			class: com.ray3k.skincomposer.data.FontData
 			name: title
-			file: "/home/sol/Desktop/skin/project_data/font-title-export.fnt"
+			file: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project_data/font-title-export.fnt
 		}
 	]
 	freeTypeFonts: []
@@ -2074,7 +2125,7 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: background
 						optional: false
-						value: slider-horizontal
+						value: background
 					}
 					disabledBackground: {
 						class: com.ray3k.skincomposer.data.StyleProperty
@@ -2088,7 +2139,7 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: knob
 						optional: true
-						value: slider-knob
+						value: sett_sld_p3_36x36_noA_point
 					}
 					disabledKnob: {
 						class: com.ray3k.skincomposer.data.StyleProperty
@@ -2102,7 +2153,7 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: knobBefore
 						optional: true
-						value: null
+						value: knobBefore
 					}
 					knobAfter: {
 						class: com.ray3k.skincomposer.data.StyleProperty
@@ -2116,7 +2167,7 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: disabledKnobBefore
 						optional: true
-						value: null
+						value: background
 					}
 					disabledKnobAfter: {
 						class: com.ray3k.skincomposer.data.StyleProperty
@@ -2948,7 +2999,7 @@ preferences: {
 	}
 	last-import-export-path: {
 		class: java.lang.String
-		value: "/home/sol/Desktop/skin/gameSkin.json"
+		value: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/gameSkin.json
 	}
 	id: {
 		class: java.lang.Integer
@@ -2958,9 +3009,17 @@ preferences: {
 		class: java.lang.Integer
 		value: 1024
 	}
+	export-fonts: {
+		class: java.lang.Boolean
+		value: true
+	}
 	texture-max-width: {
 		class: java.lang.Integer
 		value: 1024
+	}
+	export-atlas: {
+		class: java.lang.Boolean
+		value: true
 	}
 	resources-relative: {
 		class: java.lang.Boolean
@@ -2971,6 +3030,6 @@ preferences: {
 		value: E:/workspace/Plain James UI/output
 	}
 }
-saveFile: "/home/sol/Desktop/skin/project.scmp"
+saveFile: C:/Users/vsoloviev/StudioProjects/shuttle/android/assets/uiskin/project.scmp
 version: 34
 }

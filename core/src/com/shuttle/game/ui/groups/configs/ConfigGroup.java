@@ -50,10 +50,10 @@ public class ConfigGroup extends VerticalGroup {
     private ScrollPane scrollPane;
     private Table innerTable;
     private Table joystickTable;
-    private BitmapFont font64;
+    private BitmapFont font44;
     private BitmapFont font96;
     private Label.LabelStyle labelStyle54;
-    private Label.LabelStyle noticeStyle64;
+    private Label.LabelStyle noticeStyle44;
     private Label.LabelStyle labelStyle96;
     private SoundConfigCheckBoxStyle soundCheckBoxStyle;
     private ConfigCheckBoxStyle musicCheckBoxStyle;
@@ -109,7 +109,7 @@ public class ConfigGroup extends VerticalGroup {
     private ConfigGroup() {
         this.setName(GroupType.CONFIG.name());
         this.setVisible(false);
-        this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
+        this.font44 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT44, BitmapFont.class);
         this.font96 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
         this.skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.setPosition(PaintConstants.UI_SETTINGS_X, PaintConstants.UI_SETTINGS_Y);
@@ -137,7 +137,7 @@ public class ConfigGroup extends VerticalGroup {
         initLines();
 
         this.glyphLayout = new GlyphLayout();
-        this.noticeLabel = new Label(notice, noticeStyle64);
+        this.noticeLabel = new Label(notice, noticeStyle44);
         this.noticeGroup = new Group();
         noticeGroup.addActor(noticeLabel);
         noticeLabel.setFillParent(true);
@@ -224,8 +224,8 @@ public class ConfigGroup extends VerticalGroup {
         );
 
 
-        noticeStyle64 = new Label.LabelStyle(
-                Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
+        noticeStyle44 = new Label.LabelStyle(
+                Assets.getInstance().getAssetManager().get(PaintConstants.FONT44, BitmapFont.class),
                 new Color(1.0f, 1.0f, 1.0f, 1f)
         );
 
@@ -576,9 +576,9 @@ public class ConfigGroup extends VerticalGroup {
         });
     }
 
-    private Label initLines() {
+    private void initLines() {
         titleLabel = new Label("SETTINGS", labelStyle96);
-        space = new Label("", labelStyle96);
+        space = new Label("", labelStyle54);
 
         Label soundLabel = new Label("SOUND", labelStyle54);
         soundLabel.addListener(new ClickListener() {
@@ -808,7 +808,6 @@ public class ConfigGroup extends VerticalGroup {
                 innerTable,
                 new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE3))
         );
-        return space;
     }
 
     public void refresh() {
@@ -951,11 +950,11 @@ public class ConfigGroup extends VerticalGroup {
     public void act(float delta) {
         super.act(delta);
         noticeGroup.getColor().a = a;
-        glyphLayout.setText(font64, notice);
+        glyphLayout.setText(font44, notice);
         noticeLabel.setText(notice);
         noticeGroup.setPosition(
                 Rules.WORLD_WIDTH / 2 - this.getX() - glyphLayout.width / 2,
-                this.getHeight() - 3 * titleLabel.getHeight() / 2
+                this.getHeight() - titleLabel.getHeight() - 20
         );
 
         shadowTime -= delta;
@@ -1054,7 +1053,7 @@ public class ConfigGroup extends VerticalGroup {
         return instance;
     }
 
-    private class Line extends Group {
+    private static class Line extends Group {
         @Getter
         @Setter
         private String noticeMessage;
@@ -1080,10 +1079,10 @@ public class ConfigGroup extends VerticalGroup {
         private boolean slave;
         private TextureRegion textureRegion;
 
-        private float touchTime;
         private ConfigCheckBox configCheckBox;
 
         private Line(ConfigCheckBox leftActor, Actor centerActor, Actor rightActor, TextureRegion textureRegion) {
+
             this.table = new Table();
             this.configCheckBox = leftActor;
             this.textureRegion = textureRegion;
