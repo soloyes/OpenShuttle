@@ -85,16 +85,16 @@ public class ConfigGroup extends VerticalGroup {
     private Line joystickLine;
     private Line joystickPresetLine;
     private Line tmpLine;
-    private CheckBox soundCheckBox;
-    private CheckBox musicCheckBox;
-    private CheckBox effectsCheckBox;
+    private ConfigCheckBox soundCheckBox;
+    private ConfigCheckBox musicCheckBox;
+    private ConfigCheckBox effectsCheckBox;
     private ConfigCheckBox shadersCheckBox;
     private ConfigCheckBox childCheckBox;
     private ConfigCheckBox levelCheckBox;
-    private CheckBox vibrationCheckBox;
-    private CheckBox joyStickCheckBox;
+    private ConfigCheckBox vibrationCheckBox;
+    private ConfigCheckBox joyStickCheckBox;
     private CheckBox joyStickColorCheckBox;
-    private CheckBox joyStickPresetCheckBox;
+    private ConfigCheckBox joyStickPresetCheckBox;
     private Label noticeLabel;
     private Label levelLabel;
     private Label titleLabel;
@@ -848,6 +848,7 @@ public class ConfigGroup extends VerticalGroup {
             settingsTouched = false;
             touchTime = 0.0f;
             scrollPane.setFlickScroll(true);
+            tmpLine.setTouchTime(touchTime);
         }
     }
 
@@ -952,8 +953,10 @@ public class ConfigGroup extends VerticalGroup {
         noticeGroup.getColor().a = a;
         glyphLayout.setText(font64, notice);
         noticeLabel.setText(notice);
-        noticeGroup.setPosition(Rules.WORLD_WIDTH / 2 - this.getX() - glyphLayout.width / 2,
-                this.getHeight() - 3 * titleLabel.getHeight() / 2);
+        noticeGroup.setPosition(
+                Rules.WORLD_WIDTH / 2 - this.getX() - glyphLayout.width / 2,
+                this.getHeight() - 3 * titleLabel.getHeight() / 2
+        );
 
         shadowTime -= delta;
         if (shadowTime <= 0.0f) {
@@ -964,6 +967,7 @@ public class ConfigGroup extends VerticalGroup {
         if (settingsTouched) {
             setNoticeAndAlpha(tmpLine.getNoticeMessage());
             touchTime += delta;
+            tmpLine.setTouchTime(touchTime);
         }
 
         if (touchTime >= Rules.SETTINGS_WAIT_TOUCH) {
@@ -1014,6 +1018,7 @@ public class ConfigGroup extends VerticalGroup {
                 soundCheckBox.setChecked(true);
                 soundSlider.setDisabled(false);
             }
+            tmpLine.setTouchTime(touchTime);
         }
     }
 
@@ -1075,8 +1080,12 @@ public class ConfigGroup extends VerticalGroup {
         private boolean slave;
         private TextureRegion textureRegion;
 
-        private Line(Actor leftActor, Actor centerActor, Actor rightActor, TextureRegion textureRegion) {
+        private float touchTime;
+        private ConfigCheckBox configCheckBox;
+
+        private Line(ConfigCheckBox leftActor, Actor centerActor, Actor rightActor, TextureRegion textureRegion) {
             this.table = new Table();
+            this.configCheckBox = leftActor;
             this.textureRegion = textureRegion;
             table.row().padBottom(12);
 
@@ -1124,6 +1133,10 @@ public class ConfigGroup extends VerticalGroup {
             color.a = parentAlpha;
             batch.setColor(color);
             super.draw(batch, a);
+        }
+
+        public void setTouchTime(float touchTime) {
+            configCheckBox.setTouchTime(touchTime);
         }
     }
 }

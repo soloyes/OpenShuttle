@@ -598,6 +598,13 @@ configcelltype1
   orig: 628, 82
   offset: 0, 0
   index: -1
+icoconfigload
+  rotate: false
+  xy: 3850, 1192
+  size: 82, 82
+  orig: 82, 82
+  offset: 0, 0
+  index: -1
 spscale
   rotate: false
   xy: 3850, 710

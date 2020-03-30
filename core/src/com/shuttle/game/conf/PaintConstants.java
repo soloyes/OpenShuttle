@@ -220,9 +220,13 @@ public final class PaintConstants {
     public static final String UI_ICO_CONFIG_JOYSTICK_OFF = "icoconfigjoystickpresetoff";
     public static final String UI_ICO_CONFIG_OFF = "icoconfigoff";
     public static final String UI_ICO_CONFIG_LOCK = "icoconfiglock";
+    public static final String UI_ICO_CONFIG_LOAD = "icoconfigload";
 
-    public static final int UI_ICO_CONFIG_WIDTH = 38;
-    public static final int UI_ICO_CONFIG_HEIGHT = 38;
+    public static final int UI_ICO_CONFIG_WIDTH = 36;
+    public static final int UI_ICO_CONFIG_HEIGHT = 36;
+
+    public static final int UI_ICO_CONFIG_LOAD_WIDTH = 82;
+    public static final int UI_ICO_CONFIG_LOAD_HEIGHT = 82;
 
     public static final int UI_CONFIG_CELL_WIDTH = 640;
     public static final int UI_CONFIG_CELL_HEIGHT = 82;

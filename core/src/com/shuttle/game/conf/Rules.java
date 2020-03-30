@@ -276,10 +276,10 @@ public final class Rules {
     public static final float LINE_DELETE_WAIT = 3.0f;
     //2.0f better less than LINE_DELETE_WAIT
     public static final float NOTICE_WAIT = 2.0f;
-    //2.0f
-    public static final float SETTINGS_WAIT_TOUCH = 1.0f;
-    //5.0f
-    public static final float SETTINGS_WAIT_DISABLE = 3.0f + SETTINGS_WAIT_TOUCH;
+    //0.4f
+    public static final float SETTINGS_WAIT_TOUCH = 0.4f;
+    //0.9f
+    public static final float SETTINGS_WAIT_DISABLE = 0.5f + SETTINGS_WAIT_TOUCH;
 
     public static void setSpace(int n) {
         STARS_COUNT = STARS * n;
