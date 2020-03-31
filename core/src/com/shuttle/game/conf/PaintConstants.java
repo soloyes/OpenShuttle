@@ -172,7 +172,7 @@ public final class PaintConstants {
     public static final float PANEL_ELEMENT_FLASH_TIME = 0.2f;
     public static final float PANEL_ELEMENT_FADING_TIME = 0.4f;
     public static final int PANEL_ELEMENTS_MAX = 4;
-    public static final int LEFT_RIGHT_PANEL_ELEMENT_WIDTH = 148;
+    public static final int LEFT_RIGHT_PANEL_ELEMENT_WIDTH = 128;
     public static final int LEFT_RIGHT_PANEL_ELEMENT_HEIGHT = 128;
     public static final String LEFT_RIGHT_PANEL_FULL_CIRCLE = "fullcircle";
     public static final String LEFT_RIGHT_PANEL_EMPTY_CIRCLE = "emptycircle";
