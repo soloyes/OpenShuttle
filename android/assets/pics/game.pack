@@ -402,23 +402,9 @@ timerbackground
   orig: 110, 162
   offset: 0, 0
   index: -1
-fullcircle
-  rotate: false
-  xy: 1028, 3866
-  size: 148, 128
-  orig: 148, 128
-  offset: 0, 0
-  index: -1
-emptycircle
-  rotate: false
-  xy: 3866, 1286
-  size: 148, 128
-  orig: 148, 128
-  offset: 0, 0
-  index: -1
 astronautbonusicon
   rotate: false
-  xy: 1286, 3866
+  xy: 1028, 3866
   size: 148, 128
   orig: 148, 128
   offset: 0, 0
@@ -432,26 +418,40 @@ selectorscale
   index: -1
 selectorright
   rotate: false
-  xy: 2834, 1544
+  xy: 3866, 1286
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 selectorout
   rotate: false
-  xy: 2964, 1544
+  xy: 1286, 3866
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 selectorleft
   rotate: false
-  xy: 3094, 1544
+  xy: 2834, 1544
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 selectorin
+  rotate: false
+  xy: 2964, 1544
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+fullcircle
+  rotate: false
+  xy: 3094, 1544
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+emptycircle
   rotate: false
   xy: 3224, 1544
   size: 128, 128
@@ -502,56 +502,56 @@ mechanicicon
   index: -1
 glowcell
   rotate: false
-  xy: 2834, 1674
+  xy: 1416, 3866
   size: 118, 118
   orig: 118, 118
   offset: 0, 0
   index: -1
 emptyastronaut
   rotate: false
-  xy: 2964, 1674
+  xy: 2834, 1674
   size: 118, 118
   orig: 118, 118
   offset: 0, 0
   index: -1
 astronauticon
   rotate: false
-  xy: 3094, 1674
+  xy: 2964, 1674
   size: 118, 118
   orig: 118, 118
   offset: 0, 0
   index: -1
 settingsbuttonmenu
   rotate: false
-  xy: 3224, 1674
+  xy: 3094, 1674
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 resultsbuttonmenu
   rotate: false
-  xy: 3354, 1544
+  xy: 3224, 1674
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 playbuttonmenu
   rotate: false
-  xy: 3354, 1658
+  xy: 3354, 1544
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 infobuttonmenu
   rotate: false
-  xy: 3468, 1544
+  xy: 3354, 1658
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 exitbuttonmenu
   rotate: false
-  xy: 3468, 1658
+  xy: 3468, 1544
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
