@@ -255,7 +255,9 @@ public class GameScreen extends BaseScreen {
         //batch.end();
 
         if (PauseGroup.getInstance().isPause()) {
+
             batch.setShader(ShaderManager.PAUSE.getProgram());
+            ShaderManager.PAUSE.getProgram().setUniformf("resolution", Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
         } else {
             batch.setShader(null);
         }
