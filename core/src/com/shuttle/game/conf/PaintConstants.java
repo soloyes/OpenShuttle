@@ -291,6 +291,10 @@ public final class PaintConstants {
     public static final String INFO_BUTTON_MENU = "infobuttonmenu";
     public static final String SETTINGS_BUTTON_MENU = "settingsbuttonmenu";
     public static final String EXIT_BUTTON_MENU = "exitbuttonmenu";
+
+    public static final String PAUSE_MENU_HOME = "menupausehome";
+    public static final String PAUSE_MENU_RESTART = "menupauserestart";
+
     public static final int MENU_BUTTON_WIDTH = 112;
     public static final int MENU_BUTTON_HEIGHT = 112;
     public static final String PROFILES_BORDER = "profilesborder";
