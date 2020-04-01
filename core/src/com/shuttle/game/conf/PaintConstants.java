@@ -226,6 +226,7 @@ public final class PaintConstants {
     public static final String UI_MENU_BACKGROUND_SIT_ASTRONAUT = "menubackgroundsitastronaut";
     public static final String UI_MENU_BACKGROUND_ASTRONAUT = "menubackgroundastronaut";
     public static final String UI_MENU_BACKGROUND_SHUTTLE = "menubackgroundshuttle";
+    public static final String UI_MENU_BACKGROUND_SHIELD = "menubackgroundshield";
     public static final String UI_MENU_BACKGROUND_PLANET = "menubackgroundplanet";
     public static final String UI_MENU_BACKGROUND_FUEL = "menubackgroundfuel";
     public static final String UI_MENU_BACKGROUND_CRATE = "menubackgroundcrate";
@@ -238,8 +239,10 @@ public final class PaintConstants {
     public static int UI_MENU_BACKGROUND_ASTRONAUT_Y = 950;
     public static int UI_MENU_BACKGROUND_SIT_ASTRONAUT_X = 700;
     public static int UI_MENU_BACKGROUND_SIT_ASTRONAUT_Y = 320;
-    public static int UI_MENU_BACKGROUND_SHUTTLE_X = 180;
-    public static int UI_MENU_BACKGROUND_SHUTTLE_Y = 1250;
+    public static int UI_MENU_BACKGROUND_SHUTTLE_X = 257;
+    public static int UI_MENU_BACKGROUND_SHUTTLE_Y = 1355;
+    public static int UI_MENU_BACKGROUND_SHIELD_X = 180;
+    public static int UI_MENU_BACKGROUND_SHIELD_Y = 1250;
     public static int UI_MENU_BACKGROUND_PLANET_X = 0;
     public static int UI_MENU_BACKGROUND_PLANET_Y = 0;
     public static int UI_MENU_BACKGROUND_FUEL_X = 150;
@@ -251,8 +254,10 @@ public final class PaintConstants {
     public static int UI_MENU_BACKGROUND_ASTEROID2_X = 920;
     public static int UI_MENU_BACKGROUND_ASTEROID2_Y = 1700;
 
-    public static int UI_MENU_BACKGROUND_SHUTTLE_WIDTH = 407;
-    public static int UI_MENU_BACKGROUND_SHUTTLE_HEIGHT = 394;
+    public static int UI_MENU_BACKGROUND_SHUTTLE_WIDTH = 252;
+    public static int UI_MENU_BACKGROUND_SHUTTLE_HEIGHT = 219;
+    public static int UI_MENU_BACKGROUND_SHIELD_WIDTH = 407;
+    public static int UI_MENU_BACKGROUND_SHIELD_HEIGHT = 394;
     public static int UI_MENU_BACKGROUND_ASTRONAUT_WIDTH = 180;
     public static int UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT = 183;
     public static int UI_MENU_BACKGROUND_CRATE_WIDTH = 133;

@@ -17,6 +17,7 @@ public class MenuBackgroundGroup extends Group {
     private TextureRegion astronaut;
     private TextureRegion sitastronaut;
     private TextureRegion shuttle;
+    private TextureRegion shield;
     private TextureRegion planet;
     private TextureRegion fuel;
     private TextureRegion crate;
@@ -31,13 +32,19 @@ public class MenuBackgroundGroup extends Group {
     private float rotation2;
     private int random1;
     private int random2;
+    private float shuttleY;
+    private float angle;
+    private int radius;
 
     private float astronautScale;
     private float asteroidScale1;
     private float asteroidScale2;
+    private float shieldScale;
     private Oscillator astronautScaleOscillator;
     private Oscillator asteroidScaleOscillator1;
     private Oscillator asteroidScaleOscillator2;
+    private Oscillator shieldScaleOscillator;
+    private Oscillator shuttleYOscillator;
 
     public static MenuBackgroundGroup getInstance() {
         if (instance == null) {
@@ -52,6 +59,7 @@ public class MenuBackgroundGroup extends Group {
         this.astronaut = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT));
         this.sitastronaut = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT));
         this.shuttle = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_SHUTTLE));
+        this.shield = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_SHIELD));
         this.planet = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_PLANET));
         this.fuel = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_FUEL));
         this.crate = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_CRATE));
@@ -64,8 +72,14 @@ public class MenuBackgroundGroup extends Group {
         this.asteroidScale1 = 1.0f;
         this.asteroidScaleOscillator2 = new Oscillator();
         this.asteroidScale2 = 1.0f;
+        this.shieldScaleOscillator = new Oscillator();
+        this.shieldScale = 1.0f;
+        this.shuttleYOscillator = new Oscillator();
+        this.shuttleY = 1.0f * PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_Y;
         this.random1 = MathUtils.randomSign();
         this.random2 = -random1;
+        this.radius = 200;
+        this.angle = 180;
     }
 
     @Override
@@ -85,7 +99,18 @@ public class MenuBackgroundGroup extends Group {
                 0.0f
         );
         batch.draw(sitastronaut, PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT_X, PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT_Y);
-        batch.draw(shuttle, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_X, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_Y);
+        batch.draw(shuttle, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_X, shuttleY);
+        batch.draw(
+                shield,
+                PaintConstants.UI_MENU_BACKGROUND_SHIELD_X,
+                PaintConstants.UI_MENU_BACKGROUND_SHIELD_Y,
+                PaintConstants.UI_MENU_BACKGROUND_SHIELD_WIDTH / 2,
+                PaintConstants.UI_MENU_BACKGROUND_SHIELD_HEIGHT / 2,
+                PaintConstants.UI_MENU_BACKGROUND_SHIELD_WIDTH,
+                PaintConstants.UI_MENU_BACKGROUND_SHIELD_HEIGHT,
+                shieldScale, shieldScale,
+                0.0f
+        );
         batch.draw(
                 crate,
                 PaintConstants.UI_MENU_BACKGROUND_CRATE_X,
@@ -110,8 +135,8 @@ public class MenuBackgroundGroup extends Group {
         );
         batch.draw(
                 asteroid2,
-                PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_X,
-                PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_Y,
+                PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_X + radius * MathUtils.cos(angle),
+                PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_Y + radius * MathUtils.sin(angle),
                 PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_WIDTH / 2,
                 PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_HEIGHT / 2,
                 PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_WIDTH,
@@ -133,8 +158,8 @@ public class MenuBackgroundGroup extends Group {
 
         ParticleEmitter.getInstance()
                 .setupFromPointToPoint(
-                        PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_X + PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_WIDTH / 3 - 30,
-                        PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_Y + PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_HEIGHT / 3 - 20,
+                        PaintConstants.UI_MENU_BACKGROUND_SHIELD_X + PaintConstants.UI_MENU_BACKGROUND_SHIELD_WIDTH / 3 - 30,
+                        PaintConstants.UI_MENU_BACKGROUND_SHIELD_Y + PaintConstants.UI_MENU_BACKGROUND_SHIELD_HEIGHT / 3 - 20,
                         PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_X + PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_WIDTH / 2,
                         PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_Y + PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT / 2,
                         1.0f,
@@ -164,10 +189,13 @@ public class MenuBackgroundGroup extends Group {
         super.act(delta);
         ParticleEmitter.getInstance().update(delta);
         astronautScale = astronautScaleOscillator.oscillate(astronautScale, 0.05f, 0.9f, 1.0f, delta);
-        asteroidScale1 = asteroidScaleOscillator1.oscillate(asteroidScale1, 0.03f, 0.9f, 1.0f, delta);
-        asteroidScale2 = asteroidScaleOscillator2.oscillate(asteroidScale2, 0.02f, 0.8f, 1.0f, delta);
+        asteroidScale1 = asteroidScaleOscillator1.oscillate(asteroidScale1, 0.01f, 0.9f, 1.0f, delta);
+        asteroidScale2 = asteroidScaleOscillator2.oscillate(asteroidScale2, 0.03f, 0.8f, 1.0f, delta);
+        shieldScale = shieldScaleOscillator.oscillate(shieldScale, 0.09f, 0.95f, 1.0f, delta);
+        shuttleY = shuttleYOscillator.oscillate(shuttleY, 12.0f, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_Y, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_Y + 15, delta);
         rotation1 += delta;
-        rotation2 += 2 * delta;
+        rotation2 += 10 * delta;
+        angle += delta / 5;
     }
 
     public void dispose() {
