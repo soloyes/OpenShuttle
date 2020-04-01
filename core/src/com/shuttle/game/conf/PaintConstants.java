@@ -222,6 +222,48 @@ public final class PaintConstants {
     public static final String UI_ICO_CONFIG_LOCK = "icoconfiglock";
     public static final String UI_ICO_CONFIG_LOAD = "icoconfigload";
 
+    public static final String UI_MENU_BACKGROUND_STORAGE = "menubackgroundstorage";
+    public static final String UI_MENU_BACKGROUND_SIT_ASTRONAUT = "menubackgroundsitastronaut";
+    public static final String UI_MENU_BACKGROUND_ASTRONAUT = "menubackgroundastronaut";
+    public static final String UI_MENU_BACKGROUND_SHUTTLE = "menubackgroundshuttle";
+    public static final String UI_MENU_BACKGROUND_PLANET = "menubackgroundplanet";
+    public static final String UI_MENU_BACKGROUND_FUEL = "menubackgroundfuel";
+    public static final String UI_MENU_BACKGROUND_CRATE = "menubackgroundcrate";
+    public static final String UI_MENU_BACKGROUND_ASTEROID1 = "menubackgroundasteroid1";
+    public static final String UI_MENU_BACKGROUND_ASTEROID2 = "menubackgroundasteroid2";
+
+    public static int UI_MENU_BACKGROUND_STORAGE_X = 456;
+    public static int UI_MENU_BACKGROUND_STORAGE_Y = 400;
+    public static int UI_MENU_BACKGROUND_ASTRONAUT_X = 70;
+    public static int UI_MENU_BACKGROUND_ASTRONAUT_Y = 950;
+    public static int UI_MENU_BACKGROUND_SIT_ASTRONAUT_X = 700;
+    public static int UI_MENU_BACKGROUND_SIT_ASTRONAUT_Y = 320;
+    public static int UI_MENU_BACKGROUND_SHUTTLE_X = 180;
+    public static int UI_MENU_BACKGROUND_SHUTTLE_Y = 1250;
+    public static int UI_MENU_BACKGROUND_PLANET_X = 0;
+    public static int UI_MENU_BACKGROUND_PLANET_Y = 0;
+    public static int UI_MENU_BACKGROUND_FUEL_X = 150;
+    public static int UI_MENU_BACKGROUND_FUEL_Y = 720;
+    public static int UI_MENU_BACKGROUND_CRATE_X = 50;
+    public static int UI_MENU_BACKGROUND_CRATE_Y = 1450;
+    public static int UI_MENU_BACKGROUND_ASTEROID1_X = 720;
+    public static int UI_MENU_BACKGROUND_ASTEROID1_Y = 1100;
+    public static int UI_MENU_BACKGROUND_ASTEROID2_X = 920;
+    public static int UI_MENU_BACKGROUND_ASTEROID2_Y = 1700;
+
+    public static int UI_MENU_BACKGROUND_SHUTTLE_WIDTH = 407;
+    public static int UI_MENU_BACKGROUND_SHUTTLE_HEIGHT = 394;
+    public static int UI_MENU_BACKGROUND_ASTRONAUT_WIDTH = 180;
+    public static int UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT = 183;
+    public static int UI_MENU_BACKGROUND_CRATE_WIDTH = 133;
+    public static int UI_MENU_BACKGROUND_CRATE_HEIGHT = 133;
+    public static int UI_MENU_BACKGROUND_FUEL_WIDTH = 132;
+    public static int UI_MENU_BACKGROUND_FUEL_HEIGHT = 167;
+    public static int UI_MENU_BACKGROUND_ASTEROID1_WIDTH = 233;
+    public static int UI_MENU_BACKGROUND_ASTEROID1_HEIGHT = 213;
+    public static int UI_MENU_BACKGROUND_ASTEROID2_WIDTH = 95;
+    public static int UI_MENU_BACKGROUND_ASTEROID2_HEIGHT = 95;
+
     public static final int UI_ICO_CONFIG_WIDTH = 36;
     public static final int UI_ICO_CONFIG_HEIGHT = 36;
 

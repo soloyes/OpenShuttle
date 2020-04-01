@@ -73,7 +73,7 @@ public class Ray {
                         Shuttle.position.x, Shuttle.position.y,
                         1, 2,
                         preset.startR, preset.startG, preset.startB, 0.3f,
-                        preset.endA, preset.endG, preset.endB, 0.3f
+                        preset.endR, preset.endG, preset.endB, 0.3f
                 );
                 for (int j = 0; j < count; j++) {
                     float ang = 6.28f / count * j;
@@ -84,7 +84,7 @@ public class Ray {
                             poolable.getPosition().y + radY * (float) Math.sin(ang) + MathUtils.random(-10, 10),
                             0, 0, 0.1f, size, size,
                             preset.startR, preset.startG, preset.startB, 0.2f,
-                            preset.endA, preset.endG, preset.endB, 0.0f
+                            preset.endR, preset.endG, preset.endB, 0.0f
                     );
                 }
 
@@ -118,7 +118,7 @@ public class Ray {
                     Shuttle.position.x, Shuttle.position.y,
                     1.0f, 1.0f,
                     preset.startR, preset.startG, preset.startB, 0.3f,
-                    preset.endA, preset.endG, preset.endB, 0.3f
+                    preset.endR, preset.endG, preset.endB, 0.3f
             );
             for (int j = 0; j < count; j++) {
                 float ang = 6.28f / count * j;
@@ -129,7 +129,7 @@ public class Ray {
                         asteroid.getPosition().y + radY * (float) Math.sin(ang) + MathUtils.random(-10, 10),
                         0, 0, 0.1f, size, size,
                         preset.startR, preset.startG, preset.startB, 0.2f,
-                        preset.endA, preset.endG, preset.endB, 0.0f
+                        preset.endR, preset.endG, preset.endB, 0.0f
                 );
             }
             asteroid.setTimeToBurn(asteroid.getTimeToBurn() + dt);
@@ -172,13 +172,13 @@ public class Ray {
         @Getter
         private float startR, startG, startB;
         @Getter
-        private float endA, endG, endB;
+        private float endR, endG, endB;
 
-        Preset(float startR, float startG, float startB, float endA, float endG, float endB) {
+        Preset(float startR, float startG, float startB, float endR, float endG, float endB) {
             this.startR = startR;
             this.startG = startG;
             this.startB = startB;
-            this.endA = endA;
+            this.endR = endR;
             this.endG = endG;
             this.endB = endB;
         }

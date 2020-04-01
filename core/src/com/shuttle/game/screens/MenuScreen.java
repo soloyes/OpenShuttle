@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.shuttle.game.background.Background;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.ui.groups.MenuBackgroundGroup;
 import com.shuttle.game.ui.groups.MenuBar;
 import com.shuttle.game.ui.groups.MenuGroup;
 import com.shuttle.game.ui.groups.ShareGroup;
@@ -51,6 +52,7 @@ public class MenuScreen extends BaseScreen {
         head.setPosition(285, 1686);
         this.underHead = new Label("2D GAME ARCADE", labelStyle64);
         underHead.setPosition(408, 1658);
+        stage.addActor(MenuBackgroundGroup.getInstance());
         stage.addActor(menuGroup);
         stage.addActor(ConfigGroup.getInstance());
         stage.addActor(menuBar);
@@ -80,5 +82,6 @@ public class MenuScreen extends BaseScreen {
         super.dispose();
         menuGroup.dispose();
         ConfigGroup.getInstance().dispose();
+        MenuBackgroundGroup.getInstance().dispose();
     }
 }

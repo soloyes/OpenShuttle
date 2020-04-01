@@ -1,10 +1,43 @@
 package com.shuttle.game.ui.groups;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.effects.Oscillator;
+import com.shuttle.game.effects.Ray;
+import com.shuttle.game.effects.particle.ParticleEmitter;
+import com.shuttle.game.utils.Assets;
 
 public class MenuBackgroundGroup extends Group {
     private static MenuBackgroundGroup instance;
+    private TextureRegion storage;
+    private TextureRegion astronaut;
+    private TextureRegion sitastronaut;
+    private TextureRegion shuttle;
+    private TextureRegion planet;
+    private TextureRegion fuel;
+    private TextureRegion crate;
+    private TextureRegion asteroid1;
+    private TextureRegion asteroid2;
 
+    private Ray.Preset preset;
+    private int count = 24;
+    private float size = 4;
+
+    private float rotation1;
+    private float rotation2;
+    private int random1;
+    private int random2;
+
+    private float astronautScale;
+    private float asteroidScale1;
+    private float asteroidScale2;
+    private Oscillator astronautScaleOscillator;
+    private Oscillator asteroidScaleOscillator1;
+    private Oscillator asteroidScaleOscillator2;
 
     public static MenuBackgroundGroup getInstance() {
         if (instance == null) {
@@ -15,6 +48,130 @@ public class MenuBackgroundGroup extends Group {
 
     private MenuBackgroundGroup() {
         setName(GroupType.MENU_BACKGROUND.name());
+        this.storage = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_STORAGE));
+        this.astronaut = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT));
+        this.sitastronaut = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT));
+        this.shuttle = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_SHUTTLE));
+        this.planet = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_PLANET));
+        this.fuel = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_FUEL));
+        this.crate = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_CRATE));
+        this.asteroid1 = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_ASTEROID1));
+        this.asteroid2 = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_ASTEROID2));
+        this.preset = Ray.Preset.GREEN;
+        this.astronautScaleOscillator = new Oscillator();
+        this.astronautScale = 1.0f;
+        this.asteroidScaleOscillator1 = new Oscillator();
+        this.asteroidScale1 = 1.0f;
+        this.asteroidScaleOscillator2 = new Oscillator();
+        this.asteroidScale2 = 1.0f;
+        this.random1 = MathUtils.randomSign();
+        this.random2 = -random1;
+    }
 
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        batch.draw(planet, PaintConstants.UI_MENU_BACKGROUND_PLANET_X, PaintConstants.UI_MENU_BACKGROUND_PLANET_Y);
+        batch.draw(storage, PaintConstants.UI_MENU_BACKGROUND_STORAGE_X, PaintConstants.UI_MENU_BACKGROUND_STORAGE_Y);
+        batch.draw(
+                astronaut,
+                PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_X,
+                PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_Y,
+                PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_WIDTH / 2,
+                PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT / 2,
+                PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_WIDTH,
+                PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT,
+                astronautScale,
+                astronautScale,
+                0.0f
+        );
+        batch.draw(sitastronaut, PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT_X, PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT_Y);
+        batch.draw(shuttle, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_X, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_Y);
+        batch.draw(
+                crate,
+                PaintConstants.UI_MENU_BACKGROUND_CRATE_X,
+                PaintConstants.UI_MENU_BACKGROUND_CRATE_Y,
+                PaintConstants.UI_MENU_BACKGROUND_CRATE_WIDTH / 2,
+                PaintConstants.UI_MENU_BACKGROUND_CRATE_HEIGHT / 2,
+                PaintConstants.UI_MENU_BACKGROUND_CRATE_WIDTH,
+                PaintConstants.UI_MENU_BACKGROUND_CRATE_HEIGHT,
+                1.0f, 1.0f,
+                rotation1 * random1
+        );
+        batch.draw(
+                asteroid1,
+                PaintConstants.UI_MENU_BACKGROUND_ASTEROID1_X,
+                PaintConstants.UI_MENU_BACKGROUND_ASTEROID1_Y,
+                PaintConstants.UI_MENU_BACKGROUND_ASTEROID1_WIDTH / 2,
+                PaintConstants.UI_MENU_BACKGROUND_ASTEROID1_HEIGHT / 2,
+                PaintConstants.UI_MENU_BACKGROUND_ASTEROID1_WIDTH,
+                PaintConstants.UI_MENU_BACKGROUND_ASTEROID1_HEIGHT,
+                asteroidScale1, asteroidScale1,
+                rotation1 * random1
+        );
+        batch.draw(
+                asteroid2,
+                PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_X,
+                PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_Y,
+                PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_WIDTH / 2,
+                PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_HEIGHT / 2,
+                PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_WIDTH,
+                PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_HEIGHT,
+                asteroidScale2, asteroidScale2,
+                rotation2 * random2
+        );
+        batch.draw(
+                fuel,
+                PaintConstants.UI_MENU_BACKGROUND_FUEL_X,
+                PaintConstants.UI_MENU_BACKGROUND_FUEL_Y,
+                PaintConstants.UI_MENU_BACKGROUND_FUEL_WIDTH / 2,
+                PaintConstants.UI_MENU_BACKGROUND_FUEL_HEIGHT / 2,
+                PaintConstants.UI_MENU_BACKGROUND_FUEL_WIDTH,
+                PaintConstants.UI_MENU_BACKGROUND_FUEL_HEIGHT,
+                1.0f, 1.0f,
+                rotation1 * random2
+        );
+
+        ParticleEmitter.getInstance()
+                .setupFromPointToPoint(
+                        PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_X + PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_WIDTH / 3 - 30,
+                        PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_Y + PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_HEIGHT / 3 - 20,
+                        PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_X + PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_WIDTH / 2,
+                        PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_Y + PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT / 2,
+                        1.0f,
+                        2.0f,
+                        preset.getStartR(), preset.getStartG(), preset.getStartB(), 0.3f,
+                        preset.getEndR(), preset.getEndG(), preset.getEndB(), 0.3f
+                );
+
+        for (int j = 0; j < count; j++) {
+            float ang = 6.28f / count * j;
+            float radX = astronautScale * PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_WIDTH / 2;
+            float radY = astronautScale * PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT / 2;
+            ParticleEmitter.getInstance().setup(
+                    PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_X + PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_WIDTH / 2 + radX * (float) Math.cos(ang) + MathUtils.random(-10, 10),
+                    PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_Y + PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT / 2 + radY * (float) Math.sin(ang) + MathUtils.random(-10, 10),
+                    0, 0, 0.1f, size, size,
+                    preset.getStartR(), preset.getStartG(), preset.getStartB(), 0.2f,
+                    preset.getEndR(), preset.getEndG(), preset.getEndB(), 0.0f
+            );
+        }
+
+        ParticleEmitter.getInstance().render((SpriteBatch) batch);
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        ParticleEmitter.getInstance().update(delta);
+        astronautScale = astronautScaleOscillator.oscillate(astronautScale, 0.05f, 0.9f, 1.0f, delta);
+        asteroidScale1 = asteroidScaleOscillator1.oscillate(asteroidScale1, 0.03f, 0.9f, 1.0f, delta);
+        asteroidScale2 = asteroidScaleOscillator2.oscillate(asteroidScale2, 0.02f, 0.8f, 1.0f, delta);
+        rotation1 += delta;
+        rotation2 += 2 * delta;
+    }
+
+    public void dispose() {
+        instance = null;
+        ParticleEmitter.getInstance().dispose();
     }
 }
