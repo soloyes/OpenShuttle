@@ -28,6 +28,8 @@ void main(){
      // Blur direction
     float hstep = 1.0;
     float vstep = 1.0;
+    gl_FragColor = texture2D(u_texture, v_texCoords);
+    float alpha = gl_FragColor.a;
 
     // Apply blur using 9 samples and predefined gaussian weights
     sum += texture2D(u_texture, vec2(v_texCoords.x - 4.0*blur*hstep/resolution.x, v_texCoords.y - 4.0*blur*vstep/resolution.y)) * 0.006;
@@ -47,5 +49,5 @@ void main(){
 
 
     //gl_FragColor = texture2D(u_texture, v_texCoords);
-    gl_FragColor = vec4(vec3(dot(gl_FragColor.rgb, vec3(0.299, 0.587, 0.114))), gl_FragColor.a);
+    gl_FragColor = vec4(vec3(dot(gl_FragColor.rgb, vec3(0.299, 0.587, 0.114))), alpha);
 }
