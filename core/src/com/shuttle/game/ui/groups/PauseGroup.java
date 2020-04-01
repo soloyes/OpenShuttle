@@ -2,11 +2,11 @@ package com.shuttle.game.ui.groups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -55,7 +55,6 @@ public class PauseGroup extends Group {
     private PauseGroup() {
         this.boomBox = new BoomBox();
         this.pause = false;
-        Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         final TextureRegionDrawable play = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PLAY_BUTTON));
         final TextureRegionDrawable pause = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_BUTTON));
         this.playPauseBtn = new ImageButton(pause);
@@ -69,19 +68,19 @@ public class PauseGroup extends Group {
         this.configGroup = ConfigGroup.getInstance();
         this.leftGroup = LeftGroup.getInstance();
         this.rightGroup = RightGroup.getInstance();
-        this.buttonMenu = new Button(skin, "default");
+        this.buttonMenu = new Button(new TextureRegionDrawable(new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_MENU_HOME))));
         buttonMenu.setVisible(false);
-        this.buttonRestart = new Button(skin, "default");
+        this.buttonRestart = new Button(new TextureRegionDrawable(new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_MENU_RESTART))));
         buttonRestart.setVisible(false);
 
         buttonMenu.setOrigin(Align.center);
         buttonRestart.setOrigin(Align.center);
 
-        buttonMenu.setSize(128f, 128f);
-        buttonRestart.setSize(128f, 128f);
+        buttonMenu.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
+        buttonRestart.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
 
         buttonRestart.setPosition(22, 22);
-        buttonMenu.setPosition(930, 22);
+        buttonMenu.setPosition(946, 22);
 
         buttonMenu.addListener(new ClickListener() {
             @Override
