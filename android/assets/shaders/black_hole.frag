@@ -45,7 +45,7 @@ void main (void)
         if (d > dmax - 0.01 && d < (dmax + 0.02)) {
             vec4 sum = vec4(0.0);
 
-            float blur = 3.0;
+            float blur = 2.0;
 
             // Blur direction
             float hstep = 1.0;
