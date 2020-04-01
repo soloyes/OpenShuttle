@@ -5,6 +5,7 @@ package com.shuttle.game.ui.groups;
  */
 public enum GroupType {
     MENU,
+    MENU_BACKGROUND,
     MENU_BAR,
     CONFIG,
     RESULTS,
