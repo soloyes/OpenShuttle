@@ -591,16 +591,30 @@ playbuttonmenu
   orig: 112, 112
   offset: 0, 0
   index: -1
-infobuttonmenu
+menupauserestart
   rotate: false
   xy: 1916, 3005
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-exitbuttonmenu
+menupausehome
   rotate: false
   xy: 1802, 3119
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+infobuttonmenu
+  rotate: false
+  xy: 1916, 3119
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+exitbuttonmenu
+  rotate: false
+  xy: 1802, 3233
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
@@ -628,14 +642,14 @@ switchoff
   index: -1
 glowupdown
   rotate: false
-  xy: 1802, 3233
+  xy: 1802, 3347
   size: 172, 98
   orig: 172, 98
   offset: 0, 0
   index: -1
 menubackgroundasteroid2
   rotate: false
-  xy: 1916, 3119
+  xy: 1916, 3233
   size: 95, 95
   orig: 95, 95
   offset: 0, 0
@@ -670,105 +684,105 @@ spscale
   index: -1
 spicon
   rotate: false
-  xy: 1802, 3333
+  xy: 1802, 3447
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 lpscale
   rotate: false
-  xy: 1802, 3383
+  xy: 1802, 3497
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 lpicon
   rotate: false
-  xy: 1802, 3433
+  xy: 1802, 3547
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpscale
   rotate: false
-  xy: 1802, 3483
+  xy: 1802, 3597
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpout
   rotate: false
-  xy: 1802, 3533
+  xy: 1802, 3647
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 lpout
   rotate: false
-  xy: 1802, 3533
+  xy: 1802, 3647
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpin
   rotate: false
-  xy: 1802, 3583
+  xy: 1802, 3697
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 lpin
   rotate: false
-  xy: 1802, 3583
+  xy: 1802, 3697
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpicon
   rotate: false
-  xy: 1802, 3633
+  xy: 1802, 3747
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpscale
   rotate: false
-  xy: 1802, 3683
+  xy: 1802, 3797
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpout
   rotate: false
-  xy: 1802, 3733
+  xy: 1802, 3847
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 spout
   rotate: false
-  xy: 1802, 3733
+  xy: 1802, 3847
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpin
   rotate: false
-  xy: 1802, 3783
+  xy: 1802, 3897
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 spin
   rotate: false
-  xy: 1802, 3783
+  xy: 1802, 3897
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpicon
   rotate: false
-  xy: 1802, 3833
+  xy: 1802, 3947
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
