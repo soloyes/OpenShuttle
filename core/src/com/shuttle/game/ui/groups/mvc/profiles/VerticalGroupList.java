@@ -1,7 +1,9 @@
 package com.shuttle.game.ui.groups.mvc.profiles;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
@@ -11,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
@@ -51,7 +54,7 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
         this.verticalGroup = new VerticalGroup();
         scrollPane = new ScrollPane(verticalGroup, skin);
         scrollPane.setFadeScrollBars(false);
-        scrollPane.setScrollingDisabled(true, false);
+        scrollPane.setScrollingDisabled(false, false);
         //scrollPane.setVariableSizeKnobs(false);
         scrollPane.setVisible(false);
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
@@ -94,9 +97,9 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
         for (int i = 0; i < id.size(); i++) {
             Line line = currentLines.get(id.get(i));
             if (line != null) {
-                line
-                        .getTimeAndFlag()
+                line.getTimeAndFlag()
                         .copy(previousLines.get(id.get(i)).getTimeAndFlag());
+                line.push();
             }
         }
         previousLines.clear();
@@ -143,25 +146,34 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
         private final ProfileDAO profile;
         @Getter
         private TimeAndFlag timeAndFlag;
+        private TextureRegion textureRegion;
+        private ProfilesCheckBox minus;
 
         @Override
         public void act(float delta) {
             super.act(delta);
             if (timeAndFlag.isPressed()) {
                 timeAndFlag.addPressedWait(delta);
+                minus.setPressedWait(timeAndFlag.getPressedWait());
             }
             if (timeAndFlag.getPressedWait() >= Rules.LINE_PRESSED_WAIT) {
                 timeAndFlag.setPressedWait(0.0f);
+                minus.setPressedWait(0.0f);
+                minus.setConfirm(true);
                 timeAndFlag.setPressed(false);
                 timeAndFlag.setConfirm(true);
                 MenuGroup.setNotice(PaintConstants.UI_DELETION_PROCESS);
             }
             if (timeAndFlag.isConfirm()) {
                 timeAndFlag.addDeleteWait(delta);
+                minus.setDeleteWait(timeAndFlag.getDeleteWait());
             }
             if (timeAndFlag.getDeleteWait() >= Rules.LINE_DELETE_WAIT) {
                 timeAndFlag.setDeleteWait(0.0f);
                 timeAndFlag.setConfirm(false);
+                minus.setDeleteWait(0.0f);
+                minus.setPressedWait(0.0f);
+                minus.setConfirm(false);
                 controller.remove(Line.this.profile);
                 MenuGroup.setNotice(PaintConstants.UI_PROFILE_DELETED);
                 boomBox.playSound(MSConstants.UI_CHANGED);
@@ -170,14 +182,23 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
 
         Line(final ProfileDAO profile) {
             this.timeAndFlag = new TimeAndFlag();
+            this.textureRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_CELL));
             this.profile = profile;
             this.table = new Table();
-            table.row().padBottom(22).expandX();
+            table.row().padBottom(12);
             Label.LabelStyle style64 = new Label.LabelStyle(
                     Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
                     new Color(0.8f, 0.43f, 0.33f, 1f)
             );
-            Label minus = new Label("-", style64);
+
+            minus = new ProfilesCheckBox(
+                    "",
+                    new ProfilesCheckBoxStyle(
+                            new TextureRegionDrawable(new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_MINUS))),
+                            new TextureRegionDrawable(new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_MINUS)))
+                    )
+            );
+
             minus.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -187,6 +208,7 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
                             MenuGroup.setNotice(PaintConstants.UI_PROFILE_DEL);
                         } else {
                             timeAndFlag.setConfirm(false);
+                            minus.setConfirm(false);
                             MenuGroup.setNotice(PaintConstants.UI_CANCEL_DELETION);
                         }
                         boomBox.playSound(MSConstants.UI_CLICK);
@@ -197,17 +219,21 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                     timeAndFlag.setPressed(false);
-                    timeAndFlag.setDeleteWait(0.0f);
                     timeAndFlag.setPressedWait(0.0f);
+                    minus.setPressedWait(0.0f);
+                    if (!timeAndFlag.isConfirm()) {
+                        timeAndFlag.setDeleteWait(0.0f);
+                        minus.setDeleteWait(0.0f);
+                    }
                 }
             });
 
             if (profile.getType() == ProfileDAO.Type.DUMMY) {
-                table.add();
+                table.add().width(82).height(82);
                 table.add();
                 table.add();
             } else {
-                table.add(minus);
+                table.add(minus).width(82).height(82);
                 Label label = new Label(profile.getUsername(), style64);
                 label.addListener(new ClickListener() {
                     @Override
@@ -219,29 +245,51 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
                         }
                     }
                 });
-                table.add(label).center();
+                table.add(label).padLeft(12);
                 table.add();
             }
 
             table.align(Align.bottomLeft);
             table.setFillParent(true);
-            this.setWidth(Rules.WORLD_WIDTH / 2);
-            this.setHeight(90);
+            this.setWidth(PaintConstants.UI_MENU_CELL_WIDTH);
+            this.setHeight(PaintConstants.UI_CELL_HEIGHT + 12);
             this.addActor(table);
+        }
+
+        public void push() {
+            minus.setConfirm(timeAndFlag.isConfirm());
+            minus.setDeleteWait(timeAndFlag.getDeleteWait());
+            minus.setPressedWait(timeAndFlag.getPressedWait());
+        }
+
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
+            batch.draw(textureRegion, getX(), getY() + 12);
+            super.draw(batch, parentAlpha);
         }
     }
 
     private class Header extends Group {
         private Table table;
+        private TextureRegion textureRegion;
 
         Header() {
             this.table = new Table();
-            table.row().padBottom(22).expandX();
+            this.textureRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_CELL_HEAD));
+            table.row().padBottom(12);
             Label.LabelStyle style64 = new Label.LabelStyle(
                     Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
                     new Color(0.8f, 0.43f, 0.33f, 1f)
             );
-            Label plus = new Label("+", style64);
+
+            ProfilesCheckBox plus = new ProfilesCheckBox(
+                    "",
+                    new ProfilesCheckBoxStyle(
+                            new TextureRegionDrawable(new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_PLUS))),
+                            new TextureRegionDrawable(new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_PLUS)))
+                    )
+            );
+
             plus.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -252,14 +300,20 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
                     boomBox.playSound(MSConstants.UI_CLICK);
                 }
             });
-            table.add(plus);
-            table.add(new Label(PaintConstants.UI_ADD_NEW_LINE, style64)).center();
+            table.add(plus).width(82).height(82);
+            table.add(new Label(PaintConstants.UI_ADD_NEW_LINE, style64)).padLeft(12);
             table.add();
             table.align(Align.bottomLeft);
             table.setFillParent(true);
-            this.setWidth(Rules.WORLD_WIDTH / 2);
-            this.setHeight(90);
+            this.setWidth(PaintConstants.UI_MENU_CELL_WIDTH);
+            this.setHeight(PaintConstants.UI_CELL_HEIGHT + 12);
             this.addActor(table);
+        }
+
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
+            batch.draw(textureRegion, getX(), getY() + 12);
+            super.draw(batch, parentAlpha);
         }
     }
 

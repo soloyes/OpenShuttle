@@ -675,9 +675,37 @@ configcelltype1
   orig: 628, 82
   offset: 0, 0
   index: -1
-icoconfigload
+menucellhead
+  rotate: false
+  xy: 2462, 2109
+  size: 498, 82
+  orig: 498, 82
+  offset: 0, 0
+  index: -1
+menucell
+  rotate: false
+  xy: 2974, 2167
+  size: 498, 82
+  orig: 498, 82
+  offset: 0, 0
+  index: -1
+menuplus
   rotate: false
   xy: 3965, 515
+  size: 82, 82
+  orig: 82, 82
+  offset: 0, 0
+  index: -1
+menuminus
+  rotate: false
+  xy: 3965, 773
+  size: 82, 82
+  orig: 82, 82
+  offset: 0, 0
+  index: -1
+icoconfigload
+  rotate: false
+  xy: 3993, 1641
   size: 82, 82
   orig: 82, 82
   offset: 0, 0
@@ -761,35 +789,35 @@ fpscale
   index: -1
 fpout
   rotate: false
-  xy: 2462, 2109
+  xy: 2462, 2193
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 spout
   rotate: false
-  xy: 2462, 2109
+  xy: 2462, 2193
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpin
   rotate: false
-  xy: 2462, 2159
+  xy: 2702, 2193
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 spin
   rotate: false
-  xy: 2462, 2159
+  xy: 2702, 2193
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpicon
   rotate: false
-  xy: 2702, 2109
+  xy: 3604, 1999
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
@@ -824,119 +852,119 @@ icoconfigsound1
   index: -1
 icoconfigshaders
   rotate: false
-  xy: 3965, 773
+  xy: 4049, 773
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigoff
   rotate: false
-  xy: 3965, 811
+  xy: 4049, 811
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigmusic
   rotate: false
-  xy: 4003, 773
+  xy: 3972, 988
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfiglock
   rotate: false
-  xy: 4041, 773
+  xy: 4010, 988
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfiglevel4
   rotate: false
-  xy: 4003, 811
+  xy: 4048, 988
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfiglevel3
   rotate: false
-  xy: 4041, 811
+  xy: 256, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfiglevel2
   rotate: false
-  xy: 3972, 988
+  xy: 294, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfiglevel1
   rotate: false
-  xy: 4010, 988
+  xy: 332, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigjoystickpreseton
   rotate: false
-  xy: 4048, 988
+  xy: 370, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigjoystickpresetoff
   rotate: false
-  xy: 256, 4052
+  xy: 408, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigjoystick
   rotate: false
-  xy: 294, 4052
+  xy: 446, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigeffects
   rotate: false
-  xy: 332, 4052
+  xy: 484, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigchild
   rotate: false
-  xy: 370, 4052
+  xy: 522, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 rocket
   rotate: false
-  xy: 408, 4052
+  xy: 560, 4052
   size: 96, 32
   orig: 96, 32
   offset: 0, 0
   index: -1
 scrollback.9
   rotate: false
-  xy: 506, 4052
+  xy: 658, 4052
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 scroll.9
   rotate: false
-  xy: 540, 4052
+  xy: 692, 4052
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 atrocketpoint
   rotate: false
-  xy: 574, 4052
+  xy: 726, 4052
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

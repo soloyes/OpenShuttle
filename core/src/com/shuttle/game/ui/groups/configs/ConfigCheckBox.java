@@ -37,16 +37,16 @@ public class ConfigCheckBox extends CheckBox {
         if (locked) {
             batch.draw(
                     lock,
-                    getX() + (PaintConstants.UI_CONFIG_CELL_HEIGHT - PaintConstants.UI_ICO_CONFIG_WIDTH) / 2,
-                    getY() + (PaintConstants.UI_CONFIG_CELL_HEIGHT - PaintConstants.UI_ICO_CONFIG_WIDTH) / 2
+                    getX() + (PaintConstants.UI_CELL_HEIGHT - PaintConstants.UI_ICO_CONFIG_WIDTH) / 2,
+                    getY() + (PaintConstants.UI_CELL_HEIGHT - PaintConstants.UI_ICO_CONFIG_WIDTH) / 2
             );
         } else {
             super.draw(batch, parentAlpha);
             if (!isChecked()) {
                 batch.draw(
                         block,
-                        getX() + (PaintConstants.UI_CONFIG_CELL_HEIGHT - PaintConstants.UI_ICO_CONFIG_WIDTH) / 2,
-                        getY() + (PaintConstants.UI_CONFIG_CELL_HEIGHT - PaintConstants.UI_ICO_CONFIG_WIDTH) / 2
+                        getX() + (PaintConstants.UI_CELL_HEIGHT - PaintConstants.UI_ICO_CONFIG_WIDTH) / 2,
+                        getY() + (PaintConstants.UI_CELL_HEIGHT - PaintConstants.UI_ICO_CONFIG_WIDTH) / 2
                 );
             }
         }

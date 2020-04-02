@@ -200,6 +200,11 @@ public final class PaintConstants {
     public static final int LEFT_RIGHT_UI_ITEM_TYPE_WIDTH = 16;
     public static final int LEFT_RIGHT_UI_ITEM_TYPE_HEIGHT = 16;
 
+    public static final String UI_MENU_CELL_HEAD = "menucellhead";
+    public static final String UI_MENU_CELL = "menucell";
+    public static final String UI_MENU_PLUS = "menuplus";
+    public static final String UI_MENU_MINUS = "menuminus";
+
     public static final String UI_CONFIG_CELL_TYPE1 = "configcelltype1";
     public static final String UI_CONFIG_CELL_TYPE2 = "configcelltype2";
     public static final String UI_CONFIG_CELL_TYPE3 = "configcelltype3";
@@ -272,11 +277,10 @@ public final class PaintConstants {
     public static final int UI_ICO_CONFIG_WIDTH = 36;
     public static final int UI_ICO_CONFIG_HEIGHT = 36;
 
-    public static final int UI_ICO_CONFIG_LOAD_WIDTH = 82;
-    public static final int UI_ICO_CONFIG_LOAD_HEIGHT = 82;
-
     public static final int UI_CONFIG_CELL_WIDTH = 640;
-    public static final int UI_CONFIG_CELL_HEIGHT = 82;
+    public static final int UI_MENU_CELL_WIDTH = 510;
+    public static final int UI_CELL_WIDTH = 82;
+    public static final int UI_CELL_HEIGHT = 82;
 
     public static final String ASTRONAUT_ICON = "astronauticon";
     public static final String MECHANIC_ICON = "mechanicicon";
