@@ -66,10 +66,12 @@ public class MenuScreen extends BaseScreen {
         update(delta);
         batch.begin();
         background.render(batch);
+        batch.end();
+        stage.draw();
+        batch.begin();
         head.draw(batch, 1.0f);
         underHead.draw(batch, 1.0f);
         batch.end();
-        stage.draw();
     }
 
     public void update(float delta) {
