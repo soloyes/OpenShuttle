@@ -146,7 +146,8 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
         private final ProfileDAO profile;
         @Getter
         private TimeAndFlag timeAndFlag;
-        private TextureRegion textureRegion;
+        private TextureRegion background;
+        private TextureRegion active;
         private ProfilesCheckBox minus;
 
         @Override
@@ -182,7 +183,8 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
 
         Line(final ProfileDAO profile) {
             this.timeAndFlag = new TimeAndFlag();
-            this.textureRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_CELL));
+            this.background = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_CELL));
+            this.active = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_CELL_ACTIVE));
             this.profile = profile;
             this.table = new Table();
             table.row().padBottom(12);
@@ -235,6 +237,10 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
             } else {
                 table.add(minus).width(82).height(82);
                 Label label = new Label(profile.getUsername(), style64);
+                label.setFillParent(true);
+                Group group = new Group();
+                group.setSize(PaintConstants.UI_MENU_CELL_WIDTH - PaintConstants.UI_CELL_WIDTH, PaintConstants.UI_CELL_HEIGHT);
+                group.addActor(label);
                 label.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
@@ -245,7 +251,7 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
                         }
                     }
                 });
-                table.add(label).padLeft(12);
+                table.add(group).width(PaintConstants.UI_MENU_CELL_WIDTH - PaintConstants.UI_CELL_WIDTH).height(PaintConstants.UI_CELL_HEIGHT).padLeft(12);
                 table.add();
             }
 
@@ -264,7 +270,18 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
 
         @Override
         public void draw(Batch batch, float parentAlpha) {
-            batch.draw(textureRegion, getX(), getY() + 12);
+            Color color = batch.getColor();
+            if (!profile.isActive()) {
+                color.a = 0.3f;
+            } else {
+                color.a = parentAlpha;
+            }
+            batch.setColor(color);
+            if (profile.isActive()) {
+                batch.draw(active, getX(), getY() + 12);
+            } else {
+                batch.draw(background, getX(), getY() + 12);
+            }
             super.draw(batch, parentAlpha);
         }
     }
@@ -290,6 +307,11 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
                     )
             );
 
+            Label label = new Label(PaintConstants.UI_ADD_NEW_LINE, style64);
+            label.setFillParent(true);
+            Group group = new Group();
+            group.setSize(PaintConstants.UI_MENU_CELL_WIDTH - PaintConstants.UI_CELL_WIDTH, PaintConstants.UI_CELL_HEIGHT);
+            group.addActor(label);
             plus.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -300,8 +322,19 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
                     boomBox.playSound(MSConstants.UI_CLICK);
                 }
             });
+            group.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (MenuGroup.isValidUserName()) {
+                        controller.add();
+                        MenuGroup.setNotice(PaintConstants.UI_NEW_PROFILE);
+                    }
+                    boomBox.playSound(MSConstants.UI_CLICK);
+                }
+            });
+
             table.add(plus).width(82).height(82);
-            table.add(new Label(PaintConstants.UI_ADD_NEW_LINE, style64)).padLeft(12);
+            table.add(group).width(PaintConstants.UI_MENU_CELL_WIDTH - PaintConstants.UI_CELL_WIDTH).height(PaintConstants.UI_CELL_HEIGHT).padLeft(12);
             table.add();
             table.align(Align.bottomLeft);
             table.setFillParent(true);

@@ -7,7 +7,7 @@ import com.shuttle.game.player.Standing;
  * Game rules constants (Rules)
  */
 public final class Rules {
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     private Rules() {
     }
@@ -270,12 +270,12 @@ public final class Rules {
     public static final int SELECTOR_GOLDEN_COUNT = 2;
     //3
     public static final int SELECTOR_SHABBY_BASE_BONUS = 3;
-    //1.0f
-    public static final float LINE_PRESSED_WAIT = 1.0f;
-    //3.0f
-    public static final float LINE_DELETE_WAIT = 3.0f;
+    //0.7f
+    public static final float LINE_PRESSED_WAIT = 0.7f;
+    //2.0f
+    public static final float LINE_DELETE_WAIT = 2.0f;
     //2.0f better less than LINE_DELETE_WAIT
-    public static final float NOTICE_WAIT = 2.0f;
+    public static final float NOTICE_WAIT = 1.5f;
     //0.4f
     public static final float SETTINGS_WAIT_TOUCH = 0.4f;
     //0.9f

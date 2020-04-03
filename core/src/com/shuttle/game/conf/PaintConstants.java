@@ -202,6 +202,7 @@ public final class PaintConstants {
 
     public static final String UI_MENU_CELL_HEAD = "menucellhead";
     public static final String UI_MENU_CELL = "menucell";
+    public static final String UI_MENU_CELL_ACTIVE = "menucellactive";
     public static final String UI_MENU_PLUS = "menuplus";
     public static final String UI_MENU_MINUS = "menuminus";
 
@@ -389,7 +390,7 @@ public final class PaintConstants {
     public static final String UI_CANCEL_DELETION = "Cancel profile deletion";
     public static final String UI_SELECT_PROFILE = "Select profile";
     public static final String UI_NEW_PROFILE = "New profile";
-    public static final String UI_ADD_NEW_LINE = "Add new line";
+    public static final String UI_ADD_NEW_LINE = "Add new profile";
     public static final String UI_EMPTY_PROFILE = "Empty profile";
 
     public static final String UI_SOUND_NOTICE = "HOLD TO MUTE/UNMUTE";

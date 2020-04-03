@@ -1,6 +1,5 @@
 package com.shuttle.game.ui.groups.mvc.profiles;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -32,7 +31,6 @@ public class ProfilesCheckBox extends CheckBox {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        batch.setColor(Color.CYAN);
         if (pressedWait > 0.0f) {
             load.draw(
                     (SpriteBatch) batch,
@@ -41,7 +39,6 @@ public class ProfilesCheckBox extends CheckBox {
                     -360 * (1 - 1.0f * (Rules.LINE_PRESSED_WAIT - pressedWait) / Rules.LINE_PRESSED_WAIT)
             );
         }
-        batch.setColor(Color.WHITE);
 
         if (confirm) {
             load.draw(

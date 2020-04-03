@@ -682,9 +682,16 @@ menucellhead
   orig: 498, 82
   offset: 0, 0
   index: -1
-menucell
+menucellactive
   rotate: false
   xy: 2974, 2167
+  size: 498, 82
+  orig: 498, 82
+  offset: 0, 0
+  index: -1
+menucell
+  rotate: false
+  xy: 2060, 2251
   size: 498, 82
   orig: 498, 82
   offset: 0, 0
