@@ -675,23 +675,30 @@ configcelltype1
   orig: 628, 82
   offset: 0, 0
   index: -1
-menucellhead
+infocell
   rotate: false
   xy: 2462, 2109
-  size: 498, 82
-  orig: 498, 82
+  size: 510, 82
+  orig: 510, 82
   offset: 0, 0
   index: -1
-menucellactive
+menucellhead
   rotate: false
   xy: 2974, 2167
   size: 498, 82
   orig: 498, 82
   offset: 0, 0
   index: -1
-menucell
+menucellactive
   rotate: false
   xy: 2060, 2251
+  size: 498, 82
+  orig: 498, 82
+  offset: 0, 0
+  index: -1
+menucell
+  rotate: false
+  xy: 2560, 2251
   size: 498, 82
   orig: 498, 82
   offset: 0, 0

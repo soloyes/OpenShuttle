@@ -206,6 +206,8 @@ public final class PaintConstants {
     public static final String UI_MENU_PLUS = "menuplus";
     public static final String UI_MENU_MINUS = "menuminus";
 
+    public static final String UI_INFO_CELL = "infocell";
+
     public static final String UI_CONFIG_CELL_TYPE1 = "configcelltype1";
     public static final String UI_CONFIG_CELL_TYPE2 = "configcelltype2";
     public static final String UI_CONFIG_CELL_TYPE3 = "configcelltype3";

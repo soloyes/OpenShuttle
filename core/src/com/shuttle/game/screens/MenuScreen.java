@@ -6,10 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.shuttle.game.background.Background;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.ui.groups.InfoGroup;
 import com.shuttle.game.ui.groups.MenuBackgroundGroup;
 import com.shuttle.game.ui.groups.MenuBar;
 import com.shuttle.game.ui.groups.MenuGroup;
-import com.shuttle.game.ui.groups.ShareGroup;
 import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.mvc.results.ResultGroup;
 import com.shuttle.game.utils.Assets;
@@ -41,7 +41,7 @@ public class MenuScreen extends BaseScreen {
         menuGroup = new MenuGroup();
         MenuBar menuBar = new MenuBar();
         ResultGroup resultGroup = new ResultGroup();
-        ShareGroup shareGroup = new ShareGroup();
+        InfoGroup infoGroup = new InfoGroup();
         this.font188 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT188, BitmapFont.class);
         this.font48 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT48, BitmapFont.class);
         Label.LabelStyle labelStyle64 = new Label.LabelStyle();
@@ -57,7 +57,7 @@ public class MenuScreen extends BaseScreen {
         stage.addActor(ConfigGroup.getInstance());
         stage.addActor(menuBar);
         stage.addActor(resultGroup);
-        stage.addActor(shareGroup);
+        stage.addActor(infoGroup);
     }
 
     @Override
