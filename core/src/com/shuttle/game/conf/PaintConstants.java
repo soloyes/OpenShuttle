@@ -207,6 +207,8 @@ public final class PaintConstants {
     public static final String UI_MENU_MINUS = "menuminus";
 
     public static final String UI_INFO_CELL = "infocell";
+    public static final String UI_RESULTS_CELL = "resultscell";
+    public static final String UI_RESULTS_CELL_EMPTY = "resultscellempty";
 
     public static final String UI_CONFIG_CELL_TYPE1 = "configcelltype1";
     public static final String UI_CONFIG_CELL_TYPE2 = "configcelltype2";
@@ -284,6 +286,8 @@ public final class PaintConstants {
     public static final int UI_MENU_CELL_WIDTH = 510;
     public static final int UI_CELL_WIDTH = 82;
     public static final int UI_CELL_HEIGHT = 82;
+
+    public static final int UI_RESULTS_CELL_WIDTH = 998;
 
     public static final String ASTRONAUT_ICON = "astronauticon";
     public static final String MECHANIC_ICON = "mechanicicon";
@@ -393,7 +397,7 @@ public final class PaintConstants {
     public static final String UI_SELECT_PROFILE = "Select profile";
     public static final String UI_NEW_PROFILE = "New profile";
     public static final String UI_ADD_NEW_LINE = "Add new profile";
-    public static final String UI_EMPTY_PROFILE = "Empty profile";
+    public static final String UI_EMPTY_PROFILE = "Empty";
 
     public static final String UI_SOUND_NOTICE = "HOLD TO MUTE/UNMUTE";
     public static final String UI_SOUND_ENABLE = "SOUND ON";
@@ -437,8 +441,11 @@ public final class PaintConstants {
 
     public static final float UI_SETTINGS_WIDTH = 720;
     public static final float UI_SETTINGS_HEIGHT = 1200;
+    public static final float UI_RESULTS_WIDTH = 998;
+    public static final float UI_RESULTS_HEIGHT = 1000;
     public static final float UI_SETTINGS_X = 178;
     public static final float UI_SETTINGS_Y = 300;
+    public static final float UI_RESULTS_Y = 500;
 
     private PaintConstants() {
     }

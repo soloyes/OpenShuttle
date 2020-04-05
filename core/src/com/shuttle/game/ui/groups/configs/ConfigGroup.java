@@ -151,7 +151,7 @@ public class ConfigGroup extends VerticalGroup {
         scrollPane.setVariableSizeKnobs(false);
         scrollPane.getStyle().vScrollKnob.setMinHeight(100);
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
-        container.setHeight(PaintConstants.UI_SETTINGS_HEIGHT);
+        //container.setHeight(300);
         container.align(Align.top);
 
         screenType = ScreenManager.getInstance().getCurrentScreen();
@@ -1080,13 +1080,19 @@ public class ConfigGroup extends VerticalGroup {
         private TextureRegion textureRegion;
 
         private ConfigCheckBox configCheckBox;
+        private Actor centerActor;
 
         private Line(ConfigCheckBox leftActor, Actor centerActor, Actor rightActor, TextureRegion textureRegion) {
 
             this.table = new Table();
             this.configCheckBox = leftActor;
+            this.centerActor = centerActor;
             this.textureRegion = textureRegion;
-            table.row().padBottom(12);
+            if (centerActor.getHeight() == PaintConstants.JOYSTICK_HEIGHT) {
+                table.row().padBottom(12);
+            } else {
+                table.row();
+            }
 
             table.add(leftActor).width(82).height(82);
 
@@ -1100,7 +1106,12 @@ public class ConfigGroup extends VerticalGroup {
             table.setFillParent(true);
             this.setWidth(PaintConstants.UI_CONFIG_CELL_WIDTH);
 
-            this.setHeight(centerActor.getHeight() + 12);
+            if (centerActor.getHeight() == PaintConstants.JOYSTICK_HEIGHT) {
+                this.setHeight(centerActor.getHeight());
+            } else {
+                this.setHeight(centerActor.getHeight() + 12);
+            }
+
             this.addActor(table);
         }
 
@@ -1128,7 +1139,12 @@ public class ConfigGroup extends VerticalGroup {
             Color color = batch.getColor();
             color.a = a;
             batch.setColor(color);
-            batch.draw(textureRegion, getX(), getY() + 12);
+            if (centerActor.getHeight() == PaintConstants.JOYSTICK_HEIGHT) {
+                batch.draw(textureRegion, getX(), getY());
+            } else {
+                batch.draw(textureRegion, getX(), getY() + 12);
+            }
+
             color.a = parentAlpha;
             batch.setColor(color);
             super.draw(batch, a);

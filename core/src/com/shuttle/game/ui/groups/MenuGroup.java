@@ -50,9 +50,9 @@ public class MenuGroup extends Group {
     public MenuGroup() {
         this(GroupType.MENU.name());
         username.setAlignment(Align.center);
-        username.setMaxLength(14);
-        username.setPosition(285, 960);
-        username.setWidth(510);
+        username.setMaxLength(8);
+        username.setPosition(270, 960);
+        username.setWidth(540);
         username.setHeight(108);
         buttonProfiles.setSize(PaintConstants.PROFILES_BUTTON_WIDTH, PaintConstants.PROFILES_BUTTON_HEIGHT);
         buttonProfiles.setPosition(487, 1096);

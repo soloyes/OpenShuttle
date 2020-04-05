@@ -230,7 +230,7 @@ public final class Standing {
         if (profiles.getActive() != null) {
             ResultDAO result = new ResultDAO(
                     profiles.getActive().getUsername(),
-                    new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date()),
+                    new SimpleDateFormat("dd/MM/YY", Locale.ENGLISH).format(new Date()),
                     scoreView <= Integer.MAX_VALUE ? String.valueOf(scoreView) : String.valueOf(Rounder.round(scoreView)),
                     Rules.StartLevel.values()[GamePreferences.getLevel()].name()
             );
