@@ -232,7 +232,9 @@ public final class Standing {
                     profiles.getActive().getUsername(),
                     new SimpleDateFormat("dd/MM/YY", Locale.ENGLISH).format(new Date()),
                     scoreView <= Integer.MAX_VALUE ? String.valueOf(scoreView) : String.valueOf(Rounder.round(scoreView)),
-                    Rules.StartLevel.values()[GamePreferences.getLevel()].name()
+                    Rules.StartLevel.values()[GamePreferences.getLevel()].name(),
+                    profiles.getActive().getId()
+
             );
             results.addResult(result);
         }

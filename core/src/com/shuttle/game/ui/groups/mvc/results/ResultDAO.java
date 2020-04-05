@@ -18,12 +18,16 @@ public class ResultDAO {
     @Getter
     @Setter
     private String level;
+    @Getter
+    @Setter
+    private String id;
 
     public ResultDAO() {
         this.username = "";
         this.date = "";
         this.level = "";
         this.score = "";
+        this.id = "";
     }
 
     @Override
@@ -35,7 +39,8 @@ public class ResultDAO {
 
         if (!username.equals(resultDAO.username)) return false;
         if (!date.equals(resultDAO.date)) return false;
-        return level.equals(resultDAO.level);
+        if (!level.equals(resultDAO.level)) return false;
+        return id.equals(resultDAO.id);
     }
 
     @Override
@@ -43,6 +48,7 @@ public class ResultDAO {
         int result = username.hashCode();
         result = 31 * result + date.hashCode();
         result = 31 * result + level.hashCode();
+        result = 31 * result + id.hashCode();
         return result;
     }
 
@@ -53,6 +59,7 @@ public class ResultDAO {
                 ", date='" + date + '\'' +
                 ", score='" + score + '\'' +
                 ", level='" + level + '\'' +
+                ", id='" + id + '\'' +
                 '}';
     }
 }

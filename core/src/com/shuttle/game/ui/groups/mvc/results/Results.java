@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.shuttle.game.conf.FileConstants;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -80,6 +81,20 @@ public class Results {
             mapper.writeValue(instance.file.file(), instance.results);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void removeResults(String id) {
+        for (Iterator<ResultDAO> iterator = getInstance().results.iterator(); iterator.hasNext(); ) {
+            if (iterator.next().getId().equals(id)) {
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    iterator.remove();
+                    mapper.writeValue(instance.file.file(), instance.results);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

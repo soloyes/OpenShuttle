@@ -22,6 +22,7 @@ import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.ui.groups.MenuGroup;
 import com.shuttle.game.ui.groups.mvc.Controller;
 import com.shuttle.game.ui.groups.mvc.View;
+import com.shuttle.game.ui.groups.mvc.results.Results;
 import com.shuttle.game.utils.Assets;
 
 import java.util.ArrayList;
@@ -44,9 +45,11 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
     private Map<String, Line> previousLines;
     private List<String> id;
     private BoomBox boomBox;
+    private Results results;
 
     public VerticalGroupList() {
         this.boomBox = new BoomBox();
+        this.results = new Results();
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.currentLines = new HashMap<String, Line>();
         this.previousLines = new HashMap<String, Line>();
@@ -176,6 +179,7 @@ public class VerticalGroupList extends VerticalGroup implements View<ProfileDAO>
                 minus.setPressedWait(0.0f);
                 minus.setConfirm(false);
                 controller.remove(Line.this.profile);
+                results.removeResults(Line.this.profile.getId());
                 MenuGroup.setNotice(PaintConstants.UI_PROFILE_DELETED);
                 boomBox.playSound(MSConstants.UI_CHANGED);
             }
