@@ -16,7 +16,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.screens.ScreenManager;
-import com.shuttle.game.ui.groups.mvc.profiles.GroupController;
+import com.shuttle.game.ui.groups.mvc.profiles.ProfilesController;
 import com.shuttle.game.utils.Assets;
 
 /**
@@ -209,7 +209,7 @@ public class MenuBar extends Group {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (GroupController.isEmpty()) {
+        if (ProfilesController.isEmpty()) {
             buttonInfo.setDisabled(true);
             buttonPlay.setDisabled(true);
             buttonSettings.setDisabled(true);

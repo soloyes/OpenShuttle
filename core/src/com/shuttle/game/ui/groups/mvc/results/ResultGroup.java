@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.ui.groups.GroupType;
+import com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO;
+import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Rounder;
 
@@ -24,14 +26,25 @@ import lombok.Setter;
 /**
  * @author Shuttle on 7/14/18.
  */
-//todo: to MVC
+
 public class ResultGroup extends VerticalGroup {
-    public ResultGroup() {
+    private Profiles profiles;
+    private VerticalGroup verticalGroup;
+    private static ResultGroup instance;
+
+    public static ResultGroup getInstance() {
+        if (instance == null) {
+            instance = new ResultGroup();
+        }
+        return instance;
+    }
+
+    private ResultGroup() {
         this.setName(GroupType.RESULTS.name());
+        this.profiles = new Profiles();
         this.setVisible(false);
-        Results results = new Results();
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        VerticalGroup verticalGroup = new VerticalGroup();
+        verticalGroup = new VerticalGroup();
         ScrollPane scrollPane = new ScrollPane(verticalGroup, skin);
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
         container.width(PaintConstants.UI_RESULTS_WIDTH);
@@ -51,32 +64,7 @@ public class ResultGroup extends VerticalGroup {
         Label titleLabel = new Label("RESULTS", style96);
         Label space = new Label("", style54);
 
-        for (ResultDAO r : results.getResults()) {
-            if (!r.getUsername().isEmpty()) {
-                final Line line = new Line(r);
-                line.addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        line.setActive(true);
-                        return super.touchDown(event, x, y, pointer, button);
-                    }
-
-                    @Override
-                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        super.touchUp(event, x, y, pointer, button);
-                        line.setActive(false);
-                    }
-                });
-
-                verticalGroup.addActor(line);
-            }
-        }
-
-        if (results.getResults().size() <= 14) {
-            for (int i = 0; i < 14 - results.getResults().size(); i++) {
-                verticalGroup.addActor(new Line());
-            }
-        }
+        init();
 
         scrollPane.setScrollbarsOnTop(false);
         scrollPane.setForceScroll(false, true);
@@ -95,13 +83,48 @@ public class ResultGroup extends VerticalGroup {
         this.addActor(container);
     }
 
+    public void init() {
+        verticalGroup.clear();
+        int lines = 0;
+
+        for (ProfileDAO p : profiles.getList()) {
+            if (!p.getResultSet().isEmpty()) {
+                for (ResultDAO r : p.getResultSet()) {
+                    final Line line = new Line(p, r);
+                    line.addListener(new ClickListener() {
+                        @Override
+                        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                            line.setActive(true);
+                            return super.touchDown(event, x, y, pointer, button);
+                        }
+
+                        @Override
+                        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                            super.touchUp(event, x, y, pointer, button);
+                            line.setActive(false);
+                        }
+                    });
+
+                    verticalGroup.addActor(line);
+                    lines++;
+                }
+            }
+        }
+
+        if (lines <= 14) {
+            for (int i = 0; i < 14 - lines; i++) {
+                verticalGroup.addActor(new Line());
+            }
+        }
+    }
+
     private class Line extends Group {
         private Table table;
         private TextureRegion textureRegion;
         @Setter
         private boolean active;
 
-        public Line(ResultDAO resultDAO) {
+        public Line(ProfileDAO profileDAO, ResultDAO resultDAO) {
             this.table = new Table();
             this.textureRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL));
             Label.LabelStyle style64 = new Label.LabelStyle(
@@ -110,7 +133,7 @@ public class ResultGroup extends VerticalGroup {
             );
 
             table.row().padBottom(12);
-            makeGroup(new Label(resultDAO.getUsername(), style64), 320);
+            makeGroup(new Label(profileDAO.getUsername(), style64), 320);
             makeGroup(new Label(Rounder.round(Integer.valueOf(resultDAO.getScore())), style64), 138);
             makeGroup(new Label(resultDAO.getDate(), style64), 250);
             makeGroup(new Label(resultDAO.getLevel(), style64), 240);
@@ -155,5 +178,9 @@ public class ResultGroup extends VerticalGroup {
             batch.draw(textureRegion, getX(), getY() + 12);
             super.draw(batch, parentAlpha);
         }
+    }
+
+    public void dispose() {
+        instance = null;
     }
 }

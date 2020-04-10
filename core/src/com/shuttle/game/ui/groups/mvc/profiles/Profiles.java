@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.shuttle.game.conf.FileConstants;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.player.Standing;
+import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.mvc.Model;
 
@@ -101,6 +103,13 @@ public class Profiles implements Model<ProfileDAO> {
         }
     }
 
+    private void resultsToActiveProfile() {
+        if (getActive() != null && ScreenManager.getInstance().getCurrentScreen() != ScreenManager.ScreenType.MENU) {
+            Standing.getInstance().writeResult();
+        }
+    }
+
+
     //Why? Because it is not good to work with static resources (file e.g.)
     private Profiles getInstance() {
         if (instance == null) {
@@ -164,10 +173,11 @@ public class Profiles implements Model<ProfileDAO> {
 
     public void dispose() {
         preferencesToActiveProfile();
+        resultsToActiveProfile();
         write();
     }
 
-    public void flush(){
+    public void flush() {
         dispose();
     }
 

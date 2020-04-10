@@ -11,7 +11,6 @@ import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.mvc.results.ResultDAO;
-import com.shuttle.game.ui.groups.mvc.results.Results;
 import com.shuttle.game.utils.Rounder;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
@@ -32,7 +31,6 @@ public final class Standing {
     @Getter
     @Setter
     private long score, scoreView, scoreToLive;
-    private Results results;
     @Getter
     @Setter
     private float fuel, maxFuel;
@@ -81,7 +79,6 @@ public final class Standing {
 
     private Standing() {
         this.boomBox = new BoomBox();
-        this.results = new Results();
         this.n = 1;
         this.statistics = new HashMap<AbstractPoolable.Type, Map<Integer, Integer>>();
         this.astronauts = new HashMap<Sticker, Integer>();
@@ -229,14 +226,12 @@ public final class Standing {
     public void writeResult() {
         if (profiles.getActive() != null) {
             ResultDAO result = new ResultDAO(
-                    profiles.getActive().getUsername(),
                     new SimpleDateFormat("dd/MM/YY", Locale.ENGLISH).format(new Date()),
                     scoreView <= Integer.MAX_VALUE ? String.valueOf(scoreView) : String.valueOf(Rounder.round(scoreView)),
-                    Rules.StartLevel.values()[GamePreferences.getLevel()].name(),
-                    profiles.getActive().getId()
-
+                    Rules.StartLevel.values()[GamePreferences.getLevel()].name()
             );
-            results.addResult(result);
+            profiles.getActive().getResultSet().remove(result);
+            profiles.getActive().getResultSet().add(result);
         }
     }
 

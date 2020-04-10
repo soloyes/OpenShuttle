@@ -20,6 +20,7 @@ import com.shuttle.game.utils.Assets;
 public class MenuScreen extends BaseScreen {
     private Background background;
     private MenuGroup menuGroup;
+    private ResultGroup resultGroup;
     private BitmapFont font188;
     private BitmapFont font48;
     private Label head;
@@ -40,7 +41,7 @@ public class MenuScreen extends BaseScreen {
         background = new Background();
         menuGroup = new MenuGroup();
         MenuBar menuBar = new MenuBar();
-        ResultGroup resultGroup = new ResultGroup();
+        resultGroup = ResultGroup.getInstance();
         InfoGroup infoGroup = new InfoGroup();
         this.font188 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT188, BitmapFont.class);
         this.font48 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT48, BitmapFont.class);
@@ -83,6 +84,7 @@ public class MenuScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         menuGroup.dispose();
+        resultGroup.dispose();
         ConfigGroup.getInstance().dispose();
         MenuBackgroundGroup.getInstance().dispose();
     }
