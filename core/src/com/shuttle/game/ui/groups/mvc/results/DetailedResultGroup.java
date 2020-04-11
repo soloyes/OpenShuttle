@@ -1,0 +1,266 @@
+package com.shuttle.game.ui.groups.mvc.results;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
+import com.shuttle.game.conf.MSConstants;
+import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
+import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.screens.ScreenManager;
+import com.shuttle.game.ui.groups.GroupType;
+import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.Rounder;
+import com.shuttle.game.utils.TimeFormat;
+
+import lombok.Setter;
+
+/**
+ * @author Shuttle on 11/04/18.
+ */
+
+public class DetailedResultGroup extends Group {
+    private VerticalGroup verticalGroup;
+    private static DetailedResultGroup instance;
+    private Button buttonBack;
+    private BoomBox boomBox;
+
+    public static DetailedResultGroup getInstance() {
+        if (instance == null) {
+            instance = new DetailedResultGroup();
+        }
+        return instance;
+    }
+
+    private DetailedResultGroup() {
+        this.setName(GroupType.RESULTS_DETAILED.name());
+        this.setVisible(false);
+        this.boomBox = new BoomBox();
+        Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
+        verticalGroup = new VerticalGroup();
+        ScrollPane scrollPane = new ScrollPane(verticalGroup, skin);
+        Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
+        container.width(PaintConstants.UI_RESULTS_DETAILED_WIDTH);
+        container.height(PaintConstants.UI_RESULTS_DETAILED_HEIGHT);
+        container.setPosition(PaintConstants.UI_RESULTS_DETAILED_X, PaintConstants.UI_RESULTS_DETAILED_Y);
+        container.align(Align.bottomLeft);
+
+        Label.LabelStyle style96 = new Label.LabelStyle(
+                Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class),
+                Color.WHITE
+        );
+
+        Label titleLabel = new Label("DETAILS", style96);
+        titleLabel.setPosition((Rules.WORLD_WIDTH - titleLabel.getWidth()) / 2, PaintConstants.UI_TITLE_LABEL_Y);
+
+        scrollPane.setScrollbarsOnTop(false);
+        scrollPane.setForceScroll(false, true);
+        scrollPane.setScrollingDisabled(false, false);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setVariableSizeKnobs(true);
+        scrollPane.getStyle().vScrollKnob.setMinHeight(100);
+
+        scrollPane.setWidth(PaintConstants.UI_RESULTS_DETAILED_WIDTH);
+        scrollPane.setHeight(PaintConstants.UI_RESULTS_DETAILED_HEIGHT);
+
+        this.setWidth(Rules.WORLD_WIDTH);
+        this.setHeight(Rules.WORLD_HEIGHT);
+        this.addActor(titleLabel);
+        this.addActor(container);
+        if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.MENU) {
+            this.buttonBack = new Button(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.BACK_BUTTON)));
+            buttonBack.setPosition(484, 24);
+            this.addActor(buttonBack);
+        }
+    }
+
+    public void init(ResultDAO resultDAO) {
+        verticalGroup.clear();
+
+        Line effectivenessLine = new Line(
+                "Effectiveness",
+                String.valueOf(resultDAO.getCurrent().getEffectiveness()),
+                resultDAO.getPrevious() == null ? 1 :
+                        Integer.compare(resultDAO.getCurrent().getEffectiveness(), resultDAO.getPrevious().getEffectiveness())
+        );
+        verticalGroup.addActor(effectivenessLine);
+        long score = resultDAO.getCurrent().getScore();
+        Line scoreLine = new Line(
+                "Score",
+                String.valueOf(score <= Integer.MAX_VALUE ? String.valueOf(score) : String.valueOf(Rounder.round(score))),
+                resultDAO.getPrevious() == null ? 1 :
+                        Long.compare(resultDAO.getCurrent().getScore(), resultDAO.getPrevious().getScore())
+        );
+        verticalGroup.addActor(scoreLine);
+        Line timeLine = new Line(
+                "Time",
+                TimeFormat.format(resultDAO.getCurrent().getTime()),
+                resultDAO.getPrevious() == null ? 1 :
+                        Integer.compare(resultDAO.getCurrent().getTime(), resultDAO.getPrevious().getTime())
+        );
+        verticalGroup.addActor(timeLine);
+        Line dmgDoneLine = new Line(
+                "Dmg done",
+                String.valueOf(resultDAO.getCurrent().getDmgDone()),
+                resultDAO.getPrevious() == null ? 1 :
+                        Integer.compare(resultDAO.getCurrent().getDmgDone(), resultDAO.getPrevious().getDmgDone())
+        );
+        verticalGroup.addActor(dmgDoneLine);
+        Line dmgReceivedLine = new Line(
+                "Dmg received",
+                String.valueOf(resultDAO.getCurrent().getDmgReceived()),
+                resultDAO.getPrevious() == null ? 1 :
+                        Integer.compare(resultDAO.getCurrent().getDmgReceived(), resultDAO.getPrevious().getDmgReceived())
+        );
+        verticalGroup.addActor(dmgReceivedLine);
+        Line enemiesDestroyedLine = new Line(
+                "Enemies destroyed",
+                String.valueOf(resultDAO.getCurrent().getEnemiesDestroyed()),
+                resultDAO.getPrevious() == null ? 1 :
+                        Integer.compare(resultDAO.getCurrent().getEnemiesDestroyed(), resultDAO.getPrevious().getEnemiesDestroyed())
+        );
+        verticalGroup.addActor(enemiesDestroyedLine);
+        Line minedMeteoriteLine = new Line(
+                "Mined meteorite",
+                String.valueOf(resultDAO.getCurrent().getMinedMeteorite()),
+                resultDAO.getPrevious() == null ? 1 :
+                        Integer.compare(resultDAO.getCurrent().getMinedMeteorite(), resultDAO.getPrevious().getMinedMeteorite())
+        );
+        verticalGroup.addActor(minedMeteoriteLine);
+        Line pickUpItemsLine = new Line(
+                "Pick sideRegion items",
+                String.valueOf(resultDAO.getCurrent().getPickUpItems()),
+                resultDAO.getPrevious() == null ? 1 :
+                        Integer.compare(resultDAO.getCurrent().getPickUpItems(), resultDAO.getPrevious().getPickUpItems())
+        );
+        verticalGroup.addActor(pickUpItemsLine);
+        Line usedItemsLine = new Line(
+                "Used items",
+                String.valueOf(resultDAO.getCurrent().getUsedItems()),
+                resultDAO.getPrevious() == null ? 1 :
+                        Integer.compare(resultDAO.getCurrent().getUsedItems(), resultDAO.getPrevious().getUsedItems())
+        );
+        verticalGroup.addActor(usedItemsLine);
+        Line astronautsTakenLine = new Line(
+                "Astronauts taken",
+                String.valueOf(resultDAO.getCurrent().getAstronautsTaken()),
+                resultDAO.getPrevious() == null ? 1 :
+                        Integer.compare(resultDAO.getCurrent().getAstronautsTaken(), resultDAO.getPrevious().getAstronautsTaken())
+        );
+        verticalGroup.addActor(astronautsTakenLine);
+
+        if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.MENU) {
+            buttonBack.addListener(new ClickListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    if (pointer == 0) {
+                        Array<Actor> actors = getStage().getActors();
+                        for (int i = 0; i < actors.size; i++) {
+                            if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
+                                actors.get(i).setVisible(true);
+                            }
+                            if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
+                                actors.get(i).setVisible(true);
+                            }
+                        }
+                        setVisible(false);
+                        boomBox.playSound(MSConstants.UI_MENU);
+                    }
+                    return super.touchDown(event, x, y, pointer, button);
+                }
+            });
+        }
+        Array<Actor> actors = getStage().getActors();
+        for (int i = 0; i < actors.size; i++) {
+            if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
+                actors.get(i).setVisible(false);
+            }
+        }
+        setVisible(true);
+    }
+
+    private class Line extends Group {
+        private Table table;
+        private TextureRegion textureRegion;
+        private TextureRegion sideRegion;
+        @Setter
+        private boolean active;
+
+        public Line(String item, String value, int side) {
+            this.table = new Table();
+            this.textureRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL_DETAILED));
+            if (side < 0) {
+                this.sideRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL_DETAILED_DOWN));
+            } else if (side == 0) {
+                this.sideRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL_DETAILED_EQUAL));
+            } else {
+                this.sideRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL_DETAILED_UP));
+            }
+
+            Label.LabelStyle style64 = new Label.LabelStyle(
+                    Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
+                    new Color(0.8f, 0.43f, 0.33f, 1f)
+            );
+
+            CheckBox checkBox = new CheckBox("", new ResultsCheckBoxStyle(
+                    new TextureRegionDrawable(sideRegion),
+                    new TextureRegionDrawable(sideRegion))
+            );
+            table.row().padBottom(12);
+            Group group = new Group();
+            group.setSize(82, PaintConstants.UI_CELL_HEIGHT);
+            group.addActor(checkBox);
+            table.add(group).left().width(82);
+            makeGroup(new Label(item, style64));
+            makeGroup(new Label(value, style64));
+
+            table.align(Align.bottomLeft);
+            table.setFillParent(true);
+            table.setWidth(PaintConstants.UI_RESULTS_CELL_WIDTH - 30);
+            this.setWidth(PaintConstants.UI_RESULTS_CELL_WIDTH - 30);
+            this.setHeight(94);
+            this.addActor(table);
+        }
+
+        private void makeGroup(Label label) {
+            label.setFillParent(true);
+            Group group = new Group();
+            group.setSize(425, PaintConstants.UI_CELL_HEIGHT);
+            group.addActor(label);
+            table.add(group).left().width(425).padLeft(12);
+        }
+
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
+            Color color = batch.getColor();
+            if (active) {
+                color.a = parentAlpha;
+            } else {
+                color.a = 0.5f;
+            }
+            batch.setColor(color);
+            batch.draw(textureRegion, getX(), getY() + 12);
+            super.draw(batch, parentAlpha);
+        }
+    }
+
+    public void dispose() {
+        instance = null;
+    }
+}

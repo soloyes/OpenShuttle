@@ -11,7 +11,6 @@ import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.mvc.results.DetailedResultDAO;
-import com.shuttle.game.utils.Rounder;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
 import java.util.HashMap;
@@ -223,7 +222,7 @@ public final class Standing {
     public void writeResult() {
         //
         DetailedResultDAO detailedResultDAO = new DetailedResultDAO();
-        detailedResultDAO.setScore(scoreView <= Integer.MAX_VALUE ? String.valueOf(scoreView) : String.valueOf(Rounder.round(scoreView)));
+        detailedResultDAO.setScore(scoreView);
         //
         profiles.writeResults(detailedResultDAO);
     }

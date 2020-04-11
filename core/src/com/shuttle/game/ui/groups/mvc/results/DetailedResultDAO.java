@@ -12,46 +12,46 @@ import lombok.Setter;
 public class DetailedResultDAO {
     @Getter
     @Setter
-    private String effectiveness;
+    private int effectiveness;
     @Getter
     @Setter
-    private String score;
+    private long score;
     @Getter
     @Setter
-    private String time;
+    private int time;
     @Getter
     @Setter
-    private String dmgDone;
+    private int dmgDone;
     @Getter
     @Setter
-    private String dmgReceived;
+    private int dmgReceived;
     @Getter
     @Setter
-    private String enemiesDestroyed;
+    private int enemiesDestroyed;
     @Getter
     @Setter
-    private String minedMeteorite;
+    private int minedMeteorite;
     @Getter
     @Setter
-    private String pickUpItems;
+    private int pickUpItems;
     @Getter
     @Setter
-    private String usedItems;
+    private int usedItems;
     @Getter
     @Setter
-    private String astronautsTaken;
+    private int astronautsTaken;
 
     public DetailedResultDAO() {
-        this.effectiveness = "";
-        this.score = "";
-        this.time = "";
-        this.dmgDone = "";
-        this.dmgReceived = "";
-        this.enemiesDestroyed = "";
-        this.minedMeteorite = "";
-        this.pickUpItems = "";
-        this.usedItems = "";
-        this.astronautsTaken = "";
+        this.effectiveness = 0;
+        this.score = 0L;
+        this.time = 0;
+        this.dmgDone = 0;
+        this.dmgReceived = 0;
+        this.enemiesDestroyed = 0;
+        this.minedMeteorite = 0;
+        this.pickUpItems = 0;
+        this.usedItems = 0;
+        this.astronautsTaken = 0;
     }
 
     public DetailedResultDAO(DetailedResultDAO detailedResultDAO) {

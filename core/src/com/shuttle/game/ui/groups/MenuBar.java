@@ -2,7 +2,6 @@ package com.shuttle.game.ui.groups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -22,6 +21,7 @@ import com.shuttle.game.utils.Assets;
 /**
  * @author Shuttle on 3/24/18.
  */
+
 public class MenuBar extends Group {
     private Button buttonExit;
     private Button buttonPlay;
@@ -220,14 +220,5 @@ public class MenuBar extends Group {
             buttonSettings.setDisabled(false);
             buttonResults.setDisabled(false);
         }
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        buttonPlay.draw(batch, parentAlpha);
-        buttonExit.draw(batch, parentAlpha);
-        buttonSettings.draw(batch, parentAlpha);
-        buttonResults.draw(batch, parentAlpha);
-        buttonInfo.draw(batch, parentAlpha);
     }
 }

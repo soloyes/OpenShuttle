@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.ui.groups.GroupType;
 import com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
@@ -29,9 +30,10 @@ import lombok.Setter;
  * @author Shuttle on 7/14/18.
  */
 
-public class ResultGroup extends VerticalGroup {
+public class ResultGroup extends Group {
     private Profiles profiles;
     private VerticalGroup verticalGroup;
+    private ScrollPane scrollPane;
     private static ResultGroup instance;
 
     public static ResultGroup getInstance() {
@@ -47,24 +49,20 @@ public class ResultGroup extends VerticalGroup {
         this.setVisible(false);
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         verticalGroup = new VerticalGroup();
-        ScrollPane scrollPane = new ScrollPane(verticalGroup, skin);
+        scrollPane = new ScrollPane(verticalGroup, skin);
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
         container.width(PaintConstants.UI_RESULTS_WIDTH);
         container.height(PaintConstants.UI_RESULTS_HEIGHT);
-        container.align(Align.top);
+        container.setPosition(PaintConstants.UI_RESULTS_X, PaintConstants.UI_RESULTS_Y);
+        container.align(Align.bottomLeft);
 
         Label.LabelStyle style96 = new Label.LabelStyle(
                 Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class),
                 Color.WHITE
         );
 
-        Label.LabelStyle style54 = new Label.LabelStyle(
-                Assets.getInstance().getAssetManager().get(PaintConstants.FONT54, BitmapFont.class),
-                Color.WHITE
-        );
-
         Label titleLabel = new Label("RESULTS", style96);
-        Label space = new Label("", style54);
+        titleLabel.setPosition((Rules.WORLD_WIDTH - titleLabel.getWidth()) / 2, PaintConstants.UI_TITLE_LABEL_Y);
 
         init();
 
@@ -77,11 +75,9 @@ public class ResultGroup extends VerticalGroup {
 
         scrollPane.setWidth(PaintConstants.UI_RESULTS_WIDTH);
         scrollPane.setHeight(PaintConstants.UI_RESULTS_HEIGHT);
-        this.setPosition(41, PaintConstants.UI_RESULTS_Y);
-        this.setWidth(PaintConstants.UI_RESULTS_WIDTH);
-        this.setHeight(PaintConstants.UI_RESULTS_HEIGHT);
+        this.setWidth(Rules.WORLD_WIDTH);
+        this.setHeight(Rules.WORLD_HEIGHT);
         this.addActor(titleLabel);
-        this.addActor(space);
         this.addActor(container);
     }
 
@@ -91,12 +87,13 @@ public class ResultGroup extends VerticalGroup {
 
         for (ProfileDAO p : profiles.getList()) {
             if (!p.getResultSet().isEmpty()) {
-                for (ResultDAO r : p.getResultSet()) {
+                for (final ResultDAO r : p.getResultSet()) {
                     final Line line = new Line(p, r);
                     line.addListener(new ClickListener() {
                         @Override
                         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                             line.setActive(true);
+                            scrollPane.setFlickScroll(false);
                             return super.touchDown(event, x, y, pointer, button);
                         }
 
@@ -104,6 +101,9 @@ public class ResultGroup extends VerticalGroup {
                         public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                             super.touchUp(event, x, y, pointer, button);
                             line.setActive(false);
+                            scrollPane.setFlickScroll(true);
+                            ResultGroup.this.setVisible(false);
+                            DetailedResultGroup.getInstance().init(r);
                         }
                     });
 
@@ -136,9 +136,9 @@ public class ResultGroup extends VerticalGroup {
 
             table.row().padBottom(12);
             makeGroup(new Label(profileDAO.getUsername(), style64), 320);
-            makeGroup(new Label(Rounder.round(Integer.valueOf(resultDAO.getCurrent().getScore())), style64), 138);
+            makeGroup(new Label(String.valueOf(Rounder.round(resultDAO.getCurrent().getScore())), style64), 138);
             makeGroup(new Label(resultDAO.getDate(), style64), 250);
-            makeGroup(new Label(resultDAO.getLevel(), style64), 240);
+            makeGroup(new Label(resultDAO.getLevel(), style64), 200);
 
             table.align(Align.bottomLeft);
             table.setFillParent(true);
@@ -187,7 +187,6 @@ public class ResultGroup extends VerticalGroup {
     }
 
     public void switchVisible() {
-        this.setVisible(false);
         Array<Actor> actors = getStage().getActors();
         for (int i = 0; i < actors.size; i++) {
             if (actors.get(i).getName().equals(GroupType.MENU.name())) {
@@ -196,6 +195,12 @@ public class ResultGroup extends VerticalGroup {
                 actors.get(i).setVisible(false);
             } else if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
                 actors.get(i).setVisible(false);
+            } else if (actors.get(i).getName().equals(GroupType.RESULTS_DETAILED.name())) {
+                actors.get(i).setVisible(false);
+            } else if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
+                actors.get(i).setVisible(false);
+            } else if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
+                actors.get(i).setVisible(true);
             }
         }
     }

@@ -1,0 +1,42 @@
+package com.shuttle.game.utils;
+
+import java.util.Locale;
+
+public class TimeFormat {
+    public final static long ONE_SECOND = 1000;
+    public final static long SECONDS_IN_A_MINUTE = 60;
+
+    public final static long ONE_MINUTE = ONE_SECOND * 60;
+    public final static long MINUTES_IN_AN_HOUR = 60;
+
+    public final static long ONE_HOUR = ONE_MINUTE * 60;
+    public final static long HOURS_IN_A_DAY = 24;
+    public final static long ONE_DAY = ONE_HOUR * 24;
+    public final static long DAYS_IN_A_YEAR = 365;
+
+    public static String format(Number n) {
+        String res = "";
+        if (n != null) {
+            long duration = n.longValue();
+
+            duration /= ONE_SECOND;
+            int seconds = (int) (duration % SECONDS_IN_A_MINUTE);
+            duration /= SECONDS_IN_A_MINUTE;
+            int minutes = (int) (duration % MINUTES_IN_AN_HOUR);
+            duration /= MINUTES_IN_AN_HOUR;
+            int hours = (int) (duration % HOURS_IN_A_DAY);
+            duration /= HOURS_IN_A_DAY;
+            int days = (int) (duration % DAYS_IN_A_YEAR);
+            duration /= DAYS_IN_A_YEAR;
+            int years = (int) (duration);
+            if (days == 0) {
+                res = String.format(Locale.ENGLISH, "%02dh %02dm %02ds", hours, minutes, seconds);
+            } else if (years == 0) {
+                res = String.format(Locale.ENGLISH, "%dD %02dh %02dm %02ds", days, hours, minutes, seconds);
+            } else {
+                res = String.format(Locale.ENGLISH, "%dY %dD %02dh% 02dm% 02ds", years, days, hours, minutes, seconds);
+            }
+        }
+        return res;
+    }
+}

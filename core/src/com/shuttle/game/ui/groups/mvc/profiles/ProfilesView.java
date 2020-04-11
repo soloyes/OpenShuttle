@@ -23,7 +23,6 @@ import com.shuttle.game.ui.groups.MenuGroup;
 import com.shuttle.game.ui.groups.mvc.Controller;
 import com.shuttle.game.ui.groups.mvc.View;
 import com.shuttle.game.ui.groups.mvc.results.ResultGroup;
-import com.shuttle.game.ui.groups.mvc.results.Results;
 import com.shuttle.game.utils.Assets;
 
 import java.util.ArrayList;
@@ -39,18 +38,16 @@ import lombok.Setter;
  */
 
 public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
-    private com.shuttle.game.ui.groups.mvc.Controller<ProfileDAO> controller;
+    private Controller<ProfileDAO> controller;
     private final ScrollPane scrollPane;
     private VerticalGroup verticalGroup;
     private Map<String, Line> currentLines;
     private Map<String, Line> previousLines;
     private List<String> id;
     private BoomBox boomBox;
-    private Results results;
 
     public ProfilesView() {
         this.boomBox = new BoomBox();
-        this.results = new Results();
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.currentLines = new HashMap<String, Line>();
         this.previousLines = new HashMap<String, Line>();
