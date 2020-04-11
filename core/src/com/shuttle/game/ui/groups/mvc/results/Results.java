@@ -23,7 +23,7 @@ public class Results {
                     stringBuffer
                             .append(p.getUsername())
                             .append(" ")
-                            .append(r.getScore())
+                            .append(r.getCurrent().getScore())
                             .append(" ")
                             .append(r.getDate())
                             .append(" ")

@@ -17,6 +17,7 @@ import com.shuttle.game.utils.Assets;
 /**
  * @author Shuttle on 3/24/18.
  */
+
 public class MenuScreen extends BaseScreen {
     private Background background;
     private MenuGroup menuGroup;

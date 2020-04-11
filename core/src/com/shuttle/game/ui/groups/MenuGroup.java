@@ -30,6 +30,7 @@ import com.shuttle.game.utils.Assets;
 /**
  * @author Shuttle on 6/23/18.
  */
+
 public class MenuGroup extends Group {
     private static boolean validUserName;
     private static TextField username;

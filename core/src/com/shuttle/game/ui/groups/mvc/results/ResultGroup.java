@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.ui.groups.GroupType;
 import com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO;
@@ -134,7 +136,7 @@ public class ResultGroup extends VerticalGroup {
 
             table.row().padBottom(12);
             makeGroup(new Label(profileDAO.getUsername(), style64), 320);
-            makeGroup(new Label(Rounder.round(Integer.valueOf(resultDAO.getScore())), style64), 138);
+            makeGroup(new Label(Rounder.round(Integer.valueOf(resultDAO.getCurrent().getScore())), style64), 138);
             makeGroup(new Label(resultDAO.getDate(), style64), 250);
             makeGroup(new Label(resultDAO.getLevel(), style64), 240);
 
@@ -182,5 +184,19 @@ public class ResultGroup extends VerticalGroup {
 
     public void dispose() {
         instance = null;
+    }
+
+    public void switchVisible() {
+        this.setVisible(false);
+        Array<Actor> actors = getStage().getActors();
+        for (int i = 0; i < actors.size; i++) {
+            if (actors.get(i).getName().equals(GroupType.MENU.name())) {
+                actors.get(i).setVisible(true);
+            } else if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
+                actors.get(i).setVisible(false);
+            } else if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
+                actors.get(i).setVisible(false);
+            }
+        }
     }
 }

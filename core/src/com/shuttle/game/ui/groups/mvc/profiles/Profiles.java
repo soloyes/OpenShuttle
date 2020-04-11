@@ -8,14 +8,22 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.shuttle.game.conf.FileConstants;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.mvc.Model;
+import com.shuttle.game.ui.groups.mvc.results.DetailedResultDAO;
+import com.shuttle.game.ui.groups.mvc.results.ResultDAO;
+import com.shuttle.game.ui.groups.mvc.results.ResultGroup;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 /**
  * @author Shuttle on 17/06/19.
@@ -165,6 +173,7 @@ public class Profiles implements Model<ProfileDAO> {
                 ProfileDAO tmpProfile = profiles.get(0);
                 if (tmpProfile.getType() == ProfileDAO.Type.DUMMY) {
                     tmpProfile.setActive(false);
+                    ResultGroup.getInstance().switchVisible();
                 }
                 break;
             }
@@ -206,5 +215,39 @@ public class Profiles implements Model<ProfileDAO> {
     @Override
     public List<ProfileDAO> getList() {
         return getInstance().profiles;
+    }
+
+    public void writeResults(DetailedResultDAO detailedResultDAO) {
+        if (getActive() != null) {
+
+            ResultDAO result = new ResultDAO(
+                    new SimpleDateFormat("dd/MM/YY", Locale.ENGLISH).format(new Date()),
+                    Rules.StartLevel.values()[GamePreferences.getLevel()].name(),
+                    detailedResultDAO
+            );
+
+            ProfileDAO profileDAO = getActive();
+            Set<ResultDAO> set = profileDAO.getResultSet();
+
+            if (set.size() == 0) {
+                set.add(result);
+            } else {
+                boolean added = false;
+                for (ResultDAO r : set) {
+                    if (r.getDate().equals(result.getDate()) && r.getLevel().equals(result.getLevel())) {
+                        if (r.getPrevious() == null) {
+                            r.setPrevious(new DetailedResultDAO());
+                        }
+                        r.setPrevious(new DetailedResultDAO(r.getCurrent()));
+                        r.setCurrent(new DetailedResultDAO(detailedResultDAO));
+                        added = true;
+                        break;
+                    }
+                }
+                if (!added) {
+                    set.add(result);
+                }
+            }
+        }
     }
 }

@@ -10,14 +10,11 @@ import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
-import com.shuttle.game.ui.groups.mvc.results.ResultDAO;
+import com.shuttle.game.ui.groups.mvc.results.DetailedResultDAO;
 import com.shuttle.game.utils.Rounder;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import lombok.Getter;
@@ -224,15 +221,11 @@ public final class Standing {
     }
 
     public void writeResult() {
-        if (profiles.getActive() != null) {
-            ResultDAO result = new ResultDAO(
-                    new SimpleDateFormat("dd/MM/YY", Locale.ENGLISH).format(new Date()),
-                    scoreView <= Integer.MAX_VALUE ? String.valueOf(scoreView) : String.valueOf(Rounder.round(scoreView)),
-                    Rules.StartLevel.values()[GamePreferences.getLevel()].name()
-            );
-            profiles.getActive().getResultSet().remove(result);
-            profiles.getActive().getResultSet().add(result);
-        }
+        //
+        DetailedResultDAO detailedResultDAO = new DetailedResultDAO();
+        detailedResultDAO.setScore(scoreView <= Integer.MAX_VALUE ? String.valueOf(scoreView) : String.valueOf(Rounder.round(scoreView)));
+        //
+        profiles.writeResults(detailedResultDAO);
     }
 
     public void update(float dt) {
