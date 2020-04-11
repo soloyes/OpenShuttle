@@ -204,4 +204,17 @@ public class ResultGroup extends Group {
             }
         }
     }
+
+    public void backVisible() {
+        Array<Actor> actors = getStage().getActors();
+        for (int i = 0; i < actors.size; i++) {
+            if (actors.get(i).getName().equals(GroupType.RESULTS_DETAILED.name())) {
+                actors.get(i).setVisible(false);
+            } else if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
+                actors.get(i).setVisible(true);
+            } else if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
+                actors.get(i).setVisible(true);
+            }
+        }
+    }
 }

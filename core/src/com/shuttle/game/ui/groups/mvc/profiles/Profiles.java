@@ -14,6 +14,7 @@ import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.mvc.Model;
 import com.shuttle.game.ui.groups.mvc.results.DetailedResultDAO;
+import com.shuttle.game.ui.groups.mvc.results.DetailedResultGroup;
 import com.shuttle.game.ui.groups.mvc.results.ResultDAO;
 import com.shuttle.game.ui.groups.mvc.results.ResultGroup;
 
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -44,7 +46,7 @@ public class Profiles implements Model<ProfileDAO> {
     }
 
     private static ProfileDAO asEmpty() {
-        return new ProfileDAO(ProfileDAO.Type.PROFILE, PaintConstants.UI_EMPTY_PROFILE, GamePreferences.defaults, false);
+        return new ProfileDAO(ProfileDAO.Type.PROFILE, PaintConstants.UI_EMPTY_PROFILE, GamePreferences.defaults, new HashSet<ResultDAO>(), false);
     }
 
     @Override
@@ -93,7 +95,7 @@ public class Profiles implements Model<ProfileDAO> {
     }
 
     private static ProfileDAO asDummy() {
-        return new ProfileDAO(ProfileDAO.Type.DUMMY, "", null, false);
+        return new ProfileDAO(ProfileDAO.Type.DUMMY, "", null, new HashSet<ResultDAO>(), false);
     }
 
     private void initDefaultProfiles() {
@@ -174,6 +176,10 @@ public class Profiles implements Model<ProfileDAO> {
                 if (tmpProfile.getType() == ProfileDAO.Type.DUMMY) {
                     tmpProfile.setActive(false);
                     ResultGroup.getInstance().switchVisible();
+                } else {
+                    if (DetailedResultGroup.getInstance().isVisible()) {
+                        ResultGroup.getInstance().backVisible();
+                    }
                 }
                 break;
             }

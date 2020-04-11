@@ -2,7 +2,6 @@ package com.shuttle.game.ui.groups.mvc.profiles;
 
 import com.shuttle.game.ui.groups.mvc.results.ResultDAO;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -49,16 +48,16 @@ public class ProfileDAO {
         this.username = profile.getUsername();
         this.preferences = profile.getPreferences();
         this.active = profile.isActive();
-        this.resultSet = profile.getResultSet();
     }
 
-    public ProfileDAO(Type type, String username, Map<String, Object> preferences, boolean active) {
+    public ProfileDAO(Type type, String username, Map<String, Object> preferences, Set<ResultDAO> resultSet, boolean active) {
         this.type = type;
         this.username = username;
         this.preferences = preferences;
         this.active = active;
+        this.resultSet = resultSet;
+
         this.id = UUID.randomUUID().toString();
-        this.resultSet = new HashSet<ResultDAO>();
     }
 
     public enum Type {
