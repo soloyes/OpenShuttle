@@ -113,28 +113,37 @@ public class ResultGroup extends Group {
             }
         }
 
-        if (lines <= 14) {
-            for (int i = 0; i < 14 - lines; i++) {
+        if (lines <= PaintConstants.DUMMY_RESULTS) {
+            for (int i = 0; i < PaintConstants.DUMMY_RESULTS - lines; i++) {
                 verticalGroup.addActor(new Line());
             }
         }
     }
 
-    private class Line extends Group {
+    private static class Line extends Group {
         private Table table;
         private TextureRegion textureRegion;
         @Setter
         private boolean active;
+        private static int lines;
+        private boolean last;
 
         public Line(ProfileDAO profileDAO, ResultDAO resultDAO) {
+            lines++;
+            if (lines == PaintConstants.DUMMY_RESULTS) {
+                last = true;
+            }
             this.table = new Table();
             this.textureRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL));
             Label.LabelStyle style64 = new Label.LabelStyle(
                     Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
                     new Color(0.8f, 0.43f, 0.33f, 1f)
             );
-
-            table.row().padBottom(12);
+            if (last) {
+                table.row();
+            } else {
+                table.row().padBottom(12);
+            }
             makeGroup(new Label(profileDAO.getUsername(), style64), 320);
             makeGroup(new Label(String.valueOf(Rounder.round(resultDAO.getCurrent().getScore())), style64), 138);
             makeGroup(new Label(resultDAO.getDate(), style64), 250);
@@ -144,19 +153,35 @@ public class ResultGroup extends Group {
             table.setFillParent(true);
             table.setWidth(PaintConstants.UI_RESULTS_CELL_WIDTH - 30);
             this.setWidth(PaintConstants.UI_RESULTS_CELL_WIDTH - 30);
-            this.setHeight(94);
+            if (last) {
+                this.setHeight(82);
+            } else {
+                this.setHeight(94);
+            }
             this.addActor(table);
         }
 
         public Line() {
+            lines++;
+            if (lines == PaintConstants.DUMMY_RESULTS) {
+                last = true;
+            }
             this.table = new Table();
             this.textureRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL_EMPTY));
-            table.row().padBottom(12);
+            if (last) {
+                table.row();
+            } else {
+                table.row().padBottom(12);
+            }
             table.align(Align.bottomLeft);
             table.setFillParent(true);
             table.setWidth(PaintConstants.UI_RESULTS_CELL_WIDTH - 30);
             this.setWidth(PaintConstants.UI_RESULTS_CELL_WIDTH - 30);
-            this.setHeight(94);
+            if (last) {
+                this.setHeight(82);
+            } else {
+                this.setHeight(94);
+            }
             this.addActor(table);
         }
 
@@ -177,7 +202,12 @@ public class ResultGroup extends Group {
                 color.a = 0.5f;
             }
             batch.setColor(color);
-            batch.draw(textureRegion, getX(), getY() + 12);
+
+            if (last) {
+                batch.draw(textureRegion, getX(), getY());
+            } else {
+                batch.draw(textureRegion, getX(), getY() + 12);
+            }
             super.draw(batch, parentAlpha);
         }
     }

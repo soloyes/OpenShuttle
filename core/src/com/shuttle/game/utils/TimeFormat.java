@@ -3,16 +3,16 @@ package com.shuttle.game.utils;
 import java.util.Locale;
 
 public class TimeFormat {
-    public final static long ONE_SECOND = 1000;
-    public final static long SECONDS_IN_A_MINUTE = 60;
+    private final static long ONE_SECOND = 1;
+    private final static long SECONDS_IN_A_MINUTE = 60;
 
-    public final static long ONE_MINUTE = ONE_SECOND * 60;
-    public final static long MINUTES_IN_AN_HOUR = 60;
+    private final static long ONE_MINUTE = ONE_SECOND * 60;
+    private final static long MINUTES_IN_AN_HOUR = 60;
 
-    public final static long ONE_HOUR = ONE_MINUTE * 60;
-    public final static long HOURS_IN_A_DAY = 24;
-    public final static long ONE_DAY = ONE_HOUR * 24;
-    public final static long DAYS_IN_A_YEAR = 365;
+    private final static long ONE_HOUR = ONE_MINUTE * 60;
+    private final static long HOURS_IN_A_DAY = 24;
+    private final static long ONE_DAY = ONE_HOUR * 24;
+    private final static long DAYS_IN_A_YEAR = 365;
 
     public static String format(Number n) {
         String res = "";

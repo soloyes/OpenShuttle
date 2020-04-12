@@ -147,8 +147,8 @@ public class ConfigGroup extends Group {
         scrollPane.setForceScroll(false, true);
         scrollPane.setScrollingDisabled(true, false);
         scrollPane.setFadeScrollBars(false);
-        scrollPane.setVariableSizeKnobs(false);
-        scrollPane.getStyle().vScrollKnob.setMinHeight(100);
+        //scrollPane.setVariableSizeKnobs(false);
+        //scrollPane.getStyle().vScrollKnob.setMinHeight(100);
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
         container.setPosition(PaintConstants.UI_SETTINGS_X, PaintConstants.UI_SETTINGS_Y);
         container.width(PaintConstants.UI_SETTINGS_WIDTH);

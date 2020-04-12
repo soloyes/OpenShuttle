@@ -388,6 +388,8 @@ public final class PaintConstants {
     public static final String BACKGROUND_COLOR_HEX = "100514ff";
     public static final float BACKGROUND_OSCILLATE_WIDTH = 50;
     public static final int DUMMY_PROFILES = 5;
+    public static final int DUMMY_RESULTS = 14;
+    public static final int RESULTS_DETAILED = 10;
     public static final float NOTICE_BLINK_TIME = 1.0f;
 
     public static final String UI_YOUR_USERNAME = "Your profile username";
@@ -450,14 +452,14 @@ public final class PaintConstants {
     public static final float UI_SETTINGS_Y = 340;
 
     public static final float UI_RESULTS_WIDTH = 998;
-    public static final float UI_RESULTS_HEIGHT = 1000;
+    public static final float UI_RESULTS_HEIGHT = 988;
     public static final float UI_RESULTS_X = 41;
-    public static final float UI_RESULTS_Y = 292;
+    public static final float UI_RESULTS_Y = 304;
 
     public static final float UI_RESULTS_DETAILED_WIDTH = 998;
-    public static final float UI_RESULTS_DETAILED_HEIGHT = 940;
+    public static final float UI_RESULTS_DETAILED_HEIGHT = 928;
     public static final float UI_RESULTS_DETAILED_X = 41;
-    public static final float UI_RESULTS_DETAILED_Y = 352;
+    public static final float UI_RESULTS_DETAILED_Y = 364;
 
     public static final float UI_TITLE_LABEL_Y = 1340;
 

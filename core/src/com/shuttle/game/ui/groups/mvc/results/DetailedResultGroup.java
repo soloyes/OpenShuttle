@@ -29,8 +29,6 @@ import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Rounder;
 import com.shuttle.game.utils.TimeFormat;
 
-import lombok.Setter;
-
 /**
  * @author Shuttle on 11/04/18.
  */
@@ -92,6 +90,7 @@ public class DetailedResultGroup extends Group {
 
     public void init(ResultDAO resultDAO) {
         verticalGroup.clear();
+        Line.lines = 0;
 
         Line effectivenessLine = new Line(
                 "Effectiveness",
@@ -144,7 +143,7 @@ public class DetailedResultGroup extends Group {
         );
         verticalGroup.addActor(minedMeteoriteLine);
         Line pickUpItemsLine = new Line(
-                "Pick sideRegion items",
+                "Pick up items",
                 String.valueOf(resultDAO.getCurrent().getPickUpItems()),
                 resultDAO.getPrevious() == null ? 1 :
                         Integer.compare(resultDAO.getCurrent().getPickUpItems(), resultDAO.getPrevious().getPickUpItems())
@@ -195,46 +194,60 @@ public class DetailedResultGroup extends Group {
         setVisible(true);
     }
 
-    private class Line extends Group {
+    private static class Line extends Group {
         private Table table;
         private TextureRegion textureRegion;
         private TextureRegion sideRegion;
-        @Setter
-        private boolean active;
+        private Color color;
+        private static int lines;
+        private boolean last;
 
         public Line(String item, String value, int side) {
+            lines++;
+            if (lines == PaintConstants.RESULTS_DETAILED) {
+                last = true;
+            }
             this.table = new Table();
             this.textureRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL_DETAILED));
             if (side < 0) {
                 this.sideRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL_DETAILED_DOWN));
+                color = Color.valueOf("ed7616ff");
             } else if (side == 0) {
                 this.sideRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL_DETAILED_EQUAL));
+                color = Color.valueOf("ebff22ff");
             } else {
                 this.sideRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL_DETAILED_UP));
+                color = Color.valueOf("7ea000ff");
             }
 
-            Label.LabelStyle style64 = new Label.LabelStyle(
-                    Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
-                    new Color(0.8f, 0.43f, 0.33f, 1f)
-            );
+            Label.LabelStyle style64 = new Label.LabelStyle(Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class), color);
+            Label.LabelStyle style64White = new Label.LabelStyle(Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class), Color.WHITE);
 
             CheckBox checkBox = new CheckBox("", new ResultsCheckBoxStyle(
                     new TextureRegionDrawable(sideRegion),
                     new TextureRegionDrawable(sideRegion))
             );
-            table.row().padBottom(12);
+            if (last) {
+                table.row();
+            } else {
+                table.row().padBottom(12);
+            }
             Group group = new Group();
             group.setSize(82, PaintConstants.UI_CELL_HEIGHT);
             group.addActor(checkBox);
             table.add(group).left().width(82);
-            makeGroup(new Label(item, style64));
+            makeGroup(new Label(item, style64White));
             makeGroup(new Label(value, style64));
 
             table.align(Align.bottomLeft);
             table.setFillParent(true);
             table.setWidth(PaintConstants.UI_RESULTS_CELL_WIDTH - 30);
             this.setWidth(PaintConstants.UI_RESULTS_CELL_WIDTH - 30);
-            this.setHeight(94);
+            if (last) {
+                this.setHeight(82);
+            } else {
+                this.setHeight(94);
+            }
             this.addActor(table);
         }
 
@@ -248,14 +261,11 @@ public class DetailedResultGroup extends Group {
 
         @Override
         public void draw(Batch batch, float parentAlpha) {
-            Color color = batch.getColor();
-            if (active) {
-                color.a = parentAlpha;
+            if (last) {
+                batch.draw(textureRegion, getX(), getY());
             } else {
-                color.a = 0.5f;
+                batch.draw(textureRegion, getX(), getY() + 12);
             }
-            batch.setColor(color);
-            batch.draw(textureRegion, getX(), getY() + 12);
             super.draw(batch, parentAlpha);
         }
     }
