@@ -24,6 +24,12 @@ import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Rounder;
 
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
+
 import lombok.Setter;
 
 /**
@@ -85,32 +91,42 @@ public class ResultGroup extends Group {
         verticalGroup.clear();
         int lines = 0;
 
+        Map<ResultDAO, ProfileDAO> map = new TreeMap<ResultDAO, ProfileDAO>(new Comparator<ResultDAO>() {
+            @Override
+            public int compare(ResultDAO resultDAO1, ResultDAO resultDAO2) {
+                return resultDAO2.getDate().compareTo(resultDAO1.getDate());
+            }
+        });
+
         for (ProfileDAO p : profiles.getList()) {
             if (!p.getResultSet().isEmpty()) {
                 for (final ResultDAO r : p.getResultSet()) {
-                    final Line line = new Line(p, r);
-                    line.addListener(new ClickListener() {
-                        @Override
-                        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                            line.setActive(true);
-                            scrollPane.setFlickScroll(false);
-                            return super.touchDown(event, x, y, pointer, button);
-                        }
-
-                        @Override
-                        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                            super.touchUp(event, x, y, pointer, button);
-                            line.setActive(false);
-                            scrollPane.setFlickScroll(true);
-                            ResultGroup.this.setVisible(false);
-                            DetailedResultGroup.getInstance().init(r);
-                        }
-                    });
-
-                    verticalGroup.addActor(line);
-                    lines++;
+                    map.put(r, p);
                 }
             }
+        }
+        for (final Map.Entry<ResultDAO, ProfileDAO> m : map.entrySet()) {
+            final Line line = new Line(m.getValue(), m.getKey());
+            line.addListener(new ClickListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    line.setActive(true);
+                    scrollPane.setFlickScroll(false);
+                    return super.touchDown(event, x, y, pointer, button);
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchUp(event, x, y, pointer, button);
+                    line.setActive(false);
+                    scrollPane.setFlickScroll(true);
+                    ResultGroup.this.setVisible(false);
+                    DetailedResultGroup.getInstance().init(m.getKey());
+                }
+            });
+
+            verticalGroup.addActor(line);
+            lines++;
         }
 
         if (lines <= PaintConstants.DUMMY_RESULTS) {
@@ -146,7 +162,7 @@ public class ResultGroup extends Group {
             }
             makeGroup(new Label(profileDAO.getUsername(), style64), 320);
             makeGroup(new Label(String.valueOf(Rounder.round(resultDAO.getCurrent().getScore())), style64), 138);
-            makeGroup(new Label(resultDAO.getDate(), style64), 250);
+            makeGroup(new Label(new SimpleDateFormat(Rules.DATE_FORMAT, Locale.ENGLISH).format(resultDAO.getDate()), style64), 250);
             makeGroup(new Label(resultDAO.getLevel(), style64), 200);
 
             table.align(Align.bottomLeft);

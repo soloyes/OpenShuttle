@@ -1,5 +1,11 @@
 package com.shuttle.game.ui.groups.mvc.results;
 
+import com.shuttle.game.conf.Rules;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +16,7 @@ import lombok.Setter;
 public class ResultDAO {
     @Getter
     @Setter
-    private String date;
+    private Date date;
     @Getter
     @Setter
     private String level;
@@ -22,13 +28,13 @@ public class ResultDAO {
     private DetailedResultDAO previous;
 
     public ResultDAO() {
-        this.date = "";
+        this.date = new Date();
         this.level = "";
         this.current = new DetailedResultDAO();
         this.previous = new DetailedResultDAO();
     }
 
-    public ResultDAO(String date, String level, DetailedResultDAO current) {
+    public ResultDAO(Date date, String level, DetailedResultDAO current) {
         this.date = date;
         this.level = level;
         this.current = current;
@@ -41,13 +47,18 @@ public class ResultDAO {
 
         ResultDAO resultDAO = (ResultDAO) o;
 
-        if (!date.equals(resultDAO.date)) return false;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Rules.DATE_FORMAT, Locale.ENGLISH);
+        String day1 = simpleDateFormat.format(date);
+        String day2 = simpleDateFormat.format(resultDAO.date);
+        if (!day1.equals(day2)) return false;
         return level.equals(resultDAO.level);
     }
 
     @Override
     public int hashCode() {
-        int result = date.hashCode();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Rules.DATE_FORMAT, Locale.ENGLISH);
+        String day = simpleDateFormat.format(date.getTime());
+        int result = day.hashCode();
         result = 31 * result + level.hashCode();
         return result;
     }

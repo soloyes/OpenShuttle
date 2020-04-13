@@ -19,12 +19,13 @@ import com.shuttle.game.ui.groups.mvc.results.ResultDAO;
 import com.shuttle.game.ui.groups.mvc.results.ResultGroup;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -227,33 +228,49 @@ public class Profiles implements Model<ProfileDAO> {
         if (getActive() != null) {
 
             ResultDAO result = new ResultDAO(
-                    new SimpleDateFormat("dd/MM/YY", Locale.ENGLISH).format(new Date()),
+                    new Date(),
                     Rules.StartLevel.values()[GamePreferences.getLevel()].name(),
                     detailedResultDAO
             );
 
-            ProfileDAO profileDAO = getActive();
-            Set<ResultDAO> set = profileDAO.getResultSet();
+            List<ResultDAO> list = getActiveProfileResultList(Rules.StartLevel.values()[GamePreferences.getLevel()].name());
+            Set<ResultDAO> set = getActive().getResultSet();
 
-            if (set.size() == 0) {
-                set.add(result);
+            if (list.size() == 0) {
+                result.setCurrent(new DetailedResultDAO(detailedResultDAO));
             } else {
-                boolean added = false;
-                for (ResultDAO r : set) {
-                    if (r.getDate().equals(result.getDate()) && r.getLevel().equals(result.getLevel())) {
-                        if (r.getPrevious() == null) {
-                            r.setPrevious(new DetailedResultDAO());
-                        }
-                        r.setPrevious(new DetailedResultDAO(r.getCurrent()));
-                        r.setCurrent(new DetailedResultDAO(detailedResultDAO));
-                        added = true;
-                        break;
-                    }
+                if (result.getPrevious() == null) {
+                    result.setPrevious(new DetailedResultDAO());
                 }
-                if (!added) {
-                    set.add(result);
+                if (list.size() == 1) {
+                    result.setPrevious(new DetailedResultDAO(list.get(0).getCurrent()));
+                } else {
+                    result.setPrevious(new DetailedResultDAO(list.get(1).getCurrent()));
+                }
+
+                result.setCurrent(new DetailedResultDAO(detailedResultDAO));
+            }
+
+            set.remove(result);
+            set.add(result);
+        }
+    }
+
+    private List<ResultDAO> getActiveProfileResultList(String level) {
+        List<ResultDAO> list = new LinkedList<ResultDAO>();
+        if (getActive() != null) {
+            for (ResultDAO r : getActive().getResultSet()) {
+                if (r.getLevel().equals(level)) {
+                    list.add(r);
                 }
             }
         }
+        Collections.sort(list, new Comparator<ResultDAO>() {
+            @Override
+            public int compare(ResultDAO resultDAO1, ResultDAO resultDAO2) {
+                return resultDAO2.getDate().compareTo(resultDAO1.getDate());
+            }
+        });
+        return list;
     }
 }

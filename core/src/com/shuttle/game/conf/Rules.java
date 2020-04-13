@@ -24,6 +24,8 @@ public final class Rules {
     public static int SPACE_WIDTH;
     //
     public static int SPACE_HEIGHT;
+    //
+    public static String DATE_FORMAT = "dd/MM/YY";
     //CONSUMABLE
     //2
     public static final int CONSUMABLE_ASTRONAUT_AT_START = 2;
