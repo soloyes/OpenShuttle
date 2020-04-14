@@ -626,6 +626,13 @@ exitbuttonmenu
   orig: 112, 112
   offset: 0, 0
   index: -1
+backbutton
+  rotate: false
+  xy: 1802, 3607
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
 profilesborder
   rotate: false
   xy: 2462, 1999
@@ -649,7 +656,7 @@ switchoff
   index: -1
 glowupdown
   rotate: false
-  xy: 1802, 3607
+  xy: 1802, 3721
   size: 172, 98
   orig: 172, 98
   offset: 0, 0
@@ -668,23 +675,30 @@ resultscellempty
   orig: 956, 82
   offset: 0, 0
   index: -1
-resultscell
+resultscelldetailed
   rotate: false
   xy: 2974, 2083
   size: 956, 82
   orig: 956, 82
   offset: 0, 0
   index: -1
-configcelltype2
+resultscell
   rotate: false
   xy: 2974, 2167
+  size: 956, 82
+  orig: 956, 82
+  offset: 0, 0
+  index: -1
+configcelltype2
+  rotate: false
+  xy: 2060, 2251
   size: 628, 82
   orig: 628, 82
   offset: 0, 0
   index: -1
 configcelltype1
   rotate: false
-  xy: 2060, 2251
+  xy: 2690, 2251
   size: 628, 82
   orig: 628, 82
   offset: 0, 0
@@ -698,42 +712,63 @@ infocell
   index: -1
 menucellhead
   rotate: false
-  xy: 2690, 2251
+  xy: 3320, 2251
   size: 498, 82
   orig: 498, 82
   offset: 0, 0
   index: -1
 menucellactive
   rotate: false
-  xy: 3190, 2251
+  xy: 2060, 2335
   size: 498, 82
   orig: 498, 82
   offset: 0, 0
   index: -1
 menucell
   rotate: false
-  xy: 2060, 2335
+  xy: 2560, 2335
   size: 498, 82
   orig: 498, 82
   offset: 0, 0
   index: -1
-menuplus
+resultscelldetailedup
   rotate: false
   xy: 3965, 515
   size: 82, 82
   orig: 82, 82
   offset: 0, 0
   index: -1
-menuminus
+resultscelldetailedequal
   rotate: false
   xy: 3965, 773
   size: 82, 82
   orig: 82, 82
   offset: 0, 0
   index: -1
-icoconfigload
+resultscelldetaileddown
   rotate: false
   xy: 3993, 1641
+  size: 82, 82
+  orig: 82, 82
+  offset: 0, 0
+  index: -1
+menuplus
+  rotate: false
+  xy: 1916, 3607
+  size: 82, 82
+  orig: 82, 82
+  offset: 0, 0
+  index: -1
+menuminus
+  rotate: false
+  xy: 1976, 3721
+  size: 82, 82
+  orig: 82, 82
+  offset: 0, 0
+  index: -1
+icoconfigload
+  rotate: false
+  xy: 1802, 3821
   size: 82, 82
   orig: 82, 82
   offset: 0, 0
@@ -754,98 +789,98 @@ spicon
   index: -1
 lpscale
   rotate: false
-  xy: 1802, 3707
+  xy: 1802, 3905
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 lpicon
   rotate: false
-  xy: 1802, 3757
+  xy: 1802, 3955
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpscale
   rotate: false
-  xy: 1802, 3807
+  xy: 1802, 4005
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpout
   rotate: false
-  xy: 1802, 3857
+  xy: 2462, 2193
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 lpout
   rotate: false
-  xy: 1802, 3857
+  xy: 2462, 2193
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpin
   rotate: false
-  xy: 1802, 3907
+  xy: 2702, 2193
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 lpin
   rotate: false
-  xy: 1802, 3907
+  xy: 2702, 2193
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 hpicon
   rotate: false
-  xy: 1802, 3957
+  xy: 3820, 2251
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpscale
   rotate: false
-  xy: 1802, 4007
+  xy: 3060, 2335
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpout
   rotate: false
-  xy: 2462, 2193
+  xy: 3300, 2335
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 spout
   rotate: false
-  xy: 2462, 2193
+  xy: 3300, 2335
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpin
   rotate: false
-  xy: 2702, 2193
+  xy: 3540, 2335
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 spin
   rotate: false
-  xy: 2702, 2193
+  xy: 3540, 2335
   size: 238, 48
   orig: 238, 48
   offset: 0, 0
   index: -1
 fpicon
   rotate: false
-  xy: 3604, 2167
+  xy: 3780, 2335
   size: 238, 48
   orig: 238, 48
   offset: 0, 0

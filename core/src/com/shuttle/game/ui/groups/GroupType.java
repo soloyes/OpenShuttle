@@ -9,6 +9,7 @@ public enum GroupType {
     MENU_BAR,
     CONFIG,
     RESULTS,
+    RESULTS_DETAILED,
     SHARE,
     LEFT,
     RIGHT

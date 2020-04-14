@@ -209,6 +209,10 @@ public final class PaintConstants {
     public static final String UI_INFO_CELL = "infocell";
     public static final String UI_RESULTS_CELL = "resultscell";
     public static final String UI_RESULTS_CELL_EMPTY = "resultscellempty";
+    public static final String UI_RESULTS_CELL_DETAILED = "resultscelldetailed";
+    public static final String UI_RESULTS_CELL_DETAILED_UP = "resultscelldetailedup";
+    public static final String UI_RESULTS_CELL_DETAILED_DOWN = "resultscelldetaileddown";
+    public static final String UI_RESULTS_CELL_DETAILED_EQUAL = "resultscelldetailedequal";
 
     public static final String UI_CONFIG_CELL_TYPE1 = "configcelltype1";
     public static final String UI_CONFIG_CELL_TYPE2 = "configcelltype2";
@@ -310,6 +314,7 @@ public final class PaintConstants {
 
     public static final String PAUSE_MENU_HOME = "menupausehome";
     public static final String PAUSE_MENU_RESTART = "menupauserestart";
+    public static final String BACK_BUTTON = "backbutton";
 
     public static final int MENU_BUTTON_WIDTH = 112;
     public static final int MENU_BUTTON_HEIGHT = 112;
@@ -383,6 +388,8 @@ public final class PaintConstants {
     public static final String BACKGROUND_COLOR_HEX = "100514ff";
     public static final float BACKGROUND_OSCILLATE_WIDTH = 50;
     public static final int DUMMY_PROFILES = 5;
+    public static final int DUMMY_RESULTS = 14;
+    public static final int RESULTS_DETAILED = 10;
     public static final float NOTICE_BLINK_TIME = 1.0f;
 
     public static final String UI_YOUR_USERNAME = "Your profile username";
@@ -439,13 +446,22 @@ public final class PaintConstants {
     public static final String UI_JOYSTICK_DISABLE = "JOYSTICK DISABLED";
     public static final String UI_JOYSTICK_HOLD = "SWITCHING JOYSTICK";
 
-    public static final float UI_SETTINGS_WIDTH = 720;
-    public static final float UI_SETTINGS_HEIGHT = 1200;
+    public static final float UI_SETTINGS_WIDTH = 670;
+    public static final float UI_SETTINGS_HEIGHT = 952;
+    public static final float UI_SETTINGS_X = 205;
+    public static final float UI_SETTINGS_Y = 340;
+
     public static final float UI_RESULTS_WIDTH = 998;
-    public static final float UI_RESULTS_HEIGHT = 1000;
-    public static final float UI_SETTINGS_X = 178;
-    public static final float UI_SETTINGS_Y = 300;
-    public static final float UI_RESULTS_Y = 500;
+    public static final float UI_RESULTS_HEIGHT = 988;
+    public static final float UI_RESULTS_X = 41;
+    public static final float UI_RESULTS_Y = 304;
+
+    public static final float UI_RESULTS_DETAILED_WIDTH = 998;
+    public static final float UI_RESULTS_DETAILED_HEIGHT = 928;
+    public static final float UI_RESULTS_DETAILED_X = 41;
+    public static final float UI_RESULTS_DETAILED_Y = 364;
+
+    public static final float UI_TITLE_LABEL_Y = 1340;
 
     private PaintConstants() {
     }

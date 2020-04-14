@@ -42,7 +42,8 @@ import lombok.Setter;
 /**
  * @author Shuttle on 6/23/18.
  */
-public class ConfigGroup extends VerticalGroup {
+
+public class ConfigGroup extends Group {
     private static ConfigGroup instance;
     private static StringBuilder notice = new StringBuilder();
     private Skin skin;
@@ -97,10 +98,9 @@ public class ConfigGroup extends VerticalGroup {
     private ConfigCheckBox joyStickPresetCheckBox;
     private Label noticeLabel;
     private Label levelLabel;
-    private Label titleLabel;
-    private Label space;
     private Group noticeGroup;
     private GlyphLayout glyphLayout;
+    private GlyphLayout glyphLayoutTitle;
     private Array<Music> musicArray;
     private BoomBox boomBox;
     private Label shaderLabel;
@@ -112,9 +112,8 @@ public class ConfigGroup extends VerticalGroup {
         this.font44 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT44, BitmapFont.class);
         this.font96 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
         this.skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
-        this.setPosition(PaintConstants.UI_SETTINGS_X, PaintConstants.UI_SETTINGS_Y);
-        this.setWidth(PaintConstants.UI_SETTINGS_WIDTH);
-        this.setHeight(PaintConstants.UI_SETTINGS_HEIGHT);
+        this.setWidth(Rules.WORLD_WIDTH);
+        this.setHeight(Rules.WORLD_HEIGHT);
         this.boomBox = new BoomBox();
 
         initStyles();
@@ -134,9 +133,10 @@ public class ConfigGroup extends VerticalGroup {
         innerTable.row();
         innerTable.add(joyStickColorCheckBox).height(PaintConstants.JOYSTICK_HEIGHT / 2).left();
 
+        this.glyphLayoutTitle = new GlyphLayout();
         initLines();
-
         this.glyphLayout = new GlyphLayout();
+
         this.noticeLabel = new Label(notice, noticeStyle44);
         this.noticeGroup = new Group();
         noticeGroup.addActor(noticeLabel);
@@ -148,11 +148,13 @@ public class ConfigGroup extends VerticalGroup {
         scrollPane.setForceScroll(false, true);
         scrollPane.setScrollingDisabled(true, false);
         scrollPane.setFadeScrollBars(false);
-        scrollPane.setVariableSizeKnobs(false);
-        scrollPane.getStyle().vScrollKnob.setMinHeight(100);
+        //scrollPane.setVariableSizeKnobs(false);
+        //scrollPane.getStyle().vScrollKnob.setMinHeight(100);
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
-        //container.setHeight(300);
-        container.align(Align.top);
+        container.setPosition(PaintConstants.UI_SETTINGS_X, PaintConstants.UI_SETTINGS_Y);
+        container.width(PaintConstants.UI_SETTINGS_WIDTH);
+        container.height(PaintConstants.UI_SETTINGS_HEIGHT);
+        container.align(Align.bottomLeft);
 
         screenType = ScreenManager.getInstance().getCurrentScreen();
 
@@ -165,8 +167,6 @@ public class ConfigGroup extends VerticalGroup {
         verticalGroup.addActor(vibrationLine);
         verticalGroup.addActor(joystickLine);
         verticalGroup.addActor(joystickPresetLine);
-        this.addActor(titleLabel);
-        this.addActor(space);
         this.addActor(noticeGroup);
         this.addActor(container);
         this.refresh();
@@ -577,8 +577,7 @@ public class ConfigGroup extends VerticalGroup {
     }
 
     private void initLines() {
-        titleLabel = new Label("SETTINGS", labelStyle96);
-        space = new Label("", labelStyle54);
+        glyphLayoutTitle.setText(font96, "SETTINGS");
 
         Label soundLabel = new Label("SOUND", labelStyle54);
         soundLabel.addListener(new ClickListener() {
@@ -953,8 +952,8 @@ public class ConfigGroup extends VerticalGroup {
         glyphLayout.setText(font44, notice);
         noticeLabel.setText(notice);
         noticeGroup.setPosition(
-                Rules.WORLD_WIDTH / 2 - this.getX() - glyphLayout.width / 2,
-                this.getHeight() - titleLabel.getHeight() - 20
+                (Rules.WORLD_WIDTH - glyphLayout.width) / 2,
+                1313
         );
 
         shadowTime -= delta;
@@ -1153,5 +1152,15 @@ public class ConfigGroup extends VerticalGroup {
         public void setTouchTime(float touchTime) {
             configCheckBox.setTouchTime(touchTime);
         }
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        font96.draw(batch,
+                glyphLayoutTitle,
+                (Rules.WORLD_WIDTH - glyphLayoutTitle.width) / 2,
+                PaintConstants.UI_TITLE_LABEL_Y + glyphLayoutTitle.height
+        );
     }
 }

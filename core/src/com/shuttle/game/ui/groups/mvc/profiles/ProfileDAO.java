@@ -1,6 +1,9 @@
 package com.shuttle.game.ui.groups.mvc.profiles;
 
+import com.shuttle.game.ui.groups.mvc.results.ResultDAO;
+
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import lombok.Getter;
@@ -33,6 +36,10 @@ public class ProfileDAO {
     @Setter
     private String id;
 
+    @Getter
+    @Setter
+    private Set<ResultDAO> resultSet;
+
     private ProfileDAO() {
     }
 
@@ -43,11 +50,13 @@ public class ProfileDAO {
         this.active = profile.isActive();
     }
 
-    public ProfileDAO(Type type, String username, Map<String, Object> preferences, boolean active) {
+    public ProfileDAO(Type type, String username, Map<String, Object> preferences, Set<ResultDAO> resultSet, boolean active) {
         this.type = type;
         this.username = username;
         this.preferences = preferences;
         this.active = active;
+        this.resultSet = resultSet;
+
         this.id = UUID.randomUUID().toString();
     }
 

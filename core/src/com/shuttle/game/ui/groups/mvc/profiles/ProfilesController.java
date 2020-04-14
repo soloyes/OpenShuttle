@@ -11,7 +11,7 @@ import java.util.List;
  * @author Shuttle on 17/06/19.
  */
 
-public class GroupController implements Controller<ProfileDAO> {
+public class ProfilesController implements Controller<ProfileDAO> {
     private View<ProfileDAO> view;
     private Model<ProfileDAO> model;
 
@@ -20,7 +20,7 @@ public class GroupController implements Controller<ProfileDAO> {
         return model.getList();
     }
 
-    public GroupController(View<ProfileDAO> view, Model<ProfileDAO> model) {
+    public ProfilesController(View<ProfileDAO> view, Model<ProfileDAO> model) {
         this.view = view;
         this.model = model;
     }

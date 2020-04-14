@@ -19,6 +19,7 @@ import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.configs.LeftGroup;
 import com.shuttle.game.ui.groups.configs.RightGroup;
+import com.shuttle.game.ui.groups.mvc.results.DetailedResultGroup;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
 import com.shuttle.game.ui.groups.switches.SwitchGroup;
 import com.shuttle.game.ui.panels.UILeftPanel;
@@ -48,6 +49,7 @@ public class Restart {
         LeftGroup.getInstance().dispose();
         RightGroup.getInstance().dispose();
         Standing.getInstance().dispose();
+        DetailedResultGroup.getInstance().dispose();
         Shuttle.respawn();
     }
 }

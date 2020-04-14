@@ -1,29 +1,43 @@
 package com.shuttle.game.ui.groups.mvc.results;
 
-import lombok.AllArgsConstructor;
+import com.shuttle.game.conf.Rules;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import lombok.Getter;
 import lombok.Setter;
 
-@AllArgsConstructor
+/**
+ * @author Shuttle on 7/14/18.
+ */
+
 public class ResultDAO {
     @Getter
     @Setter
-    private String username;
-    @Getter
-    @Setter
-    private String date;
-    @Getter
-    @Setter
-    private String score;
+    private Date date;
     @Getter
     @Setter
     private String level;
+    @Getter
+    @Setter
+    private DetailedResultDAO current;
+    @Getter
+    @Setter
+    private DetailedResultDAO previous;
 
     public ResultDAO() {
-        this.username = "";
-        this.date = "";
+        this.date = new Date();
         this.level = "";
-        this.score = "";
+        this.current = new DetailedResultDAO();
+        this.previous = new DetailedResultDAO();
+    }
+
+    public ResultDAO(Date date, String level, DetailedResultDAO current) {
+        this.date = date;
+        this.level = level;
+        this.current = current;
     }
 
     @Override
@@ -33,26 +47,19 @@ public class ResultDAO {
 
         ResultDAO resultDAO = (ResultDAO) o;
 
-        if (!username.equals(resultDAO.username)) return false;
-        if (!date.equals(resultDAO.date)) return false;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Rules.DATE_FORMAT, Locale.ENGLISH);
+        String day1 = simpleDateFormat.format(date);
+        String day2 = simpleDateFormat.format(resultDAO.date);
+        if (!day1.equals(day2)) return false;
         return level.equals(resultDAO.level);
     }
 
     @Override
     public int hashCode() {
-        int result = username.hashCode();
-        result = 31 * result + date.hashCode();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Rules.DATE_FORMAT, Locale.ENGLISH);
+        String day = simpleDateFormat.format(date.getTime());
+        int result = day.hashCode();
         result = 31 * result + level.hashCode();
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "ResultDAO{" +
-                "username='" + username + '\'' +
-                ", date='" + date + '\'' +
-                ", score='" + score + '\'' +
-                ", level='" + level + '\'' +
-                '}';
     }
 }

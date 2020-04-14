@@ -131,8 +131,8 @@ public class PauseGroup extends Group {
             }
         });
 
-        this.addActor(playPauseBtn);
         this.addActor(configGroup);
+        this.addActor(playPauseBtn);
         this.addActor(leftGroup);
         this.addActor(rightGroup);
         this.addActor(buttonMenu);

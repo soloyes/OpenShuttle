@@ -21,15 +21,16 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
-import com.shuttle.game.ui.groups.mvc.profiles.GroupController;
 import com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
-import com.shuttle.game.ui.groups.mvc.profiles.VerticalGroupList;
+import com.shuttle.game.ui.groups.mvc.profiles.ProfilesController;
+import com.shuttle.game.ui.groups.mvc.profiles.ProfilesView;
 import com.shuttle.game.utils.Assets;
 
 /**
  * @author Shuttle on 6/23/18.
  */
+
 public class MenuGroup extends Group {
     private static boolean validUserName;
     private static TextField username;
@@ -39,8 +40,8 @@ public class MenuGroup extends Group {
     private BitmapFont font72;
     private Button buttonProfiles;
     private GlyphLayout glyphLayout;
-    private VerticalGroupList verticalGroupList;
-    private GroupController groupController;
+    private ProfilesView profilesView;
+    private ProfilesController profilesController;
     private float a;
     private float blinkTime;
     private Label noticeLabel;
@@ -63,7 +64,7 @@ public class MenuGroup extends Group {
                 if (buttonProfiles.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
                 } else if (pointer == 0) {
-                    verticalGroupList.switchVisible();
+                    profilesView.switchVisible();
                     setNotice(PaintConstants.UI_YOUR_USERNAME);
                     boomBox.playSound(MSConstants.UI_MENU);
                 }
@@ -92,16 +93,16 @@ public class MenuGroup extends Group {
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.ENTER) {
                     if (validUserName) {
-                        ProfileDAO profile = groupController.getActive();
+                        ProfileDAO profile = profilesController.getActive();
                         if (profile == null) {
-                            profile = verticalGroupList.addProfile(username.getText());
-                            groupController.select(profile);
+                            profile = profilesView.addProfile(username.getText());
+                            profilesController.select(profile);
                             setNotice(PaintConstants.UI_YOUR_USERNAME);
                         } else {
                             setNotice(PaintConstants.UI_PROFILE_SAVED);
                             profile.setUsername(username.getText());
-                            groupController.flush();
-                            groupController.update();
+                            profilesController.flush();
+                            profilesController.update();
                         }
                     }
                 }
@@ -115,7 +116,7 @@ public class MenuGroup extends Group {
         this.addActor(buttonProfiles);
         this.addActor(noticeGroup);
         this.addActor(username);
-        this.addActor(verticalGroupList);
+        this.addActor(profilesView);
     }
 
     private MenuGroup(String name) {
@@ -141,12 +142,12 @@ public class MenuGroup extends Group {
         username = new TextField("", skin, "default");
         this.glyphLayout = new GlyphLayout();
         //MVC
-        this.verticalGroupList = new VerticalGroupList();
-        this.groupController = new GroupController(verticalGroupList, new Profiles());
-        verticalGroupList.setController(groupController);
-        groupController.update();
+        this.profilesView = new ProfilesView();
+        this.profilesController = new ProfilesController(profilesView, new Profiles());
+        profilesView.setController(profilesController);
+        profilesController.update();
         //
-        if (groupController.getActive() != null) {
+        if (profilesController.getActive() != null) {
             setNotice(PaintConstants.UI_YOUR_USERNAME);
         }
         this.boomBox = new BoomBox();
@@ -178,9 +179,9 @@ public class MenuGroup extends Group {
                 a = 1.0f;
             }
         }
-        if (GroupController.isEmpty()) {
+        if (ProfilesController.isEmpty()) {
             buttonProfiles.setDisabled(true);
-            verticalGroupList.setVisible(false);
+            profilesView.setVisible(false);
         } else {
             buttonProfiles.setDisabled(false);
         }
@@ -210,7 +211,7 @@ public class MenuGroup extends Group {
     }
 
     public void dispose() {
-        groupController.dispose();
+        profilesController.dispose();
     }
 
     public static void setUsername(String username) {

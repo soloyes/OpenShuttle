@@ -11,15 +11,19 @@ import com.shuttle.game.ui.groups.MenuBackgroundGroup;
 import com.shuttle.game.ui.groups.MenuBar;
 import com.shuttle.game.ui.groups.MenuGroup;
 import com.shuttle.game.ui.groups.configs.ConfigGroup;
+import com.shuttle.game.ui.groups.mvc.results.DetailedResultGroup;
 import com.shuttle.game.ui.groups.mvc.results.ResultGroup;
 import com.shuttle.game.utils.Assets;
 
 /**
  * @author Shuttle on 3/24/18.
  */
+
 public class MenuScreen extends BaseScreen {
     private Background background;
     private MenuGroup menuGroup;
+    private ResultGroup resultGroup;
+    private DetailedResultGroup detailedResultGroup;
     private BitmapFont font188;
     private BitmapFont font48;
     private Label head;
@@ -40,7 +44,8 @@ public class MenuScreen extends BaseScreen {
         background = new Background();
         menuGroup = new MenuGroup();
         MenuBar menuBar = new MenuBar();
-        ResultGroup resultGroup = new ResultGroup();
+        resultGroup = ResultGroup.getInstance();
+        detailedResultGroup = DetailedResultGroup.getInstance();
         InfoGroup infoGroup = new InfoGroup();
         this.font188 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT188, BitmapFont.class);
         this.font48 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT48, BitmapFont.class);
@@ -55,9 +60,10 @@ public class MenuScreen extends BaseScreen {
         stage.addActor(MenuBackgroundGroup.getInstance());
         stage.addActor(menuGroup);
         stage.addActor(ConfigGroup.getInstance());
-        stage.addActor(menuBar);
         stage.addActor(resultGroup);
+        stage.addActor(detailedResultGroup);
         stage.addActor(infoGroup);
+        stage.addActor(menuBar);
     }
 
     @Override
@@ -83,6 +89,8 @@ public class MenuScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         menuGroup.dispose();
+        resultGroup.dispose();
+        detailedResultGroup.dispose();
         ConfigGroup.getInstance().dispose();
         MenuBackgroundGroup.getInstance().dispose();
     }

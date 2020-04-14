@@ -10,5 +10,4 @@ public final class FileConstants {
     }
 
     public static final String PROFILES = "profiles.json";
-    public static final String RESULTS = "results.json";
 }

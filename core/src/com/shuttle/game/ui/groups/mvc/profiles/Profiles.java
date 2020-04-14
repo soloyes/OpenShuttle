@@ -8,12 +8,25 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.shuttle.game.conf.FileConstants;
 import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
+import com.shuttle.game.player.Standing;
+import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.mvc.Model;
+import com.shuttle.game.ui.groups.mvc.results.DetailedResultDAO;
+import com.shuttle.game.ui.groups.mvc.results.DetailedResultGroup;
+import com.shuttle.game.ui.groups.mvc.results.ResultDAO;
+import com.shuttle.game.ui.groups.mvc.results.ResultGroup;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Shuttle on 17/06/19.
@@ -34,7 +47,7 @@ public class Profiles implements Model<ProfileDAO> {
     }
 
     private static ProfileDAO asEmpty() {
-        return new ProfileDAO(ProfileDAO.Type.PROFILE, PaintConstants.UI_EMPTY_PROFILE, GamePreferences.defaults, false);
+        return new ProfileDAO(ProfileDAO.Type.PROFILE, PaintConstants.UI_EMPTY_PROFILE, GamePreferences.defaults, new HashSet<ResultDAO>(), false);
     }
 
     @Override
@@ -83,7 +96,7 @@ public class Profiles implements Model<ProfileDAO> {
     }
 
     private static ProfileDAO asDummy() {
-        return new ProfileDAO(ProfileDAO.Type.DUMMY, "", null, false);
+        return new ProfileDAO(ProfileDAO.Type.DUMMY, "", null, new HashSet<ResultDAO>(), false);
     }
 
     private void initDefaultProfiles() {
@@ -100,6 +113,13 @@ public class Profiles implements Model<ProfileDAO> {
             getActive().setPreferences(GamePreferences.getCurrent());
         }
     }
+
+    private void resultsToActiveProfile() {
+        if (getActive() != null && ScreenManager.getInstance().getCurrentScreen() != ScreenManager.ScreenType.MENU) {
+            Standing.getInstance().writeResult();
+        }
+    }
+
 
     //Why? Because it is not good to work with static resources (file e.g.)
     private Profiles getInstance() {
@@ -156,6 +176,11 @@ public class Profiles implements Model<ProfileDAO> {
                 ProfileDAO tmpProfile = profiles.get(0);
                 if (tmpProfile.getType() == ProfileDAO.Type.DUMMY) {
                     tmpProfile.setActive(false);
+                    ResultGroup.getInstance().switchVisible();
+                } else {
+                    if (DetailedResultGroup.getInstance().isVisible()) {
+                        ResultGroup.getInstance().backVisible();
+                    }
                 }
                 break;
             }
@@ -164,10 +189,11 @@ public class Profiles implements Model<ProfileDAO> {
 
     public void dispose() {
         preferencesToActiveProfile();
+        resultsToActiveProfile();
         write();
     }
 
-    public void flush(){
+    public void flush() {
         dispose();
     }
 
@@ -196,5 +222,55 @@ public class Profiles implements Model<ProfileDAO> {
     @Override
     public List<ProfileDAO> getList() {
         return getInstance().profiles;
+    }
+
+    public void writeResults(DetailedResultDAO detailedResultDAO) {
+        if (getActive() != null) {
+
+            ResultDAO result = new ResultDAO(
+                    new Date(),
+                    Rules.StartLevel.values()[GamePreferences.getLevel()].name(),
+                    detailedResultDAO
+            );
+
+            List<ResultDAO> list = getActiveProfileResultList(Rules.StartLevel.values()[GamePreferences.getLevel()].name());
+            Set<ResultDAO> set = getActive().getResultSet();
+
+            if (list.size() == 0) {
+                result.setCurrent(new DetailedResultDAO(detailedResultDAO));
+            } else {
+                if (result.getPrevious() == null) {
+                    result.setPrevious(new DetailedResultDAO());
+                }
+                if (list.size() == 1) {
+                    result.setPrevious(new DetailedResultDAO(list.get(0).getCurrent()));
+                } else {
+                    result.setPrevious(new DetailedResultDAO(list.get(1).getCurrent()));
+                }
+
+                result.setCurrent(new DetailedResultDAO(detailedResultDAO));
+            }
+
+            set.remove(result);
+            set.add(result);
+        }
+    }
+
+    public List<ResultDAO> getActiveProfileResultList(String level) {
+        List<ResultDAO> list = new LinkedList<ResultDAO>();
+        if (getActive() != null) {
+            for (ResultDAO r : getActive().getResultSet()) {
+                if (r.getLevel().equals(level)) {
+                    list.add(r);
+                }
+            }
+        }
+        Collections.sort(list, new Comparator<ResultDAO>() {
+            @Override
+            public int compare(ResultDAO resultDAO1, ResultDAO resultDAO2) {
+                return resultDAO2.getDate().compareTo(resultDAO1.getDate());
+            }
+        });
+        return list;
     }
 }

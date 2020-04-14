@@ -24,6 +24,8 @@ public final class Rules {
     public static int SPACE_WIDTH;
     //
     public static int SPACE_HEIGHT;
+    //
+    public static String DATE_FORMAT = "dd/MM/YY";
     //CONSUMABLE
     //2
     public static final int CONSUMABLE_ASTRONAUT_AT_START = 2;
@@ -350,12 +352,12 @@ public final class Rules {
             public void setGameLevel() {
                 Standing.getInstance().setMaxFuel(100);
                 Standing.getInstance().setFuel(100);
-                Standing.getInstance().setHp(10);
-                Standing.getInstance().setMaxHp(10);
+                Standing.getInstance().setHp(1);
+                Standing.getInstance().setMaxHp(1);
                 Standing.getInstance().setMaxLaserChargeLevel(10);
                 Standing.getInstance().setLifeShield(10);
                 Standing.getInstance().setMaxLifeShield(10);
-                Standing.getInstance().setLives(3);
+                Standing.getInstance().setLives(1);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
                 Standing.getInstance().setPlayingLevel(10);
                 Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 18);
