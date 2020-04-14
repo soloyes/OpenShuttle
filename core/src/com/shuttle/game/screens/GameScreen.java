@@ -330,6 +330,7 @@ public class GameScreen extends BaseScreen {
             RocketLauncher.getInstance().update(dt);
             if (!Rules.GAME_OVER) {
                 anomalyTimer.update(dt);
+                Standing.getInstance().addTime(dt);
             }
 
             gameInfoSystem.update(dt);

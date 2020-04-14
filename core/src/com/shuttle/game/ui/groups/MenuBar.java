@@ -81,7 +81,11 @@ public class MenuBar extends Group {
                 if (buttonPlay.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
                 } else if (pointer == 0 && !buttonResults.isDisabled()) {
-                    boomBox.playSound(MSConstants.UI_MENU);
+                    if (MenuGroup.isValidUserName()) {
+                        boomBox.playSound(MSConstants.UI_MENU);
+                    } else {
+                        boomBox.playSound(MSConstants.UI_EMPTY_NAME);
+                    }
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -98,6 +102,8 @@ public class MenuBar extends Group {
                             if (actors.get(i).getName().equals(GroupType.MENU.name())) {
                                 actors.get(i).setVisible(true);
                             } else if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
+                                actors.get(i).setVisible(true);
+                            } else if (actors.get(i).getName().equals(GroupType.MENU_BACKGROUND.name())) {
                                 actors.get(i).setVisible(true);
                             } else {
                                 actors.get(i).setVisible(false);

@@ -72,6 +72,15 @@ public final class Standing {
     //Type, level, score
     private Map<AbstractPoolable.Type, Map<Integer, Integer>> statistics;
     private Profiles profiles;
+    @Getter
+    private float playTime;
+
+    public static Standing getInstance() {
+        if (instance == null) {
+            instance = new Standing();
+        }
+        return instance;
+    }
 
     private Standing() {
         this.boomBox = new BoomBox();
@@ -220,7 +229,10 @@ public final class Standing {
 
     public DetailedResultDAO getDetails() {
         DetailedResultDAO detailedResultDAO = new DetailedResultDAO();
+        //Set game details
         detailedResultDAO.setScore(scoreView);
+        detailedResultDAO.setTime((int) playTime);
+        //
         return detailedResultDAO;
     }
 
@@ -267,10 +279,7 @@ public final class Standing {
         }
     }
 
-    public static Standing getInstance() {
-        if (instance == null) {
-            instance = new Standing();
-        }
-        return instance;
+    public void addTime(float amount) {
+        playTime += amount;
     }
 }
