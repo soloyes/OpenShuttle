@@ -352,7 +352,6 @@ public class ConfigGroup extends Group {
         });
     }
 
-    //todo: затестить мультитач. Надо чтобы несколько пальцев не мгли одновременно нажимать на опции
     private void initCheckBoxes() {
         soundCheckBox = new ConfigCheckBox("", soundCheckBoxStyle);
         soundCheckBox.setDisabled(true);

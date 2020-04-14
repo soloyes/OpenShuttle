@@ -1,6 +1,5 @@
 package com.shuttle.game.ui.groups;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -180,10 +179,6 @@ public class MenuGroup extends Group {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (Gdx.input.justTouched()) {
-            //todo: потестить
-            //getStage().unfocusAll();
-        }
         validUserName = !username.getText().isEmpty();
         if (!isValidUserName()) {
             setNotice(PaintConstants.UI_EMPTY_USERNAME);
