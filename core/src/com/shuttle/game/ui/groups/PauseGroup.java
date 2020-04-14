@@ -1,7 +1,5 @@
 package com.shuttle.game.ui.groups;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -10,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
@@ -28,6 +25,7 @@ import lombok.Setter;
 /**
  * @author Shuttle on 7/8/18.
  */
+
 public class PauseGroup extends Group {
     private static PauseGroup instance;
     private final Button buttonMenu;
@@ -84,50 +82,63 @@ public class PauseGroup extends Group {
 
         buttonMenu.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
-                if (GamePreferences.isEffectsEnabled()) {
-                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.UI_MENU));
-                    sound.play(GamePreferences.getOverallEffectsVolume());
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (pointer == 0) {
+                    boomBox.playSound(MSConstants.UI_MENU);
                 }
-                //
-                ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
-                Restart.doRestart();
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0) {
+                    ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
+                    Restart.doRestart();
+                }
             }
         });
 
         buttonRestart.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
-                if (GamePreferences.isEffectsEnabled()) {
-                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.UI_MENU));
-                    sound.play(GamePreferences.getOverallEffectsVolume());
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (pointer == 0) {
+                    boomBox.playSound(MSConstants.UI_MENU);
                 }
-                //
-                ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
-                Restart.doRestart();
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0) {
+                    ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
+                    Restart.doRestart();
+                }
             }
         });
 
         playPauseBtn.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                PauseGroup.this.pause = !PauseGroup.this.pause;
-                if (PauseGroup.this.pause) {
-                    boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
-                    playPauseBtn.getStyle().imageUp = play;
-                } else {
-                    boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
-                    playPauseBtn.getStyle().imageUp = pause;
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (pointer == 0) {
+                    PauseGroup.this.pause = !PauseGroup.this.pause;
+                    if (PauseGroup.this.pause) {
+                        boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
+                        playPauseBtn.getStyle().imageUp = play;
+                    } else {
+                        boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
+                        playPauseBtn.getStyle().imageUp = pause;
+                    }
+                    configGroup.setVisible(PauseGroup.this.pause);
+                    leftGroup.setVisible(PauseGroup.this.pause);
+                    rightGroup.setVisible(PauseGroup.this.pause);
+                    buttonMenu.setVisible(PauseGroup.this.pause);
+                    buttonRestart.setVisible(PauseGroup.this.pause);
+                    boomBox.stopAllSound();
+                    boomBox.playSound(MSConstants.UI_PAUSE);
                 }
-                configGroup.setVisible(PauseGroup.this.pause);
-                leftGroup.setVisible(PauseGroup.this.pause);
-                rightGroup.setVisible(PauseGroup.this.pause);
-                buttonMenu.setVisible(PauseGroup.this.pause);
-                buttonRestart.setVisible(PauseGroup.this.pause);
-                boomBox.stopAllSound();
-                boomBox.playSound(MSConstants.UI_PAUSE);
+                return super.touchDown(event, x, y, pointer, button);
             }
         });
 

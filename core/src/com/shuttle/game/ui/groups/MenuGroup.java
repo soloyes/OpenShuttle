@@ -64,14 +64,30 @@ public class MenuGroup extends Group {
                 if (buttonProfiles.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
                 } else if (pointer == 0) {
-                    profilesView.switchVisible();
-                    setNotice(PaintConstants.UI_YOUR_USERNAME);
                     boomBox.playSound(MSConstants.UI_MENU);
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0) {
+                    profilesView.switchVisible();
+                    setNotice(PaintConstants.UI_YOUR_USERNAME);
+                }
+            }
         });
 
+        username.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (pointer == 0) {
+                    boomBox.playSound(MSConstants.UI_CLICK);
+                }
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
         username.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -79,7 +95,6 @@ public class MenuGroup extends Group {
                 boomBox.playSound(MSConstants.UI_INPUT);
             }
         });
-
         username.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -104,6 +119,9 @@ public class MenuGroup extends Group {
                             profilesController.flush();
                             profilesController.update();
                         }
+                        boomBox.playSound(MSConstants.UI_CHANGED);
+                    } else {
+                        boomBox.playSound(MSConstants.UI_EMPTY_NAME);
                     }
                 }
                 return super.keyDown(event, keycode);

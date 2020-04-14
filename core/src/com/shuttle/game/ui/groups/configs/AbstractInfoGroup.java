@@ -8,7 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.StickerResolver;
@@ -23,6 +25,7 @@ import lombok.Getter;
 /**
  * @author Shuttle on 10/12/19.
  */
+
 public abstract class AbstractInfoGroup extends Group {
     protected final VerticalGroup group;
     protected final Skin skin;
@@ -42,9 +45,11 @@ public abstract class AbstractInfoGroup extends Group {
     protected final Map<Sticker, ConfigImageButton> buttonMap;
     private float d;
     private boolean touched;
+    private BoomBox boomBox;
 
     public AbstractInfoGroup() {
         this.setVisible(false);
+        this.boomBox = new BoomBox();
         this.stickerResolver = new StickerResolver();
         this.skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.group = new VerticalGroup();
@@ -146,6 +151,15 @@ public abstract class AbstractInfoGroup extends Group {
             }
             this.row().width(cellWidth).height(cellHeight - delimiter);
             this.add(actor);
+            this.addListener(new ClickListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    if (pointer == 0) {
+                        boomBox.playSound(MSConstants.UI_CLICK);
+                    }
+                    return super.touchDown(event, x, y, pointer, button);
+                }
+            });
         }
     }
 }

@@ -17,8 +17,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.groups.GroupType;
 import com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
@@ -44,6 +47,7 @@ public class ResultGroup extends Group {
     private static ResultGroup instance;
     private GlyphLayout glyphLayout;
     private BitmapFont font;
+    private BoomBox boomBox;
 
     public static ResultGroup getInstance() {
         if (instance == null) {
@@ -57,6 +61,7 @@ public class ResultGroup extends Group {
         this.profiles = new Profiles();
         this.setVisible(false);
         this.glyphLayout = new GlyphLayout();
+        this.boomBox = new BoomBox();
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         verticalGroup = new VerticalGroup();
         scrollPane = new ScrollPane(verticalGroup, skin);
@@ -110,6 +115,7 @@ public class ResultGroup extends Group {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     line.setActive(true);
+                    boomBox.playSound(MSConstants.UI_CLICK);
                     scrollPane.setFlickScroll(false);
                     return super.touchDown(event, x, y, pointer, button);
                 }
@@ -150,6 +156,22 @@ public class ResultGroup extends Group {
             }
             this.table = new Table();
             this.textureRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL));
+
+            this.addListener(new ClickListener() {
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchUp(event, x, y, pointer, button);
+                    if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.MENU) {
+                        Array<Actor> actors = getStage().getActors();
+                        for (int i = 0; i < actors.size; i++) {
+                            if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
+                                actors.get(i).setVisible(false);
+                            }
+                        }
+                    }
+                }
+            });
+
             Label.LabelStyle style64 = new Label.LabelStyle(
                     Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
                     new Color(0.8f, 0.43f, 0.33f, 1f)

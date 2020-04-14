@@ -86,6 +86,32 @@ public class DetailedResultGroup extends Group {
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.MENU) {
             this.buttonBack = new Button(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.BACK_BUTTON)));
             buttonBack.setPosition(484, 24);
+            buttonBack.addListener(new ClickListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    if (pointer == 0) {
+                        boomBox.playSound(MSConstants.UI_MENU);
+                    }
+                    return super.touchDown(event, x, y, pointer, button);
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchUp(event, x, y, pointer, button);
+                    if (pointer == 0) {
+                        Array<Actor> actors = getStage().getActors();
+                        for (int i = 0; i < actors.size; i++) {
+                            if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
+                                actors.get(i).setVisible(true);
+                            }
+                            if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
+                                actors.get(i).setVisible(true);
+                            }
+                        }
+                        setVisible(false);
+                    }
+                }
+            });
             this.addActor(buttonBack);
         }
     }
@@ -171,34 +197,6 @@ public class DetailedResultGroup extends Group {
         );
         verticalGroup.addActor(astronautsTakenLine);
 
-        if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.MENU) {
-            buttonBack.addListener(new ClickListener() {
-                @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    if (pointer == 0) {
-                        Array<Actor> actors = getStage().getActors();
-                        for (int i = 0; i < actors.size; i++) {
-                            if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
-                                actors.get(i).setVisible(true);
-                            }
-                            if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
-                                actors.get(i).setVisible(true);
-                            }
-                        }
-                        setVisible(false);
-                        boomBox.playSound(MSConstants.UI_MENU);
-                    }
-                    return super.touchDown(event, x, y, pointer, button);
-                }
-            });
-
-            Array<Actor> actors = getStage().getActors();
-            for (int i = 0; i < actors.size; i++) {
-                if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
-                    actors.get(i).setVisible(false);
-                }
-            }
-        }
         setVisible(true);
     }
 

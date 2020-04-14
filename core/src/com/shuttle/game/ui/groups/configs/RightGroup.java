@@ -9,8 +9,16 @@ import com.shuttle.game.utils.Assets;
 /**
  * @author Shuttle on 10/11/19.
  */
+
 public class RightGroup extends AbstractInfoGroup {
     private static RightGroup instance = new RightGroup();
+
+    public static RightGroup getInstance() {
+        if (instance == null) {
+            instance = new RightGroup();
+        }
+        return instance;
+    }
 
     public RightGroup() {
         this.setName(GroupType.RIGHT.name());
@@ -43,12 +51,5 @@ public class RightGroup extends AbstractInfoGroup {
 
     public void dispose() {
         instance = null;
-    }
-
-    public static RightGroup getInstance() {
-        if (instance == null) {
-            instance = new RightGroup();
-        }
-        return instance;
     }
 }
