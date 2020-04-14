@@ -206,7 +206,6 @@ public final class Standing {
         lives += amount;
         if (lives == 0) {
             Rules.GAME_OVER = true;
-            writeResult();
         } else {
             Shuttle.respawn();
             GameInfoSystem.setup(
@@ -219,12 +218,14 @@ public final class Standing {
         }
     }
 
-    public void writeResult() {
-        //
+    public DetailedResultDAO getDetails() {
         DetailedResultDAO detailedResultDAO = new DetailedResultDAO();
         detailedResultDAO.setScore(scoreView);
-        //
-        profiles.writeResults(detailedResultDAO);
+        return detailedResultDAO;
+    }
+
+    public void writeResult() {
+        profiles.writeResults(getDetails());
     }
 
     public void update(float dt) {

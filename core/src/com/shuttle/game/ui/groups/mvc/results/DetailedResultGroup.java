@@ -3,6 +3,7 @@ package com.shuttle.game.ui.groups.mvc.results;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -19,12 +20,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.groups.GroupType;
+import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Rounder;
 import com.shuttle.game.utils.TimeFormat;
@@ -38,6 +41,9 @@ public class DetailedResultGroup extends Group {
     private static DetailedResultGroup instance;
     private Button buttonBack;
     private BoomBox boomBox;
+    private Profiles profiles;
+    private GlyphLayout glyphLayout;
+    private BitmapFont font;
 
     public static DetailedResultGroup getInstance() {
         if (instance == null) {
@@ -50,6 +56,8 @@ public class DetailedResultGroup extends Group {
         this.setName(GroupType.RESULTS_DETAILED.name());
         this.setVisible(false);
         this.boomBox = new BoomBox();
+        this.profiles = new Profiles();
+        this.glyphLayout = new GlyphLayout();
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         verticalGroup = new VerticalGroup();
         ScrollPane scrollPane = new ScrollPane(verticalGroup, skin);
@@ -59,13 +67,8 @@ public class DetailedResultGroup extends Group {
         container.setPosition(PaintConstants.UI_RESULTS_DETAILED_X, PaintConstants.UI_RESULTS_DETAILED_Y);
         container.align(Align.bottomLeft);
 
-        Label.LabelStyle style96 = new Label.LabelStyle(
-                Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class),
-                Color.WHITE
-        );
-
-        Label titleLabel = new Label("DETAILS", style96);
-        titleLabel.setPosition((Rules.WORLD_WIDTH - titleLabel.getWidth()) / 2, PaintConstants.UI_TITLE_LABEL_Y);
+        this.font = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
+        glyphLayout.setText(font, "DETAILS");
 
         scrollPane.setScrollbarsOnTop(false);
         scrollPane.setForceScroll(false, true);
@@ -79,13 +82,17 @@ public class DetailedResultGroup extends Group {
 
         this.setWidth(Rules.WORLD_WIDTH);
         this.setHeight(Rules.WORLD_HEIGHT);
-        this.addActor(titleLabel);
         this.addActor(container);
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.MENU) {
             this.buttonBack = new Button(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.BACK_BUTTON)));
             buttonBack.setPosition(484, 24);
             this.addActor(buttonBack);
         }
+    }
+
+    public void init() {
+        ResultDAO resultDAO = profiles.getActiveProfileResultList(Rules.StartLevel.values()[GamePreferences.getLevel()].name()).get(0);
+        init(resultDAO);
     }
 
     public void init(ResultDAO resultDAO) {
@@ -184,14 +191,20 @@ public class DetailedResultGroup extends Group {
                     return super.touchDown(event, x, y, pointer, button);
                 }
             });
-        }
-        Array<Actor> actors = getStage().getActors();
-        for (int i = 0; i < actors.size; i++) {
-            if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
-                actors.get(i).setVisible(false);
+
+            Array<Actor> actors = getStage().getActors();
+            for (int i = 0; i < actors.size; i++) {
+                if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
+                    actors.get(i).setVisible(false);
+                }
             }
         }
         setVisible(true);
+    }
+
+    public void setOver() {
+        setVisible(true);
+        glyphLayout.setText(font, "GAME OVER");
     }
 
     private static class Line extends Group {
@@ -272,5 +285,15 @@ public class DetailedResultGroup extends Group {
 
     public void dispose() {
         instance = null;
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        font.draw(batch,
+                glyphLayout,
+                (Rules.WORLD_WIDTH - glyphLayout.width) / 2,
+                PaintConstants.UI_TITLE_LABEL_Y + glyphLayout.height
+        );
     }
 }

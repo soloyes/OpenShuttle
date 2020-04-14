@@ -256,7 +256,7 @@ public class Profiles implements Model<ProfileDAO> {
         }
     }
 
-    private List<ResultDAO> getActiveProfileResultList(String level) {
+    public List<ResultDAO> getActiveProfileResultList(String level) {
         List<ResultDAO> list = new LinkedList<ResultDAO>();
         if (getActive() != null) {
             for (ResultDAO r : getActive().getResultSet()) {

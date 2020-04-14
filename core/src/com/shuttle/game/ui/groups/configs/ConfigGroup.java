@@ -98,9 +98,9 @@ public class ConfigGroup extends Group {
     private ConfigCheckBox joyStickPresetCheckBox;
     private Label noticeLabel;
     private Label levelLabel;
-    private Label titleLabel;
     private Group noticeGroup;
     private GlyphLayout glyphLayout;
+    private GlyphLayout glyphLayoutTitle;
     private Array<Music> musicArray;
     private BoomBox boomBox;
     private Label shaderLabel;
@@ -133,9 +133,10 @@ public class ConfigGroup extends Group {
         innerTable.row();
         innerTable.add(joyStickColorCheckBox).height(PaintConstants.JOYSTICK_HEIGHT / 2).left();
 
+        this.glyphLayoutTitle = new GlyphLayout();
         initLines();
-
         this.glyphLayout = new GlyphLayout();
+
         this.noticeLabel = new Label(notice, noticeStyle44);
         this.noticeGroup = new Group();
         noticeGroup.addActor(noticeLabel);
@@ -166,7 +167,6 @@ public class ConfigGroup extends Group {
         verticalGroup.addActor(vibrationLine);
         verticalGroup.addActor(joystickLine);
         verticalGroup.addActor(joystickPresetLine);
-        this.addActor(titleLabel);
         this.addActor(noticeGroup);
         this.addActor(container);
         this.refresh();
@@ -577,8 +577,7 @@ public class ConfigGroup extends Group {
     }
 
     private void initLines() {
-        titleLabel = new Label("SETTINGS", labelStyle96);
-        titleLabel.setPosition((Rules.WORLD_WIDTH - titleLabel.getWidth()) / 2, PaintConstants.UI_TITLE_LABEL_Y);
+        glyphLayoutTitle.setText(font96, "SETTINGS");
 
         Label soundLabel = new Label("SOUND", labelStyle54);
         soundLabel.addListener(new ClickListener() {
@@ -954,7 +953,7 @@ public class ConfigGroup extends Group {
         noticeLabel.setText(notice);
         noticeGroup.setPosition(
                 (Rules.WORLD_WIDTH - glyphLayout.width) / 2,
-                1323
+                1313
         );
 
         shadowTime -= delta;
@@ -1153,5 +1152,15 @@ public class ConfigGroup extends Group {
         public void setTouchTime(float touchTime) {
             configCheckBox.setTouchTime(touchTime);
         }
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        font96.draw(batch,
+                glyphLayoutTitle,
+                (Rules.WORLD_WIDTH - glyphLayoutTitle.width) / 2,
+                PaintConstants.UI_TITLE_LABEL_Y + glyphLayoutTitle.height
+        );
     }
 }

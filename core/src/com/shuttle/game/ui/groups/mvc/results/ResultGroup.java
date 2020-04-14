@@ -3,6 +3,7 @@ package com.shuttle.game.ui.groups.mvc.results;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -41,6 +42,8 @@ public class ResultGroup extends Group {
     private VerticalGroup verticalGroup;
     private ScrollPane scrollPane;
     private static ResultGroup instance;
+    private GlyphLayout glyphLayout;
+    private BitmapFont font;
 
     public static ResultGroup getInstance() {
         if (instance == null) {
@@ -53,6 +56,7 @@ public class ResultGroup extends Group {
         this.setName(GroupType.RESULTS.name());
         this.profiles = new Profiles();
         this.setVisible(false);
+        this.glyphLayout = new GlyphLayout();
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         verticalGroup = new VerticalGroup();
         scrollPane = new ScrollPane(verticalGroup, skin);
@@ -62,13 +66,9 @@ public class ResultGroup extends Group {
         container.setPosition(PaintConstants.UI_RESULTS_X, PaintConstants.UI_RESULTS_Y);
         container.align(Align.bottomLeft);
 
-        Label.LabelStyle style96 = new Label.LabelStyle(
-                Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class),
-                Color.WHITE
-        );
+        font = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
 
-        Label titleLabel = new Label("RESULTS", style96);
-        titleLabel.setPosition((Rules.WORLD_WIDTH - titleLabel.getWidth()) / 2, PaintConstants.UI_TITLE_LABEL_Y);
+        glyphLayout.setText(font, "RESULTS");
 
         init();
 
@@ -83,7 +83,6 @@ public class ResultGroup extends Group {
         scrollPane.setHeight(PaintConstants.UI_RESULTS_HEIGHT);
         this.setWidth(Rules.WORLD_WIDTH);
         this.setHeight(Rules.WORLD_HEIGHT);
-        this.addActor(titleLabel);
         this.addActor(container);
     }
 
@@ -262,5 +261,15 @@ public class ResultGroup extends Group {
                 actors.get(i).setVisible(true);
             }
         }
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        font.draw(batch,
+                glyphLayout,
+                (Rules.WORLD_WIDTH - glyphLayout.width) / 2,
+                PaintConstants.UI_TITLE_LABEL_Y + glyphLayout.height
+        );
     }
 }

@@ -58,6 +58,7 @@ import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.ui.groups.configs.ConfigImageButton;
 import com.shuttle.game.ui.groups.configs.RightGroup;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
+import com.shuttle.game.ui.groups.mvc.results.DetailedResultGroup;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
 import com.shuttle.game.ui.groups.switches.SwitchGroup;
 import com.shuttle.game.ui.panels.UILeftPanel;
@@ -98,7 +99,7 @@ public class GameScreen extends BaseScreen {
     private FrameBuffer fbo;
     private TextureRegion fboTexRegion;
     private OrthographicCamera cameraHelper;
-    private GameOver gameOver;
+    private DetailedResultGroup detailedResultGroup;
     private Ray ray;
     private PrettySound prettyCorrosiveKick;
     private PrettySound prettyElectricKick;
@@ -149,7 +150,6 @@ public class GameScreen extends BaseScreen {
         BoundCheck.avoidPosition(Blackhole.position, Shuttle.position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         playerPointer = new PlayerPointer(player);
         Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel();
-        gameOver = new GameOver();
 
         InputMultiplexer im = new InputMultiplexer(player, stage, joystick);
         Gdx.input.setInputProcessor(im);
@@ -180,6 +180,8 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void createGUI() {
+        detailedResultGroup = DetailedResultGroup.getInstance();
+        stage.addActor(detailedResultGroup);
         stage.addActor(PauseGroup.getInstance());
         stage.addActor(SelectorGroup.getInstance());
         stage.addActor(SwitchGroup.getInstance());
@@ -255,7 +257,6 @@ public class GameScreen extends BaseScreen {
         //batch.end();
 
         if (PauseGroup.getInstance().isPause()) {
-
             batch.setShader(ShaderManager.PAUSE.getProgram());
             ShaderManager.PAUSE.getProgram().setUniformf("resolution", Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
         } else {
@@ -285,7 +286,11 @@ public class GameScreen extends BaseScreen {
             if (fadeInAlpha >= 1.0f)
                 fadeInAlpha = 1.0f;
             batch.setColor(tmpColor.r, tmpColor.g, tmpColor.b, fadeInAlpha);
-            gameOver.draw(batch);
+            if (!detailedResultGroup.isVisible()) {
+                detailedResultGroup.setOver();
+                profiles.dispose();
+                detailedResultGroup.init();
+            }
         }
         batch.end();
 
@@ -333,7 +338,6 @@ public class GameScreen extends BaseScreen {
                 boomBox.playRandomMusicEffects(dt);
                 checkCollision(dt);
             } else {
-                gameOver.update(dt);
                 if (!gameOverDeactivate) {
                     abstractAnomalyDeactivate(CorrosiveAnomalyEmitter.getInstance().getActiveList());
                     abstractAnomalyDeactivate(CorrosiveAnomalyEmitter.getInstance().getFreeList());
@@ -722,6 +726,8 @@ public class GameScreen extends BaseScreen {
         ShaderManager.PAUSE.dispose();
         ShaderManager.BLACKHOLE.dispose();
         uiTopPanel.dispose();
-        profiles.dispose();
+        if (!Rules.GAME_OVER) {
+            profiles.dispose();
+        }
     }
 }
