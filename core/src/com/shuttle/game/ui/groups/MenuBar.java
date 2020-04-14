@@ -1,7 +1,6 @@
 package com.shuttle.game.ui.groups;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -10,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.effects.BoomBox;
@@ -63,9 +61,17 @@ public class MenuBar extends Group {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
-                    Gdx.app.exit();
+                    boomBox.playSound(MSConstants.UI_MENU);
                 }
                 return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0) {
+                    Gdx.app.exit();
+                }
             }
         });
 
@@ -74,13 +80,16 @@ public class MenuBar extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (buttonPlay.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
-                } else if (pointer == 0) {
-                    //Workaround. If use BoomBox.playSound(), then Sound is unload while change Screen
-                    if (GamePreferences.isEffectsEnabled()) {
-                        Sound sound = Gdx.audio.newSound(Gdx.files.internal(MSConstants.UI_MENU));
-                        sound.play(GamePreferences.getOverallEffectsVolume());
-                    }
-                    //
+                } else if (pointer == 0 && !buttonResults.isDisabled()) {
+                    boomBox.playSound(MSConstants.UI_MENU);
+                }
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0 && !buttonResults.isDisabled()) {
                     if (MenuGroup.isValidUserName()) {
                         ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
                     } else {
@@ -96,7 +105,6 @@ public class MenuBar extends Group {
                         }
                     }
                 }
-                return super.touchDown(event, x, y, pointer, button);
             }
         });
 
@@ -106,6 +114,15 @@ public class MenuBar extends Group {
                 if (buttonSettings.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
                 } else if (pointer == 0) {
+                    boomBox.playSound(MSConstants.UI_MENU);
+                }
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0 && !buttonResults.isDisabled()) {
                     Array<Actor> actors = getStage().getActors();
                     Actor tmp = new Actor();
                     for (int i = 0; i < actors.size; i++) {
@@ -127,9 +144,7 @@ public class MenuBar extends Group {
                             actors.get(i).setVisible(false);
                         }
                     }
-                    boomBox.playSound(MSConstants.UI_MENU);
                 }
-                return super.touchDown(event, x, y, pointer, button);
             }
         });
 
@@ -139,6 +154,15 @@ public class MenuBar extends Group {
                 if (buttonResults.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
                 } else if (pointer == 0) {
+                    boomBox.playSound(MSConstants.UI_MENU);
+                }
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0 && !buttonResults.isDisabled()) {
                     Array<Actor> actors = getStage().getActors();
                     Actor tmp = new Actor();
                     for (int i = 0; i < actors.size; i++) {
@@ -160,9 +184,7 @@ public class MenuBar extends Group {
                             actors.get(i).setVisible(false);
                         }
                     }
-                    boomBox.playSound(MSConstants.UI_MENU);
                 }
-                return super.touchDown(event, x, y, pointer, button);
             }
         });
 
@@ -172,6 +194,15 @@ public class MenuBar extends Group {
                 if (buttonInfo.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
                 } else if (pointer == 0) {
+                    boomBox.playSound(MSConstants.UI_MENU);
+                }
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0 && !buttonResults.isDisabled()) {
                     Array<Actor> actors = getStage().getActors();
                     Actor tmp = new Actor();
                     for (int i = 0; i < actors.size; i++) {
@@ -193,9 +224,7 @@ public class MenuBar extends Group {
                             actors.get(i).setVisible(false);
                         }
                     }
-                    boomBox.playSound(MSConstants.UI_MENU);
                 }
-                return super.touchDown(event, x, y, pointer, button);
             }
         });
 

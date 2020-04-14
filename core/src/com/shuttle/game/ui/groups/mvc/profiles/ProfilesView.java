@@ -316,22 +316,34 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
             group.addActor(label);
             plus.addListener(new ClickListener() {
                 @Override
-                public void clicked(InputEvent event, float x, float y) {
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    boomBox.playSound(MSConstants.UI_CLICK);
+                    return super.touchDown(event, x, y, pointer, button);
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchUp(event, x, y, pointer, button);
                     if (MenuGroup.isValidUserName()) {
                         controller.add();
                         MenuGroup.setNotice(PaintConstants.UI_NEW_PROFILE);
                     }
-                    boomBox.playSound(MSConstants.UI_CLICK);
                 }
             });
             group.addListener(new ClickListener() {
                 @Override
-                public void clicked(InputEvent event, float x, float y) {
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    boomBox.playSound(MSConstants.UI_CLICK);
+                    return super.touchDown(event, x, y, pointer, button);
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchUp(event, x, y, pointer, button);
                     if (MenuGroup.isValidUserName()) {
                         controller.add();
                         MenuGroup.setNotice(PaintConstants.UI_NEW_PROFILE);
                     }
-                    boomBox.playSound(MSConstants.UI_CLICK);
                 }
             });
 

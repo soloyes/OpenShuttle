@@ -12,9 +12,17 @@ import com.shuttle.game.utils.Assets;
 /**
  * @author Shuttle on 10/11/19.
  */
+
 public class LeftGroup extends AbstractInfoGroup {
     private static LeftGroup instance = new LeftGroup();
     private TextureRegion textureRegion;
+
+    public static LeftGroup getInstance() {
+        if (instance == null) {
+            instance = new LeftGroup();
+        }
+        return instance;
+    }
 
     public LeftGroup() {
         this.setName(GroupType.LEFT.name());
@@ -60,19 +68,8 @@ public class LeftGroup extends AbstractInfoGroup {
         group.align(Align.left);
     }
 
-    public void dispose() {
-        instance = null;
-    }
-
-    public static LeftGroup getInstance() {
-        if (instance == null) {
-            instance = new LeftGroup();
-        }
-        return instance;
-    }
-
     public void setCenter(Selector selector) {
-        if (selector == null){
+        if (selector == null) {
             for (int i = 0; i < buttonList.size(); i++) {
                 ConfigImageButton b = buttonList.get(i);
                 b.setCenter(false);
@@ -87,5 +84,9 @@ public class LeftGroup extends AbstractInfoGroup {
             }
             button.setCenter(true);
         }
+    }
+
+    public void dispose() {
+        instance = null;
     }
 }

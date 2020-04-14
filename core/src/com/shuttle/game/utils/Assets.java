@@ -52,6 +52,7 @@ public class Assets {
                 assetManager.load(MSConstants.UI_CHANGED, Sound.class);
                 assetManager.load(MSConstants.UI_INPUT, Sound.class);
                 assetManager.load(MSConstants.UI_CLICK, Sound.class);
+                assetManager.load(MSConstants.UI_EMPTY_NAME, Sound.class);
                 break;
             case GAME:
                 createStandardFont(32, "fonts/college.regular", "");

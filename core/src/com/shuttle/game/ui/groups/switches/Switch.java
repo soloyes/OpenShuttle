@@ -1,6 +1,5 @@
 package com.shuttle.game.ui.groups.switches;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -60,9 +59,12 @@ public class Switch extends ImageButton {
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) {
+    public void act(float delta) {
+        super.act(delta);
         if (!PauseGroup.getInstance().isPause() && !Rules.GAME_OVER) {
-            super.draw(batch, parentAlpha);
+            setVisible(true);
+        } else {
+            setVisible(false);
         }
     }
 }
