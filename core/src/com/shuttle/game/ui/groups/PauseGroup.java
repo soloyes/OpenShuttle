@@ -11,7 +11,9 @@ import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.configs.LeftGroup;
@@ -85,6 +87,7 @@ public class PauseGroup extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     boomBox.playSound(MSConstants.UI_MENU);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -104,6 +107,7 @@ public class PauseGroup extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     boomBox.playSound(MSConstants.UI_MENU);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -137,6 +141,7 @@ public class PauseGroup extends Group {
                     buttonRestart.setVisible(PauseGroup.this.pause);
                     boomBox.stopAllSound();
                     boomBox.playSound(MSConstants.UI_PAUSE);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }

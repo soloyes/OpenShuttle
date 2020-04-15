@@ -352,8 +352,8 @@ public final class Rules {
             public void setGameLevel() {
                 Standing.getInstance().setMaxFuel(100);
                 Standing.getInstance().setFuel(100);
-                Standing.getInstance().setHp(1);
-                Standing.getInstance().setMaxHp(1);
+                Standing.getInstance().setHp(10);
+                Standing.getInstance().setMaxHp(10);
                 Standing.getInstance().setMaxLaserChargeLevel(10);
                 Standing.getInstance().setLifeShield(10);
                 Standing.getInstance().setMaxLifeShield(10);

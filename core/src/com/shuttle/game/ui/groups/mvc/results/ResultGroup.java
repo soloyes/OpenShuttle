@@ -20,7 +20,9 @@ import com.badlogic.gdx.utils.Array;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.groups.GroupType;
 import com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO;
@@ -116,6 +118,7 @@ public class ResultGroup extends Group {
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     line.setActive(true);
                     boomBox.playSound(MSConstants.UI_CLICK);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
                     scrollPane.setFlickScroll(false);
                     return super.touchDown(event, x, y, pointer, button);
                 }

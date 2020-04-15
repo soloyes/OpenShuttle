@@ -6,13 +6,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.conf.VConstants;
+import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.ui.groups.configs.LeftGroup;
@@ -38,8 +44,10 @@ public class SelectorGroup extends Group {
     private int select;
     private int pressedCount;
     private boolean paused;
+    private BoomBox boomBox;
 
     private SelectorGroup() {
+        this.boomBox = new BoomBox();
         this.selectors = new LinkedList<Selector>();
         this.circleIn = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_IN));
         this.leftButton = new ImageButton(circleIn);
@@ -93,6 +101,33 @@ public class SelectorGroup extends Group {
                 if (select < 0) {
                     select = selectors.size() == 0 ? 0 : selectors.size() - 1;
                 }
+            }
+        });
+        leftButton.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
+                Vibrator.vibrate(VConstants.UI_CLICK);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        rightButton.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
+                Vibrator.vibrate(VConstants.UI_CLICK);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        centerButton.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (selectors.size() != 0) {
+                    Vibrator.vibrate(VConstants.UI_CLICK);
+                }
+                return super.touchDown(event, x, y, pointer, button);
             }
         });
 

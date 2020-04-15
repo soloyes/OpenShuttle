@@ -18,7 +18,9 @@ import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.ui.groups.MenuGroup;
 import com.shuttle.game.ui.groups.mvc.Controller;
 import com.shuttle.game.ui.groups.mvc.View;
@@ -180,6 +182,7 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                 ResultGroup.getInstance().init();
                 MenuGroup.setNotice(PaintConstants.UI_PROFILE_DELETED);
                 boomBox.playSound(MSConstants.UI_CHANGED);
+                Vibrator.vibrate(VConstants.UI_CHANGED);
             }
         }
 
@@ -216,6 +219,7 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                             MenuGroup.setNotice(PaintConstants.UI_CANCEL_DELETION);
                         }
                         boomBox.playSound(MSConstants.UI_CLICK);
+                        Vibrator.vibrate(VConstants.UI_CLICK);
                     }
                     return true;
                 }
@@ -250,6 +254,7 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                             controller.select(profile);
                             MenuGroup.setNotice(PaintConstants.UI_SELECT_PROFILE);
                             boomBox.playSound(MSConstants.UI_CHANGED);
+                            Vibrator.vibrate(VConstants.UI_CHANGED);
                         }
                     }
                 });
@@ -318,6 +323,7 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     boomBox.playSound(MSConstants.UI_CLICK);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
                     return super.touchDown(event, x, y, pointer, button);
                 }
 
@@ -334,6 +340,7 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     boomBox.playSound(MSConstants.UI_CLICK);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
                     return super.touchDown(event, x, y, pointer, button);
                 }
 

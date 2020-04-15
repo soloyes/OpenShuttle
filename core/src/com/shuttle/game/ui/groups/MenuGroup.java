@@ -19,7 +19,9 @@ import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.mvc.profiles.ProfilesController;
@@ -62,8 +64,10 @@ public class MenuGroup extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (buttonProfiles.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
                 } else if (pointer == 0) {
                     boomBox.playSound(MSConstants.UI_MENU);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -83,6 +87,7 @@ public class MenuGroup extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     boomBox.playSound(MSConstants.UI_CLICK);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -119,8 +124,10 @@ public class MenuGroup extends Group {
                             profilesController.update();
                         }
                         boomBox.playSound(MSConstants.UI_CHANGED);
+                        Vibrator.vibrate(VConstants.UI_CHANGED);
                     } else {
                         boomBox.playSound(MSConstants.UI_EMPTY_NAME);
+                        Vibrator.vibrate(VConstants.UI_EMPTY_NAME);
                     }
                 }
                 return super.keyDown(event, keycode);

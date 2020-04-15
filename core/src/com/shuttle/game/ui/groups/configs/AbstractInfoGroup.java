@@ -10,7 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.StickerResolver;
@@ -156,6 +158,7 @@ public abstract class AbstractInfoGroup extends Group {
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     if (pointer == 0) {
                         boomBox.playSound(MSConstants.UI_CLICK);
+                        Vibrator.vibrate(VConstants.UI_CLICK);
                     }
                     return super.touchDown(event, x, y, pointer, button);
                 }

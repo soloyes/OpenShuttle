@@ -1,14 +1,18 @@
 package com.shuttle.game.ui.groups.switches;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.utils.Assets;
 
@@ -54,6 +58,13 @@ public class Switch extends ImageButton {
                     }
                     boomBox.playSound(MSConstants.UI_SWITCH);
                 }
+            }
+        });
+        addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Vibrator.vibrate(VConstants.UI_CLICK);
+                return super.touchDown(event, x, y, pointer, button);
             }
         });
     }

@@ -14,7 +14,9 @@ import com.shuttle.game.ShuttleGame;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.ui.groups.mvc.results.Results;
 import com.shuttle.game.utils.Assets;
 
@@ -60,43 +62,58 @@ public class InfoGroup extends Group {
         shareLine.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                boomBox.playSound(MSConstants.UI_MENU);
-                shareLine.setTouched(true);
+                if (pointer == 0) {
+                    boomBox.playSound(MSConstants.UI_MENU);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    shareLine.setTouched(true);
+                }
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                shareLine.setTouched(false);
-                ShuttleGame.getShare().share(results.shareResults());
+                if (pointer == 0) {
+                    shareLine.setTouched(false);
+                    ShuttleGame.getShare().share(results.shareResults());
+                }
             }
         });
 
         rateLine.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                rateLine.setTouched(true);
-                boomBox.playSound(MSConstants.UI_MENU);
+                if (pointer == 0) {
+                    rateLine.setTouched(true);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    boomBox.playSound(MSConstants.UI_MENU);
+                }
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                rateLine.setTouched(false);
+                if (pointer == 0) {
+                    rateLine.setTouched(false);
+                }
             }
         });
 
         aboutLine.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                aboutLine.setTouched(true);
-                boomBox.playSound(MSConstants.UI_MENU);
+                if (pointer == 0) {
+                    aboutLine.setTouched(true);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    boomBox.playSound(MSConstants.UI_MENU);
+                }
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                aboutLine.setTouched(false);
+                if (pointer == 0) {
+                    aboutLine.setTouched(false);
+                }
             }
         });
 

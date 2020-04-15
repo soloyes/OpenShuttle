@@ -35,8 +35,8 @@ public class UIRightPanel extends AbstractLatestPanel {
         } else {
             x += dt * 360;
         }
-        if (x >= Rules.WORLD_WIDTH) {
-            x = Rules.WORLD_WIDTH;
+        if (x >= Rules.WORLD_WIDTH + 32) {
+            x = Rules.WORLD_WIDTH + 32;
         }
         if (x <= Rules.WORLD_WIDTH - width - 32) {
             x = Rules.WORLD_WIDTH - width - 32;

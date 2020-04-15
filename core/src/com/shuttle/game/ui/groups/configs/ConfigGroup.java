@@ -253,6 +253,7 @@ public class ConfigGroup extends Group {
                 }
                 if (soundSlider.isDragging()) {
                     boomBox.playSound(MSConstants.UI_MENU);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
                 }
                 soundLine.setMuted(soundSlider.getValue() == 0.0f);
                 soundCheckBoxStyle.setFront(soundSlider.getPercent());
@@ -284,6 +285,7 @@ public class ConfigGroup extends Group {
                 }
                 if (musicSlider.isDragging()) {
                     boomBox.playSound(MSConstants.UI_MENU);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
                 }
                 musicLine.setMuted(musicSlider.getValue() == 0.0f);
             }
@@ -309,6 +311,7 @@ public class ConfigGroup extends Group {
                 GamePreferences.setEffectsVolume(effectsSlider.getValue());
                 if (effectsSlider.isDragging()) {
                     boomBox.playSound(MSConstants.UI_MENU);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
                 }
                 effectsLine.setMuted(effectsSlider.getValue() == 0.0f);
             }
@@ -334,6 +337,7 @@ public class ConfigGroup extends Group {
                 GamePreferences.setJoyStickMode((int) joyStickModeSlider.getValue());
                 if (joyStickModeSlider.isDragging()) {
                     boomBox.playSound(MSConstants.UI_MENU);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
                 }
             }
         });
@@ -529,6 +533,7 @@ public class ConfigGroup extends Group {
                 GamePreferences.setJoyStickEnabled(enabled);
                 if (joyStickCheckBox.isPressed()) {
                     boomBox.playSound(MSConstants.UI_CHANGED);
+                    Vibrator.vibrate(VConstants.UI_CHANGED);
                 }
             }
         });
@@ -550,26 +555,25 @@ public class ConfigGroup extends Group {
         joyStickPresetCheckBox.setDisabled(true);
 
         joyStickColorCheckBox = new CheckBox(" COLOR", joystickPresetCheckBoxStyle);
-        joyStickColorCheckBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                boolean enabled = joyStickColorCheckBox.isChecked();
-                GamePreferences.setJoyStickColorEnabled(enabled);
-                if (joyStickColorCheckBox.isPressed()) {
-                    boomBox.playSound(MSConstants.UI_CHANGED);
-                }
-            }
-        });
+
         joyStickColorCheckBox.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 scrollPane.setFlickScroll(false);
+                if (pointer == 0 && joystickPresetLine.isActive()) {
+                    boomBox.playSound(MSConstants.UI_CHANGED);
+                    Vibrator.vibrate(VConstants.UI_CHANGED);
+                }
                 return super.touchDown(event, x, y, pointer, button);
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 scrollPane.setFlickScroll(true);
+                if (pointer == 0 && joystickPresetLine.isActive()) {
+                    boolean enabled = joyStickColorCheckBox.isChecked();
+                    GamePreferences.setJoyStickColorEnabled(enabled);
+                }
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -837,6 +841,7 @@ public class ConfigGroup extends Group {
             scrollPane.setFlickScroll(false);
             tmpLine = line;
             boomBox.playSound(MSConstants.UI_CLICK);
+            Vibrator.vibrate(VConstants.UI_CLICK);
         }
     }
 
@@ -973,6 +978,7 @@ public class ConfigGroup extends Group {
 
         if (touchTime >= Rules.SETTINGS_WAIT_DISABLE) {
             boomBox.playSound(MSConstants.UI_CHANGED);
+            Vibrator.vibrate(VConstants.UI_CHANGED);
             if (tmpLine.isActive()) {
                 setNoticeAndAlpha(tmpLine.getDisabledMessage());
             } else {

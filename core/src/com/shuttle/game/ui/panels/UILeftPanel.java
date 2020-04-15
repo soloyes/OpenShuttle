@@ -37,8 +37,8 @@ public class UILeftPanel extends AbstractLatestPanel {
         if (x >= 32) {
             x = 32;
         }
-        if (x <= -cWidth) {
-            x = -cWidth;
+        if (x <= -cWidth - 32) {
+            x = -cWidth - 32;
         }
     }
 
