@@ -9,6 +9,7 @@ import com.shuttle.game.player.Standing;
 /**
  * @author Shuttle on 3/14/19.
  */
+
 public abstract class AbstractBar {
     protected TextureRegion outBar, inBar, scale, icon;
     protected int width, height;

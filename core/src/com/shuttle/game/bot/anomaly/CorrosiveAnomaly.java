@@ -23,6 +23,10 @@ import com.shuttle.game.utils.Regions;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @author Shuttle on 03/06/18.
+ */
+
 public class CorrosiveAnomaly extends AbstractAnomaly {
     private float[] probabilities = {1.0f, 0.8f, 0.5f, 0.3f};
     private TextureRegion glowRegion;

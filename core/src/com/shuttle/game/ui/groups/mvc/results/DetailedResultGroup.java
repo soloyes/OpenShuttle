@@ -285,10 +285,6 @@ public class DetailedResultGroup extends Group {
         }
     }
 
-    public void dispose() {
-        instance = null;
-    }
-
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
@@ -297,5 +293,13 @@ public class DetailedResultGroup extends Group {
                 (Rules.WORLD_WIDTH - glyphLayout.width) / 2,
                 PaintConstants.UI_TITLE_LABEL_Y + glyphLayout.height
         );
+    }
+
+    public void dispose() {
+        instance = null;
+    }
+
+    public static void doStart() {
+        instance = null;
     }
 }

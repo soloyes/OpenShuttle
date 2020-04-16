@@ -9,6 +9,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 
+/**
+ * @author Shuttle on 03/07/18.
+ */
+
 public class FlyingText {
     private Matrix4 matrix4;
     private Matrix4 matrix1;

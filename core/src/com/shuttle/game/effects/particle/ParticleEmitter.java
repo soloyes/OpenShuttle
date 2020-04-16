@@ -16,6 +16,7 @@ import lombok.Setter;
 /**
  * Created by FlameXander on 02.07.2017.
  */
+
 public class ParticleEmitter extends ObjectPool<ParticleEmitter.Particle> {
     private static ParticleEmitter instance;
     private TextureRegion particleTexture;
@@ -36,11 +37,6 @@ public class ParticleEmitter extends ObjectPool<ParticleEmitter.Particle> {
     @Override
     protected Particle newObject() {
         return new Particle();
-    }
-
-    @Override
-    public void dispose() {
-        instance = null;
     }
 
     public void render(SpriteBatch batch) {
@@ -189,5 +185,14 @@ public class ParticleEmitter extends ObjectPool<ParticleEmitter.Particle> {
                     0
             );
         }
+    }
+
+    @Override
+    public void dispose() {
+        instance = null;
+    }
+
+    public static void doStart() {
+        instance = null;
     }
 }

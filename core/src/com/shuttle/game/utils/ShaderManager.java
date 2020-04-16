@@ -7,6 +7,7 @@ import com.shuttle.game.conf.GamePreferences;
 /**
  * @author Shuttle on 10/8/18.
  */
+
 public interface ShaderManager {
     void dispose();
 

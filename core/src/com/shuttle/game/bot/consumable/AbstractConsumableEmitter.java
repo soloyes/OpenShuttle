@@ -8,6 +8,10 @@ import com.shuttle.game.utils.pool.ObjectPool;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @author Shuttle on 02/11/18.
+ */
+
 public abstract class AbstractConsumableEmitter extends ObjectPool<AbstractConsumable> {
     private float time;
     @Getter

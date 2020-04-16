@@ -6,6 +6,7 @@ import com.shuttle.game.player.Standing;
  * @author Shuttle on 10/16/18.
  * Game rules constants (Rules)
  */
+
 public final class Rules {
     public static final boolean DEBUG = false;
 

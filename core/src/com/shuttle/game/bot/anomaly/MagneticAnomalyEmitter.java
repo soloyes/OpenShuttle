@@ -6,6 +6,7 @@ import com.shuttle.game.conf.Rules;
 /**
  * @author Shuttle on 9/12/18.
  */
+
 public class MagneticAnomalyEmitter extends AbstractAnomalyEmitter {
     private static MagneticAnomalyEmitter instance;
 

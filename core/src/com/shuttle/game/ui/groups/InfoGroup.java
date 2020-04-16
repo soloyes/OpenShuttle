@@ -22,6 +22,10 @@ import com.shuttle.game.utils.Assets;
 
 import lombok.Setter;
 
+/**
+ * @author Shuttle on 03/04/20.
+ */
+
 public class InfoGroup extends Group {
     private Label titleLabel;
     private BoomBox boomBox;

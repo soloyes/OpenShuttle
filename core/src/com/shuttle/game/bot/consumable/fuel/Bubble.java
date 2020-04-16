@@ -11,6 +11,10 @@ import com.shuttle.game.utils.Assets;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @author Shuttle on 09/12/18.
+ */
+
 public class Bubble {
     //0.27f (texture size to isLeft/right line)
     //0.156f (texture size to up/down line)

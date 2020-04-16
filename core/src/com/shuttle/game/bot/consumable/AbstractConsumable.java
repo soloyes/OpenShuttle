@@ -19,6 +19,10 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @author Shuttle on 02/11/18.
+ */
+
 public abstract class AbstractConsumable extends AbstractPoolable implements Consumable {
     protected TextureRegion texture;
     @Getter

@@ -252,10 +252,6 @@ public class ResultGroup extends Group {
         }
     }
 
-    public void dispose() {
-        instance = null;
-    }
-
     public void switchVisible() {
         Array<Actor> actors = getStage().getActors();
         for (int i = 0; i < actors.size; i++) {
@@ -296,5 +292,13 @@ public class ResultGroup extends Group {
                 (Rules.WORLD_WIDTH - glyphLayout.width) / 2,
                 PaintConstants.UI_TITLE_LABEL_Y + glyphLayout.height
         );
+    }
+
+    public void dispose() {
+        instance = null;
+    }
+
+    public static void doStart() {
+        instance = null;
     }
 }

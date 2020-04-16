@@ -13,6 +13,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Shuttle on 15/05/19.
+ */
+
 public abstract class AbstractLatestPanel {
     protected Map<Sticker, TextureRegion> textureRegions;
     protected int width, height, cWidth, cHeight;

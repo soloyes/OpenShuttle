@@ -9,6 +9,7 @@ import com.shuttle.game.utils.Assets;
 /**
  * @author Shuttle on 12/8/18.
  */
+
 public class StarSky {
     private TextureRegion starTexture;
     private Star[] stars;

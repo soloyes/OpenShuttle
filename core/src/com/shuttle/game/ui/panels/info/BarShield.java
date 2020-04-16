@@ -5,8 +5,9 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 3/14/19.
+ * @author Shuttle on 15/03/19.
  */
+
 public class BarShield extends AbstractBar {
     public BarShield() {
         this.outBar = Assets.getInstance().getAtlas().findRegion(PaintConstants.SP_BAR_OUT);

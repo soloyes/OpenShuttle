@@ -14,6 +14,7 @@ import lombok.Setter;
 /**
  * @author Shuttle on 12/17/18.
  */
+
 public class Scan {
     private TextureRegion texture;
     private AbstractConsumable consumable;

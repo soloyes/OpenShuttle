@@ -6,8 +6,16 @@ import com.shuttle.game.conf.Rules;
 /**
  * @author Shuttle on 9/12/18.
  */
+
 public class RadiationAnomalyEmitter extends AbstractAnomalyEmitter {
     private static RadiationAnomalyEmitter instance;
+
+    public static RadiationAnomalyEmitter getInstance() {
+        if (instance == null) {
+            instance = new RadiationAnomalyEmitter();
+        }
+        return instance;
+    }
 
     private RadiationAnomalyEmitter() {
         this(RadiationAnomaly.class);
@@ -29,12 +37,5 @@ public class RadiationAnomalyEmitter extends AbstractAnomalyEmitter {
     public void createBonusAnomaly(Vector2 position) {
         AbstractAnomaly anomaly = getActiveElement();
         anomaly.init(position.x, position.y);
-    }
-
-    public static RadiationAnomalyEmitter getInstance() {
-        if (instance == null) {
-            instance = new RadiationAnomalyEmitter();
-        }
-        return instance;
     }
 }

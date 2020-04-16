@@ -21,6 +21,7 @@ import java.util.LinkedList;
 /**
  * Created by FlameXander on 30.09.2017.
  */
+
 public class Joystick extends Actor implements InputProcessor {
     private TextureRegion joy1;
     private TextureRegion stick1;

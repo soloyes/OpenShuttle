@@ -15,6 +15,7 @@ import lombok.Setter;
 /**
  * @author Shuttle on 12/8/18.
  */
+
 public class Star {
     private Vector2 position;
     private Vector2 normal;

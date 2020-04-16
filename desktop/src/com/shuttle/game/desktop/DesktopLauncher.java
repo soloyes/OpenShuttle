@@ -5,6 +5,10 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.shuttle.game.ShuttleGame;
 import com.shuttle.game.screens.ScreenManager;
 
+/**
+ * @author Shuttle on 03/06/18.
+ */
+
 public class DesktopLauncher {
 
     public static void main(String[] arg) {

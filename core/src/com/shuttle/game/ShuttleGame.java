@@ -7,6 +7,10 @@ import com.shuttle.game.screens.ScreenManager;
 
 import lombok.Getter;
 
+/**
+ * @author Shuttle on 03/06/18.
+ */
+
 public class ShuttleGame extends Game {
     private SpriteBatch batch;
     private ScreenManager.ScreenType screenType;

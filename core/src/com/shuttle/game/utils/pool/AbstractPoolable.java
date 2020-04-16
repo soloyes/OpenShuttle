@@ -18,6 +18,7 @@ import lombok.Setter;
 /**
  * @author Shuttle on 8/26/18.
  */
+
 public abstract class AbstractPoolable implements Poolable {
     protected Vector2 position;
     @Getter

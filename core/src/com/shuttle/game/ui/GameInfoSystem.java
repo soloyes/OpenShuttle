@@ -5,6 +5,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.FlyingText;
 
+/**
+ * @author Shuttle on 03/07/18.
+ */
+
 public class GameInfoSystem {
     private static FlyingText[] elements;
 

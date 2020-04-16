@@ -2,6 +2,10 @@ package com.shuttle.game.bot.consumable;
 
 import com.shuttle.game.conf.Rules;
 
+/**
+ * @author Shuttle on 22/11/18.
+ */
+
 public class StorageEmitter extends AbstractConsumableEmitter {
     private static StorageEmitter instance;
 

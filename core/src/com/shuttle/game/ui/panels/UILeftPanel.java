@@ -6,6 +6,10 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.ui.groups.switches.SwitchGroup;
 import com.shuttle.game.utils.Assets;
 
+/**
+ * @author Shuttle on 15/05/19.
+ */
+
 public class UILeftPanel extends AbstractLatestPanel {
     private static UILeftPanel instance = new UILeftPanel();
 
@@ -43,6 +47,10 @@ public class UILeftPanel extends AbstractLatestPanel {
     }
 
     public void dispose() {
+        instance = null;
+    }
+
+    public static void doStart() {
         instance = null;
     }
 

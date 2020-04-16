@@ -6,6 +6,7 @@ import com.shuttle.game.conf.GamePreferences;
 /**
  * @author Shuttle on 10/23/18.
  */
+
 public class Vibrator {
     public static void vibrate(int ms, int mul) {
         if (GamePreferences.isVibrationEnabled()) {

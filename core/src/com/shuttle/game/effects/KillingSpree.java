@@ -1,5 +1,9 @@
 package com.shuttle.game.effects;
 
+/**
+ * @author Shuttle on 29/10/18.
+ */
+
 public enum KillingSpree {
     NONE("", 0, 1.0f, 0.0f), KILL("KILL", 1, 1.0f, 4.0f), DOUBLE("DOUBLE KILL", 2, 1.1f, 5.0f),
     MULTI("MULTI KILL", 3, 1.2f, 5.0f), ULTRA("ULTRA KILL", 4, 1.5f, 6.0f), RAMPAGE("RAMPAGE", 5, 2.0f, 10.0f),

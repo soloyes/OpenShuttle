@@ -9,6 +9,7 @@ import java.util.Map;
 /**
  * @author Shuttle on 6/19/18.
  */
+
 public class GamePreferences {
     private static final String PREFS_NAME = "shuttleGame_preferences";
 

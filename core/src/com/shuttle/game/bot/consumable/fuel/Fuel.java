@@ -18,6 +18,10 @@ import com.shuttle.game.player.Standing;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Consumer;
 
+/**
+ * @author Shuttle on 09/12/18.
+ */
+
 public class Fuel extends AbstractConsumable {
     private Substrate substrate;
     private Box box;

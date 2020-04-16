@@ -8,6 +8,10 @@ import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
 import com.shuttle.game.ui.panels.UILeftPanel;
 
+/**
+ * @author Shuttle on 28/12/18.
+ */
+
 public class Consumer {
     public static void consume(Sticker sticker, AbstractConsumable consumable) {
 

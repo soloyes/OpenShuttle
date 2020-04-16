@@ -19,6 +19,7 @@ import lombok.Setter;
 /**
  * @author Shuttle on 10/29/18.
  */
+
 public class Ray {
     private Vector2 tmp1V2;
     @Setter

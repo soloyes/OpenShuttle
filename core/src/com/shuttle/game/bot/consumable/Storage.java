@@ -19,6 +19,10 @@ import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Consumer;
 
+/**
+ * @author Shuttle on 22/11/18.
+ */
+
 public class Storage extends AbstractConsumable {
     private Size size;
     private Label dangerLabel;

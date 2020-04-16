@@ -3,6 +3,10 @@ package com.shuttle.game.effects.particle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * @author Shuttle on 30/07/18.
+ */
+
 public class ParticleEffectBuilder {
     private ParticleEmitter particleEmitter;
 

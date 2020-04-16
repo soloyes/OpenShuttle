@@ -37,4 +37,8 @@ public class SwitchGroup extends Group {
     public void dispose() {
         instance = null;
     }
+
+    public static void doStart() {
+        instance = null;
+    }
 }

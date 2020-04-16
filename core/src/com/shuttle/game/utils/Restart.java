@@ -25,10 +25,13 @@ import com.shuttle.game.ui.groups.switches.SwitchGroup;
 import com.shuttle.game.ui.panels.UILeftPanel;
 import com.shuttle.game.ui.panels.UIRightPanel;
 
+/**
+ * @author Shuttle on 02/05/19.
+ */
+
 public class Restart {
     public static void doRestart() {
         Rules.GAME_OVER = false;
-        ParticleEmitter.getInstance().dispose();
         MetalAsteroidEmitter.getInstance().dispose();
         MineralAsteroidEmitter.getInstance().dispose();
         CrateEmitter.getInstance().dispose();
@@ -40,16 +43,17 @@ public class Restart {
         RadiationAnomalyEmitter.getInstance().dispose();
         FuelEmitter.getInstance().dispose();
         RocketEmitter.getInstance().dispose();
+        Standing.getInstance().dispose();
+        DetailedResultGroup.getInstance().dispose();
+        RightGroup.getInstance().dispose();
+        LeftGroup.getInstance().dispose();
         SelectorGroup.getInstance().dispose();
         SwitchGroup.getInstance().dispose();
         PauseGroup.getInstance().dispose();
         ConfigGroup.getInstance().dispose();
         UILeftPanel.getInstance().dispose();
         UIRightPanel.getInstance().dispose();
-        LeftGroup.getInstance().dispose();
-        RightGroup.getInstance().dispose();
-        Standing.getInstance().dispose();
-        DetailedResultGroup.getInstance().dispose();
+        ParticleEmitter.getInstance().dispose();
         Shuttle.respawn();
     }
 }

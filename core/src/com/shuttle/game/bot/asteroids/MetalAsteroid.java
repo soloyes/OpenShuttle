@@ -9,6 +9,7 @@ import com.shuttle.game.utils.Regions;
 /**
  * @author Shuttle on 11/26/18.
  */
+
 public class MetalAsteroid extends AbstractAsteroid {
     public MetalAsteroid() {
         super();

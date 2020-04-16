@@ -11,6 +11,7 @@ import lombok.Getter;
 /**
  * @author Shuttle on 3/22/19.
  */
+
 public class Selector {
     @Getter
     private int count;

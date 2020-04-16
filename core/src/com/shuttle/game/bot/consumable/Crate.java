@@ -20,6 +20,7 @@ import com.shuttle.game.utils.Consumer;
 /**
  * @author Shuttle on 10/11/18.
  */
+
 public class Crate extends AbstractConsumable {
     public Crate() {
         this.width = PaintConstants.CRATE_WIDTH;

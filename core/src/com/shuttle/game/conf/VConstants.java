@@ -4,6 +4,7 @@ package com.shuttle.game.conf;
  * @author Shuttle on 10/16/18.
  * Vibration time constants (VConstants)
  */
+
 public final class VConstants {
     private VConstants() {
     }

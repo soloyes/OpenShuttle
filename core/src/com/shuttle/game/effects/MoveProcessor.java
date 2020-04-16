@@ -14,6 +14,7 @@ import com.shuttle.game.utils.pool.AbstractPoolable;
 /**
  * @author Shuttle on 10/28/18.
  */
+
 public class MoveProcessor {
     private float angle;
     private float radius;

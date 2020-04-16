@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * @author Shuttle on 9/10/18.
  */
+
 public class AnomalyTimer {
     private TextureRegion timerBackground, timerBox, timerIcon;
     private Texture texture;

@@ -55,7 +55,9 @@ import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.Joystick;
 import com.shuttle.game.ui.PlayerPointer;
 import com.shuttle.game.ui.groups.PauseGroup;
+import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.configs.ConfigImageButton;
+import com.shuttle.game.ui.groups.configs.LeftGroup;
 import com.shuttle.game.ui.groups.configs.RightGroup;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.mvc.results.DetailedResultGroup;
@@ -75,6 +77,10 @@ import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
+
+/**
+ * @author Shuttle on 03/06/18.
+ */
 
 public class GameScreen extends BaseScreen {
     @Getter
@@ -180,6 +186,17 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void createGUI() {
+        // Workaround (Android restarts via app manager)
+        RightGroup.doStart();
+        LeftGroup.doStart();
+        SelectorGroup.doStart();
+        SwitchGroup.doStart();
+        PauseGroup.doStart();
+        ConfigGroup.doStart();
+        UILeftPanel.doStart();
+        UIRightPanel.doStart();
+        ParticleEmitter.doStart();
+        //
         detailedResultGroup = DetailedResultGroup.getInstance();
         stage.addActor(detailedResultGroup);
         stage.addActor(PauseGroup.getInstance());

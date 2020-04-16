@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 /**
  * @author Shuttle on 8/29/18.
  */
+
 public class Shake {
     private static Shake instance;
     private float[] samples, vectorSamples;

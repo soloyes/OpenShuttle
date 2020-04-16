@@ -7,8 +7,16 @@ import com.shuttle.game.conf.Rules;
 /**
  * @author Shuttle on 9/11/18.
  */
+
 public class CorrosiveAnomalyEmitter extends AbstractAnomalyEmitter {
     private static CorrosiveAnomalyEmitter instance;
+
+    public static CorrosiveAnomalyEmitter getInstance() {
+        if (instance == null) {
+            instance = new CorrosiveAnomalyEmitter();
+        }
+        return instance;
+    }
 
     private CorrosiveAnomalyEmitter() {
         this(CorrosiveAnomaly.class);
@@ -40,12 +48,5 @@ public class CorrosiveAnomalyEmitter extends AbstractAnomalyEmitter {
                 MathUtils.random(0, Rules.SPACE_HEIGHT)
         );
         anomaly.setLevel(level);
-    }
-
-    public static CorrosiveAnomalyEmitter getInstance() {
-        if (instance == null) {
-            instance = new CorrosiveAnomalyEmitter();
-        }
-        return instance;
     }
 }

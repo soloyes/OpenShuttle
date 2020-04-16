@@ -2,6 +2,10 @@ package com.shuttle.game.utils;
 
 import java.util.Locale;
 
+/**
+ * @author Shuttle on 12/04/19.
+ */
+
 public class TimeFormat {
     private final static long ONE_SECOND = 1;
     private final static long SECONDS_IN_A_MINUTE = 60;

@@ -19,6 +19,7 @@ import lombok.Getter;
  * mc - middle cloud
  * sc - small cloud
  */
+
 public class CloudSky {
     private int bcW, bcH, mcW, mcH, scW, scH;
     private TextureRegion bc, mc, sc;

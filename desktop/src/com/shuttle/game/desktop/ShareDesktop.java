@@ -2,6 +2,10 @@ package com.shuttle.game.desktop;
 
 import com.shuttle.game.Share;
 
+/**
+ * @author Shuttle on 16/11/18.
+ */
+
 public class ShareDesktop implements Share {
 
     public ShareDesktop() {

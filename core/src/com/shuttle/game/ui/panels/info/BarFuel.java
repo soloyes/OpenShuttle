@@ -7,6 +7,7 @@ import com.shuttle.game.utils.Assets;
 /**
  * @author Shuttle on 3/14/19.
  */
+
 public class BarFuel extends AbstractBar {
 
     public BarFuel() {

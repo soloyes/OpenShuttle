@@ -28,6 +28,7 @@ import com.shuttle.game.utils.pool.AbstractPoolable;
 /**
  * @author Shuttle on 7/7/18.
  */
+
 public class Radar {
     private TextureRegion dot;
     private TextureRegion dot1;

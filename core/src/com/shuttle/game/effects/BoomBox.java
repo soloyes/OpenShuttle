@@ -16,6 +16,7 @@ import java.util.Map;
 /**
  * @author Shuttle on 7/14/18.
  */
+
 public class BoomBox {
     private static Array<Sound> soundIdList = new Array<Sound>();
     private static Array<Music> musicArray = new Array<Music>();

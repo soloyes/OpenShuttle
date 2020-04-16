@@ -2,6 +2,10 @@ package com.shuttle.game.utils;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/**
+ * @author Shuttle on 29/06/18.
+ */
+
 public class Regions {
     public static TextureRegion[] split(TextureRegion region, int rows, int cols, int frames) {
         if (region == null) throw new RuntimeException("Split null region");

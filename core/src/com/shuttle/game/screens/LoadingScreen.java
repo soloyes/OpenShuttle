@@ -9,6 +9,7 @@ import com.shuttle.game.utils.Assets;
 /**
  * Created by FlameXander on 12.03.2018.
  */
+
 public class LoadingScreen extends BaseScreen implements Screen {
     private SpriteBatch batch;
     private Texture texture;

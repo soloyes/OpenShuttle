@@ -32,6 +32,7 @@ import java.util.List;
 /**
  * @author Shuttle on 3/22/19.
  */
+
 public class SelectorGroup extends Group {
     private static SelectorGroup instance;
     private List<Selector> selectors;
@@ -45,6 +46,13 @@ public class SelectorGroup extends Group {
     private int pressedCount;
     private boolean paused;
     private BoomBox boomBox;
+
+    public static SelectorGroup getInstance() {
+        if (instance == null) {
+            instance = new SelectorGroup();
+        }
+        return instance;
+    }
 
     private SelectorGroup() {
         this.boomBox = new BoomBox();
@@ -186,10 +194,6 @@ public class SelectorGroup extends Group {
             selector.changeCount(amount);
             selectors.add(selector);
         }
-    }
-
-    public void dispose() {
-        instance = null;
     }
 
     public void render(SpriteBatch batch) {
@@ -337,10 +341,11 @@ public class SelectorGroup extends Group {
         }
     }
 
-    public static SelectorGroup getInstance() {
-        if (instance == null) {
-            instance = new SelectorGroup();
-        }
-        return instance;
+    public void dispose() {
+        instance = null;
+    }
+
+    public static void doStart() {
+        instance = null;
     }
 }

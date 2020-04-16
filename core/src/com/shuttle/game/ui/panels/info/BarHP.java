@@ -7,6 +7,7 @@ import com.shuttle.game.utils.Assets;
 /**
  * @author Shuttle on 3/14/19.
  */
+
 public class BarHP extends AbstractBar {
     public BarHP() {
         this.outBar = Assets.getInstance().getAtlas().findRegion(PaintConstants.HP_BAR_OUT);

@@ -12,6 +12,10 @@ import com.shuttle.game.effects.Ray;
 import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.utils.Assets;
 
+/**
+ * @author Shuttle on 01/04/20.
+ */
+
 public class MenuBackgroundGroup extends Group {
     private static MenuBackgroundGroup instance;
     private TextureRegion storage;
@@ -208,5 +212,9 @@ public class MenuBackgroundGroup extends Group {
     public void dispose() {
         instance = null;
         ParticleEmitter.getInstance().dispose();
+    }
+
+    public static void doStart() {
+        instance = null;
     }
 }

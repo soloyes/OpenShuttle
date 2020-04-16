@@ -4,6 +4,10 @@ import android.content.Intent;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 
+/**
+ * @author Shuttle on 16/11/18.
+ */
+
 public class ShareAndroid implements Share {
     private AndroidApplication androidApplication;
     private Intent shareIntent;

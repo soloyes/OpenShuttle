@@ -14,6 +14,10 @@ import com.shuttle.game.utils.Assets;
 
 import lombok.Getter;
 
+/**
+ * @author Shuttle on 03/06/18.
+ */
+
 public class ScreenManager {
     private static ScreenManager instance;
     private ShuttleGame game;
@@ -29,9 +33,15 @@ public class ScreenManager {
     @Getter
     private ScreenType currentScreen;
 
-    private ScreenManager() {
+    public static ScreenManager getInstance() {
+        if (instance == null) {
+            instance = new ScreenManager();
+        }
+        return instance;
     }
 
+    private ScreenManager() {
+    }
 
     public void changeScreen(ScreenType type) {
         Screen screen = game.getScreen();
@@ -87,13 +97,6 @@ public class ScreenManager {
     public void resize(int width, int height) {
         viewport.update(width, height);
         viewport.apply();
-    }
-
-    public static ScreenManager getInstance() {
-        if (instance == null) {
-            instance = new ScreenManager();
-        }
-        return instance;
     }
 
     public Viewport getViewport() {

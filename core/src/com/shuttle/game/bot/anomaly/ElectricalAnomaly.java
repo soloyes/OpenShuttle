@@ -19,6 +19,7 @@ import com.shuttle.game.utils.Regions;
 /**
  * @author Shuttle on 9/11/18.
  */
+
 public class ElectricalAnomaly extends AbstractAnomaly {
     private boolean touched;
 

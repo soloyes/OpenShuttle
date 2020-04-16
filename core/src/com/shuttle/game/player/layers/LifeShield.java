@@ -14,6 +14,7 @@ import lombok.Setter;
 /**
  * @author Shuttle on 9/2/18.
  */
+
 public class LifeShield {
     private TextureRegion texture;
     private int width, height;

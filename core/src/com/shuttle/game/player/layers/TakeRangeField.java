@@ -13,6 +13,7 @@ import lombok.Setter;
 /**
  * @author Shuttle on 11/18/18.
  */
+
 public class TakeRangeField {
     private TextureRegion texture;
     private int width, height;

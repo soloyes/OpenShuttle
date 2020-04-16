@@ -12,6 +12,7 @@ import com.shuttle.game.utils.Assets;
 /**
  * @author Shuttle on 4/22/19.
  */
+
 public class PlayerHP {
     private int width, height;
     private Vector2 position;

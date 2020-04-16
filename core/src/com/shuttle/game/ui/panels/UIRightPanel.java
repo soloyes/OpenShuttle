@@ -7,6 +7,10 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.ui.groups.switches.SwitchGroup;
 import com.shuttle.game.utils.Assets;
 
+/**
+ * @author Shuttle on 15/05/19.
+ */
+
 public class UIRightPanel extends AbstractLatestPanel {
     private static UIRightPanel instance = new UIRightPanel();
 
@@ -44,6 +48,10 @@ public class UIRightPanel extends AbstractLatestPanel {
     }
 
     public void dispose() {
+        instance = null;
+    }
+
+    public static void doStart() {
         instance = null;
     }
 

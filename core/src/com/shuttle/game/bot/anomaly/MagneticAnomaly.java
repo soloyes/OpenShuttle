@@ -23,6 +23,7 @@ import lombok.Setter;
 /**
  * @author Shuttle on 9/12/18.
  */
+
 public class MagneticAnomaly extends AbstractAnomaly {
     @Getter
     @Setter

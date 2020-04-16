@@ -15,6 +15,7 @@ import lombok.Setter;
 /**
  * @author Shuttle on 9/3/18.
  */
+
 public class Scratch {
     private TextureRegion[] textures;
     private int width, height;

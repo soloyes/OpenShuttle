@@ -5,6 +5,7 @@ import java.util.LinkedList;
 /**
  * @author Shuttle on 11/7/18.
  */
+
 public class PrettySound {
     private static LinkedList<PrettySound> list = new LinkedList<PrettySound>();
     private BoomBox boomBox;

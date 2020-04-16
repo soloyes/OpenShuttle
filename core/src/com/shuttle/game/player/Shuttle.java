@@ -33,6 +33,10 @@ import java.util.LinkedList;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @author Shuttle on 03/06/18.
+ */
+
 public class Shuttle extends AbstractShuttle {
     public static boolean isLaser;
     private static LinkedList<Integer> shadowsCoordinates;

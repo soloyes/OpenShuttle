@@ -5,6 +5,7 @@ import com.shuttle.game.conf.Rules;
 /**
  * @author Shuttle on 11/26/18.
  */
+
 public class MineralAsteroidEmitter extends AbstractAsteroidEmitter {
     private static MineralAsteroidEmitter instance;
 

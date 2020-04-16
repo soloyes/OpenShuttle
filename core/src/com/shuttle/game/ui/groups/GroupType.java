@@ -3,6 +3,7 @@ package com.shuttle.game.ui.groups;
 /**
  * @author Shuttle on 6/23/18.
  */
+
 public enum GroupType {
     MENU,
     MENU_BACKGROUND,

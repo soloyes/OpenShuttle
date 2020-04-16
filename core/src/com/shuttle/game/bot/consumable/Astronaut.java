@@ -19,6 +19,7 @@ import com.shuttle.game.utils.Regions;
 /**
  * @author Shuttle on 10/11/18.
  */
+
 public class Astronaut extends AbstractConsumable {
     private TextureRegion[] regions;
     private int multiplier;

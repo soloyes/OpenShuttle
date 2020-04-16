@@ -8,6 +8,7 @@ import com.shuttle.game.labelsticker.Sticker;
  * @author Shuttle on 3/25/19.
  * Do not refactor to static method. libgdx unable to work with textures, calling from static context.
  */
+
 public class StickerResolver {
     private TextureRegion textureRegion;
     private Operation operation;

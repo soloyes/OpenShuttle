@@ -21,6 +21,7 @@ import lombok.Getter;
 /**
  * @author Shuttle on 3/30/19.
  */
+
 public class Switch extends ImageButton {
     private TextureRegionDrawable onRegion;
     private TextureRegionDrawable offRegion;

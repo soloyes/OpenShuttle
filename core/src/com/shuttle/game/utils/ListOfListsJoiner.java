@@ -21,6 +21,7 @@ import java.util.List;
 /**
  * @author Shuttle on 11/22/18.
  */
+
 public final class ListOfListsJoiner<T> {
     private List<List<? extends T>> list;
 
@@ -84,6 +85,4 @@ public final class ListOfListsJoiner<T> {
                 StorageEmitter.getInstance().getActiveList()
         );
     }
-
-
 }

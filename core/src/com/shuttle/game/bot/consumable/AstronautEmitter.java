@@ -2,8 +2,19 @@ package com.shuttle.game.bot.consumable;
 
 import com.shuttle.game.conf.Rules;
 
+/**
+ * @author Shuttle on 12/11/18.
+ */
+
 public class AstronautEmitter extends AbstractConsumableEmitter {
     private static AstronautEmitter instance;
+
+    public static AstronautEmitter getInstance() {
+        if (instance == null) {
+            instance = new AstronautEmitter();
+        }
+        return instance;
+    }
 
     private AstronautEmitter() {
         this(Astronaut.class);
@@ -20,12 +31,5 @@ public class AstronautEmitter extends AbstractConsumableEmitter {
     @Override
     protected Astronaut newObject() {
         return new Astronaut();
-    }
-
-    public static AstronautEmitter getInstance() {
-        if (instance == null) {
-            instance = new AstronautEmitter();
-        }
-        return instance;
     }
 }

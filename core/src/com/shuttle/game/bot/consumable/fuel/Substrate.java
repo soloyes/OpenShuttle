@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 
+/**
+ * @author Shuttle on 09/12/09.
+ */
+
 public class Substrate {
     private TextureRegion texture;
     private Fuel fuel;

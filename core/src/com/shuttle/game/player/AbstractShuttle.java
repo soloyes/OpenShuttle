@@ -18,6 +18,7 @@ import lombok.Setter;
 /**
  * @author Shuttle on 10/24/18.
  */
+
 public class AbstractShuttle implements InputProcessor {
     public static Vector2 position, velocity;
     public static float angle;

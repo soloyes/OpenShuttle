@@ -22,6 +22,7 @@ import lombok.Setter;
 /**
  * @author Shuttle on 8/2/18.
  */
+
 public final class Standing {
     private static Standing instance;
     @Getter

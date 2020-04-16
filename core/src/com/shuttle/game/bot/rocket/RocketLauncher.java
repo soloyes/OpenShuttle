@@ -15,6 +15,7 @@ import lombok.Getter;
 /**
  * @author Shuttle on 20/01/19.
  */
+
 public class RocketLauncher {
     private static RocketLauncher instance;
     @Getter
@@ -24,7 +25,6 @@ public class RocketLauncher {
     private float time;
     private int amplitude;
     private ListOfListsJoiner<AbstractAnomaly> anomalyJoiner;
-
 
     public static RocketLauncher getInstance() {
         if (instance == null) {

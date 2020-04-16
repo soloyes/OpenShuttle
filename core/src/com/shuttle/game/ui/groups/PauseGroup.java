@@ -49,10 +49,6 @@ public class PauseGroup extends Group {
         return instance;
     }
 
-    public void dispose() {
-        instance = null;
-    }
-
     private PauseGroup() {
         this.boomBox = new BoomBox();
         this.pause = false;
@@ -163,5 +159,13 @@ public class PauseGroup extends Group {
         rightGroup.setVisible(false);
         buttonMenu.setVisible(true);
         buttonRestart.setVisible(true);
+    }
+
+    public void dispose() {
+        instance = null;
+    }
+
+    public static void doStart() {
+        instance = null;
     }
 }

@@ -15,6 +15,7 @@ import lombok.Setter;
 /**
  * @author Shuttle on 9/15/18.
  */
+
 public class Blackhole {
     public static Vector2 position;
     private TextureRegion texture;

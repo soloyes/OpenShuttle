@@ -16,6 +16,7 @@ import com.shuttle.game.utils.Rounder;
 /**
  * @author Shuttle on 3/3/19.
  */
+
 public class PlayerXP {
     private TextureRegion outCircle, inCircle;
     private RadialSprite scaleCircle;

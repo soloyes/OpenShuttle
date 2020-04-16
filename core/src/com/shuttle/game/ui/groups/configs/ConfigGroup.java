@@ -106,6 +106,13 @@ public class ConfigGroup extends Group {
     private Label shaderLabel;
     private Label childLabel;
 
+    public static ConfigGroup getInstance() {
+        if (instance == null) {
+            instance = new ConfigGroup();
+        }
+        return instance;
+    }
+
     private ConfigGroup() {
         this.setName(GroupType.CONFIG.name());
         this.setVisible(false);
@@ -1046,17 +1053,6 @@ public class ConfigGroup extends Group {
         soundLine.setMuted(soundSlider.getValue() == 0.0f);
     }
 
-    public void dispose() {
-        instance = null;
-    }
-
-    public static ConfigGroup getInstance() {
-        if (instance == null) {
-            instance = new ConfigGroup();
-        }
-        return instance;
-    }
-
     private static class Line extends Group {
         @Getter
         @Setter
@@ -1167,5 +1163,13 @@ public class ConfigGroup extends Group {
                 (Rules.WORLD_WIDTH - glyphLayoutTitle.width) / 2,
                 PaintConstants.UI_TITLE_LABEL_Y + glyphLayoutTitle.height
         );
+    }
+
+    public void dispose() {
+        instance = null;
+    }
+
+    public static void doStart() {
+        instance = null;
     }
 }

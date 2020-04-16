@@ -89,4 +89,8 @@ public class LeftGroup extends AbstractInfoGroup {
     public void dispose() {
         instance = null;
     }
+
+    public static void doStart() {
+        instance = null;
+    }
 }

@@ -41,12 +41,18 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public void createGUI() {
+        // Workaround (Android restarts via app manager)
+        MenuBackgroundGroup.doStart();
+        DetailedResultGroup.doStart();
+        ConfigGroup.doStart();
+        ResultGroup.doStart();
+        //
         background = new Background();
         menuGroup = new MenuGroup();
         MenuBar menuBar = new MenuBar();
+        InfoGroup infoGroup = new InfoGroup();
         resultGroup = ResultGroup.getInstance();
         detailedResultGroup = DetailedResultGroup.getInstance();
-        InfoGroup infoGroup = new InfoGroup();
         this.font188 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT188, BitmapFont.class);
         this.font48 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT48, BitmapFont.class);
         Label.LabelStyle labelStyle64 = new Label.LabelStyle();

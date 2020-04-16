@@ -5,6 +5,10 @@ import com.badlogic.gdx.math.MathUtils;
 
 import lombok.Getter;
 
+/**
+ * @author Shuttle on 08/08/18.
+ */
+
 public enum PlayerInteractionLevels {
     NONE(0, 0, 0, 0, 0, 1.0f, 0.5f, 0.6f),
     TAN(1, Color.TAN.r, Color.TAN.g, Color.TAN.b, 1f, 1.5f, 0.35f, 0.5f),

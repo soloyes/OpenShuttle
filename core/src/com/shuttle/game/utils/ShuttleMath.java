@@ -1,5 +1,9 @@
 package com.shuttle.game.utils;
 
+/**
+ * @author Shuttle on 03/07/18.
+ */
+
 public class ShuttleMath {
     public static float checkAngleBetween0And360(float angle) {
         if (angle < 0.0f) {

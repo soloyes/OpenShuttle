@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 /**
  * @author Shuttle on 12/8/18.
  */
+
 public class Background {
     private StarSky starSky;
     private CloudSky cloudSky;

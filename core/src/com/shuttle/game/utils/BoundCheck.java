@@ -19,6 +19,7 @@ import com.shuttle.game.utils.pool.AbstractPoolable;
 /**
  * @author Shuttle on 8/26/18.
  */
+
 public class BoundCheck {
     private float alertTimer;
     private float hpTimer;

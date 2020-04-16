@@ -6,6 +6,10 @@ import com.shuttle.game.conf.PaintConstants;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @author Shuttle on 15/05/19.
+ */
+
 public class LabelTime {
     @Getter
     @Setter

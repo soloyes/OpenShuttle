@@ -4,6 +4,7 @@ package com.shuttle.game.conf;
  * @author Shuttle on 8/26/18.
  * Music and Sound constants (MSConstants)
  */
+
 public final class MSConstants {
     private MSConstants() {
     }

@@ -17,6 +17,7 @@ import lombok.Setter;
 /**
  * @author Shuttle on 19/01/19.
  */
+
 public class Rocket extends AbstractPoolable {
     private Vector2 position;
     private Vector2 velocity;
@@ -126,6 +127,4 @@ public class Rocket extends AbstractPoolable {
     public Vector2 getPosition() {
         return position;
     }
-
-
 }

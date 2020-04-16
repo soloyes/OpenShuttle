@@ -15,6 +15,7 @@ import lombok.Setter;
 /**
  * @author Shuttle on 11/12/18.
  */
+
 public class Label {
     @Getter
     private TextureRegion textureRegion;
