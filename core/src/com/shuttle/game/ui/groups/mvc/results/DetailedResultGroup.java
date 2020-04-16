@@ -28,6 +28,7 @@ import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.screens.ScreenManager;
+import com.shuttle.game.ui.UIButton;
 import com.shuttle.game.ui.groups.GroupType;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.Assets;
@@ -86,7 +87,7 @@ public class DetailedResultGroup extends Group {
         this.setHeight(Rules.WORLD_HEIGHT);
         this.addActor(container);
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.MENU) {
-            this.buttonBack = new Button(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.BACK_BUTTON)));
+            this.buttonBack = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.BACK_BUTTON)));
             buttonBack.setPosition(484, 24);
             buttonBack.addListener(new ClickListener() {
                 @Override

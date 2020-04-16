@@ -1,5 +1,6 @@
 package com.shuttle.game.ui.groups;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -33,6 +34,7 @@ public class MenuBackgroundGroup extends Group {
     private int random1;
     private int random2;
     private float shuttleY;
+    private float backY;
     private float angle;
     private int radius;
 
@@ -45,6 +47,7 @@ public class MenuBackgroundGroup extends Group {
     private Oscillator asteroidScaleOscillator2;
     private Oscillator shieldScaleOscillator;
     private Oscillator shuttleYOscillator;
+    private Oscillator backYOscillator;
 
     public static MenuBackgroundGroup getInstance() {
         if (instance == null) {
@@ -76,6 +79,8 @@ public class MenuBackgroundGroup extends Group {
         this.shieldScale = 1.0f;
         this.shuttleYOscillator = new Oscillator();
         this.shuttleY = 1.0f * PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_Y;
+        this.backYOscillator = new Oscillator();
+        this.backY = PaintConstants.UI_MENU_BACKGROUND_PLANET_Y;
         this.random1 = MathUtils.randomSign();
         this.random2 = -random1;
         this.radius = 200;
@@ -84,8 +89,9 @@ public class MenuBackgroundGroup extends Group {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(planet, PaintConstants.UI_MENU_BACKGROUND_PLANET_X, PaintConstants.UI_MENU_BACKGROUND_PLANET_Y);
-        batch.draw(storage, PaintConstants.UI_MENU_BACKGROUND_STORAGE_X, PaintConstants.UI_MENU_BACKGROUND_STORAGE_Y);
+        batch.setColor(Color.WHITE);
+        batch.draw(planet, PaintConstants.UI_MENU_BACKGROUND_PLANET_X, PaintConstants.UI_MENU_BACKGROUND_PLANET_Y - backY);
+        batch.draw(storage, PaintConstants.UI_MENU_BACKGROUND_STORAGE_X, PaintConstants.UI_MENU_BACKGROUND_STORAGE_Y - backY);
         batch.draw(
                 astronaut,
                 PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_X,
@@ -98,7 +104,7 @@ public class MenuBackgroundGroup extends Group {
                 astronautScale,
                 0.0f
         );
-        batch.draw(sitastronaut, PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT_X, PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT_Y);
+        batch.draw(sitastronaut, PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT_X, PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT_Y - backY);
         batch.draw(shuttle, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_X, shuttleY);
         batch.draw(
                 shield,
@@ -193,6 +199,7 @@ public class MenuBackgroundGroup extends Group {
         asteroidScale2 = asteroidScaleOscillator2.oscillate(asteroidScale2, 0.03f, 0.8f, 1.0f, delta);
         shieldScale = shieldScaleOscillator.oscillate(shieldScale, 0.09f, 0.95f, 1.0f, delta);
         shuttleY = shuttleYOscillator.oscillate(shuttleY, 12.0f, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_Y, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_Y + 15, delta);
+        backY = backYOscillator.oscillate(backY, 6.0f, PaintConstants.UI_MENU_BACKGROUND_PLANET_Y, PaintConstants.UI_MENU_BACKGROUND_PLANET_Y + 50, delta);
         rotation1 += delta;
         rotation2 += 10 * delta;
         angle += delta / 5;

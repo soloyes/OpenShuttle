@@ -22,6 +22,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Vibrator;
+import com.shuttle.game.ui.UIButton;
 import com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.mvc.profiles.ProfilesController;
@@ -155,7 +156,7 @@ public class MenuGroup extends Group {
         );
 
         noticeLabel = new Label(notice, noticeStyle64);
-        this.buttonProfiles = new Button(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PROFILES_BUTTON_MENU)));
+        this.buttonProfiles = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PROFILES_BUTTON_MENU)));
         buttonProfiles.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
 
         TextField.TextFieldStyle tfs = skin.get("default", TextField.TextFieldStyle.class);

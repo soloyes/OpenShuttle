@@ -15,6 +15,7 @@ import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.screens.ScreenManager;
+import com.shuttle.game.ui.UIButton;
 import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.configs.LeftGroup;
 import com.shuttle.game.ui.groups.configs.RightGroup;
@@ -68,9 +69,9 @@ public class PauseGroup extends Group {
         this.configGroup = ConfigGroup.getInstance();
         this.leftGroup = LeftGroup.getInstance();
         this.rightGroup = RightGroup.getInstance();
-        this.buttonMenu = new Button(new TextureRegionDrawable(new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_MENU_HOME))));
+        this.buttonMenu = new UIButton(new TextureRegionDrawable(new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_MENU_HOME))));
         buttonMenu.setVisible(false);
-        this.buttonRestart = new Button(new TextureRegionDrawable(new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_MENU_RESTART))));
+        this.buttonRestart = new UIButton(new TextureRegionDrawable(new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_MENU_RESTART))));
         buttonRestart.setVisible(false);
 
         buttonMenu.setOrigin(Align.center);
