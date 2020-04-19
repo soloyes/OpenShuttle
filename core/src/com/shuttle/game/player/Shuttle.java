@@ -140,7 +140,7 @@ public class Shuttle extends AbstractShuttle {
                 setLayersScale(1.0f, 1.0f);
                 isTaken = false;
                 boomBox.playSound(MSConstants.TELEPORT);
-                if (Profiles.getSettings().isChild()) {
+                if (!Profiles.getSettings().isChild()) {
                     Standing.getInstance().takeDamage(Rules.BLACKHOLE_GET_DAMAGE);
                 }
                 cameraSmooth = true;
