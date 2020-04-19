@@ -1,10 +1,10 @@
 package com.shuttle.game.utils;
 
 import com.shuttle.game.bot.consumable.AbstractConsumable;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
 import com.shuttle.game.ui.panels.UILeftPanel;
 
@@ -26,7 +26,7 @@ public class Consumer {
     }
 
     private static void addToSelector(Sticker sticker, AbstractConsumable consumable) {
-        if (GamePreferences.isChildEnabled()) {
+        if (Profiles.getSettings().isChild()) {
             if (Sticker.SELECTABLE.contains(sticker) && consumable.isGolden()) {
                 SelectorGroup.getInstance().addSelector(sticker, 1);
                 sticker.notify(consumable);

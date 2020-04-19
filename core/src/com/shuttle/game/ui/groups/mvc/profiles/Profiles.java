@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionLikeType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.shuttle.game.conf.FileConstants;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Standing;
@@ -46,12 +45,11 @@ public class Profiles implements Model<ProfileDAO> {
     }
 
     private static ProfileDAO asEmpty() {
-        return new ProfileDAO(ProfileDAO.Type.PROFILE, PaintConstants.UI_EMPTY_PROFILE, GamePreferences.defaults, new HashSet<ResultDAO>(), false);
+        return new ProfileDAO(ProfileDAO.Type.PROFILE, PaintConstants.UI_EMPTY_PROFILE, new SettingsDAO(), new HashSet<ResultDAO>(), false);
     }
 
     @Override
     public ProfileDAO addEmpty() {
-        preferencesToActiveProfile();
         ProfileDAO empty = asEmpty();
         getList().add(empty);
         return empty;
@@ -86,11 +84,6 @@ public class Profiles implements Model<ProfileDAO> {
             }
         }
 
-        if (getActive() != null) {
-            GamePreferences.apply(getActive().getPreferences());
-        } else {
-            GamePreferences.apply(GamePreferences.defaults);
-        }
         ConfigGroup.getInstance().refresh();
     }
 
@@ -103,12 +96,6 @@ public class Profiles implements Model<ProfileDAO> {
             for (int i = 0; i < PaintConstants.DUMMY_PROFILES; i++) {
                 getList().add(asDummy());
             }
-        }
-    }
-
-    private void preferencesToActiveProfile() {
-        if (getActive() != null) {
-            getActive().setPreferences(GamePreferences.getCurrent());
         }
     }
 
@@ -151,7 +138,6 @@ public class Profiles implements Model<ProfileDAO> {
 
     @Override
     public void setEmpty(ProfileDAO profile) {
-        preferencesToActiveProfile();
         profile.copy(instance.emptyProfile);
     }
 
@@ -186,7 +172,6 @@ public class Profiles implements Model<ProfileDAO> {
     }
 
     public void dispose() {
-        preferencesToActiveProfile();
         resultsToActiveProfile();
         write();
     }
@@ -198,7 +183,6 @@ public class Profiles implements Model<ProfileDAO> {
     @Override
     public void activate(ProfileDAO profile) {
         List<ProfileDAO> profiles = getList();
-        preferencesToActiveProfile();
         for (int i = 0; i < profiles.size(); i++) {
             profiles.get(i).setActive(false);
         }
@@ -227,11 +211,11 @@ public class Profiles implements Model<ProfileDAO> {
 
             ResultDAO result = new ResultDAO(
                     new Date(),
-                    Rules.StartLevel.values()[GamePreferences.getLevel()].name(),
+                    Rules.StartLevel.values()[getActive().getPreferences().getLevel()].name(),
                     detailedResultDAO
             );
 
-            List<ResultDAO> list = getActiveProfileResultList(Rules.StartLevel.values()[GamePreferences.getLevel()].name());
+            List<ResultDAO> list = getActiveProfileResultList(Rules.StartLevel.values()[getActive().getPreferences().getLevel()].name());
             Set<ResultDAO> set = getActive().getResultSet();
 
             if (list.size() == 0) {
@@ -270,5 +254,12 @@ public class Profiles implements Model<ProfileDAO> {
             }
         });
         return list;
+    }
+
+    public static SettingsDAO getSettings() {
+        if (instance.getActive() == null) {
+            return new SettingsDAO();
+        }
+        return instance.getActive().getPreferences();
     }
 }

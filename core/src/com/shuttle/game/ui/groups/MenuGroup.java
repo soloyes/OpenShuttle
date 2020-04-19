@@ -1,9 +1,12 @@
 package com.shuttle.game.ui.groups;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -22,6 +25,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Vibrator;
+import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.UIButton;
 import com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
@@ -36,6 +40,9 @@ import com.shuttle.game.utils.Assets;
 public class MenuGroup extends Group {
     private static boolean validUserName;
     private static TextField username;
+    private Rectangle rectangle;
+    private Vector2 tmp1V2;
+    private Vector2 tmp2V2;
     private static float shadowTime;
     private static StringBuilder notice = new StringBuilder();
     private BitmapFont font44;
@@ -57,6 +64,9 @@ public class MenuGroup extends Group {
         username.setPosition(270, 960);
         username.setWidth(540);
         username.setHeight(108);
+        this.rectangle = new Rectangle(270, 960, 540, 108);
+        this.tmp1V2 = new Vector2();
+        this.tmp2V2 = new Vector2();
         buttonProfiles.setSize(PaintConstants.PROFILES_BUTTON_WIDTH, PaintConstants.PROFILES_BUTTON_HEIGHT);
         buttonProfiles.setPosition(487, 1096);
 
@@ -113,6 +123,7 @@ public class MenuGroup extends Group {
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.ENTER) {
                     if (validUserName) {
+                        getStage().unfocusAll();
                         ProfileDAO profile = profilesController.getActive();
                         if (profile == null) {
                             profile = profilesView.addProfile(username.getText());
@@ -187,6 +198,11 @@ public class MenuGroup extends Group {
     @Override
     public void act(float delta) {
         super.act(delta);
+        tmp1V2.set(Gdx.input.getX(), Gdx.input.getY());
+        tmp2V2 = ScreenManager.getInstance().getViewport().unproject(tmp1V2);
+        if (Gdx.input.justTouched() && !rectangle.contains(tmp2V2.x, tmp2V2.y)) {
+            getStage().unfocus(username);
+        }
         validUserName = !username.getText().isEmpty();
         if (!isValidUserName()) {
             setNotice(PaintConstants.UI_EMPTY_USERNAME);
@@ -210,7 +226,7 @@ public class MenuGroup extends Group {
         glyphLayout.setText(font44, notice);
         noticeLabel.setText(notice);
         noticeGroup.setPosition(Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
-                904 + glyphLayout.height / 2 + 22);
+                900 + glyphLayout.height / 2 + 20);
         noticeGroup.getColor().a = a;
     }
 

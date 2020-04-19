@@ -2,7 +2,6 @@ package com.shuttle.game.ui.groups.mvc.profiles;
 
 import com.shuttle.game.ui.groups.mvc.results.ResultDAO;
 
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,7 +25,7 @@ public class ProfileDAO {
 
     @Getter
     @Setter
-    private Map<String, Object> preferences;
+    private SettingsDAO preferences;
 
     @Getter
     @Setter
@@ -46,11 +45,11 @@ public class ProfileDAO {
     public void copy(ProfileDAO profile) {
         this.type = profile.getType();
         this.username = profile.getUsername();
-        this.preferences = profile.getPreferences();
+        this.preferences = new SettingsDAO(profile.getPreferences());
         this.active = profile.isActive();
     }
 
-    public ProfileDAO(Type type, String username, Map<String, Object> preferences, Set<ResultDAO> resultSet, boolean active) {
+    public ProfileDAO(Type type, String username, SettingsDAO preferences, Set<ResultDAO> resultSet, boolean active) {
         this.type = type;
         this.username = username;
         this.preferences = preferences;

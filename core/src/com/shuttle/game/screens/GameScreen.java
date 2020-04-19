@@ -35,7 +35,6 @@ import com.shuttle.game.bot.consumable.StorageEmitter;
 import com.shuttle.game.bot.consumable.fuel.Fuel;
 import com.shuttle.game.bot.rocket.RocketEmitter;
 import com.shuttle.game.bot.rocket.RocketLauncher;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.PlayerInteractionLevels;
@@ -155,7 +154,7 @@ public class GameScreen extends BaseScreen {
 
         BoundCheck.avoidPosition(Blackhole.position, Shuttle.position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         playerPointer = new PlayerPointer(player);
-        Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel();
+        Rules.StartLevel.values()[Profiles.getSettings().getLevel()].setGameLevel();
 
         InputMultiplexer im = new InputMultiplexer(player, stage, joystick);
         Gdx.input.setInputProcessor(im);
@@ -220,7 +219,7 @@ public class GameScreen extends BaseScreen {
         //BEGIN
         batch.begin();
         background.render(batch);
-        if (!GamePreferences.isShaderEnabled() || ShaderManager.BLACKHOLE.getProgram() == null) {
+        if (!Profiles.getSettings().isShader() || ShaderManager.BLACKHOLE.getProgram() == null) {
             blackhole.render(batch);
         }
         MetalAsteroidEmitter.getInstance().render(batch);
@@ -250,7 +249,7 @@ public class GameScreen extends BaseScreen {
         //BEGIN
         batch.begin();
         super.render(dt);
-        if (!GamePreferences.isShaderEnabled() || ShaderManager.BLACKHOLE.getProgram() == null) {
+        if (!Profiles.getSettings().isShader() || ShaderManager.BLACKHOLE.getProgram() == null) {
             batch.setShader(null);
             //BEGIN
             batch.draw(fboTexRegion, 0, 0, Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
@@ -589,7 +588,7 @@ public class GameScreen extends BaseScreen {
                     if (asteroid.getType() == AbstractPoolable.Type.ASTEROID_MINERAL && Shuttle.isLaser) {
                         Standing.getInstance().changeLaserChargeLevel(asteroid.getSizeForHarvest());
                     }
-                    //pretty sound if collect much fragments in little time
+                    //pretty soundVolume if collect much fragments in little time
                     prettyFragmentHarvest.playSound(MSConstants.GET_FRAGMENT);
                     asteroid.destroy();
                 }

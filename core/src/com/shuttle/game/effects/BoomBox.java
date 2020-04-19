@@ -4,9 +4,9 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.Assets;
 
 import java.util.ArrayList;
@@ -51,8 +51,8 @@ public class BoomBox {
     }
 
     public void setMusicEffectVolume(String musicEffect, float volume) {
-        if (GamePreferences.isEffectsEnabled()) {
-            volume *= GamePreferences.getOverallEffectsVolume();
+        if (Profiles.getSettings().isEffects()) {
+            volume *= Profiles.getSettings().overallEffectsVolume();
             Assets.getInstance()
                     .getAssetManager()
                     .get(musicEffect, Music.class)
@@ -68,8 +68,8 @@ public class BoomBox {
     }
 
     public void playMusicEffectOnce(String musicEffect) {
-        setMusicEffectVolume(musicEffect, GamePreferences.getOverallEffectsVolume());
-        if (GamePreferences.isEffectsEnabled()) {
+        setMusicEffectVolume(musicEffect, Profiles.getSettings().overallEffectsVolume());
+        if (Profiles.getSettings().isEffects()) {
             if (!isPlaying(musicEffect)) {
                 Assets.getInstance()
                         .getAssetManager()
@@ -84,8 +84,8 @@ public class BoomBox {
                 .getAssetManager()
                 .get(sound, Sound.class);
         soundIdList.add(tmp);
-        if (GamePreferences.isEffectsEnabled()) {
-            return tmp.play(GamePreferences.getOverallEffectsVolume());
+        if (Profiles.getSettings().isEffects()) {
+            return tmp.play(Profiles.getSettings().overallEffectsVolume());
         }
         return -1;
     }
@@ -115,11 +115,11 @@ public class BoomBox {
     }
 
     private void playMusicInLoop(String music) {
-        if (GamePreferences.isMusicEnabled()) {
+        if (Profiles.getSettings().isMusic()) {
             Assets.getInstance()
                     .getAssetManager()
                     .get(music, Music.class)
-                    .setVolume(GamePreferences.getOverallMusicVolume());
+                    .setVolume(Profiles.getSettings().overallMusicVolume());
             Assets.getInstance()
                     .getAssetManager()
                     .get(music, Music.class)
@@ -134,8 +134,8 @@ public class BoomBox {
     }
 
     public void playMusicEffectInLoop(String musicEffect, float volume) {
-        if (GamePreferences.isEffectsEnabled()) {
-            volume *= GamePreferences.getOverallEffectsVolume();
+        if (Profiles.getSettings().isEffects()) {
+            volume *= Profiles.getSettings().overallEffectsVolume();
             Assets.getInstance()
                     .getAssetManager()
                     .get(musicEffect, Music.class)

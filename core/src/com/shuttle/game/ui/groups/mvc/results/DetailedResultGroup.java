@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
@@ -121,7 +120,7 @@ public class DetailedResultGroup extends Group {
     }
 
     public void init() {
-        ResultDAO resultDAO = profiles.getActiveProfileResultList(Rules.StartLevel.values()[GamePreferences.getLevel()].name()).get(0);
+        ResultDAO resultDAO = profiles.getActiveProfileResultList(Rules.StartLevel.values()[Profiles.getSettings().getLevel()].name()).get(0);
         init(resultDAO);
     }
 

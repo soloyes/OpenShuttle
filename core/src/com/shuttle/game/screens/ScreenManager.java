@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.shuttle.game.ShuttleGame;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.Assets;
 
 import lombok.Getter;
@@ -62,7 +62,7 @@ public class ScreenManager {
             case GAME:
                 targetScreen = gameScreen;
                 //SPACE_WIDTH/SPACE_HEIGHT depends from game level
-                Rules.setSpace(4 - GamePreferences.getLevel());
+                Rules.setSpace(4 - Profiles.getSettings().getLevel());
                 //
                 Assets.getInstance().loadAssets(ScreenType.GAME);
                 break;

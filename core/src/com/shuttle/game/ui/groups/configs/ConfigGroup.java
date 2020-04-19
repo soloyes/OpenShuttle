@@ -24,7 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
@@ -34,6 +33,7 @@ import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.Joystick;
 import com.shuttle.game.ui.groups.GroupType;
+import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.Assets;
 
 import lombok.Getter;
@@ -105,6 +105,7 @@ public class ConfigGroup extends Group {
     private BoomBox boomBox;
     private Label shaderLabel;
     private Label childLabel;
+    private Profiles profiles;
 
     public static ConfigGroup getInstance() {
         if (instance == null) {
@@ -115,6 +116,7 @@ public class ConfigGroup extends Group {
 
     private ConfigGroup() {
         this.setName(GroupType.CONFIG.name());
+        this.profiles = new Profiles();
         this.setVisible(false);
         this.font44 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT44, BitmapFont.class);
         this.font96 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
@@ -252,11 +254,11 @@ public class ConfigGroup extends Group {
         soundSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GamePreferences.setSoundVolume(soundSlider.getValue());
+                Profiles.getSettings().setSoundVolume(soundSlider.getValue());
                 musicArray = new Array<Music>();
                 Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
                 for (int i = 0; i < musicArray.size; i++) {
-                    musicArray.get(i).setVolume(GamePreferences.getOverallMusicVolume());
+                    musicArray.get(i).setVolume(Profiles.getSettings().overallMusicVolume());
                 }
                 if (soundSlider.isDragging()) {
                     boomBox.playSound(MSConstants.UI_MENU);
@@ -284,11 +286,11 @@ public class ConfigGroup extends Group {
         musicSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GamePreferences.setMusicVolume(musicSlider.getValue());
+                Profiles.getSettings().setMusicVolume(musicSlider.getValue());
                 musicArray = new Array<Music>();
                 Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
                 for (int i = 0; i < musicArray.size; i++) {
-                    musicArray.get(i).setVolume(GamePreferences.getOverallMusicVolume());
+                    musicArray.get(i).setVolume(Profiles.getSettings().overallMusicVolume());
                 }
                 if (musicSlider.isDragging()) {
                     boomBox.playSound(MSConstants.UI_MENU);
@@ -315,7 +317,7 @@ public class ConfigGroup extends Group {
         effectsSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GamePreferences.setEffectsVolume(effectsSlider.getValue());
+                Profiles.getSettings().setEffectsVolume(effectsSlider.getValue());
                 if (effectsSlider.isDragging()) {
                     boomBox.playSound(MSConstants.UI_MENU);
                     Vibrator.vibrate(VConstants.UI_CLICK);
@@ -341,7 +343,7 @@ public class ConfigGroup extends Group {
         joyStickModeSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GamePreferences.setJoyStickMode((int) joyStickModeSlider.getValue());
+                Profiles.getSettings().setJoystick_mode((int) joyStickModeSlider.getValue());
                 if (joyStickModeSlider.isDragging()) {
                     boomBox.playSound(MSConstants.UI_MENU);
                     Vibrator.vibrate(VConstants.UI_CLICK);
@@ -387,8 +389,8 @@ public class ConfigGroup extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = musicCheckBox.isChecked();
-                GamePreferences.setMusicEnabled(enabled);
-                boomBox.setAllMusicVolume(GamePreferences.getMusicVolume());
+                Profiles.getSettings().setMusic(enabled);
+                boomBox.setAllMusicVolume(Profiles.getSettings().getMusicVolume());
                 boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
             }
         });
@@ -413,7 +415,7 @@ public class ConfigGroup extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = effectsCheckBox.isChecked();
-                GamePreferences.setEffectsEnabled(enabled);
+                Profiles.getSettings().setEffects(enabled);
             }
         });
 
@@ -437,7 +439,7 @@ public class ConfigGroup extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = shadersCheckBox.isChecked();
-                GamePreferences.setShaderEnabled(enabled);
+                Profiles.getSettings().setShader(enabled);
             }
         });
         shadersCheckBox.addListener(new ClickListener() {
@@ -464,7 +466,7 @@ public class ConfigGroup extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = childCheckBox.isChecked();
-                GamePreferences.setChildEnabled(enabled);
+                Profiles.getSettings().setChild(enabled);
             }
         });
         childCheckBox.addListener(new ClickListener() {
@@ -511,7 +513,7 @@ public class ConfigGroup extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = vibrationCheckBox.isChecked();
-                GamePreferences.setVibrationEnabled(enabled);
+                Profiles.getSettings().setVibration(enabled);
                 if (enabled && Gdx.input.isTouched() && isVisible()) {
                     Vibrator.vibrate(VConstants.VIBRATION_ENABLED);
                 }
@@ -537,7 +539,7 @@ public class ConfigGroup extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = joyStickCheckBox.isChecked();
-                GamePreferences.setJoyStickEnabled(enabled);
+                Profiles.getSettings().setJoystick(enabled);
                 if (joyStickCheckBox.isPressed()) {
                     boomBox.playSound(MSConstants.UI_CHANGED);
                     Vibrator.vibrate(VConstants.UI_CHANGED);
@@ -579,7 +581,7 @@ public class ConfigGroup extends Group {
                 scrollPane.setFlickScroll(true);
                 if (pointer == 0 && joystickPresetLine.isActive()) {
                     boolean enabled = joyStickColorCheckBox.isChecked();
-                    GamePreferences.setJoyStickColorEnabled(enabled);
+                    Profiles.getSettings().setJoystickColor(enabled);
                 }
                 super.touchUp(event, x, y, pointer, button);
             }
@@ -728,6 +730,15 @@ public class ConfigGroup extends Group {
                 soundSlider,
                 new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE1))
         );
+        soundLine.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0) {
+                    profiles.write();
+                }
+            }
+        });
         soundLine.setNoticeMessage(PaintConstants.UI_SOUND_NOTICE);
         soundLine.setHoldMessage(PaintConstants.UI_SOUND_HOLD);
         soundLine.setEnabledMessage(PaintConstants.UI_SOUND_ENABLE);
@@ -739,6 +750,15 @@ public class ConfigGroup extends Group {
                 musicSlider,
                 new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE1))
         );
+        musicLine.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0) {
+                    profiles.write();
+                }
+            }
+        });
         musicLine.setNoticeMessage(PaintConstants.UI_MUSIC_NOTICE);
         musicLine.setHoldMessage(PaintConstants.UI_MUSIC_HOLD);
         musicLine.setEnabledMessage(PaintConstants.UI_MUSIC_ENABLE);
@@ -750,6 +770,15 @@ public class ConfigGroup extends Group {
                 effectsSlider,
                 new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE1))
         );
+        effectsLine.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0) {
+                    profiles.write();
+                }
+            }
+        });
         effectsLine.setNoticeMessage(PaintConstants.UI_EFFECTS_NOTICE);
         effectsLine.setHoldMessage(PaintConstants.UI_EFFECTS_HOLD);
         effectsLine.setEnabledMessage(PaintConstants.UI_EFFECTS_ENABLE);
@@ -761,6 +790,15 @@ public class ConfigGroup extends Group {
                 null,
                 new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE2))
         );
+        effectsLine.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0) {
+                    profiles.write();
+                }
+            }
+        });
         shaderLine.setNoticeMessage(PaintConstants.UI_SHADERS_NOTICE);
         shaderLine.setHoldMessage(PaintConstants.UI_SHADERS_HOLD);
         shaderLine.setEnabledMessage(PaintConstants.UI_SHADERS_ENABLE);
@@ -772,6 +810,15 @@ public class ConfigGroup extends Group {
                 null,
                 new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE2))
         );
+        childLine.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0) {
+                    profiles.write();
+                }
+            }
+        });
         childLine.setNoticeMessage(PaintConstants.UI_CHILD_NOTICE);
         childLine.setHoldMessage(PaintConstants.UI_CHILD_HOLD);
         childLine.setEnabledMessage(PaintConstants.UI_CHILD_ENABLE);
@@ -783,6 +830,15 @@ public class ConfigGroup extends Group {
                 null,
                 new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE2))
         );
+        levelLine.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0) {
+                    profiles.write();
+                }
+            }
+        });
         levelLine.setActive(true);
         levelLine.setNoticeMessage(PaintConstants.UI_LEVEL_NOTICE);
         levelLine.setHoldMessage(PaintConstants.UI_LEVEL_HOLD);
@@ -795,6 +851,15 @@ public class ConfigGroup extends Group {
                 null,
                 new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE2))
         );
+        vibrationLine.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0) {
+                    profiles.write();
+                }
+            }
+        });
         vibrationLine.setNoticeMessage(PaintConstants.UI_VIBRATION_NOTICE);
         vibrationLine.setHoldMessage(PaintConstants.UI_VIBRATION_HOLD);
         vibrationLine.setEnabledMessage(PaintConstants.UI_VIBRATION_ENABLE);
@@ -806,6 +871,15 @@ public class ConfigGroup extends Group {
                 null,
                 new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE2))
         );
+        joystickLine.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0) {
+                    profiles.write();
+                }
+            }
+        });
         joystickLine.setNoticeMessage(PaintConstants.UI_JOYSTICK_NOTICE);
         joystickLine.setHoldMessage(PaintConstants.UI_JOYSTICK_HOLD);
         joystickLine.setEnabledMessage(PaintConstants.UI_JOYSTICK_ENABLE);
@@ -817,29 +891,38 @@ public class ConfigGroup extends Group {
                 innerTable,
                 new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_CONFIG_CELL_TYPE3))
         );
+        joystickPresetLine.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0 && joystickLine.isActive()) {
+                    profiles.write();
+                }
+            }
+        });
     }
 
     public void refresh() {
-        musicLine.setActive(GamePreferences.isMusicEnabled());
-        musicSlider.setValue(GamePreferences.getMusicVolume());
+        musicLine.setActive(Profiles.getSettings().isMusic());
+        musicSlider.setValue(Profiles.getSettings().getMusicVolume());
         refreshMusicLine();
-        effectsLine.setActive(GamePreferences.isEffectsEnabled());
-        effectsSlider.setValue(GamePreferences.getEffectsVolume());
+        effectsLine.setActive(Profiles.getSettings().isEffects());
+        effectsSlider.setValue(Profiles.getSettings().getEffectsVolume());
         refreshEffectsLine();
-        soundSlider.setValue(GamePreferences.getSoundVolume());
+        soundSlider.setValue(Profiles.getSettings().getSoundVolume());
         refreshSoundLine();
-        shaderLine.setActive(GamePreferences.isShaderEnabled() && screenType == ScreenManager.ScreenType.MENU);
+        shaderLine.setActive(Profiles.getSettings().isShader() && screenType == ScreenManager.ScreenType.MENU);
         refreshShaderLine();
-        childLine.setActive(GamePreferences.isChildEnabled() && screenType == ScreenManager.ScreenType.MENU);
+        childLine.setActive(Profiles.getSettings().isChild() && screenType == ScreenManager.ScreenType.MENU);
         refreshChildLine();
-        level = GamePreferences.getLevel();
+        level = Profiles.getSettings().getLevel();
         refreshLevelLine();
-        vibrationLine.setActive(GamePreferences.isVibrationEnabled());
+        vibrationLine.setActive(Profiles.getSettings().isVibration());
         refreshVibrationLine();
-        joystickLine.setActive(GamePreferences.isJoyStickEnabled());
+        joystickLine.setActive(Profiles.getSettings().isJoystick());
         refreshJoystickPresetLine();
-        joyStickModeSlider.setValue(GamePreferences.getJoyStickMode());
-        joyStickColorCheckBox.setChecked(GamePreferences.isJoyStickColorEnabled());
+        joyStickModeSlider.setValue(Profiles.getSettings().getJoystick_mode());
+        joyStickColorCheckBox.setChecked(Profiles.getSettings().isJoystickColor());
     }
 
     private void touchDown(int pointer, Line line) {
@@ -870,10 +953,10 @@ public class ConfigGroup extends Group {
     }
 
     private void refreshSoundLine() {
-        //soundSlider.setDisabled(!soundLine.isActive());
-        soundLine.setActive(GamePreferences.isEffectsEnabled() || GamePreferences.isMusicEnabled());
+        soundLine.setActive(Profiles.getSettings().isEffects() || Profiles.getSettings().isMusic());
+        soundSlider.setDisabled(!soundLine.isActive());
         soundCheckBox.setChecked(soundLine.isActive());
-        if (GamePreferences.isEffectsEnabled() || GamePreferences.isMusicEnabled()) {
+        if (Profiles.getSettings().isEffects() || Profiles.getSettings().isMusic()) {
             soundLine.setMuted(false);
         } else {
             soundLine.setMuted(true);
@@ -887,20 +970,20 @@ public class ConfigGroup extends Group {
         musicSlider.setDisabled(!musicLine.isActive());
         musicCheckBox.setChecked(musicLine.isActive());
         musicLine.setMuted(musicSlider.getValue() == 0.0f);
-        if (!GamePreferences.isMusicEnabled() && !GamePreferences.isEffectsEnabled()) {
+        if (!Profiles.getSettings().isMusic() && !Profiles.getSettings().isEffects()) {
             musicLine.setSlave(true);
         }
-        soundLine.setMuted(!GamePreferences.isEffectsEnabled() && !GamePreferences.isMusicEnabled());
+        soundLine.setMuted(!Profiles.getSettings().isEffects() && !Profiles.getSettings().isMusic());
     }
 
     private void refreshEffectsLine() {
         effectsSlider.setDisabled(!effectsLine.isActive());
         effectsCheckBox.setChecked(effectsLine.isActive());
         effectsLine.setMuted(effectsSlider.getValue() == 0.0f);
-        if (!GamePreferences.isMusicEnabled() && !GamePreferences.isEffectsEnabled()) {
+        if (!Profiles.getSettings().isMusic() && !Profiles.getSettings().isEffects()) {
             effectsLine.setSlave(true);
         }
-        soundLine.setMuted(!GamePreferences.isEffectsEnabled() && !GamePreferences.isMusicEnabled());
+        soundLine.setMuted(!Profiles.getSettings().isEffects() && !Profiles.getSettings().isMusic());
     }
 
     private void refreshShaderLine() {
@@ -908,10 +991,10 @@ public class ConfigGroup extends Group {
             shadersCheckBox.setChecked(shaderLine.isActive());
             shadersCheckBox.setLocked(false);
         } else {
-            shadersCheckBox.setChecked(GamePreferences.isShaderEnabled());
+            shadersCheckBox.setChecked(Profiles.getSettings().isShader());
             shaderLine.setSlave(true);
             shadersCheckBox.setLocked(true);
-            shaderLabel.setText("SHADERS " + (GamePreferences.isShaderEnabled() ? "(ON)" : "(OFF)"));
+            shaderLabel.setText("SHADERS " + (Profiles.getSettings().isShader() ? "(ON)" : "(OFF)"));
         }
     }
 
@@ -920,10 +1003,10 @@ public class ConfigGroup extends Group {
             childCheckBox.setChecked(childLine.isActive());
             childCheckBox.setLocked(false);
         } else {
-            childCheckBox.setChecked(GamePreferences.isChildEnabled());
+            childCheckBox.setChecked(Profiles.getSettings().isChild());
             childCheckBox.setLocked(true);
             childLine.setSlave(true);
-            childLabel.setText("CHILD MODE " + (GamePreferences.isChildEnabled() ? "(ON)" : "(OFF)"));
+            childLabel.setText("CHILD MODE " + (Profiles.getSettings().isChild() ? "(ON)" : "(OFF)"));
         }
     }
 
@@ -931,7 +1014,7 @@ public class ConfigGroup extends Group {
         if (screenType == ScreenManager.ScreenType.MENU) {
             levelLine.setActive(true);
             level = level % (Rules.StartLevel.values().length);
-            GamePreferences.setLevel(level);
+            Profiles.getSettings().setLevel(level);
             levelCheckBox.setLocked(false);
         } else {
             levelLine.setActive(false);

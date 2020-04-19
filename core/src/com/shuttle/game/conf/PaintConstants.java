@@ -393,13 +393,13 @@ public final class PaintConstants {
     public static final float NOTICE_BLINK_TIME = 1.0f;
 
     public static final String UI_YOUR_USERNAME = "Your profile username";
-    public static final String UI_PROFILE_SAVED = "Profile saved";
+    public static final String UI_PROFILE_SAVED = "Profile is saved";
     public static final String UI_PROFILE_EDIT = "Rename profile";
     public static final String UI_EMPTY_USERNAME = "Empty username";
     public static final String UI_CAN_SAVE = "Can save username";
-    public static final String UI_DELETION_PROCESS = "PROFILE DELETION PROCESS...";
+    public static final String UI_DELETION_PROCESS = "Deleting...Click to cancel";
     public static final String UI_PROFILE_DELETED = "Profile is deleted";
-    public static final String UI_PROFILE_DEL = "Del. profile...";
+    public static final String UI_PROFILE_DEL = "Hold for delete profile";
     public static final String UI_CANCEL_DELETION = "Cancel profile deletion";
     public static final String UI_SELECT_PROFILE = "Select profile";
     public static final String UI_NEW_PROFILE = "New profile";

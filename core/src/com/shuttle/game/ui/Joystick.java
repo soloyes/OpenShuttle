@@ -9,10 +9,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.ScreenManager;
+import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
 
@@ -132,7 +132,7 @@ public class Joystick extends Actor implements InputProcessor {
     private void drawJoystick(SpriteBatch batch, float x, float y) {
         TextureRegion joy;
         TextureRegion stick;
-        int mode = GamePreferences.getJoyStickMode();
+        int mode = Profiles.getSettings().getJoystick_mode();
         switch (mode) {
             case 0:
                 joy = joy1;
@@ -151,7 +151,7 @@ public class Joystick extends Actor implements InputProcessor {
                 stick = stick2;
         }
 
-        if (GamePreferences.isJoyStickColorEnabled()) {
+        if (Profiles.getSettings().isJoystickColor()) {
             color.set(Color.valueOf("00ffffff"));
         } else {
             color.set(Color.valueOf("ffffffff"));
@@ -179,7 +179,7 @@ public class Joystick extends Actor implements InputProcessor {
     }
 
     public boolean isActive() {
-        return this.pointer.size() > 0 && GamePreferences.isJoyStickEnabled() && !Rules.GAME_OVER;
+        return this.pointer.size() > 0 && Profiles.getSettings().isJoystick() && !Rules.GAME_OVER;
     }
 
     public float getAngle() {

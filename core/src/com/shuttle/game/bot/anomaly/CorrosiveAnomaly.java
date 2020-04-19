@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
@@ -17,6 +16,7 @@ import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.GameInfoSystem;
+import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
 
@@ -105,7 +105,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         scaleAndBorn(dt);
 
         if (born) {
-            if (Gdx.input.isTouched() && !Rules.GAME_OVER && GamePreferences.isChildEnabled()) {
+            if (Gdx.input.isTouched() && !Rules.GAME_OVER && Profiles.getSettings().isChild()) {
                 tmp.set(Gdx.input.getX(), Gdx.input.getY());
                 ScreenManager.getInstance().getViewport().unproject(tmp);
                 if (tmp.dst(position) < PaintConstants.ANOMALY_CORROSIVE_WIDTH) {

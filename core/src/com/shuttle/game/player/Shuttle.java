@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.consumable.Consumable;
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.PlayerInteractionLevels;
@@ -24,6 +23,7 @@ import com.shuttle.game.player.navigation.Radar;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.Joystick;
+import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.ShuttleMath;
 import com.shuttle.game.utils.pool.AbstractPoolable;
@@ -140,7 +140,7 @@ public class Shuttle extends AbstractShuttle {
                 setLayersScale(1.0f, 1.0f);
                 isTaken = false;
                 boomBox.playSound(MSConstants.TELEPORT);
-                if (!GamePreferences.isChildEnabled()) {
+                if (Profiles.getSettings().isChild()) {
                     Standing.getInstance().takeDamage(Rules.BLACKHOLE_GET_DAMAGE);
                 }
                 cameraSmooth = true;

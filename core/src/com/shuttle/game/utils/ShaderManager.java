@@ -2,7 +2,7 @@ package com.shuttle.game.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.shuttle.game.conf.GamePreferences;
+import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 
 /**
  * @author Shuttle on 10/8/18.
@@ -23,7 +23,7 @@ public interface ShaderManager {
             if (shaderPause.isCompiled()) {
                 return shaderPause;
             } else {
-                GamePreferences.setShaderEnabled(false);
+                Profiles.getSettings().setShader(false);
                 return null;
             }
         }
@@ -53,7 +53,7 @@ public interface ShaderManager {
             if (shaderBlackHole.isCompiled()) {
                 return shaderBlackHole;
             } else {
-                GamePreferences.setShaderEnabled(false);
+                Profiles.getSettings().setShader(false);
                 return null;
             }
         }

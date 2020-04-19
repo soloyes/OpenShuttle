@@ -1,6 +1,5 @@
 package com.shuttle.game.player;
 
-import com.shuttle.game.conf.GamePreferences;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
@@ -93,7 +92,7 @@ public final class Standing {
 
     public void dispose() {
         statistics.clear();
-        Rules.StartLevel.values()[GamePreferences.getLevel()].setGameLevel();
+        Rules.StartLevel.values()[Profiles.getSettings().getLevel()].setGameLevel();
     }
 
     public void addToStatistics(AbstractPoolable.Type type, Integer level) {
