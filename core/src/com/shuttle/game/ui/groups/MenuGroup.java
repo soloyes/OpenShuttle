@@ -31,6 +31,7 @@ import com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.mvc.profiles.ProfilesController;
 import com.shuttle.game.ui.groups.mvc.profiles.ProfilesView;
+import com.shuttle.game.ui.groups.mvc.results.ResultGroup;
 import com.shuttle.game.utils.Assets;
 
 /**
@@ -129,13 +130,15 @@ public class MenuGroup extends Group {
                             profile = profilesView.addProfile(username.getText());
                             profilesController.select(profile);
                             setNotice(PaintConstants.UI_YOUR_USERNAME);
+                            boomBox.playSound(MSConstants.UI_PROFILE_SAVED);
                         } else {
                             setNotice(PaintConstants.UI_PROFILE_SAVED);
+                            boomBox.playSound(MSConstants.UI_PROFILE_CHANGED);
                             profile.setUsername(username.getText());
                             profilesController.flush();
                             profilesController.update();
+                            ResultGroup.getInstance().init();
                         }
-                        boomBox.playSound(MSConstants.UI_CHANGED);
                         Vibrator.vibrate(VConstants.UI_CHANGED);
                     } else {
                         boomBox.playSound(MSConstants.UI_EMPTY_NAME);

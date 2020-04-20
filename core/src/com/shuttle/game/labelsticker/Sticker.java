@@ -588,6 +588,7 @@ public enum Sticker {
                         5.0f,
                         true
                 );
+                boomBox.playSound(MSConstants.ANOMALY_FLUSH);
                 break;
             case 1:
                 score = (level + 1) * Rules.SCORE_BASE_BONUS;
@@ -598,6 +599,7 @@ public enum Sticker {
                         5.0f,
                         true
                 );
+                boomBox.playSound(MSConstants.ADD_SCORE);
                 break;
             case 2:
                 if (consumable.isGolden()) {
@@ -612,6 +614,7 @@ public enum Sticker {
                             5.0f,
                             true
                     );
+                    boomBox.playSound(MSConstants.ADD_SELECTABLE);
                 } else {
                     switch (consumable.getType()) {
                         case CRATE:
@@ -638,6 +641,7 @@ public enum Sticker {
                             }
                             break;
                     }
+                    boomBox.playSound(MSConstants.GENERATE_CRATE_STORAGE);
                 }
                 break;
             case 3:
@@ -645,10 +649,12 @@ public enum Sticker {
                     switch (consumable.getType()) {
                         case CRATE:
                             Standing.getInstance().changeHP(Standing.getInstance().getMaxHp());
+                            boomBox.playSound(MSConstants.ADD_HP);
                             break;
                         case STORAGE:
                             Standing.getInstance().changeHP(Standing.getInstance().getMaxHp());
                             Standing.getInstance().changeLives(1);
+                            boomBox.playSound(MSConstants.UP);
                             break;
                     }
                 } else {
@@ -710,6 +716,7 @@ public enum Sticker {
                             5.0f,
                             true
                     );
+                    boomBox.playSound(MSConstants.KILL_MAGNETIC_RADIATION);
                     break;
                 }
         }
@@ -735,6 +742,7 @@ public enum Sticker {
                         5.0f,
                         true
                 );
+                boomBox.playSound(MSConstants.ADD_CORROSIVE);
                 break;
             case 1:
                 score = (level + 1) * Rules.SCORE_BASE_BONUS;
@@ -745,6 +753,7 @@ public enum Sticker {
                         5.0f,
                         true
                 );
+                boomBox.playSound(MSConstants.DEL_SCORE);
                 break;
             case 2:
                 switch (consumable.getType()) {
@@ -766,6 +775,7 @@ public enum Sticker {
                                     true
                             );
                         }
+                        boomBox.playSound(MSConstants.DISABLE_LASER_RADAR);
                         break;
                     case STORAGE:
                         List<AbstractConsumable> list;
@@ -790,6 +800,7 @@ public enum Sticker {
                                 5.0f,
                                 true
                         );
+                        boomBox.playSound(MSConstants.DEL_CRATE_STORAGE);
                         break;
                 }
                 break;
@@ -804,6 +815,7 @@ public enum Sticker {
                                     5.0f,
                                     true
                             );
+                            boomBox.playSound(MSConstants.DOWN);
                         } else {
                             if (MathUtils.random(0, 1) == 0) {
                                 Standing.getInstance().changeHP(-Standing.getInstance().getHp() + 1);
@@ -822,6 +834,7 @@ public enum Sticker {
                                         true
                                 );
                             }
+                            boomBox.playSound(MSConstants.DEL_HP_FUEL);
                         }
                         break;
                     case STORAGE:
@@ -840,6 +853,7 @@ public enum Sticker {
                                 5.0f,
                                 true
                         );
+                        boomBox.playSound(MSConstants.ANOMALIES_BORN);
                         break;
                 }
                 break;

@@ -22,6 +22,8 @@ public final class MSConstants {
     private static final String SONG_FOLDER = MUSIC_ROOT_FOLDER + MUSIC_FOLDER;
 
     //SOUND
+    public static final String UI_PROFILE_SAVED = UI + "ui_profile_saved.ogg";
+    public static final String UI_PROFILE_CHANGED = UI + "ui_profile_changed.ogg";
     public static final String UI_CHANGED = UI + "ui_changed.ogg";
     public static final String UI_INPUT = UI + "ui_input.ogg";
     public static final String UI_CLICK = UI + "ui_click.ogg";
@@ -71,6 +73,19 @@ public final class MSConstants {
     public static final String SPLASH_ANOMALY = GAME + "splash_anomaly.ogg";
     public static final String LAUNCH_ROCKETS = GAME + "launch_rockets.ogg";
     public static final String BURST_CORROSIVE_ANOMALY = GAME + "burst_corrosive_anomaly.ogg";
+
+    public static final String KILL_MAGNETIC_RADIATION = GAME + "kill_magnetic_radiation.ogg";
+    public static final String GENERATE_CRATE_STORAGE = GAME + "generate_crate_storage.ogg";
+    public static final String ADD_SELECTABLE = GAME + "add_selectable.ogg";
+    public static final String ADD_SCORE = GAME + "add_score.ogg";
+    public static final String ANOMALY_FLUSH = GAME + "anomaly_flush.ogg";
+    public static final String DEL_HP_FUEL = GAME + "del_hp_fuel.ogg";
+    public static final String ANOMALIES_BORN = GAME + "anomalies_born.ogg";
+    public static final String DEL_CRATE_STORAGE = GAME + "del_crate_storage.ogg";
+    public static final String DISABLE_LASER_RADAR = GAME + "disable_laser_radar.ogg";
+    public static final String DEL_SCORE = GAME + "del_score.ogg";
+    public static final String ADD_CORROSIVE = GAME + "add_corrosive.ogg";
+    public static final String ADD_HP = GAME + "add_hp.ogg";
     //
 
     //SONG/MUSIC

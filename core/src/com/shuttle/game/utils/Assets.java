@@ -54,6 +54,8 @@ public class Assets {
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 assetManager.load(MSConstants.UI_MENU, Sound.class);
                 assetManager.load(MSConstants.UI_CHANGED, Sound.class);
+                assetManager.load(MSConstants.UI_PROFILE_CHANGED, Sound.class);
+                assetManager.load(MSConstants.UI_PROFILE_SAVED, Sound.class);
                 assetManager.load(MSConstants.UI_INPUT, Sound.class);
                 assetManager.load(MSConstants.UI_CLICK, Sound.class);
                 assetManager.load(MSConstants.UI_EMPTY_NAME, Sound.class);
@@ -131,6 +133,18 @@ public class Assets {
                 assetManager.load(MSConstants.GET_SHIELD, Sound.class);
                 assetManager.load(MSConstants.GET_LASER, Sound.class);
                 assetManager.load(MSConstants.GET_ROCKETS, Sound.class);
+                assetManager.load(MSConstants.KILL_MAGNETIC_RADIATION, Sound.class);
+                assetManager.load(MSConstants.GENERATE_CRATE_STORAGE, Sound.class);
+                assetManager.load(MSConstants.ADD_SELECTABLE, Sound.class);
+                assetManager.load(MSConstants.ADD_SCORE, Sound.class);
+                assetManager.load(MSConstants.ANOMALY_FLUSH, Sound.class);
+                assetManager.load(MSConstants.DEL_HP_FUEL, Sound.class);
+                assetManager.load(MSConstants.ANOMALIES_BORN, Sound.class);
+                assetManager.load(MSConstants.DEL_CRATE_STORAGE, Sound.class);
+                assetManager.load(MSConstants.DISABLE_LASER_RADAR, Sound.class);
+                assetManager.load(MSConstants.DEL_SCORE, Sound.class);
+                assetManager.load(MSConstants.ADD_CORROSIVE, Sound.class);
+                assetManager.load(MSConstants.ADD_HP, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 break;
             case TEST:

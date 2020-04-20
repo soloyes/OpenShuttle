@@ -339,7 +339,7 @@ public class ConfigGroup extends Group {
             }
         });
 
-        joyStickModeSlider = new Slider(0, 4, 1, false, sliderStyle);
+        joyStickModeSlider = new Slider(0, 3, 1, false, sliderStyle);
         joyStickModeSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -723,7 +723,7 @@ public class ConfigGroup extends Group {
             }
         });
 
-        Group soundGroup = makeGroup(soundLabel, 273, 82);
+        Group soundGroup = makeGroup(soundLabel, 273, PaintConstants.UI_CELL_HEIGHT);
         soundLine = new Line(
                 soundCheckBox,
                 soundGroup,
@@ -743,7 +743,7 @@ public class ConfigGroup extends Group {
         soundLine.setHoldMessage(PaintConstants.UI_SOUND_HOLD);
         soundLine.setEnabledMessage(PaintConstants.UI_SOUND_ENABLE);
         soundLine.setDisabledMessage(PaintConstants.UI_SOUND_DISABLE);
-        Group musicGroup = makeGroup(musicLabel, 273, 82);
+        Group musicGroup = makeGroup(musicLabel, 273, PaintConstants.UI_CELL_HEIGHT);
         musicLine = new Line(
                 musicCheckBox,
                 musicGroup,
@@ -763,7 +763,7 @@ public class ConfigGroup extends Group {
         musicLine.setHoldMessage(PaintConstants.UI_MUSIC_HOLD);
         musicLine.setEnabledMessage(PaintConstants.UI_MUSIC_ENABLE);
         musicLine.setDisabledMessage(PaintConstants.UI_MUSIC_DISABLE);
-        Group effectsGroup = makeGroup(effectsLabel, 273, 82);
+        Group effectsGroup = makeGroup(effectsLabel, 273, PaintConstants.UI_CELL_HEIGHT);
         effectsLine = new Line(
                 effectsCheckBox,
                 effectsGroup,
@@ -783,7 +783,7 @@ public class ConfigGroup extends Group {
         effectsLine.setHoldMessage(PaintConstants.UI_EFFECTS_HOLD);
         effectsLine.setEnabledMessage(PaintConstants.UI_EFFECTS_ENABLE);
         effectsLine.setDisabledMessage(PaintConstants.UI_EFFECTS_DISABLE);
-        Group shaderGroup = makeGroup(shaderLabel, 535, 82);
+        Group shaderGroup = makeGroup(shaderLabel, 535, PaintConstants.UI_CELL_HEIGHT);
         shaderLine = new Line(
                 shadersCheckBox,
                 shaderGroup,
@@ -803,7 +803,7 @@ public class ConfigGroup extends Group {
         shaderLine.setHoldMessage(PaintConstants.UI_SHADERS_HOLD);
         shaderLine.setEnabledMessage(PaintConstants.UI_SHADERS_ENABLE);
         shaderLine.setDisabledMessage(PaintConstants.UI_SHADERS_DISABLE);
-        Group childGroup = makeGroup(childLabel, 535, 82);
+        Group childGroup = makeGroup(childLabel, 535, PaintConstants.UI_CELL_HEIGHT);
         childLine = new Line(
                 childCheckBox,
                 childGroup,
@@ -823,7 +823,7 @@ public class ConfigGroup extends Group {
         childLine.setHoldMessage(PaintConstants.UI_CHILD_HOLD);
         childLine.setEnabledMessage(PaintConstants.UI_CHILD_ENABLE);
         childLine.setDisabledMessage(PaintConstants.UI_CHILD_DISABLE);
-        Group levelGroup = makeGroup(levelLabel, 535, 82);
+        Group levelGroup = makeGroup(levelLabel, 535, PaintConstants.UI_CELL_HEIGHT);
         levelLine = new Line(
                 levelCheckBox,
                 levelGroup,
@@ -844,7 +844,7 @@ public class ConfigGroup extends Group {
         levelLine.setHoldMessage(PaintConstants.UI_LEVEL_HOLD);
         levelLine.setEnabledMessage(PaintConstants.UI_LEVEL_ENABLE);
         levelLine.setDisabledMessage(PaintConstants.UI_LEVEL_DISABLE);
-        Group vibrationGroup = makeGroup(vibrationLabel, 535, 82);
+        Group vibrationGroup = makeGroup(vibrationLabel, 535, PaintConstants.UI_CELL_HEIGHT);
         vibrationLine = new Line(
                 vibrationCheckBox,
                 vibrationGroup,
@@ -864,7 +864,7 @@ public class ConfigGroup extends Group {
         vibrationLine.setHoldMessage(PaintConstants.UI_VIBRATION_HOLD);
         vibrationLine.setEnabledMessage(PaintConstants.UI_VIBRATION_ENABLE);
         vibrationLine.setDisabledMessage(PaintConstants.UI_VIBRATION_DISABLE);
-        Group joystickGroup = makeGroup(joyStickLabel, 535, 82);
+        Group joystickGroup = makeGroup(joyStickLabel, 535, PaintConstants.UI_CELL_HEIGHT);
         joystickLine = new Line(
                 joyStickCheckBox,
                 joystickGroup,
@@ -1177,11 +1177,11 @@ public class ConfigGroup extends Group {
                 table.row();
             }
 
-            table.add(leftActor).width(82).height(82);
+            table.add(leftActor).width(82).height(PaintConstants.UI_CELL_HEIGHT);
 
             if (rightActor != null) {
                 table.add(centerActor).width(273).padLeft(23);
-                table.add(rightActor).width(204).height(82).padRight(29).padLeft(29);
+                table.add(rightActor).width(204).height(PaintConstants.UI_CELL_HEIGHT).padRight(29).padLeft(29);
             } else {
                 table.add(centerActor).width(535).padLeft(23);
             }

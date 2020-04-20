@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.screens.ScreenManager;
+import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
@@ -159,7 +160,15 @@ public class Joystick extends Actor implements InputProcessor {
 
         color.a = PaintConstants.JOYSTICK_ALPHA;
         batch.setColor(color);
-        batch.draw(joy, x, y);
+        if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.MENU) {
+            batch.draw(joy, 130, 20, 0, 0, PaintConstants.JOYSTICK_WIDTH, PaintConstants.JOYSTICK_HEIGHT, 0.8f, 0.8f, 0.0f);
+        } else {
+            if (PauseGroup.getInstance().isPause()) {
+                batch.draw(joy, 130, 20, 0, 0, PaintConstants.JOYSTICK_WIDTH, PaintConstants.JOYSTICK_HEIGHT, 0.8f, 0.8f, 0.0f);
+            } else {
+                batch.draw(joy, x, y);
+            }
+        }
         if (mode > 3) {
             batch.draw(joy1, x, y);
         }

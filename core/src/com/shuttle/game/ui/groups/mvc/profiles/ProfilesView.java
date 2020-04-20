@@ -84,7 +84,12 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
         boolean hasActive = false;
         for (int i = 0; i < controller.getList().size(); i++) {
             ProfileDAO profile = controller.getList().get(i);
-            Line line = new Line(profile);
+            Line line;
+            if (i == controller.getList().size() - 1) {
+                line = new Line(profile, true);
+            } else {
+                line = new Line(profile, false);
+            }
             currentLines.put(profile.getId(), line);
             if (profile.isActive()) {
                 MenuGroup.setUsername(profile.getUsername());
@@ -152,6 +157,7 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
         private TextureRegion background;
         private TextureRegion active;
         private ProfilesCheckBox minus;
+        private boolean last;
 
         @Override
         public void act(float delta) {
@@ -186,13 +192,18 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
             }
         }
 
-        Line(final ProfileDAO profile) {
+        Line(final ProfileDAO profile, boolean last) {
+            this.last = last;
             this.timeAndFlag = new TimeAndFlag();
             this.background = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_CELL));
             this.active = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_CELL_ACTIVE));
             this.profile = profile;
             this.table = new Table();
-            table.row().padBottom(12);
+            if (last) {
+                table.row();
+            } else {
+                table.row().padBottom(12);
+            }
             Label.LabelStyle style64 = new Label.LabelStyle(
                     Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
                     new Color(0.8f, 0.43f, 0.33f, 1f)
@@ -237,11 +248,11 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
             });
 
             if (profile.getType() == ProfileDAO.Type.DUMMY) {
-                table.add().width(82).height(82);
+                table.add().width(82).height(PaintConstants.UI_CELL_HEIGHT);
                 table.add();
                 table.add();
             } else {
-                table.add(minus).width(82).height(82);
+                table.add(minus).width(82).height(PaintConstants.UI_CELL_HEIGHT);
                 Label label = new Label(profile.getUsername(), style64);
                 label.setFillParent(true);
                 Group group = new Group();
@@ -265,7 +276,11 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
             table.align(Align.bottomLeft);
             table.setFillParent(true);
             this.setWidth(PaintConstants.UI_MENU_CELL_WIDTH);
-            this.setHeight(PaintConstants.UI_CELL_HEIGHT + 12);
+            if (last) {
+                this.setHeight(PaintConstants.UI_CELL_HEIGHT);
+            } else {
+                this.setHeight(PaintConstants.UI_CELL_HEIGHT + 12);
+            }
             this.addActor(table);
         }
 
@@ -284,10 +299,11 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                 color.a = parentAlpha;
             }
             batch.setColor(color);
+
             if (profile.isActive()) {
-                batch.draw(active, getX(), getY() + 12);
+                batch.draw(active, getX(), getY() + (last ? 0 : 12));
             } else {
-                batch.draw(background, getX(), getY() + 12);
+                batch.draw(background, getX(), getY() + (last ? 0 : 12));
             }
             super.draw(batch, parentAlpha);
         }
@@ -354,7 +370,7 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                 }
             });
 
-            table.add(plus).width(82).height(82);
+            table.add(plus).width(82).height(PaintConstants.UI_CELL_HEIGHT);
             table.add(group).width(PaintConstants.UI_MENU_CELL_WIDTH - PaintConstants.UI_CELL_WIDTH).height(PaintConstants.UI_CELL_HEIGHT).padLeft(12);
             table.add();
             table.align(Align.bottomLeft);

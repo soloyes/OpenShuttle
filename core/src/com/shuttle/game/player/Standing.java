@@ -107,6 +107,11 @@ public final class Standing {
 
     public void dispose() {
         statistics.clear();
+        astronauts.clear();
+        usedItems.clear();
+        playTime = 0;
+        dmgReceived = 0;
+        dmgDone = 0;
         Rules.StartLevel.values()[Profiles.getSettings().getLevel()].setGameLevel();
     }
 
@@ -360,11 +365,10 @@ public final class Standing {
             dde = 1 - (1.0f * detailedResultDAO.getDmgDone() / c);
         }
 
-        //todo: get avg from playtesting
+        //todo: get avg from play testing
         float dre = 0.5f;
 
         detailedResultDAO.setEffectiveness(Math.abs((int) (scoreView * (ate + uie + pie + mae + ede + dde + te + dre) / 8)));
-        System.out.println(ate + " " + uie + " " + pie + " " + mae + " " + ede + " " + dde + " " + te + " " + dre);
         //
         return detailedResultDAO;
     }

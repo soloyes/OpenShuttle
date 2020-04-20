@@ -194,9 +194,9 @@ public class ResultGroup extends Group {
             table.setWidth(PaintConstants.UI_RESULTS_CELL_WIDTH - 30);
             this.setWidth(PaintConstants.UI_RESULTS_CELL_WIDTH - 30);
             if (last) {
-                this.setHeight(82);
+                this.setHeight(PaintConstants.UI_CELL_HEIGHT);
             } else {
-                this.setHeight(94);
+                this.setHeight(PaintConstants.UI_CELL_HEIGHT + 12);
             }
             this.addActor(table);
         }
@@ -218,9 +218,9 @@ public class ResultGroup extends Group {
             table.setWidth(PaintConstants.UI_RESULTS_CELL_WIDTH - 30);
             this.setWidth(PaintConstants.UI_RESULTS_CELL_WIDTH - 30);
             if (last) {
-                this.setHeight(82);
+                this.setHeight(PaintConstants.UI_CELL_HEIGHT);
             } else {
-                this.setHeight(94);
+                this.setHeight(PaintConstants.UI_CELL_HEIGHT + 12);
             }
             this.addActor(table);
         }
