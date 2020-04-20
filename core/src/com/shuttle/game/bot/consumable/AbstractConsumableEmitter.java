@@ -23,6 +23,10 @@ public abstract class AbstractConsumableEmitter extends ObjectPool<AbstractConsu
     @Getter
     @Setter
     private int consumablesMaxCount;
+    @Getter
+    protected int emitted;
+    @Getter
+    protected int emittedGolden;
 
     AbstractConsumableEmitter(Class<? extends AbstractConsumable> clazz) {
         super(clazz);
@@ -39,7 +43,13 @@ public abstract class AbstractConsumableEmitter extends ObjectPool<AbstractConsu
     }
 
     protected void createConsumable() {
-        getActiveElement().init(
+        AbstractConsumable ac = getActiveElement();
+        if (ac.isGolden()) {
+            emittedGolden++;
+        } else {
+            emitted++;
+        }
+        ac.init(
                 MathUtils.random(0, Rules.SPACE_WIDTH),
                 MathUtils.random(0, Rules.SPACE_HEIGHT)
         );

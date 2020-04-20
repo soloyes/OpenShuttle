@@ -188,6 +188,16 @@ public final class Rules {
     public static final float PLAYER_SHIELD_REPAIR_FACTOR = 2.0f;
     //1.5f
     public static final float PLAYER_SHIELD_DAMAGE_FACTOR = 1.5f;
+    //2
+    public static final int PLAYER_DAMAGE_DONE_GOLDEN_FACTOR = 2;
+    //2
+    public static final int PLAYER_DAMAGE_DONE_CRATE = 2;
+    //3
+    public static final int PLAYER_DAMAGE_DONE_FUEL = 3;
+    //4
+    public static final int PLAYER_DAMAGE_DONE_STORAGE = 4;
+    //10
+    public static final int PLAYER_DAMAGE_DONE_ASTRONAUT = 10;
     //5
     public static final int PLAYER_BLACKHOLE_ROTATION = 5;
     //
@@ -222,6 +232,10 @@ public final class Rules {
     //GAME
     //false
     public static boolean GAME_OVER = false;
+    //1200
+    public static int GAME_SESSION_TIME = 1200;
+    //1
+    public static int GAME_СCONSUMABLE_PER_MINUTE_COUNT = 1;
     //20000
     //todo: to be Balanced
     public static final int SCORE_TO_LIVE = 1000;

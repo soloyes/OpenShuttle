@@ -171,13 +171,13 @@ public class DetailedResultGroup extends Group {
                         Integer.compare(resultDAO.getCurrent().getEnemiesDestroyed(), resultDAO.getPrevious().getEnemiesDestroyed())
         );
         verticalGroup.addActor(enemiesDestroyedLine);
-        Line minedMeteoriteLine = new Line(
-                "Mined meteorite",
-                String.valueOf(resultDAO.getCurrent().getMinedMeteorite()),
+        Line minedAsteroidsLine = new Line(
+                "Mined asteroids",
+                String.valueOf(resultDAO.getCurrent().getMinedAsteroids()),
                 resultDAO.getPrevious() == null ? 1 :
-                        Integer.compare(resultDAO.getCurrent().getMinedMeteorite(), resultDAO.getPrevious().getMinedMeteorite())
+                        Integer.compare(resultDAO.getCurrent().getMinedAsteroids(), resultDAO.getPrevious().getMinedAsteroids())
         );
-        verticalGroup.addActor(minedMeteoriteLine);
+        verticalGroup.addActor(minedAsteroidsLine);
         Line pickUpItemsLine = new Line(
                 "Pick up items",
                 String.valueOf(resultDAO.getCurrent().getPickUpItems()),

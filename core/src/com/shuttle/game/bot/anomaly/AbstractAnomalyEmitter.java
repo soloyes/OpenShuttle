@@ -23,6 +23,8 @@ public abstract class AbstractAnomalyEmitter extends ObjectPool<AbstractAnomaly>
     @Getter
     @Setter
     private int anomaliesMaxCount;
+    @Getter
+    protected int emitted;
 
     AbstractAnomalyEmitter(Class<? extends AbstractAnomaly> clazz) {
         super(clazz);
@@ -55,6 +57,7 @@ public abstract class AbstractAnomalyEmitter extends ObjectPool<AbstractAnomaly>
                 MathUtils.random(0, Rules.SPACE_WIDTH),
                 MathUtils.random(0, Rules.SPACE_HEIGHT)
         );
+        emitted++;
     }
 
     protected void emit() {

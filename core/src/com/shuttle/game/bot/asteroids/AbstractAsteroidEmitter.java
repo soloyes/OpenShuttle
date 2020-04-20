@@ -31,6 +31,8 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     private float scale;
     private float count;
     private PlayerInteractionLevels range;
+    @Getter
+    protected int emitted;
 
     AbstractAsteroidEmitter(Class<? extends AbstractAsteroid> clazz) {
         super(clazz);
@@ -132,6 +134,7 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
         AbstractAsteroid tmpAsteroid = getActiveElement();
         tmpAsteroid.init(position, destination, scale, true);
         tmpAsteroid.setSizeForHarvest(size * Rules.ASTEROID_SIZE_FOR_HARVEST_FACTOR);
+        emitted++;
     }
 
     private enum Side {

@@ -30,7 +30,7 @@ public class DetailedResultDAO {
     private int enemiesDestroyed;
     @Getter
     @Setter
-    private int minedMeteorite;
+    private int minedAsteroids;
     @Getter
     @Setter
     private int pickUpItems;
@@ -48,7 +48,7 @@ public class DetailedResultDAO {
         this.dmgDone = 0;
         this.dmgReceived = 0;
         this.enemiesDestroyed = 0;
-        this.minedMeteorite = 0;
+        this.minedAsteroids = 0;
         this.pickUpItems = 0;
         this.usedItems = 0;
         this.astronautsTaken = 0;
@@ -62,7 +62,7 @@ public class DetailedResultDAO {
                 detailedResultDAO.getDmgDone(),
                 detailedResultDAO.getDmgReceived(),
                 detailedResultDAO.getEnemiesDestroyed(),
-                detailedResultDAO.getMinedMeteorite(),
+                detailedResultDAO.getMinedAsteroids(),
                 detailedResultDAO.getPickUpItems(),
                 detailedResultDAO.getUsedItems(),
                 detailedResultDAO.getAstronautsTaken()

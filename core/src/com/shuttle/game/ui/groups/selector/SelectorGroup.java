@@ -20,6 +20,7 @@ import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.labelsticker.Sticker;
+import com.shuttle.game.player.Standing;
 import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.ui.groups.configs.LeftGroup;
 import com.shuttle.game.utils.Assets;
@@ -28,6 +29,8 @@ import com.shuttle.game.utils.ShaderManager;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import lombok.Getter;
 
 /**
  * @author Shuttle on 3/22/19.
@@ -46,6 +49,8 @@ public class SelectorGroup extends Group {
     private int pressedCount;
     private boolean paused;
     private BoomBox boomBox;
+    @Getter
+    private int items;
 
     public static SelectorGroup getInstance() {
         if (instance == null) {
@@ -188,11 +193,16 @@ public class SelectorGroup extends Group {
         if (present) {
             if (selectors.get(i).getCount() < Rules.SELECTOR_MAX_COUNT) {
                 selectors.get(i).changeCount(amount);
+                items += amount;
             }
         } else {
             Selector selector = new Selector(sticker);
+            if (amount >= Rules.SELECTOR_MAX_COUNT) {
+                amount = Rules.SELECTOR_MAX_COUNT;
+            }
             selector.changeCount(amount);
             selectors.add(selector);
+            items += amount;
         }
     }
 
@@ -331,6 +341,7 @@ public class SelectorGroup extends Group {
         if (selectors.size() != 0) {
             Consumer.select(selectors.get(select).getSticker());
             selectors.get(select).changeCount(-1);
+            Standing.getInstance().changeUsedItems(selectors.get(select).getSticker());
             if (selectors.get(select).getCount() == 0) {
                 selectors.remove(select);
                 select--;

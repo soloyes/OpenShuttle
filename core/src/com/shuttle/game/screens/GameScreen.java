@@ -29,8 +29,10 @@ import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.bot.consumable.Astronaut;
 import com.shuttle.game.bot.consumable.AstronautEmitter;
+import com.shuttle.game.bot.consumable.Crate;
 import com.shuttle.game.bot.consumable.CrateEmitter;
 import com.shuttle.game.bot.consumable.FuelEmitter;
+import com.shuttle.game.bot.consumable.Storage;
 import com.shuttle.game.bot.consumable.StorageEmitter;
 import com.shuttle.game.bot.consumable.fuel.Fuel;
 import com.shuttle.game.bot.rocket.RocketEmitter;
@@ -419,9 +421,25 @@ public class GameScreen extends BaseScreen {
                         consumeConsumable(consumable);
                     } else {
                         consumable.destroyWithEffect();
+                        int c = 1;
+                        int a = 0;
+                        if (consumable.isGolden()) {
+                            c = Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR;
+                        }
+                        if (consumable instanceof Crate) {
+                            a = Rules.PLAYER_DAMAGE_DONE_CRATE;
+                        }
                         if (consumable instanceof Fuel) {
                             Shake.getInstance().shakeCamera(1, 35, 50);
+                            a = Rules.PLAYER_DAMAGE_DONE_FUEL;
                         }
+                        if (consumable instanceof Storage) {
+                            a = Rules.PLAYER_DAMAGE_DONE_STORAGE;
+                        }
+                        if (consumable instanceof Astronaut) {
+                            a = Rules.PLAYER_DAMAGE_DONE_ASTRONAUT;
+                        }
+                        Standing.getInstance().changeDmgDone(c * a);
                         player.badEffect(consumable);
                     }
                 }
@@ -581,7 +599,6 @@ public class GameScreen extends BaseScreen {
                             true
                     );
                     boomBox.playSound(MSConstants.DESTROY_ASTEROID);
-                    Standing.getInstance().addToStatistics(asteroid.getType(), asteroid.getLevel());
                 } else {
                     player.getRamShield().blink(0.5f);
                     Standing.getInstance().changeRamPower(asteroid.getSizeForHarvest());
@@ -590,6 +607,7 @@ public class GameScreen extends BaseScreen {
                     }
                     //pretty soundVolume if collect much fragments in little time
                     prettyFragmentHarvest.playSound(MSConstants.GET_FRAGMENT);
+                    Standing.getInstance().addToStatistics(asteroid.getType(), asteroid.getLevel());
                     asteroid.destroy();
                 }
             }
@@ -684,7 +702,7 @@ public class GameScreen extends BaseScreen {
             UIRightPanel.getInstance().add(profession);
             RightGroup.getInstance().updateScroll(astronaut.getLabels().get(Label.Layer.LABEL).get(0).getSticker());
             ConfigImageButton button = RightGroup.getInstance().getButtonMap().get(profession);
-            if (button != null){
+            if (button != null) {
                 button.changeCount(1);
             }
         }

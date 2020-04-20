@@ -7,6 +7,7 @@ import com.shuttle.game.bot.anomaly.AbstractAnomaly;
 import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.player.Standing;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
@@ -75,6 +76,7 @@ public class Rocket extends AbstractPoolable {
                     3.0f,
                     true
             );
+            Standing.getInstance().addToStatistics(targetAnomaly.getType(), targetAnomaly.getLevel());
         }
     }
 

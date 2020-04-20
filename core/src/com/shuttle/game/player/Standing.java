@@ -1,5 +1,15 @@
 package com.shuttle.game.player;
 
+import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
+import com.shuttle.game.bot.anomaly.ElectricalAnomalyEmitter;
+import com.shuttle.game.bot.anomaly.MagneticAnomalyEmitter;
+import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
+import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
+import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
+import com.shuttle.game.bot.consumable.AstronautEmitter;
+import com.shuttle.game.bot.consumable.CrateEmitter;
+import com.shuttle.game.bot.consumable.FuelEmitter;
+import com.shuttle.game.bot.consumable.StorageEmitter;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
@@ -10,6 +20,7 @@ import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.mvc.results.DetailedResultDAO;
+import com.shuttle.game.ui.groups.selector.SelectorGroup;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
 import java.util.HashMap;
@@ -61,6 +72,7 @@ public final class Standing {
     @Setter
     private float laserChargeLevel, maxLaserChargeLevel;
     private Map<Sticker, Integer> astronauts;
+    private Map<Sticker, Integer> usedItems;
     @Getter
     @Setter
     private float lifeShield, maxLifeShield;
@@ -74,6 +86,8 @@ public final class Standing {
     private Profiles profiles;
     @Getter
     private float playTime;
+    private float dmgReceived;
+    private float dmgDone;
 
     public static Standing getInstance() {
         if (instance == null) {
@@ -87,6 +101,7 @@ public final class Standing {
         this.n = 1;
         this.statistics = new HashMap<AbstractPoolable.Type, Map<Integer, Integer>>();
         this.astronauts = new HashMap<Sticker, Integer>();
+        this.usedItems = new HashMap<Sticker, Integer>();
         this.profiles = new Profiles();
     }
 
@@ -119,6 +134,14 @@ public final class Standing {
         }
     }
 
+    public void changeUsedItems(Sticker item) {
+        if (usedItems.get(item) == null) {
+            usedItems.put(item, 1);
+        } else {
+            usedItems.put(item, usedItems.get(item) + 1);
+        }
+    }
+
     public void changeFuel(float amount) {
         fuel += amount;
         if (fuel <= 0.0f) {
@@ -146,6 +169,10 @@ public final class Standing {
         }
     }
 
+    public void changeDmgDone(float amount) {
+        dmgDone += amount;
+    }
+
     public void changeScore(int amount) {
         score += amount;
         scoreToLive = Rules.SCORE_TO_LIVE * n * (28 - playingLevel);
@@ -165,19 +192,11 @@ public final class Standing {
         }
     }
 
-    public Integer getFromStatistics(AbstractPoolable.Type type, Integer level) {
-        if (statistics.get(type) == null) {
-            return 0;
-        }
-        if (statistics.get(type).get(level) == null) {
-            return 0;
-        }
-        return statistics.get(type).get(level);
-    }
-
     public void takeDamage(int amount) {
         if (!Rules.GAME_OVER) {
-            lifeShield -= amount * Rules.PLAYER_SHIELD_DAMAGE_FACTOR;
+            float count = amount * Rules.PLAYER_SHIELD_DAMAGE_FACTOR;
+            lifeShield -= count;
+            dmgReceived += count;
             if (lifeShield <= 0.0f) {
                 changeHP(lifeShield);
             }
@@ -230,8 +249,122 @@ public final class Standing {
     public DetailedResultDAO getDetails() {
         DetailedResultDAO detailedResultDAO = new DetailedResultDAO();
         //Set game details
+        int count;
+        // score
         detailedResultDAO.setScore(scoreView);
+        // time
         detailedResultDAO.setTime((int) playTime);
+        // dmgDone
+        detailedResultDAO.setDmgDone((int) dmgDone);
+        // dmgReceived
+        detailedResultDAO.setDmgReceived((int) dmgReceived);
+        // enemiesDestroyed
+        count = 0;
+        for (Map.Entry<AbstractPoolable.Type, Map<Integer, Integer>> i : statistics.entrySet()) {
+            switch (i.getKey()) {
+                case ELECTRIC:
+                case MAGNETIC:
+                case RADIATION:
+                case CORROSIVE:
+                    for (Map.Entry<Integer, Integer> j : i.getValue().entrySet()) {
+                        count += j.getValue();
+                    }
+            }
+        }
+        detailedResultDAO.setEnemiesDestroyed(count);
+        // minedAsteroids
+        count = 0;
+        for (Map.Entry<AbstractPoolable.Type, Map<Integer, Integer>> i : statistics.entrySet()) {
+            switch (i.getKey()) {
+                case ASTEROID_METAL:
+                case ASTEROID_MINERAL:
+                    for (Map.Entry<Integer, Integer> j : i.getValue().entrySet()) {
+                        count += j.getValue();
+                    }
+            }
+        }
+        detailedResultDAO.setMinedAsteroids(count);
+        // pickUpItems
+        count = 0;
+        for (Map.Entry<AbstractPoolable.Type, Map<Integer, Integer>> i : statistics.entrySet()) {
+            switch (i.getKey()) {
+                case CRATE:
+                case STORAGE:
+                case FUEL:
+                    for (Map.Entry<Integer, Integer> j : i.getValue().entrySet()) {
+                        count += j.getValue();
+                    }
+            }
+        }
+        detailedResultDAO.setPickUpItems(count);
+        // usedItems
+        count = 0;
+        for (Map.Entry<Sticker, Integer> i : usedItems.entrySet()) {
+            count += i.getValue();
+        }
+        detailedResultDAO.setUsedItems(count);
+        // astronautsTaken
+        count = 0;
+        for (Map.Entry<Sticker, Integer> i : astronauts.entrySet()) {
+            count += i.getValue();
+        }
+        detailedResultDAO.setAstronautsTaken(count);
+        // effectiveness
+        //
+        float c;
+        c = AstronautEmitter.getInstance().getEmitted() + AstronautEmitter.getInstance().getEmittedGolden();
+        float ate = 0.0f;
+        if (c != 0) {
+            ate = 1.0f * detailedResultDAO.getAstronautsTaken() / c;
+        }
+
+        c = SelectorGroup.getInstance().getItems();
+        float uie = 0.0f;
+        if (c != 0) {
+            uie = 1.0f * detailedResultDAO.getUsedItems() / c;
+        }
+
+        c = CrateEmitter.getInstance().getEmitted() + CrateEmitter.getInstance().getEmittedGolden() +
+                StorageEmitter.getInstance().getEmitted() + StorageEmitter.getInstance().getEmittedGolden() +
+                FuelEmitter.getInstance().getEmitted() + FuelEmitter.getInstance().getEmittedGolden();
+        float pie = 0.0f;
+        if (c != 0) {
+            pie = 1.0f * detailedResultDAO.getPickUpItems() / c;
+        }
+
+        c = MetalAsteroidEmitter.getInstance().getEmitted() + MineralAsteroidEmitter.getInstance().getEmitted();
+        float mae = 0.0f;
+        if (c != 0) {
+            mae = 1.0f * detailedResultDAO.getMinedAsteroids() / c;
+        }
+
+        c = CorrosiveAnomalyEmitter.getInstance().getEmitted() + MagneticAnomalyEmitter.getInstance().getEmitted() + RadiationAnomalyEmitter.getInstance().getEmitted() + ElectricalAnomalyEmitter.getInstance().getEmitted();
+        float ede = 0.0f;
+        if (c != 0) {
+            ede = 1.0f * detailedResultDAO.getEnemiesDestroyed() / c;
+        }
+
+        float te;
+        if (detailedResultDAO.getTime() <= Rules.GAME_SESSION_TIME) {
+            te = 1.0f * detailedResultDAO.getTime() / Rules.GAME_SESSION_TIME;
+        } else {
+            te = 1.0f * Rules.GAME_SESSION_TIME / detailedResultDAO.getTime();
+        }
+
+        c = (AstronautEmitter.getInstance().getEmitted() + AstronautEmitter.getInstance().getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_ASTRONAUT +
+                (CrateEmitter.getInstance().getEmitted() + CrateEmitter.getInstance().getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_CRATE +
+                (StorageEmitter.getInstance().getEmitted() + StorageEmitter.getInstance().getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_STORAGE +
+                (FuelEmitter.getInstance().getEmitted() + FuelEmitter.getInstance().getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_FUEL;
+        float dde = 1.0f;
+        if (c != 0) {
+            dde = 1 - (1.0f * detailedResultDAO.getDmgDone() / c);
+        }
+
+        //todo: get avg from playtesting
+        float dre = 0.5f;
+
+        detailedResultDAO.setEffectiveness(Math.abs((int) (scoreView * (ate + uie + pie + mae + ede + dde + te + dre) / 8)));
+        System.out.println(ate + " " + uie + " " + pie + " " + mae + " " + ede + " " + dde + " " + te + " " + dre);
         //
         return detailedResultDAO;
     }
