@@ -23,10 +23,6 @@ public class UITopPanel {
         this.playerHP = new PlayerHP();
     }
 
-    public void dispose() {
-        anomalyTimer.dispose();
-    }
-
     public void render(SpriteBatch batch) {
         playerXP.render(batch);
         bars.render(batch);

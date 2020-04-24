@@ -15,8 +15,8 @@ public class UILeftPanel extends AbstractLatestPanel {
 
     private UILeftPanel() {
         this.circleTexture = new TextureRegion[2];
-        this.circleTexture[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_FULL_CIRCLE);
-        this.circleTexture[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_PANEL_EMPTY_CIRCLE);
+        this.circleTexture[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_OUT);
+        this.circleTexture[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.CIRCLE_GLOW);
         this.x = 0.0f;
     }
 

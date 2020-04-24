@@ -62,9 +62,11 @@ public class ScreenManager {
             case GAME:
                 targetScreen = gameScreen;
                 //SPACE_WIDTH/SPACE_HEIGHT depends from game level
-                Rules.setSpace(4 - Profiles.getSettings().getLevel());
-                //
                 Assets.getInstance().loadAssets(ScreenType.GAME);
+                Profiles profiles = new Profiles();
+                Rules.setSpace(4 - profiles.getActive().getPreferences().getLevel());
+                //
+
                 break;
             case TEST:
                 targetScreen = testScreen;

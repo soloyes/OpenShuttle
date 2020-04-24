@@ -39,10 +39,10 @@ public class Switch extends ImageButton {
         this.width = PaintConstants.SWITCH_WIDTH;
         this.height = PaintConstants.SWITCH_HEIGHT;
         setPosition(
-                isLeft ? width / 2 : Rules.WORLD_WIDTH - 3 * width / 2,
-                477 + (5 * PaintConstants.LEFT_RIGHT_UI_CELL_HEIGHT) / 2 - height / 2
+                isLeft ? 0 : Rules.WORLD_WIDTH - width,
+                764
         );
-
+        setWidth(width);
         setOrigin(Align.center);
         setTransform(true);
         setRotation(isLeft ? 0.0f : 180.0f);

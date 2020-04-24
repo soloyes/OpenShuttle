@@ -169,7 +169,7 @@ public enum Sticker {
             if (!isGolden) {
                 List<AbstractAnomaly> anomalies = CorrosiveAnomalyEmitter.getInstance().getActiveList();
                 for (int i = 0; i < anomalies.size(); i++) {
-                    if (boundCheck.checkAndHandleBoundsInCamera(anomalies.get(i))) {
+                    if (anomalies.get(i).getPosition().dst(Shuttle.position) <= Rules.WORLD_WIDTH) {
                         if (!anomalies.get(i).isTaken()) {
                             anomalies.get(i).setMarkedToBoom(true);
                             standing.addToStatistics(anomalies.get(i).getType(), anomalies.get(i).getLevel());
@@ -542,6 +542,7 @@ public enum Sticker {
     private static BoomBox boomBox;
     private static BoundCheck boundCheck;
     private static Standing standing;
+
     static {
         boomBox = new BoomBox();
         boundCheck = new BoundCheck();

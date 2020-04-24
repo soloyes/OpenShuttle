@@ -109,7 +109,7 @@ public class MenuBackgroundGroup extends Group {
                 0.0f
         );
         batch.draw(sitastronaut, PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT_X, PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT_Y - backY);
-        batch.draw(shuttle, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_X, shuttleY);
+        batch.draw(shuttle, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_X, shuttleY, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_WIDTH, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_HEIGHT);
         batch.draw(
                 shield,
                 PaintConstants.UI_MENU_BACKGROUND_SHIELD_X,
