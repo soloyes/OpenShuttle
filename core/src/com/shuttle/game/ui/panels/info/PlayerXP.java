@@ -18,77 +18,96 @@ import com.shuttle.game.utils.Rounder;
  */
 
 public class PlayerXP {
-    private TextureRegion outCircle, inCircle;
+    private TextureRegion glow, circle;
     private RadialSprite scaleCircle;
     private int width, height;
     private Standing standing;
-    private float alpha;
-    private Color color;
+    private float angle;
     private Vector2 position;
     private BitmapFont font60_C;
-    private StringBuilder stringBuilder;
-    private GlyphLayout glyphLayout;
+    private BitmapFont font44;
+    private BitmapFont font72;
+    private StringBuilder scoreBuilder;
+    private StringBuilder levelBuilder;
+    private GlyphLayout score;
+    private GlyphLayout level;
+    private GlyphLayout levelLabel;
 
     public PlayerXP() {
         this.width = PaintConstants.XP_WIDTH;
         this.height = PaintConstants.XP_HEIGHT;
-        this.outCircle = Assets.getInstance().getAtlas().findRegion(PaintConstants.XP_OUT_CIRCLE);
-        this.inCircle = Assets.getInstance().getAtlas().findRegion(PaintConstants.XP_IN_CIRCLE);
+        this.glow = Assets.getInstance().getAtlas().findRegion(PaintConstants.CIRCLE_GLOW);
+        this.circle = Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_OUT_CENTER_BACK);
         this.scaleCircle = new RadialSprite(Assets.getInstance().getAtlas().findRegion(PaintConstants.XP_SCALE));
         this.standing = Standing.getInstance();
-        this.color = new Color();
         this.position = new Vector2();
-        this.position.set(44, Rules.WORLD_HEIGHT - height - 44);
+        this.position.set(43, Rules.WORLD_HEIGHT - height - 43);
+        this.font44 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT44, BitmapFont.class);
         this.font60_C = Assets.getInstance().getAssetManager().get(PaintConstants.FONT60_C, BitmapFont.class);
-        this.stringBuilder = new StringBuilder();
-        this.glyphLayout = new GlyphLayout();
+        this.font72 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT72, BitmapFont.class);
+        this.level = new GlyphLayout();
+        this.levelLabel = new GlyphLayout(font44, "level");
+        this.scoreBuilder = new StringBuilder();
+        this.levelBuilder = new StringBuilder();
+        this.score = new GlyphLayout();
     }
 
     public void render(SpriteBatch batch) {
-        Color tmpColor = batch.getColor();
-        batch.setColor(color);
-        batch.draw(outCircle,
+        batch.draw(glow,
                 position.x, position.y,
                 width / 2, height / 2,
                 width, height,
                 1.0f, 1.0f,
                 0.0f
         );
-        batch.setColor(tmpColor);
+        font72.draw(
+                batch,
+                level, position.x + width / 2 - level.width / 2,
+                position.y + height / 2 + level.height / 2 + 14
+        );
+        font44.draw(
+                batch,
+                levelLabel, position.x + width / 2 - levelLabel.width / 2,
+                position.y + height / 2 - levelLabel.height / 2
+        );
+        batch.draw(circle,
+                position.x, position.y,
+                width / 2, height / 2,
+                width, height,
+                1.0f, 1.0f,
+                0.0f
+        );
         scaleCircle.draw(batch,
                 position.x, position.y,
                 width, height,
-                -alpha
-        );
-        batch.draw(inCircle,
-                position.x, position.y,
-                width / 2, height / 2,
-                width, height,
-                1.0f, 1.0f,
-                0.0f
+                -angle
         );
         font60_C.draw(
                 batch,
-                glyphLayout, position.x + width / 2 - glyphLayout.width / 2,
-                position.y + 2 * height / 3 - glyphLayout.height / 2
+                score, position.x + width / 2 - score.width / 2,
+                1695
         );
-        batch.setColor(tmpColor);
     }
 
     public void update(float dt) {
         if (standing.getScoreView() <= 0) {
-            alpha = 1;
+            angle = 1;
         } else {
-            alpha = 360 * (1 - 1.0f * (standing.getScoreToLive() - standing.getScoreView()) / standing.getScoreToLive());
+            angle = 360 * (1 - 1.0f * (standing.getScoreToLive() - standing.getScoreView()) / standing.getScoreToLive());
         }
 
         if (standing.isScoreAlertRadiationAnomaly()) {
-            color.set(1.0f, 0.2f, 0.0f, 1f);
+            scaleCircle.setColor(Color.RED);
+            font60_C.setColor(Color.RED);
         } else {
-            color.set(0.08f, 0.27f, 0.27f, 1.0f);
+            scaleCircle.setColor(Color.WHITE);
+            font60_C.setColor(Color.WHITE);
         }
-        stringBuilder.setLength(0);
-        stringBuilder = Rounder.round(Standing.getInstance().getScoreView());
-        glyphLayout.setText(font60_C, stringBuilder);
+        scoreBuilder.setLength(0);
+        scoreBuilder = Rounder.round(Standing.getInstance().getScoreView());
+        score.setText(font60_C, scoreBuilder);
+        levelBuilder.setLength(0);
+        levelBuilder.append(standing.getPlayingLevel());
+        level.setText(font72, levelBuilder);
     }
 }

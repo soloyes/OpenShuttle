@@ -200,6 +200,8 @@ public final class Rules {
     public static final int PLAYER_DAMAGE_DONE_ASTRONAUT = 10;
     //5
     public static final int PLAYER_BLACKHOLE_ROTATION = 5;
+    //1
+    public static final int PLAYER_RECHARGE_TIME = 5;
     //
     //BLACKHOLE
     //750

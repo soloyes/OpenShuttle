@@ -1,5 +1,8 @@
 package com.shuttle.game.ui.groups;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -37,10 +40,12 @@ public class PauseGroup extends Group {
     private final ConfigGroup configGroup;
     private final LeftGroup leftGroup;
     private final RightGroup rightGroup;
+    private final BitmapFont font60;
     private BoomBox boomBox;
     @Getter
     @Setter
     private boolean pause;
+    private GlyphLayout glyphLayout;
 
     public static PauseGroup getInstance() {
         if (instance == null) {
@@ -51,16 +56,15 @@ public class PauseGroup extends Group {
 
     private PauseGroup() {
         this.boomBox = new BoomBox();
+        this.font60 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT60, BitmapFont.class);
+        this.glyphLayout = new GlyphLayout();
         this.pause = false;
         final TextureRegionDrawable play = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PLAY_BUTTON));
         final TextureRegionDrawable pause = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_BUTTON));
         this.playPauseBtn = new ImageButton(pause);
         playPauseBtn.setOrigin(Align.center);
         playPauseBtn.setSize(PaintConstants.PLAY_PAUSE_BUTTON_WIDTH, PaintConstants.PLAY_PAUSE_BUTTON_HEIGHT);
-        playPauseBtn.setPosition(
-                Rules.WORLD_WIDTH - playPauseBtn.getWidth() - 44,
-                Rules.WORLD_HEIGHT - playPauseBtn.getHeight() - 44
-        );
+        playPauseBtn.setPosition(897, 1737);
 
         this.configGroup = ConfigGroup.getInstance();
         this.leftGroup = LeftGroup.getInstance();
@@ -167,5 +171,29 @@ public class PauseGroup extends Group {
 
     public static void doStart() {
         instance = null;
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        if (!Rules.GAME_OVER) {
+            font60.draw(
+                    batch,
+                    glyphLayout, 967 - glyphLayout.width / 2,
+                    1695
+            );
+        }
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        if (!Rules.GAME_OVER) {
+            if (pause) {
+                glyphLayout.setText(font60, "PLAY");
+            } else {
+                glyphLayout.setText(font60, "PAUSE");
+            }
+        }
     }
 }

@@ -145,7 +145,7 @@ public class DetailedResultGroup extends Group {
         verticalGroup.addActor(scoreLine);
         Line timeLine = new Line(
                 "Time",
-                TimeFormat.format(resultDAO.getCurrent().getTime()),
+                TimeFormat.formatYDHMS(resultDAO.getCurrent().getTime()),
                 resultDAO.getPrevious() == null ? 1 :
                         Integer.compare(resultDAO.getCurrent().getTime(), resultDAO.getPrevious().getTime())
         );

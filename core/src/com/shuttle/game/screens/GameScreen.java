@@ -760,7 +760,6 @@ public class GameScreen extends BaseScreen {
         super.dispose();
         ShaderManager.PAUSE.dispose();
         ShaderManager.BLACKHOLE.dispose();
-        uiTopPanel.dispose();
         if (!Rules.GAME_OVER) {
             profiles.dispose();
         }

@@ -7,12 +7,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
@@ -25,6 +24,7 @@ import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.ui.groups.configs.LeftGroup;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Consumer;
+import com.shuttle.game.utils.RadialSprite;
 import com.shuttle.game.utils.ShaderManager;
 
 import java.util.LinkedList;
@@ -40,17 +40,16 @@ public class SelectorGroup extends Group {
     private static SelectorGroup instance;
     private List<Selector> selectors;
     private Selector leftSelector, centerSelector, rightSelector;
-    private ImageButton leftButton, centerButton, rightButton;
-    private TextureRegionDrawable circleIn;
+    private Button leftButton, centerButton, rightButton;
+    private TextureRegionDrawable circleGlow;
     private TextureRegion circleScale;
-    private Image circleOut, leftArrow, rightArrow;
-    private float scale = 1.2f;
+    private Image circleOut, circleOutBack, leftArrow, rightArrow;
     private int select;
-    private int pressedCount;
     private boolean paused;
     private BoomBox boomBox;
     @Getter
     private int items;
+    private RadialSprite radialSprite;
 
     public static SelectorGroup getInstance() {
         if (instance == null) {
@@ -62,45 +61,29 @@ public class SelectorGroup extends Group {
     private SelectorGroup() {
         this.boomBox = new BoomBox();
         this.selectors = new LinkedList<Selector>();
-        this.circleIn = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_IN));
-        this.leftButton = new ImageButton(circleIn);
-        this.rightButton = new ImageButton(circleIn);
-        this.centerButton = new ImageButton(circleIn);
+        this.circleGlow = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.CIRCLE_GLOW));
+        this.leftButton = new Button(circleGlow);
+        this.rightButton = new Button(circleGlow);
+        this.centerButton = new Button(circleGlow);
         this.circleScale = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_SCALE));
         this.circleOut = new Image(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_OUT));
+        this.radialSprite = new RadialSprite(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_OUT_CENTER));
+        this.circleOutBack = new Image(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_OUT_CENTER_BACK));
         this.leftArrow = new Image(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_LEFT));
         this.rightArrow = new Image(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_RIGHT));
         int width = PaintConstants.SELECTOR_WIDTH;
         int height = PaintConstants.SELECTOR_HEIGHT;
 
-        leftButton.setOrigin(Align.center);
-        rightButton.setOrigin(Align.center);
+        float centerWidth = PaintConstants.SELECTOR_CENTER_WIDTH;
+        float centerHeight = PaintConstants.SELECTOR_CENTER_HEIGHT;
 
-        float centerWidth = width * scale;
-        float centerHeight = height * scale;
-        centerButton.getImage().setScale(scale);
-        centerButton.setOrigin(Align.center);
+        centerButton.setSize(centerWidth, centerHeight);
+        leftButton.setSize(width, height);
+        rightButton.setSize(width, height);
 
-        leftButton.setPosition(
-                Rules.WORLD_WIDTH / 2 - 3 * width / 2 - 30,
-                Rules.WORLD_HEIGHT -
-                        PaintConstants.HP_BAR_HEIGHT -
-                        PaintConstants.SP_BAR_HEIGHT -
-                        height - 64 - 44
-        );
-        rightButton.setPosition(Rules.WORLD_WIDTH / 2 + width / 2 + 30,
-                Rules.WORLD_HEIGHT -
-                        PaintConstants.HP_BAR_HEIGHT -
-                        PaintConstants.SP_BAR_HEIGHT -
-                        height - 64 - 44
-        );
-        centerButton.setPosition(
-                Rules.WORLD_WIDTH / 2 - centerWidth / 2,
-                Rules.WORLD_HEIGHT -
-                        centerHeight -
-                        PaintConstants.TIMER_HEIGHT -
-                        56
-        );
+        leftButton.setPosition(337, 1597);
+        rightButton.setPosition(631, 1597);
+        centerButton.setPosition(Rules.WORLD_WIDTH / 2 - centerWidth / 2, 1569);
 
         leftArrow.setPosition(leftButton.getX(), leftButton.getY());
         rightArrow.setPosition(rightButton.getX(), rightButton.getY());
@@ -119,8 +102,10 @@ public class SelectorGroup extends Group {
         leftButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
-                Vibrator.vibrate(VConstants.UI_CLICK);
+                if (!PauseGroup.getInstance().isPause()) {
+                    boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
+                }
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -128,8 +113,10 @@ public class SelectorGroup extends Group {
         rightButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
-                Vibrator.vibrate(VConstants.UI_CLICK);
+                if (!PauseGroup.getInstance().isPause()) {
+                    boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
+                }
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -138,7 +125,11 @@ public class SelectorGroup extends Group {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (selectors.size() != 0) {
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    if (centerSelector.isActive() && !PauseGroup.getInstance().isPause()) {
+                        removeSelector();
+                        centerSelector.press();
+                        Vibrator.vibrate(VConstants.UI_CLICK);
+                    }
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -176,7 +167,7 @@ public class SelectorGroup extends Group {
             batch.setShader(null);
         }
         if (!Rules.GAME_OVER) {
-            this.drawChildren(batch, parentAlpha);
+            this.drawChildren(batch, 0.5f);
         }
     }
 
@@ -225,58 +216,62 @@ public class SelectorGroup extends Group {
             renderCenter(batch, selectors.get(select).getCount());
         }
 
-        circleOut.setScale(1.0f);
         circleOut.setPosition(leftButton.getX(), leftButton.getY());
         circleOut.draw(batch, 1.0f);
-        circleOut.setScale(1.0f);
         circleOut.setPosition(rightButton.getX(), rightArrow.getY());
         circleOut.draw(batch, 1.0f);
-        circleOut.setPosition(centerButton.getX(), centerButton.getY());
-        circleOut.setScale(scale);
-        circleOut.draw(batch, 1.0f);
+
+        circleOutBack.setPosition(centerButton.getX(), centerButton.getY());
+        circleOutBack.draw(batch, 1.0f);
+        if (selectors.size() != 0) {
+            radialSprite.draw(batch, centerButton.getX(), centerButton.getY(), centerSelector.getAngle());
+        }
     }
 
     private void renderLeft(SpriteBatch batch) {
         Color color = batch.getColor();
         batch.setColor(color.a, color.g, color.b, PaintConstants.SELECTOR_ALPHA);
-        batch.draw(leftSelector.getTextureRegion(),
+        leftSelector.draw(batch,
                 leftButton.getX(), leftButton.getY(),
                 leftButton.getOriginX(), leftButton.getOriginY(),
                 leftButton.getWidth(), leftButton.getHeight(),
-                0.7f, 0.7f, 0.0f
+                1.0f, 1.0f, 0.0f
         );
         batch.setColor(color);
     }
 
     private void renderCenter(SpriteBatch batch, int count) {
         float percentage = 1.0f * count / Rules.SELECTOR_MAX_COUNT;
+        Color color = batch.getColor();
+        batch.setColor(color.a, color.g, color.b, 1.0f);
         batch.draw(
                 circleScale.getTexture(),
                 centerButton.getX(), centerButton.getY(),
                 centerButton.getOriginX(), centerButton.getOriginY(),
-                centerButton.getWidth() * scale, centerButton.getHeight() * scale * percentage,
+                centerButton.getWidth(), centerButton.getHeight() * percentage,
                 1.0f, 1.0f,
                 0,
                 circleScale.getRegionX(), circleScale.getRegionY(),
                 circleScale.getRegionWidth(), (int) (circleScale.getRegionHeight() * percentage),
                 false, true
         );
-        batch.draw(centerSelector.getTextureRegion(),
+        centerSelector.draw(batch,
                 centerButton.getX(), centerButton.getY(),
                 centerButton.getOriginX(), centerButton.getOriginY(),
-                centerButton.getWidth() * 1.3f, centerButton.getHeight() * 1.3f,
-                0.7f, 0.7f, 0.0f
+                centerButton.getWidth(), centerButton.getHeight(),
+                1.0f, 1.0f, 0.0f
         );
+        batch.setColor(color);
     }
 
     private void renderRight(SpriteBatch batch) {
         Color color = batch.getColor();
         batch.setColor(color.a, color.g, color.b, PaintConstants.SELECTOR_ALPHA);
-        batch.draw(rightSelector.getTextureRegion(),
+        rightSelector.draw(batch,
                 rightButton.getX(), rightButton.getY(),
                 rightButton.getOriginX(), rightButton.getOriginY(),
                 rightButton.getWidth(), rightButton.getHeight(),
-                0.7f, 0.7f, 0.0f
+                1.0f, 1.0f, 0.0f
         );
         batch.setColor(color);
     }
@@ -323,31 +318,20 @@ public class SelectorGroup extends Group {
         }
 
         LeftGroup.getInstance().setCenter(centerSelector);
-        press();
-    }
-
-    private void press() {
-        if (centerButton.isPressed()) {
-            pressedCount++;
-        } else {
-            pressedCount = 0;
-        }
-        if (pressedCount == 1) {
-            removeSelector();
+        for (int i = 0; i < selectors.size(); i++) {
+            selectors.get(i).update(dt);
         }
     }
 
     public void removeSelector() {
-        if (selectors.size() != 0) {
-            Consumer.select(selectors.get(select).getSticker());
-            selectors.get(select).changeCount(-1);
-            Standing.getInstance().changeUsedItems(selectors.get(select).getSticker());
-            if (selectors.get(select).getCount() == 0) {
-                selectors.remove(select);
-                select--;
-                if (select < 0) {
-                    select = 0;
-                }
+        Consumer.select(selectors.get(select).getSticker());
+        selectors.get(select).changeCount(-1);
+        Standing.getInstance().changeUsedItems(selectors.get(select).getSticker());
+        if (selectors.get(select).getCount() == 0) {
+            selectors.remove(select);
+            select--;
+            if (select < 0) {
+                select = 0;
             }
         }
     }

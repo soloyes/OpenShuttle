@@ -1,7 +1,6 @@
 package com.shuttle.game.ui.panels.info;
 
 import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 
 /**
@@ -10,19 +9,30 @@ import com.shuttle.game.utils.Assets;
 
 public class BarShield extends AbstractBar {
     public BarShield() {
-        this.outBar = Assets.getInstance().getAtlas().findRegion(PaintConstants.SP_BAR_OUT);
-        this.inBar = Assets.getInstance().getAtlas().findRegion(PaintConstants.SP_BAR_IN);
+        this.scaleBar = Assets.getInstance().getAtlas().findRegion(PaintConstants.SP_BAR_SCALE);
+        this.bar = Assets.getInstance().getAtlas().findRegion(PaintConstants.SP_BAR);
         this.icon = Assets.getInstance().getAtlas().findRegion(PaintConstants.SP_BAR_ICON);
-        this.scale = Assets.getInstance().getAtlas().findRegion(PaintConstants.SP_BAR_SCALE);
         this.width = PaintConstants.SP_BAR_WIDTH;
         this.height = PaintConstants.SP_BAR_HEIGHT;
         this.side = Side.LEFT;
-        this.position.set(Rules.WORLD_WIDTH / 4 - 32, Rules.WORLD_HEIGHT - 2 * height - 20);
+        this.position.set(197, 1830);
     }
 
     @Override
     void update(float dt) {
         percentage = 1.0f * standing.getLifeShield() / standing.getMaxLifeShield();
-        color.set(1.0f, 1.0f, 1.0f, 1.0f);
+        if (standing.isHpAlert() && standing.getLifeShield() > 0) {
+            color.set(1.0f, 0.2f, 0.0f, 1f);
+        } else {
+            color.set(0.28f, 1.0f, 1.0f, 1.0f);
+        }
+        stringBuilder.setLength(0);
+        glyphLayout.setText(font32,
+                stringBuilder
+                        .append((int) standing.getLifeShield())
+                        .append(" (")
+                        .append((int) (100 * standing.getLifeShield() / standing.getMaxLifeShield()))
+                        .append("%)")
+        );
     }
 }

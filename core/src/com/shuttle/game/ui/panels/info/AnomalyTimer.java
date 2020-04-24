@@ -1,8 +1,8 @@
 package com.shuttle.game.ui.panels.info;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -11,6 +11,8 @@ import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.RadialSprite;
+import com.shuttle.game.utils.TimeFormat;
 
 import java.util.List;
 
@@ -19,38 +21,30 @@ import java.util.List;
  */
 
 public class AnomalyTimer {
-    private TextureRegion timerBackground, timerBox, timerIcon;
-    private Texture texture;
+    private TextureRegion timerBackground;
+    private RadialSprite timerBox;
     private Color color;
-    private int width, height, border;
-    private float percentage;
+    private int width, height;
     private float counter;
     private Vector2 position;
+    private float angle;
+    private GlyphLayout glyphLayout;
+    private BitmapFont font44;
 
     public AnomalyTimer() {
         this.counter = Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
         this.width = PaintConstants.TIMER_WIDTH;
         this.height = PaintConstants.TIMER_HEIGHT;
-        this.border = 16;
         this.timerBackground = Assets.getInstance().getAtlas().findRegion(PaintConstants.TIMER_BACKGROUND);
-        this.timerBox = Assets.getInstance().getAtlas().findRegion(PaintConstants.TIMER_BOX);
-        this.timerIcon = Assets.getInstance().getAtlas().findRegion(PaintConstants.TIMER_ICON);
-
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGB888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-        this.texture = new Texture(pixmap);
+        this.timerBox = new RadialSprite(Assets.getInstance().getAtlas().findRegion(PaintConstants.TIMER_BOX));
+        this.font44 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT44, BitmapFont.class);
+        this.glyphLayout = new GlyphLayout();
         this.color = new Color();
         this.position = new Vector2();
-        this.position.set(Rules.WORLD_WIDTH / 2 - width / 2, Rules.WORLD_HEIGHT - height - 44);
-    }
-
-    public void dispose() {
-        texture.dispose();
+        this.position.set(Rules.WORLD_WIDTH / 2 - width / 2, Rules.WORLD_HEIGHT - height / 2 - 43);
     }
 
     public void render(SpriteBatch batch) {
-        Color tmpColor = batch.getColor();
         batch.draw(timerBackground,
                 position.x, position.y,
                 width / 2, height / 2,
@@ -58,39 +52,28 @@ public class AnomalyTimer {
                 1.0f, 1.0f,
                 0.0f
         );
-        batch.setColor(color);
-        batch.draw(
-                texture,
-                position.x + width / 6 + border / 4, position.y + border,
-                2 * width / 3 - border / 2, (height - 2 * border) * percentage
-        );
-        batch.setColor(tmpColor);
-        batch.draw(timerBox,
-                position.x, position.y,
-                width / 2, height / 2,
+        timerBox.draw(batch, position.x, position.y,
                 width, height,
-                1.0f, 1.0f,
-                0.0f
+                angle
         );
-        batch.draw(timerIcon,
-                position.x, position.y,
-                width / 2, height / 2,
-                width, height,
-                1.0f, 1.0f,
-                0.0f
+        font44.draw(batch,
+                glyphLayout,
+                Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
+                position.y - 14
         );
-        batch.setColor(tmpColor);
     }
 
     public void update(float dt) {
         counter -= dt;
         if (counter >= Rules.ANOMALIES_CORROSIVE_HUNT_TIME * 0.6f) {
-            color.set(0.25f, 0.78f, 0.78f, 1f);
+            color.set(Color.WHITE);
         } else if (counter >= Rules.ANOMALIES_CORROSIVE_HUNT_TIME * 0.3f) {
             color.set(1.0f, 0.8f, 0.3f, 1f);
         } else {
             color.set(1.0f, 0.2f, 0.0f, 1f);
         }
+
+        timerBox.setColor(color);
 
         if (counter <= 0.0f) {
             counter = Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
@@ -101,6 +84,7 @@ public class AnomalyTimer {
                 }
             }
         }
-        percentage = 1.0f * counter / Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
+        glyphLayout.setText(font44, TimeFormat.formatMs(counter));
+        angle = -360.0f * counter / Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
     }
 }
