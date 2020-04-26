@@ -444,6 +444,7 @@ public class GameScreen extends BaseScreen {
                 continue;
             }
             if (Shuttle.position.dst(consumable.getPosition()) <= PaintConstants.SHUTTLE_WIDTH / 2) {
+                consumable.setHarvested(true);
                 if (player.getShieldLevel().getLevel() < PlayerInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
                     consumeConsumable(consumable);
                 } else {
@@ -473,6 +474,8 @@ public class GameScreen extends BaseScreen {
                         player.badEffect(consumable);
                     }
                 }
+            } else {
+                consumable.setHarvested(false);
             }
             ray.setCount(24);
             ray.setSize(4);
@@ -487,7 +490,7 @@ public class GameScreen extends BaseScreen {
                     ray.setPreset(Ray.Preset.RED);
                 }
             }
-            ray.harvest(player, consumable, dt);
+            ray.harvest(consumable, dt);
             anyAtHarvestPoint |= consumable.isAtRayPoint();
         }
 
@@ -683,7 +686,7 @@ public class GameScreen extends BaseScreen {
                 ray.setPreset(Ray.Preset.GREY);
                 ray.setHarvestVelocity(Rules.PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY);
                 ray.setTakeRange(Rules.PLAYER_FRAGMENT_TAKE_RANGE);
-                ray.harvest(player, asteroid, dt);
+                ray.harvest(asteroid, dt);
             } else {
                 if (Shuttle.isLaser) {
                     ray.setCount(5);

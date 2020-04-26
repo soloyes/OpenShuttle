@@ -50,7 +50,7 @@ public class Ray {
         this.particleEmitter = particleEmitter;
     }
 
-    public void harvest(Shuttle player, AbstractPoolable poolable, float dt) {
+    public void harvest(AbstractPoolable poolable, float dt) {
         if (!Shuttle.isTaken) {
             if (Shuttle.position.dst(poolable.getPosition()) <= takeRange) {
                 poolable.setAtRayPoint(true);
@@ -99,7 +99,6 @@ public class Ray {
                 poolable.setAtRayPoint(false);
             }
         } else {
-
             poolable.setScaleX(poolable.getScaleX() + dt);
             poolable.setScaleY(poolable.getScaleY() + dt);
             if (poolable.getScaleX() >= poolable.getSaveScaleX()) {

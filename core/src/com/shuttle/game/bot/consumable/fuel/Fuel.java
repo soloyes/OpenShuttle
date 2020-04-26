@@ -72,6 +72,7 @@ public class Fuel extends AbstractConsumable {
         this.scaleX = this.saveScaleX = 1.0f;
         this.scaleY = this.saveScaleY = 1.0f;
         this.taken = false;
+        this.harvested = false;
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.spiralRadius = MathUtils.random(20, 60);
         this.atRayPoint = false;

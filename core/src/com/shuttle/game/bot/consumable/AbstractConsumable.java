@@ -44,6 +44,8 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     @Getter
     protected boolean golden;
     protected ParticleEmitter particleEmitter;
+    @Setter
+    protected boolean harvested;
 
     public AbstractConsumable() {
     }
@@ -94,6 +96,12 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     @Override
     public void basicUpdate(float dt) {
         angle += rotationSpeed * dt;
+        if (scaleX <= saveScaleX && !harvested) {
+            scaleX += dt;
+        }
+        if (scaleY <= saveScaleY & !harvested) {
+            scaleY += dt;
+        }
     }
 
     @Override
