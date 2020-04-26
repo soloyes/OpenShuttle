@@ -1,6 +1,7 @@
 package com.shuttle.game.screens;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -40,7 +41,9 @@ public class LoadingScreen extends BaseScreen implements Screen {
             Assets.getInstance().makeLinks();
             ScreenManager.getInstance().goToTarget();
         }
+
         batch.begin();
+        batch.setColor(Color.WHITE);
         batch.draw(texture, 0, 0, 1080 * Assets.getInstance().getAssetManager().getProgress(), 60);
         batch.end();
     }
