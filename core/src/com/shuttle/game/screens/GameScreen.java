@@ -227,7 +227,7 @@ public class GameScreen extends BaseScreen {
         UILeftPanel.doStart();
         UIRightPanel.doStart();
         //
-        detailedResultGroup = DetailedResultGroup.getInstance();
+        detailedResultGroup = new DetailedResultGroup();
         pauseGroup = new PauseGroup();
         stage.addActor(detailedResultGroup);
         stage.addActor(pauseGroup);

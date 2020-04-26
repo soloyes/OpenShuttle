@@ -12,9 +12,7 @@ import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.groups.mvc.Model;
 import com.shuttle.game.ui.groups.mvc.results.DetailedResultDAO;
-import com.shuttle.game.ui.groups.mvc.results.DetailedResultGroup;
 import com.shuttle.game.ui.groups.mvc.results.ResultDAO;
-import com.shuttle.game.ui.groups.mvc.results.ResultGroup;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,6 +43,10 @@ public class Profiles implements Model<ProfileDAO> {
 
     private static ProfileDAO asEmpty() {
         return new ProfileDAO(ProfileDAO.Type.PROFILE, PaintConstants.UI_EMPTY_PROFILE, new SettingsDAO(), new HashSet<ResultDAO>(), false);
+    }
+
+    public void init() {
+        getInstance();
     }
 
     @Override
@@ -102,7 +104,6 @@ public class Profiles implements Model<ProfileDAO> {
         }
     }
 
-
     //Why? Because it is not good to work with static resources (file e.g.)
     private Profiles getInstance() {
         if (instance == null) {
@@ -157,11 +158,6 @@ public class Profiles implements Model<ProfileDAO> {
                 ProfileDAO tmpProfile = profiles.get(0);
                 if (tmpProfile.getType() == ProfileDAO.Type.DUMMY) {
                     tmpProfile.setActive(false);
-                    ResultGroup.getInstance().switchVisible();
-                } else {
-                    if (DetailedResultGroup.getInstance().isVisible()) {
-                        ResultGroup.getInstance().backVisible();
-                    }
                 }
                 break;
             }

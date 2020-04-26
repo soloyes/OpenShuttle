@@ -44,20 +44,16 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public void createGUI() {
-        // Workaround (Android restart via app manager)
-        DetailedResultGroup.doStart();
-        ResultGroup.doStart();
-        //
         Profiles profiles = new Profiles();
-        profiles.getList();
+        profiles.init();
         menuBackgroundGroup = new MenuBackgroundGroup();
         background = new Background();
         configGroup = new ConfigGroup();
-        menuGroup = new MenuGroup(configGroup);
+        detailedResultGroup = new DetailedResultGroup();
+        resultGroup = new ResultGroup(detailedResultGroup);
+        menuGroup = new MenuGroup(configGroup, resultGroup);
         MenuBar menuBar = new MenuBar();
         InfoGroup infoGroup = new InfoGroup();
-        resultGroup = ResultGroup.getInstance();
-        detailedResultGroup = DetailedResultGroup.getInstance();
         this.font188 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT188, BitmapFont.class);
         this.font48 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT48, BitmapFont.class);
         Label.LabelStyle labelStyle64 = new Label.LabelStyle();
@@ -100,7 +96,5 @@ public class MenuScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         menuGroup.dispose();
-        resultGroup.dispose();
-        detailedResultGroup.dispose();
     }
 }

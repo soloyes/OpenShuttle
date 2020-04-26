@@ -26,7 +26,6 @@ import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.player.navigation.Radar;
 import com.shuttle.game.ui.GameInfoSystem;
-import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Consumer;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 import com.shuttle.game.utils.pool.ObjectPool;
@@ -553,12 +552,10 @@ public enum Sticker {
     public static List<Sticker> SELECTABLE = Arrays.asList(BOOST, REPAIR, SHIELD, SPLASH, SCAN, ROCKETS);
     public static List<Sticker> ASTRONAUTS = Arrays.asList(REGULAR, MEDIC, SCIENTIST, MECHANIC, MILITARY);
     private static BoomBox boomBox;
-    private static BoundCheck boundCheck;
     private static Standing standing;
 
     static {
         boomBox = new BoomBox();
-        boundCheck = new BoundCheck();
         standing = Standing.getInstance();
     }
 

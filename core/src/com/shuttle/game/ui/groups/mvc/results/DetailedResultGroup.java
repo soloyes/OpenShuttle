@@ -40,21 +40,13 @@ import com.shuttle.game.utils.TimeFormat;
 
 public class DetailedResultGroup extends Group {
     private VerticalGroup verticalGroup;
-    private static DetailedResultGroup instance;
     private Button buttonBack;
     private BoomBox boomBox;
     private Profiles profiles;
     private GlyphLayout glyphLayout;
     private BitmapFont font;
 
-    public static DetailedResultGroup getInstance() {
-        if (instance == null) {
-            instance = new DetailedResultGroup();
-        }
-        return instance;
-    }
-
-    private DetailedResultGroup() {
+    public DetailedResultGroup() {
         this.setName(GroupType.RESULTS_DETAILED.name());
         this.setVisible(false);
         this.boomBox = new BoomBox();
@@ -292,13 +284,5 @@ public class DetailedResultGroup extends Group {
                 (Rules.WORLD_WIDTH - glyphLayout.width) / 2,
                 PaintConstants.UI_TITLE_LABEL_Y + glyphLayout.height
         );
-    }
-
-    public void dispose() {
-        instance = null;
-    }
-
-    public static void doStart() {
-        instance = null;
     }
 }

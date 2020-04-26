@@ -59,9 +59,10 @@ public class MenuGroup extends Group {
     private BoomBox boomBox;
     private Group noticeGroup;
     private ConfigGroup configGroup;
+    private ResultGroup resultGroup;
 
-    public MenuGroup(ConfigGroup configGroup) {
-        this(GroupType.MENU.name(), configGroup);
+    public MenuGroup(ConfigGroup configGroup, ResultGroup resultGroup) {
+        this(GroupType.MENU.name(), configGroup, resultGroup);
         username.setAlignment(Align.center);
         username.setMaxLength(8);
         username.setPosition(270, 960);
@@ -139,7 +140,7 @@ public class MenuGroup extends Group {
                             profile.setUsername(username.getText());
                             profilesController.flush();
                             profilesController.update();
-                            ResultGroup.getInstance().init();
+                            profilesView.getResultGroup().init();
                         }
                         Vibrator.vibrate(VConstants.UI_CHANGED);
                     } else {
@@ -160,9 +161,10 @@ public class MenuGroup extends Group {
         this.addActor(profilesView);
     }
 
-    private MenuGroup(String name, ConfigGroup configGroup) {
+    private MenuGroup(String name, ConfigGroup configGroup, ResultGroup resultGroup) {
         this.setName(name);
         this.configGroup = configGroup;
+        this.resultGroup = resultGroup;
         this.setVisible(true);
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.font44 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT44, BitmapFont.class);
@@ -185,7 +187,7 @@ public class MenuGroup extends Group {
         this.glyphLayout = new GlyphLayout();
         //MVC
         Profiles profiles = new Profiles();
-        this.profilesView = new ProfilesView(configGroup);
+        this.profilesView = new ProfilesView(configGroup, resultGroup);
         this.profilesController = new ProfilesController(profilesView, profiles);
         profilesView.setController(profilesController);
         profilesController.update();

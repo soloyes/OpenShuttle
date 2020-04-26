@@ -5,7 +5,6 @@ import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.ui.groups.configs.LeftGroup;
 import com.shuttle.game.ui.groups.configs.RightGroup;
-import com.shuttle.game.ui.groups.mvc.results.DetailedResultGroup;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
 import com.shuttle.game.ui.groups.switches.SwitchGroup;
 import com.shuttle.game.ui.panels.UILeftPanel;
@@ -19,7 +18,6 @@ public class Restart {
     public static void doRestart() {
         Rules.GAME_OVER = false;
         Standing.getInstance().dispose();
-        DetailedResultGroup.getInstance().dispose();
         RightGroup.getInstance().dispose();
         LeftGroup.getInstance().dispose();
         SelectorGroup.getInstance().dispose();

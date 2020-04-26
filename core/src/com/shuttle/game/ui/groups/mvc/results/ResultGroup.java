@@ -36,6 +36,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -46,20 +47,15 @@ public class ResultGroup extends Group {
     private Profiles profiles;
     private VerticalGroup verticalGroup;
     private ScrollPane scrollPane;
-    private static ResultGroup instance;
     private GlyphLayout glyphLayout;
     private BitmapFont font;
     private BoomBox boomBox;
+    @Getter
+    private DetailedResultGroup detailedResultGroup;
 
-    public static ResultGroup getInstance() {
-        if (instance == null) {
-            instance = new ResultGroup();
-        }
-        return instance;
-    }
-
-    private ResultGroup() {
+    public ResultGroup(DetailedResultGroup detailedResultGroup) {
         this.setName(GroupType.RESULTS.name());
+        this.detailedResultGroup = detailedResultGroup;
         this.profiles = new Profiles();
         this.setVisible(false);
         this.glyphLayout = new GlyphLayout();
@@ -129,7 +125,7 @@ public class ResultGroup extends Group {
                     line.setActive(false);
                     scrollPane.setFlickScroll(true);
                     ResultGroup.this.setVisible(false);
-                    DetailedResultGroup.getInstance().init(m.getKey());
+                    detailedResultGroup.init(m.getKey());
                 }
             });
 
@@ -292,13 +288,5 @@ public class ResultGroup extends Group {
                 (Rules.WORLD_WIDTH - glyphLayout.width) / 2,
                 PaintConstants.UI_TITLE_LABEL_Y + glyphLayout.height
         );
-    }
-
-    public void dispose() {
-        instance = null;
-    }
-
-    public static void doStart() {
-        instance = null;
     }
 }

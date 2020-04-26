@@ -49,9 +49,12 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
     private List<String> id;
     private BoomBox boomBox;
     private ConfigGroup configGroup;
+    @Getter
+    private ResultGroup resultGroup;
 
-    public ProfilesView(ConfigGroup configGroup) {
+    public ProfilesView(ConfigGroup configGroup, ResultGroup resultGroup) {
         this.configGroup = configGroup;
+        this.resultGroup = resultGroup;
         this.boomBox = new BoomBox();
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.currentLines = new HashMap<String, Line>();
@@ -189,7 +192,21 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                 minus.setConfirm(false);
                 controller.remove(Line.this.profile);
                 configGroup.refresh();
-                ResultGroup.getInstance().init();
+                resultGroup.init();
+                List<ProfileDAO> list = controller.getList();
+                boolean empty = true;
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).isActive()) {
+                        empty = false;
+                        break;
+                    }
+                }
+                if (empty) {
+                    resultGroup.switchVisible();
+                    if (resultGroup.getDetailedResultGroup().isVisible()) {
+                        resultGroup.backVisible();
+                    }
+                }
                 MenuGroup.setNotice(PaintConstants.UI_PROFILE_DELETED);
                 boomBox.playSound(MSConstants.UI_CHANGED);
                 Vibrator.vibrate(VConstants.UI_CHANGED);

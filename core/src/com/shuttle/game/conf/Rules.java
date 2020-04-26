@@ -292,7 +292,7 @@ public final class Rules {
     //0.7f
     public static final float LINE_PRESSED_WAIT = 0.7f;
     //2.0f
-    public static final float LINE_DELETE_WAIT = 2.0f;
+    public static final float LINE_DELETE_WAIT = 5.0f;
     //2.0f better less than LINE_DELETE_WAIT
     public static final float NOTICE_WAIT = 1.5f;
     //0.4f

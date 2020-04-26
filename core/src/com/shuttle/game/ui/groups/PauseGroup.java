@@ -33,7 +33,6 @@ import lombok.Setter;
  */
 
 public class PauseGroup extends Group {
-    private static PauseGroup instance;
     private final Button buttonMenu;
     private final Button buttonRestart;
     private final ImageButton playPauseBtn;
@@ -49,11 +48,12 @@ public class PauseGroup extends Group {
 
     public PauseGroup() {
         this.boomBox = new BoomBox();
+        pause = false;
         this.font60 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT60, BitmapFont.class);
         this.glyphLayout = new GlyphLayout();
-        final TextureRegionDrawable play = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PLAY_BUTTON));
-        final TextureRegionDrawable pause = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_BUTTON));
-        this.playPauseBtn = new ImageButton(pause);
+        final TextureRegionDrawable playTexture = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PLAY_BUTTON));
+        final TextureRegionDrawable pauseTexture = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_BUTTON));
+        this.playPauseBtn = new ImageButton(pauseTexture);
         playPauseBtn.setOrigin(Align.center);
         playPauseBtn.setSize(PaintConstants.PLAY_PAUSE_BUTTON_WIDTH, PaintConstants.PLAY_PAUSE_BUTTON_HEIGHT);
         playPauseBtn.setPosition(897, 1737);
@@ -119,19 +119,19 @@ public class PauseGroup extends Group {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
-                    PauseGroup.this.pause = !PauseGroup.this.pause;
-                    if (PauseGroup.this.pause) {
+                    pause = !pause;
+                    if (pause) {
                         boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
-                        playPauseBtn.getStyle().imageUp = play;
+                        playPauseBtn.getStyle().imageUp = playTexture;
                     } else {
                         boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
-                        playPauseBtn.getStyle().imageUp = pause;
+                        playPauseBtn.getStyle().imageUp = pauseTexture;
                     }
-                    configGroup.setVisible(PauseGroup.this.pause);
-                    leftGroup.setVisible(PauseGroup.this.pause);
-                    rightGroup.setVisible(PauseGroup.this.pause);
-                    buttonMenu.setVisible(PauseGroup.this.pause);
-                    buttonRestart.setVisible(PauseGroup.this.pause);
+                    configGroup.setVisible(pause);
+                    leftGroup.setVisible(pause);
+                    rightGroup.setVisible(pause);
+                    buttonMenu.setVisible(pause);
+                    buttonRestart.setVisible(pause);
                     boomBox.stopAllSound();
                     boomBox.playSound(MSConstants.UI_PAUSE);
                     Vibrator.vibrate(VConstants.UI_CLICK);
