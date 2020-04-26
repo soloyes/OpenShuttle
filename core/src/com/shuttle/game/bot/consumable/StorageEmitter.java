@@ -31,7 +31,7 @@ public class StorageEmitter extends AbstractConsumableEmitter {
         return new Storage(particleEmitter);
     }
 
-    public void createBonusAnomaly() {
+    public void createBonusStorage() {
         super.createConsumable();
     }
 

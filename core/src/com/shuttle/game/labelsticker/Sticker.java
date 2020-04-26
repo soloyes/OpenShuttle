@@ -580,7 +580,7 @@ public enum Sticker {
         // 1 - Add score
         // 2 - Add manual activated loot, or generate Crate/Storage
         // 3 - Kill Fuel/Radiation anomaly, or add HP/life
-        int level = Integer.parseInt(String.valueOf(consumable.isGolden() ? "1" : "0") + String.valueOf(consumable.getType() == AbstractPoolable.Type.CRATE ? "0" : "1"));
+        int level = (consumable.isGolden() ? 1 : 0) + (consumable.getType() == AbstractPoolable.Type.CRATE ? 0 : 2);
         int r = MathUtils.random(0, 3);
         int score;
         switch (r) {
@@ -638,7 +638,7 @@ public enum Sticker {
                             );
                             for (int i = 0; i < (level + 1) * Rules.CONSUMABLE_GENERATE_BASE_BONUS; i++) {
                                 CrateEmitter crateEmitter = (CrateEmitter) ObjectPool.EMITTERS.get(Crate.class);
-                                crateEmitter.createBonusAnomaly();
+                                crateEmitter.createBonusCrate();
                             }
                             break;
                         case STORAGE:
@@ -650,7 +650,7 @@ public enum Sticker {
                                     true
                             );
                             for (int i = 0; i < (level + 1) * Rules.CONSUMABLE_GENERATE_BASE_BONUS; i++) {
-                                storageEmitter.createBonusAnomaly();
+                                storageEmitter.createBonusStorage();
                             }
                             break;
                     }
@@ -746,7 +746,7 @@ public enum Sticker {
         // 1 - Del score
         // 2 - Disable Laser/Radar, or del Crate/Storage
         // 3 - Add Electrical/Corrosive/Radiation anomaly, or del HP/fuel/life
-        int level = Integer.parseInt(String.valueOf(consumable.isGolden() ? "1" : "0") + String.valueOf(consumable.getType() == AbstractPoolable.Type.CRATE ? "0" : "1"));
+        int level = (consumable.isGolden() ? 1 : 0) + (consumable.getType() == AbstractPoolable.Type.CRATE ? 0 : 2);
         int r = MathUtils.random(0, 3);
         int score;
         switch (r) {

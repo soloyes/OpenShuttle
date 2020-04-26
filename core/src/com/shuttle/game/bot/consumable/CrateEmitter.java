@@ -32,7 +32,7 @@ public class CrateEmitter extends AbstractConsumableEmitter {
         return new Crate(particleEmitter);
     }
 
-    public void createBonusAnomaly() {
+    public void createBonusCrate() {
         super.createConsumable();
     }
 

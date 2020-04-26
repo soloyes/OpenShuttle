@@ -102,6 +102,12 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
         if (scaleY <= saveScaleY & !harvested) {
             scaleY += dt;
         }
+        if (scaleX >= saveScaleX) {
+            scaleX = saveScaleX;
+        }
+        if (scaleY >= saveScaleY) {
+            scaleY = saveScaleY;
+        }
     }
 
     @Override
