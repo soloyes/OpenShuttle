@@ -56,17 +56,18 @@ public class ScreenManager {
         switch (type) {
             case MENU:
                 targetScreen = menuScreen;
+                Rules.GAME_OVER = false;
                 Rules.setSpace(1);
                 Assets.getInstance().loadAssets(ScreenType.MENU);
                 break;
             case GAME:
                 targetScreen = gameScreen;
+                Rules.GAME_OVER = false;
                 //SPACE_WIDTH/SPACE_HEIGHT depends from game level
                 Assets.getInstance().loadAssets(ScreenType.GAME);
                 Profiles profiles = new Profiles();
                 Rules.setSpace(4 - profiles.getActive().getPreferences().getLevel());
                 //
-
                 break;
             case TEST:
                 targetScreen = testScreen;

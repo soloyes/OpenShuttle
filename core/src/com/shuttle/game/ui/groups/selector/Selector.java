@@ -53,9 +53,7 @@ public class Selector {
 
     public void changeCount(int amount) {
         count += amount;
-        if (amount < 0) {
-            return;
-        }
+
         ConfigImageButton button = LeftGroup.getInstance().getButtonMap().get(sticker);
         if (button != null) {
             button.changeCount(amount);

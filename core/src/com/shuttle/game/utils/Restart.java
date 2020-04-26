@@ -1,6 +1,5 @@
 package com.shuttle.game.utils;
 
-import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.ui.groups.configs.LeftGroup;
@@ -16,7 +15,6 @@ import com.shuttle.game.ui.panels.UIRightPanel;
 
 public class Restart {
     public static void doRestart() {
-        Rules.GAME_OVER = false;
         Standing.getInstance().dispose();
         RightGroup.getInstance().dispose();
         LeftGroup.getInstance().dispose();
