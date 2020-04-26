@@ -3,14 +3,21 @@ package com.shuttle.game.labelsticker;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
+import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
+import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
 import com.shuttle.game.bot.anomaly.ElectricalAnomalyEmitter;
+import com.shuttle.game.bot.anomaly.MagneticAnomaly;
 import com.shuttle.game.bot.anomaly.MagneticAnomalyEmitter;
+import com.shuttle.game.bot.anomaly.RadiationAnomaly;
 import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
+import com.shuttle.game.bot.consumable.Crate;
 import com.shuttle.game.bot.consumable.CrateEmitter;
 import com.shuttle.game.bot.consumable.FuelEmitter;
+import com.shuttle.game.bot.consumable.Storage;
 import com.shuttle.game.bot.consumable.StorageEmitter;
+import com.shuttle.game.bot.consumable.fuel.Fuel;
 import com.shuttle.game.bot.rocket.RocketLauncher;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
@@ -22,6 +29,7 @@ import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.Consumer;
 import com.shuttle.game.utils.pool.AbstractPoolable;
+import com.shuttle.game.utils.pool.ObjectPool;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +37,6 @@ import java.util.List;
 /**
  * @author Shuttle on 3/27/19.
  */
-//todo: gold loot sounds??
 //todo: рефакториг Sticker, и удалить level только в Corrosive (Results повлияет)
 public enum Sticker {
     //Crate
@@ -92,15 +99,18 @@ public enum Sticker {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
-                List<AbstractConsumable> list = CrateEmitter.getInstance().getActiveList();
+                CrateEmitter crateEmitter = (CrateEmitter) ObjectPool.EMITTERS.get(Crate.class);
+                List<AbstractConsumable> list = crateEmitter.getActiveList();
                 for (int i = 0; i < list.size(); i++) {
                     list.get(i).setShielded(true);
                 }
-                list = FuelEmitter.getInstance().getActiveList();
+                FuelEmitter fuelEmitter = (FuelEmitter) ObjectPool.EMITTERS.get(Fuel.class);
+                list = fuelEmitter.getActiveList();
                 for (int i = 0; i < list.size(); i++) {
                     list.get(i).setShielded(true);
                 }
-                list = StorageEmitter.getInstance().getActiveList();
+                StorageEmitter storageEmitter = (StorageEmitter) ObjectPool.EMITTERS.get(Storage.class);
+                list = storageEmitter.getActiveList();
                 for (int i = 0; i < list.size(); i++) {
                     list.get(i).setShielded(true);
                 }
@@ -167,7 +177,8 @@ public enum Sticker {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
-                List<AbstractAnomaly> anomalies = CorrosiveAnomalyEmitter.getInstance().getActiveList();
+                CorrosiveAnomalyEmitter corrosiveAnomalyEmitter = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
+                List<AbstractAnomaly> anomalies = corrosiveAnomalyEmitter.getActiveList();
                 for (int i = 0; i < anomalies.size(); i++) {
                     if (anomalies.get(i).getPosition().dst(Shuttle.position) <= Rules.WORLD_WIDTH) {
                         if (!anomalies.get(i).isTaken()) {
@@ -201,13 +212,15 @@ public enum Sticker {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
-                List<AbstractConsumable> list = CrateEmitter.getInstance().getActiveList();
+                CrateEmitter crateEmitter = (CrateEmitter) ObjectPool.EMITTERS.get(Crate.class);
+                List<AbstractConsumable> list = crateEmitter.getActiveList();
                 for (int i = 0; i < list.size(); i++) {
                     if (list.get(i).isDanger()) {
                         list.get(i).setScanned(true);
                     }
                 }
-                list = StorageEmitter.getInstance().getActiveList();
+                StorageEmitter storageEmitter = (StorageEmitter) ObjectPool.EMITTERS.get(Storage.class);
+                list = storageEmitter.getActiveList();
                 for (int i = 0; i < list.size(); i++) {
                     if (list.get(i).isDanger()) {
                         list.get(i).setScanned(true);
@@ -285,7 +298,7 @@ public enum Sticker {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
-                RocketLauncher.getInstance().launch();
+                RocketLauncher.launch();
             }
         }
 
@@ -575,7 +588,8 @@ public enum Sticker {
         int score;
         switch (r) {
             case 0:
-                List<AbstractAnomaly> anomalies = CorrosiveAnomalyEmitter.getInstance().getActiveList();
+                CorrosiveAnomalyEmitter corrosiveAnomalyEmitter = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
+                List<AbstractAnomaly> anomalies = corrosiveAnomalyEmitter.getActiveList();
                 for (int i = 0; i < anomalies.size(); i++) {
                     AbstractAnomaly anomaly = anomalies.get(i);
                     if (anomaly.getLevel() == level && !anomaly.isTaken()) {
@@ -626,11 +640,12 @@ public enum Sticker {
                                     true
                             );
                             for (int i = 0; i < (level + 1) * Rules.CONSUMABLE_GENERATE_BASE_BONUS; i++) {
-                                CrateEmitter.getInstance().createBonusAnomaly();
+                                CrateEmitter crateEmitter = (CrateEmitter) ObjectPool.EMITTERS.get(Crate.class);
+                                crateEmitter.createBonusAnomaly();
                             }
                             break;
                         case STORAGE:
-                            CrateEmitter.getInstance().createBonusAnomaly();
+                            StorageEmitter storageEmitter = (StorageEmitter) ObjectPool.EMITTERS.get(Storage.class);
                             GameInfoSystem.setup(
                                     consumable.getPosition().x, consumable.getPosition().y,
                                     GameInfoSystem.Preset.BONUS_STORAGE.getValue(),
@@ -638,7 +653,7 @@ public enum Sticker {
                                     true
                             );
                             for (int i = 0; i < (level + 1) * Rules.CONSUMABLE_GENERATE_BASE_BONUS; i++) {
-                                StorageEmitter.getInstance().createBonusAnomaly();
+                                storageEmitter.createBonusAnomaly();
                             }
                             break;
                     }
@@ -663,10 +678,12 @@ public enum Sticker {
                         case CRATE:
                             List<AbstractAnomaly> list;
                             if (MathUtils.random(0, 1) == 0) {
-                                list = MagneticAnomalyEmitter.getInstance().getActiveList();
+                                MagneticAnomalyEmitter magneticAnomalyEmitter = (MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class);
+                                list = magneticAnomalyEmitter.getActiveList();
                                 score = Rules.ANOMALIES_MAGNETIC_BONUS_SCORE;
                             } else {
-                                list = RadiationAnomalyEmitter.getInstance().getActiveList();
+                                RadiationAnomalyEmitter radiationAnomalyEmitter = (RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class);
+                                list = radiationAnomalyEmitter.getActiveList();
                                 score = Rules.ANOMALIES_RADIATION_BONUS_SCORE;
                             }
                             for (int i = 0; i < list.size(); i++) {
@@ -684,8 +701,10 @@ public enum Sticker {
                             break;
                         case STORAGE:
                             score = Rules.ANOMALIES_MAGNETIC_BONUS_SCORE;
-                            for (int i = 0; i < MagneticAnomalyEmitter.getInstance().getActiveList().size(); i++) {
-                                AbstractAnomaly anomaly = MagneticAnomalyEmitter.getInstance().getActiveList().get(i);
+                            MagneticAnomalyEmitter magneticAnomalyEmitter = (MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class);
+                            list = magneticAnomalyEmitter.getActiveList();
+                            for (int i = 0; i < list.size(); i++) {
+                                AbstractAnomaly anomaly = list.get(i);
                                 if (!anomaly.isTaken()) {
                                     anomaly.destroyWithEffect();
                                     GameInfoSystem.setup(
@@ -697,8 +716,10 @@ public enum Sticker {
                                 }
                             }
                             score = Rules.ANOMALIES_RADIATION_BONUS_SCORE;
-                            for (int i = 0; i < RadiationAnomalyEmitter.getInstance().getActiveList().size(); i++) {
-                                AbstractAnomaly anomaly = RadiationAnomalyEmitter.getInstance().getActiveList().get(i);
+                            RadiationAnomalyEmitter radiationAnomalyEmitter = (RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class);
+                            list = radiationAnomalyEmitter.getActiveList();
+                            for (int i = 0; i < list.size(); i++) {
+                                AbstractAnomaly anomaly = list.get(i);
                                 if (!anomaly.isTaken()) {
                                     anomaly.destroyWithEffect();
                                     GameInfoSystem.setup(
@@ -733,9 +754,10 @@ public enum Sticker {
         int score;
         switch (r) {
             case 0:
-                CorrosiveAnomalyEmitter.getInstance().createBonusAnomaly(consumable.getPosition(), level);
+                CorrosiveAnomalyEmitter corrosiveAnomalyEmitter = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
+                corrosiveAnomalyEmitter.createBonusAnomaly(consumable.getPosition(), level);
                 for (int i = 0; i < (4 - level) * Rules.ANOMALY_GENERATE_BASE_BONUS; i++) {
-                    CorrosiveAnomalyEmitter.getInstance().createBonusAnomaly(level);
+                    corrosiveAnomalyEmitter.createBonusAnomaly(level);
                 }
                 GameInfoSystem.setup(
                         consumable.getPosition().x, consumable.getPosition().y,
@@ -782,10 +804,12 @@ public enum Sticker {
                         List<AbstractConsumable> list;
                         GameInfoSystem.Preset preset;
                         if (consumable.isGolden()) {
-                            list = StorageEmitter.getInstance().getActiveList();
+                            StorageEmitter storageEmitter = (StorageEmitter) ObjectPool.EMITTERS.get(Storage.class);
+                            list = storageEmitter.getActiveList();
                             preset = GameInfoSystem.Preset.STORAGE_FLUSH;
                         } else {
-                            list = CrateEmitter.getInstance().getActiveList();
+                            CrateEmitter crateEmitter = (CrateEmitter) ObjectPool.EMITTERS.get(Crate.class);
+                            list = crateEmitter.getActiveList();
                             preset = GameInfoSystem.Preset.CRATE_FLUSH;
                         }
 
@@ -840,12 +864,15 @@ public enum Sticker {
                         break;
                     case STORAGE:
                         if (consumable.isGolden()) {
-                            ElectricalAnomalyEmitter.getInstance().createBonusAnomaly(consumable.getPosition());
+                            ElectricalAnomalyEmitter electricalAnomalyEmitter = (ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class);
+                            electricalAnomalyEmitter.createBonusAnomaly(consumable.getPosition());
                         } else {
                             if (MathUtils.random(0, 1) == 0) {
-                                RadiationAnomalyEmitter.getInstance().createBonusAnomaly(consumable.getPosition());
+                                RadiationAnomalyEmitter radiationAnomalyEmitter = (RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class);
+                                radiationAnomalyEmitter.createBonusAnomaly(consumable.getPosition());
                             } else {
-                                MagneticAnomalyEmitter.getInstance().createBonusAnomaly(consumable.getPosition());
+                                MagneticAnomalyEmitter magneticAnomalyEmitter = (MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class);
+                                magneticAnomalyEmitter.createBonusAnomaly(consumable.getPosition());
                             }
                         }
                         GameInfoSystem.setup(

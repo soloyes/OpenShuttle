@@ -6,14 +6,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
-import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
-import com.shuttle.game.bot.anomaly.ElectricalAnomalyEmitter;
+import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
+import com.shuttle.game.bot.anomaly.ElectricalAnomaly;
 import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
-import com.shuttle.game.bot.consumable.AstronautEmitter;
-import com.shuttle.game.bot.consumable.CrateEmitter;
-import com.shuttle.game.bot.consumable.FuelEmitter;
-import com.shuttle.game.bot.consumable.StorageEmitter;
+import com.shuttle.game.bot.consumable.Astronaut;
+import com.shuttle.game.bot.consumable.Crate;
+import com.shuttle.game.bot.consumable.Storage;
+import com.shuttle.game.bot.consumable.fuel.Fuel;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
@@ -24,6 +24,7 @@ import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.ListOfListsJoiner;
 import com.shuttle.game.utils.pool.AbstractPoolable;
+import com.shuttle.game.utils.pool.ObjectPool;
 
 /**
  * @author Shuttle on 7/7/18.
@@ -56,12 +57,12 @@ public class Radar {
         this.color = new Color(Color.valueOf(PaintConstants.BACKGROUND_COLOR_HEX));
         this.boomBox = new BoomBox();
         poolableJoiner = new ListOfListsJoiner<AbstractPoolable>(
-                AstronautEmitter.getInstance().getActiveList(),
-                CrateEmitter.getInstance().getActiveList(),
-                FuelEmitter.getInstance().getActiveList(),
-                StorageEmitter.getInstance().getActiveList(),
-                CorrosiveAnomalyEmitter.getInstance().getActiveList(),
-                ElectricalAnomalyEmitter.getInstance().getActiveList()
+                ObjectPool.EMITTERS.get(Astronaut.class).getActiveList(),
+                ObjectPool.EMITTERS.get(Crate.class).getActiveList(),
+                ObjectPool.EMITTERS.get(Fuel.class).getActiveList(),
+                ObjectPool.EMITTERS.get(Storage.class).getActiveList(),
+                ObjectPool.EMITTERS.get(CorrosiveAnomaly.class).getActiveList(),
+                ObjectPool.EMITTERS.get(ElectricalAnomaly.class).getActiveList()
         );
     }
 

@@ -7,12 +7,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
+import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
 import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.RadialSprite;
 import com.shuttle.game.utils.TimeFormat;
+import com.shuttle.game.utils.pool.ObjectPool;
 
 import java.util.List;
 
@@ -77,7 +79,8 @@ public class AnomalyTimer {
 
         if (counter <= 0.0f) {
             counter = Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
-            List<AbstractAnomaly> anomalies = CorrosiveAnomalyEmitter.getInstance().getActiveList();
+            CorrosiveAnomalyEmitter corrosiveAnomalyEmitter = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
+            List<AbstractAnomaly> anomalies = corrosiveAnomalyEmitter.getActiveList();
             for (int i = 0; i < anomalies.size(); i++) {
                 if (!anomalies.get(i).isActivated()) {
                     anomalies.get(i).setActivated(true);

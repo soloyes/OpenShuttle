@@ -3,36 +3,28 @@ package com.shuttle.game.bot.anomaly;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.effects.particle.ParticleEmitter;
 
 /**
  * @author Shuttle on 9/11/18.
  */
 
 public class CorrosiveAnomalyEmitter extends AbstractAnomalyEmitter {
-    private static CorrosiveAnomalyEmitter instance;
-
-    public static CorrosiveAnomalyEmitter getInstance() {
-        if (instance == null) {
-            instance = new CorrosiveAnomalyEmitter();
-        }
-        return instance;
-    }
-
-    private CorrosiveAnomalyEmitter() {
-        this(CorrosiveAnomaly.class);
+    public CorrosiveAnomalyEmitter(ParticleEmitter particleEmitter) {
+        this(CorrosiveAnomaly.class, particleEmitter);
         super.setRespawnTime(Rules.ANOMALIES_CORROSIVE_RESPAWN_TIME);
         super.setAnomaliesAtStart(Rules.ANOMALIES_CORROSIVE_AT_START);
         super.setAnomaliesMaxCount(Rules.ANOMALIES_CORROSIVE_MAX_COUNT);
         emit();
     }
 
-    private CorrosiveAnomalyEmitter(Class<? extends AbstractAnomaly> clazz) {
-        super(clazz);
+    private CorrosiveAnomalyEmitter(Class<? extends AbstractAnomaly> clazz, ParticleEmitter particleEmitter) {
+        super(clazz, particleEmitter);
     }
 
     @Override
     protected CorrosiveAnomaly newObject() {
-        return new CorrosiveAnomaly();
+        return new CorrosiveAnomaly(particleEmitter);
     }
 
     public void createBonusAnomaly(Vector2 position, int level) {

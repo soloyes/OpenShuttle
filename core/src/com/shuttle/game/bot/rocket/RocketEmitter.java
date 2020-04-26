@@ -11,17 +11,9 @@ import com.shuttle.game.utils.pool.ObjectPool;
  */
 
 public class RocketEmitter extends ObjectPool<Rocket> {
-    private static RocketEmitter instance;
     private BoundCheck boundCheck;
 
-    public static RocketEmitter getInstance() {
-        if (instance == null) {
-            instance = new RocketEmitter();
-        }
-        return instance;
-    }
-
-    private RocketEmitter() {
+    public RocketEmitter() {
         this(Rocket.class);
         this.boundCheck = new BoundCheck();
     }

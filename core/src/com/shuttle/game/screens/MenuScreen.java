@@ -23,6 +23,7 @@ public class MenuScreen extends BaseScreen {
     private Background background;
     private MenuGroup menuGroup;
     private ResultGroup resultGroup;
+    private MenuBackgroundGroup menuBackgroundGroup;
     private DetailedResultGroup detailedResultGroup;
     private BitmapFont font188;
     private BitmapFont font48;
@@ -41,12 +42,11 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public void createGUI() {
-        // Workaround (Android restarts via app manager)
-        MenuBackgroundGroup.doStart();
+        // Workaround (Android restart via app manager)
         DetailedResultGroup.doStart();
-        ConfigGroup.doStart();
         ResultGroup.doStart();
         //
+        menuBackgroundGroup = new MenuBackgroundGroup();
         background = new Background();
         menuGroup = new MenuGroup();
         MenuBar menuBar = new MenuBar();
@@ -63,7 +63,7 @@ public class MenuScreen extends BaseScreen {
         head.setPosition(285, 1686);
         this.underHead = new Label("2D GAME ARCADE", labelStyle64);
         underHead.setPosition(408, 1658);
-        stage.addActor(MenuBackgroundGroup.getInstance());
+        stage.addActor(menuBackgroundGroup);
         stage.addActor(menuGroup);
         stage.addActor(ConfigGroup.getInstance());
         stage.addActor(resultGroup);
@@ -98,6 +98,5 @@ public class MenuScreen extends BaseScreen {
         resultGroup.dispose();
         detailedResultGroup.dispose();
         ConfigGroup.getInstance().dispose();
-        MenuBackgroundGroup.getInstance().dispose();
     }
 }

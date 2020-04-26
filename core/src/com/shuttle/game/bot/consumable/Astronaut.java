@@ -9,6 +9,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.MoveProcessor;
 import com.shuttle.game.effects.Vibrator;
+import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.labelsticker.Label;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.player.Standing;
@@ -24,7 +25,9 @@ public class Astronaut extends AbstractConsumable {
     private TextureRegion[] regions;
     private int multiplier;
 
-    public Astronaut() {
+    public Astronaut(ParticleEmitter particleEmitter) {
+        super(particleEmitter);
+        this.particleEmitter = particleEmitter;
         this.regions = Regions.split(
                 Assets.getInstance().getAtlas().findRegion(PaintConstants.ASTRONAUT_REGION), 1, 5, 5);
         this.width = PaintConstants.ASTRONAUT_WIDTH;

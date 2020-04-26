@@ -73,8 +73,10 @@ public class Shuttle extends AbstractShuttle {
     private LinkedList<Float> angleList;
     private LinkedList<Float> alphaList;
     private float a;
+    private ParticleEmitter particleEmitter;
 
-    public Shuttle(Joystick joystick) {
+    public Shuttle(Joystick joystick, ParticleEmitter particleEmitter) {
+        this.particleEmitter = particleEmitter;
         this.joystick = joystick;
         this.standing = Standing.getInstance();
         this.radar = new Radar();
@@ -392,8 +394,7 @@ public class Shuttle extends AbstractShuttle {
                 );
                 angle += dir * radialSpeed * dt;
                 if (Math.abs(angle - angleToTarget) > 5.0f) {
-                    ParticleEmitter.getInstance()
-                            .setupFromPointToPoint(
+                    particleEmitter.setupFromPointToPoint(
                                     position.x + dir * 80 * (float) Math.cos(Math.toRadians(90 - angle)),
                                     position.y - dir * 80 * (float) Math.sin(Math.toRadians(90 - angle)),
                                     position.x + dir * 35 * (float) Math.cos(Math.toRadians(90 - angle)),
@@ -421,20 +422,20 @@ public class Shuttle extends AbstractShuttle {
         /*FPS hack*/
         for (int i = 0; i <= j; i++) {
             if (standing.getFuel() > 0.1f && velocity.len() >= 80 && !Rules.GAME_OVER) {
-                ParticleEmitter.getInstance().getBuilder().buildShuttleEngineFire(position, angle,  /*FPS hack*/70 - j * 0.5f /*FPS hack*/, 1.0f, 60 * dt);
+                particleEmitter.getBuilder().buildShuttleEngineFire(position, angle,  /*FPS hack*/70 - j * 0.5f /*FPS hack*/, 1.0f, 60 * dt);
                 if (engineStarted) {
                     boomBox.playSound(MSConstants.START_ENGINE);
                     engineStarted = false;
                 }
             } else {
-                ParticleEmitter.getInstance().getBuilder().buildShuttleLowLevelEngineFire(position, angle, 80);
+                particleEmitter.getBuilder().buildShuttleLowLevelEngineFire(position, angle, 80);
                 engineStarted = true;
             }
             if (velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
-                ParticleEmitter.getInstance().getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
+                particleEmitter.getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
             }
             if (velocity.len() >= Rules.PLAYER_ENGINE_POWER) {
-                ParticleEmitter.getInstance().getBuilder().buildShuttleShield(
+                particleEmitter.getBuilder().buildShuttleShield(
                         position, angle, 90, 45,
                         PlayerInteractionLevels.RED.getR(), PlayerInteractionLevels.RED.getG(), PlayerInteractionLevels.RED.getB()
                 );

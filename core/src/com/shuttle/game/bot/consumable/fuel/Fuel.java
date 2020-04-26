@@ -27,7 +27,9 @@ public class Fuel extends AbstractConsumable {
     private Box box;
     private Bubble[] bubble;
 
-    public Fuel() {
+    public Fuel(ParticleEmitter particleEmitter) {
+        super(particleEmitter);
+        this.particleEmitter = particleEmitter;
         this.width = PaintConstants.FUEL_WIDTH;
         this.height = PaintConstants.FUEL_HEIGHT;
         this.type = Type.FUEL;
@@ -130,6 +132,6 @@ public class Fuel extends AbstractConsumable {
     @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
-        ParticleEmitter.getInstance().getBuilder().buildFuelDestroyFlame(position);
+        particleEmitter.getBuilder().buildFuelDestroyFlame(position);
     }
 }

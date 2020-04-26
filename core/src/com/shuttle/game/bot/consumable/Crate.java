@@ -11,6 +11,7 @@ import com.shuttle.game.effects.MoveProcessor;
 import com.shuttle.game.effects.Scan;
 import com.shuttle.game.effects.Shield;
 import com.shuttle.game.effects.Vibrator;
+import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.labelsticker.Label;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.ui.GameInfoSystem;
@@ -22,7 +23,9 @@ import com.shuttle.game.utils.Consumer;
  */
 
 public class Crate extends AbstractConsumable {
-    public Crate() {
+    public Crate(ParticleEmitter particleEmitter) {
+        super(particleEmitter);
+        this.particleEmitter = particleEmitter;
         this.width = PaintConstants.CRATE_WIDTH;
         this.height = PaintConstants.CRATE_HEIGHT;
         this.type = Type.CRATE;

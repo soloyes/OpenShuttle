@@ -17,7 +17,6 @@ import com.shuttle.game.utils.Assets;
  */
 
 public class MenuBackgroundGroup extends Group {
-    private static MenuBackgroundGroup instance;
     private TextureRegion storage;
     private TextureRegion astronaut;
     private TextureRegion sitastronaut;
@@ -52,16 +51,11 @@ public class MenuBackgroundGroup extends Group {
     private Oscillator shieldScaleOscillator;
     private Oscillator shuttleYOscillator;
     private Oscillator backYOscillator;
+    private ParticleEmitter particleEmitter;
 
-    public static MenuBackgroundGroup getInstance() {
-        if (instance == null) {
-            instance = new MenuBackgroundGroup();
-        }
-        return instance;
-    }
-
-    private MenuBackgroundGroup() {
+    public MenuBackgroundGroup() {
         setName(GroupType.MENU_BACKGROUND.name());
+        this.particleEmitter = new ParticleEmitter();
         this.storage = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_STORAGE));
         this.astronaut = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT));
         this.sitastronaut = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT));
@@ -166,8 +160,7 @@ public class MenuBackgroundGroup extends Group {
                 rotation1 * random2
         );
 
-        ParticleEmitter.getInstance()
-                .setupFromPointToPoint(
+        particleEmitter.setupFromPointToPoint(
                         PaintConstants.UI_MENU_BACKGROUND_SHIELD_X + PaintConstants.UI_MENU_BACKGROUND_SHIELD_WIDTH / 3 - 30,
                         PaintConstants.UI_MENU_BACKGROUND_SHIELD_Y + PaintConstants.UI_MENU_BACKGROUND_SHIELD_HEIGHT / 3 - 20,
                         PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_X + PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_WIDTH / 2,
@@ -182,7 +175,7 @@ public class MenuBackgroundGroup extends Group {
             float ang = 6.28f / count * j;
             float radX = astronautScale * PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_WIDTH / 2;
             float radY = astronautScale * PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT / 2;
-            ParticleEmitter.getInstance().setup(
+            particleEmitter.setup(
                     PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_X + PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_WIDTH / 2 + radX * (float) Math.cos(ang) + MathUtils.random(-10, 10),
                     PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_Y + PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT / 2 + radY * (float) Math.sin(ang) + MathUtils.random(-10, 10),
                     0, 0, 0.1f, size, size,
@@ -191,13 +184,13 @@ public class MenuBackgroundGroup extends Group {
             );
         }
 
-        ParticleEmitter.getInstance().render((SpriteBatch) batch);
+        particleEmitter.render((SpriteBatch) batch);
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
-        ParticleEmitter.getInstance().update(delta);
+        particleEmitter.update(delta);
         astronautScale = astronautScaleOscillator.oscillate(astronautScale, 0.05f, 0.9f, 1.0f, delta);
         asteroidScale1 = asteroidScaleOscillator1.oscillate(asteroidScale1, 0.01f, 0.9f, 1.0f, delta);
         asteroidScale2 = asteroidScaleOscillator2.oscillate(asteroidScale2, 0.03f, 0.8f, 1.0f, delta);
@@ -207,14 +200,5 @@ public class MenuBackgroundGroup extends Group {
         rotation1 += delta;
         rotation2 += 10 * delta;
         angle += delta / 5;
-    }
-
-    public void dispose() {
-        instance = null;
-        ParticleEmitter.getInstance().dispose();
-    }
-
-    public static void doStart() {
-        instance = null;
     }
 }

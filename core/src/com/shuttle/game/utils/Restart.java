@@ -1,18 +1,6 @@
 package com.shuttle.game.utils;
 
-import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
-import com.shuttle.game.bot.anomaly.ElectricalAnomalyEmitter;
-import com.shuttle.game.bot.anomaly.MagneticAnomalyEmitter;
-import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
-import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
-import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
-import com.shuttle.game.bot.consumable.AstronautEmitter;
-import com.shuttle.game.bot.consumable.CrateEmitter;
-import com.shuttle.game.bot.consumable.FuelEmitter;
-import com.shuttle.game.bot.consumable.StorageEmitter;
-import com.shuttle.game.bot.rocket.RocketEmitter;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.ui.groups.PauseGroup;
@@ -32,17 +20,6 @@ import com.shuttle.game.ui.panels.UIRightPanel;
 public class Restart {
     public static void doRestart() {
         Rules.GAME_OVER = false;
-        MetalAsteroidEmitter.getInstance().dispose();
-        MineralAsteroidEmitter.getInstance().dispose();
-        CrateEmitter.getInstance().dispose();
-        StorageEmitter.getInstance().dispose();
-        AstronautEmitter.getInstance().dispose();
-        ElectricalAnomalyEmitter.getInstance().dispose();
-        CorrosiveAnomalyEmitter.getInstance().dispose();
-        MagneticAnomalyEmitter.getInstance().dispose();
-        RadiationAnomalyEmitter.getInstance().dispose();
-        FuelEmitter.getInstance().dispose();
-        RocketEmitter.getInstance().dispose();
         Standing.getInstance().dispose();
         DetailedResultGroup.getInstance().dispose();
         RightGroup.getInstance().dispose();
@@ -53,7 +30,6 @@ public class Restart {
         ConfigGroup.getInstance().dispose();
         UILeftPanel.getInstance().dispose();
         UIRightPanel.getInstance().dispose();
-        ParticleEmitter.getInstance().dispose();
         Shuttle.respawn();
     }
 }

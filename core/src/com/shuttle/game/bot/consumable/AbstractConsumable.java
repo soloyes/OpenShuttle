@@ -3,10 +3,12 @@ package com.shuttle.game.bot.consumable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Scan;
 import com.shuttle.game.effects.Shield;
+import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.labelsticker.Label;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.pool.AbstractPoolable;
@@ -41,8 +43,12 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     protected boolean danger;
     @Getter
     protected boolean golden;
+    protected ParticleEmitter particleEmitter;
 
     public AbstractConsumable() {
+    }
+
+    public AbstractConsumable(ParticleEmitter particleEmitter) {
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.active = false;
@@ -64,6 +70,7 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
         if (labels.get(Label.Layer.HIDDEN).size() < 1) {
             this.labels.get(Label.Layer.HIDDEN).add(new Label());
         }
+        this.particleEmitter = particleEmitter;
     }
 
     public abstract void init(float x, float y);
@@ -97,5 +104,22 @@ public abstract class AbstractConsumable extends AbstractPoolable implements Con
     @Override
     public Vector2 getPosition() {
         return position;
+    }
+
+    public void showSprayCollision() {
+        float R, G, B;
+        for (int j = 0; j < 60; j++) {
+            R = this.getSpreeColor().r;
+            G = this.getSpreeColor().g;
+            B = this.getSpreeColor().b;
+            particleEmitter.setup(
+                    this.getPosition().x + MathUtils.random(-30, 30),
+                    this.getPosition().y + MathUtils.random(-30, 30),
+                    MathUtils.random(-600, 600), MathUtils.random(-600, 600),
+                    0.4f, 8, 0,
+                    R, G, B, 1f,
+                    R, G, B, 0.0f
+            );
+        }
     }
 }

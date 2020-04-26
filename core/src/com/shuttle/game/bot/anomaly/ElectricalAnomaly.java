@@ -10,6 +10,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.MoveProcessor;
+import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.GameInfoSystem;
@@ -23,7 +24,9 @@ import com.shuttle.game.utils.Regions;
 public class ElectricalAnomaly extends AbstractAnomaly {
     private boolean touched;
 
-    public ElectricalAnomaly() {
+    public ElectricalAnomaly(ParticleEmitter particleEmitter) {
+        super(particleEmitter);
+        this.particleEmitter = particleEmitter;
         this.textureRegions = Regions.split(
                 new TextureRegion(
                         Assets.getInstance()

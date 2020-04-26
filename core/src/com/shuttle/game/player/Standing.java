@@ -1,11 +1,7 @@
 package com.shuttle.game.player;
 
-import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
-import com.shuttle.game.bot.anomaly.ElectricalAnomalyEmitter;
-import com.shuttle.game.bot.anomaly.MagneticAnomalyEmitter;
-import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
-import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
-import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
+import com.shuttle.game.bot.anomaly.AbstractAnomalyEmitter;
+import com.shuttle.game.bot.asteroids.AbstractAsteroidEmitter;
 import com.shuttle.game.bot.consumable.AstronautEmitter;
 import com.shuttle.game.bot.consumable.CrateEmitter;
 import com.shuttle.game.bot.consumable.FuelEmitter;
@@ -317,7 +313,7 @@ public final class Standing {
         // effectiveness
         //
         float c;
-        c = AstronautEmitter.getInstance().getEmitted() + AstronautEmitter.getInstance().getEmittedGolden();
+        c = AstronautEmitter.getEmitted();
         float ate = 0.0f;
         if (c != 0) {
             ate = 1.0f * detailedResultDAO.getAstronautsTaken() / c;
@@ -329,21 +325,21 @@ public final class Standing {
             uie = 1.0f * detailedResultDAO.getUsedItems() / c;
         }
 
-        c = CrateEmitter.getInstance().getEmitted() + CrateEmitter.getInstance().getEmittedGolden() +
-                StorageEmitter.getInstance().getEmitted() + StorageEmitter.getInstance().getEmittedGolden() +
-                FuelEmitter.getInstance().getEmitted() + FuelEmitter.getInstance().getEmittedGolden();
+        c = CrateEmitter.getEmitted() + CrateEmitter.getEmittedGolden() +
+                StorageEmitter.getEmitted() + StorageEmitter.getEmittedGolden() +
+                FuelEmitter.getEmitted() + FuelEmitter.getEmittedGolden();
         float pie = 0.0f;
         if (c != 0) {
             pie = 1.0f * detailedResultDAO.getPickUpItems() / c;
         }
 
-        c = MetalAsteroidEmitter.getInstance().getEmitted() + MineralAsteroidEmitter.getInstance().getEmitted();
+        c = AbstractAsteroidEmitter.getEmitted();
         float mae = 0.0f;
         if (c != 0) {
             mae = 1.0f * detailedResultDAO.getMinedAsteroids() / c;
         }
 
-        c = CorrosiveAnomalyEmitter.getInstance().getEmitted() + MagneticAnomalyEmitter.getInstance().getEmitted() + RadiationAnomalyEmitter.getInstance().getEmitted() + ElectricalAnomalyEmitter.getInstance().getEmitted();
+        c = AbstractAnomalyEmitter.getEmitted();
         float ede = 0.0f;
         if (c != 0) {
             ede = 1.0f * detailedResultDAO.getEnemiesDestroyed() / c;
@@ -356,10 +352,10 @@ public final class Standing {
             te = 1.0f * Rules.GAME_SESSION_TIME / detailedResultDAO.getTime();
         }
 
-        c = (AstronautEmitter.getInstance().getEmitted() + AstronautEmitter.getInstance().getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_ASTRONAUT +
-                (CrateEmitter.getInstance().getEmitted() + CrateEmitter.getInstance().getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_CRATE +
-                (StorageEmitter.getInstance().getEmitted() + StorageEmitter.getInstance().getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_STORAGE +
-                (FuelEmitter.getInstance().getEmitted() + FuelEmitter.getInstance().getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_FUEL;
+        c = AstronautEmitter.getEmitted() * Rules.PLAYER_DAMAGE_DONE_ASTRONAUT +
+                (CrateEmitter.getEmitted() + CrateEmitter.getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_CRATE +
+                (StorageEmitter.getEmitted() + StorageEmitter.getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_STORAGE +
+                (FuelEmitter.getEmitted() + FuelEmitter.getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_FUEL;
         float dde = 1.0f;
         if (c != 0) {
             dde = 1 - (1.0f * detailedResultDAO.getDmgDone() / c);

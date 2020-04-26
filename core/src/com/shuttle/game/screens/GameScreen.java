@@ -116,10 +116,25 @@ public class GameScreen extends BaseScreen {
     private boolean gameOverDeactivate;
     private ListOfListsJoiner<AbstractConsumable> consumableJoiner;
     private ListOfListsJoiner<AbstractAsteroid> asteroidsJoiner;
+    private ListOfListsJoiner<AbstractAnomaly> anomalyJoiner;
     @Getter
     private UITopPanel uiTopPanel;
     private Standing standing;
     private Profiles profiles;
+
+    private MineralAsteroidEmitter mineralAsteroidEmitter;
+    private MetalAsteroidEmitter metalAsteroidEmitter;
+    private CorrosiveAnomalyEmitter corrosiveAnomalyEmitter;
+    private ElectricalAnomalyEmitter electricalAnomalyEmitter;
+    private MagneticAnomalyEmitter magneticAnomalyEmitter;
+    private RadiationAnomalyEmitter radiationAnomalyEmitter;
+    private AstronautEmitter astronautEmitter;
+    private CrateEmitter crateEmitter;
+    private StorageEmitter storageEmitter;
+    private FuelEmitter fuelEmitter;
+    private RocketEmitter rocketEmitter;
+    private ParticleEmitter particleEmitter;
+    private RocketLauncher rocketLauncher;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -135,6 +150,20 @@ public class GameScreen extends BaseScreen {
         super.show();
         fadeInAlpha = 0.0f;
         gameOverDeactivate = false;
+
+        particleEmitter = new ParticleEmitter();
+        mineralAsteroidEmitter = new MineralAsteroidEmitter(particleEmitter);
+        metalAsteroidEmitter = new MetalAsteroidEmitter(particleEmitter);
+        corrosiveAnomalyEmitter = new CorrosiveAnomalyEmitter(particleEmitter);
+        electricalAnomalyEmitter = new ElectricalAnomalyEmitter(particleEmitter);
+        magneticAnomalyEmitter = new MagneticAnomalyEmitter(particleEmitter);
+        radiationAnomalyEmitter = new RadiationAnomalyEmitter(particleEmitter);
+        astronautEmitter = new AstronautEmitter(particleEmitter);
+        crateEmitter = new CrateEmitter(particleEmitter);
+        storageEmitter = new StorageEmitter(particleEmitter);
+        fuelEmitter = new FuelEmitter(particleEmitter);
+        rocketEmitter = new RocketEmitter();
+
         anomalyTimer = new AnomalyTimer();
         boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
         fbo = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(),
@@ -150,7 +179,7 @@ public class GameScreen extends BaseScreen {
         joystick = new Joystick();
 
         blackhole = new Blackhole();
-        player = new Shuttle(joystick);
+        player = new Shuttle(joystick, particleEmitter);
         standing = Standing.getInstance();
         uiTopPanel = new UITopPanel();
 
@@ -160,16 +189,19 @@ public class GameScreen extends BaseScreen {
 
         InputMultiplexer im = new InputMultiplexer(player, stage, joystick);
         Gdx.input.setInputProcessor(im);
-        ray = new Ray();
+
         calcMusicEffectVolume();
         prettyCorrosiveKick = PrettySound.getPretty(Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY);
         prettyElectricKick = PrettySound.getPretty(Rules.ANOMALY_KICK_PRETTY_SOUND_DELAY);
         prettyFragmentHarvest = PrettySound.getPretty(Rules.FRAGMENT_KICK_PRETTY_SOUND_DELAY);
+        ray = new Ray(particleEmitter, mineralAsteroidEmitter.getActiveList(), metalAsteroidEmitter.getActiveList());
+        //todo: а тут что?
+        consumableJoiner = ListOfListsJoiner.newAbstractConsumableList(astronautEmitter.getActiveList(), crateEmitter.getActiveList(), storageEmitter.getActiveList(), fuelEmitter.getActiveList());
+        asteroidsJoiner = ListOfListsJoiner.newAbstractAsteroidList(mineralAsteroidEmitter.getActiveList(), metalAsteroidEmitter.getActiveList());
+        anomalyJoiner = ListOfListsJoiner.newAbstractAnomalyList(corrosiveAnomalyEmitter.getActiveList(), electricalAnomalyEmitter.getActiveList(), radiationAnomalyEmitter.getActiveList(), magneticAnomalyEmitter.getActiveList());
         //
-        consumableJoiner = ListOfListsJoiner.newAbstractConsumableList();
-        asteroidsJoiner = ListOfListsJoiner.newAbstractAsteroidList();
-        //
-        StorageEmitter.getInstance().emit();
+        rocketLauncher = new RocketLauncher(rocketEmitter, anomalyJoiner);
+        storageEmitter.emit();
         this.profiles = new Profiles();
     }
 
@@ -196,7 +228,6 @@ public class GameScreen extends BaseScreen {
         ConfigGroup.doStart();
         UILeftPanel.doStart();
         UIRightPanel.doStart();
-        ParticleEmitter.doStart();
         //
         detailedResultGroup = DetailedResultGroup.getInstance();
         stage.addActor(detailedResultGroup);
@@ -224,20 +255,20 @@ public class GameScreen extends BaseScreen {
         if (!Profiles.getSettings().isShader() || ShaderManager.BLACKHOLE.getProgram() == null) {
             blackhole.render(batch);
         }
-        MetalAsteroidEmitter.getInstance().render(batch);
-        MineralAsteroidEmitter.getInstance().render(batch);
-        FuelEmitter.getInstance().render(batch);
-        StorageEmitter.getInstance().render(batch);
-        AstronautEmitter.getInstance().render(batch);
-        CrateEmitter.getInstance().render(batch);
-        CorrosiveAnomalyEmitter.getInstance().render(batch);
-        ElectricalAnomalyEmitter.getInstance().render(batch);
-        ParticleEmitter.getInstance().render(batch);
+        mineralAsteroidEmitter.render(batch);
+        metalAsteroidEmitter.render(batch);
+        fuelEmitter.render(batch);
+        storageEmitter.render(batch);
+        astronautEmitter.render(batch);
+        crateEmitter.render(batch);
+        corrosiveAnomalyEmitter.render(batch);
+        electricalAnomalyEmitter.render(batch);
+        particleEmitter.render(batch);
         player.render(batch);
         player.getRamShield().render(batch);
-        RadiationAnomalyEmitter.getInstance().render(batch);
-        MagneticAnomalyEmitter.getInstance().render(batch);
-        RocketLauncher.getInstance().render(batch);
+        radiationAnomalyEmitter.render(batch);
+        magneticAnomalyEmitter.render(batch);
+        rocketLauncher.render(batch);
         batch.end();
 
         float shaderHoleX = (Blackhole.position.x - camera.position.x + Rules.WORLD_WIDTH / 2) / Rules.WORLD_WIDTH;
@@ -331,21 +362,21 @@ public class GameScreen extends BaseScreen {
             PrettySound.update(dt);
             background.update(dt);
             player.update(dt);
-            CorrosiveAnomalyEmitter.getInstance().update(dt);
-            ElectricalAnomalyEmitter.getInstance().update(dt);
-            RadiationAnomalyEmitter.getInstance().update(dt);
-            MagneticAnomalyEmitter.getInstance().update(dt);
-            AstronautEmitter.getInstance().update(dt);
-            CrateEmitter.getInstance().update(dt);
-            MetalAsteroidEmitter.getInstance().update(dt);
-            MineralAsteroidEmitter.getInstance().update(dt);
-            FuelEmitter.getInstance().update(dt);
-            StorageEmitter.getInstance().update(dt);
-            ParticleEmitter.getInstance().update(dt);
+            corrosiveAnomalyEmitter.update(dt);
+            electricalAnomalyEmitter.update(dt);
+            radiationAnomalyEmitter.update(dt);
+            magneticAnomalyEmitter.update(dt);
+            astronautEmitter.update(dt);
+            crateEmitter.update(dt);
+            mineralAsteroidEmitter.update(dt);
+            metalAsteroidEmitter.update(dt);
+            fuelEmitter.update(dt);
+            storageEmitter.update(dt);
+            particleEmitter.update(dt);
             blackhole.update(dt);
             UILeftPanel.getInstance().update(dt);
             uiTopPanel.update(dt);
-            RocketLauncher.getInstance().update(dt);
+            rocketLauncher.update(dt);
             if (!Rules.GAME_OVER) {
                 anomalyTimer.update(dt);
                 Standing.getInstance().addTime(dt);
@@ -358,14 +389,14 @@ public class GameScreen extends BaseScreen {
                 checkCollision(dt);
             } else {
                 if (!gameOverDeactivate) {
-                    abstractAnomalyDeactivate(CorrosiveAnomalyEmitter.getInstance().getActiveList());
-                    abstractAnomalyDeactivate(CorrosiveAnomalyEmitter.getInstance().getFreeList());
-                    abstractAnomalyDeactivate(ElectricalAnomalyEmitter.getInstance().getActiveList());
-                    abstractAnomalyDeactivate(ElectricalAnomalyEmitter.getInstance().getFreeList());
-                    abstractAnomalyDeactivate(MagneticAnomalyEmitter.getInstance().getActiveList());
-                    abstractAnomalyDeactivate(MagneticAnomalyEmitter.getInstance().getFreeList());
-                    abstractAnomalyDeactivate(RadiationAnomalyEmitter.getInstance().getActiveList());
-                    abstractAnomalyDeactivate(RadiationAnomalyEmitter.getInstance().getFreeList());
+                    abstractAnomalyDeactivate(corrosiveAnomalyEmitter.getActiveList());
+                    abstractAnomalyDeactivate(corrosiveAnomalyEmitter.getFreeList());
+                    abstractAnomalyDeactivate(electricalAnomalyEmitter.getActiveList());
+                    abstractAnomalyDeactivate(electricalAnomalyEmitter.getFreeList());
+                    abstractAnomalyDeactivate(magneticAnomalyEmitter.getActiveList());
+                    abstractAnomalyDeactivate(magneticAnomalyEmitter.getFreeList());
+                    abstractAnomalyDeactivate(radiationAnomalyEmitter.getActiveList());
+                    abstractAnomalyDeactivate(radiationAnomalyEmitter.getFreeList());
                     gameOverDeactivate = true;
                 }
             }
@@ -463,8 +494,8 @@ public class GameScreen extends BaseScreen {
 
         player.showTakeRangeField(dt, anyAtHarvestPoint);
 
-        for (int i = 0; i < CorrosiveAnomalyEmitter.getInstance().getActiveList().size(); i++) {
-            CorrosiveAnomaly anomaly = (CorrosiveAnomaly) CorrosiveAnomalyEmitter.getInstance().getActiveList().get(i);
+        for (int i = 0; i < corrosiveAnomalyEmitter.getActiveList().size(); i++) {
+            CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(i);
             collideWithRocket(anomaly);
             if (anomaly.isTaken()) {
                 continue;
@@ -492,8 +523,8 @@ public class GameScreen extends BaseScreen {
             }
         }
 
-        for (int i = 0; i < ElectricalAnomalyEmitter.getInstance().getActiveList().size(); i++) {
-            ElectricalAnomaly anomaly = (ElectricalAnomaly) ElectricalAnomalyEmitter.getInstance().getActiveList().get(i);
+        for (int i = 0; i < electricalAnomalyEmitter.getActiveList().size(); i++) {
+            ElectricalAnomaly anomaly = (ElectricalAnomaly) electricalAnomalyEmitter.getActiveList().get(i);
             if (anomaly.isTaken()) {
                 continue;
             }
@@ -509,8 +540,8 @@ public class GameScreen extends BaseScreen {
 
         //
         boolean tmp1 = false;
-        for (int i = 0; i < RadiationAnomalyEmitter.getInstance().getActiveList().size(); i++) {
-            RadiationAnomaly anomaly = (RadiationAnomaly) RadiationAnomalyEmitter.getInstance().getActiveList().get(i);
+        for (int i = 0; i < radiationAnomalyEmitter.getActiveList().size(); i++) {
+            RadiationAnomaly anomaly = (RadiationAnomaly) radiationAnomalyEmitter.getActiveList().get(i);
             if (anomaly.isTaken()) {
                 continue;
             }
@@ -544,8 +575,8 @@ public class GameScreen extends BaseScreen {
         Standing.getInstance().setScoreAlertRadiationAnomaly(tmp1);
 
         boolean tmp2 = false;
-        for (int i = 0; i < MagneticAnomalyEmitter.getInstance().getActiveList().size(); i++) {
-            MagneticAnomaly anomaly = (MagneticAnomaly) MagneticAnomalyEmitter.getInstance().getActiveList().get(i);
+        for (int i = 0; i < magneticAnomalyEmitter.getActiveList().size(); i++) {
+            MagneticAnomaly anomaly = (MagneticAnomaly) magneticAnomalyEmitter.getActiveList().get(i);
             if (anomaly.isTaken()) {
                 continue;
             }
@@ -612,8 +643,8 @@ public class GameScreen extends BaseScreen {
                 }
             }
 
-            for (int j = 0; j < CorrosiveAnomalyEmitter.getInstance().getActiveList().size(); j++) {
-                CorrosiveAnomaly anomaly = (CorrosiveAnomaly) CorrosiveAnomalyEmitter.getInstance().getActiveList().get(j);
+            for (int j = 0; j < corrosiveAnomalyEmitter.getActiveList().size(); j++) {
+                CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(j);
                 if (!asteroid.isFragmented() && anomaly.getPosition().dst(asteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
                     asteroid.destroyWithEffect();
                     ObjectPool.EMITTERS.get(asteroid.getClass())
@@ -665,7 +696,7 @@ public class GameScreen extends BaseScreen {
             //
 
         }
-        RocketEmitter.getInstance().checkCollision();
+        rocketEmitter.checkCollision();
     }
 
     private void abstractAnomalyDeactivate(List<AbstractAnomaly> anomalies) {
@@ -718,16 +749,16 @@ public class GameScreen extends BaseScreen {
         }
     }
 
-    private void damageToAnomaly(AbstractPoolable abstractPoolable) {
-        abstractPoolable.destroyWithEffect();
+    private void damageToAnomaly(AbstractAnomaly abstractAnomaly) {
+        abstractAnomaly.destroyWithEffect();
         player.getRamShield().blink(1.0f);
-        player.slowDown(abstractPoolable.getLevel() * 50.0f);
+        player.slowDown(abstractAnomaly.getLevel() * 50.0f);
         if (Shuttle.velocity.len() <= Rules.PLAYER_ENGINE_POWER) {
-            Standing.getInstance().changeRamPower(-abstractPoolable.getLevel());
+            Standing.getInstance().changeRamPower(-abstractAnomaly.getLevel());
         }
-        abstractPoolable.showSprayCollision();
-        player.killPlusPlus(abstractPoolable);
-        Standing.getInstance().addToStatistics(abstractPoolable.getType(), abstractPoolable.getLevel());
+        abstractAnomaly.showSprayCollision();
+        player.killPlusPlus(abstractAnomaly);
+        Standing.getInstance().addToStatistics(abstractAnomaly.getType(), abstractAnomaly.getLevel());
     }
 
     private void damageToPlayer(AbstractPoolable anomaly) {

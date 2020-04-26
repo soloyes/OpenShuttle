@@ -18,12 +18,11 @@ import lombok.Setter;
  */
 
 public class ParticleEmitter extends ObjectPool<ParticleEmitter.Particle> {
-    private static ParticleEmitter instance;
     private TextureRegion particleTexture;
     private ParticleEffectBuilder builder;
     private Vector2 tmp;
 
-    private ParticleEmitter() {
+    public ParticleEmitter() {
         this(Particle.class);
         this.particleTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STAR16_REGION);
         this.builder = new ParticleEffectBuilder(this);
@@ -76,13 +75,6 @@ public class ParticleEmitter extends ObjectPool<ParticleEmitter.Particle> {
 
     public ParticleEffectBuilder getBuilder() {
         return builder;
-    }
-
-    public static ParticleEmitter getInstance() {
-        if (instance == null) {
-            instance = new ParticleEmitter();
-        }
-        return instance;
     }
 
     public class Particle extends AbstractPoolable {
@@ -185,14 +177,5 @@ public class ParticleEmitter extends ObjectPool<ParticleEmitter.Particle> {
                     0
             );
         }
-    }
-
-    @Override
-    public void dispose() {
-        instance = null;
-    }
-
-    public static void doStart() {
-        instance = null;
     }
 }

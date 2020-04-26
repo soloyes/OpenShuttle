@@ -3,6 +3,7 @@ package com.shuttle.game.bot.anomaly;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.utils.pool.ObjectPool;
 
 import lombok.Getter;
@@ -24,10 +25,12 @@ public abstract class AbstractAnomalyEmitter extends ObjectPool<AbstractAnomaly>
     @Setter
     private int anomaliesMaxCount;
     @Getter
-    protected int emitted;
+    private static int emitted;
+    protected ParticleEmitter particleEmitter;
 
-    AbstractAnomalyEmitter(Class<? extends AbstractAnomaly> clazz) {
+    AbstractAnomalyEmitter(Class<? extends AbstractAnomaly> clazz, ParticleEmitter particleEmitter) {
         super(clazz);
+        this.particleEmitter = particleEmitter;
     }
 
     protected abstract AbstractAnomaly newObject();

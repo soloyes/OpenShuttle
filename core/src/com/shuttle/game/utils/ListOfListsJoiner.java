@@ -1,18 +1,8 @@
 package com.shuttle.game.utils;
 
 import com.shuttle.game.bot.anomaly.AbstractAnomaly;
-import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
-import com.shuttle.game.bot.anomaly.ElectricalAnomalyEmitter;
-import com.shuttle.game.bot.anomaly.MagneticAnomalyEmitter;
-import com.shuttle.game.bot.anomaly.RadiationAnomalyEmitter;
 import com.shuttle.game.bot.asteroids.AbstractAsteroid;
-import com.shuttle.game.bot.asteroids.MetalAsteroidEmitter;
-import com.shuttle.game.bot.asteroids.MineralAsteroidEmitter;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
-import com.shuttle.game.bot.consumable.AstronautEmitter;
-import com.shuttle.game.bot.consumable.CrateEmitter;
-import com.shuttle.game.bot.consumable.FuelEmitter;
-import com.shuttle.game.bot.consumable.StorageEmitter;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -26,9 +16,9 @@ public final class ListOfListsJoiner<T> {
     private List<List<? extends T>> list;
 
     @SafeVarargs
-    public ListOfListsJoiner(List<? extends T>... list) {
+    public ListOfListsJoiner(List<? extends T>... lists) {
         this.list = new LinkedList<List<? extends T>>();
-        join(list);
+        join(lists);
     }
 
     @SafeVarargs
@@ -61,28 +51,15 @@ public final class ListOfListsJoiner<T> {
         return size;
     }
 
-    public static ListOfListsJoiner<AbstractAnomaly> newAbstractAnomalyList() {
-        return new ListOfListsJoiner<AbstractAnomaly>(
-                CorrosiveAnomalyEmitter.getInstance().getActiveList(),
-                ElectricalAnomalyEmitter.getInstance().getActiveList(),
-                MagneticAnomalyEmitter.getInstance().getActiveList(),
-                RadiationAnomalyEmitter.getInstance().getActiveList()
-        );
+    public static ListOfListsJoiner<AbstractAnomaly> newAbstractAnomalyList(List<AbstractAnomaly>... lists) {
+        return new ListOfListsJoiner<AbstractAnomaly>(lists);
     }
 
-    public static ListOfListsJoiner<AbstractAsteroid> newAbstractAsteroidList() {
-        return new ListOfListsJoiner<AbstractAsteroid>(
-                MetalAsteroidEmitter.getInstance().getActiveList(),
-                MineralAsteroidEmitter.getInstance().getActiveList()
-        );
+    public static ListOfListsJoiner<AbstractAsteroid> newAbstractAsteroidList(List<AbstractAsteroid>... lists) {
+        return new ListOfListsJoiner<AbstractAsteroid>(lists);
     }
 
-    public static ListOfListsJoiner<AbstractConsumable> newAbstractConsumableList() {
-        return new ListOfListsJoiner<AbstractConsumable>(
-                AstronautEmitter.getInstance().getActiveList(),
-                CrateEmitter.getInstance().getActiveList(),
-                FuelEmitter.getInstance().getActiveList(),
-                StorageEmitter.getInstance().getActiveList()
-        );
+    public static ListOfListsJoiner<AbstractConsumable> newAbstractConsumableList(List<AbstractConsumable>... lists) {
+        return new ListOfListsJoiner<AbstractConsumable>(lists);
     }
 }

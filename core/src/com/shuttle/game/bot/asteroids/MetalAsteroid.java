@@ -11,8 +11,9 @@ import com.shuttle.game.utils.Regions;
  */
 
 public class MetalAsteroid extends AbstractAsteroid {
-    public MetalAsteroid() {
-        super();
+    public MetalAsteroid(ParticleEmitter particleEmitter) {
+        super(particleEmitter);
+        this.particleEmitter = particleEmitter;
         textureRegions = Regions.split(
                 new TextureRegion(
                         Assets.getInstance()
@@ -36,6 +37,6 @@ public class MetalAsteroid extends AbstractAsteroid {
     @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
-        ParticleEmitter.getInstance().getBuilder().buildDust(getPosition().x, getPosition().y, 180, 32 + 32);
+        particleEmitter.getBuilder().buildDust(getPosition().x, getPosition().y, 180, 32 + 32);
     }
 }

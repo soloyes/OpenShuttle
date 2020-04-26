@@ -11,6 +11,7 @@ import com.shuttle.game.effects.MoveProcessor;
 import com.shuttle.game.effects.Scan;
 import com.shuttle.game.effects.Shield;
 import com.shuttle.game.effects.Vibrator;
+import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.labelsticker.Label;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.player.Shuttle;
@@ -18,6 +19,9 @@ import com.shuttle.game.player.navigation.Radar;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Consumer;
+import com.shuttle.game.utils.pool.ObjectPool;
+
+import java.util.List;
 
 /**
  * @author Shuttle on 22/11/18.
@@ -27,7 +31,9 @@ public class Storage extends AbstractConsumable {
     private Size size;
     private Label dangerLabel;
 
-    public Storage() {
+    public Storage(ParticleEmitter particleEmitter) {
+        super(particleEmitter);
+        this.particleEmitter = particleEmitter;
         this.width = PaintConstants.STORAGE_WIDTH;
         this.height = PaintConstants.STORAGE_HEIGHT;
         this.type = Type.STORAGE;
@@ -200,7 +206,9 @@ public class Storage extends AbstractConsumable {
                 r = MathUtils.random(0, 3);
                 boolean radar = false;
                 boolean laser = false;
-                for (AbstractConsumable consumable : StorageEmitter.getInstance().getActiveList()) {
+                StorageEmitter storageEmitter = (StorageEmitter) ObjectPool.EMITTERS.get(Storage.class);
+                List<AbstractConsumable> list = storageEmitter.getActiveList();
+                for (AbstractConsumable consumable : list) {
                     if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Sticker.LASER ||
                             consumable.getLabels().get(Label.Layer.HIDDEN).get(0).getSticker() == Sticker.LASER) {
                         laser = true;
@@ -208,7 +216,7 @@ public class Storage extends AbstractConsumable {
                     }
                 }
 
-                for (AbstractConsumable consumable : StorageEmitter.getInstance().getActiveList()) {
+                for (AbstractConsumable consumable : list) {
                     if (consumable.getLabels().get(Label.Layer.LABEL).get(0).getSticker() == Sticker.RADAR ||
                             consumable.getLabels().get(Label.Layer.HIDDEN).get(0).getSticker() == Sticker.RADAR) {
                         radar = true;

@@ -17,39 +17,33 @@ import lombok.Getter;
  */
 
 public class RocketLauncher {
-    private static RocketLauncher instance;
     @Getter
-    private boolean launched;
+    private static boolean launched;
     private BoomBox boomBox;
     private boolean charged;
     private float time;
-    private int amplitude;
+    private static int amplitude;
     private ListOfListsJoiner<AbstractAnomaly> anomalyJoiner;
+    private RocketEmitter rocketEmitter;
 
-    public static RocketLauncher getInstance() {
-        if (instance == null) {
-            instance = new RocketLauncher();
-        }
-        return instance;
-    }
-
-    private RocketLauncher() {
+    public RocketLauncher(RocketEmitter rocketEmitter, ListOfListsJoiner<AbstractAnomaly> anomalyJoiner) {
         this.charged = false;
         this.boomBox = new BoomBox();
-        this.anomalyJoiner = ListOfListsJoiner.newAbstractAnomalyList();
+        this.anomalyJoiner = anomalyJoiner;
+        this.rocketEmitter = rocketEmitter;
     }
 
-    public void launch() {
+    public static void launch() {
         launched = true;
         amplitude++;
     }
 
     public void render(SpriteBatch batch) {
-        RocketEmitter.getInstance().render(batch);
+        rocketEmitter.render(batch);
     }
 
     public void update(float dt) {
-        RocketEmitter.getInstance().update(dt);
+        rocketEmitter.update(dt);
         if (launched) {
             boomBox.playMusicEffectOnce(MSConstants.CHARGING_ROCKETS);
             time += dt;
@@ -66,7 +60,7 @@ public class RocketLauncher {
                 AbstractAnomaly anomaly = anomalyJoiner.get(i);
                 if (anomaly.isAtRocketPoint()) {
                     count++;
-                    RocketEmitter.getInstance().createRocket(Shuttle.position, anomaly);
+                    rocketEmitter.createRocket(Shuttle.position, anomaly);
                 }
             }
             if (count > 0) {

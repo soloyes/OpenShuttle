@@ -2,14 +2,12 @@ package com.shuttle.game.utils.pool;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.bot.blackhole.Blackhole;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.MoveProcessor;
-import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.utils.BoundCheck;
 
 import lombok.Getter;
@@ -106,41 +104,7 @@ public abstract class AbstractPoolable implements Poolable {
 
     public abstract void update(float dt);
 
-    public void showSprayBoom() {
-        float R, G, B;
-        for (int j = 0; j < 8; j++) {
-            R = this.getSpreeColor().r;
-            G = this.getSpreeColor().g;
-            B = this.getSpreeColor().b;
-            ParticleEmitter.getInstance().setup(
-                    this.getPosition().x,
-                    this.getPosition().y,
-                    MathUtils.random(-200, 200), MathUtils.random(-200, 200),
-                    0.4f, 24, 0,
-                    R, G, B, 1f,
-                    R, G, B, 0.0f
-            );
-        }
-    }
-
     public abstract Vector2 getPosition();
-
-    public void showSprayCollision() {
-        float R, G, B;
-        for (int j = 0; j < 60; j++) {
-            R = this.getSpreeColor().r;
-            G = this.getSpreeColor().g;
-            B = this.getSpreeColor().b;
-            ParticleEmitter.getInstance().setup(
-                    this.getPosition().x + MathUtils.random(-30, 30),
-                    this.getPosition().y + MathUtils.random(-30, 30),
-                    MathUtils.random(-600, 600), MathUtils.random(-600, 600),
-                    0.4f, 8, 0,
-                    R, G, B, 1f,
-                    R, G, B, 0.0f
-            );
-        }
-    }
 
     public void collideBlackhole() {
         float dst = Blackhole.position.dst(position);

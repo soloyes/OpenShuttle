@@ -13,6 +13,8 @@ import com.shuttle.game.utils.ListOfListsJoiner;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 import com.shuttle.game.utils.pool.ObjectPool;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,8 +36,9 @@ public class Ray {
     private float takeRange;
     private BoomBox boomBox;
     private ListOfListsJoiner<AbstractAsteroid> asteroidsJoiner;
+    private ParticleEmitter particleEmitter;
 
-    public Ray() {
+    public Ray(ParticleEmitter particleEmitter, List<AbstractAsteroid>... lists) {
         this.tmp1V2 = new Vector2();
         this.count = 24;
         this.preset = Preset.GREEN;
@@ -43,7 +46,8 @@ public class Ray {
         this.harvestVelocity = Rules.PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY;
         this.takeRange = Rules.PLAYER_CONSUMABLE_TAKE_RANGE;
         this.boomBox = new BoomBox();
-        this.asteroidsJoiner = ListOfListsJoiner.newAbstractAsteroidList();
+        this.asteroidsJoiner = ListOfListsJoiner.newAbstractAsteroidList(lists);
+        this.particleEmitter = particleEmitter;
     }
 
     public void harvest(Shuttle player, AbstractPoolable poolable, float dt) {
@@ -69,7 +73,7 @@ public class Ray {
                 poolable.setScaleX(scaleX);
                 poolable.setScaleY(scaleY);
 
-                ParticleEmitter.getInstance().setupFromPointToPoint(
+                particleEmitter.setupFromPointToPoint(
                         poolable.getPosition().x, poolable.getPosition().y,
                         Shuttle.position.x, Shuttle.position.y,
                         1, 2,
@@ -80,7 +84,7 @@ public class Ray {
                     float ang = 6.28f / count * j;
                     float radX = poolable.getWidth() / 2 * scaleX;
                     float radY = poolable.getHeight() / 2 * scaleY;
-                    ParticleEmitter.getInstance().setup(
+                    particleEmitter.setup(
                             poolable.getPosition().x + radX * (float) Math.cos(ang) + MathUtils.random(-10, 10),
                             poolable.getPosition().y + radY * (float) Math.sin(ang) + MathUtils.random(-10, 10),
                             0, 0, 0.1f, size, size,
@@ -114,7 +118,7 @@ public class Ray {
             boomBox.playMusicEffectInLoop(MSConstants.LASER, 1.0f);
             float scaleX = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleX();
             float scaleY = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleY();
-            ParticleEmitter.getInstance().setupFromPointToPoint(
+            particleEmitter.setupFromPointToPoint(
                     asteroid.getPosition().x, asteroid.getPosition().y,
                     Shuttle.position.x, Shuttle.position.y,
                     1.0f, 1.0f,
@@ -125,7 +129,7 @@ public class Ray {
                 float ang = 6.28f / count * j;
                 float radX = asteroid.getWidth() / 4 * scaleX;
                 float radY = asteroid.getHeight() / 4 * scaleY;
-                ParticleEmitter.getInstance().setup(
+                particleEmitter.setup(
                         asteroid.getPosition().x + radX * (float) Math.cos(ang) + MathUtils.random(-10, 10),
                         asteroid.getPosition().y + radY * (float) Math.sin(ang) + MathUtils.random(-10, 10),
                         0, 0, 0.1f, size, size,

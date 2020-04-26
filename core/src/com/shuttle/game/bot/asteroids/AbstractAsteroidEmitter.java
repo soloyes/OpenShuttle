@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.PlayerInteractionLevels;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.utils.pool.ObjectPool;
 
 import lombok.Getter;
@@ -32,13 +33,15 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     private float count;
     private PlayerInteractionLevels range;
     @Getter
-    protected int emitted;
+    private static int emitted;
+    protected ParticleEmitter particleEmitter;
 
-    AbstractAsteroidEmitter(Class<? extends AbstractAsteroid> clazz) {
+    AbstractAsteroidEmitter(Class<? extends AbstractAsteroid> clazz, ParticleEmitter particleEmitter) {
         super(clazz);
         this.position = new Vector2();
         this.destination = new Vector2();
         this.tmp1V2 = new Vector2();
+        this.particleEmitter = particleEmitter;
     }
 
     @Override

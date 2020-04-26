@@ -3,6 +3,7 @@ package com.shuttle.game.bot.consumable;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.utils.pool.ObjectPool;
 
 import lombok.Getter;
@@ -23,13 +24,11 @@ public abstract class AbstractConsumableEmitter extends ObjectPool<AbstractConsu
     @Getter
     @Setter
     private int consumablesMaxCount;
-    @Getter
-    protected int emitted;
-    @Getter
-    protected int emittedGolden;
+    protected ParticleEmitter particleEmitter;
 
-    AbstractConsumableEmitter(Class<? extends AbstractConsumable> clazz) {
+    AbstractConsumableEmitter(Class<? extends AbstractConsumable> clazz, ParticleEmitter particleEmitter) {
         super(clazz);
+        this.particleEmitter = particleEmitter;
     }
 
     protected abstract AbstractConsumable newObject();
@@ -43,17 +42,15 @@ public abstract class AbstractConsumableEmitter extends ObjectPool<AbstractConsu
     }
 
     protected void createConsumable() {
-        AbstractConsumable ac = getActiveElement();
-        if (ac.isGolden()) {
-            emittedGolden++;
-        } else {
-            emitted++;
-        }
-        ac.init(
+        AbstractConsumable abstractConsumable = getActiveElement();
+        calculateStat(abstractConsumable);
+        abstractConsumable.init(
                 MathUtils.random(0, Rules.SPACE_WIDTH),
                 MathUtils.random(0, Rules.SPACE_HEIGHT)
         );
     }
+
+    protected abstract void calculateStat(AbstractConsumable consumable);
 
     public void render(SpriteBatch batch) {
         for (int i = 0; i < activeList.size(); i++) {
