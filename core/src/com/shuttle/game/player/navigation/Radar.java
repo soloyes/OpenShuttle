@@ -100,7 +100,7 @@ public class Radar {
     private Color setPointColor(AbstractPoolable abstractPoolable) {
         float d = Vector2.dst(Shuttle.position.x, Shuttle.position.y, Blackhole.position.x, Blackhole.position.y);
         int c;
-        if (d <= Rules.BLACKHOLE_NOISE_RANGE && !PauseGroup.getInstance().isPause()) {
+        if (d <= Rules.BLACKHOLE_NOISE_RANGE && !PauseGroup.isPause()) {
             c = MathUtils.random(0, 4);
             if (MathUtils.random(0, 100) <= 60) {
                 return color;

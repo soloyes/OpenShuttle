@@ -163,7 +163,7 @@ public class Joystick extends Actor implements InputProcessor {
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.MENU) {
             batch.draw(joy, 130, 20, 0, 0, PaintConstants.JOYSTICK_WIDTH, PaintConstants.JOYSTICK_HEIGHT, 0.8f, 0.8f, 0.0f);
         } else {
-            if (PauseGroup.getInstance().isPause()) {
+            if (PauseGroup.isPause()) {
                 batch.draw(joy, 130, 20, 0, 0, PaintConstants.JOYSTICK_WIDTH, PaintConstants.JOYSTICK_HEIGHT, 0.8f, 0.8f, 0.0f);
             } else {
                 batch.draw(joy, x, y);

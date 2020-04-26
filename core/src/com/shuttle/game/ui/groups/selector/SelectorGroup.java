@@ -102,7 +102,7 @@ public class SelectorGroup extends Group {
         leftButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (!PauseGroup.getInstance().isPause()) {
+                if (!PauseGroup.isPause()) {
                     boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
                     Vibrator.vibrate(VConstants.UI_CLICK);
                 }
@@ -113,7 +113,7 @@ public class SelectorGroup extends Group {
         rightButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (!PauseGroup.getInstance().isPause()) {
+                if (!PauseGroup.isPause()) {
                     boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
                     Vibrator.vibrate(VConstants.UI_CLICK);
                 }
@@ -125,7 +125,7 @@ public class SelectorGroup extends Group {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (selectors.size() != 0) {
-                    if (centerSelector.isActive() && !PauseGroup.getInstance().isPause()) {
+                    if (centerSelector.isActive() && !PauseGroup.isPause()) {
                         removeSelector();
                         centerSelector.press();
                         Vibrator.vibrate(VConstants.UI_CLICK);
@@ -156,12 +156,12 @@ public class SelectorGroup extends Group {
 
     @Override
     public void act(float delta) {
-        paused = PauseGroup.getInstance().isPause();
+        paused = PauseGroup.isPause();
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (PauseGroup.getInstance().isPause()) {
+        if (PauseGroup.isPause()) {
             batch.setShader(ShaderManager.PAUSE.getProgram());
         } else {
             batch.setShader(null);

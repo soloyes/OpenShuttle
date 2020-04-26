@@ -10,7 +10,6 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.ScreenManager;
-import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.mvc.Model;
 import com.shuttle.game.ui.groups.mvc.results.DetailedResultDAO;
 import com.shuttle.game.ui.groups.mvc.results.DetailedResultGroup;
@@ -83,8 +82,6 @@ public class Profiles implements Model<ProfileDAO> {
                 break;
             }
         }
-
-        ConfigGroup.getInstance().refresh();
     }
 
     private static ProfileDAO asDummy() {

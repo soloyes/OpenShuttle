@@ -22,6 +22,7 @@ import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.ui.groups.MenuGroup;
+import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.mvc.Controller;
 import com.shuttle.game.ui.groups.mvc.View;
 import com.shuttle.game.ui.groups.mvc.results.ResultGroup;
@@ -47,8 +48,10 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
     private Map<String, Line> previousLines;
     private List<String> id;
     private BoomBox boomBox;
+    private ConfigGroup configGroup;
 
-    public ProfilesView() {
+    public ProfilesView(ConfigGroup configGroup) {
+        this.configGroup = configGroup;
         this.boomBox = new BoomBox();
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.currentLines = new HashMap<String, Line>();
@@ -185,6 +188,7 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                 minus.setPressedWait(0.0f);
                 minus.setConfirm(false);
                 controller.remove(Line.this.profile);
+                configGroup.refresh();
                 ResultGroup.getInstance().init();
                 MenuGroup.setNotice(PaintConstants.UI_PROFILE_DELETED);
                 boomBox.playSound(MSConstants.UI_CHANGED);
@@ -263,6 +267,7 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                     public void clicked(InputEvent event, float x, float y) {
                         if (MenuGroup.isValidUserName()) {
                             controller.select(profile);
+                            configGroup.refresh();
                             MenuGroup.setNotice(PaintConstants.UI_SELECT_PROFILE);
                             boomBox.playSound(MSConstants.UI_CHANGED);
                             Vibrator.vibrate(VConstants.UI_CHANGED);

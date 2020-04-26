@@ -73,7 +73,7 @@ public class Switch extends ImageButton {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (!PauseGroup.getInstance().isPause() && !Rules.GAME_OVER) {
+        if (!PauseGroup.isPause() && !Rules.GAME_OVER) {
             setVisible(true);
         } else {
             setVisible(false);

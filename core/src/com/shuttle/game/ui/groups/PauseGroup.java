@@ -44,21 +44,13 @@ public class PauseGroup extends Group {
     private BoomBox boomBox;
     @Getter
     @Setter
-    private boolean pause;
+    private static boolean pause;
     private GlyphLayout glyphLayout;
 
-    public static PauseGroup getInstance() {
-        if (instance == null) {
-            instance = new PauseGroup();
-        }
-        return instance;
-    }
-
-    private PauseGroup() {
+    public PauseGroup() {
         this.boomBox = new BoomBox();
         this.font60 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT60, BitmapFont.class);
         this.glyphLayout = new GlyphLayout();
-        this.pause = false;
         final TextureRegionDrawable play = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PLAY_BUTTON));
         final TextureRegionDrawable pause = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_BUTTON));
         this.playPauseBtn = new ImageButton(pause);
@@ -66,7 +58,7 @@ public class PauseGroup extends Group {
         playPauseBtn.setSize(PaintConstants.PLAY_PAUSE_BUTTON_WIDTH, PaintConstants.PLAY_PAUSE_BUTTON_HEIGHT);
         playPauseBtn.setPosition(897, 1737);
 
-        this.configGroup = ConfigGroup.getInstance();
+        this.configGroup = new ConfigGroup();
         this.leftGroup = LeftGroup.getInstance();
         this.rightGroup = RightGroup.getInstance();
         this.buttonMenu = new UIButton(new TextureRegionDrawable(new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_MENU_HOME))));
@@ -163,14 +155,6 @@ public class PauseGroup extends Group {
         rightGroup.setVisible(false);
         buttonMenu.setVisible(true);
         buttonRestart.setVisible(true);
-    }
-
-    public void dispose() {
-        instance = null;
-    }
-
-    public static void doStart() {
-        instance = null;
     }
 
     @Override

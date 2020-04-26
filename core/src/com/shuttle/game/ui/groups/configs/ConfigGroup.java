@@ -44,7 +44,6 @@ import lombok.Setter;
  */
 
 public class ConfigGroup extends Group {
-    private static ConfigGroup instance;
     private static StringBuilder notice = new StringBuilder();
     private Skin skin;
     private ScreenManager.ScreenType screenType;
@@ -107,14 +106,7 @@ public class ConfigGroup extends Group {
     private Label childLabel;
     private Profiles profiles;
 
-    public static ConfigGroup getInstance() {
-        if (instance == null) {
-            instance = new ConfigGroup();
-        }
-        return instance;
-    }
-
-    private ConfigGroup() {
+    public ConfigGroup() {
         this.setName(GroupType.CONFIG.name());
         this.profiles = new Profiles();
         this.setVisible(false);
@@ -736,6 +728,7 @@ public class ConfigGroup extends Group {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
                     profiles.write();
+                    ConfigGroup.this.refresh();
                 }
             }
         });
@@ -756,6 +749,7 @@ public class ConfigGroup extends Group {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
                     profiles.write();
+                    ConfigGroup.this.refresh();
                 }
             }
         });
@@ -776,6 +770,7 @@ public class ConfigGroup extends Group {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
                     profiles.write();
+                    ConfigGroup.this.refresh();
                 }
             }
         });
@@ -796,6 +791,7 @@ public class ConfigGroup extends Group {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
                     profiles.write();
+                    ConfigGroup.this.refresh();
                 }
             }
         });
@@ -816,6 +812,7 @@ public class ConfigGroup extends Group {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
                     profiles.write();
+                    ConfigGroup.this.refresh();
                 }
             }
         });
@@ -836,6 +833,7 @@ public class ConfigGroup extends Group {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
                     profiles.write();
+                    ConfigGroup.this.refresh();
                 }
             }
         });
@@ -857,6 +855,7 @@ public class ConfigGroup extends Group {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
                     profiles.write();
+                    ConfigGroup.this.refresh();
                 }
             }
         });
@@ -877,6 +876,7 @@ public class ConfigGroup extends Group {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
                     profiles.write();
+                    ConfigGroup.this.refresh();
                 }
             }
         });
@@ -897,6 +897,7 @@ public class ConfigGroup extends Group {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0 && joystickLine.isActive()) {
                     profiles.write();
+                    ConfigGroup.this.refresh();
                 }
             }
         });
@@ -1246,13 +1247,5 @@ public class ConfigGroup extends Group {
                 (Rules.WORLD_WIDTH - glyphLayoutTitle.width) / 2,
                 PaintConstants.UI_TITLE_LABEL_Y + glyphLayoutTitle.height
         );
-    }
-
-    public void dispose() {
-        instance = null;
-    }
-
-    public static void doStart() {
-        instance = null;
     }
 }

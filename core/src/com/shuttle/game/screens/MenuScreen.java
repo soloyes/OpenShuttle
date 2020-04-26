@@ -11,6 +11,7 @@ import com.shuttle.game.ui.groups.MenuBackgroundGroup;
 import com.shuttle.game.ui.groups.MenuBar;
 import com.shuttle.game.ui.groups.MenuGroup;
 import com.shuttle.game.ui.groups.configs.ConfigGroup;
+import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.mvc.results.DetailedResultGroup;
 import com.shuttle.game.ui.groups.mvc.results.ResultGroup;
 import com.shuttle.game.utils.Assets;
@@ -23,6 +24,7 @@ public class MenuScreen extends BaseScreen {
     private Background background;
     private MenuGroup menuGroup;
     private ResultGroup resultGroup;
+    private ConfigGroup configGroup;
     private MenuBackgroundGroup menuBackgroundGroup;
     private DetailedResultGroup detailedResultGroup;
     private BitmapFont font188;
@@ -46,9 +48,12 @@ public class MenuScreen extends BaseScreen {
         DetailedResultGroup.doStart();
         ResultGroup.doStart();
         //
+        Profiles profiles = new Profiles();
+        profiles.getList();
         menuBackgroundGroup = new MenuBackgroundGroup();
         background = new Background();
-        menuGroup = new MenuGroup();
+        configGroup = new ConfigGroup();
+        menuGroup = new MenuGroup(configGroup);
         MenuBar menuBar = new MenuBar();
         InfoGroup infoGroup = new InfoGroup();
         resultGroup = ResultGroup.getInstance();
@@ -65,7 +70,7 @@ public class MenuScreen extends BaseScreen {
         underHead.setPosition(408, 1658);
         stage.addActor(menuBackgroundGroup);
         stage.addActor(menuGroup);
-        stage.addActor(ConfigGroup.getInstance());
+        stage.addActor(configGroup);
         stage.addActor(resultGroup);
         stage.addActor(detailedResultGroup);
         stage.addActor(infoGroup);
@@ -97,6 +102,5 @@ public class MenuScreen extends BaseScreen {
         menuGroup.dispose();
         resultGroup.dispose();
         detailedResultGroup.dispose();
-        ConfigGroup.getInstance().dispose();
     }
 }

@@ -56,7 +56,6 @@ import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.Joystick;
 import com.shuttle.game.ui.PlayerPointer;
 import com.shuttle.game.ui.groups.PauseGroup;
-import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.configs.ConfigImageButton;
 import com.shuttle.game.ui.groups.configs.LeftGroup;
 import com.shuttle.game.ui.groups.configs.RightGroup;
@@ -107,6 +106,7 @@ public class GameScreen extends BaseScreen {
     private TextureRegion fboTexRegion;
     private OrthographicCamera cameraHelper;
     private DetailedResultGroup detailedResultGroup;
+    private PauseGroup pauseGroup;
     private Ray ray;
     private PrettySound prettyCorrosiveKick;
     private PrettySound prettyElectricKick;
@@ -224,14 +224,13 @@ public class GameScreen extends BaseScreen {
         LeftGroup.doStart();
         SelectorGroup.doStart();
         SwitchGroup.doStart();
-        PauseGroup.doStart();
-        ConfigGroup.doStart();
         UILeftPanel.doStart();
         UIRightPanel.doStart();
         //
         detailedResultGroup = DetailedResultGroup.getInstance();
+        pauseGroup = new PauseGroup();
         stage.addActor(detailedResultGroup);
-        stage.addActor(PauseGroup.getInstance());
+        stage.addActor(pauseGroup);
         stage.addActor(SelectorGroup.getInstance());
         stage.addActor(SwitchGroup.getInstance());
     }
@@ -244,7 +243,7 @@ public class GameScreen extends BaseScreen {
         super.render(dt);
         update(dt);
         batch.setProjectionMatrix(camera.combined);
-        if (PauseGroup.getInstance().isPause() || Rules.GAME_OVER) {
+        if (PauseGroup.isPause() || Rules.GAME_OVER) {
             batch.setShader(ShaderManager.PAUSE.getProgram());
         } else {
             batch.setShader(null);
@@ -289,14 +288,14 @@ public class GameScreen extends BaseScreen {
         } else {
             batch.setShader(ShaderManager.BLACKHOLE.getProgram());
             ShaderManager.BLACKHOLE.getProgram().setUniformf("resolution", Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
-            if (!PauseGroup.getInstance().isPause()) {
+            if (!PauseGroup.isPause()) {
                 holeTime += dt;
             }
             ShaderManager.BLACKHOLE.getProgram().setUniformf("time", holeTime);
             ShaderManager.BLACKHOLE.getProgram().setUniformf("center", shaderHoleX, shaderHoleY);
             ShaderManager.BLACKHOLE.getProgram().setUniformf("dmax", blackhole.getShaderDiameter());
 
-            if (PauseGroup.getInstance().isPause() || Rules.GAME_OVER) {
+            if (PauseGroup.isPause() || Rules.GAME_OVER) {
                 ShaderManager.BLACKHOLE.getProgram().setUniformf("isGrey", 1.0f);
             } else {
                 ShaderManager.BLACKHOLE.getProgram().setUniformf("isGrey", -1.0f);
@@ -305,7 +304,7 @@ public class GameScreen extends BaseScreen {
         }
         //batch.end();
 
-        if (PauseGroup.getInstance().isPause()) {
+        if (PauseGroup.isPause()) {
             batch.setShader(ShaderManager.PAUSE.getProgram());
             ShaderManager.PAUSE.getProgram().setUniformf("resolution", Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
         } else {
@@ -313,7 +312,7 @@ public class GameScreen extends BaseScreen {
         }
 
         //BEGIN
-        if (!PauseGroup.getInstance().isPause() && !Rules.GAME_OVER) {
+        if (!PauseGroup.isPause() && !Rules.GAME_OVER) {
             UILeftPanel.getInstance().render(batch);
             UIRightPanel.getInstance().render(batch);
         }
@@ -323,14 +322,14 @@ public class GameScreen extends BaseScreen {
             SelectorGroup.getInstance().render(batch);
         }
 
-        if (!PauseGroup.getInstance().isPause()) {
+        if (!PauseGroup.isPause()) {
             joystick.render(batch);
         }
 
         Color tmpColor = batch.getColor();
         if (Rules.GAME_OVER) {
             boomBox.stopAllMusicAndPlayThis(MSConstants.GAME_OVER);
-            PauseGroup.getInstance().setGameOver();
+            pauseGroup.setGameOver();
             fadeInAlpha += dt / 2;
             if (fadeInAlpha >= 1.0f)
                 fadeInAlpha = 1.0f;
@@ -358,7 +357,7 @@ public class GameScreen extends BaseScreen {
 
     public void update(float dt) {
         cameraUpdate(dt);
-        if (!PauseGroup.getInstance().isPause()) {
+        if (!PauseGroup.isPause()) {
             PrettySound.update(dt);
             background.update(dt);
             player.update(dt);
@@ -402,7 +401,7 @@ public class GameScreen extends BaseScreen {
             }
         }
         cameraUpdate(dt);
-        if (!PauseGroup.getInstance().isPause() && !Rules.GAME_OVER) {
+        if (!PauseGroup.isPause() && !Rules.GAME_OVER) {
             Shake.getInstance().update(dt, camera);
             standing.update(dt);
             SelectorGroup.getInstance().update(dt);

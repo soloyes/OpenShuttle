@@ -27,6 +27,7 @@ import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.UIButton;
+import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.mvc.profiles.ProfilesController;
@@ -57,9 +58,10 @@ public class MenuGroup extends Group {
     private Label noticeLabel;
     private BoomBox boomBox;
     private Group noticeGroup;
+    private ConfigGroup configGroup;
 
-    public MenuGroup() {
-        this(GroupType.MENU.name());
+    public MenuGroup(ConfigGroup configGroup) {
+        this(GroupType.MENU.name(), configGroup);
         username.setAlignment(Align.center);
         username.setMaxLength(8);
         username.setPosition(270, 960);
@@ -158,8 +160,9 @@ public class MenuGroup extends Group {
         this.addActor(profilesView);
     }
 
-    private MenuGroup(String name) {
+    private MenuGroup(String name, ConfigGroup configGroup) {
         this.setName(name);
+        this.configGroup = configGroup;
         this.setVisible(true);
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.font44 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT44, BitmapFont.class);
@@ -181,8 +184,9 @@ public class MenuGroup extends Group {
         username = new TextField("", skin, "default");
         this.glyphLayout = new GlyphLayout();
         //MVC
-        this.profilesView = new ProfilesView();
-        this.profilesController = new ProfilesController(profilesView, new Profiles());
+        Profiles profiles = new Profiles();
+        this.profilesView = new ProfilesView(configGroup);
+        this.profilesController = new ProfilesController(profilesView, profiles);
         profilesView.setController(profilesController);
         profilesController.update();
         //
