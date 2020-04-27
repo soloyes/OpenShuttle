@@ -205,7 +205,8 @@ public class Profiles implements Model<ProfileDAO> {
             ResultDAO result = new ResultDAO(
                     new Date(),
                     Rules.StartLevel.values()[getActive().getPreferences().getLevel()].name(),
-                    detailedResultDAO
+                    detailedResultDAO,
+                    getActive().getPreferences().isChild()
             );
 
             List<ResultDAO> list = getActiveProfileResultList(Rules.StartLevel.values()[getActive().getPreferences().getLevel()].name());

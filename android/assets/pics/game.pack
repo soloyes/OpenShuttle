@@ -654,23 +654,30 @@ resultscelldetailed
   orig: 956, 82
   offset: 0, 0
   index: -1
-resultscell
+resultscellchild
   rotate: false
   xy: 2974, 2167
   size: 956, 82
   orig: 956, 82
   offset: 0, 0
   index: -1
-configcelltype2
+resultscell
   rotate: false
   xy: 2060, 2251
+  size: 956, 82
+  orig: 956, 82
+  offset: 0, 0
+  index: -1
+configcelltype2
+  rotate: false
+  xy: 3018, 2251
   size: 628, 82
   orig: 628, 82
   offset: 0, 0
   index: -1
 configcelltype1
   rotate: false
-  xy: 2690, 2251
+  xy: 2060, 2335
   size: 628, 82
   orig: 628, 82
   offset: 0, 0
@@ -684,21 +691,21 @@ infocell
   index: -1
 menucellhead
   rotate: false
-  xy: 3320, 2251
+  xy: 2690, 2335
   size: 498, 82
   orig: 498, 82
   offset: 0, 0
   index: -1
 menucellactive
   rotate: false
-  xy: 2060, 2335
+  xy: 3190, 2335
   size: 498, 82
   orig: 498, 82
   offset: 0, 0
   index: -1
 menucell
   rotate: false
-  xy: 2560, 2335
+  xy: 2060, 2419
   size: 498, 82
   orig: 498, 82
   offset: 0, 0

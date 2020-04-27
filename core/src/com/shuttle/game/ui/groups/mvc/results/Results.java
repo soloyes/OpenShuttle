@@ -28,6 +28,7 @@ public class Results {
                             .append(r.getDate())
                             .append(" ")
                             .append(r.getLevel())
+                            .append(r.isChild() ? " as Child" : "")
                             .append("\n");
                 }
             }

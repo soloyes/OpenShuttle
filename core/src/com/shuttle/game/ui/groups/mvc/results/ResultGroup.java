@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.shuttle.game.conf.MSConstants;
@@ -25,6 +26,8 @@ import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.groups.GroupType;
+import com.shuttle.game.ui.groups.configs.ConfigCheckBox;
+import com.shuttle.game.ui.groups.configs.ConfigCheckBoxStyle;
 import com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.Assets;
@@ -142,7 +145,12 @@ public class ResultGroup extends Group {
 
     private static class Line extends Group {
         private Table table;
-        private TextureRegion textureRegion;
+        private TextureRegion draw;
+        private TextureRegion standard;
+        private TextureRegion child;
+        private TextureRegion childIcon;
+        private ConfigCheckBoxStyle childCheckBoxStyle;
+
         @Setter
         private boolean active;
         private static int lines;
@@ -154,7 +162,15 @@ public class ResultGroup extends Group {
                 last = true;
             }
             this.table = new Table();
-            this.textureRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL));
+            this.standard = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL));
+            this.child = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL_CHILD));
+
+            childCheckBoxStyle = new ConfigCheckBoxStyle(
+                    new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_CHILD)),
+                    new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_CHILD))
+            );
+            ConfigCheckBox childCheckBox = new ConfigCheckBox("", childCheckBoxStyle);
+            childCheckBox.setChecked(true);
 
             this.addListener(new ClickListener() {
                 @Override
@@ -171,8 +187,8 @@ public class ResultGroup extends Group {
                 }
             });
 
-            Label.LabelStyle style64 = new Label.LabelStyle(
-                    Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class),
+            Label.LabelStyle style54 = new Label.LabelStyle(
+                    Assets.getInstance().getAssetManager().get(PaintConstants.FONT54, BitmapFont.class),
                     new Color(0.8f, 0.43f, 0.33f, 1f)
             );
             if (last) {
@@ -180,10 +196,25 @@ public class ResultGroup extends Group {
             } else {
                 table.row().padBottom(12);
             }
-            makeGroup(new Label(profileDAO.getUsername(), style64), 320);
-            makeGroup(new Label(String.valueOf(Rounder.round(resultDAO.getCurrent().getScore())), style64), 138);
-            makeGroup(new Label(new SimpleDateFormat(Rules.DATE_FORMAT, Locale.ENGLISH).format(resultDAO.getDate()), style64), 250);
-            makeGroup(new Label(resultDAO.getLevel(), style64), 200);
+
+            if (resultDAO.isChild()) {
+                draw = child;
+                makeGroup(new Label(profileDAO.getUsername(), style54), 238);
+                Group group = new Group();
+                childCheckBox.setFillParent(true);
+                group.setSize(82, PaintConstants.UI_CELL_HEIGHT);
+                group.addActor(childCheckBox);
+                table.add(group).left().width(82).padLeft(12);
+                makeGroup(new Label(String.valueOf(Rounder.round(resultDAO.getCurrent().getScore())), style54), 128);
+                makeGroup(new Label(new SimpleDateFormat(Rules.DATE_FORMAT, Locale.ENGLISH).format(resultDAO.getDate()), style54), 244);
+                makeGroup(new Label(resultDAO.getLevel(), style54), 202);
+            } else {
+                draw = standard;
+                makeGroup(new Label(profileDAO.getUsername(), style54), 330);
+                makeGroup(new Label(String.valueOf(Rounder.round(resultDAO.getCurrent().getScore())), style54), 128);
+                makeGroup(new Label(new SimpleDateFormat(Rules.DATE_FORMAT, Locale.ENGLISH).format(resultDAO.getDate()), style54), 244);
+                makeGroup(new Label(resultDAO.getLevel(), style54), 202);
+            }
 
             table.align(Align.bottomLeft);
             table.setFillParent(true);
@@ -203,7 +234,7 @@ public class ResultGroup extends Group {
                 last = true;
             }
             this.table = new Table();
-            this.textureRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL_EMPTY));
+            this.draw = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL_EMPTY));
             if (last) {
                 table.row();
             } else {
@@ -240,9 +271,9 @@ public class ResultGroup extends Group {
             batch.setColor(color);
 
             if (last) {
-                batch.draw(textureRegion, getX(), getY());
+                batch.draw(draw, getX(), getY());
             } else {
-                batch.draw(textureRegion, getX(), getY() + 12);
+                batch.draw(draw, getX(), getY() + 12);
             }
             super.draw(batch, parentAlpha);
         }

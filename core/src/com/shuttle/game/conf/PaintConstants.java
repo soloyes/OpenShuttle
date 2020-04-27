@@ -209,6 +209,7 @@ public final class PaintConstants {
 
     public static final String UI_INFO_CELL = "infocell";
     public static final String UI_RESULTS_CELL = "resultscell";
+    public static final String UI_RESULTS_CELL_CHILD = "resultscellchild";
     public static final String UI_RESULTS_CELL_EMPTY = "resultscellempty";
     public static final String UI_RESULTS_CELL_DETAILED = "resultscelldetailed";
     public static final String UI_RESULTS_CELL_DETAILED_UP = "resultscelldetailedup";
