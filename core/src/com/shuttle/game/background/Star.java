@@ -90,10 +90,10 @@ public class Star {
             position.x = -width;
         }
         if (position.y < -height) {
-            position.y = Rules.SPACE_HEIGHT + position.y%Rules.SPACE_HEIGHT;
+            position.y = Rules.SPACE_HEIGHT;
         }
         if (position.y > Rules.SPACE_HEIGHT) {
-            position.y = -height + position.y%Rules.SPACE_HEIGHT;
+            position.y = -height;
         }
     }
 
