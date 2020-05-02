@@ -148,7 +148,6 @@ public class ResultGroup extends Group {
         private TextureRegion draw;
         private TextureRegion standard;
         private TextureRegion child;
-        private TextureRegion childIcon;
         private ConfigCheckBoxStyle childCheckBoxStyle;
 
         @Setter
@@ -171,6 +170,7 @@ public class ResultGroup extends Group {
             );
             ConfigCheckBox childCheckBox = new ConfigCheckBox("", childCheckBoxStyle);
             childCheckBox.setChecked(true);
+            childCheckBox.clearListeners();
 
             this.addListener(new ClickListener() {
                 @Override
