@@ -58,8 +58,6 @@ public class MenuGroup extends Group {
     private Label noticeLabel;
     private BoomBox boomBox;
     private Group noticeGroup;
-    private ConfigGroup configGroup;
-    private ResultGroup resultGroup;
 
     public MenuGroup(ConfigGroup configGroup, ResultGroup resultGroup) {
         this(GroupType.MENU.name(), configGroup, resultGroup);
@@ -143,6 +141,7 @@ public class MenuGroup extends Group {
                             profilesView.getResultGroup().init();
                         }
                         Vibrator.vibrate(VConstants.UI_CHANGED);
+                        Gdx.input.setOnscreenKeyboardVisible(false);
                     } else {
                         boomBox.playSound(MSConstants.UI_EMPTY_NAME);
                         Vibrator.vibrate(VConstants.UI_EMPTY_NAME);
@@ -163,8 +162,6 @@ public class MenuGroup extends Group {
 
     private MenuGroup(String name, ConfigGroup configGroup, ResultGroup resultGroup) {
         this.setName(name);
-        this.configGroup = configGroup;
-        this.resultGroup = resultGroup;
         this.setVisible(true);
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.font44 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT44, BitmapFont.class);
@@ -211,6 +208,7 @@ public class MenuGroup extends Group {
         tmp2V2 = ScreenManager.getInstance().getViewport().unproject(tmp1V2);
         if (Gdx.input.justTouched() && !rectangle.contains(tmp2V2.x, tmp2V2.y)) {
             getStage().unfocus(username);
+            Gdx.input.setOnscreenKeyboardVisible(false);
         }
         validUserName = !username.getText().isEmpty();
         if (!isValidUserName()) {
