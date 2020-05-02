@@ -510,7 +510,6 @@ public class GameScreen extends BaseScreen {
                         boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
                     }
                     damageToAnomaly(anomaly);
-                    //todo: duration must be positive. Here may be 0
                     Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
                 } else {
                     damageToPlayer(anomaly);

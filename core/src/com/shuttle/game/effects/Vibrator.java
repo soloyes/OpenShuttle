@@ -1,6 +1,7 @@
 package com.shuttle.game.effects;
 
 import com.badlogic.gdx.Gdx;
+import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 
 /**
@@ -10,7 +11,11 @@ import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 public class Vibrator {
     public static void vibrate(int ms, int mul) {
         if (Profiles.getSettings().isVibration()) {
-            Gdx.input.vibrate(ms * mul);
+            int t = ms * ms;
+            if (t <= 0) {
+                t = VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY;
+            }
+            Gdx.input.vibrate(t);
         }
     }
 
