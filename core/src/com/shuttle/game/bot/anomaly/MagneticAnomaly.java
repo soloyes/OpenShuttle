@@ -9,7 +9,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.MoveProcessor;
+import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.ScreenManager;
@@ -124,6 +126,9 @@ public class MagneticAnomaly extends AbstractAnomaly {
                 ScreenManager.getInstance().getViewport().unproject(tmp);
                 if (tmp.dst(position) < PaintConstants.ANOMALY_MAGNETIC_WIDTH) {
                     touched = true;
+                    if (!taken) {
+                        Vibrator.vibrate(VConstants.PLAYER_ANOMALY_MAGNETIC_DESTROY);
+                    }
                 }
             }
         }

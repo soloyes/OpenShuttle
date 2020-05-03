@@ -11,7 +11,7 @@ import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 public class Vibrator {
     public static void vibrate(int ms, int mul) {
         if (Profiles.getSettings().isVibration()) {
-            int t = ms * ms;
+            int t = ms * mul;
             if (t <= 0) {
                 t = VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY;
             }

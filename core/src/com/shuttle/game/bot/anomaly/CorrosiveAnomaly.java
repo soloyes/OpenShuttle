@@ -114,6 +114,9 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 if (tmp.dst(position) < PaintConstants.ANOMALY_CORROSIVE_WIDTH) {
                     hungry = false;
                     touched = true;
+                    if (!taken) {
+                        Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, level);
+                    }
                 }
             }
 

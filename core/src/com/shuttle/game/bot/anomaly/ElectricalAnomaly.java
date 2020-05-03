@@ -9,7 +9,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.MoveProcessor;
+import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.ScreenManager;
@@ -107,6 +109,9 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                 if (tmp.dst(position) < PaintConstants.ANOMALY_ELECTRIC_WIDTH) {
                     hungry = false;
                     touched = true;
+                    if (!taken) {
+                        Vibrator.vibrate(VConstants.PLAYER_ANOMALY_ELECTRICAL_DESTROY);
+                    }
                 }
             }
 
