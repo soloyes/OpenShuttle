@@ -379,7 +379,7 @@ public class Shuttle extends AbstractShuttle {
         if (!Rules.GAME_OVER) {
             standing.changeFuel(-Rules.PLAYER_FUEL_CONSUMPTION * dt);
         }
-        if (standing.getFuel() <= 0.0f) {
+        if (standing.getFuel() <= 0.0f || Rules.GAME_OVER) {
             standing.setFuel(0.0f);
             velocity.scl(/*FPS hack*/1.0f - dt/*FPS hack*/);
         }

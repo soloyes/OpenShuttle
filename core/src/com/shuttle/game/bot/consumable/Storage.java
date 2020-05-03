@@ -41,7 +41,6 @@ public class Storage extends AbstractConsumable {
         this.level = -3;
         this.shield = new Shield(this);
         this.scan = new Scan(this);
-        //todo: labels.get(Label.Layer.BACK).size() --> labels.getLayer.size() and so on, Do refactor. Everywhere
         while (this.labels.get(Label.Layer.BACK).size() < Size.values().length) {
             this.labels.get(Label.Layer.BACK).add(new Label());
         }
