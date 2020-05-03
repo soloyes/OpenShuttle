@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Rounder;
 import com.shuttle.game.utils.StickerResolver;
@@ -175,6 +176,9 @@ public class ConfigImageButton extends ImageButton {
     public void changeCount(int amount) {
         count += amount;
         if (left) {
+            if (count >= Rules.SELECTOR_MAX_COUNT) {
+                count = Rules.SELECTOR_MAX_COUNT;
+            }
             bottomLabel.setText(Rounder.round(count));
         } else {
             topLabel.setText(Rounder.round(count));

@@ -4,7 +4,6 @@ import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.labelsticker.Sticker;
 import com.shuttle.game.player.Shuttle;
-import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
 import com.shuttle.game.ui.panels.UILeftPanel;
 
@@ -14,7 +13,6 @@ import com.shuttle.game.ui.panels.UILeftPanel;
 
 public class Consumer {
     public static void consume(Sticker sticker, AbstractConsumable consumable) {
-
         if (sticker != Sticker.SHABBY && sticker != Sticker.SHABBY_GOLD) {
             addToUI(sticker, consumable);
         }
@@ -26,24 +24,15 @@ public class Consumer {
     }
 
     private static void addToSelector(Sticker sticker, AbstractConsumable consumable) {
-        if (Profiles.getSettings().isChild()) {
-            if (Sticker.SELECTABLE.contains(sticker) && consumable.isGolden()) {
-                SelectorGroup.getInstance().addSelector(sticker, 1);
-                sticker.notify(consumable);
-            } else {
-                sticker.consume(consumable);
+        if (Sticker.SELECTABLE.contains(sticker)) {
+            int amount = 1;
+            if (consumable.isGolden()) {
+                amount = Rules.SELECTOR_GOLDEN_COUNT;
             }
+            SelectorGroup.getInstance().addSelector(sticker, amount);
+            sticker.notify(consumable);
         } else {
-            if (Sticker.SELECTABLE.contains(sticker)) {
-                int amount = 1;
-                if (consumable.isGolden()) {
-                    amount = Rules.SELECTOR_GOLDEN_COUNT;
-                }
-                SelectorGroup.getInstance().addSelector(sticker, amount);
-                sticker.notify(consumable);
-            } else {
-                sticker.consume(consumable);
-            }
+            sticker.consume(consumable);
         }
     }
 

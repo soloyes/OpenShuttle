@@ -53,6 +53,9 @@ public class Selector {
 
     public void changeCount(int amount) {
         count += amount;
+        if (count >= Rules.SELECTOR_MAX_COUNT) {
+            count = Rules.SELECTOR_MAX_COUNT;
+        }
 
         ConfigImageButton button = LeftGroup.getInstance().getButtonMap().get(sticker);
         if (button != null) {

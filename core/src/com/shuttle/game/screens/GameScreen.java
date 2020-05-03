@@ -66,7 +66,6 @@ import com.shuttle.game.ui.groups.switches.SwitchGroup;
 import com.shuttle.game.ui.panels.UILeftPanel;
 import com.shuttle.game.ui.panels.UIRightPanel;
 import com.shuttle.game.ui.panels.UITopPanel;
-import com.shuttle.game.ui.panels.info.AnomalyTimer;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.ListOfListsJoiner;
 import com.shuttle.game.utils.ShaderManager;
@@ -97,9 +96,6 @@ public class GameScreen extends BaseScreen {
     private GameInfoSystem gameInfoSystem;
     private Joystick joystick;
     private PlayerPointer playerPointer;
-    @Getter
-    @Setter
-    private AnomalyTimer anomalyTimer;
     @Getter
     private Blackhole blackhole;
     private FrameBuffer fbo;
@@ -164,7 +160,6 @@ public class GameScreen extends BaseScreen {
         fuelEmitter = new FuelEmitter(particleEmitter);
         rocketEmitter = new RocketEmitter();
 
-        anomalyTimer = new AnomalyTimer();
         boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
         fbo = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(),
                 Gdx.graphics.getHeight(), false);
@@ -374,10 +369,9 @@ public class GameScreen extends BaseScreen {
             particleEmitter.update(dt);
             blackhole.update(dt);
             UILeftPanel.getInstance().update(dt);
-            uiTopPanel.update(dt);
             rocketLauncher.update(dt);
             if (!Rules.GAME_OVER) {
-                anomalyTimer.update(dt);
+                uiTopPanel.update(dt);
                 Standing.getInstance().addTime(dt);
             }
 

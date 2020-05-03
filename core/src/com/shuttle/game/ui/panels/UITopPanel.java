@@ -19,8 +19,8 @@ public class UITopPanel {
     public UITopPanel() {
         this.playerXP = new PlayerXP();
         this.bars = new Bars();
-        this.anomalyTimer = new AnomalyTimer();
         this.playerHP = new PlayerHP();
+        this.anomalyTimer = new AnomalyTimer();
     }
 
     public void render(SpriteBatch batch) {

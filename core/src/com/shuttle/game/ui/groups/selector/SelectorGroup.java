@@ -182,19 +182,13 @@ public class SelectorGroup extends Group {
             }
         }
         if (present) {
-            if (selectors.get(i).getCount() < Rules.SELECTOR_MAX_COUNT) {
-                selectors.get(i).changeCount(amount);
-                items += amount;
-            }
+            selectors.get(i).changeCount(amount);
         } else {
             Selector selector = new Selector(sticker);
-            if (amount >= Rules.SELECTOR_MAX_COUNT) {
-                amount = Rules.SELECTOR_MAX_COUNT;
-            }
             selector.changeCount(amount);
             selectors.add(selector);
-            items += amount;
         }
+        items += amount;
     }
 
     public void render(SpriteBatch batch) {
