@@ -2,8 +2,13 @@ package com.shuttle.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.screens.ScreenManager;
+
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.util.Date;
 
 import lombok.Getter;
 
@@ -16,6 +21,8 @@ public class ShuttleGame extends Game {
     private ScreenManager.ScreenType screenType;
     @Getter
     private static Share share;
+    private PrintStream printStream;
+    private FileHandle fileHandle;
 
     public ShuttleGame(Share share) {
         ShuttleGame.share = share;
@@ -24,6 +31,12 @@ public class ShuttleGame extends Game {
     @Override
     public void create() {
         this.batch = new SpriteBatch();
+        this.fileHandle = Gdx.files.local("exception.txt");
+        try {
+            this.printStream = new PrintStream(fileHandle.file());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         ScreenManager.getInstance().init(this, batch);
         if (screenType == null) {
             screenType = ScreenManager.ScreenType.MENU;
@@ -39,8 +52,16 @@ public class ShuttleGame extends Game {
 
     @Override
     public void render() {
-        float dt = Gdx.graphics.getDeltaTime();
-        getScreen().render(dt);
+        try {
+            float dt = Gdx.graphics.getDeltaTime();
+            getScreen().render(dt);
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.printStackTrace(printStream);
+            printStream.append("Above trace date: ").append(new Date().toString());
+            printStream.close();
+            System.exit(0);
+        }
     }
 
     public void setRunScreen(ScreenManager.ScreenType screenType) {
