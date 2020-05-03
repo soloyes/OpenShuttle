@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * @author Shuttle on 3/27/19.
  */
-//todo: рефакториг Sticker, и удалить level только в Corrosive (Results повлияет)
+
 public enum Sticker {
     //Crate
     BOOST {

@@ -236,8 +236,6 @@ public final class Rules {
     public static boolean GAME_OVER = false;
     //1200
     public static int GAME_SESSION_TIME = 1200;
-    //1
-    public static int GAME_СCONSUMABLE_PER_MINUTE_COUNT = 1;
     //20000
     //todo: to be Balanced
     public static final int SCORE_TO_LIVE = 1000;
