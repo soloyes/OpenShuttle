@@ -31,7 +31,7 @@ public final class Rules {
     //2
     public static final int CONSUMABLE_ASTRONAUT_AT_START = 2;
     //10.0f
-    public static final float CONSUMABLE_ASTRONAUT_RESPAWN_TIME = 10.0f;
+    public static final float CONSUMABLE_ASTRONAUT_RESPAWN_TIME = 1.0f;
     //2
     public static final int CONSUMABLE_ASTRONAUT_MAX_COUNT = 2;
     //2
@@ -238,7 +238,7 @@ public final class Rules {
     public static int GAME_SESSION_TIME = 1200;
     //20000
     //todo: to be Balanced
-    public static final int SCORE_TO_LIVE = 1000;
+    public static final int INDEX_SCORE_TO_LEVEL = 250;
     //10000
     public static final int SCORE_BASE_BONUS = 10000;
     //3
@@ -297,6 +297,8 @@ public final class Rules {
     public static final float SETTINGS_WAIT_TOUCH = 0.4f;
     //0.9f
     public static final float SETTINGS_WAIT_DISABLE = 0.5f + SETTINGS_WAIT_TOUCH;
+    //3
+    public static final int LEVELS_TO_LIVE = 3;
 
     public static void setSpace(int n) {
         STARS_COUNT = STARS * n;
@@ -309,17 +311,16 @@ public final class Rules {
         LOW {
             @Override
             public void setGameLevel() {
-                Standing.getInstance().setMaxFuel(250);
-                Standing.getInstance().setFuel(250);
-                Standing.getInstance().setHp(25);
-                Standing.getInstance().setMaxHp(25);
-                Standing.getInstance().setMaxLaserChargeLevel(25);
-                Standing.getInstance().setLifeShield(25);
-                Standing.getInstance().setMaxLifeShield(25);
+                Standing.getInstance().setMaxFuel(270);
+                Standing.getInstance().setFuel(270);
+                Standing.getInstance().setHp(27);
+                Standing.getInstance().setMaxHp(27);
+                Standing.getInstance().setMaxLaserChargeLevel(27);
+                Standing.getInstance().setLifeShield(27);
+                Standing.getInstance().setMaxLifeShield(27);
                 Standing.getInstance().setLives(1);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setPlayingLevel(25);
-                Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 3);
+                Standing.getInstance().setStartLevel(27);
                 Standing.getInstance().setScore(0);
                 Standing.getInstance().setScoreView(0);
             }
@@ -327,17 +328,16 @@ public final class Rules {
         MEDIUM {
             @Override
             public void setGameLevel() {
-                Standing.getInstance().setMaxFuel(200);
-                Standing.getInstance().setFuel(200);
-                Standing.getInstance().setHp(20);
-                Standing.getInstance().setMaxHp(20);
-                Standing.getInstance().setMaxLaserChargeLevel(20);
-                Standing.getInstance().setLifeShield(20);
-                Standing.getInstance().setMaxLifeShield(20);
+                Standing.getInstance().setMaxFuel(240);
+                Standing.getInstance().setFuel(240);
+                Standing.getInstance().setHp(24);
+                Standing.getInstance().setMaxHp(24);
+                Standing.getInstance().setMaxLaserChargeLevel(24);
+                Standing.getInstance().setLifeShield(24);
+                Standing.getInstance().setMaxLifeShield(24);
                 Standing.getInstance().setLives(2);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setPlayingLevel(20);
-                Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 8);
+                Standing.getInstance().setStartLevel(24);
                 Standing.getInstance().setScore(0);
                 Standing.getInstance().setScoreView(0);
             }
@@ -345,17 +345,16 @@ public final class Rules {
         HIGH {
             @Override
             public void setGameLevel() {
-                Standing.getInstance().setMaxFuel(150);
-                Standing.getInstance().setFuel(150);
-                Standing.getInstance().setHp(15);
-                Standing.getInstance().setMaxHp(15);
-                Standing.getInstance().setMaxLaserChargeLevel(15);
-                Standing.getInstance().setLifeShield(15);
-                Standing.getInstance().setMaxLifeShield(15);
+                Standing.getInstance().setMaxFuel(210);
+                Standing.getInstance().setFuel(210);
+                Standing.getInstance().setHp(21);
+                Standing.getInstance().setMaxHp(21);
+                Standing.getInstance().setMaxLaserChargeLevel(21);
+                Standing.getInstance().setLifeShield(21);
+                Standing.getInstance().setMaxLifeShield(21);
                 Standing.getInstance().setLives(2);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setPlayingLevel(15);
-                Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 13);
+                Standing.getInstance().setStartLevel(21);
                 Standing.getInstance().setScore(0);
                 Standing.getInstance().setScoreView(0);
             }
@@ -363,22 +362,20 @@ public final class Rules {
         EXTREME {
             @Override
             public void setGameLevel() {
-                Standing.getInstance().setMaxFuel(100);
-                Standing.getInstance().setFuel(100);
-                Standing.getInstance().setHp(10);
-                Standing.getInstance().setMaxHp(10);
-                Standing.getInstance().setMaxLaserChargeLevel(10);
-                Standing.getInstance().setLifeShield(10);
-                Standing.getInstance().setMaxLifeShield(10);
+                Standing.getInstance().setMaxFuel(180);
+                Standing.getInstance().setFuel(180);
+                Standing.getInstance().setHp(18);
+                Standing.getInstance().setMaxHp(18);
+                Standing.getInstance().setMaxLaserChargeLevel(18);
+                Standing.getInstance().setLifeShield(18);
+                Standing.getInstance().setMaxLifeShield(18);
                 Standing.getInstance().setLives(1);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setPlayingLevel(10);
-                Standing.getInstance().setScoreToLive(SCORE_TO_LIVE * 18);
+                Standing.getInstance().setStartLevel(18);
                 Standing.getInstance().setScore(0);
                 Standing.getInstance().setScoreView(0);
             }
         };
-
         public abstract void setGameLevel();
     }
 }

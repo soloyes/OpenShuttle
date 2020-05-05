@@ -33,7 +33,7 @@ public final class Standing {
     private static Standing instance;
     @Getter
     @Setter
-    private long score, scoreView, scoreToLive;
+    private long score, scoreView, scoreToLevel;
     @Getter
     @Setter
     private float fuel, maxFuel;
@@ -52,6 +52,7 @@ public final class Standing {
     @Getter
     @Setter
     private int playingLevel;
+    private int startLevel;
     @Getter
     @Setter
     private boolean hpAlert;
@@ -74,8 +75,6 @@ public final class Standing {
     private float lifeShield, maxLifeShield;
     private float lifeShieldDelayTime;
     private boolean lifeShieldDelayFlag;
-    //Score to lives with formula scoreToLive*n*(28 - level)
-    private int n;
     private BoomBox boomBox;
     //Type, level, score
     private Map<AbstractPoolable.Type, Map<Integer, Integer>> statistics;
@@ -84,6 +83,8 @@ public final class Standing {
     private float playTime;
     private float dmgReceived;
     private float dmgDone;
+    @Getter
+    private int levelsToLive;
 
     public static Standing getInstance() {
         if (instance == null) {
@@ -94,11 +95,15 @@ public final class Standing {
 
     private Standing() {
         this.boomBox = new BoomBox();
-        this.n = 1;
         this.statistics = new HashMap<AbstractPoolable.Type, Map<Integer, Integer>>();
         this.astronauts = new HashMap<Sticker, Integer>();
         this.usedItems = new HashMap<Sticker, Integer>();
         this.profiles = new Profiles();
+    }
+
+    public void setStartLevel(int level) {
+        playingLevel = level;
+        startLevel = level;
     }
 
     public void dispose() {
@@ -108,7 +113,7 @@ public final class Standing {
         playTime = 0;
         dmgReceived = 0;
         dmgDone = 0;
-        Rules.StartLevel.values()[Profiles.getSettings().getLevel()].setGameLevel();
+        levelsToLive = 0;
     }
 
     public void addToStatistics(AbstractPoolable.Type type, Integer level) {
@@ -176,11 +181,30 @@ public final class Standing {
 
     public void changeScore(int amount) {
         score += amount;
-        scoreToLive = Rules.SCORE_TO_LIVE * n * (28 - playingLevel);
-        if (score - scoreToLive >= 0) {
-            //todo: to be Balanced
-            n += 3;
+        calcScoreToLevel();
+        if (score - scoreToLevel >= 0) {
+            addLevelToLive();
+            playingLevel -= 1;
+            if (playingLevel <= 1) {
+                playingLevel = 1;
+            }
+        }
+    }
+
+    private void calcScoreToLevel() {
+        //todo: to be Balanced
+        scoreToLevel = 0;
+        for (int i = startLevel; i >= playingLevel; i--) {
+            scoreToLevel += Rules.INDEX_SCORE_TO_LEVEL * i * (28 - i);
+        }
+    }
+
+    private void addLevelToLive() {
+        levelsToLive += 1;
+        if (levelsToLive >= Rules.LEVELS_TO_LIVE) {
+            levelsToLive = 0;
             lives++;
+            boomBox.playSound(MSConstants.UP);
             GameInfoSystem.setup(
                     Shuttle.position.x,
                     Shuttle.position.y,
@@ -188,8 +212,6 @@ public final class Standing {
                     4.0f,
                     true
             );
-            boomBox.playSound(MSConstants.UP);
-            scoreToLive = Rules.SCORE_TO_LIVE * n * (28 - playingLevel);
         }
     }
 

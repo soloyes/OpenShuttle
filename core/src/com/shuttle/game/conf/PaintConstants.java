@@ -10,8 +10,9 @@ public final class PaintConstants {
     public static final int SHUTTLE_WIDTH = 256;
     public static final int SHUTTLE_HEIGHT = 256;
     public static final String SHUTTLE_ICON = "shuttleicon";
-    public static final int SHUTTLE_ICON_WIDTH = 32;
-    public static final int SHUTTLE_ICON_HEIGHT = 32;
+    public static final String SHUTTLE_ICON_SCALE = "shuttleiconscale";
+    public static final int SHUTTLE_ICON_WIDTH = 44;
+    public static final int SHUTTLE_ICON_HEIGHT = 44;
     public static final String SHUTTLE_TAKE_RANGE_FIELD_REGION = "takefield384";
     public static final int SHUTTLE_TAKE_RANGE_FIELD_WIDTH = 384;
     public static final int SHUTTLE_TAKE_RANGE_FIELD_HEIGHT = 384;
@@ -148,8 +149,8 @@ public final class PaintConstants {
     public static final String AT_ROCKET_POINT_REGION = "atrocketpoint";
     public static final float AT_ROCKET_POINT_ALPHA = 0.5f;
     public static final String ROCKET_REGION = "rocket";
-    public static final int ROCKET_WIDTH = 128;
-    public static final int ROCKET_HEIGHT = 128;
+    public static final int ROCKET_WIDTH = 96;
+    public static final int ROCKET_HEIGHT = 96;
     public static final int ROCKET_FRAMES = 3;
     public static final String POINTER_ARROW = "outarrow";
     public static final String POINTER_MARK = "outmark";

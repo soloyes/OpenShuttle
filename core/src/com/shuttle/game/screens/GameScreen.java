@@ -144,6 +144,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
+        standing = Standing.getInstance();
         fadeInAlpha = 0.0f;
         gameOverDeactivate = false;
 
@@ -175,7 +176,6 @@ public class GameScreen extends BaseScreen {
 
         blackhole = new Blackhole();
         player = new Shuttle(joystick, particleEmitter);
-        standing = Standing.getInstance();
         uiTopPanel = new UITopPanel();
 
         BoundCheck.avoidPosition(Blackhole.position, Shuttle.position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);

@@ -93,7 +93,7 @@ public class PlayerXP {
         if (standing.getScoreView() <= 0) {
             angle = 1;
         } else {
-            angle = 360 * (1 - 1.0f * (standing.getScoreToLive() - standing.getScoreView()) / standing.getScoreToLive());
+            angle = 360 * (1 - 1.0f * (standing.getScoreToLevel() - standing.getScoreView()) / standing.getScoreToLevel());
         }
 
         if (standing.isScoreAlertRadiationAnomaly()) {
