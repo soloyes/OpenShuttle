@@ -270,8 +270,9 @@ public class Shuttle extends AbstractShuttle {
     }
 
     public void slowDown(float amount) {
-        if (velocity.len() > 0)
+        if (velocity.len() > 0) {
             velocity.scl(1.0f - amount / velocity.len());
+        }
     }
 
     public void takeEffect(Consumable consumable) {
@@ -325,7 +326,7 @@ public class Shuttle extends AbstractShuttle {
 
     private void makeShadow(float dt) {
         float v = velocity.len() - Rules.PLAYER_ENGINE_POWER;
-        if (v >= 0) {
+        if (v > 10) {
             if (v <= shadowsCoordinates.getLast()) {
                 if (shadowsCoordinates.size() > 1) {
                     shadowsCoordinates.removeLast();
@@ -395,15 +396,15 @@ public class Shuttle extends AbstractShuttle {
                 angle += dir * radialSpeed * dt;
                 if (Math.abs(angle - angleToTarget) > 5.0f) {
                     particleEmitter.setupFromPointToPoint(
-                                    position.x + dir * 80 * (float) Math.cos(Math.toRadians(90 - angle)),
-                                    position.y - dir * 80 * (float) Math.sin(Math.toRadians(90 - angle)),
-                                    position.x + dir * 35 * (float) Math.cos(Math.toRadians(90 - angle)),
-                                    position.y - dir * 35 * (float) Math.sin(Math.toRadians(90 - angle)),
-                                    2.0f,
-                                    0.0f,
-                                    0.5f, 0.5f, 0.5f, 0.5f,
-                                    0, 0, 0, 0
-                            );
+                            position.x + dir * 80 * (float) Math.cos(Math.toRadians(90 - angle)),
+                            position.y - dir * 80 * (float) Math.sin(Math.toRadians(90 - angle)),
+                            position.x + dir * 35 * (float) Math.cos(Math.toRadians(90 - angle)),
+                            position.y - dir * 35 * (float) Math.sin(Math.toRadians(90 - angle)),
+                            2.0f,
+                            0.0f,
+                            0.5f, 0.5f, 0.5f, 0.5f,
+                            0, 0, 0, 0
+                    );
                 }
             }
         }
@@ -431,10 +432,10 @@ public class Shuttle extends AbstractShuttle {
                 particleEmitter.getBuilder().buildShuttleLowLevelEngineFire(position, angle, 80);
                 engineStarted = true;
             }
-            if (velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
+            if (velocity.len() > Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                 particleEmitter.getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
             }
-            if (velocity.len() >= Rules.PLAYER_ENGINE_POWER) {
+            if (velocity.len() > Rules.PLAYER_ENGINE_POWER + 10) {
                 particleEmitter.getBuilder().buildShuttleShield(
                         position, angle, 90, 45,
                         PlayerInteractionLevels.RED.getR(), PlayerInteractionLevels.RED.getG(), PlayerInteractionLevels.RED.getB()
