@@ -13,6 +13,7 @@ import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Shake;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.labelsticker.Sticker;
+import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.mvc.results.DetailedResultDAO;
@@ -185,8 +186,20 @@ public final class Standing {
         if (score - scoreToLevel >= 0) {
             addLevelToLive();
             playingLevel -= 1;
-            if (playingLevel <= 1) {
+            if (playingLevel < 1) {
                 playingLevel = 1;
+            } else {
+                GameInfoSystem.setup(
+                        ScreenManager.getInstance().getCamera().position.x,
+                        ScreenManager.getInstance().getCamera().position.y,
+                        String.valueOf(playingLevel),
+                        6.0f,
+                        2.0f,
+                        false,
+                        true
+                );
+                boomBox.playSound(MSConstants.LEVEL_UP);
+                Shake.getInstance().shakeCamera(0.3f, 35, 150);
             }
         }
     }

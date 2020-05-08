@@ -27,10 +27,10 @@ public class GameInfoSystem {
     }
 
     public static void setup(float x, float y, Preset preset, float scale, boolean colored) {
-        setupElement(x, y, preset.getValue(), scale, colored);
+        setupElement(x, y, preset.getValue(), scale, 2.0f, colored, false);
     }
 
-    private static void setupElement(float x, float y, String text, float scale, boolean colored) {
+    private static void setupElement(float x, float y, String text, float scale, float dstScale, boolean colored, boolean giant) {
         for (int i = 0; i < elements.length; i++) {
             float dy;
             if (MathUtils.random(0, 1) == 0) {
@@ -39,14 +39,18 @@ public class GameInfoSystem {
                 dy = MathUtils.random(20, 50);
             }
             if (!elements[i].isActive()) {
-                elements[i].setup(x, y + dy, text, scale, colored);
+                elements[i].setup(x, y + dy, text, scale, dstScale, colored, giant);
                 break;
             }
         }
     }
 
     public static void setup(float x, float y, String text, float scale, boolean colored) {
-        setupElement(x, y, text, scale, colored);
+        setupElement(x, y, text, scale, 2.0f, colored, false);
+    }
+
+    public static void setup(float x, float y, String text, float scale, float dstScale, boolean colored, boolean giant) {
+        setupElement(x, y, text, scale, dstScale, colored, giant);
     }
 
     public void update(float dt) {
