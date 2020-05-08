@@ -47,7 +47,7 @@ public class TimeFormat {
         return res;
     }
 
-    public static StringBuilder formatMs(float n) {
+    public static StringBuilder formatMS(float n) {
         stringBuilder.setLength(0);
         if (n >= 0.0f) {
             int duration = (int) n;

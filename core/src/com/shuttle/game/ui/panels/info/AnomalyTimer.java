@@ -87,7 +87,7 @@ public class AnomalyTimer {
                 }
             }
         }
-        glyphLayout.setText(font44, TimeFormat.formatMs(counter));
+        glyphLayout.setText(font44, TimeFormat.formatMS(counter));
         angle = -360.0f * counter / Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
     }
 }

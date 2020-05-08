@@ -30,11 +30,14 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Vibrator;
+import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.Joystick;
 import com.shuttle.game.ui.groups.GroupType;
+import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.Assets;
+import com.shuttle.game.utils.TimeFormat;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -100,6 +103,7 @@ public class ConfigGroup extends Group {
     private Group noticeGroup;
     private GlyphLayout glyphLayout;
     private GlyphLayout glyphLayoutTitle;
+    private GlyphLayout timeGlyphLayout;
     private Array<Music> musicArray;
     private BoomBox boomBox;
     private Label shaderLabel;
@@ -137,6 +141,7 @@ public class ConfigGroup extends Group {
         this.glyphLayoutTitle = new GlyphLayout();
         initLines();
         this.glyphLayout = new GlyphLayout();
+        this.timeGlyphLayout = new GlyphLayout();
 
         this.noticeLabel = new Label(notice, noticeStyle44);
         this.noticeGroup = new Group();
@@ -1043,6 +1048,9 @@ public class ConfigGroup extends Group {
     @Override
     public void act(float delta) {
         super.act(delta);
+        if (PauseGroup.isPause()) {
+            timeGlyphLayout.setText(font96, TimeFormat.formatYDHMS(Standing.getInstance().getPlayTime()));
+        }
         noticeGroup.getColor().a = a;
         glyphLayout.setText(font44, notice);
         noticeLabel.setText(notice);
@@ -1247,5 +1255,12 @@ public class ConfigGroup extends Group {
                 (Rules.WORLD_WIDTH - glyphLayoutTitle.width) / 2,
                 PaintConstants.UI_TITLE_LABEL_Y + glyphLayoutTitle.height
         );
+        if (PauseGroup.isPause()) {
+            font96.draw(batch,
+                    timeGlyphLayout,
+                    (Rules.WORLD_WIDTH - timeGlyphLayout.width) / 2,
+                    PaintConstants.UI_RESULTS_Y
+            );
+        }
     }
 }
