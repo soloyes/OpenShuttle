@@ -275,6 +275,8 @@ public final class Standing {
         int count;
         // score
         detailedResultDAO.setScore(scoreView);
+        // level
+        detailedResultDAO.setLevelAchieved(playingLevel);
         // time
         detailedResultDAO.setTime((int) playTime);
         // dmgDone

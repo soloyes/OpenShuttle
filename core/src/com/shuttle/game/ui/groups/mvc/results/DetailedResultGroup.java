@@ -135,6 +135,13 @@ public class DetailedResultGroup extends Group {
                         Long.compare(resultDAO.getCurrent().getScore(), resultDAO.getPrevious().getScore())
         );
         verticalGroup.addActor(scoreLine);
+        Line levelLine = new Line(
+                "Level achieved",
+                String.valueOf(resultDAO.getCurrent().getLevelAchieved()),
+                resultDAO.getPrevious() == null ? 1 :
+                        Long.compare(resultDAO.getPrevious().getLevelAchieved(), resultDAO.getCurrent().getLevelAchieved())
+        );
+        verticalGroup.addActor(levelLine);
         Line timeLine = new Line(
                 "Time",
                 TimeFormat.formatYDHMS(resultDAO.getCurrent().getTime()),

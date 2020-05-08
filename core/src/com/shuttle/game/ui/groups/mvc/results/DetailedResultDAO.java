@@ -40,6 +40,9 @@ public class DetailedResultDAO {
     @Getter
     @Setter
     private int astronautsTaken;
+    @Getter
+    @Setter
+    private int levelAchieved;
 
     public DetailedResultDAO() {
         this.effectiveness = 0;
@@ -52,6 +55,7 @@ public class DetailedResultDAO {
         this.pickUpItems = 0;
         this.usedItems = 0;
         this.astronautsTaken = 0;
+        this.levelAchieved = 0;
     }
 
     public DetailedResultDAO(DetailedResultDAO detailedResultDAO) {
@@ -65,7 +69,8 @@ public class DetailedResultDAO {
                 detailedResultDAO.getMinedAsteroids(),
                 detailedResultDAO.getPickUpItems(),
                 detailedResultDAO.getUsedItems(),
-                detailedResultDAO.getAstronautsTaken()
+                detailedResultDAO.getAstronautsTaken(),
+                detailedResultDAO.getLevelAchieved()
         );
     }
 }
