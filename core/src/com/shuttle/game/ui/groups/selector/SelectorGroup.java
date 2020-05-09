@@ -157,6 +157,9 @@ public class SelectorGroup extends Group {
     @Override
     public void act(float delta) {
         paused = PauseGroup.isPause();
+        if (Rules.GAME_OVER) {
+            setVisible(false);
+        }
     }
 
     @Override
