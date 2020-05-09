@@ -67,7 +67,7 @@ public final class MSConstants {
     public static final String NEW_ASTRONAUT = GAME + "new_astronaut.ogg";
     public static final String LOW_LIFE_WARNING = GAME + "low_life_warning.ogg";
     public static final String UP = GAME + "up.ogg";
-    public static final String LEVEL_UP = GAME + "levelup.ogg";
+    public static final String LEVEL_UP = GAME + "level_up.ogg";
     public static final String DOWN = GAME + "down.ogg";
     public static final String OUT_OF_SCREEN = GAME + "out_of_screen.ogg";
     public static final String START_ENGINE = GAME + "start_engine.ogg";

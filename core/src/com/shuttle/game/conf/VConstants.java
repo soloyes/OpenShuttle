@@ -13,6 +13,8 @@ public final class VConstants {
     public static final int PLAYER_ASTEROID_DESTROY = 30;
     //200
     public static final int PLAYER_LOST_LIVE = 200;
+    //100
+    public static final int LEVEL_UP = 100;
     //200
     public static final int VIBRATION_ENABLED = 200;
     //30

@@ -99,6 +99,7 @@ public class ConfigImageButton extends ImageButton {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        batch.setColor(Color.WHITE);
         batch.draw(glow, getX(), getY(),
                 PaintConstants.LEFT_RIGHT_UI_CELL_WIDTH,
                 PaintConstants.LEFT_RIGHT_UI_CELL_HEIGHT
@@ -168,6 +169,7 @@ public class ConfigImageButton extends ImageButton {
             }
         }
 
+        batch.setColor(Color.WHITE);
         if (center) {
             batch.draw(centerRegion, getX(), getY(), PaintConstants.LEFT_RIGHT_UI_CELL_WIDTH, PaintConstants.LEFT_RIGHT_UI_CELL_HEIGHT);
         }

@@ -200,6 +200,7 @@ public final class Standing {
                 );
                 boomBox.playSound(MSConstants.LEVEL_UP);
                 Shake.getInstance().shakeCamera(0.3f, 35, 150);
+                Vibrator.vibrate(VConstants.LEVEL_UP);
             }
         }
     }

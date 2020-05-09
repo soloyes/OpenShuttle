@@ -192,6 +192,7 @@ public class SelectorGroup extends Group {
     }
 
     public void render(SpriteBatch batch) {
+        batch.setColor(Color.WHITE);
         if (selectors.size() >= 3) {
             renderLeft(batch);
             renderCenter(batch, selectors.get(select).getCount());
@@ -231,7 +232,7 @@ public class SelectorGroup extends Group {
                 leftButton.getWidth(), leftButton.getHeight(),
                 1.0f, 1.0f, 0.0f
         );
-        batch.setColor(color);
+        batch.setColor(Color.WHITE);
     }
 
     private void renderCenter(SpriteBatch batch, int count) {
@@ -255,7 +256,7 @@ public class SelectorGroup extends Group {
                 centerButton.getWidth(), centerButton.getHeight(),
                 1.0f, 1.0f, 0.0f
         );
-        batch.setColor(color);
+        batch.setColor(Color.WHITE);
     }
 
     private void renderRight(SpriteBatch batch) {
@@ -267,7 +268,7 @@ public class SelectorGroup extends Group {
                 rightButton.getWidth(), rightButton.getHeight(),
                 1.0f, 1.0f, 0.0f
         );
-        batch.setColor(color);
+        batch.setColor(Color.WHITE);
     }
 
     public void update(float dt) {
