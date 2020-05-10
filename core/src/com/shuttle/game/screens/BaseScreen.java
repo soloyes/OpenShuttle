@@ -13,7 +13,7 @@ import com.shuttle.game.effects.BoomBox;
 /**
  * @author Shuttle on 4/6/18.
  */
-//todo: try to adopt to 21:9
+
 public abstract class BaseScreen implements Screen {
     protected Stage stage;
     protected SpriteBatch batch;

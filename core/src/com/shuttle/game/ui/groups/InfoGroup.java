@@ -3,9 +3,11 @@ package com.shuttle.game.ui.groups;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -27,9 +29,10 @@ import lombok.Setter;
  */
 
 public class InfoGroup extends Group {
-    private Label titleLabel;
+    private GlyphLayout glyphLayout;
     private BoomBox boomBox;
     private Results results;
+    private BitmapFont font96;
 
     public InfoGroup() {
         this.setName(GroupType.SHARE.name());
@@ -38,19 +41,18 @@ public class InfoGroup extends Group {
         this.results = new Results();
         this.setVisible(false);
         Color color = new Color(0.8f, 0.43f, 0.33f, 1f);
-
         Label.LabelStyle style64 = new Label.LabelStyle(Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class), color);
-        Label.LabelStyle style96 = new Label.LabelStyle(Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class), Color.WHITE);
-
-        titleLabel = new Label("INFO", style96);
+        font96 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
+        glyphLayout = new GlyphLayout(font96, "INFO");
         Label shareLabel = new Label("Share Results", style64);
         Label rateLabel = new Label("Rate Shuttle", style64);
         Label aboutLabel = new Label("About Us", style64);
-
-        this.setWidth(PaintConstants.UI_MENU_CELL_WIDTH);
-        this.setHeight(Rules.WORLD_HEIGHT / 4);
-
-        titleLabel.setPosition(Rules.WORLD_WIDTH / 2 - titleLabel.getWidth() / 2, Rules.WORLD_HEIGHT / 2 + 9);
+        Container<Table> container = new Container<Table>(table);
+        container.width(PaintConstants.UI_MENU_CELL_WIDTH);
+        container.height(Rules.WORLD_HEIGHT / 4);
+        container.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.UI_MENU_CELL_WIDTH / 2, 2 * Rules.WORLD_HEIGHT / 3);
+        container.align(Align.topLeft);
+        table.align(Align.topLeft);
 
         final Line shareLine = new Line(shareLabel);
         table.add(shareLine).width(PaintConstants.UI_MENU_CELL_WIDTH).height(PaintConstants.UI_CELL_HEIGHT).padBottom(12).align(Align.center);
@@ -60,8 +62,6 @@ public class InfoGroup extends Group {
         table.row();
         final Line aboutLine = new Line(aboutLabel);
         table.add(aboutLine).width(PaintConstants.UI_MENU_CELL_WIDTH).height(PaintConstants.UI_CELL_HEIGHT).padBottom(12).align(Align.center);
-
-        this.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.UI_MENU_CELL_WIDTH / 2, Rules.WORLD_HEIGHT / 2 - table.getRows() * (PaintConstants.UI_CELL_WIDTH + 12));
 
         shareLine.addListener(new ClickListener() {
             @Override
@@ -121,16 +121,19 @@ public class InfoGroup extends Group {
             }
         });
 
-        table.setFillParent(true);
-        this.setWidth(PaintConstants.UI_MENU_CELL_WIDTH);
-        this.setHeight(PaintConstants.UI_CELL_HEIGHT + 12);
-        this.addActor(table);
+        this.setWidth(Rules.WORLD_WIDTH);
+        this.setHeight(Rules.WORLD_HEIGHT);
+        this.addActor(container);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        titleLabel.draw(batch, parentAlpha);
+        font96.draw(batch,
+                glyphLayout,
+                (Rules.WORLD_WIDTH - glyphLayout.width) / 2,
+                2 * Rules.WORLD_HEIGHT / 3 + 2 * glyphLayout.height
+        );
     }
 
     private class Line extends Group {

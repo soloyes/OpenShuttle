@@ -1,6 +1,7 @@
 package com.shuttle.game.ui.panels.info;
 
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 
 /**
@@ -12,10 +13,10 @@ public class BarFuel extends AbstractBar {
         this.scaleBar = Assets.getInstance().getAtlas().findRegion(PaintConstants.FP_BAR_SCALE);
         this.bar = Assets.getInstance().getAtlas().findRegion(PaintConstants.FP_BAR);
         this.icon = Assets.getInstance().getAtlas().findRegion(PaintConstants.FP_BAR_ICON);
-        this.width = PaintConstants.FP_BAR_WIDTH;
-        this.height = PaintConstants.FP_BAR_HEIGHT;
+        this.width = Rules.WORLD_WIDTH / 4;
+        this.height = PaintConstants.BAR_HEIGHT;
         this.side = Side.RIGHT;
-        this.position.set(631, 1751);
+        this.position.set(Rules.WORLD_WIDTH - width - 43 - PaintConstants.PLAY_PAUSE_BUTTON_WIDTH - 14, Rules.WORLD_HEIGHT - 168);
     }
 
     @Override

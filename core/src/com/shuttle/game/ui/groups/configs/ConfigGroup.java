@@ -157,10 +157,10 @@ public class ConfigGroup extends Group {
         //scrollPane.setVariableSizeKnobs(false);
         //scrollPane.getStyle().vScrollKnob.setMinHeight(100);
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
-        container.setPosition(PaintConstants.UI_SETTINGS_X, PaintConstants.UI_SETTINGS_Y);
+        container.setPosition(PaintConstants.UI_SETTINGS_X, 2 * Rules.WORLD_HEIGHT / 3);
         container.width(PaintConstants.UI_SETTINGS_WIDTH);
         container.height(PaintConstants.UI_SETTINGS_HEIGHT);
-        container.align(Align.bottomLeft);
+        container.align(Align.topLeft);
 
         screenType = ScreenManager.getInstance().getCurrentScreen();
 
@@ -1056,7 +1056,7 @@ public class ConfigGroup extends Group {
         noticeLabel.setText(notice);
         noticeGroup.setPosition(
                 (Rules.WORLD_WIDTH - glyphLayout.width) / 2,
-                1313
+                2 * Rules.WORLD_HEIGHT / 3 + glyphLayoutTitle.height / 2
         );
 
         shadowTime -= delta;
@@ -1253,13 +1253,13 @@ public class ConfigGroup extends Group {
         font96.draw(batch,
                 glyphLayoutTitle,
                 (Rules.WORLD_WIDTH - glyphLayoutTitle.width) / 2,
-                PaintConstants.UI_TITLE_LABEL_Y + glyphLayoutTitle.height
+                2 * Rules.WORLD_HEIGHT / 3 + 2 * glyphLayoutTitle.height
         );
-        if (PauseGroup.isPause()) {
+        if (PauseGroup.isPause() && ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
             font96.draw(batch,
                     timeGlyphLayout,
                     (Rules.WORLD_WIDTH - timeGlyphLayout.width) / 2,
-                    PaintConstants.UI_RESULTS_Y
+                    2 * Rules.WORLD_HEIGHT / 3 - PaintConstants.UI_SETTINGS_HEIGHT - timeGlyphLayout.height
             );
         }
     }

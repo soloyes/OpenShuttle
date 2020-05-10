@@ -1,6 +1,7 @@
 package com.shuttle.game.ui.panels.info;
 
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 
 /**
@@ -12,10 +13,10 @@ public class BarHP extends AbstractBar {
         this.scaleBar = Assets.getInstance().getAtlas().findRegion(PaintConstants.HP_BAR_SCALE);
         this.bar = Assets.getInstance().getAtlas().findRegion(PaintConstants.HP_BAR);
         this.icon = Assets.getInstance().getAtlas().findRegion(PaintConstants.HP_BAR_ICON);
-        this.width = PaintConstants.BAR_WIDTH;
+        this.width = Rules.WORLD_WIDTH / 4;
         this.height = PaintConstants.BAR_HEIGHT;
         this.side = Side.LEFT;
-        this.position.set(197, 1751);
+        this.position.set(43 + PaintConstants.XP_WIDTH + 12, Rules.WORLD_HEIGHT - 168);
     }
 
     @Override

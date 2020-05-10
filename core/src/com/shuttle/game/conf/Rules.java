@@ -18,9 +18,9 @@ public final class Rules {
     //300
     private static final int STARS = 300;
     //1080
-    public static final int WORLD_WIDTH = 1080;
+    public static int WORLD_WIDTH;
     //1920
-    public static final int WORLD_HEIGHT = 1920;
+    public static int WORLD_HEIGHT;
     //
     public static int SPACE_WIDTH;
     //

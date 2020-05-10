@@ -38,7 +38,7 @@ public abstract class AbstractLatestPanel {
         this.cHeight = PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_HEIGHT;
         this.maxShowed = PaintConstants.PANEL_ELEMENTS_MAX;
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-        this.startPoint = Rules.WORLD_HEIGHT / 2;
+        this.startPoint = Rules.WORLD_HEIGHT / 2 + 3 * width / 2 + 28;
         this.freeLabel = new ArrayList<LabelTime>();
         this.showLabel = new ArrayList<LabelTime>();
         this.needDel = new ArrayList<Integer>();

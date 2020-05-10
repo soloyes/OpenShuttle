@@ -86,9 +86,18 @@ public class ScreenManager {
         game.setScreen(targetScreen);
     }
 
-    public void init(ShuttleGame game, SpriteBatch batch) {
+    public void init(ShuttleGame game, SpriteBatch batch, boolean mobile) {
         this.game = game;
         this.batch = batch;
+        if (mobile) {
+            Rules.WORLD_WIDTH = Gdx.graphics.getWidth();
+            Rules.WORLD_HEIGHT = Gdx.graphics.getHeight();
+        } else {
+            Rules.WORLD_WIDTH = 1080;
+            Rules.WORLD_HEIGHT = 2520;
+            // Rules.WORLD_HEIGHT = 1920;
+        }
+
         this.camera = new OrthographicCamera(Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
         this.viewport = new FitViewport(Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT, camera);
         this.gameScreen = new GameScreen(batch, camera);

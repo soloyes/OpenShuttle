@@ -13,7 +13,8 @@ public class GameInfoSystem {
     private static FlyingText[] elements;
 
     public GameInfoSystem() {
-        elements = new FlyingText[20];
+        //todo: objectPool
+        elements = new FlyingText[200];
         for (int i = 0; i < elements.length; i++) {
             elements[i] = new FlyingText();
         }

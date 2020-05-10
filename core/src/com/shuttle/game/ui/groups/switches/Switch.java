@@ -40,7 +40,7 @@ public class Switch extends ImageButton {
         this.height = PaintConstants.SWITCH_HEIGHT;
         setPosition(
                 isLeft ? 0 : Rules.WORLD_WIDTH - width,
-                764
+                Rules.WORLD_HEIGHT / 2
         );
         setWidth(width);
         setOrigin(Align.center);

@@ -81,9 +81,9 @@ public class SelectorGroup extends Group {
         leftButton.setSize(width, height);
         rightButton.setSize(width, height);
 
-        leftButton.setPosition(337, 1597);
-        rightButton.setPosition(631, 1597);
-        centerButton.setPosition(Rules.WORLD_WIDTH / 2 - centerWidth / 2, 1569);
+        leftButton.setPosition(Rules.WORLD_WIDTH / 2 - centerWidth / 2 - width - 14, Rules.WORLD_HEIGHT - 323);
+        rightButton.setPosition(Rules.WORLD_WIDTH / 2 + centerWidth / 2 + 14, Rules.WORLD_HEIGHT - 323);
+        centerButton.setPosition(Rules.WORLD_WIDTH / 2 - centerWidth / 2, Rules.WORLD_HEIGHT - 351);
 
         leftArrow.setPosition(leftButton.getX(), leftButton.getY());
         rightArrow.setPosition(rightButton.getX(), rightButton.getY());

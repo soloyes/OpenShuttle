@@ -58,8 +58,8 @@ public class DetailedResultGroup extends Group {
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
         container.width(PaintConstants.UI_RESULTS_DETAILED_WIDTH);
         container.height(PaintConstants.UI_RESULTS_DETAILED_HEIGHT);
-        container.setPosition(PaintConstants.UI_RESULTS_DETAILED_X, PaintConstants.UI_RESULTS_DETAILED_Y);
-        container.align(Align.bottomLeft);
+        container.setPosition(PaintConstants.UI_RESULTS_DETAILED_X, 2 * Rules.WORLD_HEIGHT / 3);
+        container.align(Align.topLeft);
 
         this.font = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
         glyphLayout.setText(font, "DETAILS");
@@ -289,7 +289,7 @@ public class DetailedResultGroup extends Group {
         font.draw(batch,
                 glyphLayout,
                 (Rules.WORLD_WIDTH - glyphLayout.width) / 2,
-                PaintConstants.UI_TITLE_LABEL_Y + glyphLayout.height
+                2 * Rules.WORLD_HEIGHT / 3 + 2 * glyphLayout.height
         );
     }
 }

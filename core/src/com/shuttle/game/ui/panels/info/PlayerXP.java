@@ -85,7 +85,7 @@ public class PlayerXP {
         font60_C.draw(
                 batch,
                 score, position.x + width / 2 - score.width / 2,
-                1695
+                Rules.WORLD_HEIGHT - 225
         );
     }
 

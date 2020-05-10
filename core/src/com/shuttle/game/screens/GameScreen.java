@@ -138,7 +138,7 @@ public class GameScreen extends BaseScreen {
         this.camera = camera;
         this.tmp1V2 = new Vector2(0, 0);
         this.tmp1V3 = new Vector3(0, 0, 0);
-        this.cameraHelper = new OrthographicCamera(1080, 1920);
+        this.cameraHelper = new OrthographicCamera(Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
     }
 
     @Override

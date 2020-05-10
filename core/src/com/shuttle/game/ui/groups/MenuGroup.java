@@ -70,7 +70,7 @@ public class MenuGroup extends Group {
         this.tmp1V2 = new Vector2();
         this.tmp2V2 = new Vector2();
         buttonProfiles.setSize(PaintConstants.PROFILES_BUTTON_WIDTH, PaintConstants.PROFILES_BUTTON_HEIGHT);
-        buttonProfiles.setPosition(487, 1096);
+        buttonProfiles.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.PROFILES_BUTTON_WIDTH / 2, 1096);
 
         buttonProfiles.addListener(new ClickListener() {
             @Override

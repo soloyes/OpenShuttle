@@ -336,23 +336,16 @@ public final class PaintConstants {
     public static final String HP_BAR_SCALE = "barscale";
     public static final String HP_BAR = "bar";
     public static final String HP_BAR_ICON = "hpicon";
-    public static final int BAR_WIDTH = 256;
-    public static final int BAR_HEIGHT = 14;
     public static final String LP_BAR = "bar";
     public static final String LP_BAR_SCALE = "barscale";
     public static final String LP_BAR_ICON = "lpicon";
-    public static final int LP_BAR_WIDTH = 256;
-    public static final int LP_BAR_HEIGHT = 14;
     public static final String FP_BAR = "bar";
     public static final String FP_BAR_SCALE = "barscale";
     public static final String FP_BAR_ICON = "fpicon";
-    public static final int FP_BAR_WIDTH = 256;
-    public static final int FP_BAR_HEIGHT = 14;
     public static final String SP_BAR = "bar";
     public static final String SP_BAR_SCALE = "barscale";
     public static final String SP_BAR_ICON = "spicon";
-    public static final int SP_BAR_WIDTH = 256;
-    public static final int SP_BAR_HEIGHT = 14;
+    public static final int BAR_HEIGHT = 14;
     public static final String CIRCLE_GLOW = "circleglow";
     public static final String SELECTOR_OUT = "selectorout";
     public static final String SELECTOR_OUT_CENTER = "selectoroutcenter";
@@ -452,19 +445,14 @@ public final class PaintConstants {
     public static final float UI_SETTINGS_WIDTH = 670;
     public static final float UI_SETTINGS_HEIGHT = 952;
     public static final float UI_SETTINGS_X = 205;
-    public static final float UI_SETTINGS_Y = 340;
 
     public static final float UI_RESULTS_WIDTH = 998;
     public static final float UI_RESULTS_HEIGHT = 988;
     public static final float UI_RESULTS_X = 41;
-    public static final float UI_RESULTS_Y = 304;
 
     public static final float UI_RESULTS_DETAILED_WIDTH = 998;
     public static final float UI_RESULTS_DETAILED_HEIGHT = 1022;
     public static final float UI_RESULTS_DETAILED_X = 41;
-    public static final float UI_RESULTS_DETAILED_Y = 270;
-
-    public static final float UI_TITLE_LABEL_Y = 1340;
 
     private PaintConstants() {
     }
