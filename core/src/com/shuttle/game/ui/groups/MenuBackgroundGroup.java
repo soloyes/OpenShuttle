@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.Oscillator;
 import com.shuttle.game.effects.Ray;
 import com.shuttle.game.effects.particle.ParticleEmitter;
@@ -88,8 +89,14 @@ public class MenuBackgroundGroup extends Group {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.setColor(Color.WHITE);
-        batch.draw(planet, PaintConstants.UI_MENU_BACKGROUND_PLANET_X, PaintConstants.UI_MENU_BACKGROUND_PLANET_Y - backY);
-        batch.draw(storage, PaintConstants.UI_MENU_BACKGROUND_STORAGE_X, PaintConstants.UI_MENU_BACKGROUND_STORAGE_Y - backY);
+        float ratio = 1.0f * Rules.WORLD_WIDTH / PaintConstants.UI_MENU_BACKGROUND_PLANET_WIDTH;
+        batch.draw(planet,
+                PaintConstants.UI_MENU_BACKGROUND_PLANET_X, PaintConstants.UI_MENU_BACKGROUND_PLANET_Y - backY,
+                PaintConstants.UI_MENU_BACKGROUND_PLANET_WIDTH * ratio, PaintConstants.UI_MENU_BACKGROUND_PLANET_HEIGHT
+        );
+        batch.draw(storage,
+                Rules.WORLD_WIDTH * 0.42f, PaintConstants.UI_MENU_BACKGROUND_STORAGE_Y - backY
+        );
         batch.draw(
                 astronaut,
                 PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_X,
@@ -102,7 +109,9 @@ public class MenuBackgroundGroup extends Group {
                 astronautScale,
                 0.0f
         );
-        batch.draw(sitastronaut, PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT_X, PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT_Y - backY);
+        batch.draw(sitastronaut,
+                Rules.WORLD_WIDTH * 0.55f, PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT_Y - backY
+        );
         batch.draw(shuttle, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_X, shuttleY, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_WIDTH, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_HEIGHT);
         batch.draw(
                 shield,
@@ -128,7 +137,7 @@ public class MenuBackgroundGroup extends Group {
         );
         batch.draw(
                 asteroid1,
-                PaintConstants.UI_MENU_BACKGROUND_ASTEROID1_X,
+                Rules.WORLD_WIDTH * 0.65f,
                 PaintConstants.UI_MENU_BACKGROUND_ASTEROID1_Y,
                 PaintConstants.UI_MENU_BACKGROUND_ASTEROID1_WIDTH / 2,
                 PaintConstants.UI_MENU_BACKGROUND_ASTEROID1_HEIGHT / 2,
@@ -139,7 +148,7 @@ public class MenuBackgroundGroup extends Group {
         );
         batch.draw(
                 asteroid2,
-                PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_X + radius * MathUtils.cos(angle),
+                Rules.WORLD_WIDTH * 0.85f + radius * MathUtils.cos(angle),
                 PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_Y + radius * MathUtils.sin(angle),
                 PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_WIDTH / 2,
                 PaintConstants.UI_MENU_BACKGROUND_ASTEROID2_HEIGHT / 2,
@@ -161,15 +170,15 @@ public class MenuBackgroundGroup extends Group {
         );
 
         particleEmitter.setupFromPointToPoint(
-                        PaintConstants.UI_MENU_BACKGROUND_SHIELD_X + PaintConstants.UI_MENU_BACKGROUND_SHIELD_WIDTH / 3 - 30,
-                        PaintConstants.UI_MENU_BACKGROUND_SHIELD_Y + PaintConstants.UI_MENU_BACKGROUND_SHIELD_HEIGHT / 3 - 20,
-                        PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_X + PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_WIDTH / 2,
-                        PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_Y + PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT / 2,
-                        1.0f,
-                        2.0f,
-                        preset.getStartR(), preset.getStartG(), preset.getStartB(), 0.3f,
-                        preset.getEndR(), preset.getEndG(), preset.getEndB(), 0.3f
-                );
+                PaintConstants.UI_MENU_BACKGROUND_SHIELD_X + PaintConstants.UI_MENU_BACKGROUND_SHIELD_WIDTH / 3 - 30,
+                PaintConstants.UI_MENU_BACKGROUND_SHIELD_Y + PaintConstants.UI_MENU_BACKGROUND_SHIELD_HEIGHT / 3 - 20,
+                PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_X + PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_WIDTH / 2,
+                PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_Y + PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT / 2,
+                1.0f,
+                2.0f,
+                preset.getStartR(), preset.getStartG(), preset.getStartB(), 0.3f,
+                preset.getEndR(), preset.getEndG(), preset.getEndB(), 0.3f
+        );
 
         for (int j = 0; j < count; j++) {
             float ang = 6.28f / count * j;

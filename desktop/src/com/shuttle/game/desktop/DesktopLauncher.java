@@ -10,13 +10,20 @@ import com.shuttle.game.screens.ScreenManager;
  */
 
 public class DesktopLauncher {
+    private static ScreenResolutionTester tester = ScreenResolutionTester.SIXTEEN_TO_NINE;
 
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.width = 360;
-        config.height = 840;
-//        config.width = 540;
-//        config.height = 960;
+        try {
+            if (arg.length > 1) {
+                tester.setMode(ScreenResolutionTester.valueOf(arg[1]));
+            }
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+        config.width = tester.getMode().getHalfWidth();
+        config.height = tester.getMode().getHalfHeight();
         config.vSyncEnabled = true;
         //config.foregroundFPS = 10;
 
@@ -29,7 +36,7 @@ public class DesktopLauncher {
                 }
             }
         }
-        ShuttleGame game = new ShuttleGame(new ShareDesktop(), false);
+        ShuttleGame game = new ShuttleGame(new ShareDesktop(), false, tester.getMode().getWidth(), tester.getMode().getHeight());
         game.setRunScreen(screenType);
         //
 

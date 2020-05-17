@@ -157,9 +157,9 @@ public class ConfigGroup extends Group {
         //scrollPane.setVariableSizeKnobs(false);
         //scrollPane.getStyle().vScrollKnob.setMinHeight(100);
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
-        container.setPosition(PaintConstants.UI_SETTINGS_X, 2 * Rules.WORLD_HEIGHT / 3);
         container.width(PaintConstants.UI_SETTINGS_WIDTH);
         container.height(PaintConstants.UI_SETTINGS_HEIGHT);
+        container.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.UI_SETTINGS_WIDTH / 2, 2 * Rules.WORLD_HEIGHT / 3);
         container.align(Align.topLeft);
 
         screenType = ScreenManager.getInstance().getCurrentScreen();

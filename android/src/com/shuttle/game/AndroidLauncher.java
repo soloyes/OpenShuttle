@@ -16,7 +16,7 @@ public class AndroidLauncher extends AndroidApplication {
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         ShareAndroid shareAndroid = new ShareAndroid();
         shareAndroid.setAndroidApplication(this);
-        initialize(new ShuttleGame(shareAndroid, true), config);
+        initialize(new ShuttleGame(shareAndroid, true, 1080, 1920), config);
         onWindowFocusChanged(true);
     }
 

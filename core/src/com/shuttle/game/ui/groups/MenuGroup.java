@@ -63,10 +63,10 @@ public class MenuGroup extends Group {
         this(GroupType.MENU.name(), configGroup, resultGroup);
         username.setAlignment(Align.center);
         username.setMaxLength(8);
-        username.setPosition(270, 960);
         username.setWidth(540);
         username.setHeight(108);
-        this.rectangle = new Rectangle(270, 960, 540, 108);
+        username.setPosition(Rules.WORLD_WIDTH / 2 - username.getWidth() / 2, 960);
+        this.rectangle = new Rectangle(Rules.WORLD_WIDTH / 2 - username.getWidth() / 2, 960, 540, 108);
         this.tmp1V2 = new Vector2();
         this.tmp2V2 = new Vector2();
         buttonProfiles.setSize(PaintConstants.PROFILES_BUTTON_WIDTH, PaintConstants.PROFILES_BUTTON_HEIGHT);

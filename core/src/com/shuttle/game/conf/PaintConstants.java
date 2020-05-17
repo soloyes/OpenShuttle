@@ -285,6 +285,8 @@ public final class PaintConstants {
     public static int UI_MENU_BACKGROUND_ASTEROID1_HEIGHT = 213;
     public static int UI_MENU_BACKGROUND_ASTEROID2_WIDTH = 95;
     public static int UI_MENU_BACKGROUND_ASTEROID2_HEIGHT = 95;
+    public static int UI_MENU_BACKGROUND_PLANET_WIDTH = 1080;
+    public static int UI_MENU_BACKGROUND_PLANET_HEIGHT = 711;
 
     public static final int UI_ICO_CONFIG_WIDTH = 36;
     public static final int UI_ICO_CONFIG_HEIGHT = 36;
@@ -448,11 +450,12 @@ public final class PaintConstants {
 
     public static final float UI_RESULTS_WIDTH = 998;
     public static final float UI_RESULTS_HEIGHT = 988;
-    public static final float UI_RESULTS_X = 41;
 
     public static final float UI_RESULTS_DETAILED_WIDTH = 998;
     public static final float UI_RESULTS_DETAILED_HEIGHT = 1022;
-    public static final float UI_RESULTS_DETAILED_X = 41;
+
+    public static final float UI_PROFILES_WIDTH = 540;
+    public static final float UI_PROFILES_HEIGHT = 492;
 
     private PaintConstants() {
     }

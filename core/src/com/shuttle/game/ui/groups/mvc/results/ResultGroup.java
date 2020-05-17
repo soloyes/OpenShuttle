@@ -69,7 +69,7 @@ public class ResultGroup extends Group {
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
         container.width(PaintConstants.UI_RESULTS_WIDTH);
         container.height(PaintConstants.UI_RESULTS_HEIGHT);
-        container.setPosition(PaintConstants.UI_RESULTS_X, 2 * Rules.WORLD_HEIGHT / 3);
+        container.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.UI_RESULTS_WIDTH / 2, 2 * Rules.WORLD_HEIGHT / 3);
         container.align(Align.topLeft);
 
         font = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);

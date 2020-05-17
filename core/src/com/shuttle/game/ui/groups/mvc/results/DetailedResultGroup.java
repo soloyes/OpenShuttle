@@ -58,7 +58,7 @@ public class DetailedResultGroup extends Group {
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
         container.width(PaintConstants.UI_RESULTS_DETAILED_WIDTH);
         container.height(PaintConstants.UI_RESULTS_DETAILED_HEIGHT);
-        container.setPosition(PaintConstants.UI_RESULTS_DETAILED_X, 2 * Rules.WORLD_HEIGHT / 3);
+        container.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.UI_RESULTS_DETAILED_WIDTH / 2, 2 * Rules.WORLD_HEIGHT / 3);
         container.align(Align.topLeft);
 
         this.font = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
@@ -79,7 +79,7 @@ public class DetailedResultGroup extends Group {
         this.addActor(container);
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.MENU) {
             this.buttonBack = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.BACK_BUTTON)));
-            buttonBack.setPosition(484, 24);
+            buttonBack.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.MENU_BUTTON_WIDTH / 2, 24);
             buttonBack.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Vibrator;
@@ -54,11 +55,12 @@ public class MenuBar extends Group {
         this.buttonResults.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
         this.buttonInfo.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
 
+
         buttonPlay.setPosition(24, 24);
-        buttonResults.setPosition(254, 24);
-        buttonInfo.setPosition(484, 24);
-        buttonSettings.setPosition(714, 24);
-        buttonExit.setPosition(944, 24);
+        buttonResults.setPosition(Rules.WORLD_WIDTH / 4 - 12, 24);
+        buttonInfo.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.MENU_BUTTON_WIDTH / 2, 24);
+        buttonSettings.setPosition(3 * Rules.WORLD_WIDTH / 4 - PaintConstants.MENU_BUTTON_WIDTH + 12, 24);
+        buttonExit.setPosition(Rules.WORLD_WIDTH - PaintConstants.MENU_BUTTON_WIDTH - 24, 24);
 
         buttonExit.addListener(new ClickListener() {
             @Override

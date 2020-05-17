@@ -68,12 +68,12 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
         scrollPane.setVisible(false);
         Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
         //container.setPosition(Rules.WORLD_WIDTH / 2, 100);
-        container.height(492);
-        container.width(540);
+        container.height(PaintConstants.UI_PROFILES_HEIGHT);
+        container.width(PaintConstants.UI_PROFILES_WIDTH);
         container.align(Align.topLeft);
-        this.setPosition(Rules.WORLD_WIDTH / 4, 408);
-        this.setWidth(540);
-        this.setHeight(492);
+        this.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.UI_PROFILES_WIDTH / 2, 408);
+        this.setWidth(PaintConstants.UI_PROFILES_WIDTH);
+        this.setHeight(PaintConstants.UI_PROFILES_HEIGHT);
         this.addActor(container);
     }
 

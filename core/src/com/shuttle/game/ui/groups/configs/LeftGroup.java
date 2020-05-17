@@ -65,7 +65,7 @@ public class LeftGroup extends AbstractInfoGroup {
     @Override
     protected void setPosition() {
         this.isLeft = true;
-        scrollPane.setPosition(25, 2 * Rules.WORLD_HEIGHT / 3 - PaintConstants.UI_SETTINGS_HEIGHT / 2 - (N * cellHeight) / 2);
+        scrollPane.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.UI_SETTINGS_WIDTH / 2 - PaintConstants.LEFT_RIGHT_UI_GLOW_UPDOWN_WIDTH, 2 * Rules.WORLD_HEIGHT / 3 - PaintConstants.UI_SETTINGS_HEIGHT / 2 - (N * cellHeight) / 2);
         group.align(Align.left);
     }
 

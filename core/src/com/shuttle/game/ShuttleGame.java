@@ -24,10 +24,14 @@ public class ShuttleGame extends Game {
     private PrintStream printStream;
     private FileHandle fileHandle;
     private boolean mobile;
+    private int width;
+    private int height;
 
-    public ShuttleGame(Share share, boolean mobile) {
+    public ShuttleGame(Share share, boolean mobile, int width, int height) {
         ShuttleGame.share = share;
         this.mobile = mobile;
+        this.width = width;
+        this.height = height;
     }
 
     @Override
@@ -39,7 +43,7 @@ public class ShuttleGame extends Game {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        ScreenManager.getInstance().init(this, batch, mobile);
+        ScreenManager.getInstance().init(this, batch, mobile, width, height);
         if (screenType == null) {
             screenType = ScreenManager.ScreenType.MENU;
         }
