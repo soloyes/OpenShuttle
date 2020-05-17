@@ -42,6 +42,7 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.PlayerInteractionLevels;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
+import com.shuttle.game.effects.AsteroidLaunchEmitter;
 import com.shuttle.game.effects.PrettySound;
 import com.shuttle.game.effects.Ray;
 import com.shuttle.game.effects.Shake;
@@ -131,6 +132,7 @@ public class GameScreen extends BaseScreen {
     private RocketEmitter rocketEmitter;
     private ParticleEmitter particleEmitter;
     private RocketLauncher rocketLauncher;
+    private AsteroidLaunchEmitter asteroidLaunchEmitter;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -160,6 +162,7 @@ public class GameScreen extends BaseScreen {
         storageEmitter = new StorageEmitter(particleEmitter);
         fuelEmitter = new FuelEmitter(particleEmitter);
         rocketEmitter = new RocketEmitter();
+        asteroidLaunchEmitter = new AsteroidLaunchEmitter();
 
         boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
         fbo = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(),
@@ -263,6 +266,7 @@ public class GameScreen extends BaseScreen {
         radiationAnomalyEmitter.render(batch);
         magneticAnomalyEmitter.render(batch);
         rocketLauncher.render(batch);
+        asteroidLaunchEmitter.render(batch);
         batch.end();
 
         float shaderHoleX = (Blackhole.position.x - camera.position.x + Rules.WORLD_WIDTH / 2) / Rules.WORLD_WIDTH;
@@ -370,6 +374,7 @@ public class GameScreen extends BaseScreen {
             blackhole.update(dt);
             UILeftPanel.getInstance().update(dt);
             rocketLauncher.update(dt);
+            asteroidLaunchEmitter.update(dt);
             if (!Rules.GAME_OVER) {
                 uiTopPanel.update(dt);
                 Standing.getInstance().addTime(dt);

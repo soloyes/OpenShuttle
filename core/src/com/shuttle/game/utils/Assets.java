@@ -66,7 +66,7 @@ public class Assets {
                 createStandardFont(36, "fonts/college.regular", "");
                 createStandardFont(44, "fonts/college.regular", "");
                 createStandardFont(48, "fonts/college.regular", "");
-                createStandardFont(48, "fonts/college.regular", "");
+                createStandardFont(48, "fonts/college.regular", "Coloured");
                 createStandardFont(54, "fonts/college.regular", "");
                 createStandardFont(64, "fonts/college.regular", "");
                 createStandardFont(64, "fonts/college.regular", "Coloured");
@@ -131,6 +131,7 @@ public class Assets {
                 assetManager.load(MSConstants.DESTROY_ASTEROID_RAY, Sound.class);
                 assetManager.load(MSConstants.DESTROY_FUEL, Sound.class);
                 assetManager.load(MSConstants.BURST_CORROSIVE_ANOMALY, Sound.class);
+                assetManager.load(MSConstants.TRASH_ASTEROIDS, Sound.class);
                 assetManager.load(MSConstants.UI_CHANGED, Sound.class);
                 assetManager.load(MSConstants.GET_SCANNER, Sound.class);
                 assetManager.load(MSConstants.GET_SHIELD, Sound.class);

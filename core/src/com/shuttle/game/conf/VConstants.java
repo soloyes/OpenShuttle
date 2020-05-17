@@ -18,6 +18,8 @@ public final class VConstants {
     //200
     public static final int VIBRATION_ENABLED = 200;
     //30
+    public static final int TRASH_ASTEROIDS = 30;
+    //30
     public static final int PLAYER_OUT_OF_SCREEN = 30;
     //30
     public static final int PLAYER_ANOMALY_CORROSIVE_DESTROY = 30;

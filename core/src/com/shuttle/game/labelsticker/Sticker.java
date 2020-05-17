@@ -21,6 +21,7 @@ import com.shuttle.game.bot.consumable.fuel.Fuel;
 import com.shuttle.game.bot.rocket.RocketLauncher;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
+import com.shuttle.game.effects.AsteroidLaunchEmitter;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
@@ -138,14 +139,11 @@ public enum Sticker {
 
         @Override
         public void consume(Vector2 position, boolean isGolden) {
+            AsteroidLaunchEmitter asteroidLaunchEmitter = (AsteroidLaunchEmitter) ObjectPool.EMITTERS.get(AsteroidLaunchEmitter.Element.class);
+            asteroidLaunchEmitter.addToList();
             score = Rules.CONSUMABLE_TRASH_BASE_SCORE *
-                    ((isGolden) ?
-                            Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_FACTOR * MathUtils.random(
-                                    Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MIN,
-                                    Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MAX)
-                            : MathUtils.random(
-                            Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MIN,
-                            Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MAX)
+                    (MathUtils.random(Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MIN, Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MAX) *
+                            ((isGolden) ? Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_FACTOR : 1)
                     );
             standing.changeScore(score);
         }

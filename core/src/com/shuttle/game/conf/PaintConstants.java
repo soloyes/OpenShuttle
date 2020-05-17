@@ -372,6 +372,7 @@ public final class PaintConstants {
     public static final String FONT32_C = "fonts/college.regular32Coloured.ttf";
     public static final String FONT44 = "fonts/college.regular44.ttf";
     public static final String FONT48 = "fonts/college.regular48.ttf";
+    public static final String FONT48_C = "fonts/college.regular48Coloured.ttf";
     public static final String FONT60 = "fonts/college.regular60.ttf";
     public static final String FONT60_C = "fonts/college.regular60Coloured.ttf";
     public static final String FONT64 = "fonts/college.regular64.ttf";
@@ -446,7 +447,6 @@ public final class PaintConstants {
 
     public static final float UI_SETTINGS_WIDTH = 670;
     public static final float UI_SETTINGS_HEIGHT = 952;
-    public static final float UI_SETTINGS_X = 205;
 
     public static final float UI_RESULTS_WIDTH = 998;
     public static final float UI_RESULTS_HEIGHT = 988;
