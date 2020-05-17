@@ -16,14 +16,14 @@ public class DesktopLauncher {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         try {
             if (arg.length > 1) {
-                tester.setMode(ScreenResolutionTester.valueOf(arg[1]));
+                tester = ScreenResolutionTester.valueOf(arg[1]);
             }
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
 
-        config.width = tester.getMode().getHalfWidth();
-        config.height = tester.getMode().getHalfHeight();
+        config.width = tester.getHalfWidth();
+        config.height = tester.getHalfHeight();
         config.vSyncEnabled = true;
         //config.foregroundFPS = 10;
 
@@ -36,7 +36,7 @@ public class DesktopLauncher {
                 }
             }
         }
-        ShuttleGame game = new ShuttleGame(new ShareDesktop(), false, tester.getMode().getWidth(), tester.getMode().getHeight());
+        ShuttleGame game = new ShuttleGame(new ShareDesktop(), false, tester.getWidth(), tester.getHeight());
         game.setRunScreen(screenType);
         //
 

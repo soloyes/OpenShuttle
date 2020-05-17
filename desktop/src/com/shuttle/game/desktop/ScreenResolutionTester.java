@@ -6,14 +6,13 @@ public enum ScreenResolutionTester {
     FIVE_TO_FOUR(1024, 1280, 4, 5),
     SEXTEEN_TO_TEN(960, 1536, 10, 16),
     SIXTEEN_TO_NINE(1080, 1920, 9, 16),
-    TWENTY_ONE_TO_NINE(540, 1260, 9, 21),
+    TWENTY_ONE_TO_NINE(1080, 2520, 9, 21),
     TWENTY_FIVE_TO_SIXTEEN(1024, 1600, 16, 25);
 
     private int width;
     private int height;
     private int xRatio;
     private int yRatio;
-    private ScreenResolutionTester mode;
 
     ScreenResolutionTester(int width, int height, int xRatio, int yRatio) {
         this.width = width;
@@ -36,13 +35,5 @@ public enum ScreenResolutionTester {
 
     public int getHeight() {
         return height;
-    }
-
-    public void setMode(ScreenResolutionTester mode) {
-        this.mode = mode;
-    }
-
-    public ScreenResolutionTester getMode() {
-        return mode;
     }
 }

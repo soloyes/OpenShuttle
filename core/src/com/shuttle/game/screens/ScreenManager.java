@@ -95,8 +95,10 @@ public class ScreenManager {
                 Rules.WORLD_HEIGHT = Gdx.graphics.getHeight();
             }
             Rules.WORLD_WIDTH = Rules.WORLD_HEIGHT * Gdx.graphics.getWidth() / Gdx.graphics.getHeight();
-
         } else {
+            if (height > Rules.WORLD_HEIGHT) {
+                Rules.WORLD_HEIGHT = height;
+            }
             Rules.WORLD_WIDTH = Rules.WORLD_HEIGHT * width / height;
         }
 
