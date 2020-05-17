@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 
 /**
@@ -19,7 +20,7 @@ public class LoadingScreen extends BaseScreen implements Screen {
     public LoadingScreen(SpriteBatch batch) {
         super(batch);
         this.batch = batch;
-        pixmap = new Pixmap(1080, 60, Pixmap.Format.RGB888);
+        pixmap = new Pixmap(Rules.WORLD_WIDTH, 60, Pixmap.Format.RGB888);
         pixmap.setColor(0.8f, 0.43f, 0.33f, 1f);
         pixmap.fill();
         this.texture = new Texture(pixmap);
@@ -44,7 +45,7 @@ public class LoadingScreen extends BaseScreen implements Screen {
 
         batch.begin();
         batch.setColor(Color.WHITE);
-        batch.draw(texture, 0, 0, 1080 * Assets.getInstance().getAssetManager().getProgress(), 60);
+        batch.draw(texture, 0, 0, Rules.WORLD_WIDTH * Assets.getInstance().getAssetManager().getProgress(), 60);
         batch.end();
     }
 
