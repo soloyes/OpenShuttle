@@ -1028,7 +1028,7 @@ public class ConfigGroup extends Group {
             levelCheckBox.setLocked(true);
         }
         levelCheckBox.setChecked(true);
-        levelLabel.setText("LEVEL " + level + " (" + Rules.StartLevel.values()[level].name() + ")");
+        levelLabel.setText("LEVEL " + (level + 1) + " (" + Rules.StartLevel.values()[level].name() + ")");
         levelCheckBoxStyle.setFront(level);
     }
 

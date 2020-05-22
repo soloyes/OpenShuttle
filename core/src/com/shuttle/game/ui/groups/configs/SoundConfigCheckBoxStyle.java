@@ -15,22 +15,26 @@ public class SoundConfigCheckBoxStyle extends ConfigCheckBoxStyle {
 
     public SoundConfigCheckBoxStyle(Drawable checkboxOff, Drawable checkboxOn) {
         super(checkboxOff, checkboxOn);
-        this.drawables = new Drawable[3];
+        this.drawables = new Drawable[4];
         drawables[0] = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_SOUND1));
         drawables[1] = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_SOUND2));
         drawables[2] = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_SOUND3));
+        drawables[3] = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_SOUND4));
     }
 
     public void setFront(float i) {
-        if (i >= 0.7f) {
+        if (i >= 0.8f) {
             checkboxOn = drawables[0];
             checkboxOff = drawables[0];
-        } else if (i >= 0.4f) {
+        } else if (i >= 0.6f) {
             checkboxOn = drawables[1];
             checkboxOff = drawables[1];
-        } else {
+        } else if (i >= 0.4f) {
             checkboxOn = drawables[2];
             checkboxOff = drawables[2];
+        } else {
+            checkboxOn = drawables[3];
+            checkboxOff = drawables[3];
         }
     }
 }

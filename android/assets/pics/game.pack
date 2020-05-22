@@ -808,114 +808,121 @@ icoconfigvibration
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfigsound3
+icoconfigsound4
   rotate: false
   xy: 108, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfigsound2
+icoconfigsound3
   rotate: false
   xy: 146, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfigsound1
+icoconfigsound2
   rotate: false
   xy: 184, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfigshaders
+icoconfigsound1
   rotate: false
   xy: 222, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfigoff
+icoconfigshaders
   rotate: false
   xy: 260, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfigmusic
+icoconfigoff
   rotate: false
   xy: 298, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfiglock
+icoconfigmusic
   rotate: false
   xy: 336, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfiglevel4
+icoconfiglock
   rotate: false
   xy: 374, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfiglevel3
+icoconfiglevel4
   rotate: false
   xy: 412, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfiglevel2
+icoconfiglevel3
   rotate: false
   xy: 450, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfiglevel1
+icoconfiglevel2
   rotate: false
   xy: 488, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfigjoystickpreseton
+icoconfiglevel1
   rotate: false
   xy: 526, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfigjoystickpresetoff
+icoconfigjoystickpreseton
   rotate: false
   xy: 564, 4052
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfigjoystick
+icoconfigjoystickpresetoff
   rotate: false
   xy: 632, 4035
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfigeffects
+icoconfigjoystick
   rotate: false
   xy: 670, 4035
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-icoconfigchild
+icoconfigeffects
   rotate: false
   xy: 708, 4035
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+icoconfigchild
+  rotate: false
+  xy: 746, 4035
   size: 36, 36
   orig: 36, 36
   offset: 0, 0

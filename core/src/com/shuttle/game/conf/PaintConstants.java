@@ -223,6 +223,7 @@ public final class PaintConstants {
     public static final String UI_ICO_CONFIG_SOUND1 = "icoconfigsound1";
     public static final String UI_ICO_CONFIG_SOUND2 = "icoconfigsound2";
     public static final String UI_ICO_CONFIG_SOUND3 = "icoconfigsound3";
+    public static final String UI_ICO_CONFIG_SOUND4 = "icoconfigsound4";
     public static final String UI_ICO_CONFIG_MUSIC = "icoconfigmusic";
     public static final String UI_ICO_CONFIG_EFFECTS = "icoconfigeffects";
     public static final String UI_ICO_CONFIG_SHADERS = "icoconfigshaders";
