@@ -74,6 +74,7 @@ public final class MSConstants {
     public static final String SPLASH_ANOMALY = GAME + "splash_anomaly.ogg";
     public static final String LAUNCH_ROCKETS = GAME + "launch_rockets.ogg";
     public static final String BURST_CORROSIVE_ANOMALY = GAME + "burst_corrosive_anomaly.ogg";
+    public static final String TRASH_ASTEROIDS = GAME + "trash_asteroids.ogg";
 
     public static final String KILL_MAGNETIC_RADIATION = GAME + "kill_magnetic_radiation.ogg";
     public static final String GENERATE_CRATE_STORAGE = GAME + "generate_crate_storage.ogg";
