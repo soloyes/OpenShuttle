@@ -353,9 +353,16 @@ blackhole
   orig: 256, 256
   offset: 0, 0
   index: -1
-joystick
+atrocketpoint
   rotate: false
   xy: 3088, 1999
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+joystick
+  rotate: false
+  xy: 3346, 1999
   size: 400, 250
   orig: 400, 250
   offset: 0, 0
@@ -614,7 +621,7 @@ backbutton
   index: -1
 profilesborder
   rotate: false
-  xy: 3490, 1999
+  xy: 2056, 2257
   size: 510, 108
   orig: 510, 108
   offset: 0, 0
@@ -649,70 +656,70 @@ menubackgroundasteroid2
   index: -1
 resultscellempty
   rotate: false
-  xy: 2056, 2257
+  xy: 2568, 2257
   size: 956, 82
   orig: 956, 82
   offset: 0, 0
   index: -1
 resultscelldetailed
   rotate: false
-  xy: 3014, 2257
+  xy: 2056, 2367
   size: 956, 82
   orig: 956, 82
   offset: 0, 0
   index: -1
 resultscellchild
   rotate: false
-  xy: 2056, 2341
+  xy: 3014, 2367
   size: 956, 82
   orig: 956, 82
   offset: 0, 0
   index: -1
 resultscell
   rotate: false
-  xy: 3014, 2341
+  xy: 2056, 2451
   size: 956, 82
   orig: 956, 82
   offset: 0, 0
   index: -1
 configcelltype2
   rotate: false
-  xy: 2056, 2425
+  xy: 3014, 2451
   size: 628, 82
   orig: 628, 82
   offset: 0, 0
   index: -1
 configcelltype1
   rotate: false
-  xy: 2686, 2425
+  xy: 2056, 2535
   size: 628, 82
   orig: 628, 82
   offset: 0, 0
   index: -1
 infocell
   rotate: false
-  xy: 3490, 2109
+  xy: 3526, 2257
   size: 510, 82
   orig: 510, 82
   offset: 0, 0
   index: -1
 menucellhead
   rotate: false
-  xy: 3316, 2425
+  xy: 2686, 2535
   size: 498, 82
   orig: 498, 82
   offset: 0, 0
   index: -1
 menucellactive
   rotate: false
-  xy: 2056, 2509
+  xy: 3186, 2535
   size: 498, 82
   orig: 498, 82
   offset: 0, 0
   index: -1
 menucell
   rotate: false
-  xy: 2056, 2593
+  xy: 2056, 2619
   size: 498, 82
   orig: 498, 82
   offset: 0, 0
@@ -951,13 +958,6 @@ scrollback.9
 scroll.9
   rotate: false
   xy: 3182, 992
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-atrocketpoint
-  rotate: false
-  xy: 3216, 992
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
