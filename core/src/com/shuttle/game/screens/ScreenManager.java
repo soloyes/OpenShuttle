@@ -91,7 +91,6 @@ public class ScreenManager {
         this.batch = batch;
         Rules.WORLD_HEIGHT = 1920;
         if (mobile) {
-            System.out.println(Gdx.graphics.getWidth() + " " + Gdx.graphics.getHeight());
             if (Gdx.graphics.getHeight() > Rules.WORLD_HEIGHT) {
                 Rules.WORLD_HEIGHT = Gdx.graphics.getHeight();
             }
