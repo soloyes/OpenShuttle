@@ -115,8 +115,6 @@ public class ResultGroup extends Group {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     line.setActive(true);
-                    boomBox.playSound(MSConstants.UI_CLICK);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
                     return super.touchDown(event, x, y, pointer, button);
                 }
 
@@ -129,6 +127,8 @@ public class ResultGroup extends Group {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
+                    boomBox.playSound(MSConstants.UI_CLICK);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
                     ResultGroup.this.setVisible(false);
                     detailedResultGroup.init(m.getKey());
                 }
