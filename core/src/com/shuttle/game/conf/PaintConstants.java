@@ -251,11 +251,9 @@ public final class PaintConstants {
     public static final String UI_MENU_BACKGROUND_ASTEROID1 = "menubackgroundasteroid1";
     public static final String UI_MENU_BACKGROUND_ASTEROID2 = "menubackgroundasteroid2";
 
-    public static int UI_MENU_BACKGROUND_STORAGE_X = 456;
     public static int UI_MENU_BACKGROUND_STORAGE_Y = 400;
     public static int UI_MENU_BACKGROUND_ASTRONAUT_X = 70;
     public static int UI_MENU_BACKGROUND_ASTRONAUT_Y = 950;
-    public static int UI_MENU_BACKGROUND_SIT_ASTRONAUT_X = 700;
     public static int UI_MENU_BACKGROUND_SIT_ASTRONAUT_Y = 320;
     public static int UI_MENU_BACKGROUND_SHUTTLE_X = 257;
     public static int UI_MENU_BACKGROUND_SHUTTLE_Y = 1355;
@@ -267,9 +265,7 @@ public final class PaintConstants {
     public static int UI_MENU_BACKGROUND_FUEL_Y = 720;
     public static int UI_MENU_BACKGROUND_CRATE_X = 50;
     public static int UI_MENU_BACKGROUND_CRATE_Y = 1450;
-    public static int UI_MENU_BACKGROUND_ASTEROID1_X = 720;
     public static int UI_MENU_BACKGROUND_ASTEROID1_Y = 1100;
-    public static int UI_MENU_BACKGROUND_ASTEROID2_X = 920;
     public static int UI_MENU_BACKGROUND_ASTEROID2_Y = 1700;
 
     public static int UI_MENU_BACKGROUND_SHUTTLE_WIDTH = 252;
@@ -384,7 +380,8 @@ public final class PaintConstants {
     public static final String FONT128_C = "fonts/college.regular128Coloured.ttf";
     public static final String FONT188 = "fonts/college.regular188.ttf";
     public static final String FONT256 = "fonts/college.regular256.ttf";
-    public static final String GAME_PACK = "pics/game.pack";
+    public static final String GAME_PACK = "pics/atlas/game.pack";
+    public static final String LOAD_TEXTURES = "pics/load/";
     public static final String BACKGROUND_COLOR_HEX = "100514ff";
     public static final float BACKGROUND_OSCILLATE_WIDTH = 50;
     public static final int DUMMY_PROFILES = 5;
