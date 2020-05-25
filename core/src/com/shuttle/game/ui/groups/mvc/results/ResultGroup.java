@@ -117,7 +117,6 @@ public class ResultGroup extends Group {
                     line.setActive(true);
                     boomBox.playSound(MSConstants.UI_CLICK);
                     Vibrator.vibrate(VConstants.UI_CLICK);
-                    scrollPane.setFlickScroll(false);
                     return super.touchDown(event, x, y, pointer, button);
                 }
 
@@ -125,7 +124,11 @@ public class ResultGroup extends Group {
                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                     super.touchUp(event, x, y, pointer, button);
                     line.setActive(false);
-                    scrollPane.setFlickScroll(true);
+                }
+
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
                     ResultGroup.this.setVisible(false);
                     detailedResultGroup.init(m.getKey());
                 }
@@ -173,8 +176,8 @@ public class ResultGroup extends Group {
 
             this.addListener(new ClickListener() {
                 @Override
-                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    super.touchUp(event, x, y, pointer, button);
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
                     if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.MENU) {
                         Array<Actor> actors = getStage().getActors();
                         for (int i = 0; i < actors.size; i++) {
@@ -204,15 +207,15 @@ public class ResultGroup extends Group {
                 group.setSize(82, PaintConstants.UI_CELL_HEIGHT);
                 group.addActor(childCheckBox);
                 table.add(group).left().width(82).padLeft(12);
-                makeGroup(new Label(String.valueOf(Rounder.round(resultDAO.getCurrent().getScore())), style54), 128);
-                makeGroup(new Label(new SimpleDateFormat(Rules.DATE_FORMAT, Locale.ENGLISH).format(resultDAO.getDate()), style54), 244);
-                makeGroup(new Label(resultDAO.getLevel(), style54), 202);
+                makeGroup(new Label(String.valueOf(Rounder.round(resultDAO.getCurrent().getScore())), style54), 168);
+                makeGroup(new Label(new SimpleDateFormat(Rules.DATE_FORMAT, Locale.ENGLISH).format(resultDAO.getDate()), style54), 224);
+                makeGroup(new Label(resultDAO.getLevel(), style54), 182);
             } else {
                 draw = standard;
                 makeGroup(new Label(profileDAO.getUsername(), style54), 330);
-                makeGroup(new Label(String.valueOf(Rounder.round(resultDAO.getCurrent().getScore())), style54), 128);
-                makeGroup(new Label(new SimpleDateFormat(Rules.DATE_FORMAT, Locale.ENGLISH).format(resultDAO.getDate()), style54), 244);
-                makeGroup(new Label(resultDAO.getLevel(), style54), 202);
+                makeGroup(new Label(String.valueOf(Rounder.round(resultDAO.getCurrent().getScore())), style54), 168);
+                makeGroup(new Label(new SimpleDateFormat(Rules.DATE_FORMAT, Locale.ENGLISH).format(resultDAO.getDate()), style54), 224);
+                makeGroup(new Label(resultDAO.getLevel(), style54), 182);
             }
 
             table.align(Align.bottomLeft);

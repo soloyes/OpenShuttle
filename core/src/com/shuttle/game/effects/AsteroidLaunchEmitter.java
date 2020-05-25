@@ -60,6 +60,7 @@ public class AsteroidLaunchEmitter extends ObjectPool<AsteroidLaunchEmitter.Elem
         private BitmapFont font48_C;
         private Vector2 position;
         private Vector2 destination;
+        private float dx, dy;
 
         public Element() {
             this.font48_C = Assets.getInstance().getAssetManager().get(PaintConstants.FONT48_C);
@@ -114,6 +115,8 @@ public class AsteroidLaunchEmitter extends ObjectPool<AsteroidLaunchEmitter.Elem
             } else {
                 glyphLayout.setText(font48_C, TimeFormat.formatMS(time));
             }
+            dx = MathUtils.random(-5, 5);
+            dy = MathUtils.random(-5, 5);
             checkPool();
         }
 
@@ -127,7 +130,7 @@ public class AsteroidLaunchEmitter extends ObjectPool<AsteroidLaunchEmitter.Elem
             }
             font48_C.draw(batch,
                     glyphLayout,
-                    position.x - glyphLayout.width / 2 + MathUtils.random(-5, 5), position.y - glyphLayout.height / 2 + MathUtils.random(-5, 5)
+                    position.x - glyphLayout.width / 2 + dx, position.y - glyphLayout.height / 2 + dy
             );
         }
     }

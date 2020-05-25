@@ -46,7 +46,7 @@ public class RightGroup extends AbstractInfoGroup {
     @Override
     protected void setPosition() {
         this.isLeft = false;
-        scrollPane.setPosition(Rules.WORLD_WIDTH / 2 + PaintConstants.UI_SETTINGS_WIDTH / 2, 2 * Rules.WORLD_HEIGHT / 3 - PaintConstants.UI_SETTINGS_HEIGHT / 2 - (N * cellHeight) / 2);
+        scrollPane.setPosition(Rules.WORLD_WIDTH / 2 + PaintConstants.UI_SETTINGS_WIDTH / 2 + 12, 2 * Rules.WORLD_HEIGHT / 3 - PaintConstants.UI_SETTINGS_HEIGHT / 2 - (N * cellHeight) / 2);
         group.align(Align.right);
     }
 

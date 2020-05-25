@@ -41,7 +41,7 @@ public abstract class AbstractInfoGroup extends Group {
     protected TextureRegionDrawable up;
     protected StickerResolver stickerResolver;
     protected boolean barClicked;
-    protected int x;
+    protected float Y;
     protected boolean isLeft;
     @Getter
     protected final Map<Sticker, ConfigImageButton> buttonMap;
@@ -62,9 +62,9 @@ public abstract class AbstractInfoGroup extends Group {
         this.cellWidth = PaintConstants.LEFT_RIGHT_UI_CELL_WIDTH;
         this.cellHeight = PaintConstants.LEFT_RIGHT_UI_CELL_HEIGHT + delimiter;
         float scrollPaneWidth = cellWidth + 44;
-        float scrollPainHeight = N * cellHeight - delimiter;
+        float scrollPaneHeight = N * cellHeight - delimiter;
 
-        scrollPane.setSize(scrollPaneWidth, scrollPainHeight);
+        scrollPane.setSize(scrollPaneWidth, scrollPaneHeight);
         scrollPane.setScrollbarsOnTop(false);
         scrollPane.setScrollingDisabled(true, false);
         scrollPane.setFadeScrollBars(false);
@@ -103,13 +103,13 @@ public abstract class AbstractInfoGroup extends Group {
                 scrollTo();
             }
         }
-        x = (int) (scrollPane.getVisualScrollY() / cellHeight);
+        Y = 1.0f * scrollPane.getVisualScrollY() / cellHeight;
     }
 
     private void scrollTo() {
         barClicked = false;
         d = 0.0f;
-        int a1 = x * cellHeight;
+        int a1 = (int) Y * cellHeight;
         float b = scrollPane.getVisualScrollY() % cellHeight;
 
         int r = b >= cellHeight / 2 ? 1 : -1;
