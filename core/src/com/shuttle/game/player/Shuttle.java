@@ -116,13 +116,11 @@ public class Shuttle extends AbstractShuttle {
     }
 
     public boolean canCatch(AbstractConsumable abstractConsumable) {
-        tmp2V2.set(abstractConsumable.getPosition());
-        tmp2V2.sub(position);
-        float dif = angle - tmp2V2.angle();
-        return (dif >= -100 && dif <= -30) ||
-                (dif <= 100 && dif >= 30) ||
-                (dif >= -260 && dif <= -330) ||
-                (dif <= 260 && dif >= 330);
+        tmp2V2.nor().setAngle(angle);
+        tmp3V2.set(abstractConsumable.getPosition());
+        tmp3V2.sub(position);
+        float dif = tmp2V2.angle(tmp3V2);
+        return (dif >= 30 && dif <= 100) || (dif <= -30 && dif >= -100);
     }
 
     public void collideBlackhole(float dt) {

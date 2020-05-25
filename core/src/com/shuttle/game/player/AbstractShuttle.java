@@ -30,7 +30,7 @@ public class AbstractShuttle implements InputProcessor {
     @Setter
     protected Standing standing;
     protected TextureRegion[] textureRegion;
-    protected Vector2 tmpV2, tmp2V2;
+    protected Vector2 tmpV2, tmp2V2, tmp3V2;
     @Getter
     @Setter
     protected int width, height;
@@ -65,7 +65,8 @@ public class AbstractShuttle implements InputProcessor {
         );
         System.arraycopy(tmpRegion, 0, textureRegion, 1, tmpRegion.length);
         this.tmpV2 = new Vector2();
-        this.tmp2V2 = new Vector2();
+        this.tmp2V2 = new Vector2(1, 1);
+        this.tmp3V2 = new Vector2();
         this.width = PaintConstants.SHUTTLE_WIDTH;
         this.height = PaintConstants.SHUTTLE_HEIGHT;
         this.widthBlur = PaintConstants.SHUTTLE_BLUR_WIDTH;
