@@ -1,7 +1,7 @@
 name=mypack
 filename=game.pack
 input=images
-output=..\android\assets\pics
+output=..\android\assets\pics\atlas
 
 alias=true
 alphaThreshold=0
@@ -16,7 +16,7 @@ edgePadding=true
 ignoreBlankImages=true
 incremental=false
 incrementalFilePath=
-maxHeight=2048
+maxHeight=4096
 maxWidth=4096
 minHeight=128
 minWidth=128
