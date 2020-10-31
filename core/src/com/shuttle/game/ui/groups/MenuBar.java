@@ -157,7 +157,7 @@ public class MenuBar extends Group {
                         if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
                             actors.get(i).setVisible(false);
                         }
-                        if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
+                        if (actors.get(i).getName().equals(GroupType.INFO.name())) {
                             actors.get(i).setVisible(false);
                         }
                     }
@@ -199,7 +199,7 @@ public class MenuBar extends Group {
                         if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
                             actors.get(i).setVisible(false);
                         }
-                        if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
+                        if (actors.get(i).getName().equals(GroupType.INFO.name())) {
                             actors.get(i).setVisible(false);
                         }
                     }
@@ -227,12 +227,12 @@ public class MenuBar extends Group {
                     Array<Actor> actors = getStage().getActors();
                     Actor tmp = new Actor();
                     for (int i = 0; i < actors.size; i++) {
-                        if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
+                        if (actors.get(i).getName().equals(GroupType.INFO.name())) {
                             tmp = actors.get(i);
                         }
                     }
                     for (int i = 0; i < actors.size; i++) {
-                        if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
+                        if (actors.get(i).getName().equals(GroupType.INFO.name())) {
                             actors.get(i).setVisible(!actors.get(i).isVisible());
                         }
                         if (actors.get(i).getName().equals(GroupType.MENU.name())) {

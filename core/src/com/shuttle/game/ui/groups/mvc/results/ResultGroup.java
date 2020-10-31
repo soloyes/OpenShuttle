@@ -288,7 +288,7 @@ public class ResultGroup extends Group {
                 actors.get(i).setVisible(true);
             } else if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
                 actors.get(i).setVisible(false);
-            } else if (actors.get(i).getName().equals(GroupType.SHARE.name())) {
+            } else if (actors.get(i).getName().equals(GroupType.INFO.name())) {
                 actors.get(i).setVisible(false);
             } else if (actors.get(i).getName().equals(GroupType.RESULTS_DETAILED.name())) {
                 actors.get(i).setVisible(false);

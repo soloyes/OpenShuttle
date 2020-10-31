@@ -11,6 +11,7 @@ import com.shuttle.game.ui.groups.InfoGroup;
 import com.shuttle.game.ui.groups.MenuBackgroundGroup;
 import com.shuttle.game.ui.groups.MenuBar;
 import com.shuttle.game.ui.groups.MenuGroup;
+import com.shuttle.game.ui.groups.RulesGroup;
 import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.ui.groups.mvc.results.DetailedResultGroup;
@@ -28,6 +29,7 @@ public class MenuScreen extends BaseScreen {
     private ConfigGroup configGroup;
     private MenuBackgroundGroup menuBackgroundGroup;
     private DetailedResultGroup detailedResultGroup;
+    private RulesGroup rulesGroup;
     private BitmapFont font188;
     private BitmapFont font48;
     private Label head;
@@ -50,6 +52,7 @@ public class MenuScreen extends BaseScreen {
         menuBackgroundGroup = new MenuBackgroundGroup();
         background = new Background();
         configGroup = new ConfigGroup();
+        rulesGroup = new RulesGroup();
         detailedResultGroup = new DetailedResultGroup();
         resultGroup = new ResultGroup(detailedResultGroup);
         menuGroup = new MenuGroup(configGroup, resultGroup);
@@ -68,6 +71,7 @@ public class MenuScreen extends BaseScreen {
         stage.addActor(menuBackgroundGroup);
         stage.addActor(menuGroup);
         stage.addActor(configGroup);
+        stage.addActor(rulesGroup);
         stage.addActor(resultGroup);
         stage.addActor(detailedResultGroup);
         stage.addActor(infoGroup);

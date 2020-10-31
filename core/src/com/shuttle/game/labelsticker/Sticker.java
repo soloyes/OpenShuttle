@@ -34,13 +34,15 @@ import com.shuttle.game.utils.pool.ObjectPool;
 import java.util.Arrays;
 import java.util.List;
 
+import lombok.Getter;
+
 /**
  * @author Shuttle on 3/27/19.
  */
 
 public enum Sticker {
     //Crate
-    BOOST {
+    BOOST("[#FFFFFF]BOOST[]\n[#cc6e54]Acceleration - the rate of change of the velocity of the ship with respect to time. When you get this object, you able to activate it from the top storage menu. Danger! When velocity is high, you may get more damage. From the other hand, you able to kill more anomalies.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
@@ -70,7 +72,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_BOOST);
         }
     },
-    REPAIR {
+    REPAIR("[#FFFFFF]REPAIR[]\n[#cc6e54]Using to restore by replacing a part or putting together what is torn or broken. Your ship takes damage when collide with asteroids, black holes, and anomalies. Be aware! Carefully leave the space.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
@@ -95,7 +97,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_REPAIR);
         }
     },
-    SHIELD {
+    SHIELD("[#FFFFFF]SHIELD[]\n[#cc6e54]A shield is round a piece of personal armour. Your shield may bite a related color anomaly. Shield should be charged, just do the harvesting and watch around.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
@@ -134,7 +136,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_SHIELD);
         }
     },
-    TRASH {
+    TRASH("[#FFFFFF]TRASH[]\n[#cc6e54]A box like this can give you many interesting possibilities. The main thing is not to be afraid to take it and open it so that you have a chance to earn more points.[]") {
         int score;
 
         @Override
@@ -170,7 +172,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_TRASH);
         }
     },
-    SPLASH {
+    SPLASH("[#FFFFFF]SPLASH[]\n[#cc6e54]This item helps you clear the map of anomalies. Not every anomaly can withstand this possibility, so a few experiments will be required.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
@@ -205,7 +207,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_SPLASH);
         }
     },
-    SCAN {
+    SCAN("[#FFFFFF]SCAN[]\n[#cc6e54]You may find boxes that are difficult to recognize. They can contain anything. Use the scanner to look inside.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
@@ -244,7 +246,7 @@ public enum Sticker {
         }
     },
     //Storage
-    LASER {
+    LASER("[#FFFFFF]LASER[]\n[#cc6e54]The ability to destroy asteroids at a distance appears only with a non-zero charge of the laser scale. The purple scale indicates the presence of a laser, and gives you the option of automatic fire.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             Shuttle.isLaser = true;
@@ -268,7 +270,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_LASER);
         }
     },
-    RADAR {
+    RADAR("[#FFFFFF]RADAR[]\n[#cc6e54]Our space is a boundless two-dimensional extent in which objects and events have relative position and direction. But it's good when there is a device that shows the location of those objects.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             Radar.isActive = true;
@@ -291,7 +293,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_RADAR);
         }
     },
-    ROCKETS {
+    ROCKETS("[#FFFFFF]ROCKETS[]\n[#cc6e54]When there is no way out, you can smash everything around. True, powerful weapons take time to recharge. Find ammunition and activate it.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
@@ -316,7 +318,7 @@ public enum Sticker {
         }
     },
     //Fuel
-    FUEL {
+    FUEL("[#FFFFFF]FUEL[]\n[#cc6e54]When there is no fuel, the ship cannot fly. But he can still move. True, the speed may not be enough to get away from the attacking anomalies.[]") {
         float fuel;
 
         @Override
@@ -351,7 +353,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_FUEL);
         }
     },
-    FUEL_UI {
+    FUEL_UI("[#FFFFFF]FUEL[]\n[#cc6e54]When there is no fuel, the ship cannot fly. But he can still move. True, the speed may not be enough to get away from the attacking anomalies.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
 
@@ -373,7 +375,7 @@ public enum Sticker {
         }
     },
     //Surprise
-    PATTERN {
+    PATTERN("[#FFFFFF]PATTERN[]\n[#cc6e54]Not all boxes can be labeled. This happens for a variety of reasons.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
         }
@@ -393,7 +395,7 @@ public enum Sticker {
 
         }
     },
-    PATTERN_GOLD {
+    PATTERN_GOLD("[#FFFFFF]GOLD PATTERN[]\n[#cc6e54]There is a theory that gold boxes have great potential. But this holds great risks for the ship. Like space, the space for the possibilities of the boxes is limitless.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
         }
@@ -413,7 +415,7 @@ public enum Sticker {
 
         }
     },
-    SHABBY {
+    SHABBY("[#FFFFFF]SHABBY[]\n[#cc6e54]Space debris, radiation, and other aggressive phenomena completely destroy the ability to scan such boxes. They shouldn't be dangerous, but no one has explored the possibilities of forgotten objects.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
 
@@ -434,7 +436,7 @@ public enum Sticker {
 
         }
     },
-    SHABBY_GOLD {
+    SHABBY_GOLD("[#FFFFFF]GOLD SHABBY[]\n[#cc6e54]Our scientists cannot determine what it is.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
 
@@ -456,7 +458,7 @@ public enum Sticker {
         }
     },
     //Astronaut
-    REGULAR {
+    REGULAR("[#FFFFFF]REGULAR[]\n[#cc6e54][]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
         }
@@ -474,7 +476,8 @@ public enum Sticker {
         public void sound() {
 
         }
-    }, MECHANIC {
+    },
+    MECHANIC("[#FFFFFF]MECHANIC[]\n[#cc6e54][]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
         }
@@ -492,7 +495,8 @@ public enum Sticker {
         public void sound() {
 
         }
-    }, MEDIC {
+    },
+    MEDIC("[#FFFFFF]MEDIC[]\n[#cc6e54][]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
         }
@@ -510,7 +514,8 @@ public enum Sticker {
         public void sound() {
 
         }
-    }, MILITARY {
+    },
+    MILITARY("[#FFFFFF]MILITARY[]\n[#cc6e54][]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
         }
@@ -528,7 +533,8 @@ public enum Sticker {
         public void sound() {
 
         }
-    }, SCIENTIST {
+    },
+    SCIENTIST("[#FFFFFF]SCIENTIST[]\n[#cc6e54][]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
         }
@@ -547,10 +553,18 @@ public enum Sticker {
 
         }
     };
+
+    Sticker(String description) {
+        this.description = description;
+    }
+
     public static List<Sticker> SELECTABLE = Arrays.asList(BOOST, REPAIR, SHIELD, SPLASH, SCAN, ROCKETS);
     public static List<Sticker> ASTRONAUTS = Arrays.asList(REGULAR, MEDIC, SCIENTIST, MECHANIC, MILITARY);
+    public static List<Sticker> ALL = Arrays.asList(Sticker.values());
     private static BoomBox boomBox;
     private static Standing standing;
+    @Getter
+    private String description;
 
     static {
         boomBox = new BoomBox();

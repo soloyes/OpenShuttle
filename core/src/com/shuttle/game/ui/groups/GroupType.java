@@ -11,7 +11,8 @@ public enum GroupType {
     CONFIG,
     RESULTS,
     RESULTS_DETAILED,
-    SHARE,
+    INFO,
+    RULES,
     LEFT,
     RIGHT
 }

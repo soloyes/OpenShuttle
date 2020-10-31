@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.shuttle.game.ShuttleGame;
 import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
@@ -35,7 +37,7 @@ public class InfoGroup extends Group {
     private BitmapFont font96;
 
     public InfoGroup() {
-        this.setName(GroupType.SHARE.name());
+        this.setName(GroupType.INFO.name());
         Table table = new Table();
         this.boomBox = new BoomBox();
         this.results = new Results();
@@ -47,9 +49,10 @@ public class InfoGroup extends Group {
         Label shareLabel = new Label("Share Results", style64);
         Label rateLabel = new Label("Rate Shuttle", style64);
         Label aboutLabel = new Label("About Us", style64);
+        Label rulesLabel = new Label("Rules", style64);
         Container<Table> container = new Container<Table>(table);
         container.width(PaintConstants.UI_MENU_CELL_WIDTH);
-        container.height(Rules.WORLD_HEIGHT / 4);
+        container.height(Rules.WORLD_HEIGHT / 2);
         container.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.UI_MENU_CELL_WIDTH / 2, 2 * Rules.WORLD_HEIGHT / 3);
         container.align(Align.topLeft);
         table.align(Align.topLeft);
@@ -62,6 +65,9 @@ public class InfoGroup extends Group {
         table.row();
         final Line aboutLine = new Line(aboutLabel);
         table.add(aboutLine).width(PaintConstants.UI_MENU_CELL_WIDTH).height(PaintConstants.UI_CELL_HEIGHT).padBottom(12).align(Align.center);
+        table.row();
+        final Line rulesLine = new Line(rulesLabel);
+        table.add(rulesLine).width(PaintConstants.UI_MENU_CELL_WIDTH).height(PaintConstants.UI_CELL_HEIGHT).padBottom(12).align(Align.center);
 
         shareLine.addListener(new ClickListener() {
             @Override
@@ -118,6 +124,36 @@ public class InfoGroup extends Group {
                 if (pointer == 0) {
                     aboutLine.setTouched(false);
                 }
+            }
+        });
+
+        rulesLine.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (pointer == 0) {
+                    rulesLine.setTouched(true);
+                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    boomBox.playSound(MSConstants.UI_MENU);
+                }
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0) {
+                    setVisible(false);
+                    Array<Actor> actors = getStage().getActors();
+                    for (int i = 0; i < actors.size; i++) {
+                        if (actors.get(i).getName().equals(GroupType.RULES.name())) {
+                            actors.get(i).setVisible(true);
+                        }
+                        if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
+                            actors.get(i).setVisible(false);
+                        }
+                    }
+                }
+                rulesLine.setTouched(false);
             }
         });
 
