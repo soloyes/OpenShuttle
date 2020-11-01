@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -43,6 +44,7 @@ import com.shuttle.game.conf.PlayerInteractionLevels;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.AsteroidLaunchEmitter;
+import com.shuttle.game.effects.Oscillator;
 import com.shuttle.game.effects.PrettySound;
 import com.shuttle.game.effects.Ray;
 import com.shuttle.game.effects.Shake;
@@ -67,6 +69,7 @@ import com.shuttle.game.ui.groups.switches.SwitchGroup;
 import com.shuttle.game.ui.panels.UILeftPanel;
 import com.shuttle.game.ui.panels.UIRightPanel;
 import com.shuttle.game.ui.panels.UITopPanel;
+import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.ListOfListsJoiner;
 import com.shuttle.game.utils.ShaderManager;
@@ -133,6 +136,10 @@ public class GameScreen extends BaseScreen {
     private ParticleEmitter particleEmitter;
     private RocketLauncher rocketLauncher;
     private AsteroidLaunchEmitter asteroidLaunchEmitter;
+    private TextureRegion nebulaRegion;
+    private Oscillator nebulaAOscillator;
+    private float nebulaA = 0.5f;
+    private int nebulaRegionX, nebulaRegionY;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -201,6 +208,10 @@ public class GameScreen extends BaseScreen {
         rocketLauncher = new RocketLauncher(rocketEmitter, anomalyJoiner);
         storageEmitter.emit();
         this.profiles = new Profiles();
+        this.nebulaRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.CIRCLE_GLOW);
+        nebulaRegionX = MathUtils.random(0, Rules.SPACE_WIDTH - Rules.WORLD_WIDTH);
+        nebulaRegionY = MathUtils.random(0, Rules.SPACE_HEIGHT - Rules.WORLD_HEIGHT);
+        this.nebulaAOscillator = new Oscillator();
     }
 
     private void calcMusicEffectVolume() {
@@ -267,6 +278,14 @@ public class GameScreen extends BaseScreen {
         magneticAnomalyEmitter.render(batch);
         rocketLauncher.render(batch);
         asteroidLaunchEmitter.render(batch);
+        Color color = batch.getColor();
+        color.a = nebulaA;
+        batch.setColor(color);
+        batch.draw(nebulaRegion,
+                nebulaRegionX, nebulaRegionY,
+                Rules.WORLD_WIDTH, (3 * Rules.WORLD_HEIGHT / 4)
+        );
+        batch.setColor(Color.WHITE);
         batch.end();
 
         float shaderHoleX = (Blackhole.position.x - camera.position.x + Rules.WORLD_WIDTH / 2) / Rules.WORLD_WIDTH;
@@ -398,6 +417,15 @@ public class GameScreen extends BaseScreen {
                     gameOverDeactivate = true;
                 }
             }
+            if (!Radar.isActive) {
+                nebulaA = nebulaAOscillator.oscillate(nebulaA, 0.03f, 0.5f, 1.0f, dt);
+            } else {
+                nebulaA -= dt;
+                if (nebulaA <= 0.0f) {
+                    nebulaA = 0.0f;
+                }
+            }
+
         }
         cameraUpdate(dt);
         if (!PauseGroup.isPause() && !Rules.GAME_OVER) {
