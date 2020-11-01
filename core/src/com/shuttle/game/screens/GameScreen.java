@@ -332,7 +332,7 @@ public class GameScreen extends BaseScreen {
             fadeInAlpha += dt / 2;
             if (fadeInAlpha >= 1.0f)
                 fadeInAlpha = 1.0f;
-            batch.setColor(tmpColor.r, tmpColor.g, tmpColor.b, fadeInAlpha);
+            detailedResultGroup.setColor(tmpColor.r, tmpColor.g, tmpColor.b, fadeInAlpha);
             if (!detailedResultGroup.isVisible()) {
                 detailedResultGroup.setOver();
                 profiles.dispose();
@@ -414,7 +414,9 @@ public class GameScreen extends BaseScreen {
     private void cameraUpdate(float dt) {
         if (player.isCameraSmooth()) {
             tmp1V3.set(Shuttle.position, 0.0f).sub(cameraHelper.position.x, cameraHelper.position.y, 0.0f).nor();
-            cameraHelper.position.mulAdd(tmp1V3, Rules.CAMERA_SMOOTH_VELOCITY * dt);
+            if (!PauseGroup.isPause()) {
+                cameraHelper.position.mulAdd(tmp1V3, Rules.CAMERA_SMOOTH_VELOCITY * dt);
+            }
             camera.position.set(cameraHelper.position);
             if (
                 //parking
@@ -425,8 +427,8 @@ public class GameScreen extends BaseScreen {
                 player.setCameraSmooth(false);
             }
         } else {
-            cameraHelper.position.set(Shuttle.position.x, Shuttle.position.y, 0);
             camera.position.set(Shuttle.position.x, Shuttle.position.y, 0);
+            cameraHelper.position.set(Shuttle.position.x, Shuttle.position.y, 0);
         }
         cameraUpdater(cameraHelper);
         cameraUpdater(camera);
