@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -74,6 +75,7 @@ public class ConfigGroup extends Group {
     private float touchTime;
     private float shadowTime;
     private boolean settingsTouched;
+    private final Slider notifySlider;
     private Slider soundSlider;
     private Slider effectsSlider;
     private Slider musicSlider;
@@ -109,6 +111,7 @@ public class ConfigGroup extends Group {
     private Label shaderLabel;
     private Label childLabel;
     private Profiles profiles;
+    private Table table;
 
     public ConfigGroup() {
         this.setName(GroupType.CONFIG.name());
@@ -120,6 +123,8 @@ public class ConfigGroup extends Group {
         this.setWidth(Rules.WORLD_WIDTH);
         this.setHeight(Rules.WORLD_HEIGHT);
         this.boomBox = new BoomBox();
+        this.table = new Table();
+        table.setTouchable(Touchable.enabled);
 
         initStyles();
         initSliders();
@@ -164,6 +169,28 @@ public class ConfigGroup extends Group {
 
         screenType = ScreenManager.getInstance().getCurrentScreen();
 
+        Slider.SliderStyle sliderStyle = new Slider.SliderStyle(skin.get("default-horizontal", Slider.SliderStyle.class));
+        notifySlider = new Slider(0.0f, 0.1f, 0.1f, false, sliderStyle);
+        notifySlider.clearListeners();
+        notifySlider.setValue(Profiles.getSettings().isNotification() ? notifySlider.getMaxValue() : notifySlider.getMinValue());
+        notifySlider.getColor().a = Profiles.getSettings().isNotification() ? 1.0f : 0.7f;
+        //todo: сделать мигание кнопки
+        notifySlider.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                setNotify();
+            }
+        });
+        table.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                setNotify();
+            }
+        });
+
+        notifySlider.setPosition(Rules.WORLD_WIDTH - PaintConstants.PLAY_PAUSE_BUTTON_WIDTH / 2 - 25 - 42, Rules.WORLD_HEIGHT - 224);
+        notifySlider.setWidth(50);
+
         verticalGroup.addActor(soundLine);
         verticalGroup.addActor(musicLine);
         verticalGroup.addActor(effectsLine);
@@ -175,7 +202,23 @@ public class ConfigGroup extends Group {
         verticalGroup.addActor(joystickPresetLine);
         this.addActor(noticeGroup);
         this.addActor(container);
+        this.addActor(notifySlider);
+        this.addActor(table);
         this.refresh();
+    }
+
+    private void setNotify() {
+        boomBox.playSound(MSConstants.UI_MENU);
+        Vibrator.vibrate(VConstants.UI_CLICK);
+        if (notifySlider.getValue() == notifySlider.getMinValue()) {
+            notifySlider.setValue(notifySlider.getMaxValue());
+            notifySlider.getColor().a = 1.0f;
+        } else {
+            notifySlider.getColor().a = 0.7f;
+            notifySlider.setValue(notifySlider.getMinValue());
+        }
+        Profiles.getSettings().setNotification(!Profiles.getSettings().isNotification());
+        profiles.write();
     }
 
     private void initStyles() {
@@ -1050,6 +1093,11 @@ public class ConfigGroup extends Group {
         super.act(delta);
         if (PauseGroup.isPause()) {
             timeGlyphLayout.setText(font96, TimeFormat.formatYDHMS(Standing.getInstance().getPlayTime()));
+            notifySlider.setVisible(true);
+            table.setBounds(Rules.WORLD_WIDTH - PaintConstants.PLAY_PAUSE_BUTTON_WIDTH / 2 - PauseGroup.playPauseWidth / 2 - 43,
+                    Rules.WORLD_HEIGHT - 225 - PauseGroup.playPauseHeight, PauseGroup.playPauseWidth, PauseGroup.playPauseHeight);
+        } else {
+            notifySlider.setVisible(false);
         }
         noticeGroup.getColor().a = a;
         glyphLayout.setText(font44, notice);

@@ -32,6 +32,7 @@ public class PlayerXP {
     private GlyphLayout score;
     private GlyphLayout level;
     private GlyphLayout levelLabel;
+    private Color color;
 
     public PlayerXP() {
         this.width = PaintConstants.XP_WIDTH;
@@ -50,9 +51,12 @@ public class PlayerXP {
         this.scoreBuilder = new StringBuilder();
         this.levelBuilder = new StringBuilder();
         this.score = new GlyphLayout();
+        this.color = new Color(Color.WHITE);
     }
 
     public void render(SpriteBatch batch) {
+        Color tmpColor = batch.getColor();
+        batch.setColor(color);
         batch.draw(glow,
                 position.x, position.y,
                 width / 2, height / 2,
@@ -87,6 +91,7 @@ public class PlayerXP {
                 score, position.x + width / 2 - score.width / 2,
                 Rules.WORLD_HEIGHT - 225
         );
+        batch.setColor(tmpColor);
     }
 
     public void update(float dt) {
