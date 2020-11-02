@@ -7,12 +7,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.shuttle.game.AdsController;
 import com.shuttle.game.ShuttleGame;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.Assets;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 03/06/18.
@@ -32,6 +34,9 @@ public class ScreenManager {
     private Camera camera;
     @Getter
     private ScreenType currentScreen;
+    @Getter
+    @Setter
+    private AdsController adsController;
 
     public static ScreenManager getInstance() {
         if (instance == null) {

@@ -36,7 +36,7 @@ public class DesktopLauncher {
                 }
             }
         }
-        ShuttleGame game = new ShuttleGame(new ShareDesktop(), false, tester.getWidth(), tester.getHeight());
+        ShuttleGame game = new ShuttleGame(new AdsDesktop(), new ShareDesktop(), false, tester.getWidth(), tester.getHeight());
         game.setRunScreen(screenType);
         //
 

@@ -27,11 +27,12 @@ public class ShuttleGame extends Game {
     private int width;
     private int height;
 
-    public ShuttleGame(Share share, boolean mobile, int width, int height) {
+    public ShuttleGame(AdsController adsController, Share share, boolean mobile, int width, int height) {
         ShuttleGame.share = share;
         this.mobile = mobile;
         this.width = width;
         this.height = height;
+        ScreenManager.getInstance().setAdsController(adsController);
     }
 
     @Override
