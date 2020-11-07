@@ -309,7 +309,7 @@ public class GameScreen extends BaseScreen {
             if (!PauseGroup.isPause()) {
                 holeTime += dt;
             }
-            holeTime = holeTime  % (2.0f * 3.14159f);
+            holeTime = holeTime % (MathUtils.PI2);
             ShaderManager.BLACKHOLE.getProgram().setUniformf("time", holeTime);
             ShaderManager.BLACKHOLE.getProgram().setUniformf("center", shaderHoleX, shaderHoleY);
             ShaderManager.BLACKHOLE.getProgram().setUniformf("dmax", blackhole.getShaderDiameter());
