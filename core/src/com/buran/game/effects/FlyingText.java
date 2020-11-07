@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.utils.Assets;
 
 /**
  * @author soloyes on 03/07/18.
@@ -32,12 +34,12 @@ public class FlyingText {
 
     public FlyingText() {
         this.position = new Vector2(0, 0);
-        this.font128Coloured = com.buran.game.utils.Assets.getInstance().getAssetManager().get(com.buran.game.conf.PaintConstants.FONT128_C);
+        this.font128Coloured = Assets.getInstance().getAssetManager().get(PaintConstants.FONT128_C);
         this.font128Coloured.getData().markupEnabled = true;
-        this.font128 = com.buran.game.utils.Assets.getInstance().getAssetManager().get(com.buran.game.conf.PaintConstants.FONT128);
-        this.font32Coloured = com.buran.game.utils.Assets.getInstance().getAssetManager().get(com.buran.game.conf.PaintConstants.FONT32_C);
+        this.font128 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT128);
+        this.font32Coloured = Assets.getInstance().getAssetManager().get(PaintConstants.FONT32_C);
         this.font32Coloured.getData().markupEnabled = true;
-        this.font32 = com.buran.game.utils.Assets.getInstance().getAssetManager().get(com.buran.game.conf.PaintConstants.FONT32);
+        this.font32 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT32);
         this.scale = 1.0f;
         this.matrix4 = new Matrix4();
         this.matrix1 = new Matrix4();

@@ -2,9 +2,9 @@ package com.buran.game.bot.rocket;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.anomaly.AbstractAnomaly;
-import com.shuttle.game.utils.BoundCheck;
-import com.shuttle.game.utils.pool.ObjectPool;
+import com.buran.game.bot.anomaly.AbstractAnomaly;
+import com.buran.game.utils.BoundCheck;
+import com.buran.game.utils.pool.ObjectPool;
 
 /**
  * @author soloyes on 19/01/19.

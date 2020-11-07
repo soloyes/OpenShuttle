@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.buran.game.bot.rocket.RocketLauncher;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.effects.BoomBox;
 import com.buran.game.effects.particle.ParticleEmitter;
@@ -65,7 +66,7 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
     }
 
     protected void drawAtRocketPoint(SpriteBatch batch) {
-        if (atRocketPoint && com.buran.game.bot.rocket.RocketLauncher.isLaunched()) {
+        if (atRocketPoint && RocketLauncher.isLaunched()) {
             Color color = batch.getColor();
             batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, PaintConstants.AT_ROCKET_POINT_ALPHA);
             batch.draw(atRocketRegion,

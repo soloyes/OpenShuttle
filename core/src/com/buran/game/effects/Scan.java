@@ -4,6 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.buran.game.bot.consumable.AbstractConsumable;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.utils.Assets;
 import com.buran.game.utils.pool.AbstractPoolable;
 
 import lombok.Setter;
@@ -14,7 +18,7 @@ import lombok.Setter;
 
 public class Scan {
     private TextureRegion texture;
-    private com.buran.game.bot.consumable.AbstractConsumable consumable;
+    private AbstractConsumable consumable;
     @Setter
     private Color color;
     private Oscillator oscillatorA;
@@ -24,8 +28,8 @@ public class Scan {
     private float scaleFactor;
     private Vector2 position;
 
-    public Scan(com.buran.game.bot.consumable.AbstractConsumable consumable) {
-        this.texture = com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.BOX_SCAN_NOISE_REGION);
+    public Scan(AbstractConsumable consumable) {
+        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOX_SCAN_NOISE_REGION);
         this.consumable = consumable;
         this.color = Color.valueOf("00ffffff");
         this.oscillatorA = new Oscillator();
@@ -59,14 +63,14 @@ public class Scan {
             time -= dt;
             if (time <= 1.0f) {
                 consumable.setScanned(false);
-                time = com.buran.game.conf.Rules.CONSUMABLE_SCAN_TIME;
+                time = Rules.CONSUMABLE_SCAN_TIME;
             }
-            frequency = com.buran.game.conf.Rules.CONSUMABLE_SCAN_TIME / time;
-            frequency = frequency / com.buran.game.conf.Rules.CONSUMABLE_SCAN_TIME;
+            frequency = Rules.CONSUMABLE_SCAN_TIME / time;
+            frequency = frequency / Rules.CONSUMABLE_SCAN_TIME;
             frequency = 10 * frequency;
             float da = (frequency % 10) / 10;
-            float minA = com.buran.game.conf.PaintConstants.SCAN_ALPHA_MIN - da;
-            float maxA = com.buran.game.conf.PaintConstants.SCAN_ALPHA_MAX - da;
+            float minA = PaintConstants.SCAN_ALPHA_MIN - da;
+            float maxA = PaintConstants.SCAN_ALPHA_MAX - da;
             if (minA <= 0.0f) {
                 minA = 0.0f;
             }

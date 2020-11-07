@@ -3,6 +3,8 @@ package com.buran.game.bot.consumable.fuel;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.utils.Assets;
 
 /**
  * @author Buran on 09/12/09.

@@ -1,8 +1,7 @@
 package com.buran.game.utils.pool;
 
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.conf.PlayerInteractionLevels;
-import com.shuttle.game.utils.pool.Poolable;
+import com.buran.game.conf.PlayerInteractionLevels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,10 +11,10 @@ import java.util.List;
  * Created by FlameXander on 23/09/2017.
  */
 
-public abstract class ObjectPool<T extends com.shuttle.game.utils.pool.Poolable> {
+public abstract class ObjectPool<T extends Poolable> {
     protected List<T> activeList;
     protected List<T> freeList;
-    public static HashMap<Class<? extends com.shuttle.game.utils.pool.Poolable>, ObjectPool> EMITTERS = new HashMap<Class<? extends Poolable>, ObjectPool>();
+    public static HashMap<Class<? extends Poolable>, ObjectPool> EMITTERS = new HashMap<Class<? extends Poolable>, ObjectPool>();
 
     public ObjectPool(Class<? extends T> clazz) {
         this.activeList = new ArrayList<T>();

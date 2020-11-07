@@ -5,6 +5,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.buran.game.bot.anomaly.AbstractAnomaly;
 import com.buran.game.bot.anomaly.CorrosiveAnomaly;
 import com.buran.game.bot.anomaly.CorrosiveAnomalyEmitter;
+import com.buran.game.bot.anomaly.ElectricalAnomaly;
+import com.buran.game.bot.anomaly.ElectricalAnomalyEmitter;
+import com.buran.game.bot.anomaly.MagneticAnomaly;
+import com.buran.game.bot.anomaly.MagneticAnomalyEmitter;
+import com.buran.game.bot.anomaly.RadiationAnomaly;
+import com.buran.game.bot.anomaly.RadiationAnomalyEmitter;
 import com.buran.game.bot.consumable.AbstractConsumable;
 import com.buran.game.bot.consumable.Crate;
 import com.buran.game.bot.consumable.CrateEmitter;
@@ -12,11 +18,17 @@ import com.buran.game.bot.consumable.FuelEmitter;
 import com.buran.game.bot.consumable.Storage;
 import com.buran.game.bot.consumable.StorageEmitter;
 import com.buran.game.bot.consumable.fuel.Fuel;
+import com.buran.game.bot.rocket.RocketLauncher;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.effects.AsteroidLaunchEmitter;
+import com.buran.game.effects.BoomBox;
 import com.buran.game.player.Buran;
+import com.buran.game.player.Standing;
+import com.buran.game.player.navigation.Radar;
 import com.buran.game.ui.GameInfoSystem;
+import com.buran.game.utils.Consumer;
+import com.buran.game.utils.pool.AbstractPoolable;
 import com.buran.game.utils.pool.ObjectPool;
 
 import java.util.Arrays;
@@ -44,14 +56,14 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
             notify(consumable);
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
-            print(consumable, com.buran.game.ui.GameInfoSystem.Preset.TURBO);
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.TURBO);
             sound();
         }
 
@@ -69,14 +81,14 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
             notify(consumable);
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
-            print(consumable, com.buran.game.ui.GameInfoSystem.Preset.REPAIR);
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.REPAIR);
             sound();
         }
 
@@ -90,7 +102,7 @@ public enum Sticker {
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
                 CrateEmitter crateEmitter = (CrateEmitter) ObjectPool.EMITTERS.get(Crate.class);
-                List<com.buran.game.bot.consumable.AbstractConsumable> list = crateEmitter.getActiveList();
+                List<AbstractConsumable> list = crateEmitter.getActiveList();
                 for (int i = 0; i < list.size(); i++) {
                     list.get(i).setShielded(true);
                 }
@@ -108,7 +120,7 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
             notify(consumable);
         }
@@ -121,7 +133,7 @@ public enum Sticker {
 
         @Override
         public void sound() {
-            boomBox.playSound(com.buran.game.conf.MSConstants.GET_SHIELD);
+            boomBox.playSound(MSConstants.GET_SHIELD);
         }
     },
     TRASH("[#FFFFFF]TRASH[]\n[#cc6e54]A box like this can give you many interesting possibilities. The main thing is not to be afraid to take it and open it so that you have a chance to earn more points.[]") {
@@ -157,7 +169,7 @@ public enum Sticker {
 
         @Override
         public void sound() {
-            boomBox.playSound(com.buran.game.conf.MSConstants.GET_TRASH);
+            boomBox.playSound(MSConstants.GET_TRASH);
         }
     },
     SPLASH("[#FFFFFF]SPLASH[]\n[#cc6e54]This item helps you clear the map of anomalies. Not every anomaly can withstand this possibility, so a few experiments will be required.[]") {
@@ -238,67 +250,67 @@ public enum Sticker {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             Buran.isLaser = true;
-            com.buran.game.player.Standing.getInstance().setLaserChargeLevel(com.buran.game.player.Standing.getInstance().getMaxLaserChargeLevel());
+            Standing.getInstance().setLaserChargeLevel(Standing.getInstance().getMaxLaserChargeLevel());
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
             notify(consumable);
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
-            print(consumable, com.buran.game.ui.GameInfoSystem.Preset.LASER);
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.LASER);
             sound();
         }
 
         @Override
         public void sound() {
-            boomBox.playSound(com.buran.game.conf.MSConstants.GET_LASER);
+            boomBox.playSound(MSConstants.GET_LASER);
         }
     },
     RADAR("[#FFFFFF]RADAR[]\n[#cc6e54]Our space is a boundless two-dimensional extent in which objects and events have relative position and direction. But it's good when there is a device that shows the location of those objects.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
-            com.buran.game.player.navigation.Radar.isActive = true;
+            Radar.isActive = true;
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
             notify(consumable);
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
-            print(consumable, com.buran.game.ui.GameInfoSystem.Preset.RADAR);
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.RADAR);
             sound();
         }
 
         @Override
         public void sound() {
-            boomBox.playSound(com.buran.game.conf.MSConstants.GET_RADAR);
+            boomBox.playSound(MSConstants.GET_RADAR);
         }
     },
     ROCKETS("[#FFFFFF]ROCKETS[]\n[#cc6e54]When there is no way out, you can smash everything around. True, powerful weapons take time to recharge. Find ammunition and activate it.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
-                com.buran.game.bot.rocket.RocketLauncher.launch();
+                RocketLauncher.launch();
             }
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
             notify(consumable);
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
-            print(consumable, com.buran.game.ui.GameInfoSystem.Preset.ROCKETS);
-            boomBox.playSound(com.buran.game.conf.MSConstants.GET_ROCKETS);
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.ROCKETS);
+            boomBox.playSound(MSConstants.GET_ROCKETS);
         }
 
         @Override
@@ -312,33 +324,33 @@ public enum Sticker {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (isGolden) {
-                fuel = com.buran.game.player.Standing.getInstance().getMaxFuel();
+                fuel = Standing.getInstance().getMaxFuel();
             } else {
-                fuel = com.buran.game.conf.Rules.CONSUMABLE_FUEL_ADD_FACTOR *
+                fuel = Rules.CONSUMABLE_FUEL_ADD_FACTOR *
                         MathUtils.random(
-                                com.buran.game.conf.Rules.CONSUMABLE_FUEL_MIN_ADD,
-                                com.buran.game.conf.Rules.CONSUMABLE_FUEL_MAX_ADD
+                                Rules.CONSUMABLE_FUEL_MIN_ADD,
+                                Rules.CONSUMABLE_FUEL_MAX_ADD
                         );
             }
-            com.buran.game.player.Standing.getInstance().changeFuel(fuel);
+            Standing.getInstance().changeFuel(fuel);
 
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
             notify(consumable);
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
-            print(consumable, com.buran.game.ui.GameInfoSystem.Preset.FUEL);
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.FUEL);
             sound();
         }
 
         @Override
         public void sound() {
-            boomBox.playSound(com.buran.game.conf.MSConstants.GET_FUEL);
+            boomBox.playSound(MSConstants.GET_FUEL);
         }
     },
     FUEL_UI("[#FFFFFF]FUEL[]\n[#cc6e54]When there is no fuel, the ship cannot fly. But he can still move. True, the speed may not be enough to get away from the attacking anomalies.[]") {
@@ -348,12 +360,12 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void notify(AbstractConsumable consumable) {
 
         }
 
@@ -369,12 +381,12 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void notify(AbstractConsumable consumable) {
 
         }
 
@@ -389,12 +401,12 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
             consume(consumable.getPosition(), consumable.isGolden());
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void notify(AbstractConsumable consumable) {
 
         }
 
@@ -410,12 +422,12 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
             Sticker.consumeShabby(consumable);
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void notify(AbstractConsumable consumable) {
 
         }
 
@@ -431,12 +443,12 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
             Sticker.consumeShabby(consumable);
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void notify(AbstractConsumable consumable) {
 
         }
 
@@ -452,11 +464,11 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void notify(AbstractConsumable consumable) {
 
         }
 
@@ -471,11 +483,11 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void notify(AbstractConsumable consumable) {
 
         }
 
@@ -490,11 +502,11 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void notify(AbstractConsumable consumable) {
 
         }
 
@@ -509,11 +521,11 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void notify(AbstractConsumable consumable) {
 
         }
 
@@ -528,11 +540,11 @@ public enum Sticker {
         }
 
         @Override
-        public void consume(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void consume(AbstractConsumable consumable) {
         }
 
         @Override
-        public void notify(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        public void notify(AbstractConsumable consumable) {
 
         }
 
@@ -549,25 +561,25 @@ public enum Sticker {
     public static List<Sticker> SELECTABLE = Arrays.asList(BOOST, REPAIR, SHIELD, SPLASH, SCAN, ROCKETS);
     public static List<Sticker> ASTRONAUTS = Arrays.asList(REGULAR, MEDIC, SCIENTIST, MECHANIC, MILITARY);
     public static List<Sticker> ALL = Arrays.asList(Sticker.values());
-    private static com.buran.game.effects.BoomBox boomBox;
-    private static com.buran.game.player.Standing standing;
+    private static BoomBox boomBox;
+    private static Standing standing;
     @Getter
     private String description;
 
     static {
-        boomBox = new com.buran.game.effects.BoomBox();
-        standing = com.buran.game.player.Standing.getInstance();
+        boomBox = new BoomBox();
+        standing = Standing.getInstance();
     }
 
     public abstract void consume(Vector2 position, boolean isGolden);
 
-    public abstract void consume(com.buran.game.bot.consumable.AbstractConsumable consumable);
+    public abstract void consume(AbstractConsumable consumable);
 
-    public abstract void notify(com.buran.game.bot.consumable.AbstractConsumable consumable);
+    public abstract void notify(AbstractConsumable consumable);
 
     public abstract void sound();
 
-    private static void consumeShabby(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+    private static void consumeShabby(AbstractConsumable consumable) {
         if (MathUtils.random(0, 1) == 0) {
             getPositive(consumable);
         } else {
@@ -575,153 +587,153 @@ public enum Sticker {
         }
     }
 
-    private static void getPositive(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+    private static void getPositive(AbstractConsumable consumable) {
         // 0 - Kill related level corrosive anomaly
         // 1 - Add score
         // 2 - Add manual activated loot, or generate Crate/Storage
         // 3 - Kill Fuel/Radiation anomaly, or add HP/life
-        int level = (consumable.isGolden() ? 1 : 0) + (consumable.getType() == com.buran.game.utils.pool.AbstractPoolable.Type.CRATE ? 0 : 2);
+        int level = (consumable.isGolden() ? 1 : 0) + (consumable.getType() == AbstractPoolable.Type.CRATE ? 0 : 2);
         int r = MathUtils.random(0, 3);
         int score;
         switch (r) {
             case 0:
-                com.buran.game.bot.anomaly.CorrosiveAnomalyEmitter corrosiveAnomalyEmitter = (com.buran.game.bot.anomaly.CorrosiveAnomalyEmitter) com.buran.game.utils.pool.ObjectPool.EMITTERS.get(com.buran.game.bot.anomaly.CorrosiveAnomaly.class);
-                List<com.buran.game.bot.anomaly.AbstractAnomaly> anomalies = corrosiveAnomalyEmitter.getActiveList();
+                CorrosiveAnomalyEmitter corrosiveAnomalyEmitter = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
+                List<AbstractAnomaly> anomalies = corrosiveAnomalyEmitter.getActiveList();
                 for (int i = 0; i < anomalies.size(); i++) {
-                    com.buran.game.bot.anomaly.AbstractAnomaly anomaly = anomalies.get(i);
+                    AbstractAnomaly anomaly = anomalies.get(i);
                     if (anomaly.getLevel() == level && !anomaly.isTaken()) {
                         anomaly.setMarkedToBoom(true);
-                        com.buran.game.player.Standing.getInstance().changeScore(com.buran.game.conf.Rules.ANOMALIES_BASE_SCORE_ADD * (level + 1));
+                        Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD * (level + 1));
                     }
                 }
-                com.buran.game.ui.GameInfoSystem.setup(
+                GameInfoSystem.setup(
                         consumable.getPosition().x, consumable.getPosition().y,
-                        com.buran.game.ui.GameInfoSystem.Preset.ANOMALY_FLUSH.getValue(),
+                        GameInfoSystem.Preset.ANOMALY_FLUSH.getValue(),
                         5.0f,
                         true
                 );
-                boomBox.playSound(com.buran.game.conf.MSConstants.ANOMALY_FLUSH);
+                boomBox.playSound(MSConstants.ANOMALY_FLUSH);
                 break;
             case 1:
-                score = (level + 1) * com.buran.game.conf.Rules.SCORE_BASE_BONUS;
-                com.buran.game.player.Standing.getInstance().changeScore(score);
-                com.buran.game.ui.GameInfoSystem.setup(
+                score = (level + 1) * Rules.SCORE_BASE_BONUS;
+                Standing.getInstance().changeScore(score);
+                GameInfoSystem.setup(
                         consumable.getPosition().x, consumable.getPosition().y,
-                        com.buran.game.ui.GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
+                        GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
                         5.0f,
                         true
                 );
-                boomBox.playSound(com.buran.game.conf.MSConstants.ADD_SCORE);
+                boomBox.playSound(MSConstants.ADD_SCORE);
                 break;
             case 2:
                 if (consumable.isGolden()) {
                     for (int i = 0; i < Sticker.SELECTABLE.size(); i++) {
-                        for (int j = 0; j < com.buran.game.conf.Rules.SELECTOR_SHABBY_BASE_BONUS; j++) {
-                            com.buran.game.utils.Consumer.consume(Sticker.SELECTABLE.get(i), consumable);
+                        for (int j = 0; j < Rules.SELECTOR_SHABBY_BASE_BONUS; j++) {
+                            Consumer.consume(Sticker.SELECTABLE.get(i), consumable);
                         }
                     }
-                    com.buran.game.ui.GameInfoSystem.setup(
+                    GameInfoSystem.setup(
                             consumable.getPosition().x, consumable.getPosition().y,
-                            com.buran.game.ui.GameInfoSystem.Preset.BIG_BONUS.getValue(),
+                            GameInfoSystem.Preset.BIG_BONUS.getValue(),
                             5.0f,
                             true
                     );
-                    boomBox.playSound(com.buran.game.conf.MSConstants.ADD_SELECTABLE);
+                    boomBox.playSound(MSConstants.ADD_SELECTABLE);
                 } else {
                     switch (consumable.getType()) {
-                        case com.buran.game.utils.pool.AbstractPoolable.Type.CRATE:
-                            com.buran.game.ui.GameInfoSystem.setup(
+                        case AbstractPoolable.Type.CRATE:
+                            GameInfoSystem.setup(
                                     consumable.getPosition().x, consumable.getPosition().y,
-                                    com.buran.game.ui.GameInfoSystem.Preset.BONUS_CRATE.getValue(),
+                                    GameInfoSystem.Preset.BONUS_CRATE.getValue(),
                                     5.0f,
                                     true
                             );
-                            for (int i = 0; i < (level + 1) * com.buran.game.conf.Rules.CONSUMABLE_GENERATE_BASE_BONUS; i++) {
-                                com.buran.game.bot.consumable.CrateEmitter crateEmitter = (com.buran.game.bot.consumable.CrateEmitter) com.buran.game.utils.pool.ObjectPool.EMITTERS.get(com.buran.game.bot.consumable.Crate.class);
+                            for (int i = 0; i < (level + 1) * Rules.CONSUMABLE_GENERATE_BASE_BONUS; i++) {
+                                CrateEmitter crateEmitter = (CrateEmitter) ObjectPool.EMITTERS.get(Crate.class);
                                 crateEmitter.createBonusCrate();
                             }
                             break;
-                        case com.buran.game.utils.pool.AbstractPoolable.Type.STORAGE:
-                            com.buran.game.bot.consumable.StorageEmitter storageEmitter = (com.buran.game.bot.consumable.StorageEmitter) com.buran.game.utils.pool.ObjectPool.EMITTERS.get(com.buran.game.bot.consumable.Storage.class);
-                            com.buran.game.ui.GameInfoSystem.setup(
+                        case AbstractPoolable.Type.STORAGE:
+                            StorageEmitter storageEmitter = (StorageEmitter) ObjectPool.EMITTERS.get(Storage.class);
+                            GameInfoSystem.setup(
                                     consumable.getPosition().x, consumable.getPosition().y,
-                                    com.buran.game.ui.GameInfoSystem.Preset.BONUS_STORAGE.getValue(),
+                                    GameInfoSystem.Preset.BONUS_STORAGE.getValue(),
                                     5.0f,
                                     true
                             );
-                            for (int i = 0; i < (level + 1) * com.buran.game.conf.Rules.CONSUMABLE_GENERATE_BASE_BONUS; i++) {
+                            for (int i = 0; i < (level + 1) * Rules.CONSUMABLE_GENERATE_BASE_BONUS; i++) {
                                 storageEmitter.createBonusStorage();
                             }
                             break;
                     }
-                    boomBox.playSound(com.buran.game.conf.MSConstants.GENERATE_CRATE_STORAGE);
+                    boomBox.playSound(MSConstants.GENERATE_CRATE_STORAGE);
                 }
                 break;
             case 3:
                 if (consumable.isGolden()) {
                     switch (consumable.getType()) {
-                        case com.buran.game.utils.pool.AbstractPoolable.Type.CRATE:
-                            com.buran.game.player.Standing.getInstance().changeHP(com.buran.game.player.Standing.getInstance().getMaxHp());
-                            boomBox.playSound(com.buran.game.conf.MSConstants.ADD_HP);
+                        case AbstractPoolable.Type.CRATE:
+                            Standing.getInstance().changeHP(Standing.getInstance().getMaxHp());
+                            boomBox.playSound(MSConstants.ADD_HP);
                             break;
-                        case com.buran.game.utils.pool.AbstractPoolable.Type.STORAGE:
-                            com.buran.game.player.Standing.getInstance().changeHP(com.buran.game.player.Standing.getInstance().getMaxHp());
-                            com.buran.game.player.Standing.getInstance().changeLives(1);
-                            boomBox.playSound(com.buran.game.conf.MSConstants.UP);
+                        case AbstractPoolable.Type.STORAGE:
+                            Standing.getInstance().changeHP(Standing.getInstance().getMaxHp());
+                            Standing.getInstance().changeLives(1);
+                            boomBox.playSound(MSConstants.UP);
                             break;
                     }
                 } else {
                     switch (consumable.getType()) {
-                        case com.buran.game.utils.pool.AbstractPoolable.Type.CRATE:
-                            List<com.buran.game.bot.anomaly.AbstractAnomaly> list;
+                        case AbstractPoolable.Type.CRATE:
+                            List<AbstractAnomaly> list;
                             if (MathUtils.random(0, 1) == 0) {
-                                com.buran.game.bot.anomaly.MagneticAnomalyEmitter magneticAnomalyEmitter = (com.buran.game.bot.anomaly.MagneticAnomalyEmitter) com.buran.game.utils.pool.ObjectPool.EMITTERS.get(com.buran.game.bot.anomaly.MagneticAnomaly.class);
+                                MagneticAnomalyEmitter magneticAnomalyEmitter = (MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class);
                                 list = magneticAnomalyEmitter.getActiveList();
-                                score = com.buran.game.conf.Rules.ANOMALIES_MAGNETIC_BONUS_SCORE;
+                                score = Rules.ANOMALIES_MAGNETIC_BONUS_SCORE;
                             } else {
-                                com.buran.game.bot.anomaly.RadiationAnomalyEmitter radiationAnomalyEmitter = (com.buran.game.bot.anomaly.RadiationAnomalyEmitter) com.buran.game.utils.pool.ObjectPool.EMITTERS.get(com.buran.game.bot.anomaly.RadiationAnomaly.class);
+                                RadiationAnomalyEmitter radiationAnomalyEmitter = (RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class);
                                 list = radiationAnomalyEmitter.getActiveList();
-                                score = com.buran.game.conf.Rules.ANOMALIES_RADIATION_BONUS_SCORE;
+                                score = Rules.ANOMALIES_RADIATION_BONUS_SCORE;
                             }
                             for (int i = 0; i < list.size(); i++) {
-                                com.buran.game.bot.anomaly.AbstractAnomaly anomaly = list.get(i);
+                                AbstractAnomaly anomaly = list.get(i);
                                 if (!anomaly.isTaken()) {
                                     list.get(i).destroyWithEffect();
-                                    com.buran.game.ui.GameInfoSystem.setup(
+                                    GameInfoSystem.setup(
                                             anomaly.getPosition().x, anomaly.getPosition().y,
-                                            com.buran.game.ui.GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
+                                            GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
                                             5.0f,
                                             true
                                     );
                                 }
                             }
                             break;
-                        case com.buran.game.utils.pool.AbstractPoolable.Type.STORAGE:
-                            score = com.buran.game.conf.Rules.ANOMALIES_MAGNETIC_BONUS_SCORE;
-                            com.buran.game.bot.anomaly.MagneticAnomalyEmitter magneticAnomalyEmitter = (com.buran.game.bot.anomaly.MagneticAnomalyEmitter) com.buran.game.utils.pool.ObjectPool.EMITTERS.get(com.buran.game.bot.anomaly.MagneticAnomaly.class);
+                        case AbstractPoolable.Type.STORAGE:
+                            score = Rules.ANOMALIES_MAGNETIC_BONUS_SCORE;
+                            MagneticAnomalyEmitter magneticAnomalyEmitter = (MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class);
                             list = magneticAnomalyEmitter.getActiveList();
                             for (int i = 0; i < list.size(); i++) {
-                                com.buran.game.bot.anomaly.AbstractAnomaly anomaly = list.get(i);
+                                AbstractAnomaly anomaly = list.get(i);
                                 if (!anomaly.isTaken()) {
                                     anomaly.destroyWithEffect();
-                                    com.buran.game.ui.GameInfoSystem.setup(
+                                    GameInfoSystem.setup(
                                             anomaly.getPosition().x, anomaly.getPosition().y,
-                                            com.buran.game.ui.GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
+                                            GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
                                             5.0f,
                                             true
                                     );
                                 }
                             }
-                            score = com.buran.game.conf.Rules.ANOMALIES_RADIATION_BONUS_SCORE;
-                            com.buran.game.bot.anomaly.RadiationAnomalyEmitter radiationAnomalyEmitter = (com.buran.game.bot.anomaly.RadiationAnomalyEmitter) com.buran.game.utils.pool.ObjectPool.EMITTERS.get(com.buran.game.bot.anomaly.RadiationAnomaly.class);
+                            score = Rules.ANOMALIES_RADIATION_BONUS_SCORE;
+                            RadiationAnomalyEmitter radiationAnomalyEmitter = (RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class);
                             list = radiationAnomalyEmitter.getActiveList();
                             for (int i = 0; i < list.size(); i++) {
-                                com.buran.game.bot.anomaly.AbstractAnomaly anomaly = list.get(i);
+                                AbstractAnomaly anomaly = list.get(i);
                                 if (!anomaly.isTaken()) {
                                     anomaly.destroyWithEffect();
-                                    com.buran.game.ui.GameInfoSystem.setup(
+                                    GameInfoSystem.setup(
                                             anomaly.getPosition().x, anomaly.getPosition().y,
-                                            com.buran.game.ui.GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
+                                            GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
                                             5.0f,
                                             true
                                     );
@@ -729,164 +741,164 @@ public enum Sticker {
                             }
                             break;
                     }
-                    com.buran.game.ui.GameInfoSystem.setup(
+                    GameInfoSystem.setup(
                             consumable.getPosition().x, consumable.getPosition().y,
-                            com.buran.game.ui.GameInfoSystem.Preset.ANOMALY_FLUSH.getValue(),
+                            GameInfoSystem.Preset.ANOMALY_FLUSH.getValue(),
                             5.0f,
                             true
                     );
-                    boomBox.playSound(com.buran.game.conf.MSConstants.KILL_MAGNETIC_RADIATION);
+                    boomBox.playSound(MSConstants.KILL_MAGNETIC_RADIATION);
                     break;
                 }
         }
     }
 
-    private static void getNegative(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+    private static void getNegative(AbstractConsumable consumable) {
         // 0 - Add related level corrosive anomaly
         // 1 - Del score
         // 2 - Disable Laser/Radar, or del Crate/Storage
         // 3 - Add Electrical/Corrosive/Radiation anomaly, or del HP/fuel/life
-        int level = (consumable.isGolden() ? 1 : 0) + (consumable.getType() == com.buran.game.utils.pool.AbstractPoolable.Type.CRATE ? 0 : 2);
+        int level = (consumable.isGolden() ? 1 : 0) + (consumable.getType() == AbstractPoolable.Type.CRATE ? 0 : 2);
         int r = MathUtils.random(0, 3);
         int score;
         switch (r) {
             case 0:
-                com.buran.game.bot.anomaly.CorrosiveAnomalyEmitter corrosiveAnomalyEmitter = (com.buran.game.bot.anomaly.CorrosiveAnomalyEmitter) com.buran.game.utils.pool.ObjectPool.EMITTERS.get(com.buran.game.bot.anomaly.CorrosiveAnomaly.class);
+                CorrosiveAnomalyEmitter corrosiveAnomalyEmitter = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
                 corrosiveAnomalyEmitter.createBonusAnomaly(consumable.getPosition(), level);
-                for (int i = 0; i < (4 - level) * com.buran.game.conf.Rules.ANOMALY_GENERATE_BASE_BONUS; i++) {
+                for (int i = 0; i < (4 - level) * Rules.ANOMALY_GENERATE_BASE_BONUS; i++) {
                     corrosiveAnomalyEmitter.createBonusAnomaly(level);
                 }
-                com.buran.game.ui.GameInfoSystem.setup(
+                GameInfoSystem.setup(
                         consumable.getPosition().x, consumable.getPosition().y,
-                        com.buran.game.ui.GameInfoSystem.Preset.ANOMALY_ARISE.getValue(),
+                        GameInfoSystem.Preset.ANOMALY_ARISE.getValue(),
                         5.0f,
                         true
                 );
-                boomBox.playSound(com.buran.game.conf.MSConstants.ADD_CORROSIVE);
+                boomBox.playSound(MSConstants.ADD_CORROSIVE);
                 break;
             case 1:
-                score = (level + 1) * com.buran.game.conf.Rules.SCORE_BASE_BONUS;
-                com.buran.game.player.Standing.getInstance().changeScore(-score);
-                com.buran.game.ui.GameInfoSystem.setup(
+                score = (level + 1) * Rules.SCORE_BASE_BONUS;
+                Standing.getInstance().changeScore(-score);
+                GameInfoSystem.setup(
                         consumable.getPosition().x, consumable.getPosition().y,
-                        com.buran.game.ui.GameInfoSystem.Preset.SCORE + "-[RED]" + score + "[]",
+                        GameInfoSystem.Preset.SCORE + "-[RED]" + score + "[]",
                         5.0f,
                         true
                 );
-                boomBox.playSound(com.buran.game.conf.MSConstants.DEL_SCORE);
+                boomBox.playSound(MSConstants.DEL_SCORE);
                 break;
             case 2:
                 switch (consumable.getType()) {
-                    case com.buran.game.utils.pool.AbstractPoolable.Type.CRATE:
+                    case AbstractPoolable.Type.CRATE:
                         if (consumable.isGolden()) {
-                            com.buran.game.player.navigation.Radar.isActive = false;
-                            com.buran.game.ui.GameInfoSystem.setup(
+                            Radar.isActive = false;
+                            GameInfoSystem.setup(
                                     consumable.getPosition().x, consumable.getPosition().y,
-                                    "-[RED]" + com.buran.game.ui.GameInfoSystem.Preset.RADAR + "[]",
+                                    "-[RED]" + GameInfoSystem.Preset.RADAR + "[]",
                                     5.0f,
                                     true
                             );
                         } else {
                             Buran.isLaser = false;
-                            com.buran.game.ui.GameInfoSystem.setup(
+                            GameInfoSystem.setup(
                                     consumable.getPosition().x, consumable.getPosition().y,
-                                    "-[RED]" + com.buran.game.ui.GameInfoSystem.Preset.LASER + "[]",
+                                    "-[RED]" + GameInfoSystem.Preset.LASER + "[]",
                                     5.0f,
                                     true
                             );
                         }
-                        boomBox.playSound(com.buran.game.conf.MSConstants.DISABLE_LASER_RADAR);
+                        boomBox.playSound(MSConstants.DISABLE_LASER_RADAR);
                         break;
-                    case com.buran.game.utils.pool.AbstractPoolable.Type.STORAGE:
-                        List<com.buran.game.bot.consumable.AbstractConsumable> list;
-                        com.buran.game.ui.GameInfoSystem.Preset preset;
+                    case AbstractPoolable.Type.STORAGE:
+                        List<AbstractConsumable> list;
+                        GameInfoSystem.Preset preset;
                         if (consumable.isGolden()) {
-                            com.buran.game.bot.consumable.StorageEmitter storageEmitter = (com.buran.game.bot.consumable.StorageEmitter) com.buran.game.utils.pool.ObjectPool.EMITTERS.get(com.buran.game.bot.consumable.Storage.class);
+                            StorageEmitter storageEmitter = (StorageEmitter) ObjectPool.EMITTERS.get(Storage.class);
                             list = storageEmitter.getActiveList();
-                            preset = com.buran.game.ui.GameInfoSystem.Preset.STORAGE_FLUSH;
+                            preset = GameInfoSystem.Preset.STORAGE_FLUSH;
                         } else {
-                            com.buran.game.bot.consumable.CrateEmitter crateEmitter = (com.buran.game.bot.consumable.CrateEmitter) com.buran.game.utils.pool.ObjectPool.EMITTERS.get(com.buran.game.bot.consumable.Crate.class);
+                            CrateEmitter crateEmitter = (CrateEmitter) ObjectPool.EMITTERS.get(Crate.class);
                             list = crateEmitter.getActiveList();
-                            preset = com.buran.game.ui.GameInfoSystem.Preset.CRATE_FLUSH;
+                            preset = GameInfoSystem.Preset.CRATE_FLUSH;
                         }
 
                         for (int i = 0; i < list.size(); i++) {
-                            com.buran.game.bot.consumable.AbstractConsumable c = list.get(i);
+                            AbstractConsumable c = list.get(i);
                             if (!c.isTaken()) {
                                 c.destroyWithEffect();
                             }
                         }
-                        com.buran.game.ui.GameInfoSystem.setup(
+                        GameInfoSystem.setup(
                                 consumable.getPosition().x, consumable.getPosition().y,
                                 preset.getValue(),
                                 5.0f,
                                 true
                         );
-                        boomBox.playSound(com.buran.game.conf.MSConstants.DEL_CRATE_STORAGE);
+                        boomBox.playSound(MSConstants.DEL_CRATE_STORAGE);
                         break;
                 }
                 break;
             case 3:
                 switch (consumable.getType()) {
-                    case com.buran.game.utils.pool.AbstractPoolable.Type.CRATE:
+                    case AbstractPoolable.Type.CRATE:
                         if (consumable.isGolden()) {
-                            com.buran.game.player.Standing.getInstance().changeLives(-1);
-                            com.buran.game.ui.GameInfoSystem.setup(
+                            Standing.getInstance().changeLives(-1);
+                            GameInfoSystem.setup(
                                     consumable.getPosition().x, consumable.getPosition().y,
-                                    "-[RED]" + com.buran.game.ui.GameInfoSystem.Preset.UP + "[]",
+                                    "-[RED]" + GameInfoSystem.Preset.UP + "[]",
                                     5.0f,
                                     true
                             );
-                            boomBox.playSound(com.buran.game.conf.MSConstants.DOWN);
+                            boomBox.playSound(MSConstants.DOWN);
                         } else {
                             if (MathUtils.random(0, 1) == 0) {
-                                com.buran.game.player.Standing.getInstance().changeHP(-com.buran.game.player.Standing.getInstance().getHp() + 1);
-                                com.buran.game.ui.GameInfoSystem.setup(
+                                Standing.getInstance().changeHP(-Standing.getInstance().getHp() + 1);
+                                GameInfoSystem.setup(
                                         consumable.getPosition().x, consumable.getPosition().y,
-                                        "-[RED]" + com.buran.game.ui.GameInfoSystem.Preset.HP + "[]",
+                                        "-[RED]" + GameInfoSystem.Preset.HP + "[]",
                                         5.0f,
                                         true
                                 );
                             } else {
-                                com.buran.game.player.Standing.getInstance().changeFuel(-com.buran.game.player.Standing.getInstance().getFuel());
-                                com.buran.game.ui.GameInfoSystem.setup(
+                                Standing.getInstance().changeFuel(-Standing.getInstance().getFuel());
+                                GameInfoSystem.setup(
                                         consumable.getPosition().x, consumable.getPosition().y,
-                                        "-[RED]" + com.buran.game.ui.GameInfoSystem.Preset.FUEL + "[]",
+                                        "-[RED]" + GameInfoSystem.Preset.FUEL + "[]",
                                         5.0f,
                                         true
                                 );
                             }
-                            boomBox.playSound(com.buran.game.conf.MSConstants.DEL_HP_FUEL);
+                            boomBox.playSound(MSConstants.DEL_HP_FUEL);
                         }
                         break;
-                    case com.buran.game.utils.pool.AbstractPoolable.Type.STORAGE:
+                    case AbstractPoolable.Type.STORAGE:
                         if (consumable.isGolden()) {
-                            com.buran.game.bot.anomaly.ElectricalAnomalyEmitter electricalAnomalyEmitter = (com.buran.game.bot.anomaly.ElectricalAnomalyEmitter) com.buran.game.utils.pool.ObjectPool.EMITTERS.get(com.buran.game.bot.anomaly.ElectricalAnomaly.class);
+                            ElectricalAnomalyEmitter electricalAnomalyEmitter = (ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class);
                             electricalAnomalyEmitter.createBonusAnomaly(consumable.getPosition());
                         } else {
                             if (MathUtils.random(0, 1) == 0) {
-                                com.buran.game.bot.anomaly.RadiationAnomalyEmitter radiationAnomalyEmitter = (com.buran.game.bot.anomaly.RadiationAnomalyEmitter) com.buran.game.utils.pool.ObjectPool.EMITTERS.get(com.buran.game.bot.anomaly.RadiationAnomaly.class);
+                                RadiationAnomalyEmitter radiationAnomalyEmitter = (RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class);
                                 radiationAnomalyEmitter.createBonusAnomaly(consumable.getPosition());
                             } else {
-                                com.buran.game.bot.anomaly.MagneticAnomalyEmitter magneticAnomalyEmitter = (com.buran.game.bot.anomaly.MagneticAnomalyEmitter) com.buran.game.utils.pool.ObjectPool.EMITTERS.get(com.buran.game.bot.anomaly.MagneticAnomaly.class);
+                                MagneticAnomalyEmitter magneticAnomalyEmitter = (MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class);
                                 magneticAnomalyEmitter.createBonusAnomaly(consumable.getPosition());
                             }
                         }
-                        com.buran.game.ui.GameInfoSystem.setup(
+                        GameInfoSystem.setup(
                                 consumable.getPosition().x, consumable.getPosition().y,
-                                com.buran.game.ui.GameInfoSystem.Preset.ANOMALY_ARISE.getValue(),
+                                GameInfoSystem.Preset.ANOMALY_ARISE.getValue(),
                                 5.0f,
                                 true
                         );
-                        boomBox.playSound(com.buran.game.conf.MSConstants.ANOMALIES_BORN);
+                        boomBox.playSound(MSConstants.ANOMALIES_BORN);
                         break;
                 }
                 break;
         }
     }
 
-    private static void print(com.buran.game.bot.consumable.AbstractConsumable consumable, com.buran.game.ui.GameInfoSystem.Preset p) {
-        com.buran.game.ui.GameInfoSystem.setup(
+    private static void print(AbstractConsumable consumable, GameInfoSystem.Preset p) {
+        GameInfoSystem.setup(
                 consumable.getPosition().x, consumable.getPosition().y,
                 (consumable.isGolden() ? "[GOLD]" : "[GREEN]") + p + "[]",
                 (consumable.isGolden() ? 7.0f : 3.0f),

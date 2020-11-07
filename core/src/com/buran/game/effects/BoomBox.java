@@ -4,6 +4,10 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.ui.groups.mvc.profiles.Profiles;
+import com.buran.game.utils.Assets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,17 +24,17 @@ public class BoomBox {
     private float t = 0.0f;
 
     static {
-        musicEffects.add(com.buran.game.conf.MSConstants.HUM_MUSIC_EFFECT_1);
-        musicEffects.add(com.buran.game.conf.MSConstants.HUM_MUSIC_EFFECT_2);
-        musicEffects.add(com.buran.game.conf.MSConstants.HUM_MUSIC_EFFECT_3);
-        musicEffects.add(com.buran.game.conf.MSConstants.HUM_MUSIC_EFFECT_4);
-        musicEffects.add(com.buran.game.conf.MSConstants.HUM_MUSIC_EFFECT_5);
+        musicEffects.add(MSConstants.HUM_MUSIC_EFFECT_1);
+        musicEffects.add(MSConstants.HUM_MUSIC_EFFECT_2);
+        musicEffects.add(MSConstants.HUM_MUSIC_EFFECT_3);
+        musicEffects.add(MSConstants.HUM_MUSIC_EFFECT_4);
+        musicEffects.add(MSConstants.HUM_MUSIC_EFFECT_5);
     }
 
     public void playRandomMusicEffects(float dt) {
         t += dt;
         if (t >= 1.0f) {
-            if (MathUtils.random(0, 100) <= com.buran.game.conf.Rules.MUSIC_EFFECT_PROBABILITY) {
+            if (MathUtils.random(0, 100) <= Rules.MUSIC_EFFECT_PROBABILITY) {
                 boolean flag = true;
                 for (int i = 0; i < musicEffects.size(); i++) {
                     if (isPlaying(musicEffects.get(i))) {
@@ -47,9 +51,9 @@ public class BoomBox {
     }
 
     public void setMusicEffectVolume(String musicEffect, float volume) {
-        if (com.buran.game.ui.groups.mvc.profiles.Profiles.getSettings().isEffects()) {
-            volume *= com.buran.game.ui.groups.mvc.profiles.Profiles.getSettings().overallEffectsVolume();
-            com.buran.game.utils.Assets.getInstance()
+        if (Profiles.getSettings().isEffects()) {
+            volume *= Profiles.getSettings().overallEffectsVolume();
+            Assets.getInstance()
                     .getAssetManager()
                     .get(musicEffect, Music.class)
                     .setVolume(volume);
@@ -57,17 +61,17 @@ public class BoomBox {
     }
 
     private boolean isPlaying(String music) {
-        return com.buran.game.utils.Assets.getInstance()
+        return Assets.getInstance()
                 .getAssetManager()
                 .get(music, Music.class)
                 .isPlaying();
     }
 
     public void playMusicEffectOnce(String musicEffect) {
-        setMusicEffectVolume(musicEffect, com.buran.game.ui.groups.mvc.profiles.Profiles.getSettings().overallEffectsVolume());
-        if (com.buran.game.ui.groups.mvc.profiles.Profiles.getSettings().isEffects()) {
+        setMusicEffectVolume(musicEffect, Profiles.getSettings().overallEffectsVolume());
+        if (Profiles.getSettings().isEffects()) {
             if (!isPlaying(musicEffect)) {
-                com.buran.game.utils.Assets.getInstance()
+                Assets.getInstance()
                         .getAssetManager()
                         .get(musicEffect, Music.class)
                         .play();
@@ -76,12 +80,12 @@ public class BoomBox {
     }
 
     public long playSound(String sound) {
-        Sound tmp = com.buran.game.utils.Assets.getInstance()
+        Sound tmp = Assets.getInstance()
                 .getAssetManager()
                 .get(sound, Sound.class);
         soundIdList.add(tmp);
-        if (com.buran.game.ui.groups.mvc.profiles.Profiles.getSettings().isEffects()) {
-            return tmp.play(com.buran.game.ui.groups.mvc.profiles.Profiles.getSettings().overallEffectsVolume());
+        if (Profiles.getSettings().isEffects()) {
+            return tmp.play(Profiles.getSettings().overallEffectsVolume());
         }
         return -1;
     }
@@ -90,7 +94,7 @@ public class BoomBox {
         Map<String, Float> musicWithVolumes = new HashMap<String, Float>();
         for (int i = 0; i < musicEffect.length; i++) {
             musicWithVolumes.put(musicEffect[i],
-                    com.buran.game.utils.Assets.getInstance()
+                    Assets.getInstance()
                             .getAssetManager()
                             .get(musicEffect[i], Music.class).getVolume()
             );
@@ -104,7 +108,7 @@ public class BoomBox {
 
     private void stopAllMusic() {
         musicArray.clear();
-        com.buran.game.utils.Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
+        Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
         for (int i = 0; i < musicArray.size; i++) {
             musicArray.get(i).stop();
         }
@@ -112,7 +116,7 @@ public class BoomBox {
 
     public void pauseAllMusic() {
         musicArray.clear();
-        com.buran.game.utils.Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
+        Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
         for (int i = 0; i < musicArray.size; i++) {
             musicArray.get(i).pause();
         }
@@ -120,7 +124,7 @@ public class BoomBox {
 
     public void resumeAllMusic() {
         musicArray.clear();
-        com.buran.game.utils.Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
+        Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
         for (int i = 0; i < musicArray.size; i++) {
             musicArray.get(i).play();
         }
@@ -128,24 +132,24 @@ public class BoomBox {
 
     public void resumeThisMusic(String music) {
         musicArray.clear();
-        com.buran.game.utils.Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
+        Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
         for (int i = 0; i < musicArray.size; i++) {
             playMusicInLoop(music);
         }
     }
 
     private void playMusicInLoop(String music) {
-        if (com.buran.game.ui.groups.mvc.profiles.Profiles.getSettings().isMusic()) {
-            com.buran.game.utils.Assets.getInstance()
+        if (Profiles.getSettings().isMusic()) {
+            Assets.getInstance()
                     .getAssetManager()
                     .get(music, Music.class)
-                    .setVolume(com.buran.game.ui.groups.mvc.profiles.Profiles.getSettings().overallMusicVolume());
-            com.buran.game.utils.Assets.getInstance()
+                    .setVolume(Profiles.getSettings().overallMusicVolume());
+            Assets.getInstance()
                     .getAssetManager()
                     .get(music, Music.class)
                     .setLooping(true);
             if (!isPlaying(music)) {
-                com.buran.game.utils.Assets.getInstance()
+                Assets.getInstance()
                         .getAssetManager()
                         .get(music, Music.class)
                         .play();
@@ -154,18 +158,18 @@ public class BoomBox {
     }
 
     public void playMusicEffectInLoop(String musicEffect, float volume) {
-        if (com.buran.game.ui.groups.mvc.profiles.Profiles.getSettings().isEffects()) {
-            volume *= com.buran.game.ui.groups.mvc.profiles.Profiles.getSettings().overallEffectsVolume();
-            com.buran.game.utils.Assets.getInstance()
+        if (Profiles.getSettings().isEffects()) {
+            volume *= Profiles.getSettings().overallEffectsVolume();
+            Assets.getInstance()
                     .getAssetManager()
                     .get(musicEffect, Music.class)
                     .setVolume(volume);
-            com.buran.game.utils.Assets.getInstance()
+            Assets.getInstance()
                     .getAssetManager()
                     .get(musicEffect, Music.class)
                     .setLooping(true);
             if (!isPlaying(musicEffect)) {
-                com.buran.game.utils.Assets.getInstance()
+                Assets.getInstance()
                         .getAssetManager()
                         .get(musicEffect, Music.class)
                         .play();
@@ -187,7 +191,7 @@ public class BoomBox {
     }
 
     public void stopMusicEffect(String musicEffect) {
-        com.buran.game.utils.Assets.getInstance()
+        Assets.getInstance()
                 .getAssetManager()
                 .get(musicEffect, Music.class)
                 .stop();
@@ -195,7 +199,7 @@ public class BoomBox {
 
     public void setAllMusicVolume(float volume) {
         musicArray.clear();
-        com.buran.game.utils.Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
+        Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
         for (int i = 0; i < musicArray.size; i++) {
             musicArray.get(i).setVolume(volume);
         }

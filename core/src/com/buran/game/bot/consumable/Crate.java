@@ -3,6 +3,20 @@ package com.buran.game.bot.consumable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.conf.VConstants;
+import com.buran.game.effects.MoveProcessor;
+import com.buran.game.effects.Scan;
+import com.buran.game.effects.Shield;
+import com.buran.game.effects.Vibrator;
+import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.labelsticker.Label;
+import com.buran.game.labelsticker.Sticker;
+import com.buran.game.ui.GameInfoSystem;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.Consumer;
 
 /**
  * @author soloyes on 10/11/18.
@@ -22,10 +36,10 @@ public class Crate extends AbstractConsumable {
 
     @Override
     public void badEffect() {
-        com.buran.game.ui.GameInfoSystem.setup(
+        GameInfoSystem.setup(
                 position.x,
                 position.y,
-                com.buran.game.ui.GameInfoSystem.Preset.EASY,
+                GameInfoSystem.Preset.EASY,
                 3.0f,
                 false
         );

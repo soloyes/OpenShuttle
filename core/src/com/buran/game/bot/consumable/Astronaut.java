@@ -3,6 +3,19 @@ package com.buran.game.bot.consumable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.conf.VConstants;
+import com.buran.game.effects.MoveProcessor;
+import com.buran.game.effects.Vibrator;
+import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.labelsticker.Label;
+import com.buran.game.labelsticker.Sticker;
+import com.buran.game.player.Standing;
+import com.buran.game.ui.GameInfoSystem;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.Regions;
 
 /**
  * @author soloyes on 10/11/18.
@@ -28,10 +41,10 @@ public class Astronaut extends AbstractConsumable {
     public void badEffect() {
         Standing standing = Standing.getInstance();
         standing.changeScore(-Rules.CONSUMABLE_MURDER_SCORE_DECREASE);
-        com.buran.game.ui.GameInfoSystem.setup(
+        GameInfoSystem.setup(
                 position.x,
                 position.y,
-                com.buran.game.ui.GameInfoSystem.Preset.MURDERER,
+                GameInfoSystem.Preset.MURDERER,
                 8.0f,
                 true
         );
@@ -45,10 +58,10 @@ public class Astronaut extends AbstractConsumable {
                 multiplier * Rules.CONSUMABLE_ASTRONAUT_RANGE_SCORE_ADD +
                 (int) Standing.getInstance().getRamPower() * Rules.CONSUMABLE_ASTRONAUT_BONUS_SCORE_ADD;
         Standing.getInstance().changeScore(score);
-        com.buran.game.ui.GameInfoSystem.setup(
+        GameInfoSystem.setup(
                 position.x,
                 position.y,
-                com.buran.game.ui.GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
+                GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
                 3.0f,
                 true
         );

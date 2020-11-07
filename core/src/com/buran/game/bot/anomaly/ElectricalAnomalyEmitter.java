@@ -1,9 +1,8 @@
 package com.buran.game.bot.anomaly;
 
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.anomaly.AbstractAnomaly;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.effects.particle.ParticleEmitter;
+import com.buran.game.conf.Rules;
+import com.buran.game.effects.particle.ParticleEmitter;
 
 /**
  * @author soloyes on 9/11/18.
@@ -18,7 +17,7 @@ public class ElectricalAnomalyEmitter extends AbstractAnomalyEmitter {
         emit();
     }
 
-    private ElectricalAnomalyEmitter(Class<? extends com.shuttle.game.bot.anomaly.AbstractAnomaly> clazz, ParticleEmitter particleEmitter) {
+    private ElectricalAnomalyEmitter(Class<? extends AbstractAnomaly> clazz, ParticleEmitter particleEmitter) {
         super(clazz, particleEmitter);
     }
 

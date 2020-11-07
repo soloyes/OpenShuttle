@@ -1,5 +1,8 @@
 package com.buran.game.bot.consumable;
 
+import com.buran.game.conf.Rules;
+import com.buran.game.effects.particle.ParticleEmitter;
+
 import lombok.Getter;
 
 /**
@@ -13,19 +16,19 @@ public class CrateEmitter extends AbstractConsumableEmitter {
     private static int emittedGolden;
 
     public CrateEmitter(ParticleEmitter particleEmitter) {
-        this(com.shuttle.game.bot.consumable.Crate.class, particleEmitter);
+        this(Crate.class, particleEmitter);
         super.setRespawnTime(Rules.CONSUMABLE_CRATE_RESPAWN_TIME);
         super.setConsumablesAtStart(Rules.CONSUMABLE_CRATE_AT_START);
         super.setConsumablesMaxCount(Rules.CONSUMABLE_CRATE_MAX_COUNT);
         emit();
     }
 
-    private CrateEmitter(Class<? extends com.shuttle.game.bot.consumable.AbstractConsumable> clazz, ParticleEmitter particleEmitter) {
+    private CrateEmitter(Class<? extends AbstractConsumable> clazz, ParticleEmitter particleEmitter) {
         super(clazz, particleEmitter);
     }
 
     @Override
-    protected com.shuttle.game.bot.consumable.Crate newObject() {
+    protected Crate newObject() {
         return new Crate(particleEmitter);
     }
 

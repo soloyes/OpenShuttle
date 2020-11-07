@@ -3,6 +3,12 @@ package com.buran.game.utils.pool;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.buran.game.bot.blackhole.Blackhole;
+import com.buran.game.bot.consumable.AbstractConsumable;
+import com.buran.game.conf.Rules;
+import com.buran.game.effects.BoomBox;
+import com.buran.game.effects.MoveProcessor;
+import com.buran.game.utils.BoundCheck;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +23,7 @@ public abstract class AbstractPoolable implements Poolable {
     @Setter
     protected Vector2 velocity;
     @Getter
-    protected com.buran.game.utils.BoundCheck boundCheck;
+    protected BoundCheck boundCheck;
     @Getter
     protected BoomBox boomBox;
     @Getter
@@ -101,13 +107,13 @@ public abstract class AbstractPoolable implements Poolable {
     public abstract Vector2 getPosition();
 
     public void collideBlackhole() {
-        float dst = com.buran.game.bot.blackhole.Blackhole.position.dst(position);
-        if (dst <= com.buran.game.conf.Rules.BLACKHOLE_TAKE_RANGE) {
+        float dst = Blackhole.position.dst(position);
+        if (dst <= Rules.BLACKHOLE_TAKE_RANGE) {
             taken = true;
             atRayPoint = false;
             velocity.scl(0.5f);
-            float scaleX = (dst / com.buran.game.conf.Rules.BLACKHOLE_TAKE_RANGE) * saveScaleX;
-            float scaleY = (dst / com.buran.game.conf.Rules.BLACKHOLE_TAKE_RANGE) * saveScaleY;
+            float scaleX = (dst / Rules.BLACKHOLE_TAKE_RANGE) * saveScaleX;
+            float scaleY = (dst / Rules.BLACKHOLE_TAKE_RANGE) * saveScaleY;
             if (scaleX >= saveScaleX) {
                 scaleX = saveScaleX;
             }
@@ -116,11 +122,11 @@ public abstract class AbstractPoolable implements Poolable {
             }
             this.scaleX = scaleX;
             this.scaleY = scaleY;
-            if (dst <= com.buran.game.conf.Rules.BLACKHOLE_EVENT_HORIZON) {
+            if (dst <= Rules.BLACKHOLE_EVENT_HORIZON) {
                 destroy();
             }
         } else {
-            if (!(this instanceof com.buran.game.bot.consumable.AbstractConsumable)) {
+            if (!(this instanceof AbstractConsumable)) {
                 this.scaleX = this.saveScaleX;
                 this.scaleY = this.saveScaleY;
             }

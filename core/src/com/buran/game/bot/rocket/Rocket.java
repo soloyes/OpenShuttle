@@ -3,14 +3,15 @@ package com.buran.game.bot.rocket;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.anomaly.AbstractAnomaly;
-import com.shuttle.game.bot.blackhole.Blackhole;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.player.Standing;
-import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.Regions;
-import com.shuttle.game.utils.pool.AbstractPoolable;
+import com.buran.game.bot.anomaly.AbstractAnomaly;
+import com.buran.game.bot.blackhole.Blackhole;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.player.Standing;
+import com.buran.game.ui.GameInfoSystem;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.Regions;
+import com.buran.game.utils.pool.AbstractPoolable;
 
 import lombok.Setter;
 
@@ -68,10 +69,10 @@ public class Rocket extends AbstractPoolable {
         if (position.dst(targetAnomaly.getPosition()) <= PaintConstants.ROCKET_WIDTH && targetAnomaly.isActive()) {
             destroy();
             targetAnomaly.destroyWithEffect();
-            com.buran.game.ui.GameInfoSystem.setup(
+            GameInfoSystem.setup(
                     position.x,
                     position.y,
-                    com.buran.game.ui.GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
+                    GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
                     3.0f,
                     true
             );

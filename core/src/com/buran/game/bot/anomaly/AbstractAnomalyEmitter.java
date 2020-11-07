@@ -2,10 +2,9 @@ package com.buran.game.bot.anomaly;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.shuttle.game.bot.anomaly.AbstractAnomaly;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.effects.particle.ParticleEmitter;
-import com.shuttle.game.utils.pool.ObjectPool;
+import com.buran.game.conf.Rules;
+import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.utils.pool.ObjectPool;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +13,7 @@ import lombok.Setter;
  * @author soloyes on 9/15/18.
  */
 
-public abstract class AbstractAnomalyEmitter extends ObjectPool<com.shuttle.game.bot.anomaly.AbstractAnomaly> {
+public abstract class AbstractAnomalyEmitter extends ObjectPool<AbstractAnomaly> {
     private float time;
     @Getter
     @Setter
@@ -29,7 +28,7 @@ public abstract class AbstractAnomalyEmitter extends ObjectPool<com.shuttle.game
     private static int emitted;
     protected ParticleEmitter particleEmitter;
 
-    AbstractAnomalyEmitter(Class<? extends com.shuttle.game.bot.anomaly.AbstractAnomaly> clazz, ParticleEmitter particleEmitter) {
+    AbstractAnomalyEmitter(Class<? extends AbstractAnomaly> clazz, ParticleEmitter particleEmitter) {
         super(clazz);
         this.particleEmitter = particleEmitter;
     }

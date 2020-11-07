@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.effects.Oscillator;
-import com.shuttle.game.utils.Assets;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.effects.Oscillator;
+import com.buran.game.utils.Assets;
 
 import lombok.Getter;
 import lombok.Setter;

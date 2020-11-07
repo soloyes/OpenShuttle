@@ -1,10 +1,10 @@
 package com.buran.game.bot.asteroids;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.effects.particle.ParticleEmitter;
-import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.Regions;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.Regions;
 
 /**
  * @author soloyes on 11/26/18.

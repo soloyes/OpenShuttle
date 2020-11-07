@@ -1,5 +1,8 @@
 package com.buran.game.bot.consumable;
 
+import com.buran.game.conf.Rules;
+import com.buran.game.effects.particle.ParticleEmitter;
+
 import lombok.Getter;
 
 /**

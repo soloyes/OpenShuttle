@@ -2,7 +2,16 @@ package com.buran.game.effects;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.buran.game.bot.asteroids.AbstractAsteroid;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.PlayerInteractionLevels;
+import com.buran.game.conf.Rules;
+import com.buran.game.effects.particle.ParticleEmitter;
 import com.buran.game.player.Buran;
+import com.buran.game.player.Standing;
+import com.buran.game.utils.ListOfListsJoiner;
+import com.buran.game.utils.pool.AbstractPoolable;
+import com.buran.game.utils.pool.ObjectPool;
 
 import java.util.List;
 
@@ -26,22 +35,22 @@ public class Ray {
     @Setter
     private float takeRange;
     private BoomBox boomBox;
-    private com.buran.game.utils.ListOfListsJoiner<AbstractAsteroid> asteroidsJoiner;
+    private ListOfListsJoiner<AbstractAsteroid> asteroidsJoiner;
     private ParticleEmitter particleEmitter;
 
-    public Ray(ParticleEmitter particleEmitter, List<com.buran.game.bot.asteroids.AbstractAsteroid>... lists) {
+    public Ray(ParticleEmitter particleEmitter, List<AbstractAsteroid>... lists) {
         this.tmp1V2 = new Vector2();
         this.count = 24;
         this.preset = Preset.GREEN;
         this.size = 4;
-        this.harvestVelocity = com.buran.game.conf.Rules.PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY;
-        this.takeRange = com.buran.game.conf.Rules.PLAYER_CONSUMABLE_TAKE_RANGE;
+        this.harvestVelocity = Rules.PLAYER_RAY_CONSUMABLE_HARVEST_VELOCITY;
+        this.takeRange = Rules.PLAYER_CONSUMABLE_TAKE_RANGE;
         this.boomBox = new BoomBox();
-        this.asteroidsJoiner = com.buran.game.utils.ListOfListsJoiner.newAbstractAsteroidList(lists);
+        this.asteroidsJoiner = ListOfListsJoiner.newAbstractAsteroidList(lists);
         this.particleEmitter = particleEmitter;
     }
 
-    public void harvest(com.buran.game.utils.pool.AbstractPoolable poolable, float dt) {
+    public void harvest(AbstractPoolable poolable, float dt) {
         if (!Buran.isTaken) {
             if (Buran.position.dst(poolable.getPosition()) <= takeRange) {
                 poolable.setAtRayPoint(true);
@@ -101,13 +110,13 @@ public class Ray {
         }
     }
 
-    public void laser(Buran player, com.buran.game.bot.asteroids.AbstractAsteroid asteroid, float dt) {
+    public void laser(Buran player, AbstractAsteroid asteroid, float dt) {
         float dst = Buran.position.dst(asteroid.getPosition());
-        if (dst <= com.buran.game.conf.Rules.PLAYER_LASER_TAKE_RANGE && !Buran.isTaken && !asteroid.isTaken() && asteroid.isActive()) {
+        if (dst <= Rules.PLAYER_LASER_TAKE_RANGE && !Buran.isTaken && !asteroid.isTaken() && asteroid.isActive()) {
             asteroid.setAtRayPoint(true);
-            boomBox.playMusicEffectInLoop(com.buran.game.conf.MSConstants.LASER, 1.0f);
-            float scaleX = (dst / com.buran.game.conf.Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleX();
-            float scaleY = (dst / com.buran.game.conf.Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleY();
+            boomBox.playMusicEffectInLoop(MSConstants.LASER, 1.0f);
+            float scaleX = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleX();
+            float scaleY = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleY();
             particleEmitter.setupFromPointToPoint(
                     asteroid.getPosition().x, asteroid.getPosition().y,
                     Buran.position.x, Buran.position.y,
@@ -128,20 +137,20 @@ public class Ray {
                 );
             }
             asteroid.setTimeToBurn(asteroid.getTimeToBurn() + dt);
-            if (asteroid.getTimeToBurn() >= 0.5f + com.buran.game.conf.Rules.ASTEROID_BURN_TIME / com.buran.game.player.Standing.getInstance().getLaserChargeLevel()) {
-                boomBox.playSound(com.buran.game.conf.MSConstants.DESTROY_ASTEROID_RAY);
-                com.buran.game.utils.pool.ObjectPool.EMITTERS.get(asteroid.getClass())
+            if (asteroid.getTimeToBurn() >= 0.5f + Rules.ASTEROID_BURN_TIME / Standing.getInstance().getLaserChargeLevel()) {
+                boomBox.playSound(MSConstants.DESTROY_ASTEROID_RAY);
+                ObjectPool.EMITTERS.get(asteroid.getClass())
                         .boom(asteroid.getPosition(), PlayerInteractionLevels.NONE);
                 asteroid.destroyWithEffect();
                 asteroid.showSprayCollision();
-                com.buran.game.player.Standing.getInstance().addToStatistics(asteroid.getType(), asteroid.getLevel());
+                Standing.getInstance().addToStatistics(asteroid.getType(), asteroid.getLevel());
                 asteroid.setTimeToBurn(0.0f);
                 asteroid.setAtRayPoint(false);
-                com.buran.game.player.Standing.getInstance().changeLaserChargeLevel(-1);
-                if (com.buran.game.player.Standing.getInstance().getLaserChargeLevel() <= 1) {
-                    boomBox.stopMusicEffect(com.buran.game.conf.MSConstants.LASER);
+                Standing.getInstance().changeLaserChargeLevel(-1);
+                if (Standing.getInstance().getLaserChargeLevel() <= 1) {
+                    boomBox.stopMusicEffect(MSConstants.LASER);
                     Buran.isLaser = false;
-                    com.buran.game.player.Standing.getInstance().setLaserChargeLevel(0);
+                    Standing.getInstance().setLaserChargeLevel(0);
                 }
             }
         } else {
@@ -156,7 +165,7 @@ public class Ray {
             }
         }
         if (!anyAtLaserPoint) {
-            boomBox.stopMusicEffect(com.buran.game.conf.MSConstants.LASER);
+            boomBox.stopMusicEffect(MSConstants.LASER);
         }
     }
 

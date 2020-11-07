@@ -6,13 +6,25 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.buran.game.bot.asteroids.MetalAsteroid;
+import com.buran.game.bot.asteroids.MetalAsteroidEmitter;
+import com.buran.game.bot.asteroids.MineralAsteroid;
+import com.buran.game.bot.asteroids.MineralAsteroidEmitter;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.conf.VConstants;
 import com.buran.game.player.Buran;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.TimeFormat;
+import com.buran.game.utils.pool.ObjectPool;
+import com.buran.game.utils.pool.Poolable;
 
 /**
  * @author soloyes on 17/05/20.
  */
 
-public class AsteroidLaunchEmitter extends com.buran.game.utils.pool.ObjectPool<AsteroidLaunchEmitter.Element> {
+public class AsteroidLaunchEmitter extends ObjectPool<AsteroidLaunchEmitter.Element> {
     private BoomBox boomBox;
 
     private AsteroidLaunchEmitter(Class<? extends Element> clazz) {
@@ -45,7 +57,7 @@ public class AsteroidLaunchEmitter extends com.buran.game.utils.pool.ObjectPool<
         return new Element();
     }
 
-    public class Element implements com.buran.game.utils.pool.Poolable {
+    public class Element implements Poolable {
         private float time;
         private boolean active;
         private GlyphLayout glyphLayout;
@@ -55,7 +67,7 @@ public class AsteroidLaunchEmitter extends com.buran.game.utils.pool.ObjectPool<
         private float dx, dy;
 
         public Element() {
-            this.font48_C = com.buran.game.utils.Assets.getInstance().getAssetManager().get(com.buran.game.conf.PaintConstants.FONT48_C);
+            this.font48_C = Assets.getInstance().getAssetManager().get(PaintConstants.FONT48_C);
             this.glyphLayout = new GlyphLayout(font48_C, "");
             this.position = new Vector2();
             this.destination = new Vector2();
@@ -72,11 +84,11 @@ public class AsteroidLaunchEmitter extends com.buran.game.utils.pool.ObjectPool<
         public void destroy() {
             this.active = false;
             int N = MathUtils.random(5, 8);
-            com.buran.game.bot.asteroids.MineralAsteroidEmitter mineralAsteroidEmitter = (com.buran.game.bot.asteroids.MineralAsteroidEmitter) com.buran.game.utils.pool.ObjectPool.EMITTERS.get(com.buran.game.bot.asteroids.MineralAsteroid.class);
-            com.buran.game.bot.asteroids.MetalAsteroidEmitter metalAsteroidEmitter = (com.buran.game.bot.asteroids.MetalAsteroidEmitter) com.buran.game.utils.pool.ObjectPool.EMITTERS.get(com.buran.game.bot.asteroids.MetalAsteroid.class);
+            MineralAsteroidEmitter mineralAsteroidEmitter = (MineralAsteroidEmitter) ObjectPool.EMITTERS.get(MineralAsteroid.class);
+            MetalAsteroidEmitter metalAsteroidEmitter = (MetalAsteroidEmitter) ObjectPool.EMITTERS.get(MetalAsteroid.class);
             for (int i = 0; i < N; i++) {
                 //out of space
-                destination.set(2 * com.buran.game.conf.Rules.SPACE_WIDTH, 2 * com.buran.game.conf.Rules.SPACE_HEIGHT);
+                destination.set(2 * Rules.SPACE_WIDTH, 2 * Rules.SPACE_HEIGHT);
                 destination.setAngle(i * 360 / N);
                 if (i % 2 == 0) {
                     mineralAsteroidEmitter.getActiveElement().init(position, destination, 1.0f, false);
@@ -85,8 +97,8 @@ public class AsteroidLaunchEmitter extends com.buran.game.utils.pool.ObjectPool<
                 }
             }
             Shake.getInstance().shakeCamera(1.0f, 35, 10);
-            Vibrator.vibrate(com.buran.game.conf.VConstants.TRASH_ASTEROIDS);
-            boomBox.playSound(com.buran.game.conf.MSConstants.TRASH_ASTEROIDS);
+            Vibrator.vibrate(VConstants.TRASH_ASTEROIDS);
+            boomBox.playSound(MSConstants.TRASH_ASTEROIDS);
         }
 
         @Override
@@ -105,7 +117,7 @@ public class AsteroidLaunchEmitter extends com.buran.game.utils.pool.ObjectPool<
                 time = 0.0f;
                 destroy();
             } else {
-                glyphLayout.setText(font48_C, com.buran.game.utils.TimeFormat.formatMS(time));
+                glyphLayout.setText(font48_C, TimeFormat.formatMS(time));
             }
             dx = MathUtils.random(-5, 5);
             dy = MathUtils.random(-5, 5);

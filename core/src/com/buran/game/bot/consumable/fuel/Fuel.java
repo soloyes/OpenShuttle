@@ -4,10 +4,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.buran.game.bot.consumable.AbstractConsumable;
+import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.conf.VConstants;
 import com.buran.game.effects.MoveProcessor;
 import com.buran.game.effects.Shield;
+import com.buran.game.effects.Vibrator;
 import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.labelsticker.Label;
+import com.buran.game.labelsticker.Sticker;
+import com.buran.game.player.Standing;
+import com.buran.game.ui.GameInfoSystem;
+import com.buran.game.utils.Consumer;
 import com.buran.game.utils.pool.AbstractPoolable;
 
 /**
@@ -38,10 +47,10 @@ public class Fuel extends AbstractConsumable {
 
     @Override
     public void badEffect() {
-        com.buran.game.ui.GameInfoSystem.setup(
+        GameInfoSystem.setup(
                 position.x,
                 position.y,
-                com.buran.game.ui.GameInfoSystem.Preset.BOOM,
+                GameInfoSystem.Preset.BOOM,
                 3.0f,
                 false
         );

@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.effects.MoveProcessor;
-import com.shuttle.game.effects.particle.ParticleEmitter;
-import com.shuttle.game.utils.BoundCheck;
-import com.shuttle.game.utils.pool.AbstractPoolable;
+import com.buran.game.effects.MoveProcessor;
+import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.utils.BoundCheck;
+import com.buran.game.utils.pool.AbstractPoolable;
 
 import lombok.Getter;
 import lombok.Setter;

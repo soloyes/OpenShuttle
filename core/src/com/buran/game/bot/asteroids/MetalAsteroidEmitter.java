@@ -1,7 +1,7 @@
 package com.buran.game.bot.asteroids;
 
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.effects.particle.ParticleEmitter;
+import com.buran.game.conf.Rules;
+import com.buran.game.effects.particle.ParticleEmitter;
 
 /**
  * @author soloyes on 11/26/18.

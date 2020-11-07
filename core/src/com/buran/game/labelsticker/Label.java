@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.buran.game.bot.consumable.AbstractConsumable;
+import com.buran.game.conf.PaintConstants;
 import com.buran.game.utils.StickerResolver;
 
 import lombok.Getter;
@@ -77,7 +78,7 @@ public class Label {
                 color.a = consumable.getColor().a;
             }
         } else {
-            color.a = com.buran.game.conf.PaintConstants.LABEL_ALPHA;
+            color.a = PaintConstants.LABEL_ALPHA;
         }
     }
 

@@ -2,10 +2,9 @@ package com.buran.game.bot.consumable;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.shuttle.game.bot.consumable.AbstractConsumable;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.effects.particle.ParticleEmitter;
-import com.shuttle.game.utils.pool.ObjectPool;
+import com.buran.game.conf.Rules;
+import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.utils.pool.ObjectPool;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +13,7 @@ import lombok.Setter;
  * @author soloyes on 02/11/18.
  */
 
-public abstract class AbstractConsumableEmitter extends ObjectPool<com.shuttle.game.bot.consumable.AbstractConsumable> {
+public abstract class AbstractConsumableEmitter extends ObjectPool<AbstractConsumable> {
     private float time;
     @Getter
     @Setter
@@ -27,12 +26,12 @@ public abstract class AbstractConsumableEmitter extends ObjectPool<com.shuttle.g
     private int consumablesMaxCount;
     protected ParticleEmitter particleEmitter;
 
-    AbstractConsumableEmitter(Class<? extends com.shuttle.game.bot.consumable.AbstractConsumable> clazz, ParticleEmitter particleEmitter) {
+    AbstractConsumableEmitter(Class<? extends AbstractConsumable> clazz, ParticleEmitter particleEmitter) {
         super(clazz);
         this.particleEmitter = particleEmitter;
     }
 
-    protected abstract com.shuttle.game.bot.consumable.AbstractConsumable newObject();
+    protected abstract AbstractConsumable newObject();
 
     public void emit() {
         if (consumablesAtStart != 0) {
@@ -43,7 +42,7 @@ public abstract class AbstractConsumableEmitter extends ObjectPool<com.shuttle.g
     }
 
     protected void createConsumable() {
-        com.shuttle.game.bot.consumable.AbstractConsumable abstractConsumable = getActiveElement();
+        AbstractConsumable abstractConsumable = getActiveElement();
         calculateStat(abstractConsumable);
         abstractConsumable.init(
                 MathUtils.random(0, Rules.SPACE_WIDTH),

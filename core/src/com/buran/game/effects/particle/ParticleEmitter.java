@@ -5,6 +5,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.pool.AbstractPoolable;
+import com.buran.game.utils.pool.ObjectPool;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,14 +17,14 @@ import lombok.Setter;
  * Created by FlameXander on 02/07/2017.
  */
 
-public class ParticleEmitter extends com.buran.game.utils.pool.ObjectPool<ParticleEmitter.Particle> {
+public class ParticleEmitter extends ObjectPool<ParticleEmitter.Particle> {
     private TextureRegion particleTexture;
     private ParticleEffectBuilder builder;
     private Vector2 tmp;
 
     public ParticleEmitter() {
         this(Particle.class);
-        this.particleTexture = com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.STAR16_REGION);
+        this.particleTexture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STAR16_REGION);
         this.builder = new ParticleEffectBuilder(this);
         this.tmp = new Vector2(0, 0);
     }
@@ -73,7 +77,7 @@ public class ParticleEmitter extends com.buran.game.utils.pool.ObjectPool<Partic
         return builder;
     }
 
-    public class Particle extends com.buran.game.utils.pool.AbstractPoolable {
+    public class Particle extends AbstractPoolable {
         private float time, duration;
         private float startSize, endSize;
         @Getter

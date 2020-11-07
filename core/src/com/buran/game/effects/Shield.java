@@ -3,6 +3,10 @@ package com.buran.game.effects;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.buran.game.bot.consumable.AbstractConsumable;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.utils.Assets;
 import com.buran.game.utils.pool.AbstractPoolable;
 
 import lombok.Setter;
@@ -13,7 +17,7 @@ import lombok.Setter;
 
 public class Shield {
     private TextureRegion texture;
-    private com.buran.game.bot.consumable.AbstractConsumable consumable;
+    private AbstractConsumable consumable;
     private float width, height;
     @Setter
     private Color color;
@@ -22,23 +26,23 @@ public class Shield {
     private float time;
     private float frequency;
 
-    public Shield(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+    public Shield(AbstractConsumable consumable) {
         this.consumable = consumable;
         switch (consumable.getType()) {
             case AbstractPoolable.Type.FUEL:
-                this.texture = com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.SHIELD_FUEL_REGION);
-                this.width = com.buran.game.conf.PaintConstants.SHIELD_FUEL_WIDTH;
-                this.height = com.buran.game.conf.PaintConstants.SHIELD_FUEL_HEIGHT;
+                this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHIELD_FUEL_REGION);
+                this.width = PaintConstants.SHIELD_FUEL_WIDTH;
+                this.height = PaintConstants.SHIELD_FUEL_HEIGHT;
                 break;
             case AbstractPoolable.Type.STORAGE:
-                this.texture = com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.SHIELD_STORAGE_REGION);
-                this.width = com.buran.game.conf.PaintConstants.SHIELD_STORAGE_WIDTH;
-                this.height = com.buran.game.conf.PaintConstants.SHIELD_STORAGE_HEIGHT;
+                this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHIELD_STORAGE_REGION);
+                this.width = PaintConstants.SHIELD_STORAGE_WIDTH;
+                this.height = PaintConstants.SHIELD_STORAGE_HEIGHT;
                 break;
             case AbstractPoolable.Type.CRATE:
-                this.texture = com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.SHIELD_CRATE_REGION);
-                this.width = com.buran.game.conf.PaintConstants.SHIELD_CRATE_WIDTH;
-                this.height = com.buran.game.conf.PaintConstants.SHIELD_CRATE_HEIGHT;
+                this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHIELD_CRATE_REGION);
+                this.width = PaintConstants.SHIELD_CRATE_WIDTH;
+                this.height = PaintConstants.SHIELD_CRATE_HEIGHT;
                 break;
         }
         this.color = Color.valueOf("00ffffff");
@@ -63,14 +67,14 @@ public class Shield {
             time -= dt;
             if (time <= 1.0f) {
                 consumable.setShielded(false);
-                time = com.buran.game.conf.Rules.CONSUMABLE_SHIELD_TIME;
+                time = Rules.CONSUMABLE_SHIELD_TIME;
             }
-            frequency = com.buran.game.conf.Rules.CONSUMABLE_SHIELD_TIME / time;
-            frequency = frequency / com.buran.game.conf.Rules.CONSUMABLE_SHIELD_TIME;
+            frequency = Rules.CONSUMABLE_SHIELD_TIME / time;
+            frequency = frequency / Rules.CONSUMABLE_SHIELD_TIME;
             frequency = 10 * frequency;
             float da = (frequency % 10) / 10;
-            float minA = com.buran.game.conf.PaintConstants.SHIELD_ALPHA_MIN - da;
-            float maxA = com.buran.game.conf.PaintConstants.SHIELD_ALPHA_MAX - da;
+            float minA = PaintConstants.SHIELD_ALPHA_MIN - da;
+            float maxA = PaintConstants.SHIELD_ALPHA_MAX - da;
             if (minA <= 0.0f) {
                 minA = 0.0f;
             }

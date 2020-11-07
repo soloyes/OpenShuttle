@@ -6,17 +6,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.shuttle.game.conf.MSConstants;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.conf.VConstants;
-import com.shuttle.game.effects.MoveProcessor;
-import com.shuttle.game.effects.Vibrator;
-import com.shuttle.game.effects.particle.ParticleEmitter;
-import com.shuttle.game.player.Standing;
-import com.shuttle.game.screens.ScreenManager;
-import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.Regions;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.conf.VConstants;
+import com.buran.game.effects.MoveProcessor;
+import com.buran.game.effects.Vibrator;
+import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.player.Standing;
+import com.buran.game.screens.ScreenManager;
+import com.buran.game.ui.GameInfoSystem;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.Regions;
 
 /**
  * @author soloyes on 9/11/18.
@@ -145,10 +146,10 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                 showSprayBoom();
                 //score amount decrease when kicked
                 int score = (int) (level * Rules.ANOMALIES_BASE_SCORE_ADD * (v / Rules.ANOMALY_ELECTRIC_VELOCITY));
-                com.buran.game.ui.GameInfoSystem.setup(
+                GameInfoSystem.setup(
                         position.x,
                         position.y,
-                        com.buran.game.ui.GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
+                        GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
                         3.0f,
                         true
                 );

@@ -2,9 +2,8 @@ package com.buran.game.bot.anomaly;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.anomaly.AbstractAnomaly;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.effects.particle.ParticleEmitter;
+import com.buran.game.conf.Rules;
+import com.buran.game.effects.particle.ParticleEmitter;
 
 /**
  * @author soloyes on 9/11/18.
@@ -19,7 +18,7 @@ public class CorrosiveAnomalyEmitter extends AbstractAnomalyEmitter {
         emit();
     }
 
-    private CorrosiveAnomalyEmitter(Class<? extends com.shuttle.game.bot.anomaly.AbstractAnomaly> clazz, ParticleEmitter particleEmitter) {
+    private CorrosiveAnomalyEmitter(Class<? extends AbstractAnomaly> clazz, ParticleEmitter particleEmitter) {
         super(clazz, particleEmitter);
     }
 
@@ -29,7 +28,7 @@ public class CorrosiveAnomalyEmitter extends AbstractAnomalyEmitter {
     }
 
     public void createBonusAnomaly(Vector2 position, int level) {
-        com.shuttle.game.bot.anomaly.AbstractAnomaly anomaly = getActiveElement();
+        AbstractAnomaly anomaly = getActiveElement();
         anomaly.init(position.x, position.y);
         anomaly.setLevel(level);
     }

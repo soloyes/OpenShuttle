@@ -3,11 +3,11 @@ package com.buran.game.bot.asteroids;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.PlayerInteractionLevels;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.effects.particle.ParticleEmitter;
-import com.shuttle.game.utils.pool.ObjectPool;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.PlayerInteractionLevels;
+import com.buran.game.conf.Rules;
+import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.utils.pool.ObjectPool;
 
 import lombok.Getter;
 import lombok.Setter;
