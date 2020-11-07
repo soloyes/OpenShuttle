@@ -1,5 +1,25 @@
 package com.buran.game.player;
 
+import com.buran.game.bot.anomaly.AbstractAnomalyEmitter;
+import com.buran.game.bot.asteroids.AbstractAsteroidEmitter;
+import com.buran.game.bot.consumable.AstronautEmitter;
+import com.buran.game.bot.consumable.CrateEmitter;
+import com.buran.game.bot.consumable.FuelEmitter;
+import com.buran.game.bot.consumable.StorageEmitter;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.conf.VConstants;
+import com.buran.game.effects.BoomBox;
+import com.buran.game.effects.Shake;
+import com.buran.game.effects.Vibrator;
+import com.buran.game.labelsticker.Sticker;
+import com.buran.game.screens.ScreenManager;
+import com.buran.game.ui.GameInfoSystem;
+import com.buran.game.ui.groups.mvc.profiles.Profiles;
+import com.buran.game.ui.groups.mvc.results.DetailedResultDAO;
+import com.buran.game.ui.groups.selector.SelectorGroup;
+import com.buran.game.utils.pool.AbstractPoolable;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,8 +78,8 @@ public final class Standing {
     private boolean lifeShieldDelayFlag;
     private BoomBox boomBox;
     //Type, level, score
-    private Map<com.buran.game.utils.pool.AbstractPoolable.Type, Map<Integer, Integer>> statistics;
-    private com.buran.game.ui.groups.mvc.profiles.Profiles profiles;
+    private Map<AbstractPoolable.Type, Map<Integer, Integer>> statistics;
+    private Profiles profiles;
     @Getter
     private float playTime;
     private float dmgReceived;
@@ -76,10 +96,10 @@ public final class Standing {
 
     private Standing() {
         this.boomBox = new BoomBox();
-        this.statistics = new HashMap<com.buran.game.utils.pool.AbstractPoolable.Type, Map<Integer, Integer>>();
+        this.statistics = new HashMap<AbstractPoolable.Type, Map<Integer, Integer>>();
         this.astronauts = new HashMap<Sticker, Integer>();
         this.usedItems = new HashMap<Sticker, Integer>();
-        this.profiles = new com.buran.game.ui.groups.mvc.profiles.Profiles();
+        this.profiles = new Profiles();
     }
 
     public void setStartLevel(int level) {
@@ -97,7 +117,7 @@ public final class Standing {
         levelsToLive = 0;
     }
 
-    public void addToStatistics(com.buran.game.utils.pool.AbstractPoolable.Type type, Integer level) {
+    public void addToStatistics(AbstractPoolable.Type type, Integer level) {
         if (statistics.get(type) == null) {
             Map<Integer, Integer> map = new HashMap<Integer, Integer>();
             map.put(level, 1);
@@ -169,7 +189,7 @@ public final class Standing {
             if (playingLevel < 1) {
                 playingLevel = 1;
             } else {
-                com.buran.game.ui.GameInfoSystem.setup(
+                GameInfoSystem.setup(
                         ScreenManager.getInstance().getCamera().position.x,
                         ScreenManager.getInstance().getCamera().position.y,
                         String.valueOf(playingLevel),
@@ -178,9 +198,9 @@ public final class Standing {
                         false,
                         true
                 );
-                boomBox.playSound(com.buran.game.conf.MSConstants.LEVEL_UP);
+                boomBox.playSound(MSConstants.LEVEL_UP);
                 Shake.getInstance().shakeCamera(0.3f, 35, 150);
-                Vibrator.vibrate(com.buran.game.conf.VConstants.LEVEL_UP);
+                Vibrator.vibrate(VConstants.LEVEL_UP);
             }
         }
     }
@@ -189,20 +209,20 @@ public final class Standing {
         //todo: to be Balanced
         scoreToLevel = 0;
         for (int i = startLevel; i >= playingLevel; i--) {
-            scoreToLevel += com.buran.game.conf.Rules.INDEX_SCORE_TO_LEVEL * i * (28 - i);
+            scoreToLevel += Rules.INDEX_SCORE_TO_LEVEL * i * (28 - i);
         }
     }
 
     private void addLevelToLive() {
         levelsToLive += 1;
-        if (levelsToLive >= com.buran.game.conf.Rules.LEVELS_TO_LIVE) {
+        if (levelsToLive >= Rules.LEVELS_TO_LIVE) {
             levelsToLive = 0;
             lives++;
-            boomBox.playSound(com.buran.game.conf.MSConstants.UP);
-            com.buran.game.ui.GameInfoSystem.setup(
+            boomBox.playSound(MSConstants.UP);
+            GameInfoSystem.setup(
                     Buran.position.x,
                     Buran.position.y,
-                    "+[GREEN]" + com.buran.game.ui.GameInfoSystem.Preset.UP + "[]",
+                    "+[GREEN]" + GameInfoSystem.Preset.UP + "[]",
                     4.0f,
                     true
             );
@@ -210,8 +230,8 @@ public final class Standing {
     }
 
     public void takeDamage(int amount) {
-        if (!com.buran.game.conf.Rules.GAME_OVER) {
-            float count = amount * com.buran.game.conf.Rules.PLAYER_SHIELD_DAMAGE_FACTOR;
+        if (!Rules.GAME_OVER) {
+            float count = amount * Rules.PLAYER_SHIELD_DAMAGE_FACTOR;
             lifeShield -= count;
             dmgReceived += count;
             if (lifeShield <= 0.0f) {
@@ -234,26 +254,26 @@ public final class Standing {
             if (lives != 0) {
                 Shake.getInstance().shakeCamera(1, 35, 50);
                 fuel = maxFuel;
-                if (!com.buran.game.conf.Rules.GAME_OVER) {
-                    Vibrator.vibrate(com.buran.game.conf.VConstants.PLAYER_LOST_LIVE);
-                    boomBox.playSound(com.buran.game.conf.MSConstants.DOWN);
+                if (!Rules.GAME_OVER) {
+                    Vibrator.vibrate(VConstants.PLAYER_LOST_LIVE);
+                    boomBox.playSound(MSConstants.DOWN);
                 }
             }
         }
         //if hp is <= X% of maxHP
         float p = 1.0f * hp / maxHp;
-        if (p <= com.buran.game.conf.Rules.PLAYER_LOW_LIFE_HP_PERCENT) {
-            boomBox.playSound(com.buran.game.conf.MSConstants.LOW_LIFE_WARNING);
+        if (p <= Rules.PLAYER_LOW_LIFE_HP_PERCENT) {
+            boomBox.playSound(MSConstants.LOW_LIFE_WARNING);
         }
     }
 
     public void changeLives(int amount) {
         lives += amount;
         if (lives == 0) {
-            com.buran.game.conf.Rules.GAME_OVER = true;
+            Rules.GAME_OVER = true;
         } else {
             Buran.respawn();
-            com.buran.game.ui.GameInfoSystem.setup(
+            GameInfoSystem.setup(
                     Buran.position.x,
                     Buran.position.y,
                     "[RED]DESTROYED[]",
@@ -263,8 +283,8 @@ public final class Standing {
         }
     }
 
-    public com.buran.game.ui.groups.mvc.results.DetailedResultDAO getDetails() {
-        com.buran.game.ui.groups.mvc.results.DetailedResultDAO detailedResultDAO = new com.buran.game.ui.groups.mvc.results.DetailedResultDAO();
+    public DetailedResultDAO getDetails() {
+        DetailedResultDAO detailedResultDAO = new DetailedResultDAO();
         //Set game details
         int count;
         // score
@@ -279,7 +299,7 @@ public final class Standing {
         detailedResultDAO.setDmgReceived((int) dmgReceived);
         // enemiesDestroyed
         count = 0;
-        for (Map.Entry<com.buran.game.utils.pool.AbstractPoolable.Type, Map<Integer, Integer>> i : statistics.entrySet()) {
+        for (Map.Entry<AbstractPoolable.Type, Map<Integer, Integer>> i : statistics.entrySet()) {
             switch (i.getKey()) {
                 case ELECTRIC:
                 case MAGNETIC:
@@ -293,7 +313,7 @@ public final class Standing {
         detailedResultDAO.setEnemiesDestroyed(count);
         // minedAsteroids
         count = 0;
-        for (Map.Entry<com.buran.game.utils.pool.AbstractPoolable.Type, Map<Integer, Integer>> i : statistics.entrySet()) {
+        for (Map.Entry<AbstractPoolable.Type, Map<Integer, Integer>> i : statistics.entrySet()) {
             switch (i.getKey()) {
                 case ASTEROID_METAL:
                 case ASTEROID_MINERAL:
@@ -305,7 +325,7 @@ public final class Standing {
         detailedResultDAO.setMinedAsteroids(count);
         // pickUpItems
         count = 0;
-        for (Map.Entry<com.buran.game.utils.pool.AbstractPoolable.Type, Map<Integer, Integer>> i : statistics.entrySet()) {
+        for (Map.Entry<AbstractPoolable.Type, Map<Integer, Integer>> i : statistics.entrySet()) {
             switch (i.getKey()) {
                 case CRATE:
                 case STORAGE:
@@ -331,49 +351,49 @@ public final class Standing {
         // effectiveness
         //
         float c;
-        c = com.buran.game.bot.consumable.AstronautEmitter.getEmitted();
+        c = AstronautEmitter.getEmitted();
         float ate = 0.0f;
         if (c != 0) {
             ate = 1.0f * detailedResultDAO.getAstronautsTaken() / c;
         }
 
-        c = com.buran.game.ui.groups.selector.SelectorGroup.getInstance().getItems();
+        c = SelectorGroup.getInstance().getItems();
         float uie = 0.0f;
         if (c != 0) {
             uie = 1.0f * detailedResultDAO.getUsedItems() / c;
         }
 
-        c = com.buran.game.bot.consumable.CrateEmitter.getEmitted() + com.buran.game.bot.consumable.CrateEmitter.getEmittedGolden() +
-                com.buran.game.bot.consumable.StorageEmitter.getEmitted() + com.buran.game.bot.consumable.StorageEmitter.getEmittedGolden() +
-                com.buran.game.bot.consumable.FuelEmitter.getEmitted() + com.buran.game.bot.consumable.FuelEmitter.getEmittedGolden();
+        c = CrateEmitter.getEmitted() + CrateEmitter.getEmittedGolden() +
+                StorageEmitter.getEmitted() + StorageEmitter.getEmittedGolden() +
+                FuelEmitter.getEmitted() + FuelEmitter.getEmittedGolden();
         float pie = 0.0f;
         if (c != 0) {
             pie = 1.0f * detailedResultDAO.getPickUpItems() / c;
         }
 
-        c = com.buran.game.bot.asteroids.AbstractAsteroidEmitter.getEmitted();
+        c = AbstractAsteroidEmitter.getEmitted();
         float mae = 0.0f;
         if (c != 0) {
             mae = 1.0f * detailedResultDAO.getMinedAsteroids() / c;
         }
 
-        c = com.buran.game.bot.anomaly.AbstractAnomalyEmitter.getEmitted();
+        c = AbstractAnomalyEmitter.getEmitted();
         float ede = 0.0f;
         if (c != 0) {
             ede = 1.0f * detailedResultDAO.getEnemiesDestroyed() / c;
         }
 
         float te;
-        if (detailedResultDAO.getTime() <= com.buran.game.conf.Rules.GAME_SESSION_TIME) {
-            te = 1.0f * detailedResultDAO.getTime() / com.buran.game.conf.Rules.GAME_SESSION_TIME;
+        if (detailedResultDAO.getTime() <= Rules.GAME_SESSION_TIME) {
+            te = 1.0f * detailedResultDAO.getTime() / Rules.GAME_SESSION_TIME;
         } else {
-            te = 1.0f * com.buran.game.conf.Rules.GAME_SESSION_TIME / detailedResultDAO.getTime();
+            te = 1.0f * Rules.GAME_SESSION_TIME / detailedResultDAO.getTime();
         }
 
-        c = com.buran.game.bot.consumable.AstronautEmitter.getEmitted() * com.buran.game.conf.Rules.PLAYER_DAMAGE_DONE_ASTRONAUT +
-                (com.buran.game.bot.consumable.CrateEmitter.getEmitted() + com.buran.game.bot.consumable.CrateEmitter.getEmittedGolden() * com.buran.game.conf.Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * com.buran.game.conf.Rules.PLAYER_DAMAGE_DONE_CRATE +
-                (com.buran.game.bot.consumable.StorageEmitter.getEmitted() + com.buran.game.bot.consumable.StorageEmitter.getEmittedGolden() * com.buran.game.conf.Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * com.buran.game.conf.Rules.PLAYER_DAMAGE_DONE_STORAGE +
-                (com.buran.game.bot.consumable.FuelEmitter.getEmitted() + com.buran.game.bot.consumable.FuelEmitter.getEmittedGolden() * com.buran.game.conf.Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * com.buran.game.conf.Rules.PLAYER_DAMAGE_DONE_FUEL;
+        c = AstronautEmitter.getEmitted() * Rules.PLAYER_DAMAGE_DONE_ASTRONAUT +
+                (CrateEmitter.getEmitted() + CrateEmitter.getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_CRATE +
+                (StorageEmitter.getEmitted() + StorageEmitter.getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_STORAGE +
+                (FuelEmitter.getEmitted() + FuelEmitter.getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_FUEL;
         float dde = 1.0f;
         if (c != 0) {
             dde = 1 - (1.0f * detailedResultDAO.getDmgDone() / c);
@@ -398,7 +418,7 @@ public final class Standing {
 
     private void lifeShieldTicTac(float dt) {
         if (!lifeShieldDelayFlag) {
-            lifeShield += dt / com.buran.game.conf.Rules.PLAYER_SHIELD_REPAIR_FACTOR;
+            lifeShield += dt / Rules.PLAYER_SHIELD_REPAIR_FACTOR;
         }
         if (lifeShield > maxLifeShield) {
             lifeShield = maxLifeShield;
@@ -407,7 +427,7 @@ public final class Standing {
             lifeShieldDelayFlag = true;
             lifeShield = 0.0f;
         }
-        if (lifeShieldDelayTime <= com.buran.game.conf.Rules.PLAYER_SHIELD_DELAY_TIME) {
+        if (lifeShieldDelayTime <= Rules.PLAYER_SHIELD_DELAY_TIME) {
             lifeShieldDelayTime += dt;
         } else {
             lifeShieldDelayFlag = false;

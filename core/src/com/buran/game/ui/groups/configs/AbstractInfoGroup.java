@@ -8,14 +8,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.shuttle.game.conf.MSConstants;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.VConstants;
-import com.shuttle.game.effects.BoomBox;
-import com.shuttle.game.effects.Vibrator;
-import com.shuttle.game.labelsticker.Sticker;
-import com.shuttle.game.ui.groups.PauseGroup;
-import com.shuttle.game.utils.Assets;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.VConstants;
+import com.buran.game.effects.BoomBox;
+import com.buran.game.effects.Vibrator;
+import com.buran.game.labelsticker.Sticker;
+import com.buran.game.ui.groups.PauseGroup;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.StickerResolver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public abstract class AbstractInfoGroup extends Group {
     protected final int delimiter = 24;
     protected final int N = 5;
     protected TextureRegionDrawable up;
-    protected com.buran.game.utils.StickerResolver stickerResolver;
+    protected StickerResolver stickerResolver;
     protected boolean barClicked;
     protected float Y;
     protected boolean isLeft;
@@ -52,7 +53,7 @@ public abstract class AbstractInfoGroup extends Group {
     public AbstractInfoGroup() {
         this.setVisible(false);
         this.boomBox = new BoomBox();
-        this.stickerResolver = new com.buran.game.utils.StickerResolver();
+        this.stickerResolver = new StickerResolver();
         this.skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.group = new VerticalGroup();
         this.buttonList = new ArrayList<ConfigImageButton>();

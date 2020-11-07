@@ -3,7 +3,11 @@ package com.buran.game.player.layers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.buran.game.conf.PaintConstants;
 import com.buran.game.player.Buran;
+import com.buran.game.player.Standing;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.Regions;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,12 +27,12 @@ public class Scratch {
     private Color tmpColor;
 
     public Scratch() {
-        this.textures = com.buran.game.utils.Regions.split(
-                com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.SHUTTLE_SCRATCH),
+        this.textures = Regions.split(
+                Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_SCRATCH),
                 1, 5, 5
         );
-        this.width = com.buran.game.conf.PaintConstants.SHUTTLE_SCRATCH_WIDTH;
-        this.height = com.buran.game.conf.PaintConstants.SHUTTLE_SCRATCH_HEIGHT;
+        this.width = PaintConstants.SHUTTLE_SCRATCH_WIDTH;
+        this.height = PaintConstants.SHUTTLE_SCRATCH_HEIGHT;
         this.tmpColor = new Color();
         this.scaleX = this.scaleY = 1.0f;
     }
@@ -48,7 +52,7 @@ public class Scratch {
     }
 
     public void update(float dt) {
-        if (com.buran.game.player.Standing.getInstance().getLives() != 1) {
+        if (Standing.getInstance().getLives() != 1) {
             alpha -= dt;
             if (alpha <= 0) {
                 alpha = 0.0f;
@@ -57,7 +61,7 @@ public class Scratch {
             alpha = 1.0f;
         }
 
-        int hp = (100 * com.buran.game.player.Standing.getInstance().getHp()) / com.buran.game.player.Standing.getInstance().getMaxHp();
+        int hp = (100 * Standing.getInstance().getHp()) / Standing.getInstance().getMaxHp();
 
         if (hp >= 0 && hp < 20)
             frame = 4;

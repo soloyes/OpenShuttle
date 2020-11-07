@@ -3,7 +3,9 @@ package com.buran.game.player.layers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.buran.game.conf.PaintConstants;
 import com.buran.game.player.Buran;
+import com.buran.game.utils.Assets;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,10 +26,10 @@ public class TakeRangeField {
     private Color tmpColor;
 
     public TakeRangeField() {
-        this.texture = com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.SHUTTLE_TAKE_RANGE_FIELD_REGION);
+        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_TAKE_RANGE_FIELD_REGION);
 
-        this.width = com.buran.game.conf.PaintConstants.SHUTTLE_TAKE_RANGE_FIELD_WIDTH;
-        this.height = com.buran.game.conf.PaintConstants.SHUTTLE_TAKE_RANGE_FIELD_HEIGHT;
+        this.width = PaintConstants.SHUTTLE_TAKE_RANGE_FIELD_WIDTH;
+        this.height = PaintConstants.SHUTTLE_TAKE_RANGE_FIELD_HEIGHT;
         this.tmpColor = new Color();
         this.scaleX = this.scaleY = 1.0f;
     }

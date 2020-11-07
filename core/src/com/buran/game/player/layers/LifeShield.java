@@ -3,7 +3,10 @@ package com.buran.game.player.layers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.buran.game.conf.PaintConstants;
 import com.buran.game.player.Buran;
+import com.buran.game.player.Standing;
+import com.buran.game.utils.Assets;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,14 +24,14 @@ public class LifeShield {
     private float scaleX, scaleY;
 
     public LifeShield() {
-        this.texture = com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.SHUTTLE_LIFE_SHIELD);
-        this.width = com.buran.game.conf.PaintConstants.SHUTTLE_LIFE_SHIELD_WIDTH;
-        this.height = com.buran.game.conf.PaintConstants.SHUTTLE_LIFE_SHIELD_HEIGHT;
+        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_LIFE_SHIELD);
+        this.width = PaintConstants.SHUTTLE_LIFE_SHIELD_WIDTH;
+        this.height = PaintConstants.SHUTTLE_LIFE_SHIELD_HEIGHT;
         this.scaleX = this.scaleY = 1.0f;
     }
 
     public void blink(float alpha) {
-        if (com.buran.game.player.Standing.getInstance().getLifeShield() <= 0) {
+        if (Standing.getInstance().getLifeShield() <= 0) {
             this.alpha = 0.0f;
         } else {
             this.alpha = alpha;

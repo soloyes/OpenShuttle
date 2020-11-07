@@ -4,12 +4,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.ui.groups.GroupType;
-import com.shuttle.game.ui.groups.configs.ConfigImageButton;
-import com.shuttle.game.ui.groups.selector.Selector;
-import com.shuttle.game.utils.Assets;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.ui.groups.GroupType;
+import com.buran.game.ui.groups.selector.Selector;
+import com.buran.game.utils.Assets;
 
 /**
  * @author soloyes on 10/11/19.
@@ -31,11 +30,11 @@ public class LeftGroup extends AbstractInfoGroup {
         this.textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_GLOW_UPDOWN);
         this.up = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_EMPTY_BOX));
 
-        com.shuttle.game.ui.groups.configs.ConfigImageButton button = new com.shuttle.game.ui.groups.configs.ConfigImageButton(up, isLeft);
+        ConfigImageButton button = new ConfigImageButton(up, isLeft);
         group.addActor(new Line(button, true));
         buttonList.add(button);
         for (int i = 1; i < N; i++) {
-            button = new com.shuttle.game.ui.groups.configs.ConfigImageButton(up, isLeft);
+            button = new ConfigImageButton(up, isLeft);
             group.addActor(new Line(button, false));
             buttonList.add(button);
         }
@@ -75,12 +74,12 @@ public class LeftGroup extends AbstractInfoGroup {
     public void setCenter(Selector selector) {
         if (selector == null) {
             for (int i = 0; i < buttonList.size(); i++) {
-                com.shuttle.game.ui.groups.configs.ConfigImageButton b = buttonList.get(i);
+                ConfigImageButton b = buttonList.get(i);
                 b.setCenter(false);
             }
             return;
         }
-        com.shuttle.game.ui.groups.configs.ConfigImageButton button = buttonMap.get(selector.getSticker());
+        ConfigImageButton button = buttonMap.get(selector.getSticker());
         if (button != null) {
             for (int i = 0; i < buttonList.size(); i++) {
                 ConfigImageButton b = buttonList.get(i);

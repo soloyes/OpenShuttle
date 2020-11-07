@@ -3,6 +3,12 @@ package com.buran.game.player;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.effects.BoomBox;
+import com.buran.game.screens.ScreenManager;
+import com.buran.game.ui.Joystick;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.Regions;
 
 import java.util.LinkedList;
 
@@ -18,7 +24,7 @@ public class AbstractBuran implements InputProcessor {
     public static float angle;
     public static boolean isTaken;
     protected LinkedList<Integer> pointer;
-    protected com.buran.game.ui.Joystick joystick;
+    protected Joystick joystick;
     protected BoomBox boomBox;
     @Getter
     @Setter
@@ -52,19 +58,19 @@ public class AbstractBuran implements InputProcessor {
         this.pointer = new LinkedList<Integer>();
         this.boomBox = new BoomBox();
         this.textureRegion = new TextureRegion[4];
-        this.textureRegion[0] = com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.SHUTTLE_REGION);
-        TextureRegion[] tmpRegion = com.buran.game.utils.Regions.split(
-                com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.SHUTTLE_BLUR_REGION),
+        this.textureRegion[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_REGION);
+        TextureRegion[] tmpRegion = Regions.split(
+                Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_BLUR_REGION),
                 1, 3, 3
         );
         System.arraycopy(tmpRegion, 0, textureRegion, 1, tmpRegion.length);
         this.tmpV2 = new Vector2();
         this.tmp2V2 = new Vector2(1, 1);
         this.tmp3V2 = new Vector2();
-        this.width = com.buran.game.conf.PaintConstants.SHUTTLE_WIDTH;
-        this.height = com.buran.game.conf.PaintConstants.SHUTTLE_HEIGHT;
-        this.widthBlur = com.buran.game.conf.PaintConstants.SHUTTLE_BLUR_WIDTH;
-        this.heightBlur = com.buran.game.conf.PaintConstants.SHUTTLE_BLUR_HEIGHT;
+        this.width = PaintConstants.SHUTTLE_WIDTH;
+        this.height = PaintConstants.SHUTTLE_HEIGHT;
+        this.widthBlur = PaintConstants.SHUTTLE_BLUR_WIDTH;
+        this.heightBlur = PaintConstants.SHUTTLE_BLUR_HEIGHT;
         this.scaleX = this.scaleY = 1.0f;
         this.scaleXBlur = this.scaleYBlur = 1.0f;
     }

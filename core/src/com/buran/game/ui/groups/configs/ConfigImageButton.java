@@ -11,10 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.Rounder;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.Rounder;
+import com.buran.game.utils.StickerResolver;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,12 +33,12 @@ public class ConfigImageButton extends ImageButton {
     private TextureRegion glow;
     private TextureRegion justNewRegion;
     private TextureRegion centerRegion;
-    private Map<com.buran.game.utils.StickerResolver.Operation, TextureRegion> types;
+    private Map<StickerResolver.Operation, TextureRegion> types;
     private GlyphLayout glyphLayout;
     private Label bottomLabel;
     private Label topLabel;
     private BitmapFont font36;
-    private com.buran.game.utils.StickerResolver.Operation operation = com.buran.game.utils.StickerResolver.Operation.DEFAULT;
+    private StickerResolver.Operation operation = StickerResolver.Operation.DEFAULT;
     private boolean left;
     @Setter
     private boolean center;
@@ -68,17 +69,17 @@ public class ConfigImageButton extends ImageButton {
         }
 
         this.centerRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_CELL_CENTER);
-        this.types = new HashMap<com.buran.game.utils.StickerResolver.Operation, TextureRegion>() {{
+        this.types = new HashMap<StickerResolver.Operation, TextureRegion>() {{
             put(
-                    com.buran.game.utils.StickerResolver.Operation.ATTACK,
+                    StickerResolver.Operation.ATTACK,
                     Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_ITEM_TYPE_ATTACK)
             );
             put(
-                    com.buran.game.utils.StickerResolver.Operation.SELF,
+                    StickerResolver.Operation.SELF,
                     Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_ITEM_TYPE_SELF)
             );
             put(
-                    com.buran.game.utils.StickerResolver.Operation.PROTECTION,
+                    StickerResolver.Operation.PROTECTION,
                     Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_ITEM_TYPE_PROTECTION)
             );
         }};
@@ -194,7 +195,7 @@ public class ConfigImageButton extends ImageButton {
         }
     }
 
-    public void setupButton(TextureRegion textureRegion, com.buran.game.utils.StickerResolver.Operation operation) {
+    public void setupButton(TextureRegion textureRegion, StickerResolver.Operation operation) {
         textureRegionDrawable.setRegion(textureRegion);
         imageButton.getImage().setDrawable(textureRegionDrawable);
         this.operation = operation;

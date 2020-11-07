@@ -4,6 +4,19 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.buran.game.background.Background;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.ui.groups.InfoGroup;
+import com.buran.game.ui.groups.MenuBackgroundGroup;
+import com.buran.game.ui.groups.MenuBar;
+import com.buran.game.ui.groups.MenuGroup;
+import com.buran.game.ui.groups.RulesGroup;
+import com.buran.game.ui.groups.configs.ConfigGroup;
+import com.buran.game.ui.groups.mvc.profiles.Profiles;
+import com.buran.game.ui.groups.mvc.results.DetailedResultGroup;
+import com.buran.game.ui.groups.mvc.results.ResultGroup;
+import com.buran.game.utils.Assets;
 
 /**
  * @author soloyes on 3/24/18.
@@ -12,10 +25,10 @@ import com.buran.game.background.Background;
 public class MenuScreen extends BaseScreen {
     private Background background;
     private MenuGroup menuGroup;
-    private mvc.results.ResultGroup resultGroup;
-    private configs.ConfigGroup configGroup;
+    private ResultGroup resultGroup;
+    private ConfigGroup configGroup;
     private MenuBackgroundGroup menuBackgroundGroup;
-    private mvc.results.DetailedResultGroup detailedResultGroup;
+    private DetailedResultGroup detailedResultGroup;
     private RulesGroup rulesGroup;
     private BitmapFont font188;
     private BitmapFont font48;
@@ -29,32 +42,32 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        boomBox.stopAllMusicAndPlayThese(com.buran.game.conf.MSConstants.MENU_SONG);
+        boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
     }
 
     @Override
     public void createGUI() {
-        com.buran.game.ui.groups.mvc.profiles.Profiles profiles = new com.buran.game.ui.groups.mvc.profiles.Profiles();
+        Profiles profiles = new Profiles();
         profiles.init();
-        menuBackgroundGroup = new com.buran.game.ui.groups.MenuBackgroundGroup();
+        menuBackgroundGroup = new MenuBackgroundGroup();
         background = new Background();
-        configGroup = new com.buran.game.ui.groups.configs.ConfigGroup();
-        rulesGroup = new com.buran.game.ui.groups.RulesGroup();
-        detailedResultGroup = new com.buran.game.ui.groups.mvc.results.DetailedResultGroup();
-        resultGroup = new com.buran.game.ui.groups.mvc.results.ResultGroup(detailedResultGroup);
-        menuGroup = new com.buran.game.ui.groups.MenuGroup(configGroup, resultGroup);
-        com.buran.game.ui.groups.MenuBar menuBar = new com.buran.game.ui.groups.MenuBar();
-        com.buran.game.ui.groups.InfoGroup infoGroup = new com.buran.game.ui.groups.InfoGroup();
-        this.font188 = com.buran.game.utils.Assets.getInstance().getAssetManager().get(com.buran.game.conf.PaintConstants.FONT188, BitmapFont.class);
-        this.font48 = com.buran.game.utils.Assets.getInstance().getAssetManager().get(com.buran.game.conf.PaintConstants.FONT48, BitmapFont.class);
+        configGroup = new ConfigGroup();
+        rulesGroup = new RulesGroup();
+        detailedResultGroup = new DetailedResultGroup();
+        resultGroup = new ResultGroup(detailedResultGroup);
+        menuGroup = new MenuGroup(configGroup, resultGroup);
+        MenuBar menuBar = new MenuBar();
+        InfoGroup infoGroup = new InfoGroup();
+        this.font188 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT188, BitmapFont.class);
+        this.font48 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT48, BitmapFont.class);
         Label.LabelStyle labelStyle64 = new Label.LabelStyle();
         labelStyle64.font = font48;
         Label.LabelStyle labelStyle188 = new Label.LabelStyle();
         labelStyle188.font = font188;
         this.head = new Label("SHUTTLE", labelStyle188);
-        head.setPosition(com.buran.game.conf.Rules.WORLD_WIDTH / 2 - head.getWidth() / 2, com.buran.game.conf.Rules.WORLD_HEIGHT - 234);
+        head.setPosition(Rules.WORLD_WIDTH / 2 - head.getWidth() / 2, Rules.WORLD_HEIGHT - 234);
         this.underHead = new Label("2D GAME ARCADE", labelStyle64);
-        underHead.setPosition(com.buran.game.conf.Rules.WORLD_WIDTH / 2 - underHead.getWidth() / 2, com.buran.game.conf.Rules.WORLD_HEIGHT - 262);
+        underHead.setPosition(Rules.WORLD_WIDTH / 2 - underHead.getWidth() / 2, Rules.WORLD_HEIGHT - 262);
         stage.addActor(menuBackgroundGroup);
         stage.addActor(menuGroup);
         stage.addActor(configGroup);

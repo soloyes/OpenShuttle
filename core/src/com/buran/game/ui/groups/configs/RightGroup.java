@@ -2,11 +2,10 @@ package com.buran.game.ui.groups.configs;
 
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.ui.groups.GroupType;
-import com.shuttle.game.ui.groups.configs.ConfigImageButton;
-import com.shuttle.game.utils.Assets;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.ui.groups.GroupType;
+import com.buran.game.utils.Assets;
 
 /**
  * @author soloyes on 10/11/19.
@@ -26,7 +25,7 @@ public class RightGroup extends AbstractInfoGroup {
         this.setName(GroupType.RIGHT.name());
         this.up = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_EMPTY_ASTRONAUT));
 
-        com.shuttle.game.ui.groups.configs.ConfigImageButton button = new com.shuttle.game.ui.groups.configs.ConfigImageButton(up, isLeft);
+        ConfigImageButton button = new ConfigImageButton(up, isLeft);
         group.addActor(new Line(button, true));
         buttonList.add(button);
         for (int i = 1; i < N; i++) {
