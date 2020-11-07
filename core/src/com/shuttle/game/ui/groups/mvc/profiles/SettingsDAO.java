@@ -6,6 +6,9 @@ import lombok.Setter;
 public class SettingsDAO {
     @Getter
     @Setter
+    private boolean notification;
+    @Getter
+    @Setter
     private float soundVolume;
     @Getter
     @Setter
@@ -44,6 +47,7 @@ public class SettingsDAO {
     private boolean joystickColor;
 
     public SettingsDAO() {
+        notification = true;
         soundVolume = 1.0f;
         effects = true;
         effectsVolume = 0.5f;
@@ -59,6 +63,7 @@ public class SettingsDAO {
     }
 
     public SettingsDAO(SettingsDAO settingsDAO) {
+        this.notification = settingsDAO.notification;
         this.soundVolume = settingsDAO.soundVolume;
         this.effects = settingsDAO.effects;
         this.effectsVolume = settingsDAO.effectsVolume;

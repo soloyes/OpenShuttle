@@ -14,6 +14,7 @@ import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.labelsticker.Sticker;
+import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.StickerResolver;
 
@@ -124,6 +125,8 @@ public abstract class AbstractInfoGroup extends Group {
     public void updateScroll(Sticker sticker) {
         if (buttonMap.containsKey(sticker)) {
             return;
+        } else {
+            PauseGroup.setWatched(false);
         }
         int i;
         for (i = 0; i < buttonList.size(); i++) {

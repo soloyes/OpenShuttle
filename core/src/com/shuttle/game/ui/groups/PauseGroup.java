@@ -1,5 +1,6 @@
 package com.shuttle.game.ui.groups;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -16,12 +17,14 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
+import com.shuttle.game.effects.Oscillator;
 import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.UIButton;
 import com.shuttle.game.ui.groups.configs.ConfigGroup;
 import com.shuttle.game.ui.groups.configs.LeftGroup;
 import com.shuttle.game.ui.groups.configs.RightGroup;
+import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Restart;
 
@@ -45,9 +48,17 @@ public class PauseGroup extends Group {
     @Setter
     private static boolean pause;
     private GlyphLayout glyphLayout;
+    public static float playPauseWidth;
+    public static float playPauseHeight;
+    private float a;
+    private Oscillator oscillatorA;
+    private Color color;
+    @Setter
+    private static boolean watched = true;
 
     public PauseGroup() {
         this.boomBox = new BoomBox();
+        this.oscillatorA = new Oscillator();
         pause = false;
         this.font60 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT60, BitmapFont.class);
         this.glyphLayout = new GlyphLayout();
@@ -57,7 +68,7 @@ public class PauseGroup extends Group {
         playPauseBtn.setOrigin(Align.center);
         playPauseBtn.setSize(PaintConstants.PLAY_PAUSE_BUTTON_WIDTH, PaintConstants.PLAY_PAUSE_BUTTON_HEIGHT);
         playPauseBtn.setPosition(Rules.WORLD_WIDTH - playPauseBtn.getWidth() - 43, Rules.WORLD_HEIGHT - playPauseBtn.getHeight() - 43);
-
+        this.color = new Color();
         this.configGroup = new ConfigGroup();
         this.leftGroup = LeftGroup.getInstance();
         this.rightGroup = RightGroup.getInstance();
@@ -126,6 +137,7 @@ public class PauseGroup extends Group {
                     } else {
                         boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
                         playPauseBtn.getStyle().imageUp = pauseTexture;
+                        watched = true;
                     }
                     configGroup.setVisible(pause);
                     leftGroup.setVisible(pause);
@@ -159,7 +171,11 @@ public class PauseGroup extends Group {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        Color tmpColor = playPauseBtn.getColor();
+        color.set(tmpColor);
+        color.a = a;
         super.draw(batch, parentAlpha);
+        playPauseBtn.setColor(color);
         if (!Rules.GAME_OVER) {
             font60.draw(
                     batch,
@@ -173,8 +189,15 @@ public class PauseGroup extends Group {
     public void act(float delta) {
         super.act(delta);
         if (!Rules.GAME_OVER) {
+            if (Profiles.getSettings().isNotification() && !pause && !watched) {
+                a = oscillatorA.oscillate(a, 1.0f, 0.3f, 1.0f, delta);
+            } else {
+                a = 1.0f;
+            }
             if (pause) {
                 glyphLayout.setText(font60, "PLAY");
+                playPauseWidth = glyphLayout.width;
+                playPauseHeight = glyphLayout.height;
             } else {
                 glyphLayout.setText(font60, "PAUSE");
             }
