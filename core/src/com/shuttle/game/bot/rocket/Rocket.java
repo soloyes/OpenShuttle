@@ -16,7 +16,7 @@ import com.shuttle.game.utils.pool.AbstractPoolable;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 19/01/19.
+ * @author soloyes on 19/01/19.
  */
 
 public class Rocket extends AbstractPoolable {

@@ -8,7 +8,7 @@ import com.shuttle.game.ui.panels.UILeftPanel;
 import com.shuttle.game.ui.panels.UIRightPanel;
 
 /**
- * @author Shuttle on 02/05/19.
+ * @author soloyes on 02/05/19.
  */
 
 public class Restart {

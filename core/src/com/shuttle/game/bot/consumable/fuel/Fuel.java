@@ -19,7 +19,7 @@ import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Consumer;
 
 /**
- * @author Shuttle on 09/12/18.
+ * @author Buran on 09/12/18.
  */
 
 public class Fuel extends AbstractConsumable {

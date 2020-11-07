@@ -7,7 +7,7 @@ import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
 
 /**
- * @author Shuttle on 11/26/18.
+ * @author soloyes on 11/26/18.
  */
 
 public class MineralAsteroid extends AbstractAsteroid {

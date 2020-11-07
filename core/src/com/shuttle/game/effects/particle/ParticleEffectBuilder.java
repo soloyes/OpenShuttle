@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * @author Shuttle on 30/07/18.
+ * @author soloyes on 30/07/18.
  */
 
 public class ParticleEffectBuilder {

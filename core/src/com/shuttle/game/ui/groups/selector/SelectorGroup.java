@@ -33,7 +33,7 @@ import java.util.List;
 import lombok.Getter;
 
 /**
- * @author Shuttle on 3/22/19.
+ * @author soloyes on 3/22/19.
  */
 
 public class SelectorGroup extends Group {

@@ -1,7 +1,7 @@
 package com.shuttle.game.ui.groups;
 
 /**
- * @author Shuttle on 6/23/18.
+ * @author soloyes on 6/23/18.
  */
 
 public enum GroupType {

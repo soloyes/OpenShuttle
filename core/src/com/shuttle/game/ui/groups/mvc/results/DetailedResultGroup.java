@@ -35,7 +35,7 @@ import com.shuttle.game.utils.Rounder;
 import com.shuttle.game.utils.TimeFormat;
 
 /**
- * @author Shuttle on 11/04/18.
+ * @author soloyes on 11/04/18.
  */
 
 public class DetailedResultGroup extends Group {

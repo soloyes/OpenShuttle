@@ -11,7 +11,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
 
 /**
- * @author Shuttle on 4/6/18.
+ * @author soloyes on 4/6/18.
  */
 
 public abstract class BaseScreen implements Screen {

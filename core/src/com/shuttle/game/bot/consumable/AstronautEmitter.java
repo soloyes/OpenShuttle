@@ -6,7 +6,7 @@ import com.shuttle.game.effects.particle.ParticleEmitter;
 import lombok.Getter;
 
 /**
- * @author Shuttle on 12/11/18.
+ * @author soloyes on 12/11/18.
  */
 
 public class AstronautEmitter extends AbstractConsumableEmitter {

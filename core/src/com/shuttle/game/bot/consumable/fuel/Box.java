@@ -7,7 +7,7 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 09/12/18.
+ * @author Buran on 09/12/18.
  */
 
 public class Box {

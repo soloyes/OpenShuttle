@@ -1,5 +1,9 @@
 package com.shuttle.game.desktop;
 
+/**
+ * @author soloyes on 17/05/20.
+ */
+
 public enum ScreenResolutionTester {
     FOUR_TO_THREE(768, 1024, 3, 4),
     FIVE_TO_THREE(960, 1600, 3, 5),

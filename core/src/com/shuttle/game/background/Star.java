@@ -7,13 +7,13 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Buran;
 import com.shuttle.game.screens.ScreenManager;
 
 import lombok.Setter;
 
 /**
- * @author Shuttle on 12/8/18.
+ * @author soloyes on 12/8/18.
  */
 
 public class Star {
@@ -60,10 +60,10 @@ public class Star {
 
     public void update(float dt) {
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
-            position.x -= Shuttle.velocity.x / (1000 / scaleX);
-            position.y -= Shuttle.velocity.y / (1000 / scaleX);
-            if (normal.set(Shuttle.velocity).len() < 150) {
-                normal.set(Shuttle.velocity).nor();
+            position.x -= Buran.velocity.x / (1000 / scaleX);
+            position.y -= Buran.velocity.y / (1000 / scaleX);
+            if (normal.set(Buran.velocity).len() < 150) {
+                normal.set(Buran.velocity).nor();
                 position.x -= 0.1 * normal.x * scaleX;
                 position.y -= 0.1 * normal.y * scaleX;
             }

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 11/04/20.
+ * @author soloyes on 11/04/20.
  */
 
 @AllArgsConstructor

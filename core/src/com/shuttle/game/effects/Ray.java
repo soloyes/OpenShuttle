@@ -7,7 +7,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PlayerInteractionLevels;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.particle.ParticleEmitter;
-import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Buran;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.utils.ListOfListsJoiner;
 import com.shuttle.game.utils.pool.AbstractPoolable;
@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 10/29/18.
+ * @author soloyes on 10/29/18.
  */
 
 public class Ray {
@@ -51,16 +51,16 @@ public class Ray {
     }
 
     public void harvest(AbstractPoolable poolable, float dt) {
-        if (!Shuttle.isTaken) {
-            if (Shuttle.position.dst(poolable.getPosition()) <= takeRange) {
+        if (!Buran.isTaken) {
+            if (Buran.position.dst(poolable.getPosition()) <= takeRange) {
                 poolable.setAtRayPoint(true);
                 tmp1V2.set(
-                        Shuttle.position)
+                        Buran.position)
                         .sub(poolable.getPosition())
                         .nor()
                         .scl(harvestVelocity);
                 poolable.getPosition().mulAdd(tmp1V2, dt);
-                float dst = Shuttle.position.dst(poolable.getPosition());
+                float dst = Buran.position.dst(poolable.getPosition());
                 float scaleX = (dst / takeRange) * poolable.getSaveScaleX();
                 float scaleY = (dst / takeRange) * poolable.getSaveScaleY();
                 if (scaleX >= poolable.getSaveScaleX()) {
@@ -75,7 +75,7 @@ public class Ray {
 
                 particleEmitter.setupFromPointToPoint(
                         poolable.getPosition().x, poolable.getPosition().y,
-                        Shuttle.position.x, Shuttle.position.y,
+                        Buran.position.x, Buran.position.y,
                         1, 2,
                         preset.startR, preset.startG, preset.startB, 0.3f,
                         preset.endR, preset.endG, preset.endB, 0.3f
@@ -110,16 +110,16 @@ public class Ray {
         }
     }
 
-    public void laser(Shuttle player, AbstractAsteroid asteroid, float dt) {
-        float dst = Shuttle.position.dst(asteroid.getPosition());
-        if (dst <= Rules.PLAYER_LASER_TAKE_RANGE && !Shuttle.isTaken && !asteroid.isTaken() && asteroid.isActive()) {
+    public void laser(Buran player, AbstractAsteroid asteroid, float dt) {
+        float dst = Buran.position.dst(asteroid.getPosition());
+        if (dst <= Rules.PLAYER_LASER_TAKE_RANGE && !Buran.isTaken && !asteroid.isTaken() && asteroid.isActive()) {
             asteroid.setAtRayPoint(true);
             boomBox.playMusicEffectInLoop(MSConstants.LASER, 1.0f);
             float scaleX = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleX();
             float scaleY = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleY();
             particleEmitter.setupFromPointToPoint(
                     asteroid.getPosition().x, asteroid.getPosition().y,
-                    Shuttle.position.x, Shuttle.position.y,
+                    Buran.position.x, Buran.position.y,
                     1.0f, 1.0f,
                     preset.startR, preset.startG, preset.startB, 0.3f,
                     preset.endR, preset.endG, preset.endB, 0.3f
@@ -149,7 +149,7 @@ public class Ray {
                 Standing.getInstance().changeLaserChargeLevel(-1);
                 if (Standing.getInstance().getLaserChargeLevel() <= 1) {
                     boomBox.stopMusicEffect(MSConstants.LASER);
-                    Shuttle.isLaser = false;
+                    Buran.isLaser = false;
                     Standing.getInstance().setLaserChargeLevel(0);
                 }
             }

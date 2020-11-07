@@ -3,7 +3,7 @@ package com.shuttle.game.effects;
 import java.util.LinkedList;
 
 /**
- * @author Shuttle on 29/10/18.
+ * @author soloyes on 29/10/18.
  */
 
 public class Fibonacci {

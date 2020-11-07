@@ -3,7 +3,7 @@ package com.shuttle.game.utils;
 import java.text.DecimalFormat;
 
 /**
- * @author Shuttle on 4/22/19.
+ * @author soloyes on 4/22/19.
  */
 
 public class Rounder {

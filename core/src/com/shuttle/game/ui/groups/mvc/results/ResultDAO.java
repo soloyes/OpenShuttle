@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 7/14/18.
+ * @author soloyes on 7/14/18.
  */
 
 public class ResultDAO {

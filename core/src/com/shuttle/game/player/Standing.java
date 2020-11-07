@@ -27,7 +27,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 8/2/18.
+ * @author soloyes on 8/2/18.
  */
 
 public final class Standing {
@@ -220,8 +220,8 @@ public final class Standing {
             lives++;
             boomBox.playSound(MSConstants.UP);
             GameInfoSystem.setup(
-                    Shuttle.position.x,
-                    Shuttle.position.y,
+                    Buran.position.x,
+                    Buran.position.y,
                     "+[GREEN]" + GameInfoSystem.Preset.UP + "[]",
                     4.0f,
                     true
@@ -272,10 +272,10 @@ public final class Standing {
         if (lives == 0) {
             Rules.GAME_OVER = true;
         } else {
-            Shuttle.respawn();
+            Buran.respawn();
             GameInfoSystem.setup(
-                    Shuttle.position.x,
-                    Shuttle.position.y,
+                    Buran.position.x,
+                    Buran.position.y,
                     "[RED]DESTROYED[]",
                     8.0f,
                     true

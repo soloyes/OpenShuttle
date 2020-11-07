@@ -8,7 +8,7 @@ import com.shuttle.game.ui.groups.GroupType;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 10/11/19.
+ * @author soloyes on 10/11/19.
  */
 
 public class RightGroup extends AbstractInfoGroup {

@@ -37,7 +37,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 17/06/19.
+ * @author soloyes on 17/06/19.
  */
 
 public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {

@@ -7,7 +7,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 12/8/18.
+ * @author soloyes on 12/8/18.
  */
 
 public class StarSky {

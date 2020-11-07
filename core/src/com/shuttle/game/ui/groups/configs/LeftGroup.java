@@ -11,7 +11,7 @@ import com.shuttle.game.ui.groups.selector.Selector;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 10/11/19.
+ * @author soloyes on 10/11/19.
  */
 
 public class LeftGroup extends AbstractInfoGroup {

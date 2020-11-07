@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 15/05/19.
+ * @author soloyes on 15/05/19.
  */
 
 public class LabelTime {

@@ -4,8 +4,9 @@ import com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 
 /**
- * @author Shuttle on 7/14/18.
+ * @author soloyes on 7/14/18.
  */
+
 public class Results {
     private StringBuffer stringBuffer;
     private Profiles profiles;

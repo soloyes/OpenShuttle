@@ -1,7 +1,7 @@
 package com.shuttle.game.conf;
 
 /**
- * @author Shuttle on 10/16/18.
+ * @author soloyes on 10/16/18.
  * Vibration time constants (VConstants)
  */
 

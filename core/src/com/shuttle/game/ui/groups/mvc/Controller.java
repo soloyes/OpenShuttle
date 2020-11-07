@@ -3,7 +3,7 @@ package com.shuttle.game.ui.groups.mvc;
 import java.util.List;
 
 /**
- * @author Shuttle on 21/06/19.
+ * @author soloyes on 21/06/19.
  */
 
 public interface Controller<T> {

@@ -28,7 +28,7 @@ import com.shuttle.game.utils.Assets;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 03/04/20.
+ * @author soloyes on 03/04/20.
  */
 
 public class InfoGroup extends Group {
@@ -48,7 +48,7 @@ public class InfoGroup extends Group {
         font96 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT96, BitmapFont.class);
         glyphLayout = new GlyphLayout(font96, "INFO");
         Label shareLabel = new Label("Share Results", style64);
-        Label rateLabel = new Label("Rate Shuttle", style64);
+        Label rateLabel = new Label("Rate Buran", style64);
         Label aboutLabel = new Label("About Us", style64);
         Label rulesLabel = new Label("Rules", style64);
         Container<Table> container = new Container<Table>(table);

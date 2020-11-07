@@ -1,7 +1,7 @@
 package com.shuttle.game.conf;
 
 /**
- * @author Shuttle on 8/28/18.
+ * @author soloyes on 8/28/18.
  * Object paint constants (PaintConstants)
  */
 //todo: Make 128*128 pics in the end?

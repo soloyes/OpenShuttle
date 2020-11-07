@@ -14,7 +14,7 @@ import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 01/04/20.
+ * @author soloyes on 01/04/20.
  */
 
 public class MenuBackgroundGroup extends Group {

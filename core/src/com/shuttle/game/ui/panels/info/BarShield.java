@@ -5,7 +5,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 15/03/19.
+ * @author soloyes on 15/03/19.
  */
 
 public class BarShield extends AbstractBar {

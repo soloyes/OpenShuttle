@@ -12,7 +12,7 @@ import com.shuttle.game.utils.RadialSprite;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 29/03/20.
+ * @author soloyes on 29/03/20.
  */
 
 public class ConfigCheckBox extends CheckBox {

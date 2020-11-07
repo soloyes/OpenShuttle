@@ -21,7 +21,7 @@ import com.shuttle.game.ui.groups.mvc.profiles.ProfilesController;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 3/24/18.
+ * @author soloyes on 3/24/18.
  */
 
 public class MenuBar extends Group {

@@ -14,7 +14,7 @@ import com.shuttle.game.utils.RadialSprite;
 import com.shuttle.game.utils.Rounder;
 
 /**
- * @author Shuttle on 3/3/19.
+ * @author soloyes on 3/3/19.
  */
 
 public class PlayerXP {

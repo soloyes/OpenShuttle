@@ -5,7 +5,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.particle.ParticleEmitter;
 
 /**
- * @author Shuttle on 9/11/18.
+ * @author soloyes on 9/11/18.
  */
 
 public class ElectricalAnomalyEmitter extends AbstractAnomalyEmitter {

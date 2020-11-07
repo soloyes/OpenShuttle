@@ -17,7 +17,7 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.screens.ScreenManager;
 
 /**
- * @author Shuttle on 03/06/18.
+ * @author soloyes on 03/06/18.
  */
 
 public class Assets {

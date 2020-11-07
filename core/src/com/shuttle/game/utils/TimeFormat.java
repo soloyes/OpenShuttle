@@ -4,7 +4,7 @@ import java.util.Formatter;
 import java.util.Locale;
 
 /**
- * @author Shuttle on 12/04/19.
+ * @author soloyes on 12/04/19.
  */
 
 public class TimeFormat {

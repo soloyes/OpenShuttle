@@ -3,6 +3,10 @@ package com.shuttle.game.ui.groups.mvc.profiles;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @author soloyes on 19/04/20.
+ */
+
 public class SettingsDAO {
     @Getter
     @Setter

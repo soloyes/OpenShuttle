@@ -19,7 +19,7 @@ import com.shuttle.game.utils.pool.ObjectPool;
 import java.util.List;
 
 /**
- * @author Shuttle on 9/10/18.
+ * @author soloyes on 9/10/18.
  */
 
 public class AnomalyTimer {

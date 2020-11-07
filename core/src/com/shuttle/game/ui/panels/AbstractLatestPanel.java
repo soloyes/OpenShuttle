@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Shuttle on 15/05/19.
+ * @author soloyes on 15/05/19.
  */
 
 public abstract class AbstractLatestPanel {

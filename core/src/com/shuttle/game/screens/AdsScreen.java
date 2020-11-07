@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shuttle.game.ui.groups.ads.AdsGroup;
 
 /**
- * Created by Shuttle on 04.11.2020.
+ * Created by soloyes on 04/11/20.
  */
 
 public class AdsScreen extends BaseScreen implements Screen {

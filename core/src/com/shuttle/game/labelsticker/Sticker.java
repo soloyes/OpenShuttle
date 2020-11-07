@@ -23,7 +23,7 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.AsteroidLaunchEmitter;
 import com.shuttle.game.effects.BoomBox;
-import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Buran;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.player.navigation.Radar;
 import com.shuttle.game.ui.GameInfoSystem;
@@ -37,7 +37,7 @@ import java.util.List;
 import lombok.Getter;
 
 /**
- * @author Shuttle on 3/27/19.
+ * @author soloyes on 3/27/19.
  */
 
 public enum Sticker {
@@ -46,11 +46,11 @@ public enum Sticker {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
-                float d = Rules.PLAYER_BOOST_ENGINE_POWER - Shuttle.velocity.len();
-                Shuttle.setShadowsCoordinates();
-                Shuttle.velocity.add(
-                        d * (float) Math.cos(Math.toRadians(Shuttle.angle)),
-                        d * (float) Math.sin(Math.toRadians(Shuttle.angle))
+                float d = Rules.PLAYER_BOOST_ENGINE_POWER - Buran.velocity.len();
+                Buran.setShadowsCoordinates();
+                Buran.velocity.add(
+                        d * (float) Math.cos(Math.toRadians(Buran.angle)),
+                        d * (float) Math.sin(Math.toRadians(Buran.angle))
                 );
             }
         }
@@ -179,7 +179,7 @@ public enum Sticker {
                 CorrosiveAnomalyEmitter corrosiveAnomalyEmitter = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
                 List<AbstractAnomaly> anomalies = corrosiveAnomalyEmitter.getActiveList();
                 for (int i = 0; i < anomalies.size(); i++) {
-                    if (anomalies.get(i).getPosition().dst(Shuttle.position) <= Rules.WORLD_WIDTH) {
+                    if (anomalies.get(i).getPosition().dst(Buran.position) <= Rules.WORLD_WIDTH) {
                         if (!anomalies.get(i).isTaken()) {
                             anomalies.get(i).setMarkedToBoom(true);
                             standing.addToStatistics(anomalies.get(i).getType(), anomalies.get(i).getLevel());
@@ -249,7 +249,7 @@ public enum Sticker {
     LASER("[#FFFFFF]LASER[]\n[#cc6e54]The ability to destroy asteroids at a distance appears only with a non-zero charge of the laser scale. The purple scale indicates the presence of a laser, and gives you the option of automatic fire.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
-            Shuttle.isLaser = true;
+            Buran.isLaser = true;
             Standing.getInstance().setLaserChargeLevel(Standing.getInstance().getMaxLaserChargeLevel());
         }
 
@@ -799,7 +799,7 @@ public enum Sticker {
                                     true
                             );
                         } else {
-                            Shuttle.isLaser = false;
+                            Buran.isLaser = false;
                             GameInfoSystem.setup(
                                     consumable.getPosition().x, consumable.getPosition().y,
                                     "-[RED]" + GameInfoSystem.Preset.LASER + "[]",

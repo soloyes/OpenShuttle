@@ -11,7 +11,7 @@ import com.shuttle.game.utils.RadialSprite;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 02/04/20.
+ * @author soloyes on 02/04/20.
  */
 
 public class ProfilesCheckBox extends CheckBox {

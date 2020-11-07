@@ -8,7 +8,7 @@ import com.shuttle.game.ui.groups.mvc.View;
 import java.util.List;
 
 /**
- * @author Shuttle on 17/06/19.
+ * @author soloyes on 17/06/19.
  */
 
 public class ProfilesController implements Controller<ProfileDAO> {

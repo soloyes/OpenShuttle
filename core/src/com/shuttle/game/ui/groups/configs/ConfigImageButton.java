@@ -24,7 +24,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 10/12/19.
+ * @author soloyes on 10/12/19.
  */
 
 public class ConfigImageButton extends ImageButton {

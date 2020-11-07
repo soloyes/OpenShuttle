@@ -25,7 +25,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 03/06/18.
+ * @author soloyes on 03/06/18.
  */
 
 public class CorrosiveAnomaly extends AbstractAnomaly {

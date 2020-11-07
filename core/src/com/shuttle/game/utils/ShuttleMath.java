@@ -1,7 +1,7 @@
 package com.shuttle.game.utils;
 
 /**
- * @author Shuttle on 03/07/18.
+ * @author soloyes on 03/07/18.
  */
 
 public class ShuttleMath {

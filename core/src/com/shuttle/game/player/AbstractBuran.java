@@ -16,10 +16,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 10/24/18.
+ * @author soloyes on 10/24/18.
  */
 
-public class AbstractShuttle implements InputProcessor {
+public class AbstractBuran implements InputProcessor {
     public static Vector2 position, velocity;
     public static float angle;
     public static boolean isTaken;
@@ -54,7 +54,7 @@ public class AbstractShuttle implements InputProcessor {
         isTaken = false;
     }
 
-    protected AbstractShuttle() {
+    protected AbstractBuran() {
         this.pointer = new LinkedList<Integer>();
         this.boomBox = new BoomBox();
         this.textureRegion = new TextureRegion[4];

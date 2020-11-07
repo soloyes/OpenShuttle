@@ -1,7 +1,7 @@
 package com.shuttle.game.effects;
 
 /**
- * @author Shuttle on 29/10/18.
+ * @author soloyes on 29/10/18.
  */
 
 public class Oscillator {

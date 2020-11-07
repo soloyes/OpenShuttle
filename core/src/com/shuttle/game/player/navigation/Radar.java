@@ -19,7 +19,7 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Oscillator;
-import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Buran;
 import com.shuttle.game.ui.groups.PauseGroup;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.ListOfListsJoiner;
@@ -27,7 +27,7 @@ import com.shuttle.game.utils.pool.AbstractPoolable;
 import com.shuttle.game.utils.pool.ObjectPool;
 
 /**
- * @author Shuttle on 7/7/18.
+ * @author soloyes on 7/7/18.
  */
 
 public class Radar {
@@ -68,7 +68,7 @@ public class Radar {
 
     public void render(SpriteBatch batch) {
         if (isActive) {
-            if (!Shuttle.isTaken) {
+            if (!Buran.isTaken) {
                 drawRadar(batch);
             }
         }
@@ -88,17 +88,17 @@ public class Radar {
     }
 
     private void drawPoolable(SpriteBatch batch, AbstractPoolable abstractPoolable) {
-        float d = Vector2.dst(Shuttle.position.x, Shuttle.position.y, abstractPoolable.getPosition().x, abstractPoolable.getPosition().y);
+        float d = Vector2.dst(Buran.position.x, Buran.position.y, abstractPoolable.getPosition().x, abstractPoolable.getPosition().y);
         if (d < 2000.0f) {
             float sc = (1.0f - d / 2000.0f) * 2.0f + 2.0f + dotSize;
-            tmp1V2.set(abstractPoolable.getPosition()).sub(Shuttle.position).nor().scl(d / 2000.0f * 300.0f);
+            tmp1V2.set(abstractPoolable.getPosition()).sub(Buran.position).nor().scl(d / 2000.0f * 300.0f);
             batch.setColor(setPointColor(abstractPoolable));
-            batch.draw(dot, Shuttle.position.x + tmp1V2.x, Shuttle.position.y + tmp1V2.y, 8f, 8f, PaintConstants.RADAR_DOT_WIDTH, PaintConstants.RADAR_DOT_HEIGHT, sc, sc, 0);
+            batch.draw(dot, Buran.position.x + tmp1V2.x, Buran.position.y + tmp1V2.y, 8f, 8f, PaintConstants.RADAR_DOT_WIDTH, PaintConstants.RADAR_DOT_HEIGHT, sc, sc, 0);
         }
     }
 
     private Color setPointColor(AbstractPoolable abstractPoolable) {
-        float d = Vector2.dst(Shuttle.position.x, Shuttle.position.y, Blackhole.position.x, Blackhole.position.y);
+        float d = Vector2.dst(Buran.position.x, Buran.position.y, Blackhole.position.x, Blackhole.position.y);
         int c;
         if (d <= Rules.BLACKHOLE_NOISE_RANGE && !PauseGroup.isPause()) {
             c = MathUtils.random(0, 4);
@@ -127,9 +127,9 @@ public class Radar {
     public void update(float dt) {
         if (isActive) {
             updateRadar(dt);
-            float d = Vector2.dst(Shuttle.position.x, Shuttle.position.y, Blackhole.position.x, Blackhole.position.y);
+            float d = Vector2.dst(Buran.position.x, Buran.position.y, Blackhole.position.x, Blackhole.position.y);
             if (d <= Rules.BLACKHOLE_NOISE_RANGE) {
-                if (!Shuttle.isTaken && !Rules.GAME_OVER) {
+                if (!Buran.isTaken && !Rules.GAME_OVER) {
                     boomBox.playMusicEffectInLoop(MSConstants.RADAR_WHITE_NOISE_MUSIC, 1.0f);
                 } else {
                     boomBox.stopMusicEffect(MSConstants.RADAR_WHITE_NOISE_MUSIC);

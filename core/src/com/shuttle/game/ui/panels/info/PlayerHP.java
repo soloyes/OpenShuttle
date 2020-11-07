@@ -12,7 +12,7 @@ import com.shuttle.game.player.Standing;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 4/22/19.
+ * @author soloyes on 4/22/19.
  */
 
 public class PlayerHP {

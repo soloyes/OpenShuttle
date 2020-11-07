@@ -44,7 +44,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 6/23/18.
+ * @author soloyes on 6/23/18.
  */
 
 public class ConfigGroup extends Group {

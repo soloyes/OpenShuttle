@@ -15,7 +15,7 @@ import com.shuttle.game.utils.StickerResolver;
 import lombok.Getter;
 
 /**
- * @author Shuttle on 3/22/19.
+ * @author soloyes on 3/22/19.
  */
 
 public class Selector {

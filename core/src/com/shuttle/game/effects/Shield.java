@@ -11,7 +11,7 @@ import com.shuttle.game.utils.Assets;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 15/12/18.
+ * @author soloyes on 15/12/18.
  */
 
 public class Shield {

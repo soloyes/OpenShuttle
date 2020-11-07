@@ -3,7 +3,7 @@ package com.shuttle.game.effects;
 import java.util.LinkedList;
 
 /**
- * @author Shuttle on 11/7/18.
+ * @author soloyes on 11/7/18.
  */
 
 public class PrettySound {

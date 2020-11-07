@@ -23,6 +23,10 @@ import com.shuttle.game.ui.UIButton;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.RadialSprite;
 
+/**
+ * @author soloyes on 17/11/20.
+ */
+
 public class AdsGroup extends Group {
     private Button buttonContinue;
     private Button buttonGetFull;

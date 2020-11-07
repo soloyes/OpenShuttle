@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 /**
- * @author Shuttle on 8/29/18.
+ * @author soloyes on 8/29/18.
  */
 
 public class Shake {

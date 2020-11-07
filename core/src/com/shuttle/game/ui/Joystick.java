@@ -20,7 +20,7 @@ import com.shuttle.game.utils.Regions;
 import java.util.LinkedList;
 
 /**
- * Created by FlameXander on 30.09.2017.
+ * Created by FlameXander on 30/09/2017.
  */
 
 public class Joystick extends Actor implements InputProcessor {

@@ -8,7 +8,7 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 02/04/20.
+ * @author soloyes on 02/04/20.
  */
 
 public class ResultsCheckBoxStyle extends CheckBox.CheckBoxStyle {

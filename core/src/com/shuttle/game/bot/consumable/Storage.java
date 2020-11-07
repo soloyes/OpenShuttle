@@ -14,7 +14,7 @@ import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.labelsticker.Label;
 import com.shuttle.game.labelsticker.Sticker;
-import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Buran;
 import com.shuttle.game.player.navigation.Radar;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Assets;
@@ -24,7 +24,7 @@ import com.shuttle.game.utils.pool.ObjectPool;
 import java.util.List;
 
 /**
- * @author Shuttle on 22/11/18.
+ * @author soloyes on 22/11/18.
  */
 
 public class Storage extends AbstractConsumable {
@@ -227,7 +227,7 @@ public class Storage extends AbstractConsumable {
                 if (r == 0 && (Radar.isActive || radar)) {
                     r += MathUtils.random(1, 3);
                 }
-                if (r == 1 && (Shuttle.isLaser || laser)) {
+                if (r == 1 && (Buran.isLaser || laser)) {
                     r += MathUtils.random(1, 2);
                 }
 

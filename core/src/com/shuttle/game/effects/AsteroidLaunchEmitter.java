@@ -14,11 +14,15 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.conf.VConstants;
-import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Buran;
 import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.TimeFormat;
 import com.shuttle.game.utils.pool.ObjectPool;
 import com.shuttle.game.utils.pool.Poolable;
+
+/**
+ * @author soloyes on 17/05/20.
+ */
 
 public class AsteroidLaunchEmitter extends ObjectPool<AsteroidLaunchEmitter.Element> {
     private BoomBox boomBox;
@@ -33,7 +37,7 @@ public class AsteroidLaunchEmitter extends ObjectPool<AsteroidLaunchEmitter.Elem
     }
 
     public void addToList() {
-        getActiveElement().init(Shuttle.position.x, Shuttle.position.y);
+        getActiveElement().init(Buran.position.x, Buran.position.y);
     }
 
     public void update(float dt) {

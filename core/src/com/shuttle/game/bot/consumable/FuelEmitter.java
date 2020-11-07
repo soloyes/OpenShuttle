@@ -7,7 +7,7 @@ import com.shuttle.game.effects.particle.ParticleEmitter;
 import lombok.Getter;
 
 /**
- * @author Shuttle on 24/11/18.
+ * @author soloyes on 24/11/18.
  */
 
 public class FuelEmitter extends AbstractConsumableEmitter {

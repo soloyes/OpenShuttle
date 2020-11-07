@@ -6,7 +6,7 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 29/03/20.
+ * @author soloyes on 29/03/20.
  */
 
 public class LevelConfigCheckBoxStyle extends ConfigCheckBoxStyle {

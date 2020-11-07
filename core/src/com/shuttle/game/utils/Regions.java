@@ -3,7 +3,7 @@ package com.shuttle.game.utils;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
- * @author Shuttle on 29/06/18.
+ * @author soloyes on 29/06/18.
  */
 
 public class Regions {

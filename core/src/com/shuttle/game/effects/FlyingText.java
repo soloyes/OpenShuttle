@@ -10,7 +10,7 @@ import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 03/07/18.
+ * @author soloyes on 03/07/18.
  */
 
 public class FlyingText {

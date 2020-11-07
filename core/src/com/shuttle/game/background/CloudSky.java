@@ -7,14 +7,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.Oscillator;
-import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Buran;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.utils.Assets;
 
 import lombok.Getter;
 
 /**
- * @author Shuttle on 12/8/18.
+ * @author soloyes on 12/8/18.
  * bc - big cloud
  * mc - middle cloud
  * sc - small cloud
@@ -96,10 +96,10 @@ public class CloudSky {
 
     public void update(float dt) {
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
-            bcDx += Shuttle.velocity.x / 1200;
-            bcDy += Shuttle.velocity.y / 1200;
-            if (normal.set(Shuttle.velocity).len() < 150) {
-                normal.set(Shuttle.velocity).nor();
+            bcDx += Buran.velocity.x / 1200;
+            bcDy += Buran.velocity.y / 1200;
+            if (normal.set(Buran.velocity).len() < 150) {
+                normal.set(Buran.velocity).nor();
                 bcDx += 0.1 * normal.x;
                 bcDy += 0.1 * normal.y;
             }
@@ -127,20 +127,20 @@ public class CloudSky {
         }
 
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
-            mcDx += Shuttle.velocity.x / 900;
-            mcDy += Shuttle.velocity.y / 900;
-            if (normal.set(Shuttle.velocity).len() < 150) {
-                normal.set(Shuttle.velocity).nor();
+            mcDx += Buran.velocity.x / 900;
+            mcDy += Buran.velocity.y / 900;
+            if (normal.set(Buran.velocity).len() < 150) {
+                normal.set(Buran.velocity).nor();
                 mcDx += 0.2 * normal.x;
                 mcDy += 0.2 * normal.y;
             }
         }
 
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
-            scDx += Shuttle.velocity.x / 600;
-            scDy += Shuttle.velocity.y / 600;
-            if (normal.set(Shuttle.velocity).len() < 150) {
-                normal.set(Shuttle.velocity).nor();
+            scDx += Buran.velocity.x / 600;
+            scDy += Buran.velocity.y / 600;
+            if (normal.set(Buran.velocity).len() < 150) {
+                normal.set(Buran.velocity).nor();
                 scDx += 0.3 * normal.x;
                 scDy += 0.3 * normal.y;
             }

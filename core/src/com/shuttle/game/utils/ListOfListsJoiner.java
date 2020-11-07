@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author Shuttle on 11/22/18.
+ * @author soloyes on 11/22/18.
  */
 
 public final class ListOfListsJoiner<T> {

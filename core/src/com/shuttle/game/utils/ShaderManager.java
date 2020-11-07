@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 
 /**
- * @author Shuttle on 10/8/18.
+ * @author soloyes on 10/8/18.
  */
 
 public interface ShaderManager {

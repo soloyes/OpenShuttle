@@ -3,7 +3,7 @@ package com.shuttle.game.conf;
 import com.shuttle.game.player.Standing;
 
 /**
- * @author Shuttle on 10/16/18.
+ * @author soloyes on 10/16/18.
  * Game rules constants (Rules)
  */
 

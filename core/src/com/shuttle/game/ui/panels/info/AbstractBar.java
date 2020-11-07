@@ -11,7 +11,7 @@ import com.shuttle.game.player.Standing;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 3/14/19.
+ * @author soloyes on 3/14/19.
  */
 
 public abstract class AbstractBar {

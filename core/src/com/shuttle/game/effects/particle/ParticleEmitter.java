@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Created by FlameXander on 02.07.2017.
+ * Created by FlameXander on 02/07/2017.
  */
 
 public class ParticleEmitter extends ObjectPool<ParticleEmitter.Particle> {

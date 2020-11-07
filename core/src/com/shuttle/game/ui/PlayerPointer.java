@@ -7,17 +7,17 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.shuttle.game.conf.PaintConstants;
 import com.shuttle.game.conf.Rules;
-import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Buran;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 8/28/18.
+ * @author soloyes on 8/28/18.
  */
 
 public class PlayerPointer {
     private TextureRegion arrow;
     private TextureRegion mark;
-    private Shuttle player;
+    private Buran player;
     private Vector2 tmp1V2;
     private float width;
     private float height;
@@ -29,7 +29,7 @@ public class PlayerPointer {
     private float d;
     private Color color;
 
-    public PlayerPointer(Shuttle player) {
+    public PlayerPointer(Buran player) {
         this.arrow = Assets.getInstance().getAtlas().findRegion(PaintConstants.POINTER_ARROW);
         this.mark = Assets.getInstance().getAtlas().findRegion(PaintConstants.POINTER_MARK);
         this.width = PaintConstants.POINTER_WIDTH;
@@ -46,17 +46,17 @@ public class PlayerPointer {
     public void render(SpriteBatch batch) {
         Color tmpColor = batch.getColor();
         boolean lost;
-        if (Shuttle.position.x - player.getWidth() / 2 > Rules.SPACE_WIDTH) {
-            tmp1V2.set(Rules.SPACE_WIDTH - width, Shuttle.position.y);
+        if (Buran.position.x - player.getWidth() / 2 > Rules.SPACE_WIDTH) {
+            tmp1V2.set(Rules.SPACE_WIDTH - width, Buran.position.y);
             lost = true;
-        } else if (Shuttle.position.x + player.getWidth() / 2 < 0) {
-            tmp1V2.set(0, Shuttle.position.y);
+        } else if (Buran.position.x + player.getWidth() / 2 < 0) {
+            tmp1V2.set(0, Buran.position.y);
             lost = true;
-        } else if (Shuttle.position.y - player.getHeight() / 2 > Rules.SPACE_HEIGHT) {
-            tmp1V2.set(Shuttle.position.x, Rules.SPACE_HEIGHT - height);
+        } else if (Buran.position.y - player.getHeight() / 2 > Rules.SPACE_HEIGHT) {
+            tmp1V2.set(Buran.position.x, Rules.SPACE_HEIGHT - height);
             lost = true;
-        } else if (Shuttle.position.y + player.getHeight() / 2 < 0) {
-            tmp1V2.set(Shuttle.position.x, 0);
+        } else if (Buran.position.y + player.getHeight() / 2 < 0) {
+            tmp1V2.set(Buran.position.x, 0);
             lost = true;
         } else {
             lost = false;
@@ -89,7 +89,7 @@ public class PlayerPointer {
 
     public void update(float dt) {
         blinkTimer += dt;
-        tmp3V3.set(Shuttle.position.x, Shuttle.position.y);
+        tmp3V3.set(Buran.position.x, Buran.position.y);
         tmp2V2.set(tmp3V3.sub(Rules.SPACE_WIDTH / 2, Rules.SPACE_HEIGHT / 2));
         angle = tmp2V2.angle();
         tmp4V2.set(tmp1V2.x, tmp1V2.y).sub(d * MathUtils.cos(MathUtils.degreesToRadians * angle), d * MathUtils.sin(MathUtils.degreesToRadians * angle));

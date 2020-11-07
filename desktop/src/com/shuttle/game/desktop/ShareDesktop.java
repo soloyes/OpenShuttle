@@ -3,7 +3,7 @@ package com.shuttle.game.desktop;
 import com.shuttle.game.Share;
 
 /**
- * @author Shuttle on 16/11/18.
+ * @author soloyes on 16/11/18.
  */
 
 public class ShareDesktop implements Share {
@@ -14,6 +14,6 @@ public class ShareDesktop implements Share {
     @Override
     public void share(String text) {
         String out = text.isEmpty() ? "No results until now..." : text;
-        System.out.println("Hey, check my achievements in Shuttle!\n" + out);
+        System.out.println("Hey, check my achievements in Buran-19!\n" + out);
     }
 }

@@ -12,7 +12,7 @@ import com.shuttle.game.utils.Assets;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 12/17/18.
+ * @author soloyes on 12/17/18.
  */
 
 public class Scan {

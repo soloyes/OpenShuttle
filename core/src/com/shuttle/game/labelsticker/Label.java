@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 11/12/18.
+ * @author soloyes on 11/12/18.
  */
 
 public class Label {

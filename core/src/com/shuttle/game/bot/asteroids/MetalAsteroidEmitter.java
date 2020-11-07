@@ -4,7 +4,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.particle.ParticleEmitter;
 
 /**
- * @author Shuttle on 11/26/18.
+ * @author soloyes on 11/26/18.
  */
 
 public class MetalAsteroidEmitter extends AbstractAsteroidEmitter {

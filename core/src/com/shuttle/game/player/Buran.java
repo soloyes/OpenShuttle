@@ -34,10 +34,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 03/06/18.
+ * @author soloyes on 03/06/18.
  */
 
-public class Shuttle extends AbstractShuttle {
+public class Buran extends AbstractBuran {
     public static boolean isLaser;
     private static LinkedList<Integer> shadowsCoordinates;
     private static int F = 2 * (int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Rules.PLAYER_ENGINE_POWER);
@@ -75,7 +75,7 @@ public class Shuttle extends AbstractShuttle {
     private float a;
     private ParticleEmitter particleEmitter;
 
-    public Shuttle(Joystick joystick, ParticleEmitter particleEmitter) {
+    public Buran(Joystick joystick, ParticleEmitter particleEmitter) {
         this.particleEmitter = particleEmitter;
         this.joystick = joystick;
         this.standing = Standing.getInstance();
@@ -246,8 +246,8 @@ public class Shuttle extends AbstractShuttle {
     }
 
     public static void respawn() {
-        Shuttle.position.set(Rules.SPACE_WIDTH / 2, Rules.SPACE_HEIGHT / 2);
-        Shuttle.velocity.set(0.0f, 0.0f);
+        Buran.position.set(Rules.SPACE_WIDTH / 2, Rules.SPACE_HEIGHT / 2);
+        Buran.velocity.set(0.0f, 0.0f);
         Radar.isActive = false;
         Standing.getInstance().setRamPower(0.0f);
     }

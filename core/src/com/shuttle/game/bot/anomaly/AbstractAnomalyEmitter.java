@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 9/15/18.
+ * @author soloyes on 9/15/18.
  */
 
 public abstract class AbstractAnomalyEmitter extends ObjectPool<AbstractAnomaly> {

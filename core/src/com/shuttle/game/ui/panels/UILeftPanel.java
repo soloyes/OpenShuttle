@@ -7,7 +7,7 @@ import com.shuttle.game.ui.groups.switches.SwitchGroup;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 15/05/19.
+ * @author soloyes on 15/05/19.
  */
 
 public class UILeftPanel extends AbstractLatestPanel {

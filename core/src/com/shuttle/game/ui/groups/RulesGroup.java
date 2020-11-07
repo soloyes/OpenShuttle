@@ -30,7 +30,7 @@ import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.StickerResolver;
 
 /**
- * @author Shuttle on 29/11/20.
+ * @author soloyes on 29/11/20.
  */
 
 public class RulesGroup extends Group {

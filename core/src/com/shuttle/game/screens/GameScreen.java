@@ -52,7 +52,7 @@ import com.shuttle.game.effects.Vibrator;
 import com.shuttle.game.effects.particle.ParticleEmitter;
 import com.shuttle.game.labelsticker.Label;
 import com.shuttle.game.labelsticker.Sticker;
-import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Buran;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.player.navigation.Radar;
 import com.shuttle.game.ui.GameInfoSystem;
@@ -82,13 +82,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 03/06/18.
+ * @author soloyes on 03/06/18.
  */
 
 public class GameScreen extends BaseScreen {
     @Getter
     @Setter
-    private Shuttle player;
+    private Buran player;
     private Background background;
     @Getter
     @Setter
@@ -185,10 +185,10 @@ public class GameScreen extends BaseScreen {
         joystick = new Joystick();
 
         blackhole = new Blackhole();
-        player = new Shuttle(joystick, particleEmitter);
+        player = new Buran(joystick, particleEmitter);
         uiTopPanel = new UITopPanel();
 
-        BoundCheck.avoidPosition(Blackhole.position, Shuttle.position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+        BoundCheck.avoidPosition(Blackhole.position, Buran.position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         playerPointer = new PlayerPointer(player);
         Rules.StartLevel.values()[Profiles.getSettings().getLevel()].setGameLevel();
 
@@ -216,12 +216,12 @@ public class GameScreen extends BaseScreen {
 
     private void calcMusicEffectVolume() {
         float v;
-        if (Shuttle.position.dst(Blackhole.position) >= Rules.BLACKHOLE_ROAR_RANGE) {
+        if (Buran.position.dst(Blackhole.position) >= Rules.BLACKHOLE_ROAR_RANGE) {
             v = 0.0f;
-        } else if (Shuttle.position.dst(Blackhole.position) <= Rules.BLACKHOLE_TAKE_RANGE) {
+        } else if (Buran.position.dst(Blackhole.position) <= Rules.BLACKHOLE_TAKE_RANGE) {
             v = 0.5f;
         } else {
-            v = 1 - Shuttle.position.dst(Blackhole.position) / Rules.BLACKHOLE_ROAR_RANGE;
+            v = 1 - Buran.position.dst(Blackhole.position) / Rules.BLACKHOLE_ROAR_RANGE;
         }
         boomBox.setMusicEffectVolume(MSConstants.BLACKHOLE_ROAR_MUSIC, v);
     }
@@ -446,22 +446,22 @@ public class GameScreen extends BaseScreen {
     //Cam position is reset when fbo.end(), copy-paste from cameraHelper is the hack.
     private void cameraUpdate(float dt) {
         if (player.isCameraSmooth()) {
-            tmp1V3.set(Shuttle.position, 0.0f).sub(cameraHelper.position.x, cameraHelper.position.y, 0.0f).nor();
+            tmp1V3.set(Buran.position, 0.0f).sub(cameraHelper.position.x, cameraHelper.position.y, 0.0f).nor();
             if (!PauseGroup.isPause()) {
                 cameraHelper.position.mulAdd(tmp1V3, Rules.CAMERA_SMOOTH_VELOCITY * dt);
             }
             camera.position.set(cameraHelper.position);
             if (
                 //parking
-                    tmp1V2.set(Shuttle.position).sub(
+                    tmp1V2.set(Buran.position).sub(
                             cameraHelper.position.x, cameraHelper.position.y).len2() <
                             tmp1V3.scl(Rules.CAMERA_SMOOTH_VELOCITY * dt).len2()
                     ) {
                 player.setCameraSmooth(false);
             }
         } else {
-            camera.position.set(Shuttle.position.x, Shuttle.position.y, 0);
-            cameraHelper.position.set(Shuttle.position.x, Shuttle.position.y, 0);
+            camera.position.set(Buran.position.x, Buran.position.y, 0);
+            cameraHelper.position.set(Buran.position.x, Buran.position.y, 0);
         }
         cameraUpdater(cameraHelper);
         cameraUpdater(camera);
@@ -477,7 +477,7 @@ public class GameScreen extends BaseScreen {
             if (consumable.isTaken()) {
                 continue;
             }
-            if (Shuttle.position.dst(consumable.getPosition()) <= PaintConstants.SHUTTLE_WIDTH / 2) {
+            if (Buran.position.dst(consumable.getPosition()) <= PaintConstants.SHUTTLE_WIDTH / 2) {
                 consumable.setHarvested(true);
                 if (player.getShieldLevel().getLevel() < PlayerInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
                     consumeConsumable(consumable);
@@ -536,9 +536,9 @@ public class GameScreen extends BaseScreen {
             if (anomaly.isTaken()) {
                 continue;
             }
-            if (Shuttle.position.dst(anomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && anomaly.isBorn()) {
-                if (anomaly.getLevel() < player.getPushPower() || Shuttle.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
-                    if (Shuttle.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
+            if (Buran.position.dst(anomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && anomaly.isBorn()) {
+                if (anomaly.getLevel() < player.getPushPower() || Buran.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
+                    if (Buran.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                         boomBox.playSound(MSConstants.BURST_CORROSIVE_ANOMALY);
                     } else {
                         boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
@@ -564,7 +564,7 @@ public class GameScreen extends BaseScreen {
                 continue;
             }
             collideWithRocket(anomaly);
-            if (Shuttle.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 && anomaly.isBorn()) {
+            if (Buran.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 && anomaly.isBorn()) {
                 anomaly.setHungry(false);
                 damageToPlayer(anomaly);
                 Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
@@ -581,7 +581,7 @@ public class GameScreen extends BaseScreen {
                 continue;
             }
             collideWithRocket(anomaly);
-            if (Shuttle.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_RADIATION_WIDTH / 3 && anomaly.isBorn()) {
+            if (Buran.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_RADIATION_WIDTH / 3 && anomaly.isBorn()) {
                 anomaly.setEat(true);
                 anomaly.setGlued(true);
             } else {
@@ -597,8 +597,8 @@ public class GameScreen extends BaseScreen {
                     Standing.getInstance().changeScore(-Rules.ANOMALIES_RADIATION_SCORE_DECREASE);
                     boomBox.playSound(MSConstants.LOSE_SCORE);
                     GameInfoSystem.setup(
-                            Shuttle.position.x,
-                            Shuttle.position.y,
+                            Buran.position.x,
+                            Buran.position.y,
                             "-[RED]" + GameInfoSystem.Preset.LOST_SCORE.getValue() + "[]",
                             2.0f,
                             true
@@ -616,7 +616,7 @@ public class GameScreen extends BaseScreen {
                 continue;
             }
             collideWithRocket(anomaly);
-            if (Shuttle.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_MAGNETIC_HEIGHT / 3 && anomaly.isBorn()) {
+            if (Buran.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_MAGNETIC_HEIGHT / 3 && anomaly.isBorn()) {
                 anomaly.setEat(true);
                 anomaly.setGlued(true);
             } else {
@@ -632,8 +632,8 @@ public class GameScreen extends BaseScreen {
                     Standing.getInstance().changeFuel(-Rules.ANOMALIES_MAGNETIC_FUEL_DECREASE);
                     boomBox.playSound(MSConstants.LOSE_FUEL);
                     GameInfoSystem.setup(
-                            Shuttle.position.x,
-                            Shuttle.position.y,
+                            Buran.position.x,
+                            Buran.position.y,
                             "-[RED]" + GameInfoSystem.Preset.FUEL + "[]",
                             4.0f,
                             true
@@ -650,7 +650,7 @@ public class GameScreen extends BaseScreen {
             if (asteroid.isTaken()) {
                 continue;
             }
-            if (Shuttle.position.dst(asteroid.getPosition()) < asteroid.getHeight() * asteroid.getScaleX()) {
+            if (Buran.position.dst(asteroid.getPosition()) < asteroid.getHeight() * asteroid.getScaleX()) {
                 if (!asteroid.isFragmented()) {
                     asteroid.destroyWithEffect();
                     Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
@@ -659,7 +659,7 @@ public class GameScreen extends BaseScreen {
                             .boom(asteroid.getPosition(), PlayerInteractionLevels.NONE);
                     Standing.getInstance().takeDamage(player.getShieldLevel().getLevel() + 1);
                     GameInfoSystem.setup(
-                            Shuttle.position.x, Shuttle.position.y,
+                            Buran.position.x, Buran.position.y,
                             GameInfoSystem.Preset.SCREECH,
                             3.0f,
                             true
@@ -668,7 +668,7 @@ public class GameScreen extends BaseScreen {
                 } else {
                     player.getRamShield().blink(0.5f);
                     Standing.getInstance().changeRamPower(asteroid.getSizeForHarvest());
-                    if (asteroid.getType() == AbstractPoolable.Type.ASTEROID_MINERAL && Shuttle.isLaser) {
+                    if (asteroid.getType() == AbstractPoolable.Type.ASTEROID_MINERAL && Buran.isLaser) {
                         Standing.getInstance().changeLaserChargeLevel(asteroid.getSizeForHarvest());
                     }
                     //pretty soundVolume if collect much fragments in little time
@@ -721,7 +721,7 @@ public class GameScreen extends BaseScreen {
                 ray.setTakeRange(Rules.PLAYER_FRAGMENT_TAKE_RANGE);
                 ray.harvest(asteroid, dt);
             } else {
-                if (Shuttle.isLaser) {
+                if (Buran.isLaser) {
                     ray.setCount(5);
                     ray.setSize(3);
                     ray.setPreset(Ray.Preset.RED);
@@ -776,7 +776,7 @@ public class GameScreen extends BaseScreen {
     }
 
     private void collideWithRocket(AbstractAnomaly anomaly) {
-        float dst = Shuttle.position.dst(anomaly.getPosition());
+        float dst = Buran.position.dst(anomaly.getPosition());
         if (dst <= Rules.ROCKETS_TAKE_RANGE && anomaly.isBorn() && !anomaly.isTaken()) {
             anomaly.setAtRocketPoint(true);
         } else {
@@ -788,7 +788,7 @@ public class GameScreen extends BaseScreen {
         abstractAnomaly.destroyWithEffect();
         player.getRamShield().blink(1.0f);
         player.slowDown(abstractAnomaly.getLevel() * 50.0f);
-        if (Shuttle.velocity.len() <= Rules.PLAYER_ENGINE_POWER) {
+        if (Buran.velocity.len() <= Rules.PLAYER_ENGINE_POWER) {
             Standing.getInstance().changeRamPower(-abstractAnomaly.getLevel());
         }
         abstractAnomaly.showSprayCollision();
@@ -807,14 +807,14 @@ public class GameScreen extends BaseScreen {
         if (player.addZigZag(0.5f * anomaly.getLevel() + 0.2f)) {
             Standing.getInstance().takeDamage(anomaly.getLevel() + 1);
             GameInfoSystem.setup(
-                    Shuttle.position.x,
-                    Shuttle.position.y,
+                    Buran.position.x,
+                    Buran.position.y,
                     GameInfoSystem.Preset.BRAKED,
                     5.0f,
                     false
             );
-            tmp1V2.set(Shuttle.position).sub(anomaly.getPosition()).nor().scl(300 + anomaly.getLevel() * 50);
-            Shuttle.velocity.add(tmp1V2);
+            tmp1V2.set(Buran.position).sub(anomaly.getPosition()).nor().scl(300 + anomaly.getLevel() * 50);
+            Buran.velocity.add(tmp1V2);
             Standing.getInstance().setRamPower(0.0f);
             tmp1V2.scl(-1);
             anomaly.getVelocity().add(tmp1V2);

@@ -5,7 +5,7 @@ import com.shuttle.game.conf.Rules;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 3/14/19.
+ * @author soloyes on 3/14/19.
  */
 
 public class BarLaser extends AbstractBar {

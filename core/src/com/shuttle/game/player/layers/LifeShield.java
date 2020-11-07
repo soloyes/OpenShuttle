@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Buran;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.utils.Assets;
 
@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 9/2/18.
+ * @author soloyes on 9/2/18.
  */
 
 public class LifeShield {
@@ -44,11 +44,11 @@ public class LifeShield {
         batch.setColor(color);
         batch.draw(
                 texture,
-                Shuttle.position.x - width / 2, Shuttle.position.y - height / 2,
+                Buran.position.x - width / 2, Buran.position.y - height / 2,
                 width / 2, height / 2,
                 width, height,
                 scaleX, scaleY,
-                Shuttle.angle
+                Buran.angle
         );
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }

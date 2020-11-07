@@ -1,7 +1,7 @@
 package com.shuttle.game.conf;
 
 /**
- * @author Shuttle on 17/06/19.
+ * @author soloyes on 17/06/19.
  * Music and Sound constants (MSConstants)
  */
 

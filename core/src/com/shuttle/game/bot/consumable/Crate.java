@@ -19,7 +19,7 @@ import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Consumer;
 
 /**
- * @author Shuttle on 10/11/18.
+ * @author soloyes on 10/11/18.
  */
 
 public class Crate extends AbstractConsumable {

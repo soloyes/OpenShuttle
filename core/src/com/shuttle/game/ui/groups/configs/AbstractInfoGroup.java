@@ -26,7 +26,7 @@ import java.util.Map;
 import lombok.Getter;
 
 /**
- * @author Shuttle on 10/12/19.
+ * @author soloyes on 10/12/19.
  */
 
 public abstract class AbstractInfoGroup extends Group {

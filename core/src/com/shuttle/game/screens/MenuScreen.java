@@ -19,7 +19,7 @@ import com.shuttle.game.ui.groups.mvc.results.ResultGroup;
 import com.shuttle.game.utils.Assets;
 
 /**
- * @author Shuttle on 3/24/18.
+ * @author soloyes on 3/24/18.
  */
 
 public class MenuScreen extends BaseScreen {

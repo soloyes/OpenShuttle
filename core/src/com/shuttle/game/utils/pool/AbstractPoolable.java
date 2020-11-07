@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 8/26/18.
+ * @author soloyes on 8/26/18.
  */
 
 public abstract class AbstractPoolable implements Poolable {

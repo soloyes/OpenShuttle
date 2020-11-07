@@ -3,7 +3,7 @@ package com.shuttle.game.background;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
- * @author Shuttle on 12/8/18.
+ * @author soloyes on 12/8/18.
  */
 
 public class Background {

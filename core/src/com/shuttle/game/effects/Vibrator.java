@@ -5,7 +5,7 @@ import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 
 /**
- * @author Shuttle on 10/23/18.
+ * @author soloyes on 10/23/18.
  */
 
 public class Vibrator {

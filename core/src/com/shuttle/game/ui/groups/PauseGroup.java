@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Shuttle on 7/8/18.
+ * @author soloyes on 7/8/18.
  */
 
 public class PauseGroup extends Group {

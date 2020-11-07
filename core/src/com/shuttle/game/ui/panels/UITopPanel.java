@@ -7,7 +7,7 @@ import com.shuttle.game.ui.panels.info.PlayerHP;
 import com.shuttle.game.ui.panels.info.PlayerXP;
 
 /**
- * @author Shuttle on 15/05/19.
+ * @author soloyes on 15/05/19.
  */
 
 public class UITopPanel {

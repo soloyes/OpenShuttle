@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Shuttle on 7/14/18.
+ * @author soloyes on 7/14/18.
  */
 
 public class BoomBox {

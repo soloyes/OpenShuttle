@@ -10,14 +10,14 @@ import com.shuttle.game.conf.VConstants;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Shake;
 import com.shuttle.game.effects.Vibrator;
-import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Buran;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.pool.AbstractPoolable;
 
 /**
- * @author Shuttle on 8/26/18.
+ * @author soloyes on 8/26/18.
  */
 
 public class BoundCheck {
@@ -41,13 +41,13 @@ public class BoundCheck {
         }
     }
 
-    public void checkAndHandleBounds(Shuttle player, float dt) {
+    public void checkAndHandleBounds(Buran player, float dt) {
         rectangle.set(
                 -player.getWidth() / 2, -player.getHeight() / 2,
                 Rules.SPACE_WIDTH + player.getWidth(),
                 Rules.SPACE_HEIGHT + player.getHeight()
         );
-        if (!rectangle.contains(Shuttle.position)) {
+        if (!rectangle.contains(Buran.position)) {
             checkCount(dt);
             playerOnScreen = false;
         } else {

@@ -3,12 +3,12 @@ package com.shuttle.game.utils;
 import com.shuttle.game.bot.consumable.AbstractConsumable;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.labelsticker.Sticker;
-import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Buran;
 import com.shuttle.game.ui.groups.selector.SelectorGroup;
 import com.shuttle.game.ui.panels.UILeftPanel;
 
 /**
- * @author Shuttle on 28/12/18.
+ * @author soloyes on 28/12/18.
  */
 
 public class Consumer {
@@ -37,7 +37,7 @@ public class Consumer {
     }
 
     public static void select(Sticker sticker) {
-        sticker.consume(Shuttle.position, false);
+        sticker.consume(Buran.position, false);
         sticker.sound();
     }
 }

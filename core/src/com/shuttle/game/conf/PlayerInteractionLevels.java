@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import lombok.Getter;
 
 /**
- * @author Shuttle on 08/08/18.
+ * @author soloyes on 08/08/18.
  */
 
 public enum PlayerInteractionLevels {

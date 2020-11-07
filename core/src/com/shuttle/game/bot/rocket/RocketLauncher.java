@@ -6,14 +6,14 @@ import com.shuttle.game.conf.MSConstants;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.effects.Shake;
-import com.shuttle.game.player.Shuttle;
+import com.shuttle.game.player.Buran;
 import com.shuttle.game.utils.BoundCheck;
 import com.shuttle.game.utils.ListOfListsJoiner;
 
 import lombok.Getter;
 
 /**
- * @author Shuttle on 20/01/19.
+ * @author soloyes on 20/01/19.
  */
 
 public class RocketLauncher {
@@ -54,13 +54,13 @@ public class RocketLauncher {
             }
         }
 
-        if (charged && !Shuttle.isTaken && !Rules.GAME_OVER && BoundCheck.playerOnScreen) {
+        if (charged && !Buran.isTaken && !Rules.GAME_OVER && BoundCheck.playerOnScreen) {
             int count = 0;
             for (int i = 0; i < anomalyJoiner.size(); i++) {
                 AbstractAnomaly anomaly = anomalyJoiner.get(i);
                 if (anomaly.isAtRocketPoint()) {
                     count++;
-                    rocketEmitter.createRocket(Shuttle.position, anomaly);
+                    rocketEmitter.createRocket(Buran.position, anomaly);
                 }
             }
             if (count > 0) {

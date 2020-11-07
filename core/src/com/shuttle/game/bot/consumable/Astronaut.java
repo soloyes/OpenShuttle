@@ -18,7 +18,7 @@ import com.shuttle.game.utils.Assets;
 import com.shuttle.game.utils.Regions;
 
 /**
- * @author Shuttle on 10/11/18.
+ * @author soloyes on 10/11/18.
  */
 
 public class Astronaut extends AbstractConsumable {

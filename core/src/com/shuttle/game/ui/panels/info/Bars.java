@@ -3,7 +3,7 @@ package com.shuttle.game.ui.panels.info;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
- * @author Shuttle on 16/03/19.
+ * @author soloyes on 16/03/19.
  */
 
 public class Bars {
