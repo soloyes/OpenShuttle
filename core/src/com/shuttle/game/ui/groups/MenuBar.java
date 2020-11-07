@@ -104,7 +104,11 @@ public class MenuBar extends Group {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0 && !buttonResults.isDisabled()) {
                     if (MenuGroup.isValidUserName()) {
-                        ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
+                        if (Rules.ADS_ENABLED) {
+                            ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.ADS);
+                        } else {
+                            ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
+                        }
                     } else {
                         Array<Actor> actors = getStage().getActors();
                         for (int i = 0; i < actors.size; i++) {
@@ -175,6 +179,7 @@ public class MenuBar extends Group {
                     boomBox.playSound(MSConstants.UI_MENU);
                     Vibrator.vibrate(VConstants.UI_CLICK);
                 }
+
                 return super.touchDown(event, x, y, pointer, button);
             }
 

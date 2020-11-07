@@ -107,7 +107,7 @@ public final class Standing {
         startLevel = level;
     }
 
-    public void dispose() {
+    public void clear() {
         statistics.clear();
         astronauts.clear();
         usedItems.clear();

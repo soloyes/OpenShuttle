@@ -3,14 +3,17 @@ package com.shuttle.game;
 import android.annotation.TargetApi;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
+import com.shuttle.game.conf.PaintConstants;
 
 import java.util.Collections;
 
@@ -20,9 +23,8 @@ import java.util.Collections;
 
 public class AndroidLauncher extends AndroidApplication implements AdsController {
 
-    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
-
-    private InterstitialAd interstitialAd;
+    private static final String BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
+    private AdView bannerAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +33,22 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         ShareAndroid shareAndroid = new ShareAndroid();
         shareAndroid.setAndroidApplication(this);
-        initialize(new ShuttleGame(this, shareAndroid, true, 1080, 1920), config);
+        ShuttleGame shuttleGame = new ShuttleGame(this, shareAndroid, true, 1080, 1920);
+        initialize(shuttleGame, config);
         onWindowFocusChanged(true);
+
+        View gameView = initializeForView(shuttleGame, config);
+
+        // Define the layout
+        RelativeLayout layout = new RelativeLayout(this);
+        layout.addView(gameView);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        layout.addView(bannerAd, params);
+
+        setContentView(layout);
     }
 
     @Override
@@ -75,31 +91,29 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
     }
 
     @Override
-    public boolean isInterstitialLoaded() {
-        return interstitialAd.isLoaded();
+    public void loadBannerAd() {
+        AdRequest.Builder builder = new AdRequest.Builder();
+        AdRequest ad = builder.build();
+        bannerAd.loadAd(ad);
     }
 
     @Override
-    public void showInterstitialAd() {
+    public void showBannerAd() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                interstitialAd.setAdListener(new AdListener() {
-                    @Override
-                    public void onAdClosed() {
-                        AdRequest.Builder builder = new AdRequest.Builder();
-                        AdRequest ad = builder.build();
-                        interstitialAd.loadAd(ad);
-                    }
-                });
-                //todo: а что если ads не грузятся?
-                if (interstitialAd.isLoaded()) {
-                    interstitialAd.show();
-                } else {
-                    AdRequest.Builder builder = new AdRequest.Builder();
-                    AdRequest ad = builder.build();
-                    interstitialAd.loadAd(ad);
-                }
+                loadBannerAd();
+                bannerAd.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    @Override
+    public void hideBannerAd() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                bannerAd.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -108,10 +122,10 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
         MobileAds.setRequestConfiguration(new RequestConfiguration.Builder().setTestDeviceIds(Collections.singletonList("E5DF21F0D60E82C4991F2034B48C44BE")).build());
         MobileAds.initialize(this);
 
-        interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId(AD_UNIT_ID);
-        AdRequest.Builder builder = new AdRequest.Builder();
-        AdRequest ad = builder.build();
-        interstitialAd.loadAd(ad);
+        bannerAd = new AdView(this);
+        bannerAd.setVisibility(View.INVISIBLE);
+        bannerAd.setBackgroundColor(PaintConstants.BACKGROUND_COLOR_HEX_INT);
+        bannerAd.setAdUnitId(BANNER_AD_UNIT_ID);
+        bannerAd.setAdSize(AdSize.SMART_BANNER);
     }
 }

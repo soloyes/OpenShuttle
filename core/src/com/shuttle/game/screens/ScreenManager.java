@@ -28,6 +28,7 @@ public class ScreenManager {
     private GameScreen gameScreen;
     private MenuScreen menuScreen;
     private TestScreen testScreen;
+    private AdsScreen adsScreen;
     private SpriteBatch batch;
     private Viewport viewport;
     @Getter
@@ -78,6 +79,10 @@ public class ScreenManager {
                 targetScreen = testScreen;
                 Assets.getInstance().loadAssets(ScreenType.TEST);
                 break;
+            case ADS:
+                targetScreen = adsScreen;
+                Assets.getInstance().loadAssets(ScreenType.ADS);
+                break;
         }
     }
 
@@ -113,6 +118,7 @@ public class ScreenManager {
         this.menuScreen = new MenuScreen(batch);
         this.testScreen = new TestScreen(batch);
         this.loadingScreen = new LoadingScreen(batch);
+        this.adsScreen = new AdsScreen(batch);
     }
 
     public void resize(int width, int height) {
@@ -125,6 +131,6 @@ public class ScreenManager {
     }
 
     public enum ScreenType {
-        MENU, GAME, TEST
+        MENU, GAME, TEST, ADS
     }
 }

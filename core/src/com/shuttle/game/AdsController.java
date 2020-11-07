@@ -2,7 +2,9 @@ package com.shuttle.game;
 
 public interface AdsController {
 
-    boolean isInterstitialLoaded();
+    void loadBannerAd();
 
-    void showInterstitialAd();
+    void showBannerAd();
+
+    void hideBannerAd();
 }

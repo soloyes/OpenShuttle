@@ -26,7 +26,6 @@ import com.shuttle.game.effects.BoomBox;
 import com.shuttle.game.player.Shuttle;
 import com.shuttle.game.player.Standing;
 import com.shuttle.game.player.navigation.Radar;
-import com.shuttle.game.screens.ScreenManager;
 import com.shuttle.game.ui.GameInfoSystem;
 import com.shuttle.game.utils.Consumer;
 import com.shuttle.game.utils.pool.AbstractPoolable;
@@ -147,8 +146,6 @@ public enum Sticker {
                             ((isGolden) ? Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_FACTOR : 1)
                     );
             standing.changeScore(score);
-            //todo: Побольше очков
-            ScreenManager.getInstance().getAdsController().showInterstitialAd();
         }
 
         @Override

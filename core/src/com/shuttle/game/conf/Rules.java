@@ -10,6 +10,12 @@ import com.shuttle.game.player.Standing;
 public final class Rules {
     public static final boolean DEBUG = false;
 
+    public static final boolean ADS_ENABLED = true;
+
+    public static final String RATE_US = "https://play.google.com/store/apps/details?id=com.github.android";
+    public static final String ABOUT_US = "https://play.google.com/store/apps/details?id=com.github.android";
+    public static final String PAY_US = "https://play.google.com/store/apps/details?id=com.github.android";
+
     private Rules() {
     }
 
@@ -269,6 +275,8 @@ public final class Rules {
     public static final float CONSUMABLE_SCAN_TIME = 30.0f;
     //60
     public static final int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
+    //6
+    public static final int ADS_TIME = 6;
     //3
     public static final int LAUNCH_ROCKETS_TIME = 3;
     //1500
