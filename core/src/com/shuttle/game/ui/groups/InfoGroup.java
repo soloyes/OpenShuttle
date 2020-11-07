@@ -1,5 +1,6 @@
 package com.shuttle.game.ui.groups;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -104,6 +105,7 @@ public class InfoGroup extends Group {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     rateLine.setTouched(false);
+                    Gdx.net.openURI(Rules.RATE_US);
                 }
             }
         });
@@ -123,6 +125,7 @@ public class InfoGroup extends Group {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     aboutLine.setTouched(false);
+                    Gdx.net.openURI(Rules.ABOUT_US);
                 }
             }
         });

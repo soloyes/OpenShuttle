@@ -6,7 +6,7 @@ package com.shuttle.game.conf;
  */
 //todo: Make 128*128 pics in the end?
 public final class PaintConstants {
-    public static final String SHUTTLE_REGION = "shuttle";
+    public static final String SHUTTLE_REGION = "buran";
     public static final int SHUTTLE_WIDTH = 256;
     public static final int SHUTTLE_HEIGHT = 256;
     public static final String SHUTTLE_ICON = "shuttleicon";
@@ -17,7 +17,7 @@ public final class PaintConstants {
     public static final int SHUTTLE_TAKE_RANGE_FIELD_WIDTH = 384;
     public static final int SHUTTLE_TAKE_RANGE_FIELD_HEIGHT = 384;
     public static final float SHUTTLE_TAKE_RANGE_FIELD_MAX = 0.5f;
-    public static final String SHUTTLE_BLUR_REGION = "shuttleblur";
+    public static final String SHUTTLE_BLUR_REGION = "buranblur";
     public static final int SHUTTLE_BLUR_WIDTH = 256;
     public static final int SHUTTLE_BLUR_HEIGHT = 256;
     public static final String SHUTTLE_LIFE_SHIELD = "lifeshield";
@@ -306,6 +306,8 @@ public final class PaintConstants {
     public static final String SCIENTIST_ICON = "scientisticon";
     public static final String LOCK_BUTTON = "lock";
     public static final String PLAY_BUTTON = "playbutton";
+    public static final String CONTINUE_BUTTON = "continuebutton";
+    public static final String GET_FULL_BUTTON = "getfullversion";
     public static final String PAUSE_BUTTON = "pausebutton";
     public static final int PLAY_PAUSE_BUTTON_WIDTH = 140;
     public static final int PLAY_PAUSE_BUTTON_HEIGHT = 140;
@@ -324,6 +326,10 @@ public final class PaintConstants {
 
     public static final int MENU_BUTTON_WIDTH = 112;
     public static final int MENU_BUTTON_HEIGHT = 112;
+
+    public static final int GET_FULL_BUTTON_WIDTH = 500;
+    public static final int GET_FULL_BUTTON_HEIGHT = 169;
+
     public static final String PROFILES_BORDER = "profilesborder";
 
     public static final String TIMER_BACKGROUND = "timerbackground";
@@ -387,6 +393,7 @@ public final class PaintConstants {
     public static final String GAME_PACK = "pics/atlas/game.pack";
     public static final String LOAD_TEXTURES = "pics/load/";
     public static final String BACKGROUND_COLOR_HEX = "100514ff";
+    public static final int BACKGROUND_COLOR_HEX_INT = 0xff100514;
     public static final float BACKGROUND_OSCILLATE_WIDTH = 50;
     public static final int DUMMY_PROFILES = 5;
     public static final int DUMMY_RESULTS = 14;

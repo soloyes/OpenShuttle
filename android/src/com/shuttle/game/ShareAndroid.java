@@ -3,6 +3,7 @@ package com.shuttle.game;
 import android.content.Intent;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
+import com.shuttle.game.conf.Rules;
 
 /**
  * @author Shuttle on 16/11/18.
@@ -20,7 +21,7 @@ public class ShareAndroid implements Share {
     public void share(String text) {
         shareIntent.setType("text/plain");
         String out = text.isEmpty() ? "No results until now..." : text;
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey, check my achievements in Shuttle!\n" + out);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey, check my achievements in Shuttle!\n" + out + "\n" + Rules.ABOUT_US);
         androidApplication.startActivity(Intent.createChooser(shareIntent, "Share results"));
     }
 

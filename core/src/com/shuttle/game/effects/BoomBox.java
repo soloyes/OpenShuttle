@@ -114,6 +114,30 @@ public class BoomBox {
         }
     }
 
+    public void pauseAllMusic() {
+        musicArray.clear();
+        Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
+        for (int i = 0; i < musicArray.size; i++) {
+            musicArray.get(i).pause();
+        }
+    }
+
+    public void resumeAllMusic() {
+        musicArray.clear();
+        Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
+        for (int i = 0; i < musicArray.size; i++) {
+            musicArray.get(i).play();
+        }
+    }
+
+    public void resumeThisMusic(String music) {
+        musicArray.clear();
+        Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
+        for (int i = 0; i < musicArray.size; i++) {
+            playMusicInLoop(music);
+        }
+    }
+
     private void playMusicInLoop(String music) {
         if (Profiles.getSettings().isMusic()) {
             Assets.getInstance()

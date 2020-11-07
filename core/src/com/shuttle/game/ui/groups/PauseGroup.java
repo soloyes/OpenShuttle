@@ -100,6 +100,9 @@ public class PauseGroup extends Group {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
+                    if (Rules.ADS_ENABLED) {
+                        ScreenManager.getInstance().getAdsController().hideBannerAd();
+                    }
                     ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
                     Restart.doRestart();
                 }
@@ -120,7 +123,12 @@ public class PauseGroup extends Group {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
-                    ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
+                    if (Rules.ADS_ENABLED) {
+                        ScreenManager.getInstance().getAdsController().hideBannerAd();
+                        ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.ADS);
+                    } else {
+                        ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
+                    }
                     Restart.doRestart();
                 }
             }

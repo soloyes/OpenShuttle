@@ -7,12 +7,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.shuttle.game.AdsController;
 import com.shuttle.game.ShuttleGame;
 import com.shuttle.game.conf.Rules;
 import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
 import com.shuttle.game.utils.Assets;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Shuttle on 03/06/18.
@@ -26,12 +28,16 @@ public class ScreenManager {
     private GameScreen gameScreen;
     private MenuScreen menuScreen;
     private TestScreen testScreen;
+    private AdsScreen adsScreen;
     private SpriteBatch batch;
     private Viewport viewport;
     @Getter
     private Camera camera;
     @Getter
     private ScreenType currentScreen;
+    @Getter
+    @Setter
+    private AdsController adsController;
 
     public static ScreenManager getInstance() {
         if (instance == null) {
@@ -73,6 +79,10 @@ public class ScreenManager {
                 targetScreen = testScreen;
                 Assets.getInstance().loadAssets(ScreenType.TEST);
                 break;
+            case ADS:
+                targetScreen = adsScreen;
+                Assets.getInstance().loadAssets(ScreenType.ADS);
+                break;
         }
     }
 
@@ -108,6 +118,7 @@ public class ScreenManager {
         this.menuScreen = new MenuScreen(batch);
         this.testScreen = new TestScreen(batch);
         this.loadingScreen = new LoadingScreen(batch);
+        this.adsScreen = new AdsScreen(batch);
     }
 
     public void resize(int width, int height) {
@@ -120,6 +131,6 @@ public class ScreenManager {
     }
 
     public enum ScreenType {
-        MENU, GAME, TEST
+        MENU, GAME, TEST, ADS
     }
 }

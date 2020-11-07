@@ -102,4 +102,9 @@ public class MenuScreen extends BaseScreen {
         super.dispose();
         menuGroup.dispose();
     }
+
+    @Override
+    public void resume() {
+        boomBox.resumeAllMusic();
+    }
 }

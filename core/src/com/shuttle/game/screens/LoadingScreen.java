@@ -51,7 +51,7 @@ public class LoadingScreen extends BaseScreen implements Screen {
 
     @Override
     public void createGUI() {
-
+        ScreenManager.getInstance().getAdsController().loadBannerAd();
     }
 
     @Override
@@ -89,9 +89,14 @@ public class LoadingScreen extends BaseScreen implements Screen {
 
     @Override
     public void dispose() {
+        super.dispose();
         texture.dispose();
         pixmap.dispose();
         shuttle.getTexture().dispose();
         shield.getTexture().dispose();
+    }
+
+    @Override
+    public void pause() {
     }
 }

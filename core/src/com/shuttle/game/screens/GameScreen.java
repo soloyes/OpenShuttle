@@ -346,16 +346,20 @@ public class GameScreen extends BaseScreen {
 
         Color tmpColor = batch.getColor();
         if (Rules.GAME_OVER) {
-            boomBox.stopAllMusicAndPlayThis(MSConstants.GAME_OVER);
             pauseGroup.setGameOver();
             fadeInAlpha += dt / 2;
-            if (fadeInAlpha >= 1.0f)
+            if (fadeInAlpha >= 1.0f) {
                 fadeInAlpha = 1.0f;
+            }
             detailedResultGroup.setColor(tmpColor.r, tmpColor.g, tmpColor.b, fadeInAlpha);
             if (!detailedResultGroup.isVisible()) {
+                boomBox.stopAllMusicAndPlayThis(MSConstants.GAME_OVER);
                 detailedResultGroup.setOver();
                 profiles.dispose();
                 detailedResultGroup.init();
+                if (Rules.ADS_ENABLED) {
+                    ScreenManager.getInstance().getAdsController().showBannerAd();
+                }
             }
         }
         batch.end();
@@ -823,6 +827,18 @@ public class GameScreen extends BaseScreen {
         ShaderManager.BLACKHOLE.dispose();
         if (!Rules.GAME_OVER) {
             profiles.dispose();
+        }
+    }
+
+    @Override
+    public void resume() {
+        if (!Rules.GAME_OVER && !PauseGroup.isPause()) {
+            boomBox.resumeThisMusic(MSConstants.GAME_SONG);
+            boomBox.resumeThisMusic(MSConstants.BLACKHOLE_ROAR_MUSIC);
+        } else if (PauseGroup.isPause()) {
+            boomBox.resumeThisMusic(MSConstants.MENU_SONG);
+        } else if (Rules.GAME_OVER) {
+            boomBox.resumeThisMusic(MSConstants.GAME_OVER);
         }
     }
 }

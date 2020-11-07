@@ -49,7 +49,6 @@ public class Assets {
                 createStandardFont(188, "fonts/college.regular", "");
                 createStandardFont(256, "fonts/college.regular", "");
                 assetManager.load(MSConstants.MENU_SONG, Music.class);
-                assetManager.load(MSConstants.BLACKHOLE_ROAR_MUSIC, Music.class);
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 assetManager.load(MSConstants.UI_MENU, Sound.class);
@@ -157,6 +156,12 @@ public class Assets {
                 createStandardFont(32, "fonts/college.regular", "");
                 createStandardFont(64, "fonts/college.regular", "");
                 createStandardFont(96, "fonts/college.regular", "");
+                break;
+            case ADS:
+                assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
+                assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
+                assetManager.load(MSConstants.UI_CLICK, Sound.class);
+                assetManager.load(MSConstants.UI_MENU, Sound.class);
                 break;
         }
     }

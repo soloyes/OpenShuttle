@@ -93,6 +93,8 @@ public class Shuttle extends AbstractShuttle {
         this.enginePower = Rules.PLAYER_ENGINE_POWER;
         setShadowsCoordinates();
         checkRamPower();
+        respawn();
+        Standing.getInstance().clear();
     }
 
     public static void setShadowsCoordinates() {
