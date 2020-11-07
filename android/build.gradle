@@ -17,7 +17,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "com.shuttle.game.pack"
+        applicationId "com.buran.game.pack"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
@@ -75,7 +75,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.shuttle.game.pack/com.shuttle.game.pack.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.buran.game.pack/com.buran.game.pack.AndroidLauncher'
 }
 // sets up the Android Eclipse project, using the old Ant based build.
 eclipse {

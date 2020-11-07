@@ -1,0 +1,83 @@
+package com.buran.game.effects;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.buran.game.utils.pool.AbstractPoolable;
+
+import lombok.Setter;
+
+/**
+ * @author soloyes on 15/12/18.
+ */
+
+public class Shield {
+    private TextureRegion texture;
+    private com.buran.game.bot.consumable.AbstractConsumable consumable;
+    private float width, height;
+    @Setter
+    private Color color;
+    private Oscillator oscillatorA;
+    @Setter
+    private float time;
+    private float frequency;
+
+    public Shield(com.buran.game.bot.consumable.AbstractConsumable consumable) {
+        this.consumable = consumable;
+        switch (consumable.getType()) {
+            case AbstractPoolable.Type.FUEL:
+                this.texture = com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.SHIELD_FUEL_REGION);
+                this.width = com.buran.game.conf.PaintConstants.SHIELD_FUEL_WIDTH;
+                this.height = com.buran.game.conf.PaintConstants.SHIELD_FUEL_HEIGHT;
+                break;
+            case AbstractPoolable.Type.STORAGE:
+                this.texture = com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.SHIELD_STORAGE_REGION);
+                this.width = com.buran.game.conf.PaintConstants.SHIELD_STORAGE_WIDTH;
+                this.height = com.buran.game.conf.PaintConstants.SHIELD_STORAGE_HEIGHT;
+                break;
+            case AbstractPoolable.Type.CRATE:
+                this.texture = com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.SHIELD_CRATE_REGION);
+                this.width = com.buran.game.conf.PaintConstants.SHIELD_CRATE_WIDTH;
+                this.height = com.buran.game.conf.PaintConstants.SHIELD_CRATE_HEIGHT;
+                break;
+        }
+        this.color = Color.valueOf("00ffffff");
+        this.oscillatorA = new Oscillator();
+    }
+
+    public void render(SpriteBatch batch) {
+        Color tmpColor = batch.getColor();
+        batch.setColor(color);
+        batch.draw(texture,
+                consumable.getPosition().x - width / 2, consumable.getPosition().y - height / 2,
+                width / 2, height / 2,
+                width, height,
+                consumable.getScaleX(), consumable.getScaleY(),
+                consumable.getAngle()
+        );
+        batch.setColor(tmpColor);
+    }
+
+    public void update(float dt) {
+        if (consumable.isShielded()) {
+            time -= dt;
+            if (time <= 1.0f) {
+                consumable.setShielded(false);
+                time = com.buran.game.conf.Rules.CONSUMABLE_SHIELD_TIME;
+            }
+            frequency = com.buran.game.conf.Rules.CONSUMABLE_SHIELD_TIME / time;
+            frequency = frequency / com.buran.game.conf.Rules.CONSUMABLE_SHIELD_TIME;
+            frequency = 10 * frequency;
+            float da = (frequency % 10) / 10;
+            float minA = com.buran.game.conf.PaintConstants.SHIELD_ALPHA_MIN - da;
+            float maxA = com.buran.game.conf.PaintConstants.SHIELD_ALPHA_MAX - da;
+            if (minA <= 0.0f) {
+                minA = 0.0f;
+            }
+            if (maxA <= 0.0f) {
+                maxA = 0.0f;
+            }
+            color.a = oscillatorA.oscillate(color.a, frequency, minA, maxA, dt);
+        }
+    }
+}
