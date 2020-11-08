@@ -118,6 +118,7 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
         });
     }
 
+    //todo: звать каждую миниту из GameScreen
     private void setupAds() {
         MobileAds.setRequestConfiguration(new RequestConfiguration.Builder().setTestDeviceIds(Collections.singletonList("E5DF21F0D60E82C4991F2034B48C44BE")).build());
         MobileAds.initialize(this);
