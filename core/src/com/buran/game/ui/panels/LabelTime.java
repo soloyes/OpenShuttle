@@ -1,6 +1,7 @@
 package com.buran.game.ui.panels;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.buran.game.conf.PaintConstants;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +32,7 @@ public class LabelTime {
         this.scaleX = this.scaleY = 1.0f;
         this.alpha = 1.0f;
         this.fleshAlpha = 0.0f;
-        this.time = com.buran.game.conf.PaintConstants.PANEL_ELEMENT_LIFETIME;
+        this.time = PaintConstants.PANEL_ELEMENT_LIFETIME;
         this.actTexture = textureRegion;
     }
 
@@ -53,7 +54,7 @@ public class LabelTime {
         this.scaleX = this.scaleY = 1.0f;
         this.alpha = 1.0f;
         this.fleshAlpha = 0.0f;
-        this.time = com.buran.game.conf.PaintConstants.PANEL_ELEMENT_LIFETIME;
+        this.time = PaintConstants.PANEL_ELEMENT_LIFETIME;
         this.actTexture = textureRegion;
     }
 }

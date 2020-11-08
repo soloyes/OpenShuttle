@@ -4,6 +4,17 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.conf.VConstants;
+import com.buran.game.effects.BoomBox;
+import com.buran.game.effects.Shake;
+import com.buran.game.effects.Vibrator;
+import com.buran.game.player.Buran;
+import com.buran.game.player.Standing;
+import com.buran.game.screens.ScreenManager;
+import com.buran.game.ui.GameInfoSystem;
+import com.buran.game.utils.pool.AbstractPoolable;
 
 /**
  * @author soloyes on 8/26/18.
@@ -33,8 +44,8 @@ public class BoundCheck {
     public void checkAndHandleBounds(Buran player, float dt) {
         rectangle.set(
                 -player.getWidth() / 2, -player.getHeight() / 2,
-                com.buran.game.conf.Rules.SPACE_WIDTH + player.getWidth(),
-                com.buran.game.conf.Rules.SPACE_HEIGHT + player.getHeight()
+                Rules.SPACE_WIDTH + player.getWidth(),
+                Rules.SPACE_HEIGHT + player.getHeight()
         );
         if (!rectangle.contains(Buran.position)) {
             checkCount(dt);
@@ -59,38 +70,38 @@ public class BoundCheck {
             alertTimer = 0.0f;
         }
 
-        if (hpTimer >= com.buran.game.conf.Rules.PLAYER_TIMER_HP_OUT_OF_MAP) {
-            Standing.getInstance().takeDamage(com.buran.game.conf.Rules.PLAYER_HP_OUT_OF_MAP);
+        if (hpTimer >= Rules.PLAYER_TIMER_HP_OUT_OF_MAP) {
+            Standing.getInstance().takeDamage(Rules.PLAYER_HP_OUT_OF_MAP);
             Standing.getInstance().setHpAlert(true);
             hpTimer = 0.0f;
         }
-        if (fuelTimer >= com.buran.game.conf.Rules.PLAYER_TIMER_FUEL_OUT_OF_MAP) {
-            Standing.getInstance().setFuel(Standing.getInstance().getFuel() - com.buran.game.conf.Rules.PLAYER_FUEL_OUT_OF_MAP);
+        if (fuelTimer >= Rules.PLAYER_TIMER_FUEL_OUT_OF_MAP) {
+            Standing.getInstance().setFuel(Standing.getInstance().getFuel() - Rules.PLAYER_FUEL_OUT_OF_MAP);
             Standing.getInstance().setFuelAlertOutOfBounds(true);
             fuelTimer = 0.0f;
         }
     }
 
     private void alert(float duration) {
-        if (!com.buran.game.conf.Rules.GAME_OVER) {
-            com.buran.game.ui.GameInfoSystem.setup(
+        if (!Rules.GAME_OVER) {
+            GameInfoSystem.setup(
                     ScreenManager.getInstance().getCamera().position.x,
                     ScreenManager.getInstance().getCamera().position.y,
-                    com.buran.game.ui.GameInfoSystem.Preset.OUT,
+                    GameInfoSystem.Preset.OUT,
                     3,
                     true
             );
-            boomBox.playSound(com.buran.game.conf.MSConstants.OUT_OF_SCREEN);
+            boomBox.playSound(MSConstants.OUT_OF_SCREEN);
             Shake.getInstance().shakeCamera(duration, 35, 10);
-            Vibrator.vibrate(com.buran.game.conf.VConstants.PLAYER_OUT_OF_SCREEN);
+            Vibrator.vibrate(VConstants.PLAYER_OUT_OF_SCREEN);
         }
     }
 
     public boolean checkAndHandleBounds(AbstractPoolable poolable) {
         rectangle.set(
                 -poolable.getWidth() / 2, -poolable.getHeight() / 2,
-                com.buran.game.conf.Rules.SPACE_WIDTH + poolable.getWidth(),
-                com.buran.game.conf.Rules.SPACE_HEIGHT + poolable.getHeight()
+                Rules.SPACE_WIDTH + poolable.getWidth(),
+                Rules.SPACE_HEIGHT + poolable.getHeight()
         );
         return !rectangle.contains(poolable.getPosition());
     }
@@ -98,8 +109,8 @@ public class BoundCheck {
     public void checkAndHandleBoundsAndDestroy(AbstractPoolable poolable) {
         rectangle.set(
                 -poolable.getWidth() / 2, -poolable.getHeight() / 2,
-                com.buran.game.conf.Rules.SPACE_WIDTH + poolable.getWidth(),
-                com.buran.game.conf.Rules.SPACE_HEIGHT + poolable.getHeight()
+                Rules.SPACE_WIDTH + poolable.getWidth(),
+                Rules.SPACE_HEIGHT + poolable.getHeight()
         );
         if (!rectangle.contains(poolable.getPosition()))
             poolable.destroy();
@@ -108,9 +119,9 @@ public class BoundCheck {
     public boolean checkAndHandleBoundsInCamera(AbstractPoolable poolable) {
         Camera camera = ScreenManager.getInstance().getViewport().getCamera();
         rectangle.set(
-                camera.position.x - com.buran.game.conf.Rules.WORLD_WIDTH / 2,
-                camera.position.y - com.buran.game.conf.Rules.WORLD_HEIGHT / 2,
-                com.buran.game.conf.Rules.WORLD_WIDTH, com.buran.game.conf.Rules.WORLD_HEIGHT
+                camera.position.x - Rules.WORLD_WIDTH / 2,
+                camera.position.y - Rules.WORLD_HEIGHT / 2,
+                Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT
         );
         return rectangle.contains(poolable.getPosition());
     }

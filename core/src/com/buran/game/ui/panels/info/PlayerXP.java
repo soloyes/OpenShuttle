@@ -6,12 +6,12 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.player.Standing;
-import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.RadialSprite;
-import com.shuttle.game.utils.Rounder;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.player.Standing;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.RadialSprite;
+import com.buran.game.utils.Rounder;
 
 /**
  * @author soloyes on 3/3/19.

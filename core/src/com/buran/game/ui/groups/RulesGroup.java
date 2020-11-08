@@ -18,16 +18,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.shuttle.game.conf.MSConstants;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.conf.VConstants;
-import com.shuttle.game.effects.BoomBox;
-import com.shuttle.game.effects.Vibrator;
-import com.shuttle.game.labelsticker.Sticker;
-import com.shuttle.game.ui.UIButton;
-import com.shuttle.game.ui.groups.GroupType;
-import com.shuttle.game.utils.Assets;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.conf.VConstants;
+import com.buran.game.effects.BoomBox;
+import com.buran.game.effects.Vibrator;
+import com.buran.game.labelsticker.Sticker;
+import com.buran.game.ui.UIButton;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.StickerResolver;
 
 /**
  * @author soloyes on 29/11/20.
@@ -44,13 +44,13 @@ public class RulesGroup extends Group {
     private int cellHeight;
     private float d;
     private boolean touched;
-    private com.buran.game.utils.StickerResolver stickerResolver;
+    private StickerResolver stickerResolver;
     private BitmapFont font72;
     private Label missionLabel;
     private Label.LabelStyle labelStyle72;
 
     public RulesGroup() {
-        this.setName(com.shuttle.game.ui.groups.GroupType.RULES.name());
+        this.setName(GroupType.RULES.name());
         this.setVisible(false);
         this.boomBox = new BoomBox();
         this.setWidth(Rules.WORLD_WIDTH);
@@ -107,7 +107,7 @@ public class RulesGroup extends Group {
                 if (pointer == 0) {
                     Array<Actor> actors = getStage().getActors();
                     for (int i = 0; i < actors.size; i++) {
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.INFO.name())) {
+                        if (actors.get(i).getName().equals(GroupType.INFO.name())) {
                             actors.get(i).setVisible(true);
                         }
                         if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
@@ -119,7 +119,7 @@ public class RulesGroup extends Group {
             }
         });
 
-        this.stickerResolver = new com.buran.game.utils.StickerResolver();
+        this.stickerResolver = new StickerResolver();
         for (int i = 0; i < Sticker.ALL.size(); i++) {
             if (Sticker.ALL.get(i) == Sticker.FUEL) {
                 continue;

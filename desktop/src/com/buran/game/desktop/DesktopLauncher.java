@@ -3,6 +3,7 @@ package com.buran.game.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.buran.game.BuranGame;
+import com.buran.game.screens.ScreenManager;
 
 /**
  * @author soloyes on 03/06/18.
@@ -27,9 +28,9 @@ public class DesktopLauncher {
         //config.foregroundFPS = 10;
 
         //This is for easy operate during test. Just run game with key from enum ScreenManager.ScreenType
-        com.buran.game.screens.ScreenManager.ScreenType screenType = com.buran.game.screens.ScreenManager.ScreenType.MENU;
+        ScreenManager.ScreenType screenType = ScreenManager.ScreenType.MENU;
         if (arg.length > 0) {
-            for (com.buran.game.screens.ScreenManager.ScreenType t : com.buran.game.screens.ScreenManager.ScreenType.values()) {
+            for (ScreenManager.ScreenType t : ScreenManager.ScreenType.values()) {
                 if (arg[0].equals(t.name())) {
                     screenType = t;
                 }

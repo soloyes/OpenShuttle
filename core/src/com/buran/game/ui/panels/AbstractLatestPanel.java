@@ -3,6 +3,10 @@ package com.buran.game.ui.panels;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.labelsticker.Sticker;
+import com.buran.game.utils.StickerResolver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +18,7 @@ import java.util.Map;
  */
 
 public abstract class AbstractLatestPanel {
-    protected Map<com.buran.game.labelsticker.Sticker, TextureRegion> textureRegions;
+    protected Map<Sticker, TextureRegion> textureRegions;
     protected int width, height, cWidth, cHeight;
     protected Color color;
     protected TextureRegion circleTexture[];
@@ -28,36 +32,36 @@ public abstract class AbstractLatestPanel {
     private float t1, t2, t3;
 
     public AbstractLatestPanel() {
-        this.width = com.buran.game.conf.PaintConstants.LEFT_RIGHT_PANEL_ELEMENT_WIDTH;
-        this.height = com.buran.game.conf.PaintConstants.LEFT_RIGHT_PANEL_ELEMENT_HEIGHT;
-        this.cWidth = com.buran.game.conf.PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_WIDTH;
-        this.cHeight = com.buran.game.conf.PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_HEIGHT;
-        this.maxShowed = com.buran.game.conf.PaintConstants.PANEL_ELEMENTS_MAX;
+        this.width = PaintConstants.LEFT_RIGHT_PANEL_ELEMENT_WIDTH;
+        this.height = PaintConstants.LEFT_RIGHT_PANEL_ELEMENT_HEIGHT;
+        this.cWidth = PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_WIDTH;
+        this.cHeight = PaintConstants.LEFT_RIGHT_PANEL_CIRCLE_HEIGHT;
+        this.maxShowed = PaintConstants.PANEL_ELEMENTS_MAX;
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-        this.startPoint = com.buran.game.conf.Rules.WORLD_HEIGHT / 2 + 3 * width / 2 + 28;
+        this.startPoint = Rules.WORLD_HEIGHT / 2 + 3 * width / 2 + 28;
         this.freeLabel = new ArrayList<LabelTime>();
         this.showLabel = new ArrayList<LabelTime>();
         this.needDel = new ArrayList<Integer>();
         this.activeLabel = new ArrayList<LabelTime>();
-        this.t1 = com.buran.game.conf.PaintConstants.PANEL_ELEMENT_LIFETIME;
-        this.t2 = com.buran.game.conf.PaintConstants.PANEL_ELEMENT_FLASH_TIME;
-        this.t3 = com.buran.game.conf.PaintConstants.PANEL_ELEMENT_FADING_TIME;
-        this.textureRegions = new HashMap<com.buran.game.labelsticker.Sticker, TextureRegion>();
-        com.buran.game.utils.StickerResolver stickerResolver = new com.buran.game.utils.StickerResolver();
-        for (int i = 0; i < com.buran.game.labelsticker.Sticker.values().length; i++) {
-            com.buran.game.labelsticker.Sticker sticker = com.buran.game.labelsticker.Sticker.values()[i];
+        this.t1 = PaintConstants.PANEL_ELEMENT_LIFETIME;
+        this.t2 = PaintConstants.PANEL_ELEMENT_FLASH_TIME;
+        this.t3 = PaintConstants.PANEL_ELEMENT_FADING_TIME;
+        this.textureRegions = new HashMap<Sticker, TextureRegion>();
+        StickerResolver stickerResolver = new StickerResolver();
+        for (int i = 0; i < Sticker.values().length; i++) {
+            Sticker sticker = Sticker.values()[i];
             textureRegions.put(sticker, stickerResolver.getRegion(sticker));
         }
     }
 
-    public void add(com.buran.game.labelsticker.Sticker sticker) {
+    public void add(Sticker sticker) {
         TextureRegion region = textureRegions.get(sticker);
         if (freeLabel.size() == 0) {
             freeLabel.add(new LabelTime(region));
         }
         LabelTime temp = freeLabel.remove(freeLabel.size() - 1);
-        if (sticker == com.buran.game.labelsticker.Sticker.FUEL) {
-            region = textureRegions.get(com.buran.game.labelsticker.Sticker.FUEL_UI);
+        if (sticker == Sticker.FUEL) {
+            region = textureRegions.get(Sticker.FUEL_UI);
         }
         temp.init(region);
         activeLabel.add(temp);

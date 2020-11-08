@@ -2,8 +2,8 @@ package com.buran.game.ui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.effects.FlyingText;
+import com.buran.game.conf.Rules;
+import com.buran.game.effects.FlyingText;
 
 /**
  * @author soloyes on 03/07/18.

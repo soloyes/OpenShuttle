@@ -1,5 +1,9 @@
 package com.buran.game.ui.panels.info;
 
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.utils.Assets;
+
 /**
  * @author soloyes on 3/14/19.
  */

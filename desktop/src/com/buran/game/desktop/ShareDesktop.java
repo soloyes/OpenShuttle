@@ -1,10 +1,12 @@
 package com.buran.game.desktop;
 
+import com.buran.game.Share;
+
 /**
  * @author soloyes on 16/11/18.
  */
 
-public class ShareDesktop implements com.buran.game.Share {
+public class ShareDesktop implements Share {
 
     public ShareDesktop() {
     }

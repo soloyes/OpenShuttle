@@ -2,6 +2,10 @@ package com.buran.game.ui.panels;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.ui.groups.switches.SwitchGroup;
+import com.buran.game.utils.Assets;
 
 /**
  * @author soloyes on 15/05/19.
@@ -12,9 +16,9 @@ public class UIRightPanel extends AbstractLatestPanel {
 
     private UIRightPanel() {
         this.circleTexture = new TextureRegion[2];
-        this.circleTexture[0] = com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.SELECTOR_OUT);
-        this.circleTexture[1] = com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.CIRCLE_GLOW);
-        this.x = com.buran.game.conf.Rules.WORLD_WIDTH;
+        this.circleTexture[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_OUT);
+        this.circleTexture[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.CIRCLE_GLOW);
+        this.x = Rules.WORLD_WIDTH;
     }
 
     @Override
@@ -30,16 +34,16 @@ public class UIRightPanel extends AbstractLatestPanel {
 
     @Override
     public void updateEnable(float dt) {
-        if (com.buran.game.ui.groups.switches.SwitchGroup.getInstance().getRightSwitch().isOn()) {
+        if (SwitchGroup.getInstance().getRightSwitch().isOn()) {
             x -= dt * 360;
         } else {
             x += dt * 360;
         }
-        if (x >= com.buran.game.conf.Rules.WORLD_WIDTH + 32) {
-            x = com.buran.game.conf.Rules.WORLD_WIDTH + 32;
+        if (x >= Rules.WORLD_WIDTH + 32) {
+            x = Rules.WORLD_WIDTH + 32;
         }
-        if (x <= com.buran.game.conf.Rules.WORLD_WIDTH - width - 32) {
-            x = com.buran.game.conf.Rules.WORLD_WIDTH - width - 32;
+        if (x <= Rules.WORLD_WIDTH - width - 32) {
+            x = Rules.WORLD_WIDTH - width - 32;
         }
     }
 

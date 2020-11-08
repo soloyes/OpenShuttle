@@ -6,14 +6,15 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.bot.anomaly.AbstractAnomaly;
-import com.shuttle.game.bot.anomaly.CorrosiveAnomaly;
-import com.shuttle.game.bot.anomaly.CorrosiveAnomalyEmitter;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.RadialSprite;
-import com.shuttle.game.utils.pool.ObjectPool;
+import com.buran.game.bot.anomaly.AbstractAnomaly;
+import com.buran.game.bot.anomaly.CorrosiveAnomaly;
+import com.buran.game.bot.anomaly.CorrosiveAnomalyEmitter;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.RadialSprite;
+import com.buran.game.utils.TimeFormat;
+import com.buran.game.utils.pool.ObjectPool;
 
 import java.util.List;
 
@@ -86,7 +87,7 @@ public class AnomalyTimer {
                 }
             }
         }
-        glyphLayout.setText(font44, com.buran.game.utils.TimeFormat.formatMS(counter));
+        glyphLayout.setText(font44, TimeFormat.formatMS(counter));
         angle = -360.0f * counter / Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
     }
 }

@@ -1,5 +1,9 @@
 package com.buran.game.utils;
 
+import com.buran.game.ui.groups.configs.LeftGroup;
+import com.buran.game.ui.groups.configs.RightGroup;
+import com.buran.game.ui.groups.selector.SelectorGroup;
+import com.buran.game.ui.groups.switches.SwitchGroup;
 import com.buran.game.ui.panels.UILeftPanel;
 import com.buran.game.ui.panels.UIRightPanel;
 
@@ -9,10 +13,10 @@ import com.buran.game.ui.panels.UIRightPanel;
 
 public class Restart {
     public static void doRestart() {
-        com.buran.game.ui.groups.configs.RightGroup.getInstance().dispose();
-        com.buran.game.ui.groups.configs.LeftGroup.getInstance().dispose();
-        com.buran.game.ui.groups.selector.SelectorGroup.getInstance().dispose();
-        com.buran.game.ui.groups.switches.SwitchGroup.getInstance().dispose();
+        RightGroup.getInstance().dispose();
+        LeftGroup.getInstance().dispose();
+        SelectorGroup.getInstance().dispose();
+        SwitchGroup.getInstance().dispose();
         UILeftPanel.getInstance().dispose();
         UIRightPanel.getInstance().dispose();
     }

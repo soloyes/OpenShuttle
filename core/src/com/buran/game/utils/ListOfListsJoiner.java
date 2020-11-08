@@ -1,5 +1,9 @@
 package com.buran.game.utils;
 
+import com.buran.game.bot.anomaly.AbstractAnomaly;
+import com.buran.game.bot.asteroids.AbstractAsteroid;
+import com.buran.game.bot.consumable.AbstractConsumable;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,15 +51,15 @@ public final class ListOfListsJoiner<T> {
         return size;
     }
 
-    public static ListOfListsJoiner<com.buran.game.bot.anomaly.AbstractAnomaly> newAbstractAnomalyList(List<com.buran.game.bot.anomaly.AbstractAnomaly>... lists) {
-        return new ListOfListsJoiner<com.buran.game.bot.anomaly.AbstractAnomaly>(lists);
+    public static ListOfListsJoiner<AbstractAnomaly> newAbstractAnomalyList(List<AbstractAnomaly>... lists) {
+        return new ListOfListsJoiner<AbstractAnomaly>(lists);
     }
 
-    public static ListOfListsJoiner<com.buran.game.bot.asteroids.AbstractAsteroid> newAbstractAsteroidList(List<com.buran.game.bot.asteroids.AbstractAsteroid>... lists) {
-        return new ListOfListsJoiner<com.buran.game.bot.asteroids.AbstractAsteroid>(lists);
+    public static ListOfListsJoiner<AbstractAsteroid> newAbstractAsteroidList(List<AbstractAsteroid>... lists) {
+        return new ListOfListsJoiner<AbstractAsteroid>(lists);
     }
 
-    public static ListOfListsJoiner<com.buran.game.bot.consumable.AbstractConsumable> newAbstractConsumableList(List<com.buran.game.bot.consumable.AbstractConsumable>... lists) {
-        return new ListOfListsJoiner<com.buran.game.bot.consumable.AbstractConsumable>(lists);
+    public static ListOfListsJoiner<AbstractConsumable> newAbstractConsumableList(List<AbstractConsumable>... lists) {
+        return new ListOfListsJoiner<AbstractConsumable>(lists);
     }
 }

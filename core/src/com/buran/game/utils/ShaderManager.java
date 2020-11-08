@@ -2,6 +2,7 @@ package com.buran.game.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.buran.game.ui.groups.mvc.profiles.Profiles;
 
 /**
  * @author soloyes on 10/8/18.
@@ -22,7 +23,7 @@ public interface ShaderManager {
             if (shaderPause.isCompiled()) {
                 return shaderPause;
             } else {
-                com.buran.game.ui.groups.mvc.profiles.Profiles.getSettings().setShader(false);
+                Profiles.getSettings().setShader(false);
                 return null;
             }
         }
@@ -52,7 +53,7 @@ public interface ShaderManager {
             if (shaderBlackHole.isCompiled()) {
                 return shaderBlackHole;
             } else {
-                com.buran.game.ui.groups.mvc.profiles.Profiles.getSettings().setShader(false);
+                Profiles.getSettings().setShader(false);
                 return null;
             }
         }

@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.player.Standing;
-import com.shuttle.game.utils.Assets;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.player.Standing;
+import com.buran.game.utils.Assets;
 
 /**
  * @author soloyes on 3/14/19.

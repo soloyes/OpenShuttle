@@ -19,6 +19,21 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.conf.VConstants;
+import com.buran.game.effects.BoomBox;
+import com.buran.game.effects.Vibrator;
+import com.buran.game.screens.ScreenManager;
+import com.buran.game.ui.UIButton;
+import com.buran.game.ui.groups.configs.ConfigGroup;
+import com.buran.game.ui.groups.mvc.profiles.ProfileDAO;
+import com.buran.game.ui.groups.mvc.profiles.Profiles;
+import com.buran.game.ui.groups.mvc.profiles.ProfilesController;
+import com.buran.game.ui.groups.mvc.profiles.ProfilesView;
+import com.buran.game.ui.groups.mvc.results.ResultGroup;
+import com.buran.game.utils.Assets;
 
 /**
  * @author soloyes on 6/23/18.
@@ -36,15 +51,15 @@ public class MenuGroup extends Group {
     private BitmapFont font72;
     private Button buttonProfiles;
     private GlyphLayout glyphLayout;
-    private com.buran.game.ui.groups.mvc.profiles.ProfilesView profilesView;
-    private com.buran.game.ui.groups.mvc.profiles.ProfilesController profilesController;
+    private ProfilesView profilesView;
+    private ProfilesController profilesController;
     private float a;
     private float blinkTime;
     private Label noticeLabel;
     private BoomBox boomBox;
     private Group noticeGroup;
 
-    public MenuGroup(com.buran.game.ui.groups.configs.ConfigGroup configGroup, ResultGroup resultGroup) {
+    public MenuGroup(ConfigGroup configGroup, ResultGroup resultGroup) {
         this(GroupType.MENU.name(), configGroup, resultGroup);
         username.setAlignment(Align.center);
         username.setMaxLength(8);
@@ -145,7 +160,7 @@ public class MenuGroup extends Group {
         this.addActor(profilesView);
     }
 
-    private MenuGroup(String name, com.buran.game.ui.groups.configs.ConfigGroup configGroup, ResultGroup resultGroup) {
+    private MenuGroup(String name, ConfigGroup configGroup, ResultGroup resultGroup) {
         this.setName(name);
         this.setVisible(true);
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
@@ -157,7 +172,7 @@ public class MenuGroup extends Group {
         );
 
         noticeLabel = new Label(notice, noticeStyle64);
-        this.buttonProfiles = new com.buran.game.ui.UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PROFILES_BUTTON_MENU)));
+        this.buttonProfiles = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PROFILES_BUTTON_MENU)));
         buttonProfiles.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
 
         TextField.TextFieldStyle tfs = skin.get("default", TextField.TextFieldStyle.class);
@@ -169,8 +184,8 @@ public class MenuGroup extends Group {
         this.glyphLayout = new GlyphLayout();
         //MVC
         Profiles profiles = new Profiles();
-        this.profilesView = new com.buran.game.ui.groups.mvc.profiles.ProfilesView(configGroup, resultGroup);
-        this.profilesController = new com.buran.game.ui.groups.mvc.profiles.ProfilesController(profilesView, profiles);
+        this.profilesView = new ProfilesView(configGroup, resultGroup);
+        this.profilesController = new ProfilesController(profilesView, profiles);
         profilesView.setController(profilesController);
         profilesController.update();
         //
@@ -208,7 +223,7 @@ public class MenuGroup extends Group {
                 a = 1.0f;
             }
         }
-        if (com.buran.game.ui.groups.mvc.profiles.ProfilesController.isEmpty()) {
+        if (ProfilesController.isEmpty()) {
             buttonProfiles.setDisabled(true);
             profilesView.setVisible(false);
         } else {

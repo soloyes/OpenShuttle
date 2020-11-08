@@ -9,6 +9,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.conf.VConstants;
+import com.buran.game.effects.BoomBox;
+import com.buran.game.effects.Vibrator;
+import com.buran.game.screens.ScreenManager;
+import com.buran.game.ui.UIButton;
+import com.buran.game.ui.groups.mvc.profiles.ProfilesController;
+import com.buran.game.utils.Assets;
 
 /**
  * @author soloyes on 3/24/18.
@@ -24,16 +34,16 @@ public class MenuBar extends Group {
 
     public MenuBar() {
         this.boomBox = new BoomBox();
-        this.setName(com.shuttle.game.ui.groups.GroupType.MENU_BAR.name());
-        this.buttonPlay = new com.buran.game.ui.UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PLAY_BUTTON_MENU)));
+        this.setName(GroupType.MENU_BAR.name());
+        this.buttonPlay = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PLAY_BUTTON_MENU)));
         buttonPlay.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
-        this.buttonExit = new com.buran.game.ui.UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.EXIT_BUTTON_MENU)));
+        this.buttonExit = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.EXIT_BUTTON_MENU)));
         buttonExit.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
-        this.buttonSettings = new com.buran.game.ui.UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.SETTINGS_BUTTON_MENU)));
+        this.buttonSettings = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.SETTINGS_BUTTON_MENU)));
         buttonSettings.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
-        this.buttonResults = new com.buran.game.ui.UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.RESULTS_BUTTON_MENU)));
+        this.buttonResults = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.RESULTS_BUTTON_MENU)));
         buttonResults.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
-        this.buttonInfo = new com.buran.game.ui.UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.INFO_BUTTON_MENU)));
+        this.buttonInfo = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.INFO_BUTTON_MENU)));
         buttonInfo.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
         this.buttonPlay.setOrigin(Align.center);
         this.buttonExit.setOrigin(Align.center);
@@ -78,7 +88,7 @@ public class MenuBar extends Group {
                     boomBox.playSound(MSConstants.UI_CLICK);
                     Vibrator.vibrate(VConstants.UI_CLICK);
                 } else if (pointer == 0 && !buttonResults.isDisabled()) {
-                    if (com.shuttle.game.ui.groups.MenuGroup.isValidUserName()) {
+                    if (MenuGroup.isValidUserName()) {
                         boomBox.playSound(MSConstants.UI_MENU);
                         Vibrator.vibrate(VConstants.UI_CLICK);
                     } else {
@@ -102,11 +112,11 @@ public class MenuBar extends Group {
                     } else {
                         Array<Actor> actors = getStage().getActors();
                         for (int i = 0; i < actors.size; i++) {
-                            if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.MENU.name())) {
+                            if (actors.get(i).getName().equals(GroupType.MENU.name())) {
                                 actors.get(i).setVisible(true);
-                            } else if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.MENU_BAR.name())) {
+                            } else if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
                                 actors.get(i).setVisible(true);
-                            } else if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.MENU_BACKGROUND.name())) {
+                            } else if (actors.get(i).getName().equals(GroupType.MENU_BACKGROUND.name())) {
                                 actors.get(i).setVisible(true);
                             } else {
                                 actors.get(i).setVisible(false);
@@ -137,21 +147,21 @@ public class MenuBar extends Group {
                     Array<Actor> actors = getStage().getActors();
                     Actor tmp = new Actor();
                     for (int i = 0; i < actors.size; i++) {
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.CONFIG.name())) {
+                        if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
                             tmp = actors.get(i);
                         }
                     }
                     for (int i = 0; i < actors.size; i++) {
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.CONFIG.name())) {
+                        if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
                             actors.get(i).setVisible(!actors.get(i).isVisible());
                         }
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.MENU.name())) {
+                        if (actors.get(i).getName().equals(GroupType.MENU.name())) {
                             actors.get(i).setVisible(tmp.isVisible());
                         }
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.RESULTS.name())) {
+                        if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
                             actors.get(i).setVisible(false);
                         }
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.INFO.name())) {
+                        if (actors.get(i).getName().equals(GroupType.INFO.name())) {
                             actors.get(i).setVisible(false);
                         }
                     }
@@ -180,21 +190,21 @@ public class MenuBar extends Group {
                     Array<Actor> actors = getStage().getActors();
                     Actor tmp = new Actor();
                     for (int i = 0; i < actors.size; i++) {
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.RESULTS.name())) {
+                        if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
                             tmp = actors.get(i);
                         }
                     }
                     for (int i = 0; i < actors.size; i++) {
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.RESULTS.name())) {
+                        if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
                             actors.get(i).setVisible(!actors.get(i).isVisible());
                         }
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.MENU.name())) {
+                        if (actors.get(i).getName().equals(GroupType.MENU.name())) {
                             actors.get(i).setVisible(tmp.isVisible());
                         }
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.CONFIG.name())) {
+                        if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
                             actors.get(i).setVisible(false);
                         }
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.INFO.name())) {
+                        if (actors.get(i).getName().equals(GroupType.INFO.name())) {
                             actors.get(i).setVisible(false);
                         }
                     }
@@ -222,18 +232,18 @@ public class MenuBar extends Group {
                     Array<Actor> actors = getStage().getActors();
                     Actor tmp = new Actor();
                     for (int i = 0; i < actors.size; i++) {
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.INFO.name())) {
+                        if (actors.get(i).getName().equals(GroupType.INFO.name())) {
                             tmp = actors.get(i);
                         }
                     }
                     for (int i = 0; i < actors.size; i++) {
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.INFO.name())) {
+                        if (actors.get(i).getName().equals(GroupType.INFO.name())) {
                             actors.get(i).setVisible(!actors.get(i).isVisible());
                         }
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.MENU.name())) {
+                        if (actors.get(i).getName().equals(GroupType.MENU.name())) {
                             actors.get(i).setVisible(tmp.isVisible());
                         }
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.CONFIG.name())) {
+                        if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
                             actors.get(i).setVisible(false);
                         }
                         if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
@@ -254,7 +264,7 @@ public class MenuBar extends Group {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (com.buran.game.ui.groups.mvc.profiles.ProfilesController.isEmpty()) {
+        if (ProfilesController.isEmpty()) {
             buttonInfo.setDisabled(true);
             buttonPlay.setDisabled(true);
             buttonSettings.setDisabled(true);

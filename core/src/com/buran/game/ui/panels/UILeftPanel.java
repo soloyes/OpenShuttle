@@ -2,6 +2,9 @@ package com.buran.game.ui.panels;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.ui.groups.switches.SwitchGroup;
+import com.buran.game.utils.Assets;
 
 /**
  * @author soloyes on 15/05/19.
@@ -12,8 +15,8 @@ public class UILeftPanel extends AbstractLatestPanel {
 
     private UILeftPanel() {
         this.circleTexture = new TextureRegion[2];
-        this.circleTexture[0] = com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.SELECTOR_OUT);
-        this.circleTexture[1] = com.buran.game.utils.Assets.getInstance().getAtlas().findRegion(com.buran.game.conf.PaintConstants.CIRCLE_GLOW);
+        this.circleTexture[0] = Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_OUT);
+        this.circleTexture[1] = Assets.getInstance().getAtlas().findRegion(PaintConstants.CIRCLE_GLOW);
         this.x = 0.0f;
     }
 
@@ -30,7 +33,7 @@ public class UILeftPanel extends AbstractLatestPanel {
 
     @Override
     public void updateEnable(float dt) {
-        if (com.buran.game.ui.groups.switches.SwitchGroup.getInstance().getLeftSwitch().isOn()) {
+        if (SwitchGroup.getInstance().getLeftSwitch().isOn()) {
             x += dt * 360;
         } else {
             x -= dt * 360;

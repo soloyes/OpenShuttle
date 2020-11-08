@@ -9,13 +9,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.screens.ScreenManager;
-import com.shuttle.game.ui.groups.PauseGroup;
-import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
-import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.Regions;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.screens.ScreenManager;
+import com.buran.game.ui.groups.PauseGroup;
+import com.buran.game.ui.groups.mvc.profiles.Profiles;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.Regions;
 
 import java.util.LinkedList;
 
