@@ -17,7 +17,6 @@ import com.buran.game.labelsticker.Sticker;
 import com.buran.game.player.Standing;
 import com.buran.game.ui.GameInfoSystem;
 import com.buran.game.utils.Consumer;
-import com.buran.game.utils.pool.AbstractPoolable;
 
 /**
  * @author Buran on 09/12/18.
@@ -33,7 +32,7 @@ public class Fuel extends AbstractConsumable {
         this.particleEmitter = particleEmitter;
         this.width = PaintConstants.FUEL_WIDTH;
         this.height = PaintConstants.FUEL_HEIGHT;
-        this.type = AbstractPoolable.Type.FUEL;
+        this.type = Type.FUEL;
         this.moveProcessor = new MoveProcessor();
         this.level = -2;
         this.substrate = new Substrate(this);
