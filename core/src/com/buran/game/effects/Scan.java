@@ -8,7 +8,6 @@ import com.buran.game.bot.consumable.AbstractConsumable;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.utils.Assets;
-import com.buran.game.utils.pool.AbstractPoolable;
 
 import lombok.Setter;
 
@@ -34,10 +33,10 @@ public class Scan {
         this.color = Color.valueOf("00ffffff");
         this.oscillatorA = new Oscillator();
         switch (consumable.getType()) {
-            case AbstractPoolable.Type.CRATE:
+            case CRATE:
                 this.scaleFactor = 1.0f;
                 break;
-            case AbstractPoolable.Type.STORAGE:
+            case STORAGE:
                 this.scaleFactor = 0.5f;
                 break;
         }

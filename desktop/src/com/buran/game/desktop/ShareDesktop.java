@@ -14,6 +14,6 @@ public class ShareDesktop implements Share {
     @Override
     public void share(String text) {
         String out = text.isEmpty() ? "No results until now..." : text;
-        System.out.println("Hey, check my achievements in Buran-19!\n" + out);
+        System.out.println("Hey, check my achievements in Buran 19!\n" + out);
     }
 }

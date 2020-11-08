@@ -1,5 +1,7 @@
 package com.buran.game.conf;
 
+import com.buran.game.player.Standing;
+
 /**
  * @author soloyes on 10/16/18.
  * Game rules constants (Rules)

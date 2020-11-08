@@ -7,7 +7,6 @@ import com.buran.game.bot.consumable.AbstractConsumable;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.utils.Assets;
-import com.buran.game.utils.pool.AbstractPoolable;
 
 import lombok.Setter;
 
@@ -29,17 +28,17 @@ public class Shield {
     public Shield(AbstractConsumable consumable) {
         this.consumable = consumable;
         switch (consumable.getType()) {
-            case AbstractPoolable.Type.FUEL:
+            case FUEL:
                 this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHIELD_FUEL_REGION);
                 this.width = PaintConstants.SHIELD_FUEL_WIDTH;
                 this.height = PaintConstants.SHIELD_FUEL_HEIGHT;
                 break;
-            case AbstractPoolable.Type.STORAGE:
+            case STORAGE:
                 this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHIELD_STORAGE_REGION);
                 this.width = PaintConstants.SHIELD_STORAGE_WIDTH;
                 this.height = PaintConstants.SHIELD_STORAGE_HEIGHT;
                 break;
-            case AbstractPoolable.Type.CRATE:
+            case CRATE:
                 this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHIELD_CRATE_REGION);
                 this.width = PaintConstants.SHIELD_CRATE_WIDTH;
                 this.height = PaintConstants.SHIELD_CRATE_HEIGHT;

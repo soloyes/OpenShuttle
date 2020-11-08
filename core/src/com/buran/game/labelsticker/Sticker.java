@@ -641,7 +641,7 @@ public enum Sticker {
                     boomBox.playSound(MSConstants.ADD_SELECTABLE);
                 } else {
                     switch (consumable.getType()) {
-                        case AbstractPoolable.Type.CRATE:
+                        case CRATE:
                             GameInfoSystem.setup(
                                     consumable.getPosition().x, consumable.getPosition().y,
                                     GameInfoSystem.Preset.BONUS_CRATE.getValue(),
@@ -653,7 +653,7 @@ public enum Sticker {
                                 crateEmitter.createBonusCrate();
                             }
                             break;
-                        case AbstractPoolable.Type.STORAGE:
+                        case STORAGE:
                             StorageEmitter storageEmitter = (StorageEmitter) ObjectPool.EMITTERS.get(Storage.class);
                             GameInfoSystem.setup(
                                     consumable.getPosition().x, consumable.getPosition().y,
@@ -672,11 +672,11 @@ public enum Sticker {
             case 3:
                 if (consumable.isGolden()) {
                     switch (consumable.getType()) {
-                        case AbstractPoolable.Type.CRATE:
+                        case CRATE:
                             Standing.getInstance().changeHP(Standing.getInstance().getMaxHp());
                             boomBox.playSound(MSConstants.ADD_HP);
                             break;
-                        case AbstractPoolable.Type.STORAGE:
+                        case STORAGE:
                             Standing.getInstance().changeHP(Standing.getInstance().getMaxHp());
                             Standing.getInstance().changeLives(1);
                             boomBox.playSound(MSConstants.UP);
@@ -684,7 +684,7 @@ public enum Sticker {
                     }
                 } else {
                     switch (consumable.getType()) {
-                        case AbstractPoolable.Type.CRATE:
+                        case CRATE:
                             List<AbstractAnomaly> list;
                             if (MathUtils.random(0, 1) == 0) {
                                 MagneticAnomalyEmitter magneticAnomalyEmitter = (MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class);
@@ -708,7 +708,7 @@ public enum Sticker {
                                 }
                             }
                             break;
-                        case AbstractPoolable.Type.STORAGE:
+                        case STORAGE:
                             score = Rules.ANOMALIES_MAGNETIC_BONUS_SCORE;
                             MagneticAnomalyEmitter magneticAnomalyEmitter = (MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class);
                             list = magneticAnomalyEmitter.getActiveList();
@@ -789,7 +789,7 @@ public enum Sticker {
                 break;
             case 2:
                 switch (consumable.getType()) {
-                    case AbstractPoolable.Type.CRATE:
+                    case CRATE:
                         if (consumable.isGolden()) {
                             Radar.isActive = false;
                             GameInfoSystem.setup(
@@ -809,7 +809,7 @@ public enum Sticker {
                         }
                         boomBox.playSound(MSConstants.DISABLE_LASER_RADAR);
                         break;
-                    case AbstractPoolable.Type.STORAGE:
+                    case STORAGE:
                         List<AbstractConsumable> list;
                         GameInfoSystem.Preset preset;
                         if (consumable.isGolden()) {
@@ -840,7 +840,7 @@ public enum Sticker {
                 break;
             case 3:
                 switch (consumable.getType()) {
-                    case AbstractPoolable.Type.CRATE:
+                    case CRATE:
                         if (consumable.isGolden()) {
                             Standing.getInstance().changeLives(-1);
                             GameInfoSystem.setup(
@@ -871,7 +871,7 @@ public enum Sticker {
                             boomBox.playSound(MSConstants.DEL_HP_FUEL);
                         }
                         break;
-                    case AbstractPoolable.Type.STORAGE:
+                    case STORAGE:
                         if (consumable.isGolden()) {
                             ElectricalAnomalyEmitter electricalAnomalyEmitter = (ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class);
                             electricalAnomalyEmitter.createBonusAnomaly(consumable.getPosition());
