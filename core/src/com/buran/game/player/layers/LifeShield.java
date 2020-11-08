@@ -24,9 +24,9 @@ public class LifeShield {
     private float scaleX, scaleY;
 
     public LifeShield() {
-        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_LIFE_SHIELD);
-        this.width = PaintConstants.SHUTTLE_LIFE_SHIELD_WIDTH;
-        this.height = PaintConstants.SHUTTLE_LIFE_SHIELD_HEIGHT;
+        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.BURAN_LIFE_SHIELD);
+        this.width = PaintConstants.BURAN_LIFE_SHIELD_WIDTH;
+        this.height = PaintConstants.BURAN_LIFE_SHIELD_HEIGHT;
         this.scaleX = this.scaleY = 1.0f;
     }
 

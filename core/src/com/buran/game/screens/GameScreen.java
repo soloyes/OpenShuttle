@@ -477,7 +477,7 @@ public class GameScreen extends BaseScreen {
             if (consumable.isTaken()) {
                 continue;
             }
-            if (Buran.position.dst(consumable.getPosition()) <= PaintConstants.SHUTTLE_WIDTH / 2) {
+            if (Buran.position.dst(consumable.getPosition()) <= PaintConstants.BURAN_WIDTH / 2) {
                 consumable.setHarvested(true);
                 if (player.getShieldLevel().getLevel() < PlayerInteractionLevels.GREEN.getLevel() || consumable.isShielded()) {
                     consumeConsumable(consumable);

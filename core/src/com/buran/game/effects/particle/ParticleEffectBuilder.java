@@ -20,7 +20,7 @@ public class ParticleEffectBuilder {
         }
     }
 
-    public void buildShuttleEngineFire(Vector2 position, float angle, float radius, float level, float factor) {
+    public void buildBuranEngineFire(Vector2 position, float angle, float radius, float level, float factor) {
         particleEmitter.setup(position.x - radius * (float) Math.cos(Math.toRadians(angle)), position.y - radius * (float) Math.sin(Math.toRadians(angle)), MathUtils.random(-90, 90), MathUtils.random(-90, 90), 0.3f + level * 0.1f, 4.0f + level * 1.5f, 0.4f, 1, 0.6f - level * 0.15f, 0, 1, 1, 0, 0, 0.5f);
         if (MathUtils.random(0, 100) < /*FPS hack*/20 / factor/*FPS hack*/) {
             for (int i = 0; i < level + 1; i++) {
@@ -30,15 +30,15 @@ public class ParticleEffectBuilder {
 
     }
 
-    public void buildShuttleFrontalTurboFire(Vector2 position, float angle, float radius, float randomPositionNoise) {
+    public void buildBuranFrontalTurboFire(Vector2 position, float angle, float radius, float randomPositionNoise) {
         particleEmitter.setup(position.x + radius * (float) Math.cos(Math.toRadians(angle)), position.y + radius * (float) Math.sin(Math.toRadians(angle)), MathUtils.random(-randomPositionNoise, randomPositionNoise), MathUtils.random(-randomPositionNoise, randomPositionNoise), 5.9f, 16.0f, 15.0f, 1, 0.6f, 0, 1, 0, 0, 0, 0.0f);
     }
 
-    public void buildShuttleLowLevelEngineFire(Vector2 position, float angle, float radius) {
+    public void buildBuranLowLevelEngineFire(Vector2 position, float angle, float radius) {
         particleEmitter.setup(position.x - radius * (float) Math.cos(Math.toRadians(angle)), position.y - radius * (float) Math.sin(Math.toRadians(angle)), MathUtils.random(-90, 90), MathUtils.random(-90, 90), 0.2f, 3.0f, 2.4f, 0.2f, 0.2f, 1.0f, 0.4f, 0, 0, 0, 0.2f);
     }
 
-    public void buildShuttleShield(Vector2 position, float angle, float radius, int halfConeAngle, float r, float g, float b) {
+    public void buildBuranShield(Vector2 position, float angle, float radius, int halfConeAngle, float r, float g, float b) {
         for (int i = -halfConeAngle; i <= halfConeAngle; i += 10) {
             particleEmitter.setup(position.x + radius * (float) Math.cos(Math.toRadians(angle + i)), position.y + radius * (float) Math.sin(Math.toRadians(angle + i)), MathUtils.random(-5, 5), MathUtils.random(-5, 5), 0.15f, 3.0f, 4.0f, r, g, b, 0.1f, 0, 0, 0, 0.0f);
         }

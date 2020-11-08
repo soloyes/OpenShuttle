@@ -21,7 +21,7 @@ public class MenuBackgroundGroup extends Group {
     private TextureRegion storage;
     private TextureRegion astronaut;
     private TextureRegion sitastronaut;
-    private TextureRegion shuttle;
+    private TextureRegion buran;
     private TextureRegion shield;
     private TextureRegion planet;
     private TextureRegion fuel;
@@ -37,7 +37,7 @@ public class MenuBackgroundGroup extends Group {
     private float rotation2;
     private int random1;
     private int random2;
-    private float shuttleY;
+    private float buranY;
     private float backY;
     private float angle;
     private int radius;
@@ -50,7 +50,7 @@ public class MenuBackgroundGroup extends Group {
     private Oscillator asteroidScaleOscillator1;
     private Oscillator asteroidScaleOscillator2;
     private Oscillator shieldScaleOscillator;
-    private Oscillator shuttleYOscillator;
+    private Oscillator buranYOscillator;
     private Oscillator backYOscillator;
     private ParticleEmitter particleEmitter;
 
@@ -60,7 +60,7 @@ public class MenuBackgroundGroup extends Group {
         this.storage = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_STORAGE));
         this.astronaut = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT));
         this.sitastronaut = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT));
-        this.shuttle = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_SHUTTLE));
+        this.buran = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_BURAN));
         this.shield = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_SHIELD));
         this.planet = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_PLANET));
         this.fuel = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_FUEL));
@@ -76,8 +76,8 @@ public class MenuBackgroundGroup extends Group {
         this.asteroidScale2 = 1.0f;
         this.shieldScaleOscillator = new Oscillator();
         this.shieldScale = 1.0f;
-        this.shuttleYOscillator = new Oscillator();
-        this.shuttleY = 1.0f * PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_Y;
+        this.buranYOscillator = new Oscillator();
+        this.buranY = 1.0f * PaintConstants.UI_MENU_BACKGROUND_BURAN_Y;
         this.backYOscillator = new Oscillator();
         this.backY = PaintConstants.UI_MENU_BACKGROUND_PLANET_Y;
         this.random1 = MathUtils.randomSign();
@@ -112,7 +112,7 @@ public class MenuBackgroundGroup extends Group {
         batch.draw(sitastronaut,
                 Rules.WORLD_WIDTH * 0.55f, PaintConstants.UI_MENU_BACKGROUND_SIT_ASTRONAUT_Y - backY
         );
-        batch.draw(shuttle, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_X, shuttleY, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_WIDTH, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_HEIGHT);
+        batch.draw(buran, PaintConstants.UI_MENU_BACKGROUND_BURAN_X, buranY, PaintConstants.UI_MENU_BACKGROUND_BURAN_WIDTH, PaintConstants.UI_MENU_BACKGROUND_BURAN_HEIGHT);
         batch.draw(
                 shield,
                 PaintConstants.UI_MENU_BACKGROUND_SHIELD_X,
@@ -204,7 +204,7 @@ public class MenuBackgroundGroup extends Group {
         asteroidScale1 = asteroidScaleOscillator1.oscillate(asteroidScale1, 0.01f, 0.9f, 1.0f, delta);
         asteroidScale2 = asteroidScaleOscillator2.oscillate(asteroidScale2, 0.03f, 0.8f, 1.0f, delta);
         shieldScale = shieldScaleOscillator.oscillate(shieldScale, 0.09f, 0.95f, 1.0f, delta);
-        shuttleY = shuttleYOscillator.oscillate(shuttleY, 12.0f, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_Y, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_Y + 15, delta);
+        buranY = buranYOscillator.oscillate(buranY, 12.0f, PaintConstants.UI_MENU_BACKGROUND_BURAN_Y, PaintConstants.UI_MENU_BACKGROUND_BURAN_Y + 15, delta);
         backY = backYOscillator.oscillate(backY, 6.0f, PaintConstants.UI_MENU_BACKGROUND_PLANET_Y, PaintConstants.UI_MENU_BACKGROUND_PLANET_Y + 50, delta);
         rotation1 += delta;
         rotation2 += 10 * delta;

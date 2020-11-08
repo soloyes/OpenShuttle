@@ -26,10 +26,10 @@ public class TakeRangeField {
     private Color tmpColor;
 
     public TakeRangeField() {
-        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_TAKE_RANGE_FIELD_REGION);
+        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.BURAN_TAKE_RANGE_FIELD_REGION);
 
-        this.width = PaintConstants.SHUTTLE_TAKE_RANGE_FIELD_WIDTH;
-        this.height = PaintConstants.SHUTTLE_TAKE_RANGE_FIELD_HEIGHT;
+        this.width = PaintConstants.BURAN_TAKE_RANGE_FIELD_WIDTH;
+        this.height = PaintConstants.BURAN_TAKE_RANGE_FIELD_HEIGHT;
         this.tmpColor = new Color();
         this.scaleX = this.scaleY = 1.0f;
     }

@@ -18,14 +18,14 @@ import com.buran.game.utils.Assets;
 public class LoadingScreen extends BaseScreen implements Screen {
     private SpriteBatch batch;
     private Texture texture;
-    private TextureRegion shuttle;
+    private TextureRegion buran;
     private TextureRegion shield;
     private Pixmap pixmap;
-    private float shuttleX, shuttleY;
+    private float buranX, buranY;
     private float shieldX, shieldY;
     private float shieldScale;
     private Oscillator shieldScaleOscillator;
-    private Oscillator shuttleYOscillator;
+    private Oscillator buranYOscillator;
 
     public LoadingScreen(SpriteBatch batch) {
         super(batch);
@@ -34,13 +34,13 @@ public class LoadingScreen extends BaseScreen implements Screen {
         pixmap.setColor(0.8f, 0.43f, 0.33f, 1f);
         pixmap.fill();
         this.texture = new Texture(pixmap);
-        this.shuttle = new TextureRegion(new Texture(PaintConstants.LOAD_TEXTURES + "menubackgroundshuttle.png"));
+        this.buran = new TextureRegion(new Texture(PaintConstants.LOAD_TEXTURES + "menubackgroundburan.png"));
         this.shield = new TextureRegion(new Texture(PaintConstants.LOAD_TEXTURES + "menubackgroundshield.png"));
         this.shieldScaleOscillator = new Oscillator();
         this.shieldScale = 1.0f;
-        this.shuttleYOscillator = new Oscillator();
-        this.shuttleX = Rules.WORLD_WIDTH / 2 - PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_WIDTH / 2;
-        this.shuttleY = Rules.WORLD_HEIGHT / 2 - PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_HEIGHT / 2;
+        this.buranYOscillator = new Oscillator();
+        this.buranX = Rules.WORLD_WIDTH / 2 - PaintConstants.UI_MENU_BACKGROUND_BURAN_WIDTH / 2;
+        this.buranY = Rules.WORLD_HEIGHT / 2 - PaintConstants.UI_MENU_BACKGROUND_BURAN_HEIGHT / 2;
         this.shieldX = Rules.WORLD_WIDTH / 2 - PaintConstants.UI_MENU_BACKGROUND_SHIELD_WIDTH / 2;
         this.shieldY = Rules.WORLD_HEIGHT / 2 - PaintConstants.UI_MENU_BACKGROUND_SHIELD_HEIGHT / 2;
     }
@@ -63,19 +63,19 @@ public class LoadingScreen extends BaseScreen implements Screen {
         }
 
         shieldScale = shieldScaleOscillator.oscillate(shieldScale, 0.09f, 0.95f, 1.0f, delta);
-        shuttleY = shuttleYOscillator.oscillate(
-                shuttleY, 12.0f,
-                Rules.WORLD_HEIGHT / 2 - PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_HEIGHT / 2,
-                Rules.WORLD_HEIGHT / 2 - PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_HEIGHT / 2 + 15,
+        buranY = buranYOscillator.oscillate(
+                buranY, 12.0f,
+                Rules.WORLD_HEIGHT / 2 - PaintConstants.UI_MENU_BACKGROUND_BURAN_HEIGHT / 2,
+                Rules.WORLD_HEIGHT / 2 - PaintConstants.UI_MENU_BACKGROUND_BURAN_HEIGHT / 2 + 15,
                 delta
         );
 
         batch.begin();
         batch.setColor(Color.WHITE);
         batch.draw(texture, 0, 0, Rules.WORLD_WIDTH * Assets.getInstance().getAssetManager().getProgress(), 60);
-        batch.draw(shuttle,
-                shuttleX, shuttleY,
-                PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_WIDTH, PaintConstants.UI_MENU_BACKGROUND_SHUTTLE_HEIGHT
+        batch.draw(buran,
+                buranX, buranY,
+                PaintConstants.UI_MENU_BACKGROUND_BURAN_WIDTH, PaintConstants.UI_MENU_BACKGROUND_BURAN_HEIGHT
         );
         batch.draw(shield,
                 shieldX, shieldY,
@@ -92,7 +92,7 @@ public class LoadingScreen extends BaseScreen implements Screen {
         super.dispose();
         texture.dispose();
         pixmap.dispose();
-        shuttle.getTexture().dispose();
+        buran.getTexture().dispose();
         shield.getTexture().dispose();
     }
 

@@ -28,9 +28,9 @@ public class RamShield {
     private Color tmpColor;
 
     public RamShield() {
-        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_RAM_SHIELD);
-        this.width = PaintConstants.SHUTTLE_RAM_SHIELD_WIDTH;
-        this.height = PaintConstants.SHUTTLE_RAM_SHIELD_HEIGHT;
+        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.BURAN_RAM_SHIELD);
+        this.width = PaintConstants.BURAN_RAM_SHIELD_WIDTH;
+        this.height = PaintConstants.BURAN_RAM_SHIELD_HEIGHT;
         this.tmpColor = new Color();
         this.scaleX = this.scaleY = 1.0f;
     }

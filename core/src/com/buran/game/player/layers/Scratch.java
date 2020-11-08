@@ -28,11 +28,11 @@ public class Scratch {
 
     public Scratch() {
         this.textures = Regions.split(
-                Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_SCRATCH),
+                Assets.getInstance().getAtlas().findRegion(PaintConstants.BURAN_SCRATCH),
                 1, 5, 5
         );
-        this.width = PaintConstants.SHUTTLE_SCRATCH_WIDTH;
-        this.height = PaintConstants.SHUTTLE_SCRATCH_HEIGHT;
+        this.width = PaintConstants.BURAN_SCRATCH_WIDTH;
+        this.height = PaintConstants.BURAN_SCRATCH_HEIGHT;
         this.tmpColor = new Color();
         this.scaleX = this.scaleY = 1.0f;
     }

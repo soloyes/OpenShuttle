@@ -25,7 +25,7 @@ import com.buran.game.ui.GameInfoSystem;
 import com.buran.game.ui.Joystick;
 import com.buran.game.ui.groups.mvc.profiles.Profiles;
 import com.buran.game.utils.BoundCheck;
-import com.buran.game.utils.ShuttleMath;
+import com.buran.game.utils.BuranMath;
 import com.buran.game.utils.pool.AbstractPoolable;
 
 import java.util.LinkedList;
@@ -255,8 +255,8 @@ public class Buran extends AbstractBuran {
     public void showTakeRangeField(float dt, boolean anyAtHarvestPoint) {
         float a = takeRangeField.getAlpha();
         if (anyAtHarvestPoint) {
-            if (a >= PaintConstants.SHUTTLE_TAKE_RANGE_FIELD_MAX) {
-                takeRangeField.setAlpha(PaintConstants.SHUTTLE_TAKE_RANGE_FIELD_MAX);
+            if (a >= PaintConstants.BURAN_TAKE_RANGE_FIELD_MAX) {
+                takeRangeField.setAlpha(PaintConstants.BURAN_TAKE_RANGE_FIELD_MAX);
             } else {
                 takeRangeField.setAlpha(a + dt);
             }
@@ -284,7 +284,7 @@ public class Buran extends AbstractBuran {
         checkSeries(dt);
         checkRamPower();
         checkZigZagEffect(dt);
-        angle = ShuttleMath.checkAngleBetween0And360(angle);
+        angle = BuranMath.checkAngleBetween0And360(angle);
         checkFuel(dt);
 
         scratch.update(dt);
@@ -389,7 +389,7 @@ public class Buran extends AbstractBuran {
     private void move(float dt, float angleToTarget) {
         if (zigzagEffect < 0.05f) {
             if (Math.abs(angle - angleToTarget) > /*FPS hack*/120.0f * dt/*FPS hack*/) {
-                float dir = ShuttleMath.getRotationDirection(
+                float dir = BuranMath.getRotationDirection(
                         angle,
                         angleToTarget
                 );
@@ -423,20 +423,20 @@ public class Buran extends AbstractBuran {
         /*FPS hack*/
         for (int i = 0; i <= j; i++) {
             if (standing.getFuel() > 0.1f && velocity.len() >= 80 && !Rules.GAME_OVER) {
-                particleEmitter.getBuilder().buildShuttleEngineFire(position, angle,  /*FPS hack*/70 - j * 0.5f /*FPS hack*/, 1.0f, 60 * dt);
+                particleEmitter.getBuilder().buildBuranEngineFire(position, angle,  /*FPS hack*/70 - j * 0.5f /*FPS hack*/, 1.0f, 60 * dt);
                 if (engineStarted) {
                     boomBox.playSound(MSConstants.START_ENGINE);
                     engineStarted = false;
                 }
             } else {
-                particleEmitter.getBuilder().buildShuttleLowLevelEngineFire(position, angle, 80);
+                particleEmitter.getBuilder().buildBuranLowLevelEngineFire(position, angle, 80);
                 engineStarted = true;
             }
             if (velocity.len() > Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
-                particleEmitter.getBuilder().buildShuttleFrontalTurboFire(position, angle, 90, 20);
+                particleEmitter.getBuilder().buildBuranFrontalTurboFire(position, angle, 90, 20);
             }
             if (velocity.len() > Rules.PLAYER_ENGINE_POWER + 10) {
-                particleEmitter.getBuilder().buildShuttleShield(
+                particleEmitter.getBuilder().buildBuranShield(
                         position, angle, 90, 45,
                         PlayerInteractionLevels.RED.getR(), PlayerInteractionLevels.RED.getG(), PlayerInteractionLevels.RED.getB()
                 );

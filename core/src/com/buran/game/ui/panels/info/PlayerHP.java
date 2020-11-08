@@ -27,10 +27,10 @@ public class PlayerHP {
     private float blinkTimer;
 
     public PlayerHP() {
-        this.icon = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_ICON));
-        this.iconScale = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.SHUTTLE_ICON_SCALE));
-        this.iconWidth = PaintConstants.SHUTTLE_ICON_WIDTH;
-        this.iconHeight = PaintConstants.SHUTTLE_ICON_HEIGHT;
+        this.icon = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.BURAN_ICON));
+        this.iconScale = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.BURAN_ICON_SCALE));
+        this.iconWidth = PaintConstants.BURAN_ICON_WIDTH;
+        this.iconHeight = PaintConstants.BURAN_ICON_HEIGHT;
         this.position = new Vector2();
         this.position.set(Rules.WORLD_WIDTH / 2, Rules.WORLD_HEIGHT - 145);
         this.font44 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT44, BitmapFont.class);
@@ -41,7 +41,7 @@ public class PlayerHP {
 
     public void render(SpriteBatch batch) {
         Color tmpColor = batch.getColor();
-        if (blinkTimer <= PaintConstants.SHUTTLE_ICON_BLINK_FREQUENCY) {
+        if (blinkTimer <= PaintConstants.BURAN_ICON_BLINK_FREQUENCY) {
             batch.setColor(color);
             batch.draw(icon, position.x - iconWidth / 2, position.y - 6, iconWidth, iconHeight);
             int h = (int) ((1.0f - 1.0f * Standing.getInstance().getLevelsToLive() / Rules.LEVELS_TO_LIVE) * iconHeight);
@@ -53,7 +53,7 @@ public class PlayerHP {
                     iconWidth, iconHeight - h
             );
         } else {
-            blinkTimer = -PaintConstants.SHUTTLE_ICON_BLINK_FREQUENCY;
+            blinkTimer = -PaintConstants.BURAN_ICON_BLINK_FREQUENCY;
         }
         batch.setColor(tmpColor);
         font44.draw(batch, glyphLayout, position.x - glyphLayout.width / 2, position.y - glyphLayout.height / 2);
