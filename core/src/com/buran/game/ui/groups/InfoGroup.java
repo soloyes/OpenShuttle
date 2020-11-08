@@ -16,15 +16,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.buran.game.BuranGame;
-import com.shuttle.game.conf.MSConstants;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.conf.VConstants;
-import com.shuttle.game.effects.BoomBox;
-import com.shuttle.game.effects.Vibrator;
-import com.shuttle.game.ui.groups.GroupType;
-import com.shuttle.game.ui.groups.mvc.results.Results;
-import com.shuttle.game.utils.Assets;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.conf.VConstants;
+import com.buran.game.effects.BoomBox;
+import com.buran.game.effects.Vibrator;
+import com.buran.game.ui.groups.mvc.results.Results;
+import com.buran.game.utils.Assets;
 
 import lombok.Setter;
 
@@ -39,7 +38,7 @@ public class InfoGroup extends Group {
     private BitmapFont font96;
 
     public InfoGroup() {
-        this.setName(com.shuttle.game.ui.groups.GroupType.INFO.name());
+        this.setName(GroupType.INFO.name());
         Table table = new Table();
         this.boomBox = new BoomBox();
         this.results = new Results();
@@ -149,7 +148,7 @@ public class InfoGroup extends Group {
                     setVisible(false);
                     Array<Actor> actors = getStage().getActors();
                     for (int i = 0; i < actors.size; i++) {
-                        if (actors.get(i).getName().equals(com.shuttle.game.ui.groups.GroupType.RULES.name())) {
+                        if (actors.get(i).getName().equals(GroupType.RULES.name())) {
                             actors.get(i).setVisible(true);
                         }
                         if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {

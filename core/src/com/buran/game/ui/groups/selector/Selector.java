@@ -4,6 +4,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.labelsticker.Sticker;
+import com.buran.game.ui.groups.configs.ConfigImageButton;
+import com.buran.game.ui.groups.configs.LeftGroup;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.StickerResolver;
 
 import lombok.Getter;
 
@@ -18,7 +25,7 @@ public class Selector {
     private TextureRegion textureRegion;
     @Getter
     private Sticker sticker;
-    private com.buran.game.utils.StickerResolver stickerResolver;
+    private StickerResolver stickerResolver;
     private float rechargeTime;
     @Getter
     private boolean active;
@@ -33,7 +40,7 @@ public class Selector {
         this.stringBuilder = new StringBuilder();
         this.textureRegion = new TextureRegion();
         this.sticker = Sticker.PATTERN;
-        this.stickerResolver = new com.buran.game.utils.StickerResolver();
+        this.stickerResolver = new StickerResolver();
         this.rechargeTime = Rules.PLAYER_RECHARGE_TIME;
         this.active = true;
         init(sticker);
@@ -50,7 +57,7 @@ public class Selector {
             count = Rules.SELECTOR_MAX_COUNT;
         }
 
-        com.buran.game.ui.groups.configs.ConfigImageButton button = com.buran.game.ui.groups.configs.LeftGroup.getInstance().getButtonMap().get(sticker);
+        ConfigImageButton button = LeftGroup.getInstance().getButtonMap().get(sticker);
         if (button != null) {
             button.changeCount(amount);
         }

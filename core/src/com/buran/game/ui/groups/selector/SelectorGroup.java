@@ -1,4 +1,4 @@
-package com.buran.game.ui.groups.selector;
+package com.buran.game.ui.groups.selector
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -12,6 +12,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.conf.VConstants;
+import com.buran.game.effects.BoomBox;
+import com.buran.game.effects.Vibrator;
+import com.buran.game.labelsticker.Sticker;
+import com.buran.game.player.Standing;
+import com.buran.game.ui.groups.PauseGroup;
+import com.buran.game.ui.groups.configs.LeftGroup;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.Consumer;
+import com.buran.game.utils.RadialSprite;
+import com.buran.game.utils.ShaderManager;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -88,7 +102,7 @@ public class SelectorGroup extends Group {
         leftButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (!com.buran.game.ui.groups.PauseGroup.isPause()) {
+                if (!PauseGroup.isPause()) {
                     boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
                     Vibrator.vibrate(VConstants.UI_CLICK);
                 }
@@ -99,7 +113,7 @@ public class SelectorGroup extends Group {
         rightButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (!com.buran.game.ui.groups.PauseGroup.isPause()) {
+                if (!PauseGroup.isPause()) {
                     boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
                     Vibrator.vibrate(VConstants.UI_CLICK);
                 }
@@ -111,7 +125,7 @@ public class SelectorGroup extends Group {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (selectors.size() != 0) {
-                    if (centerSelector.isActive() && !com.buran.game.ui.groups.PauseGroup.isPause()) {
+                    if (centerSelector.isActive() && !PauseGroup.isPause()) {
                         removeSelector();
                         centerSelector.press();
                         Vibrator.vibrate(VConstants.UI_CLICK);
@@ -142,7 +156,7 @@ public class SelectorGroup extends Group {
 
     @Override
     public void act(float delta) {
-        paused = com.buran.game.ui.groups.PauseGroup.isPause();
+        paused = PauseGroup.isPause();
         if (Rules.GAME_OVER) {
             setVisible(false);
         }
@@ -150,7 +164,7 @@ public class SelectorGroup extends Group {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (com.buran.game.ui.groups.PauseGroup.isPause()) {
+        if (PauseGroup.isPause()) {
             batch.setShader(ShaderManager.PAUSE.getProgram());
         } else {
             batch.setShader(null);
@@ -161,7 +175,7 @@ public class SelectorGroup extends Group {
     }
 
     public void addSelector(Sticker sticker, int amount) {
-        com.buran.game.ui.groups.configs.LeftGroup.getInstance().updateScroll(sticker);
+        LeftGroup.getInstance().updateScroll(sticker);
         boolean present = false;
         int i;
         for (i = 0; i < selectors.size(); i++) {
@@ -301,7 +315,7 @@ public class SelectorGroup extends Group {
             centerSelector = null;
         }
 
-        com.buran.game.ui.groups.configs.LeftGroup.getInstance().setCenter(centerSelector);
+        LeftGroup.getInstance().setCenter(centerSelector);
         for (int i = 0; i < selectors.size(); i++) {
             selectors.get(i).update(dt);
         }

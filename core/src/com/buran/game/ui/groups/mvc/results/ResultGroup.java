@@ -18,18 +18,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.shuttle.game.conf.MSConstants;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.conf.VConstants;
-import com.shuttle.game.effects.BoomBox;
-import com.shuttle.game.effects.Vibrator;
-import com.shuttle.game.screens.ScreenManager;
-import com.shuttle.game.ui.groups.mvc.profiles.ProfileDAO;
-import com.shuttle.game.ui.groups.mvc.profiles.Profiles;
-import com.shuttle.game.ui.groups.mvc.results.ResultDAO;
-import com.shuttle.game.utils.Assets;
-import com.shuttle.game.utils.Rounder;
+import com.buran.game.conf.MSConstants;
+import com.buran.game.conf.PaintConstants;
+import com.buran.game.conf.Rules;
+import com.buran.game.conf.VConstants;
+import com.buran.game.effects.BoomBox;
+import com.buran.game.effects.Vibrator;
+import com.buran.game.screens.ScreenManager;
+import com.buran.game.ui.groups.GroupType;
+import com.buran.game.ui.groups.configs.ConfigCheckBox;
+import com.buran.game.ui.groups.configs.ConfigCheckBoxStyle;
+import com.buran.game.ui.groups.mvc.profiles.ProfileDAO;
+import com.buran.game.ui.groups.mvc.profiles.Profiles;
+import com.buran.game.utils.Assets;
+import com.buran.game.utils.Rounder;
 
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
@@ -55,7 +57,7 @@ public class ResultGroup extends Group {
     private DetailedResultGroup detailedResultGroup;
 
     public ResultGroup(DetailedResultGroup detailedResultGroup) {
-        this.setName(com.buran.game.ui.groups.GroupType.RESULTS.name());
+        this.setName(GroupType.RESULTS.name());
         this.detailedResultGroup = detailedResultGroup;
         this.profiles = new Profiles();
         this.setVisible(false);
@@ -93,21 +95,21 @@ public class ResultGroup extends Group {
         verticalGroup.clear();
         int lines = 0;
 
-        Map<com.shuttle.game.ui.groups.mvc.results.ResultDAO, ProfileDAO> map = new TreeMap<com.shuttle.game.ui.groups.mvc.results.ResultDAO, ProfileDAO>(new Comparator<com.shuttle.game.ui.groups.mvc.results.ResultDAO>() {
+        Map<ResultDAO, ProfileDAO> map = new TreeMap<ResultDAO, ProfileDAO>(new Comparator<ResultDAO>() {
             @Override
-            public int compare(com.shuttle.game.ui.groups.mvc.results.ResultDAO resultDAO1, com.shuttle.game.ui.groups.mvc.results.ResultDAO resultDAO2) {
+            public int compare(ResultDAO resultDAO1, ResultDAO resultDAO2) {
                 return resultDAO2.getDate().compareTo(resultDAO1.getDate());
             }
         });
 
         for (ProfileDAO p : profiles.getList()) {
             if (!p.getResultSet().isEmpty()) {
-                for (final com.shuttle.game.ui.groups.mvc.results.ResultDAO r : p.getResultSet()) {
+                for (final ResultDAO r : p.getResultSet()) {
                     map.put(r, p);
                 }
             }
         }
-        for (final Map.Entry<com.shuttle.game.ui.groups.mvc.results.ResultDAO, ProfileDAO> m : map.entrySet()) {
+        for (final Map.Entry<ResultDAO, ProfileDAO> m : map.entrySet()) {
             final Line line = new Line(m.getValue(), m.getKey());
             line.addListener(new ClickListener() {
                 @Override
@@ -148,7 +150,7 @@ public class ResultGroup extends Group {
         private TextureRegion draw;
         private TextureRegion standard;
         private TextureRegion child;
-        private com.buran.game.ui.groups.configs.ConfigCheckBoxStyle childCheckBoxStyle;
+        private ConfigCheckBoxStyle childCheckBoxStyle;
 
         @Setter
         private boolean active;
@@ -164,11 +166,11 @@ public class ResultGroup extends Group {
             this.standard = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL));
             this.child = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RESULTS_CELL_CHILD));
 
-            childCheckBoxStyle = new com.buran.game.ui.groups.configs.ConfigCheckBoxStyle(
+            childCheckBoxStyle = new ConfigCheckBoxStyle(
                     new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_CHILD)),
                     new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_CHILD))
             );
-            com.buran.game.ui.groups.configs.ConfigCheckBox childCheckBox = new com.buran.game.ui.groups.configs.ConfigCheckBox("", childCheckBoxStyle);
+            ConfigCheckBox childCheckBox = new ConfigCheckBox("", childCheckBoxStyle);
             childCheckBox.setChecked(true);
             childCheckBox.clearListeners();
 
@@ -179,7 +181,7 @@ public class ResultGroup extends Group {
                     if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.MENU) {
                         Array<Actor> actors = getStage().getActors();
                         for (int i = 0; i < actors.size; i++) {
-                            if (actors.get(i).getName().equals(com.buran.game.ui.groups.GroupType.MENU_BAR.name())) {
+                            if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
                                 actors.get(i).setVisible(false);
                             }
                         }
@@ -282,17 +284,17 @@ public class ResultGroup extends Group {
     public void switchVisible() {
         Array<Actor> actors = getStage().getActors();
         for (int i = 0; i < actors.size; i++) {
-            if (actors.get(i).getName().equals(com.buran.game.ui.groups.GroupType.MENU.name())) {
+            if (actors.get(i).getName().equals(GroupType.MENU.name())) {
                 actors.get(i).setVisible(true);
-            } else if (actors.get(i).getName().equals(com.buran.game.ui.groups.GroupType.CONFIG.name())) {
+            } else if (actors.get(i).getName().equals(GroupType.CONFIG.name())) {
                 actors.get(i).setVisible(false);
-            } else if (actors.get(i).getName().equals(com.buran.game.ui.groups.GroupType.INFO.name())) {
+            } else if (actors.get(i).getName().equals(GroupType.INFO.name())) {
                 actors.get(i).setVisible(false);
-            } else if (actors.get(i).getName().equals(com.buran.game.ui.groups.GroupType.RESULTS_DETAILED.name())) {
+            } else if (actors.get(i).getName().equals(GroupType.RESULTS_DETAILED.name())) {
                 actors.get(i).setVisible(false);
-            } else if (actors.get(i).getName().equals(com.buran.game.ui.groups.GroupType.RESULTS.name())) {
+            } else if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
                 actors.get(i).setVisible(false);
-            } else if (actors.get(i).getName().equals(com.buran.game.ui.groups.GroupType.MENU_BAR.name())) {
+            } else if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
                 actors.get(i).setVisible(true);
             }
         }
@@ -301,11 +303,11 @@ public class ResultGroup extends Group {
     public void backVisible() {
         Array<Actor> actors = getStage().getActors();
         for (int i = 0; i < actors.size; i++) {
-            if (actors.get(i).getName().equals(com.buran.game.ui.groups.GroupType.RESULTS_DETAILED.name())) {
+            if (actors.get(i).getName().equals(GroupType.RESULTS_DETAILED.name())) {
                 actors.get(i).setVisible(false);
-            } else if (actors.get(i).getName().equals(com.buran.game.ui.groups.GroupType.RESULTS.name())) {
+            } else if (actors.get(i).getName().equals(GroupType.RESULTS.name())) {
                 actors.get(i).setVisible(true);
-            } else if (actors.get(i).getName().equals(com.buran.game.ui.groups.GroupType.MENU_BAR.name())) {
+            } else if (actors.get(i).getName().equals(GroupType.MENU_BAR.name())) {
                 actors.get(i).setVisible(true);
             }
         }

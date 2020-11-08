@@ -1,21 +1,24 @@
 package com.buran.game.ui.groups.mvc.results;
 
+import com.buran.game.ui.groups.mvc.profiles.ProfileDAO;
+import com.buran.game.ui.groups.mvc.profiles.Profiles;
+
 /**
  * @author soloyes on 7/14/18.
  */
 
 public class Results {
     private StringBuffer stringBuffer;
-    private com.buran.game.ui.groups.mvc.profiles.Profiles profiles;
+    private Profiles profiles;
 
     public Results() {
         this.stringBuffer = new StringBuffer();
-        this.profiles = new com.buran.game.ui.groups.mvc.profiles.Profiles();
+        this.profiles = new Profiles();
     }
 
     public String shareResults() {
         stringBuffer.setLength(0);
-        for (com.buran.game.ui.groups.mvc.profiles.ProfileDAO p : profiles.getList()) {
+        for (ProfileDAO p : profiles.getList()) {
             if (!p.getResultSet().isEmpty()) {
                 for (ResultDAO r : p.getResultSet()) {
                     stringBuffer

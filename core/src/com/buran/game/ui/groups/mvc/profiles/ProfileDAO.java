@@ -1,7 +1,6 @@
 package com.buran.game.ui.groups.mvc.profiles;
 
-import com.shuttle.game.ui.groups.mvc.profiles.SettingsDAO;
-import com.shuttle.game.ui.groups.mvc.results.ResultDAO;
+import com.buran.game.ui.groups.mvc.results.ResultDAO;
 
 import java.util.Set;
 import java.util.UUID;
@@ -26,7 +25,7 @@ public class ProfileDAO {
 
     @Getter
     @Setter
-    private com.shuttle.game.ui.groups.mvc.profiles.SettingsDAO preferences;
+    private SettingsDAO preferences;
 
     @Getter
     @Setter
@@ -46,7 +45,7 @@ public class ProfileDAO {
     public void copy(ProfileDAO profile) {
         this.type = profile.getType();
         this.username = profile.getUsername();
-        this.preferences = new com.shuttle.game.ui.groups.mvc.profiles.SettingsDAO(profile.getPreferences());
+        this.preferences = new SettingsDAO(profile.getPreferences());
         this.active = profile.isActive();
     }
 

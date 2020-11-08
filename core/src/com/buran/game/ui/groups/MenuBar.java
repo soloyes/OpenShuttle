@@ -9,16 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.shuttle.game.conf.MSConstants;
-import com.shuttle.game.conf.PaintConstants;
-import com.shuttle.game.conf.Rules;
-import com.shuttle.game.conf.VConstants;
-import com.shuttle.game.effects.BoomBox;
-import com.shuttle.game.effects.Vibrator;
-import com.shuttle.game.screens.ScreenManager;
-import com.shuttle.game.ui.groups.GroupType;
-import com.shuttle.game.ui.groups.MenuGroup;
-import com.shuttle.game.utils.Assets;
 
 /**
  * @author soloyes on 3/24/18.

@@ -1,5 +1,7 @@
 package com.buran.game.ui.groups.mvc.results;
 
+import com.buran.game.conf.Rules;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -51,7 +53,7 @@ public class ResultDAO {
         ResultDAO resultDAO = (ResultDAO) o;
 
         if (child != resultDAO.child) return false;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(com.buran.game.conf.Rules.DATE_FORMAT, Locale.ENGLISH);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Rules.DATE_FORMAT, Locale.ENGLISH);
         String day1 = simpleDateFormat.format(date);
         String day2 = simpleDateFormat.format(resultDAO.date);
         if (!day1.equals(day2)) return false;
@@ -60,7 +62,7 @@ public class ResultDAO {
 
     @Override
     public int hashCode() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(com.buran.game.conf.Rules.DATE_FORMAT, Locale.ENGLISH);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Rules.DATE_FORMAT, Locale.ENGLISH);
         String day = simpleDateFormat.format(date.getTime());
         int result = day.hashCode();
         result = 31 * result + level.hashCode();
