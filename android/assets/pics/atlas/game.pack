@@ -367,7 +367,7 @@ joystick
   orig: 400, 250
   offset: 0, 0
   index: -1
-menubackgroundshuttle
+menubackgroundburan
   rotate: false
   xy: 3750, 808
   size: 252, 219
@@ -787,14 +787,14 @@ icoconfigload
   orig: 82, 82
   offset: 0, 0
   index: -1
-shuttleiconscale
+buraniconscale
   rotate: false
   xy: 3112, 972
   size: 44, 44
   orig: 44, 44
   offset: 0, 0
   index: -1
-shuttleicon
+buranicon
   rotate: false
   xy: 3166, 972
   size: 44, 44
