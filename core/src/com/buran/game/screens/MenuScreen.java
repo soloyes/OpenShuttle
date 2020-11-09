@@ -30,7 +30,7 @@ public class MenuScreen extends BaseScreen {
     private MenuBackgroundGroup menuBackgroundGroup;
     private DetailedResultGroup detailedResultGroup;
     private RulesGroup rulesGroup;
-    private BitmapFont font180;
+    private BitmapFont font175;
     private BitmapFont font48;
     private Label head;
     private Label underHead;
@@ -58,13 +58,13 @@ public class MenuScreen extends BaseScreen {
         menuGroup = new MenuGroup(configGroup, resultGroup);
         MenuBar menuBar = new MenuBar();
         InfoGroup infoGroup = new InfoGroup();
-        this.font180 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT180, BitmapFont.class);
+        this.font175 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT175, BitmapFont.class);
         this.font48 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT48, BitmapFont.class);
         Label.LabelStyle labelStyle64 = new Label.LabelStyle();
         labelStyle64.font = font48;
-        Label.LabelStyle labelStyle180 = new Label.LabelStyle();
-        labelStyle180.font = font180;
-        this.head = new Label("BURAN 19", labelStyle180);
+        Label.LabelStyle labelStyle175 = new Label.LabelStyle();
+        labelStyle175.font = font175;
+        this.head = new Label("BURAN-19", labelStyle175);
         head.setPosition(Rules.WORLD_WIDTH / 2 - head.getWidth() / 2, Rules.WORLD_HEIGHT - 234);
         this.underHead = new Label("2D GAME ARCADE", labelStyle64);
         underHead.setPosition(Rules.WORLD_WIDTH / 2 - underHead.getWidth() / 2, Rules.WORLD_HEIGHT - 262);

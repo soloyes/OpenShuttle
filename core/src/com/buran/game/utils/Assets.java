@@ -45,6 +45,7 @@ public class Assets {
                 createStandardFont(72, "fonts/college.regular", "");
                 createStandardFont(96, "fonts/college.regular", "");
                 createStandardFont(128, "fonts/college.regular", "");
+                createStandardFont(175, "fonts/college.regular", "");
                 createStandardFont(180, "fonts/college.regular", "");
                 createStandardFont(188, "fonts/college.regular", "");
                 createStandardFont(256, "fonts/college.regular", "");

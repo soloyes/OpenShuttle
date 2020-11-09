@@ -1,6 +1,5 @@
 package com.buran.game.ui.groups.configs;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -16,7 +15,6 @@ import com.buran.game.effects.Vibrator;
 import com.buran.game.labelsticker.Sticker;
 import com.buran.game.ui.groups.PauseGroup;
 import com.buran.game.utils.Assets;
-import com.buran.game.utils.StickerResolver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author soloyes on 10/12/19.
@@ -40,7 +39,6 @@ public abstract class AbstractInfoGroup extends Group {
     protected final int delimiter = 24;
     protected final int N = 5;
     protected TextureRegionDrawable up;
-    protected StickerResolver stickerResolver;
     protected boolean barClicked;
     protected float Y;
     protected boolean isLeft;
@@ -49,11 +47,12 @@ public abstract class AbstractInfoGroup extends Group {
     private float d;
     private boolean touched;
     private BoomBox boomBox;
+    @Setter
+    private ConfigGroup configGroup;
 
     public AbstractInfoGroup() {
         this.setVisible(false);
         this.boomBox = new BoomBox();
-        this.stickerResolver = new StickerResolver();
         this.skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.group = new VerticalGroup();
         this.buttonList = new ArrayList<ConfigImageButton>();
@@ -132,7 +131,7 @@ public abstract class AbstractInfoGroup extends Group {
         for (i = 0; i < buttonList.size(); i++) {
             ConfigImageButton button = buttonList.get(i);
             if (button.isEmpty()) {
-                button.setupButton(stickerResolver.getRegion(sticker), stickerResolver.getOperation(sticker));
+                button.setupButton(sticker);
                 buttonMap.put(sticker, button);
                 //button.changeCount(1);
                 break;
@@ -140,7 +139,7 @@ public abstract class AbstractInfoGroup extends Group {
         }
         if (i == buttonList.size()) {
             ConfigImageButton button = new ConfigImageButton(up, isLeft);
-            button.setupButton(stickerResolver.getRegion(sticker), stickerResolver.getOperation(sticker));
+            button.setupButton(sticker);
             buttonMap.put(sticker, button);
             buttonList.add(button);
             //button.changeCount(1);
@@ -149,23 +148,38 @@ public abstract class AbstractInfoGroup extends Group {
     }
 
     public class Line extends Table {
-        public Line(Actor actor, boolean isTop) {
+        public Line(final ConfigImageButton configImageButton, boolean isTop) {
             if (!isTop) {
                 this.row().height(delimiter);
                 this.add();
             }
             this.row().width(cellWidth).height(cellHeight - delimiter);
-            this.add(actor);
+            this.add(configImageButton);
             this.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     if (pointer == 0) {
                         boomBox.playSound(MSConstants.UI_CLICK);
                         Vibrator.vibrate(VConstants.UI_CLICK);
+                        if (!configImageButton.isEmpty()) {
+                            configGroup.refreshCardContainer(configImageButton.getSticker());
+                            configGroup.changeLook(false);
+                        }
                     }
                     return super.touchDown(event, x, y, pointer, button);
                 }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchUp(event, x, y, pointer, button);
+                    if (pointer == 0) {
+                        if (!configImageButton.isEmpty()) {
+                            configGroup.changeLook(true);
+                        }
+                    }
+                }
             });
+
         }
     }
 }

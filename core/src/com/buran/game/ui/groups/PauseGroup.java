@@ -71,7 +71,9 @@ public class PauseGroup extends Group {
         this.color = new Color();
         this.configGroup = new ConfigGroup();
         this.leftGroup = LeftGroup.getInstance();
+        leftGroup.setConfigGroup(configGroup);
         this.rightGroup = RightGroup.getInstance();
+        rightGroup.setConfigGroup(configGroup);
         this.buttonMenu = new UIButton(new TextureRegionDrawable(new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_MENU_HOME))));
         buttonMenu.setVisible(false);
         this.buttonRestart = new UIButton(new TextureRegionDrawable(new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_MENU_RESTART))));

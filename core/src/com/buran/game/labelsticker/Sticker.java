@@ -42,7 +42,7 @@ import lombok.Getter;
 
 public enum Sticker {
     //Crate
-    BOOST("[#FFFFFF]BOOST[]\n[#cc6e54]Acceleration - the rate of change of the velocity of the ship with respect to time. When you get this object, you able to activate it from the top storage menu. Danger! When velocity is high, you may get more damage. From the other hand, you able to kill more anomalies.[]") {
+    BOOST("[#FFFFFF]BOOST[]\n[#cc6e54]Acceleration is the rate of change in the velocity of the ship with respect to time. When you get this object, you can activate it from the Storage menu at the top. Warning! When velocity is too high, your ship can get more damage. Or you may kill more anomalies.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
@@ -72,7 +72,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_BOOST);
         }
     },
-    REPAIR("[#FFFFFF]REPAIR[]\n[#cc6e54]Using to restore by replacing a part or putting together what is torn or broken. Your ship takes damage when collide with asteroids, black holes, and anomalies. Be aware! Carefully leave the space.[]") {
+    REPAIR("[#FFFFFF]REPAIR[]\n[#cc6e54]Restores HP by replacement of components or fixing what's broken. Your ship is damaged when it collides with asteroids, black holes and anomalies. Guard it like the apple of your eye and don't cross the borders![]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
@@ -97,7 +97,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_REPAIR);
         }
     },
-    SHIELD("[#FFFFFF]SHIELD[]\n[#cc6e54]A shield is round a piece of personal armour. Your shield may bite a related color anomaly. Shield should be charged, just do the harvesting and watch around.[]") {
+    SHIELD("[#FFFFFF]SHIELD[]\n[#cc6e54]A shield is a round piece of armor. Your shield may bite an anomaly with a matching color. Remember that the shield needs to be charged! Just do the harvesting and look around.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
@@ -136,7 +136,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_SHIELD);
         }
     },
-    TRASH("[#FFFFFF]TRASH[]\n[#cc6e54]A box like this can give you many interesting possibilities. The main thing is not to be afraid to take it and open it so that you have a chance to earn more points.[]") {
+    TRASH("[#FFFFFF]TRASH[]\n[#cc6e54]A box like this can give you many interesting possibilities. Don't be afraid - when you open it, you can earn more points.[]") {
         int score;
 
         @Override
@@ -172,7 +172,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_TRASH);
         }
     },
-    SPLASH("[#FFFFFF]SPLASH[]\n[#cc6e54]This item helps you clear the map of anomalies. Not every anomaly can withstand this possibility, so a few experiments will be required.[]") {
+    SPLASH("[#FFFFFF]SPLASH[]\n[#cc6e54]This item helps to clear the anomalies from the map. Not every anomaly can be defeated by Splash, so a few experiments will be required.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
@@ -207,7 +207,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_SPLASH);
         }
     },
-    SCAN("[#FFFFFF]SCAN[]\n[#cc6e54]You may find boxes that are difficult to recognize. They can contain anything. Use the scanner to look inside.[]") {
+    SCAN("[#FFFFFF]SCAN[]\n[#cc6e54]You may find boxes that are difficult to recognize. They can contain anything. Use the scanner to peek inside.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
@@ -246,7 +246,7 @@ public enum Sticker {
         }
     },
     //Storage
-    LASER("[#FFFFFF]LASER[]\n[#cc6e54]The ability to destroy asteroids at a distance appears only with a non-zero charge of the laser scale. The purple scale indicates the presence of a laser, and gives you the option of automatic fire.[]") {
+    LASER("[#FFFFFF]LASER[]\n[#cc6e54]You can destroy asteroids at a distance if your laser scale charge is non-zero. The purple scale indicates the presence of a laser and gives you the option of automatic fire.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             Buran.isLaser = true;
@@ -270,7 +270,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_LASER);
         }
     },
-    RADAR("[#FFFFFF]RADAR[]\n[#cc6e54]Our space is a boundless two-dimensional extent in which objects and events have relative position and direction. But it's good when there is a device that shows the location of those objects.[]") {
+    RADAR("[#FFFFFF]RADAR[]\n[#cc6e54]Our space is a boundless two-dimensional area where objects and events have relative position and direction. Nonetheless, it's good that there is a device that shows the location of those objects.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             Radar.isActive = true;
@@ -293,7 +293,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_RADAR);
         }
     },
-    ROCKETS("[#FFFFFF]ROCKETS[]\n[#cc6e54]When there is no way out, you can smash everything around. True, powerful weapons take time to recharge. Find ammunition and activate it.[]") {
+    ROCKETS("[#FFFFFF]ROCKETS[]\n[#cc6e54]When there is no way out, you can smash everything around. Indeed, powerful weapons take time to recharge. Go find some ammunition and activate it![]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
@@ -318,7 +318,7 @@ public enum Sticker {
         }
     },
     //Fuel
-    FUEL("[#FFFFFF]FUEL[]\n[#cc6e54]When there is no fuel, the ship cannot fly. But he can still move. True, the speed may not be enough to get away from the attacking anomalies.[]") {
+    FUEL("[#FFFFFF]FUEL[]\n[#cc6e54]The ship cannot fly if there is no fuel, but still it can move. Obviously, the speed may not be enough to get away from the attacking anomalies.[]") {
         float fuel;
 
         @Override
@@ -353,7 +353,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_FUEL);
         }
     },
-    FUEL_UI("[#FFFFFF]FUEL[]\n[#cc6e54]When there is no fuel, the ship cannot fly. But he can still move. True, the speed may not be enough to get away from the attacking anomalies.[]") {
+    FUEL_UI("[#FFFFFF]FUEL[]\n[#cc6e54]The ship cannot fly if there is no fuel, but still it can move. Obviously, the speed may not be enough to get away from the attacking anomalies.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
 
@@ -375,7 +375,7 @@ public enum Sticker {
         }
     },
     //Surprise
-    PATTERN("[#FFFFFF]PATTERN[]\n[#cc6e54]Not all boxes can be labeled. This happens for a variety of reasons.[]") {
+    PATTERN("[#FFFFFF]PATTERN[]\n[#cc6e54]Not all boxes can be labeled. This happens for a variety of reasons...[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
         }
@@ -395,7 +395,7 @@ public enum Sticker {
 
         }
     },
-    PATTERN_GOLD("[#FFFFFF]GOLD PATTERN[]\n[#cc6e54]There is a theory that gold boxes have great potential. But this holds great risks for the ship. Like space, the space for the possibilities of the boxes is limitless.[]") {
+    PATTERN_GOLD("[#FFFFFF]GOLD PATTERN[]\n[#cc6e54]There is a theory that gold boxes have great potential. However, this holds high risks for the ship. Like the outer space, the space of the possibilities inside these boxes is limitless.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
         }
@@ -415,7 +415,7 @@ public enum Sticker {
 
         }
     },
-    SHABBY("[#FFFFFF]SHABBY[]\n[#cc6e54]Space debris, radiation, and other aggressive phenomena completely destroy the ability to scan such boxes. They shouldn't be dangerous, but no one has explored the possibilities of forgotten objects.[]") {
+    SHABBY("[#FFFFFF]SHABBY[]\n[#cc6e54]Space debris, radiation, and other aggressive phenomena completely destroy the ability to scan such boxes. They shouldn't be dangerous, but no one ever explored the possibilities of such forgotten objects.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
 

@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
+import com.buran.game.labelsticker.Sticker;
 import com.buran.game.utils.Assets;
 import com.buran.game.utils.Rounder;
 import com.buran.game.utils.StickerResolver;
@@ -49,9 +50,13 @@ public class ConfigImageButton extends ImageButton {
     //todo: depends from game level. Need to change here
     private int maxCount = 10;
     private StringBuilder stringBuilder;
+    private StickerResolver stickerResolver;
+    @Getter
+    private Sticker sticker;
 
     public ConfigImageButton(Drawable imageUp, boolean left) {
         super(imageUp);
+        this.stickerResolver = new StickerResolver();
         this.stringBuilder = new StringBuilder();
         this.font36 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT36, BitmapFont.class);
         Label.LabelStyle labelStyle36 = new Label.LabelStyle();
@@ -92,7 +97,9 @@ public class ConfigImageButton extends ImageButton {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                justNew = false;
+                if (event.getPointer() == 0) {
+                    justNew = false;
+                }
             }
         });
     }
@@ -195,10 +202,11 @@ public class ConfigImageButton extends ImageButton {
         }
     }
 
-    public void setupButton(TextureRegion textureRegion, StickerResolver.Operation operation) {
-        textureRegionDrawable.setRegion(textureRegion);
+    public void setupButton(Sticker sticker) {
+        textureRegionDrawable.setRegion(stickerResolver.getRegion(sticker));
         imageButton.getImage().setDrawable(textureRegionDrawable);
-        this.operation = operation;
+        this.operation = stickerResolver.getOperation(sticker);
+        this.sticker = sticker;
         empty = false;
     }
 }

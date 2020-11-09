@@ -2,17 +2,14 @@ package com.buran.game.ui.groups;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -27,14 +24,12 @@ import com.buran.game.effects.Vibrator;
 import com.buran.game.labelsticker.Sticker;
 import com.buran.game.ui.UIButton;
 import com.buran.game.utils.Assets;
-import com.buran.game.utils.StickerResolver;
 
 /**
  * @author soloyes on 29/11/20.
  */
 
 public class RulesGroup extends Group {
-    private final Label.LabelStyle labelStyle54;
     private Button buttonBack;
     private BoomBox boomBox;
     private ScrollPane scrollPane;
@@ -44,7 +39,6 @@ public class RulesGroup extends Group {
     private int cellHeight;
     private float d;
     private boolean touched;
-    private StickerResolver stickerResolver;
     private BitmapFont font72;
     private Label missionLabel;
     private Label.LabelStyle labelStyle72;
@@ -67,10 +61,6 @@ public class RulesGroup extends Group {
         buttonBack.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.MENU_BUTTON_WIDTH / 2, 24);
         BitmapFont font = Assets.getInstance().getAssetManager().get(PaintConstants.FONT54, BitmapFont.class);
         font.getData().markupEnabled = true;
-        labelStyle54 = new Label.LabelStyle(
-                Assets.getInstance().getAssetManager().get(PaintConstants.FONT54, BitmapFont.class),
-                null
-        );
 
         VerticalGroup verticalGroup = new VerticalGroup();
         scrollPane = new ScrollPane(verticalGroup, skin);
@@ -119,7 +109,6 @@ public class RulesGroup extends Group {
             }
         });
 
-        this.stickerResolver = new StickerResolver();
         for (int i = 0; i < Sticker.ALL.size(); i++) {
             if (Sticker.ALL.get(i) == Sticker.FUEL) {
                 continue;
@@ -177,48 +166,5 @@ public class RulesGroup extends Group {
             z = 0;
         }
         scrollPane.setScrollY(a1 + z * r * cellHeight);
-    }
-
-    private class Card extends Group {
-        private TextureRegion back;
-        private TextureRegion backTop;
-        private boolean isTop;
-        private Table table;
-
-        public Card(Sticker sticker, boolean isTop) {
-            this.back = Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RULES_BACKGROUND);
-            if (isTop) {
-                this.backTop = Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RULES_BACKGROUND_TOP);
-                this.isTop = true;
-            }
-            this.table = new Table();
-            Image image = new Image(stickerResolver.getRegion(sticker));
-            table.row().height(32).width(PaintConstants.UI_CONFIG_CELL_WIDTH);
-            table.add();
-            table.row().height(PaintConstants.ASTRONAUT_HEIGHT);
-            table.add(image).width(PaintConstants.ASTRONAUT_WIDTH);
-            table.row().height(32);
-            table.add();
-            table.row();
-            Label l = new Label(sticker.getDescription(), labelStyle54);
-            l.getStyle().font.getData().markupEnabled = true;
-            l.setWidth(PaintConstants.UI_CONFIG_CELL_WIDTH);
-            l.setWrap(true);
-            table.add(l).width(PaintConstants.UI_CONFIG_CELL_WIDTH - 32);
-            this.setWidth(PaintConstants.UI_CONFIG_CELL_WIDTH);
-            this.setHeight(PaintConstants.UI_SETTINGS_HEIGHT);
-            table.align(Align.top);
-            table.setFillParent(true);
-            this.addActor(table);
-        }
-
-        @Override
-        public void draw(Batch batch, float parentAlpha) {
-            batch.draw(back, getX(), getY());
-            if (isTop) {
-                batch.draw(backTop, getX(), getY() + PaintConstants.UI_SETTINGS_HEIGHT - PaintConstants.UI_RULES_BACKGROUND_TOP_HEIGHT);
-            }
-            super.draw(batch, parentAlpha);
-        }
     }
 }

@@ -31,9 +31,11 @@ import com.buran.game.conf.Rules;
 import com.buran.game.conf.VConstants;
 import com.buran.game.effects.BoomBox;
 import com.buran.game.effects.Vibrator;
+import com.buran.game.labelsticker.Sticker;
 import com.buran.game.player.Standing;
 import com.buran.game.screens.ScreenManager;
 import com.buran.game.ui.Joystick;
+import com.buran.game.ui.groups.Card;
 import com.buran.game.ui.groups.GroupType;
 import com.buran.game.ui.groups.PauseGroup;
 import com.buran.game.ui.groups.mvc.profiles.Profiles;
@@ -49,9 +51,11 @@ import lombok.Setter;
 
 public class ConfigGroup extends Group {
     private static StringBuilder notice = new StringBuilder();
+    private final VerticalGroup cardVerticalGroup;
     private Skin skin;
     private ScreenManager.ScreenType screenType;
     private ScrollPane scrollPane;
+    private ScrollPane cardScrollPane;
     private Table innerTable;
     private Table joystickTable;
     private BitmapFont font44;
@@ -112,6 +116,8 @@ public class ConfigGroup extends Group {
     private Label childLabel;
     private Profiles profiles;
     private Table table;
+    private Container<ScrollPane> container;
+    private Container<ScrollPane> cardContainer;
 
     public ConfigGroup() {
         this.setName(GroupType.CONFIG.name());
@@ -161,11 +167,23 @@ public class ConfigGroup extends Group {
         scrollPane.setFadeScrollBars(false);
         //scrollPane.setVariableSizeKnobs(false);
         //scrollPane.getStyle().vScrollKnob.setMinHeight(100);
-        Container<ScrollPane> container = new Container<ScrollPane>(scrollPane);
+        this.container = new Container<ScrollPane>(scrollPane);
         container.width(PaintConstants.UI_SETTINGS_WIDTH);
         container.height(PaintConstants.UI_SETTINGS_HEIGHT);
         container.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.UI_SETTINGS_WIDTH / 2, 2 * Rules.WORLD_HEIGHT / 3);
         container.align(Align.topLeft);
+
+        cardVerticalGroup = new VerticalGroup();
+        cardScrollPane = new ScrollPane(cardVerticalGroup, skin);
+        cardScrollPane.setScrollbarsOnTop(false);
+        cardScrollPane.setForceScroll(false, true);
+        cardScrollPane.setScrollingDisabled(true, false);
+        cardScrollPane.setFadeScrollBars(false);
+        this.cardContainer = new Container<ScrollPane>(cardScrollPane);
+        cardContainer.width(PaintConstants.UI_SETTINGS_WIDTH);
+        cardContainer.height(PaintConstants.UI_SETTINGS_HEIGHT);
+        cardContainer.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.UI_SETTINGS_WIDTH / 2, 2 * Rules.WORLD_HEIGHT / 3);
+        cardContainer.align(Align.topLeft);
 
         screenType = ScreenManager.getInstance().getCurrentScreen();
 
@@ -174,17 +192,20 @@ public class ConfigGroup extends Group {
         notifySlider.clearListeners();
         notifySlider.setValue(Profiles.getSettings().isNotification() ? notifySlider.getMaxValue() : notifySlider.getMinValue());
         notifySlider.getColor().a = Profiles.getSettings().isNotification() ? 1.0f : 0.7f;
-        //todo: сделать мигание кнопки
         notifySlider.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                setNotify();
+                if (event.getPointer() == 0) {
+                    setNotify();
+                }
             }
         });
         table.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                setNotify();
+                if (event.getPointer() == 0) {
+                    setNotify();
+                }
             }
         });
 
@@ -201,10 +222,24 @@ public class ConfigGroup extends Group {
         verticalGroup.addActor(joystickLine);
         verticalGroup.addActor(joystickPresetLine);
         this.addActor(noticeGroup);
+        this.addActor(cardContainer);
         this.addActor(container);
         this.addActor(notifySlider);
         this.addActor(table);
         this.refresh();
+    }
+
+    public void changeLook(boolean visible) {
+        noticeGroup.setVisible(visible);
+        container.setVisible(visible);
+        cardContainer.setVisible(!visible);
+    }
+
+    public void refreshCardContainer(Sticker sticker) {
+        cardVerticalGroup.clear();
+        //todo:// add List and delete @new operator
+        Card card = new Card(sticker, true);
+        cardVerticalGroup.addActor(card);
     }
 
     private void setNotify() {
@@ -1091,7 +1126,7 @@ public class ConfigGroup extends Group {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (PauseGroup.isPause()) {
+        if (PauseGroup.isPause() && ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
             timeGlyphLayout.setText(font96, TimeFormat.formatYDHMS(Standing.getInstance().getPlayTime()));
             notifySlider.setVisible(true);
             table.setBounds(Rules.WORLD_WIDTH - PaintConstants.PLAY_PAUSE_BUTTON_WIDTH / 2 - PauseGroup.playPauseWidth / 2 - 43,
