@@ -10,7 +10,7 @@ import com.buran.game.player.Standing;
 public final class Rules {
     public static final boolean DEBUG = false;
 
-    public static final boolean ADS_ENABLED = true;
+    public static final boolean ADS_ENABLED = false;
 
     public static final String RATE_US = "https://play.google.com/store/apps/details?id=com.github.android";
     public static final String ABOUT_US = "https://play.google.com/store/apps/details?id=com.github.android";
