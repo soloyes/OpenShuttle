@@ -35,9 +35,9 @@ public final class Rules {
     public static String DATE_FORMAT = "dd/MM/YY";
     //CONSUMABLE
     //2
-    public static final int CONSUMABLE_ASTRONAUT_AT_START = 2;
+    public static final int CONSUMABLE_ASTRONAUT_AT_START = 0;
     //10.0f
-    public static final float CONSUMABLE_ASTRONAUT_RESPAWN_TIME = 1.0f;
+    public static final float CONSUMABLE_ASTRONAUT_RESPAWN_TIME = 0.1f;
     //2
     public static final int CONSUMABLE_ASTRONAUT_MAX_COUNT = 2;
     //2
@@ -206,8 +206,8 @@ public final class Rules {
     public static final int PLAYER_DAMAGE_DONE_ASTRONAUT = 10;
     //5
     public static final int PLAYER_BLACKHOLE_ROTATION = 5;
-    //1
-    public static final int PLAYER_RECHARGE_TIME = 5;
+    //6.0f Check Buffs.getRechargeTime()
+    public static final float PLAYER_RECHARGE_TIME = 6.0f;
     //
     //BLACKHOLE
     //750
@@ -307,6 +307,10 @@ public final class Rules {
     public static final float SETTINGS_WAIT_DISABLE = 0.5f + SETTINGS_WAIT_TOUCH;
     //3
     public static final int LEVELS_TO_LIVE = 3;
+    //0.1f
+    public static final float INCREMENT_OF_SINGLE_BAR = 0.1f;
+    //0.0003f
+    public static final float INCREMENT_OF_BARS = 0.0003f;
 
     public static void setSpace(int n) {
         STARS_COUNT = STARS * n;
@@ -384,6 +388,7 @@ public final class Rules {
                 Standing.getInstance().setScoreView(0);
             }
         };
+
         public abstract void setGameLevel();
     }
 }

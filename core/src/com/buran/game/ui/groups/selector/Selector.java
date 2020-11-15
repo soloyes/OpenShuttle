@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.buran.game.conf.Buffs;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.labelsticker.Sticker;
@@ -27,6 +28,7 @@ public class Selector {
     private Sticker sticker;
     private StickerResolver stickerResolver;
     private float rechargeTime;
+    private float rechargeTimeMoreThan;
     @Getter
     private boolean active;
     protected GlyphLayout glyphLayout;
@@ -75,8 +77,8 @@ public class Selector {
 
     public void update(float dt) {
         rechargeTime += dt;
-        if (rechargeTime >= Rules.PLAYER_RECHARGE_TIME) {
-            rechargeTime = Rules.PLAYER_RECHARGE_TIME;
+        if (rechargeTime >= rechargeTimeMoreThan) {
+            rechargeTime = rechargeTimeMoreThan;
             active = true;
         }
         stringBuilder.setLength(0);
@@ -84,13 +86,26 @@ public class Selector {
     }
 
     public float getAngle() {
-        return -360 * (1 - 1.0f * (Rules.PLAYER_RECHARGE_TIME - rechargeTime) / Rules.PLAYER_RECHARGE_TIME);
+        return -360 * (1 - 1.0f * (rechargeTimeMoreThan - rechargeTime) / rechargeTimeMoreThan);
     }
 
     public void press() {
         if (active) {
             active = false;
             rechargeTime = 0.0f;
+            switch (sticker) {
+                case SPLASH:
+                case ROCKETS:
+                    rechargeTimeMoreThan = Buffs.getRechargeTimeSplashRockets();
+                    break;
+                case REPAIR:
+                case BOOST:
+                    rechargeTimeMoreThan = Buffs.getRechargeTimeRepairBoost();
+                    break;
+                default:
+                    rechargeTimeMoreThan = Rules.PLAYER_RECHARGE_TIME;
+                    break;
+            }
         }
     }
 }

@@ -38,6 +38,7 @@ import com.buran.game.bot.consumable.StorageEmitter;
 import com.buran.game.bot.consumable.fuel.Fuel;
 import com.buran.game.bot.rocket.RocketEmitter;
 import com.buran.game.bot.rocket.RocketLauncher;
+import com.buran.game.conf.Buffs;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.PlayerInteractionLevels;
@@ -594,7 +595,7 @@ public class GameScreen extends BaseScreen {
                 anomaly.addEatTimer(dt);
                 if (anomaly.getEatTimer() >= Rules.ANOMALIES_RADIATION_EAT_TIME) {
                     anomaly.setEatTimer(0.0f);
-                    Standing.getInstance().changeScore(-Rules.ANOMALIES_RADIATION_SCORE_DECREASE);
+                    Standing.getInstance().changeScore(-Buffs.getScoreDecrease());
                     boomBox.playSound(MSConstants.LOSE_SCORE);
                     GameInfoSystem.setup(
                             Buran.position.x,
@@ -629,7 +630,7 @@ public class GameScreen extends BaseScreen {
                 anomaly.addEatTimer(dt);
                 if (anomaly.getEatTimer() >= Rules.ANOMALIES_MAGNETIC_EAT_TIME) {
                     anomaly.setEatTimer(0.0f);
-                    Standing.getInstance().changeFuel(-Rules.ANOMALIES_MAGNETIC_FUEL_DECREASE);
+                    Standing.getInstance().changeFuel(-Buffs.getFuelDecrease());
                     boomBox.playSound(MSConstants.LOSE_FUEL);
                     GameInfoSystem.setup(
                             Buran.position.x,

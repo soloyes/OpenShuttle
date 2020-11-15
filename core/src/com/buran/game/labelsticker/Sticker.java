@@ -19,6 +19,7 @@ import com.buran.game.bot.consumable.Storage;
 import com.buran.game.bot.consumable.StorageEmitter;
 import com.buran.game.bot.consumable.fuel.Fuel;
 import com.buran.game.bot.rocket.RocketLauncher;
+import com.buran.game.conf.Buffs;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.effects.AsteroidLaunchEmitter;
@@ -76,7 +77,13 @@ public enum Sticker {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
-                standing.changeHP(Rules.CONSUMABLE_REPAIR_ADD);
+                standing.changeHP(Buffs.getRepairAdd());
+                GameInfoSystem.setup(
+                        position.x, position.y,
+                        GameInfoSystem.Preset.REPAIR + "[GREEN] +" + Buffs.getRepairAdd() + "[]",
+                        5.0f,
+                        true
+                );
             }
         }
 
@@ -465,6 +472,7 @@ public enum Sticker {
 
         @Override
         public void consume(AbstractConsumable consumable) {
+            Standing.getInstance().incrementOfBars();
         }
 
         @Override
@@ -484,6 +492,7 @@ public enum Sticker {
 
         @Override
         public void consume(AbstractConsumable consumable) {
+            Standing.getInstance().incrementMaxLifeShield();
         }
 
         @Override
@@ -503,6 +512,7 @@ public enum Sticker {
 
         @Override
         public void consume(AbstractConsumable consumable) {
+            Standing.getInstance().incrementMaxHP();
         }
 
         @Override
@@ -522,6 +532,7 @@ public enum Sticker {
 
         @Override
         public void consume(AbstractConsumable consumable) {
+            Standing.getInstance().incrementLaserChargeLevel();
         }
 
         @Override
@@ -541,6 +552,7 @@ public enum Sticker {
 
         @Override
         public void consume(AbstractConsumable consumable) {
+            Standing.getInstance().incrementMaxFuel();
         }
 
         @Override

@@ -30,9 +30,9 @@ public class BarHP extends AbstractBar {
         stringBuilder.setLength(0);
         glyphLayout.setText(font32,
                 stringBuilder
-                        .append(standing.getHp())
+                        .append((int)standing.getHp())
                         .append(" (")
-                        .append(100 * standing.getHp() / standing.getMaxHp())
+                        .append((int)(100 * standing.getHp() / standing.getMaxHp()))
                         .append("%)")
         );
     }

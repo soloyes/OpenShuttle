@@ -66,7 +66,7 @@ public class GameInfoSystem {
         BOOM("BOOOOM"),
         SAD("[RED]SO SAD[]"),
         OUT("[YELLOW]OUT OF RANGE[]"),
-        REPAIR("REPAIR [GREEN]+" + Rules.CONSUMABLE_REPAIR_ADD),
+        REPAIR("REPAIR"),
         FUEL("FUEL"),
         TURBO("TURBO [GREEN]x" + (int) Rules.PLAYER_ENGINE_POWER_FACTOR + "[]"),
         TRASH("TRASH"),

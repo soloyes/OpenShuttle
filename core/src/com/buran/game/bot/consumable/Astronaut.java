@@ -15,6 +15,7 @@ import com.buran.game.labelsticker.Sticker;
 import com.buran.game.player.Standing;
 import com.buran.game.ui.GameInfoSystem;
 import com.buran.game.utils.Assets;
+import com.buran.game.utils.Consumer;
 import com.buran.game.utils.Regions;
 
 /**
@@ -66,6 +67,7 @@ public class Astronaut extends AbstractConsumable {
                 true
         );
         boomBox.playSound(MSConstants.GET_ASTRONAUT);
+        Consumer.consume(labels.get(Label.Layer.LABEL).get(0).getSticker(), this);
     }
 
     @Override

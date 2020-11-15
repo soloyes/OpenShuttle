@@ -1,11 +1,13 @@
 package com.buran.game.player;
 
+import com.badlogic.gdx.Gdx;
 import com.buran.game.bot.anomaly.AbstractAnomalyEmitter;
 import com.buran.game.bot.asteroids.AbstractAsteroidEmitter;
 import com.buran.game.bot.consumable.AstronautEmitter;
 import com.buran.game.bot.consumable.CrateEmitter;
 import com.buran.game.bot.consumable.FuelEmitter;
 import com.buran.game.bot.consumable.StorageEmitter;
+import com.buran.game.conf.Buffs;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.conf.VConstants;
@@ -40,7 +42,7 @@ public final class Standing {
     private float fuel, maxFuel;
     @Getter
     @Setter
-    private int hp, maxHp;
+    private float hp, maxHp;
     @Getter
     @Setter
     private float ramPower;
@@ -69,6 +71,7 @@ public final class Standing {
     @Getter
     @Setter
     private float laserChargeLevel, maxLaserChargeLevel;
+    @Getter
     private Map<Sticker, Integer> astronauts;
     private Map<Sticker, Integer> usedItems;
     @Getter
@@ -86,6 +89,8 @@ public final class Standing {
     private float dmgDone;
     @Getter
     private int levelsToLive;
+    @Getter
+    private float incrementOfBars;
 
     public static Standing getInstance() {
         if (instance == null) {
@@ -100,6 +105,7 @@ public final class Standing {
         this.astronauts = new HashMap<Sticker, Integer>();
         this.usedItems = new HashMap<Sticker, Integer>();
         this.profiles = new Profiles();
+        this.incrementOfBars = Rules.INCREMENT_OF_BARS;
     }
 
     public void setStartLevel(int level) {
@@ -414,6 +420,9 @@ public final class Standing {
     public void update(float dt) {
         lifeShieldTicTac(dt);
         scoreTicTac(dt);
+        if (Gdx.input.justTouched()){
+            System.out.println(Buffs.getRechargeTimeSplashRockets());
+        }
     }
 
     private void lifeShieldTicTac(float dt) {
@@ -448,6 +457,26 @@ public final class Standing {
                 scoreView = score;
             }
         }
+    }
+
+    public void incrementMaxHP() {
+        maxHp += Rules.INCREMENT_OF_SINGLE_BAR + incrementOfBars;
+    }
+
+    public void incrementMaxLifeShield() {
+        maxLifeShield += Rules.INCREMENT_OF_SINGLE_BAR + incrementOfBars;
+    }
+
+    public void incrementMaxFuel() {
+        maxFuel += Rules.INCREMENT_OF_SINGLE_BAR + incrementOfBars;
+    }
+
+    public void incrementLaserChargeLevel() {
+        maxLaserChargeLevel += Rules.INCREMENT_OF_SINGLE_BAR + incrementOfBars;
+    }
+
+    public void incrementOfBars() {
+        incrementOfBars += Rules.INCREMENT_OF_BARS;
     }
 
     public void addTime(float amount) {
