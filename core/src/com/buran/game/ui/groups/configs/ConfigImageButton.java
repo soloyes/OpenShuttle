@@ -47,6 +47,7 @@ public class ConfigImageButton extends ImageButton {
     private boolean empty = true;
     private boolean justNew = true;
     private int count;
+    private int portion;
     //todo: depends from game level. Need to change here
     private int maxCount = 10;
     private StringBuilder stringBuilder;
@@ -156,7 +157,7 @@ public class ConfigImageButton extends ImageButton {
             if (left) {
                 bottomY = 36;
             } else {
-                bottomY = 24;
+                bottomY = 36;
             }
             glyphLayout.setText(font36, bottomLabel.getText());
 
@@ -184,6 +185,7 @@ public class ConfigImageButton extends ImageButton {
 
     public void changeCount(int amount) {
         count += amount;
+        portion += amount;
         if (left) {
             if (count >= Rules.SELECTOR_MAX_COUNT) {
                 count = Rules.SELECTOR_MAX_COUNT;
@@ -192,12 +194,15 @@ public class ConfigImageButton extends ImageButton {
         } else {
             topLabel.setText(Rounder.round(count));
             stringBuilder.setLength(0);
-            stringBuilder
-                    .append("x")
-                    .append(Rounder.convert(count, maxCount));
+            int i = Sticker.ALL.indexOf(sticker);
+            stringBuilder.append("x");
+            float v = Rounder.convert(portion, maxCount);
+            Sticker.ALL.get(i).setCoefficient(v);
+            stringBuilder.append(v);
             bottomLabel.setText(stringBuilder);
-            if (count > maxCount) {
-                maxCount *= 1.3;
+            if (portion > maxCount) {
+                maxCount *= Rules.MAX_COUNT_COEFFICIENT;
+                portion = 0;
             }
         }
     }

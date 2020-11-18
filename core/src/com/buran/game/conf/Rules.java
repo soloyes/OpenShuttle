@@ -35,7 +35,7 @@ public final class Rules {
     public static String DATE_FORMAT = "dd/MM/YY";
     //CONSUMABLE
     //2
-    public static final int CONSUMABLE_ASTRONAUT_AT_START = 0;
+    public static final int CONSUMABLE_ASTRONAUT_AT_START = 200;
     //10.0f
     public static final float CONSUMABLE_ASTRONAUT_RESPAWN_TIME = 0.1f;
     //2
@@ -66,8 +66,8 @@ public final class Rules {
     public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 2.0f;
     //2
     public static final int CONSUMABLE_STORAGE_MAX_COUNT = 2;
-    //2
-    public static final int CONSUMABLE_REPAIR_ADD = 2;
+    //5
+    public static final int CONSUMABLE_REPAIR_ADD = 5;
     //ANOMALY
     //0
     public static final int ANOMALIES_ELECTRIC_AT_START = 0;
@@ -149,8 +149,8 @@ public final class Rules {
     public static final int ASTEROID_MINERAL_MAX_COUNT = 50;
     //0.5f
     public static final float ASTEROID_SIZE_FOR_HARVEST_FACTOR = 0.5f;
-    //0.3f
-    public static final float ASTEROID_BURN_TIME = 0.3f;
+    //0.7f
+    public static final float ASTEROID_BURN_TIME = 0.7f;
     //PLAYER
     //400
     public static final int PLAYER_CONSUMABLE_TAKE_RANGE = 400;
@@ -160,10 +160,14 @@ public final class Rules {
     public static final int PLAYER_LASER_TAKE_RANGE = 500;
     //135.0f
     public static final float PLAYER_RADIAL_SPEED = 135.0f;
-    //700.0f
-    public static final float PLAYER_ENGINE_POWER = 700.0f;
+    //600.0f
+    public static final float PLAYER_ENGINE_POWER_COMPONENT1 = 600.0f;
+    //100.0f
+    public static final float PLAYER_ENGINE_POWER_COMPONENT2 = 100.0f;
+    //
+    public static final float PLAYER_ENGINE_POWER = PLAYER_ENGINE_POWER_COMPONENT1 + PLAYER_ENGINE_POWER_COMPONENT2;
     //1200.0f
-    public static final float PLAYER_TURBO_THRESHOLD_VELOCITY = 1200.0f;
+    public static final float PLAYER_TURBO_THRESHOLD_VELOCITY = 1500.0f;
     //4.0f
     private static final float PLAYER_MAX_POWER = 4.0f;
     //5.0f
@@ -210,20 +214,18 @@ public final class Rules {
     public static final float PLAYER_RECHARGE_TIME = 6.0f;
     //
     //BLACKHOLE
-    //750
-    private static final int BLACKHOLE_ROAR_FACTOR = 750;
+    //1260
+    private static final int BLACKHOLE_ROAR_FACTOR = 1260;
     //
     public static final float BLACKHOLE_TAKE_RANGE = BLACKHOLE_ROAR_FACTOR / 3;
     //
     public static int BLACKHOLE_ROAR_RANGE;
-    //
-    public static float BLACKHOLE_NOISE_RANGE = 2 * BLACKHOLE_TAKE_RANGE;
     //20
     public static final int BLACKHOLE_EVENT_HORIZON = 20;
     //200
     public static final int BLACKHOLE_VELOCITY_CONSUME_PLAYER = 200;
-    //5
-    public static final int BLACKHOLE_GET_DAMAGE = 5;
+    //12
+    public static final int BLACKHOLE_GET_DAMAGE = 12;
     //0.02f
     public static final float BLACKHOLE_FLOW_VELOCITY = 0.02f;
     //SOUND
@@ -240,11 +242,15 @@ public final class Rules {
     //GAME
     //false
     public static boolean GAME_OVER = false;
+    //1.0f
+    public static float STANDARD_COEFFICIENT = 1.0f;
+    //1.3f
+    public static float MAX_COUNT_COEFFICIENT = 1.3f;
     //1200
     public static int GAME_SESSION_TIME = 1200;
-    //20000
+    //400
     //todo: to be Balanced
-    public static final int INDEX_SCORE_TO_LEVEL = 250;
+    public static final int INDEX_SCORE_TO_LEVEL = 400;
     //10000
     public static final int SCORE_BASE_BONUS = 10000;
     //3
@@ -309,8 +315,6 @@ public final class Rules {
     public static final int LEVELS_TO_LIVE = 3;
     //0.1f
     public static final float INCREMENT_OF_SINGLE_BAR = 0.1f;
-    //0.0003f
-    public static final float INCREMENT_OF_BARS = 0.0003f;
 
     public static void setSpace(int n) {
         STARS_COUNT = STARS * n;
@@ -332,7 +336,7 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(27);
                 Standing.getInstance().setLives(1);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setStartLevel(27);
+                Standing.getInstance().setStartLevel(1);
                 Standing.getInstance().setScore(0);
                 Standing.getInstance().setScoreView(0);
             }
@@ -349,7 +353,7 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(24);
                 Standing.getInstance().setLives(2);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setStartLevel(24);
+                Standing.getInstance().setStartLevel(1);
                 Standing.getInstance().setScore(0);
                 Standing.getInstance().setScoreView(0);
             }
@@ -366,7 +370,7 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(21);
                 Standing.getInstance().setLives(2);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setStartLevel(21);
+                Standing.getInstance().setStartLevel(1);
                 Standing.getInstance().setScore(0);
                 Standing.getInstance().setScoreView(0);
             }
@@ -383,7 +387,7 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(18);
                 Standing.getInstance().setLives(1);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setStartLevel(18);
+                Standing.getInstance().setStartLevel(1);
                 Standing.getInstance().setScore(0);
                 Standing.getInstance().setScoreView(0);
             }

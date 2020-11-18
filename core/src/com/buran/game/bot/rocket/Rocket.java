@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.buran.game.bot.anomaly.AbstractAnomaly;
 import com.buran.game.bot.blackhole.Blackhole;
+import com.buran.game.conf.Buffs;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.player.Standing;
@@ -83,7 +84,7 @@ public class Rocket extends AbstractPoolable {
     @Override
     public void collideBlackhole() {
         float dst = Blackhole.position.dst(position);
-        if (dst <= Rules.BLACKHOLE_TAKE_RANGE) {
+        if (dst <= Buffs.getBlackholeTakeRange()) {
             taken = true;
             velocity.scl(0.5f);
         }

@@ -33,9 +33,11 @@ import com.buran.game.utils.pool.AbstractPoolable;
 import com.buran.game.utils.pool.ObjectPool;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author soloyes on 3/27/19.
@@ -52,6 +54,12 @@ public enum Sticker {
                 Buran.velocity.add(
                         d * (float) Math.cos(Math.toRadians(Buran.angle)),
                         d * (float) Math.sin(Math.toRadians(Buran.angle))
+                );
+                GameInfoSystem.setup(
+                        position.x, position.y,
+                        "[GREEN]" + GameInfoSystem.Preset.TURBO + "[] x" + (int) Rules.PLAYER_ENGINE_POWER_FACTOR,
+                        5.0f,
+                        true
                 );
             }
         }
@@ -80,7 +88,7 @@ public enum Sticker {
                 standing.changeHP(Buffs.getRepairAdd());
                 GameInfoSystem.setup(
                         position.x, position.y,
-                        GameInfoSystem.Preset.REPAIR + "[GREEN] +" + Buffs.getRepairAdd() + "[]",
+                        "[GREEN]" + GameInfoSystem.Preset.REPAIR + "[] +" + Buffs.getRepairAdd(),
                         5.0f,
                         true
                 );
@@ -123,6 +131,12 @@ public enum Sticker {
                 for (int i = 0; i < list.size(); i++) {
                     list.get(i).setShielded(true);
                 }
+                GameInfoSystem.setup(
+                        position.x, position.y,
+                        "[GREEN]" + GameInfoSystem.Preset.SHIELD + "[] " + (int) Rules.CONSUMABLE_SHIELD_TIME,
+                        5.0f,
+                        true
+                );
             }
         }
 
@@ -167,7 +181,7 @@ public enum Sticker {
         public void notify(AbstractConsumable consumable) {
             GameInfoSystem.setup(
                     consumable.getPosition().x, consumable.getPosition().y,
-                    "+" + score + (consumable.isGolden() ? "[GOLD]" : "[GREEN]") + GameInfoSystem.Preset.TRASH + "[]",
+                    (consumable.isGolden() ? "[GOLD]" : "[WHITE]") + GameInfoSystem.Preset.TRASH + "[] " + (consumable.isGolden() ? "[WHITE]" : "[GREEN]+") + score + "[]",
                     (consumable.isGolden() ? 7.0f : 3.0f),
                     true
             );
@@ -194,6 +208,12 @@ public enum Sticker {
                         }
                     }
                 }
+                GameInfoSystem.setup(
+                        position.x, position.y,
+                        "[GREEN]" + GameInfoSystem.Preset.SPLASH + "[]",
+                        5.0f,
+                        true
+                );
             }
         }
 
@@ -232,6 +252,12 @@ public enum Sticker {
                         list.get(i).setScanned(true);
                     }
                 }
+                GameInfoSystem.setup(
+                        position.x, position.y,
+                        "[GREEN]" + GameInfoSystem.Preset.SCAN + "[] " + (int) Rules.CONSUMABLE_SCAN_TIME,
+                        5.0f,
+                        true
+                );
             }
         }
 
@@ -305,6 +331,12 @@ public enum Sticker {
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
                 RocketLauncher.launch();
+                GameInfoSystem.setup(
+                        position.x, position.y,
+                        "[GREEN]" + GameInfoSystem.Preset.ROCKETS + "[]",
+                        5.0f,
+                        true
+                );
             }
         }
 
@@ -472,7 +504,7 @@ public enum Sticker {
 
         @Override
         public void consume(AbstractConsumable consumable) {
-            Standing.getInstance().incrementOfBars();
+            Standing.getInstance().incrementScore();
         }
 
         @Override
@@ -571,12 +603,15 @@ public enum Sticker {
     }
 
     public static List<Sticker> SELECTABLE = Arrays.asList(BOOST, REPAIR, SHIELD, SPLASH, SCAN, ROCKETS);
-    public static List<Sticker> ASTRONAUTS = Arrays.asList(REGULAR, MEDIC, SCIENTIST, MECHANIC, MILITARY);
+    public static List<Sticker> ASTRONAUTS = new LinkedList<Sticker>(Arrays.asList(REGULAR, MEDIC, SCIENTIST, MECHANIC, MILITARY));
     public static List<Sticker> ALL = Arrays.asList(Sticker.values());
     private static BoomBox boomBox;
     private static Standing standing;
     @Getter
     private String description;
+    @Getter
+    @Setter
+    private float coefficient = Rules.STANDARD_COEFFICIENT;
 
     static {
         boomBox = new BoomBox();
@@ -912,7 +947,7 @@ public enum Sticker {
     private static void print(AbstractConsumable consumable, GameInfoSystem.Preset p) {
         GameInfoSystem.setup(
                 consumable.getPosition().x, consumable.getPosition().y,
-                (consumable.isGolden() ? "[GOLD]" : "[GREEN]") + p + "[]",
+                (consumable.isGolden() ? "[GOLD]" : "[WHITE]") + p + "[]",
                 (consumable.isGolden() ? 7.0f : 3.0f),
                 true
         );

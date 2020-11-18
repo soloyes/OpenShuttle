@@ -14,6 +14,7 @@ import com.buran.game.bot.consumable.Astronaut;
 import com.buran.game.bot.consumable.Crate;
 import com.buran.game.bot.consumable.Storage;
 import com.buran.game.bot.consumable.fuel.Fuel;
+import com.buran.game.conf.Buffs;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
@@ -100,7 +101,7 @@ public class Radar {
     private Color setPointColor(AbstractPoolable abstractPoolable) {
         float d = Vector2.dst(Buran.position.x, Buran.position.y, Blackhole.position.x, Blackhole.position.y);
         int c;
-        if (d <= Rules.BLACKHOLE_NOISE_RANGE && !PauseGroup.isPause()) {
+        if (d <= Buffs.getBlackholeNoiseRange() && !PauseGroup.isPause()) {
             c = MathUtils.random(0, 4);
             if (MathUtils.random(0, 100) <= 60) {
                 return color;
@@ -128,7 +129,7 @@ public class Radar {
         if (isActive) {
             updateRadar(dt);
             float d = Vector2.dst(Buran.position.x, Buran.position.y, Blackhole.position.x, Blackhole.position.y);
-            if (d <= Rules.BLACKHOLE_NOISE_RANGE) {
+            if (d <= Buffs.getBlackholeNoiseRange()) {
                 if (!Buran.isTaken && !Rules.GAME_OVER) {
                     boomBox.playMusicEffectInLoop(MSConstants.RADAR_WHITE_NOISE_MUSIC, 1.0f);
                 } else {

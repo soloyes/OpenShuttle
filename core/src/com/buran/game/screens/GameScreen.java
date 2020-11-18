@@ -27,6 +27,7 @@ import com.buran.game.bot.asteroids.AbstractAsteroid;
 import com.buran.game.bot.asteroids.MetalAsteroidEmitter;
 import com.buran.game.bot.asteroids.MineralAsteroidEmitter;
 import com.buran.game.bot.blackhole.Blackhole;
+import com.buran.game.bot.blackhole.HoleFence;
 import com.buran.game.bot.consumable.AbstractConsumable;
 import com.buran.game.bot.consumable.Astronaut;
 import com.buran.game.bot.consumable.AstronautEmitter;
@@ -141,6 +142,7 @@ public class GameScreen extends BaseScreen {
     private Oscillator nebulaAOscillator;
     private float nebulaA = 0.5f;
     private int nebulaRegionX, nebulaRegionY;
+    private HoleFence holeFence;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -189,7 +191,7 @@ public class GameScreen extends BaseScreen {
         player = new Buran(joystick, particleEmitter);
         uiTopPanel = new UITopPanel();
 
-        BoundCheck.avoidPosition(Blackhole.position, Buran.position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+        BoundCheck.avoidPosition(Blackhole.position, Buran.position, (int) Buffs.getBlackholeTakeRange() + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         playerPointer = new PlayerPointer(player);
         Rules.StartLevel.values()[Profiles.getSettings().getLevel()].setGameLevel();
 
@@ -213,13 +215,14 @@ public class GameScreen extends BaseScreen {
         nebulaRegionX = MathUtils.random(0, Rules.SPACE_WIDTH - Rules.WORLD_WIDTH);
         nebulaRegionY = MathUtils.random(0, Rules.SPACE_HEIGHT - Rules.WORLD_HEIGHT);
         this.nebulaAOscillator = new Oscillator();
+        this.holeFence = new HoleFence();
     }
 
     private void calcMusicEffectVolume() {
         float v;
         if (Buran.position.dst(Blackhole.position) >= Rules.BLACKHOLE_ROAR_RANGE) {
             v = 0.0f;
-        } else if (Buran.position.dst(Blackhole.position) <= Rules.BLACKHOLE_TAKE_RANGE) {
+        } else if (Buran.position.dst(Blackhole.position) <= Buffs.getBlackholeTakeRange()) {
             v = 0.5f;
         } else {
             v = 1 - Buran.position.dst(Blackhole.position) / Rules.BLACKHOLE_ROAR_RANGE;
@@ -261,6 +264,17 @@ public class GameScreen extends BaseScreen {
         //BEGIN
         batch.begin();
         background.render(batch);
+        batch.end();
+        //END
+
+        //BEGIN
+        batch.begin();
+        holeFence.render(camera);
+        batch.end();
+        //END
+
+        //BEGIN
+        batch.begin();
         if (!Profiles.getSettings().isShader() || ShaderManager.BLACKHOLE.getProgram() == null) {
             blackhole.render(batch);
         }
@@ -439,6 +453,7 @@ public class GameScreen extends BaseScreen {
             standing.update(dt);
             SelectorGroup.getInstance().update(dt);
             UIRightPanel.getInstance().update(dt);
+            holeFence.update(dt);
         }
         stage.act();
     }
@@ -668,9 +683,13 @@ public class GameScreen extends BaseScreen {
                     boomBox.playSound(MSConstants.DESTROY_ASTEROID);
                 } else {
                     player.getRamShield().blink(0.5f);
-                    Standing.getInstance().changeRamPower(asteroid.getSizeForHarvest());
-                    if (asteroid.getType() == AbstractPoolable.Type.ASTEROID_MINERAL && Buran.isLaser) {
-                        Standing.getInstance().changeLaserChargeLevel(asteroid.getSizeForHarvest());
+                    switch (asteroid.getType()) {
+                        case ASTEROID_METAL:
+                            Standing.getInstance().changeRamPower(asteroid.getSizeForHarvest() * Buffs.getAsteroidSizeFactor());
+                            break;
+                        case ASTEROID_MINERAL:
+                            Standing.getInstance().changeLaserChargeLevel(asteroid.getSizeForHarvest());
+                            break;
                     }
                     //pretty soundVolume if collect much fragments in little time
                     prettyFragmentHarvest.playSound(MSConstants.GET_FRAGMENT);
@@ -726,7 +745,7 @@ public class GameScreen extends BaseScreen {
                     ray.setCount(5);
                     ray.setSize(3);
                     ray.setPreset(Ray.Preset.RED);
-                    ray.laser(player, asteroid, dt);
+                    ray.laser(asteroid, dt);
                 }
             }
             //
@@ -789,7 +808,7 @@ public class GameScreen extends BaseScreen {
         abstractAnomaly.destroyWithEffect();
         player.getRamShield().blink(1.0f);
         player.slowDown(abstractAnomaly.getLevel() * 50.0f);
-        if (Buran.velocity.len() <= Rules.PLAYER_ENGINE_POWER) {
+        if (Buran.velocity.len() <= Buffs.getPlayerEnginePower()) {
             Standing.getInstance().changeRamPower(-abstractAnomaly.getLevel());
         }
         abstractAnomaly.showSprayCollision();
@@ -803,6 +822,10 @@ public class GameScreen extends BaseScreen {
                 boomBox.playSound(MSConstants.LOSE_RADAR);
                 Radar.isActive = false;
             }
+        }
+
+        if (anomaly.getLevel() == 4) {
+            Buran.isLaser = false;
         }
 
         if (player.addZigZag(0.5f * anomaly.getLevel() + 0.2f)) {

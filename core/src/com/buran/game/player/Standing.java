@@ -1,13 +1,11 @@
 package com.buran.game.player;
 
-import com.badlogic.gdx.Gdx;
 import com.buran.game.bot.anomaly.AbstractAnomalyEmitter;
 import com.buran.game.bot.asteroids.AbstractAsteroidEmitter;
 import com.buran.game.bot.consumable.AstronautEmitter;
 import com.buran.game.bot.consumable.CrateEmitter;
 import com.buran.game.bot.consumable.FuelEmitter;
 import com.buran.game.bot.consumable.StorageEmitter;
-import com.buran.game.conf.Buffs;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.conf.VConstants;
@@ -53,7 +51,6 @@ public final class Standing {
     @Setter
     private int lives;
     @Getter
-    @Setter
     private int playingLevel;
     private int startLevel;
     @Getter
@@ -89,8 +86,6 @@ public final class Standing {
     private float dmgDone;
     @Getter
     private int levelsToLive;
-    @Getter
-    private float incrementOfBars;
 
     public static Standing getInstance() {
         if (instance == null) {
@@ -105,7 +100,6 @@ public final class Standing {
         this.astronauts = new HashMap<Sticker, Integer>();
         this.usedItems = new HashMap<Sticker, Integer>();
         this.profiles = new Profiles();
-        this.incrementOfBars = Rules.INCREMENT_OF_BARS;
     }
 
     public void setStartLevel(int level) {
@@ -189,12 +183,12 @@ public final class Standing {
     public void changeScore(int amount) {
         score += amount;
         calcScoreToLevel();
-        if (score - scoreToLevel >= 0) {
-            addLevelToLive();
-            playingLevel -= 1;
-            if (playingLevel < 1) {
-                playingLevel = 1;
-            } else {
+        if (playingLevel >= 19) {
+            playingLevel = 19;
+        } else {
+            if (score - scoreToLevel >= 0) {
+                playingLevel += 1;
+                addLevelToLive();
                 GameInfoSystem.setup(
                         ScreenManager.getInstance().getCamera().position.x,
                         ScreenManager.getInstance().getCamera().position.y,
@@ -212,10 +206,10 @@ public final class Standing {
     }
 
     private void calcScoreToLevel() {
-        //todo: to be Balanced
+        //todo: Balance
         scoreToLevel = 0;
-        for (int i = startLevel; i >= playingLevel; i--) {
-            scoreToLevel += Rules.INDEX_SCORE_TO_LEVEL * i * (28 - i);
+        for (int i = startLevel; i <= playingLevel; i++) {
+            scoreToLevel += Rules.INDEX_SCORE_TO_LEVEL * i * (38 - i);
         }
     }
 
@@ -235,7 +229,7 @@ public final class Standing {
         }
     }
 
-    public void takeDamage(int amount) {
+    public void takeDamage(float amount) {
         if (!Rules.GAME_OVER) {
             float count = amount * Rules.PLAYER_SHIELD_DAMAGE_FACTOR;
             lifeShield -= count;
@@ -420,9 +414,6 @@ public final class Standing {
     public void update(float dt) {
         lifeShieldTicTac(dt);
         scoreTicTac(dt);
-        if (Gdx.input.justTouched()){
-            System.out.println(Buffs.getRechargeTimeSplashRockets());
-        }
     }
 
     private void lifeShieldTicTac(float dt) {
@@ -460,23 +451,22 @@ public final class Standing {
     }
 
     public void incrementMaxHP() {
-        maxHp += Rules.INCREMENT_OF_SINGLE_BAR + incrementOfBars;
+        maxHp += Rules.INCREMENT_OF_SINGLE_BAR * Sticker.MEDIC.getCoefficient();
     }
 
     public void incrementMaxLifeShield() {
-        maxLifeShield += Rules.INCREMENT_OF_SINGLE_BAR + incrementOfBars;
+        maxLifeShield += Rules.INCREMENT_OF_SINGLE_BAR * Sticker.MECHANIC.getCoefficient();
     }
 
     public void incrementMaxFuel() {
-        maxFuel += Rules.INCREMENT_OF_SINGLE_BAR + incrementOfBars;
+        maxFuel += Rules.INCREMENT_OF_SINGLE_BAR * Sticker.SCIENTIST.getCoefficient();
     }
 
     public void incrementLaserChargeLevel() {
-        maxLaserChargeLevel += Rules.INCREMENT_OF_SINGLE_BAR + incrementOfBars;
+        maxLaserChargeLevel += Rules.INCREMENT_OF_SINGLE_BAR * Sticker.MILITARY.getCoefficient();
     }
 
-    public void incrementOfBars() {
-        incrementOfBars += Rules.INCREMENT_OF_BARS;
+    public void incrementScore() {
     }
 
     public void addTime(float amount) {
