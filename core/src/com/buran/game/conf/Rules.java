@@ -35,7 +35,7 @@ public final class Rules {
     public static String DATE_FORMAT = "dd/MM/YY";
     //CONSUMABLE
     //2
-    public static final int CONSUMABLE_ASTRONAUT_AT_START = 200;
+    public static final int CONSUMABLE_ASTRONAUT_AT_START = 2;
     //10.0f
     public static final float CONSUMABLE_ASTRONAUT_RESPAWN_TIME = 0.1f;
     //2
@@ -180,8 +180,8 @@ public final class Rules {
     public static final float PLAYER_TIMER_FUEL_OUT_OF_MAP = 2.5f;
     //3.0f
     public static final float PLAYER_FUEL_OUT_OF_MAP = 3.0f;
-    //5.0f
-    public static final float PLAYER_KILL_TIMER = 5.0f;
+    //30.0f
+    public static final float PLAYER_KILL_TIMER = 30.0f;
     //3.0f
     public static final float PLAYER_ENGINE_POWER_FACTOR = 3.0f;
     //

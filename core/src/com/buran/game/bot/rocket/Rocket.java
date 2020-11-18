@@ -8,8 +8,6 @@ import com.buran.game.bot.blackhole.Blackhole;
 import com.buran.game.conf.Buffs;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
-import com.buran.game.player.Standing;
-import com.buran.game.ui.GameInfoSystem;
 import com.buran.game.utils.Assets;
 import com.buran.game.utils.Regions;
 import com.buran.game.utils.pool.AbstractPoolable;
@@ -70,14 +68,6 @@ public class Rocket extends AbstractPoolable {
         if (position.dst(targetAnomaly.getPosition()) <= PaintConstants.ROCKET_WIDTH && targetAnomaly.isActive()) {
             destroy();
             targetAnomaly.destroyWithEffect();
-            GameInfoSystem.setup(
-                    position.x,
-                    position.y,
-                    GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
-                    3.0f,
-                    true
-            );
-            Standing.getInstance().addToStatistics(targetAnomaly.getType(), targetAnomaly.getLevel());
         }
     }
 

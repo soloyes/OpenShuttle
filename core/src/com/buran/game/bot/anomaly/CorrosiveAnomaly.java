@@ -150,14 +150,8 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                     showSprayBoom();
                     boomBox.playSound(MSConstants.SPLASH_ANOMALY);
                     Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY);
-                    //todo:: add score here (и сколько добавляется при вызове?)
-                    GameInfoSystem.setup(
-                            position.x,
-                            position.y,
-                            GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
-                            3.0f,
-                            true
-                    );
+                    Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]", 3.0f, true);
+                    Standing.getInstance().addToStatistics(this.type, this.level);
                 }
             }
             moveProcessor.update(this, dt);
@@ -182,15 +176,8 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 destroy();
                 boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
                 Standing.getInstance().addToStatistics(this.type, this.level);
-                Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
+                Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]", 3.0f ,true);
                 showSprayBoom();
-                GameInfoSystem.setup(
-                        position.x,
-                        position.y,
-                        GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
-                        3.0f,
-                        true
-                );
             }
         } else {
             born = true;
@@ -258,6 +245,8 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
+        Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]", 3.0f ,true);
+        Standing.getInstance().addToStatistics(this.type, this.level);
         showSprayCollision();
     }
 }

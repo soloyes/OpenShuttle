@@ -168,7 +168,6 @@ public enum Sticker {
                     (MathUtils.random(Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MIN, Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MAX) *
                             ((isGolden) ? Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_FACTOR : 1)
                     );
-            standing.changeScore(score);
         }
 
         @Override
@@ -179,12 +178,7 @@ public enum Sticker {
 
         @Override
         public void notify(AbstractConsumable consumable) {
-            GameInfoSystem.setup(
-                    consumable.getPosition().x, consumable.getPosition().y,
-                    (consumable.isGolden() ? "[GOLD]" : "[WHITE]") + GameInfoSystem.Preset.TRASH + "[] " + (consumable.isGolden() ? "[WHITE]" : "[GREEN]+") + score + "[]",
-                    (consumable.isGolden() ? 7.0f : 3.0f),
-                    true
-            );
+            standing.changeScore(score, consumable.getPosition(), (consumable.isGolden() ? "[GOLD]" : "[WHITE]") + GameInfoSystem.Preset.TRASH + "[] " + (consumable.isGolden() ? "[WHITE]" : "[GREEN]+") + score + "[]", 3.0f, true);
             sound();
         }
 
@@ -203,8 +197,6 @@ public enum Sticker {
                     if (anomalies.get(i).getPosition().dst(Buran.position) <= Rules.WORLD_WIDTH) {
                         if (!anomalies.get(i).isTaken()) {
                             anomalies.get(i).setMarkedToBoom(true);
-                            standing.addToStatistics(anomalies.get(i).getType(), anomalies.get(i).getLevel());
-                            standing.changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
                         }
                     }
                 }
@@ -650,7 +642,6 @@ public enum Sticker {
                     AbstractAnomaly anomaly = anomalies.get(i);
                     if (anomaly.getLevel() == level && !anomaly.isTaken()) {
                         anomaly.setMarkedToBoom(true);
-                        Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD * (level + 1));
                     }
                 }
                 GameInfoSystem.setup(
@@ -663,13 +654,7 @@ public enum Sticker {
                 break;
             case 1:
                 score = (level + 1) * Rules.SCORE_BASE_BONUS;
-                Standing.getInstance().changeScore(score);
-                GameInfoSystem.setup(
-                        consumable.getPosition().x, consumable.getPosition().y,
-                        GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
-                        5.0f,
-                        true
-                );
+                Standing.getInstance().changeScore(score, consumable.getPosition(), GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 5.0f, true);
                 boomBox.playSound(MSConstants.ADD_SCORE);
                 break;
             case 2:
@@ -825,13 +810,7 @@ public enum Sticker {
                 break;
             case 1:
                 score = (level + 1) * Rules.SCORE_BASE_BONUS;
-                Standing.getInstance().changeScore(-score);
-                GameInfoSystem.setup(
-                        consumable.getPosition().x, consumable.getPosition().y,
-                        GameInfoSystem.Preset.SCORE + "-[RED]" + score + "[]",
-                        5.0f,
-                        true
-                );
+                Standing.getInstance().changeScore(-score, consumable.getPosition(), GameInfoSystem.Preset.SCORE + "-[RED]" + score + "[]", 5.0f, true);
                 boomBox.playSound(MSConstants.DEL_SCORE);
                 break;
             case 2:

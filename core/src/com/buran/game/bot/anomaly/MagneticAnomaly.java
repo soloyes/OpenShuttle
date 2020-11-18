@@ -160,13 +160,6 @@ public class MagneticAnomaly extends AbstractAnomaly {
             } else {
                 destroyWithEffect();
                 boomBox.playSound(MSConstants.DESTROY_MAGNETIC_ANOMALY);
-                GameInfoSystem.setup(
-                        position.x,
-                        position.y,
-                        GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]",
-                        3.0f,
-                        true
-                );
             }
         } else {
             born = true;
@@ -181,7 +174,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
     public void destroyWithEffect() {
         super.destroyWithEffect();
         Standing.getInstance().addToStatistics(this.type, this.level);
-        Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
+        Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]", 3.0f, true);
         showSprayBoom();
     }
 }

@@ -22,7 +22,6 @@ import com.buran.game.player.layers.Scratch;
 import com.buran.game.player.layers.TakeRangeField;
 import com.buran.game.player.navigation.Radar;
 import com.buran.game.screens.ScreenManager;
-import com.buran.game.ui.GameInfoSystem;
 import com.buran.game.ui.Joystick;
 import com.buran.game.ui.groups.mvc.profiles.Profiles;
 import com.buran.game.utils.BoundCheck;
@@ -170,30 +169,9 @@ public class Buran extends AbstractBuran {
     public void killPlusPlus(AbstractPoolable abstractPoolable) {
         if (abstractPoolable.getLevel() != 0) {
             killTimer = Rules.PLAYER_KILL_TIMER;
-            GameInfoSystem.setup(
-                    position.x, position.y,
-                    KillingSpree.getKillingSpreeFromKillsCount(killSeries).getText(),
-                    KillingSpree.getKillingSpreeFromKillsCount(killSeries).getTextSizeModifier(),
-                    false
-            );
-
             int score = (abstractPoolable.getLevel()) * Rules.ANOMALIES_BASE_SCORE_ADD * killSeries;
-            GameInfoSystem.setup(
-                    position.x,
-                    position.y,
-                    GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
-                    3.0f,
-                    true
-            );
-            standing.changeScore(score);
+            standing.changeScore(score, position, KillingSpree.getKillingSpreeFromKillsCount(killSeries).getText() + "[GREEN] +" + score + "[]", KillingSpree.getKillingSpreeFromKillsCount(killSeries).getTextSizeModifier(), true);
             killSeries++;
-        } else {
-            GameInfoSystem.setup(
-                    position.x, position.y,
-                    KillingSpree.getKillingSpreeFromKillsCount(0).getText(),
-                    KillingSpree.getKillingSpreeFromKillsCount(0).getTextSizeModifier(),
-                    false
-            );
         }
     }
 

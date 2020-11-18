@@ -140,20 +140,9 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                     }
                 }
             } else {
-                destroy();
+                destroyWithEffect();
                 boomBox.playSound(MSConstants.DESTROY_ELECTRIC_ANOMALY);
-                Standing.getInstance().addToStatistics(this.type, this.level);
                 showSprayBoom();
-                //score amount decrease when kicked
-                int score = (int) (level * Rules.ANOMALIES_BASE_SCORE_ADD * (v / Rules.ANOMALY_ELECTRIC_VELOCITY));
-                GameInfoSystem.setup(
-                        position.x,
-                        position.y,
-                        GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
-                        3.0f,
-                        true
-                );
-                Standing.getInstance().changeScore(score);
             }
         } else {
             born = true;
@@ -164,7 +153,9 @@ public class ElectricalAnomaly extends AbstractAnomaly {
     public void destroyWithEffect() {
         super.destroyWithEffect();
         Standing.getInstance().addToStatistics(this.type, this.level);
-        Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
+        //score amount decrease when kicked
+        int score = (int) (level * Rules.ANOMALIES_BASE_SCORE_ADD * (v / Rules.ANOMALY_ELECTRIC_VELOCITY));
+        Standing.getInstance().changeScore(score, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
         showSprayBoom();
     }
 }

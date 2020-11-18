@@ -610,15 +610,8 @@ public class GameScreen extends BaseScreen {
                 anomaly.addEatTimer(dt);
                 if (anomaly.getEatTimer() >= Rules.ANOMALIES_RADIATION_EAT_TIME) {
                     anomaly.setEatTimer(0.0f);
-                    Standing.getInstance().changeScore(-Buffs.getScoreDecrease());
+                    Standing.getInstance().changeScore(-Buffs.getScoreDecrease(), Buran.position, "-[RED]" + GameInfoSystem.Preset.LOST_SCORE.getValue() + "[]", 2.0f, true);
                     boomBox.playSound(MSConstants.LOSE_SCORE);
-                    GameInfoSystem.setup(
-                            Buran.position.x,
-                            Buran.position.y,
-                            "-[RED]" + GameInfoSystem.Preset.LOST_SCORE.getValue() + "[]",
-                            2.0f,
-                            true
-                    );
                 }
             }
             tmp1 |= anomaly.isGlued();
@@ -813,7 +806,6 @@ public class GameScreen extends BaseScreen {
         }
         abstractAnomaly.showSprayCollision();
         player.killPlusPlus(abstractAnomaly);
-        Standing.getInstance().addToStatistics(abstractAnomaly.getType(), abstractAnomaly.getLevel());
     }
 
     private void damageToPlayer(AbstractPoolable anomaly) {

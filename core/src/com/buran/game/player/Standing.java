@@ -1,5 +1,6 @@
 package com.buran.game.player;
 
+import com.badlogic.gdx.math.Vector2;
 import com.buran.game.bot.anomaly.AbstractAnomalyEmitter;
 import com.buran.game.bot.asteroids.AbstractAsteroidEmitter;
 import com.buran.game.bot.consumable.AstronautEmitter;
@@ -180,8 +181,15 @@ public final class Standing {
         dmgDone += amount;
     }
 
-    public void changeScore(int amount) {
+    public void changeScore(int amount, Vector2 position, String text, float scale, boolean colored) {
         score += amount;
+        GameInfoSystem.setup(
+                position.x,
+                position.y,
+                text,
+                scale,
+                colored
+        );
         calcScoreToLevel();
         if (playingLevel >= 19) {
             playingLevel = 19;
