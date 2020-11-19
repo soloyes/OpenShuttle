@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.buran.game.screens.ScreenManager;
+import com.buran.game.ui.groups.mvc.profiles.Profiles;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -46,6 +47,10 @@ public class BuranGame extends Game {
         }
         ScreenManager.getInstance().init(this, batch, mobile, width, height);
         if (screenType == null) {
+            screenType = ScreenManager.ScreenType.MENU;
+        }
+        Profiles profiles = new Profiles();
+        if (profiles.getActive() == null) {
             screenType = ScreenManager.ScreenType.MENU;
         }
         ScreenManager.getInstance().changeScreen(screenType);

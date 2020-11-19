@@ -1,5 +1,6 @@
 package com.buran.game.player;
 
+import com.badlogic.gdx.math.Vector2;
 import com.buran.game.bot.anomaly.AbstractAnomalyEmitter;
 import com.buran.game.bot.asteroids.AbstractAsteroidEmitter;
 import com.buran.game.bot.consumable.AstronautEmitter;
@@ -40,7 +41,7 @@ public final class Standing {
     private float fuel, maxFuel;
     @Getter
     @Setter
-    private int hp, maxHp;
+    private float hp, maxHp;
     @Getter
     @Setter
     private float ramPower;
@@ -51,7 +52,6 @@ public final class Standing {
     @Setter
     private int lives;
     @Getter
-    @Setter
     private int playingLevel;
     private int startLevel;
     @Getter
@@ -69,6 +69,7 @@ public final class Standing {
     @Getter
     @Setter
     private float laserChargeLevel, maxLaserChargeLevel;
+    @Getter
     private Map<Sticker, Integer> astronauts;
     private Map<Sticker, Integer> usedItems;
     @Getter
@@ -180,15 +181,22 @@ public final class Standing {
         dmgDone += amount;
     }
 
-    public void changeScore(int amount) {
+    public void changeScore(int amount, Vector2 position, String text, float scale, boolean colored) {
         score += amount;
+        GameInfoSystem.setup(
+                position.x,
+                position.y,
+                text,
+                scale,
+                colored
+        );
         calcScoreToLevel();
-        if (score - scoreToLevel >= 0) {
-            addLevelToLive();
-            playingLevel -= 1;
-            if (playingLevel < 1) {
-                playingLevel = 1;
-            } else {
+        if (playingLevel >= 19) {
+            playingLevel = 19;
+        } else {
+            if (score - scoreToLevel >= 0) {
+                playingLevel += 1;
+                addLevelToLive();
                 GameInfoSystem.setup(
                         ScreenManager.getInstance().getCamera().position.x,
                         ScreenManager.getInstance().getCamera().position.y,
@@ -206,10 +214,10 @@ public final class Standing {
     }
 
     private void calcScoreToLevel() {
-        //todo: to be Balanced
+        //todo: Balance
         scoreToLevel = 0;
-        for (int i = startLevel; i >= playingLevel; i--) {
-            scoreToLevel += Rules.INDEX_SCORE_TO_LEVEL * i * (28 - i);
+        for (int i = startLevel; i <= playingLevel; i++) {
+            scoreToLevel += Rules.INDEX_SCORE_TO_LEVEL * i * (38 - i);
         }
     }
 
@@ -222,14 +230,14 @@ public final class Standing {
             GameInfoSystem.setup(
                     Buran.position.x,
                     Buran.position.y,
-                    "+[GREEN]" + GameInfoSystem.Preset.UP + "[]",
+                    "+1[GREEN] " + GameInfoSystem.Preset.UP + "[]",
                     4.0f,
                     true
             );
         }
     }
 
-    public void takeDamage(int amount) {
+    public void takeDamage(float amount) {
         if (!Rules.GAME_OVER) {
             float count = amount * Rules.PLAYER_SHIELD_DAMAGE_FACTOR;
             lifeShield -= count;
@@ -272,14 +280,24 @@ public final class Standing {
         if (lives == 0) {
             Rules.GAME_OVER = true;
         } else {
-            Buran.respawn();
-            GameInfoSystem.setup(
-                    Buran.position.x,
-                    Buran.position.y,
-                    "[RED]DESTROYED[]",
-                    8.0f,
-                    true
-            );
+            if (amount < 0) {
+                Buran.respawn();
+                GameInfoSystem.setup(
+                        Buran.position.x,
+                        Buran.position.y,
+                        "[RED]DESTROYED[]",
+                        8.0f,
+                        true
+                );
+            } else {
+                GameInfoSystem.setup(
+                        Buran.position.x,
+                        Buran.position.y,
+                        "+1[GREEN] " + GameInfoSystem.Preset.UP + "[]",
+                        4.0f,
+                        true
+                );
+            }
         }
     }
 
@@ -437,17 +455,36 @@ public final class Standing {
 
     private void scoreTicTac(float dt) {
         if (scoreView < score) {
-            scoreView += 10000 * dt;
+            scoreView += 45000 * dt;
             if (scoreView > score) {
                 scoreView = score;
             }
         }
         if (scoreView > score) {
-            scoreView -= 10000 * dt;
+            scoreView -= 45000 * dt;
             if (scoreView < score) {
                 scoreView = score;
             }
         }
+    }
+
+    public void incrementMaxHP() {
+        maxHp += Rules.INCREMENT_OF_SINGLE_BAR * Sticker.MEDIC.getCoefficient();
+    }
+
+    public void incrementMaxLifeShield() {
+        maxLifeShield += Rules.INCREMENT_OF_SINGLE_BAR * Sticker.MECHANIC.getCoefficient();
+    }
+
+    public void incrementMaxFuel() {
+        maxFuel += Rules.INCREMENT_OF_SINGLE_BAR * Sticker.SCIENTIST.getCoefficient();
+    }
+
+    public void incrementLaserChargeLevel() {
+        maxLaserChargeLevel += Rules.INCREMENT_OF_SINGLE_BAR * Sticker.MILITARY.getCoefficient();
+    }
+
+    public void incrementScore() {
     }
 
     public void addTime(float amount) {

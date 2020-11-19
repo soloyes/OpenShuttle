@@ -4,7 +4,7 @@ package com.buran.game.conf;
  * @author soloyes on 8/28/18.
  * Object paint constants (PaintConstants)
  */
-//todo: Make 128*128 pics in the end?
+
 public final class PaintConstants {
     public static final String BURAN_REGION = "buran";
     public static final int BURAN_WIDTH = 256;

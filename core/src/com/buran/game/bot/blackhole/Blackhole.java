@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.buran.game.conf.Buffs;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.effects.Oscillator;
@@ -58,7 +59,7 @@ public class Blackhole {
         this.spiralHeight = PaintConstants.BLACKHOLE_SPIRAL_HEIGHT;
         this.glowWidth = PaintConstants.BLACKHOLE_GLOW_WIDTH;
         this.glowHeight = PaintConstants.BLACKHOLE_GLOW_HEIGHT;
-        this.takeRange = Rules.BLACKHOLE_TAKE_RANGE;
+        this.takeRange = Buffs.getBlackholeTakeRange();
         this.scale = 1.0f;
         this.spiralScale = 1.0f;
         this.glowScale = 1.0f;

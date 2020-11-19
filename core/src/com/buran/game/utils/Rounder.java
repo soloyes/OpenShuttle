@@ -7,7 +7,7 @@ import java.text.DecimalFormat;
  */
 
 public class Rounder {
-    private static DecimalFormat d = new DecimalFormat("#,##0.#");
+    private static DecimalFormat d = new DecimalFormat("#,##0.##");
     private static StringBuilder stringBuilder = new StringBuilder();
     private static String minus = "-";
     private static String plus = "";

@@ -3,6 +3,7 @@ package com.buran.game.effects;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.buran.game.bot.asteroids.AbstractAsteroid;
+import com.buran.game.conf.Buffs;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.PlayerInteractionLevels;
 import com.buran.game.conf.Rules;
@@ -110,9 +111,9 @@ public class Ray {
         }
     }
 
-    public void laser(Buran player, AbstractAsteroid asteroid, float dt) {
+    public void laser(AbstractAsteroid asteroid, float dt) {
         float dst = Buran.position.dst(asteroid.getPosition());
-        if (dst <= Rules.PLAYER_LASER_TAKE_RANGE && !Buran.isTaken && !asteroid.isTaken() && asteroid.isActive()) {
+        if (dst <= Rules.PLAYER_LASER_TAKE_RANGE && !Buran.isTaken && !asteroid.isTaken() && asteroid.isActive() && Standing.getInstance().getLaserChargeLevel() > 0) {
             asteroid.setAtRayPoint(true);
             boomBox.playMusicEffectInLoop(MSConstants.LASER, 1.0f);
             float scaleX = (dst / Rules.PLAYER_LASER_TAKE_RANGE) * asteroid.getSaveScaleX();
@@ -137,7 +138,8 @@ public class Ray {
                 );
             }
             asteroid.setTimeToBurn(asteroid.getTimeToBurn() + dt);
-            if (asteroid.getTimeToBurn() >= 0.5f + Rules.ASTEROID_BURN_TIME / Standing.getInstance().getLaserChargeLevel()) {
+            Standing.getInstance().changeLaserChargeLevel(-dt);
+            if (asteroid.getTimeToBurn() >= Buffs.getAsteroidBurnTime()) {
                 boomBox.playSound(MSConstants.DESTROY_ASTEROID_RAY);
                 ObjectPool.EMITTERS.get(asteroid.getClass())
                         .boom(asteroid.getPosition(), PlayerInteractionLevels.NONE);
@@ -146,10 +148,8 @@ public class Ray {
                 Standing.getInstance().addToStatistics(asteroid.getType(), asteroid.getLevel());
                 asteroid.setTimeToBurn(0.0f);
                 asteroid.setAtRayPoint(false);
-                Standing.getInstance().changeLaserChargeLevel(-1);
-                if (Standing.getInstance().getLaserChargeLevel() <= 1) {
+                if (Standing.getInstance().getLaserChargeLevel() <= 0) {
                     boomBox.stopMusicEffect(MSConstants.LASER);
-                    Buran.isLaser = false;
                     Standing.getInstance().setLaserChargeLevel(0);
                 }
             }

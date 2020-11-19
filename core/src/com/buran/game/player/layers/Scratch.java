@@ -61,7 +61,7 @@ public class Scratch {
             alpha = 1.0f;
         }
 
-        int hp = (100 * Standing.getInstance().getHp()) / Standing.getInstance().getMaxHp();
+        float hp = (100 * Standing.getInstance().getHp()) / Standing.getInstance().getMaxHp();
 
         if (hp >= 0 && hp < 20)
             frame = 4;

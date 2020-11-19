@@ -14,7 +14,9 @@ import com.buran.game.ui.panels.UILeftPanel;
 public class Consumer {
     public static void consume(Sticker sticker, AbstractConsumable consumable) {
         if (sticker != Sticker.SHABBY && sticker != Sticker.SHABBY_GOLD) {
-            addToUI(sticker, consumable);
+            if (!Sticker.ASTRONAUTS.contains(sticker)) {
+                addToUI(sticker, consumable);
+            }
         }
         addToSelector(sticker, consumable);
     }
