@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -15,6 +16,7 @@ import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.labelsticker.Sticker;
 import com.buran.game.utils.Assets;
+import com.buran.game.utils.RadialSprite;
 import com.buran.game.utils.Rounder;
 import com.buran.game.utils.StickerResolver;
 
@@ -34,6 +36,8 @@ public class ConfigImageButton extends ImageButton {
     private TextureRegion glow;
     private TextureRegion justNewRegion;
     private TextureRegion centerRegion;
+    private RadialSprite progress;
+    private float angle;
     private Map<StickerResolver.Operation, TextureRegion> types;
     private GlyphLayout glyphLayout;
     private Label bottomLabel;
@@ -74,6 +78,7 @@ public class ConfigImageButton extends ImageButton {
         }
 
         this.centerRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.LEFT_RIGHT_UI_CELL_CENTER);
+        this.progress = new RadialSprite(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_ICO_CONFIG_LOAD));
         this.types = new HashMap<StickerResolver.Operation, TextureRegion>() {{
             put(
                     StickerResolver.Operation.ATTACK,
@@ -147,7 +152,15 @@ public class ConfigImageButton extends ImageButton {
                 typeY = getY() + 12;
             }
             batch.draw(types.get(operation), typeX, typeY, PaintConstants.LEFT_RIGHT_UI_ITEM_TYPE_WIDTH, PaintConstants.LEFT_RIGHT_UI_ITEM_TYPE_HEIGHT);
-
+            if (!left) {
+                angle = -360 * (1.0f * portion / maxCount);
+                progress.draw((SpriteBatch) batch,
+                        getX() + 2,
+                        getY() + 2,
+                        PaintConstants.UI_ICO_CONFIG_WIDTH, PaintConstants.UI_ICO_CONFIG_HEIGHT,
+                        angle
+                        );
+            }
         }
         batch.setColor(color);
 

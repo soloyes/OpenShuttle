@@ -35,7 +35,7 @@ public final class Rules {
     public static String DATE_FORMAT = "dd/MM/YY";
     //CONSUMABLE
     //2
-    public static final int CONSUMABLE_ASTRONAUT_AT_START = 400;
+    public static final int CONSUMABLE_ASTRONAUT_AT_START = 2;
     //10.0f
     public static final float CONSUMABLE_ASTRONAUT_RESPAWN_TIME = 0.1f;
     //2
