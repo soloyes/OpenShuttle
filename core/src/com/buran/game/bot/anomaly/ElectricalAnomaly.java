@@ -13,6 +13,7 @@ import com.buran.game.conf.VConstants;
 import com.buran.game.effects.MoveProcessor;
 import com.buran.game.effects.Vibrator;
 import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.labelsticker.Sticker;
 import com.buran.game.player.Standing;
 import com.buran.game.screens.ScreenManager;
 import com.buran.game.ui.GameInfoSystem;
@@ -155,6 +156,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         Standing.getInstance().addToStatistics(this.type, this.level);
         //score amount decrease when kicked
         int score = (int) (level * Rules.ANOMALIES_BASE_SCORE_ADD * (v / Rules.ANOMALY_ELECTRIC_VELOCITY));
+        score = (int) (score * Sticker.REGULAR.getCoefficient());
         Standing.getInstance().changeScore(score, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
         showSprayBoom();
     }

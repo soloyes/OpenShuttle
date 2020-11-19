@@ -455,13 +455,13 @@ public final class Standing {
 
     private void scoreTicTac(float dt) {
         if (scoreView < score) {
-            scoreView += 10000 * dt;
+            scoreView += 45000 * dt;
             if (scoreView > score) {
                 scoreView = score;
             }
         }
         if (scoreView > score) {
-            scoreView -= 10000 * dt;
+            scoreView -= 45000 * dt;
             if (scoreView < score) {
                 scoreView = score;
             }

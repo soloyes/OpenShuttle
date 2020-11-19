@@ -13,6 +13,7 @@ import com.buran.game.conf.VConstants;
 import com.buran.game.effects.MoveProcessor;
 import com.buran.game.effects.Vibrator;
 import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.labelsticker.Sticker;
 import com.buran.game.player.Standing;
 import com.buran.game.screens.ScreenManager;
 import com.buran.game.ui.GameInfoSystem;
@@ -170,7 +171,8 @@ public class RadiationAnomaly extends AbstractAnomaly {
     public void destroyWithEffect() {
         super.destroyWithEffect();
         Standing.getInstance().addToStatistics(this.type, this.level);
-        Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + Rules.ANOMALIES_BASE_SCORE_ADD + "[]", 3.0f, true);
+        int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.REGULAR.getCoefficient());
+        Standing.getInstance().changeScore(score, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
         showSprayBoom();
     }
 }

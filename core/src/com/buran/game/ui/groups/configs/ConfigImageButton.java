@@ -48,7 +48,6 @@ public class ConfigImageButton extends ImageButton {
     private boolean justNew = true;
     private int count;
     private int portion;
-    //todo: depends from game level. Need to change here
     private int maxCount = 10;
     private StringBuilder stringBuilder;
     private StickerResolver stickerResolver;

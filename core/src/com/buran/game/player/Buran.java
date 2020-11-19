@@ -16,6 +16,7 @@ import com.buran.game.conf.Rules;
 import com.buran.game.effects.Fibonacci;
 import com.buran.game.effects.KillingSpree;
 import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.labelsticker.Sticker;
 import com.buran.game.player.layers.LifeShield;
 import com.buran.game.player.layers.RamShield;
 import com.buran.game.player.layers.Scratch;
@@ -170,6 +171,7 @@ public class Buran extends AbstractBuran {
         if (abstractPoolable.getLevel() != 0) {
             killTimer = Rules.PLAYER_KILL_TIMER;
             int score = (abstractPoolable.getLevel()) * Rules.ANOMALIES_BASE_SCORE_ADD * killSeries;
+            score = (int) (score * Sticker.REGULAR.getCoefficient());
             standing.changeScore(score, position, KillingSpree.getKillingSpreeFromKillsCount(killSeries).getText() + "[GREEN] +" + score + "[]", KillingSpree.getKillingSpreeFromKillsCount(killSeries).getTextSizeModifier(), true);
             killSeries++;
         }

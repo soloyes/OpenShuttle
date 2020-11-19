@@ -41,7 +41,8 @@ public class Astronaut extends AbstractConsumable {
     @Override
     public void badEffect() {
         Standing standing = Standing.getInstance();
-        standing.changeScore(-Rules.CONSUMABLE_MURDER_SCORE_DECREASE, position, GameInfoSystem.Preset.MURDERER.getValue(), 8.0f, true);
+        int score = (int) (Rules.CONSUMABLE_MURDER_SCORE_DECREASE * Sticker.REGULAR.getCoefficient());
+        standing.changeScore(-score, position, GameInfoSystem.Preset.MURDERER + "\n[RED]-" + (int) (Rules.CONSUMABLE_MURDER_SCORE_DECREASE * Sticker.REGULAR.getCoefficient()) + "[]", 8.0f, true);
         boomBox.playSound(MSConstants.DESTROY_ASTRONAUT);
         Vibrator.vibrate(VConstants.PLAYER_ASTRONAUT_DESTROY);
     }
@@ -51,6 +52,7 @@ public class Astronaut extends AbstractConsumable {
         int score = Rules.CONSUMABLE_ASTRONAUT_BASE_SCORE_ADD +
                 multiplier * Rules.CONSUMABLE_ASTRONAUT_RANGE_SCORE_ADD +
                 (int) Standing.getInstance().getRamPower() * Rules.CONSUMABLE_ASTRONAUT_BONUS_SCORE_ADD;
+        score = (int) (score * Sticker.REGULAR.getCoefficient());
         Standing.getInstance().changeScore(score, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
         boomBox.playSound(MSConstants.GET_ASTRONAUT);
         Consumer.consume(labels.get(Label.Layer.LABEL).get(0).getSticker(), this);

@@ -9,7 +9,7 @@ import com.buran.game.labelsticker.Sticker;
 public class Buffs {
 
     public static int getScoreDecrease() {
-        return (int) (Rules.ANOMALIES_RADIATION_SCORE_DECREASE / Sticker.SCIENTIST.getCoefficient());
+        return (int) (Sticker.REGULAR.getCoefficient() * (Rules.ANOMALIES_RADIATION_SCORE_DECREASE / Sticker.SCIENTIST.getCoefficient()));
     }
 
     public static float getAsteroidBurnTime() {

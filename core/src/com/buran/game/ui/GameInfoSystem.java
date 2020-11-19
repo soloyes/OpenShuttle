@@ -2,7 +2,6 @@ package com.buran.game.ui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.buran.game.conf.Rules;
 import com.buran.game.effects.FlyingText;
 
 /**
@@ -79,7 +78,7 @@ public class GameInfoSystem {
         TRASH("TRASH"),
         //
         LOST_SCORE("SCORE"),
-        MURDERER("MURDERER" + "\n[RED]-" + Rules.CONSUMABLE_MURDER_SCORE_DECREASE + "[]"),
+        MURDERER("MURDERER"),
         EASY("BE EASY"),
         BONUS_CRATE("[GREEN]BONUS CRATE[]"),
         BONUS_STORAGE("[GREEN]BONUS STORAGE[]"),

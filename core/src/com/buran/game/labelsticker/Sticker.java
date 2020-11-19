@@ -169,6 +169,7 @@ public enum Sticker {
                     (MathUtils.random(Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MIN, Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MAX) *
                             ((isGolden) ? Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_FACTOR : 1)
                     );
+            score = (int) (score * Sticker.REGULAR.getCoefficient());
         }
 
         @Override
@@ -654,6 +655,7 @@ public enum Sticker {
                 break;
             case 1:
                 int score = (level + 1) * Rules.SCORE_BASE_BONUS;
+                score = (int) (score * Sticker.REGULAR.getCoefficient());
                 Standing.getInstance().changeScore(score, consumable.getPosition(), GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 5.0f, true);
                 boomBox.playSound(MSConstants.ADD_SCORE);
                 break;
@@ -781,6 +783,7 @@ public enum Sticker {
                 break;
             case 1:
                 int score = (level + 1) * Rules.SCORE_BASE_BONUS;
+                score = (int) (score * Sticker.REGULAR.getCoefficient());
                 Standing.getInstance().changeScore(-score, consumable.getPosition(), GameInfoSystem.Preset.SCORE + " -[RED]" + score + "[]", 5.0f, true);
                 boomBox.playSound(MSConstants.DEL_SCORE);
                 break;

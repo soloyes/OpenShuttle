@@ -35,7 +35,7 @@ public final class Rules {
     public static String DATE_FORMAT = "dd/MM/YY";
     //CONSUMABLE
     //2
-    public static final int CONSUMABLE_ASTRONAUT_AT_START = 2;
+    public static final int CONSUMABLE_ASTRONAUT_AT_START = 400;
     //10.0f
     public static final float CONSUMABLE_ASTRONAUT_RESPAWN_TIME = 0.1f;
     //2
@@ -245,7 +245,7 @@ public final class Rules {
     //1200
     public static int GAME_SESSION_TIME = 1200;
     //400
-    //todo: to be Balanced
+    //todo: Balance
     public static final int INDEX_SCORE_TO_LEVEL = 400;
     //10000
     public static final int SCORE_BASE_BONUS = 10000;
