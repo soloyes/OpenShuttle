@@ -371,7 +371,7 @@ public final class Rules {
                 Standing.getInstance().setScoreView(0);
             }
         },
-        EXTREME {
+        DEBUG {
             @Override
             public void setGameLevel() {
                 Standing.getInstance().setMaxFuel(180);
