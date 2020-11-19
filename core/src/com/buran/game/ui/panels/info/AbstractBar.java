@@ -10,6 +10,8 @@ import com.buran.game.conf.PaintConstants;
 import com.buran.game.player.Standing;
 import com.buran.game.utils.Assets;
 
+import lombok.Getter;
+
 /**
  * @author soloyes on 3/14/19.
  */
@@ -86,6 +88,7 @@ public abstract class AbstractBar {
 
     protected enum Side {
         LEFT(0), RIGHT(1);
+        @Getter
         private int factor;
 
         Side(int factor) {

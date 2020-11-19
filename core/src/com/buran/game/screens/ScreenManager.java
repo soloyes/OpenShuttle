@@ -72,6 +72,10 @@ public class ScreenManager {
                 //SPACE_WIDTH/SPACE_HEIGHT depends from game level
                 Assets.getInstance().loadAssets(ScreenType.GAME);
                 Profiles profiles = new Profiles();
+                if (Rules.DEBUG){
+                    profiles.getActive().getPreferences().setLevel(3);
+                    profiles.write();
+                }
                 Rules.setSpace(4 - profiles.getActive().getPreferences().getLevel());
                 //
                 break;

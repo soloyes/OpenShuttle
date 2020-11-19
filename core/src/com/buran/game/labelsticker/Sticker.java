@@ -19,6 +19,7 @@ import com.buran.game.bot.consumable.Storage;
 import com.buran.game.bot.consumable.StorageEmitter;
 import com.buran.game.bot.consumable.fuel.Fuel;
 import com.buran.game.bot.rocket.RocketLauncher;
+import com.buran.game.conf.Buffs;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.effects.AsteroidLaunchEmitter;
@@ -27,14 +28,17 @@ import com.buran.game.player.Buran;
 import com.buran.game.player.Standing;
 import com.buran.game.player.navigation.Radar;
 import com.buran.game.ui.GameInfoSystem;
-import com.buran.game.utils.Consumer;
+import com.buran.game.ui.groups.selector.SelectorGroup;
+import com.buran.game.ui.panels.UILeftPanel;
 import com.buran.game.utils.pool.AbstractPoolable;
 import com.buran.game.utils.pool.ObjectPool;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author soloyes on 3/27/19.
@@ -51,6 +55,12 @@ public enum Sticker {
                 Buran.velocity.add(
                         d * (float) Math.cos(Math.toRadians(Buran.angle)),
                         d * (float) Math.sin(Math.toRadians(Buran.angle))
+                );
+                GameInfoSystem.setup(
+                        position.x, position.y,
+                        "[GREEN]" + GameInfoSystem.Preset.TURBO + "[] x" + (int) Rules.PLAYER_ENGINE_POWER_FACTOR,
+                        5.0f,
+                        true
                 );
             }
         }
@@ -76,7 +86,13 @@ public enum Sticker {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
-                standing.changeHP(Rules.CONSUMABLE_REPAIR_ADD);
+                standing.changeHP(Buffs.getRepairAdd());
+                GameInfoSystem.setup(
+                        position.x, position.y,
+                        "[GREEN]" + GameInfoSystem.Preset.REPAIR + "[] +" + Buffs.getRepairAdd(),
+                        5.0f,
+                        true
+                );
             }
         }
 
@@ -116,6 +132,12 @@ public enum Sticker {
                 for (int i = 0; i < list.size(); i++) {
                     list.get(i).setShielded(true);
                 }
+                GameInfoSystem.setup(
+                        position.x, position.y,
+                        "[GREEN]" + GameInfoSystem.Preset.SHIELD + "[] " + (int) Rules.CONSUMABLE_SHIELD_TIME,
+                        5.0f,
+                        true
+                );
             }
         }
 
@@ -147,7 +169,7 @@ public enum Sticker {
                     (MathUtils.random(Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MIN, Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MAX) *
                             ((isGolden) ? Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_FACTOR : 1)
                     );
-            standing.changeScore(score);
+            score = (int) (score * Sticker.REGULAR.getCoefficient());
         }
 
         @Override
@@ -158,12 +180,7 @@ public enum Sticker {
 
         @Override
         public void notify(AbstractConsumable consumable) {
-            GameInfoSystem.setup(
-                    consumable.getPosition().x, consumable.getPosition().y,
-                    "+" + score + (consumable.isGolden() ? "[GOLD]" : "[GREEN]") + GameInfoSystem.Preset.TRASH + "[]",
-                    (consumable.isGolden() ? 7.0f : 3.0f),
-                    true
-            );
+            standing.changeScore(score, consumable.getPosition(), (consumable.isGolden() ? "[GOLD]" : "[WHITE]") + GameInfoSystem.Preset.TRASH + "[] " + (consumable.isGolden() ? "[WHITE]" : "[GREEN]+") + score + "[]", 3.0f, true);
             sound();
         }
 
@@ -182,11 +199,15 @@ public enum Sticker {
                     if (anomalies.get(i).getPosition().dst(Buran.position) <= Rules.WORLD_WIDTH) {
                         if (!anomalies.get(i).isTaken()) {
                             anomalies.get(i).setMarkedToBoom(true);
-                            standing.addToStatistics(anomalies.get(i).getType(), anomalies.get(i).getLevel());
-                            standing.changeScore(Rules.ANOMALIES_BASE_SCORE_ADD);
                         }
                     }
                 }
+                GameInfoSystem.setup(
+                        position.x, position.y,
+                        "[GREEN]" + GameInfoSystem.Preset.SPLASH + "[]",
+                        5.0f,
+                        true
+                );
             }
         }
 
@@ -225,6 +246,12 @@ public enum Sticker {
                         list.get(i).setScanned(true);
                     }
                 }
+                GameInfoSystem.setup(
+                        position.x, position.y,
+                        "[GREEN]" + GameInfoSystem.Preset.SCAN + "[] " + (int) Rules.CONSUMABLE_SCAN_TIME,
+                        5.0f,
+                        true
+                );
             }
         }
 
@@ -298,6 +325,12 @@ public enum Sticker {
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
                 RocketLauncher.launch();
+                GameInfoSystem.setup(
+                        position.x, position.y,
+                        "[GREEN]" + GameInfoSystem.Preset.ROCKETS + "[]",
+                        5.0f,
+                        true
+                );
             }
         }
 
@@ -465,6 +498,7 @@ public enum Sticker {
 
         @Override
         public void consume(AbstractConsumable consumable) {
+            Standing.getInstance().incrementScore();
         }
 
         @Override
@@ -484,6 +518,7 @@ public enum Sticker {
 
         @Override
         public void consume(AbstractConsumable consumable) {
+            Standing.getInstance().incrementMaxLifeShield();
         }
 
         @Override
@@ -503,6 +538,7 @@ public enum Sticker {
 
         @Override
         public void consume(AbstractConsumable consumable) {
+            Standing.getInstance().incrementMaxHP();
         }
 
         @Override
@@ -522,6 +558,7 @@ public enum Sticker {
 
         @Override
         public void consume(AbstractConsumable consumable) {
+            Standing.getInstance().incrementLaserChargeLevel();
         }
 
         @Override
@@ -541,6 +578,7 @@ public enum Sticker {
 
         @Override
         public void consume(AbstractConsumable consumable) {
+            Standing.getInstance().incrementMaxFuel();
         }
 
         @Override
@@ -559,12 +597,15 @@ public enum Sticker {
     }
 
     public static List<Sticker> SELECTABLE = Arrays.asList(BOOST, REPAIR, SHIELD, SPLASH, SCAN, ROCKETS);
-    public static List<Sticker> ASTRONAUTS = Arrays.asList(REGULAR, MEDIC, SCIENTIST, MECHANIC, MILITARY);
+    public static List<Sticker> ASTRONAUTS = new LinkedList<Sticker>(Arrays.asList(REGULAR, MEDIC, SCIENTIST, MECHANIC, MILITARY));
     public static List<Sticker> ALL = Arrays.asList(Sticker.values());
     private static BoomBox boomBox;
     private static Standing standing;
     @Getter
     private String description;
+    @Getter
+    @Setter
+    private float coefficient = Rules.STANDARD_COEFFICIENT;
 
     static {
         boomBox = new BoomBox();
@@ -594,7 +635,6 @@ public enum Sticker {
         // 3 - Kill Fuel/Radiation anomaly, or add HP/life
         int level = (consumable.isGolden() ? 1 : 0) + (consumable.getType() == AbstractPoolable.Type.CRATE ? 0 : 2);
         int r = MathUtils.random(0, 3);
-        int score;
         switch (r) {
             case 0:
                 CorrosiveAnomalyEmitter corrosiveAnomalyEmitter = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
@@ -603,38 +643,33 @@ public enum Sticker {
                     AbstractAnomaly anomaly = anomalies.get(i);
                     if (anomaly.getLevel() == level && !anomaly.isTaken()) {
                         anomaly.setMarkedToBoom(true);
-                        Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD * (level + 1));
                     }
                 }
                 GameInfoSystem.setup(
                         consumable.getPosition().x, consumable.getPosition().y,
-                        GameInfoSystem.Preset.ANOMALY_FLUSH.getValue(),
+                        GameInfoSystem.Preset.ANOMALY_FLUSH,
                         5.0f,
                         true
                 );
                 boomBox.playSound(MSConstants.ANOMALY_FLUSH);
                 break;
             case 1:
-                score = (level + 1) * Rules.SCORE_BASE_BONUS;
-                Standing.getInstance().changeScore(score);
-                GameInfoSystem.setup(
-                        consumable.getPosition().x, consumable.getPosition().y,
-                        GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
-                        5.0f,
-                        true
-                );
+                int score = (level + 1) * Rules.SCORE_BASE_BONUS;
+                score = (int) (score * Sticker.REGULAR.getCoefficient());
+                Standing.getInstance().changeScore(score, consumable.getPosition(), GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 5.0f, true);
                 boomBox.playSound(MSConstants.ADD_SCORE);
                 break;
             case 2:
                 if (consumable.isGolden()) {
                     for (int i = 0; i < Sticker.SELECTABLE.size(); i++) {
                         for (int j = 0; j < Rules.SELECTOR_SHABBY_BASE_BONUS; j++) {
-                            Consumer.consume(Sticker.SELECTABLE.get(i), consumable);
+                            SelectorGroup.getInstance().addSelector(Sticker.SELECTABLE.get(i), consumable.getType() == AbstractPoolable.Type.CRATE ? 1 : 2);
+                            UILeftPanel.getInstance().add(Sticker.SELECTABLE.get(i));
                         }
                     }
                     GameInfoSystem.setup(
                             consumable.getPosition().x, consumable.getPosition().y,
-                            GameInfoSystem.Preset.BIG_BONUS.getValue(),
+                            GameInfoSystem.Preset.BIG_BONUS,
                             5.0f,
                             true
                     );
@@ -642,22 +677,22 @@ public enum Sticker {
                 } else {
                     switch (consumable.getType()) {
                         case CRATE:
-                            GameInfoSystem.setup(
-                                    consumable.getPosition().x, consumable.getPosition().y,
-                                    GameInfoSystem.Preset.BONUS_CRATE.getValue(),
-                                    5.0f,
-                                    true
-                            );
                             for (int i = 0; i < (level + 1) * Rules.CONSUMABLE_GENERATE_BASE_BONUS; i++) {
                                 CrateEmitter crateEmitter = (CrateEmitter) ObjectPool.EMITTERS.get(Crate.class);
                                 crateEmitter.createBonusCrate();
                             }
+                            GameInfoSystem.setup(
+                                    consumable.getPosition().x, consumable.getPosition().y,
+                                    GameInfoSystem.Preset.BONUS_CRATE,
+                                    5.0f,
+                                    true
+                            );
                             break;
                         case STORAGE:
                             StorageEmitter storageEmitter = (StorageEmitter) ObjectPool.EMITTERS.get(Storage.class);
                             GameInfoSystem.setup(
                                     consumable.getPosition().x, consumable.getPosition().y,
-                                    GameInfoSystem.Preset.BONUS_STORAGE.getValue(),
+                                    GameInfoSystem.Preset.BONUS_STORAGE,
                                     5.0f,
                                     true
                             );
@@ -675,6 +710,12 @@ public enum Sticker {
                         case CRATE:
                             Standing.getInstance().changeHP(Standing.getInstance().getMaxHp());
                             boomBox.playSound(MSConstants.ADD_HP);
+                            GameInfoSystem.setup(
+                                    consumable.getPosition().x, consumable.getPosition().y,
+                                    "+[GREEN]" + GameInfoSystem.Preset.HP + "[]",
+                                    8.0f,
+                                    true
+                            );
                             break;
                         case STORAGE:
                             Standing.getInstance().changeHP(Standing.getInstance().getMaxHp());
@@ -683,67 +724,32 @@ public enum Sticker {
                             break;
                     }
                 } else {
+                    List<AbstractAnomaly> list;
                     switch (consumable.getType()) {
                         case CRATE:
-                            List<AbstractAnomaly> list;
-                            if (MathUtils.random(0, 1) == 0) {
-                                MagneticAnomalyEmitter magneticAnomalyEmitter = (MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class);
-                                list = magneticAnomalyEmitter.getActiveList();
-                                score = Rules.ANOMALIES_MAGNETIC_BONUS_SCORE;
-                            } else {
-                                RadiationAnomalyEmitter radiationAnomalyEmitter = (RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class);
-                                list = radiationAnomalyEmitter.getActiveList();
-                                score = Rules.ANOMALIES_RADIATION_BONUS_SCORE;
-                            }
-                            for (int i = 0; i < list.size(); i++) {
-                                AbstractAnomaly anomaly = list.get(i);
-                                if (!anomaly.isTaken()) {
-                                    list.get(i).destroyWithEffect();
-                                    GameInfoSystem.setup(
-                                            anomaly.getPosition().x, anomaly.getPosition().y,
-                                            GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
-                                            5.0f,
-                                            true
-                                    );
-                                }
-                            }
-                            break;
-                        case STORAGE:
-                            score = Rules.ANOMALIES_MAGNETIC_BONUS_SCORE;
                             MagneticAnomalyEmitter magneticAnomalyEmitter = (MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class);
                             list = magneticAnomalyEmitter.getActiveList();
                             for (int i = 0; i < list.size(); i++) {
                                 AbstractAnomaly anomaly = list.get(i);
                                 if (!anomaly.isTaken()) {
-                                    anomaly.destroyWithEffect();
-                                    GameInfoSystem.setup(
-                                            anomaly.getPosition().x, anomaly.getPosition().y,
-                                            GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
-                                            5.0f,
-                                            true
-                                    );
+                                    list.get(i).destroyWithEffect();
                                 }
                             }
-                            score = Rules.ANOMALIES_RADIATION_BONUS_SCORE;
+                            break;
+                        case STORAGE:
                             RadiationAnomalyEmitter radiationAnomalyEmitter = (RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class);
                             list = radiationAnomalyEmitter.getActiveList();
                             for (int i = 0; i < list.size(); i++) {
                                 AbstractAnomaly anomaly = list.get(i);
                                 if (!anomaly.isTaken()) {
                                     anomaly.destroyWithEffect();
-                                    GameInfoSystem.setup(
-                                            anomaly.getPosition().x, anomaly.getPosition().y,
-                                            GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
-                                            5.0f,
-                                            true
-                                    );
                                 }
                             }
                             break;
                     }
                     GameInfoSystem.setup(
                             consumable.getPosition().x, consumable.getPosition().y,
-                            GameInfoSystem.Preset.ANOMALY_FLUSH.getValue(),
+                            GameInfoSystem.Preset.ANOMALY_FLUSH,
                             5.0f,
                             true
                     );
@@ -760,7 +766,6 @@ public enum Sticker {
         // 3 - Add Electrical/Corrosive/Radiation anomaly, or del HP/fuel/life
         int level = (consumable.isGolden() ? 1 : 0) + (consumable.getType() == AbstractPoolable.Type.CRATE ? 0 : 2);
         int r = MathUtils.random(0, 3);
-        int score;
         switch (r) {
             case 0:
                 CorrosiveAnomalyEmitter corrosiveAnomalyEmitter = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
@@ -770,21 +775,16 @@ public enum Sticker {
                 }
                 GameInfoSystem.setup(
                         consumable.getPosition().x, consumable.getPosition().y,
-                        GameInfoSystem.Preset.ANOMALY_ARISE.getValue(),
+                        GameInfoSystem.Preset.ANOMALY_ARISE,
                         5.0f,
                         true
                 );
                 boomBox.playSound(MSConstants.ADD_CORROSIVE);
                 break;
             case 1:
-                score = (level + 1) * Rules.SCORE_BASE_BONUS;
-                Standing.getInstance().changeScore(-score);
-                GameInfoSystem.setup(
-                        consumable.getPosition().x, consumable.getPosition().y,
-                        GameInfoSystem.Preset.SCORE + "-[RED]" + score + "[]",
-                        5.0f,
-                        true
-                );
+                int score = (level + 1) * Rules.SCORE_BASE_BONUS;
+                score = (int) (score * Sticker.REGULAR.getCoefficient());
+                Standing.getInstance().changeScore(-score, consumable.getPosition(), GameInfoSystem.Preset.SCORE + " -[RED]" + score + "[]", 5.0f, true);
                 boomBox.playSound(MSConstants.DEL_SCORE);
                 break;
             case 2:
@@ -830,7 +830,7 @@ public enum Sticker {
                         }
                         GameInfoSystem.setup(
                                 consumable.getPosition().x, consumable.getPosition().y,
-                                preset.getValue(),
+                                preset,
                                 5.0f,
                                 true
                         );
@@ -845,7 +845,7 @@ public enum Sticker {
                             Standing.getInstance().changeLives(-1);
                             GameInfoSystem.setup(
                                     consumable.getPosition().x, consumable.getPosition().y,
-                                    "-[RED]" + GameInfoSystem.Preset.UP + "[]",
+                                    "-1[RED] " + GameInfoSystem.Preset.UP + "[]",
                                     5.0f,
                                     true
                             );
@@ -886,7 +886,7 @@ public enum Sticker {
                         }
                         GameInfoSystem.setup(
                                 consumable.getPosition().x, consumable.getPosition().y,
-                                GameInfoSystem.Preset.ANOMALY_ARISE.getValue(),
+                                GameInfoSystem.Preset.ANOMALY_ARISE,
                                 5.0f,
                                 true
                         );
@@ -900,7 +900,7 @@ public enum Sticker {
     private static void print(AbstractConsumable consumable, GameInfoSystem.Preset p) {
         GameInfoSystem.setup(
                 consumable.getPosition().x, consumable.getPosition().y,
-                (consumable.isGolden() ? "[GOLD]" : "[GREEN]") + p + "[]",
+                (consumable.isGolden() ? "[GOLD]" : "[WHITE]") + p + "[]",
                 (consumable.isGolden() ? 7.0f : 3.0f),
                 true
         );

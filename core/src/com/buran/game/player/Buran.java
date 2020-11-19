@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.buran.game.bot.blackhole.Blackhole;
 import com.buran.game.bot.consumable.AbstractConsumable;
 import com.buran.game.bot.consumable.Consumable;
+import com.buran.game.conf.Buffs;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.PlayerInteractionLevels;
@@ -15,13 +16,13 @@ import com.buran.game.conf.Rules;
 import com.buran.game.effects.Fibonacci;
 import com.buran.game.effects.KillingSpree;
 import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.labelsticker.Sticker;
 import com.buran.game.player.layers.LifeShield;
 import com.buran.game.player.layers.RamShield;
 import com.buran.game.player.layers.Scratch;
 import com.buran.game.player.layers.TakeRangeField;
 import com.buran.game.player.navigation.Radar;
 import com.buran.game.screens.ScreenManager;
-import com.buran.game.ui.GameInfoSystem;
 import com.buran.game.ui.Joystick;
 import com.buran.game.ui.groups.mvc.profiles.Profiles;
 import com.buran.game.utils.BoundCheck;
@@ -40,7 +41,7 @@ import lombok.Setter;
 public class Buran extends AbstractBuran {
     public static boolean isLaser;
     private static LinkedList<Integer> shadowsCoordinates;
-    private static int F = 2 * (int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Rules.PLAYER_ENGINE_POWER);
+    private static int F = 2 * (int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Buffs.getPlayerEnginePower());
     private BoundCheck boundCheck;
     @Getter
     @Setter
@@ -90,7 +91,7 @@ public class Buran extends AbstractBuran {
         this.alphaList = new LinkedList<Float>();
         this.killSeries = 1;
         this.radialSpeed = Rules.PLAYER_RADIAL_SPEED;
-        this.enginePower = Rules.PLAYER_ENGINE_POWER;
+        this.enginePower = Buffs.getPlayerEnginePower();
         setShadowsCoordinates();
         checkRamPower();
         respawn();
@@ -126,24 +127,24 @@ public class Buran extends AbstractBuran {
     }
 
     public void collideBlackhole(float dt) {
-        if (position.dst(Blackhole.position) <= Rules.BLACKHOLE_TAKE_RANGE) {
+        if (position.dst(Blackhole.position) <= Buffs.getBlackholeTakeRange()) {
             isTaken = true;
             velocity.scl(0.5f);
             tmpV2.set(Blackhole.position).sub(position).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER);
             position.mulAdd(tmpV2, dt);
             float dst = Blackhole.position.dst(position);
-            float scaleX = dst / Rules.BLACKHOLE_TAKE_RANGE;
-            float scaleY = dst / Rules.BLACKHOLE_TAKE_RANGE;
-            a = dst / Rules.BLACKHOLE_TAKE_RANGE;
+            float scaleX = dst / Buffs.getBlackholeTakeRange();
+            float scaleY = dst / Buffs.getBlackholeTakeRange();
+            a = dst / Buffs.getBlackholeTakeRange();
             setLayersScale(scaleX, scaleY);
             angle += 365 * dt * Rules.PLAYER_BLACKHOLE_ROTATION;
             if (Blackhole.position.dst(position) <= Rules.BLACKHOLE_EVENT_HORIZON) {
-                BoundCheck.avoidPosition(Blackhole.position, position, (int) Rules.BLACKHOLE_TAKE_RANGE + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+                BoundCheck.avoidPosition(Blackhole.position, position, (int) Buffs.getBlackholeTakeRange() + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
                 setLayersScale(1.0f, 1.0f);
                 isTaken = false;
                 boomBox.playSound(MSConstants.TELEPORT);
                 if (!Profiles.getSettings().isChild()) {
-                    Standing.getInstance().takeDamage(Rules.BLACKHOLE_GET_DAMAGE);
+                    Standing.getInstance().takeDamage(Buffs.getBlackholeDecrease());
                 }
                 cameraSmooth = true;
             }
@@ -169,30 +170,10 @@ public class Buran extends AbstractBuran {
     public void killPlusPlus(AbstractPoolable abstractPoolable) {
         if (abstractPoolable.getLevel() != 0) {
             killTimer = Rules.PLAYER_KILL_TIMER;
-            GameInfoSystem.setup(
-                    position.x, position.y,
-                    KillingSpree.getKillingSpreeFromKillsCount(killSeries).getText(),
-                    KillingSpree.getKillingSpreeFromKillsCount(killSeries).getTextSizeModifier(),
-                    false
-            );
-
             int score = (abstractPoolable.getLevel()) * Rules.ANOMALIES_BASE_SCORE_ADD * killSeries;
-            GameInfoSystem.setup(
-                    position.x,
-                    position.y,
-                    GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]",
-                    3.0f,
-                    true
-            );
-            standing.changeScore(score);
+            score = (int) (score * Sticker.REGULAR.getCoefficient());
+            standing.changeScore(score, position, KillingSpree.getKillingSpreeFromKillsCount(killSeries).getText() + "[GREEN] +" + score + "[]", KillingSpree.getKillingSpreeFromKillsCount(killSeries).getTextSizeModifier(), true);
             killSeries++;
-        } else {
-            GameInfoSystem.setup(
-                    position.x, position.y,
-                    KillingSpree.getKillingSpreeFromKillsCount(0).getText(),
-                    KillingSpree.getKillingSpreeFromKillsCount(0).getTextSizeModifier(),
-                    false
-            );
         }
     }
 
@@ -325,7 +306,7 @@ public class Buran extends AbstractBuran {
     }
 
     private void makeShadow(float dt) {
-        float v = velocity.len() - Rules.PLAYER_ENGINE_POWER;
+        float v = velocity.len() - Buffs.getPlayerEnginePower();
         if (v > 10) {
             if (v <= shadowsCoordinates.getLast()) {
                 if (shadowsCoordinates.size() > 1) {
@@ -435,7 +416,7 @@ public class Buran extends AbstractBuran {
             if (velocity.len() > Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                 particleEmitter.getBuilder().buildBuranFrontalTurboFire(position, angle, 90, 20);
             }
-            if (velocity.len() > Rules.PLAYER_ENGINE_POWER + 10) {
+            if (velocity.len() > Buffs.getPlayerEnginePower() + 10) {
                 particleEmitter.getBuilder().buildBuranShield(
                         position, angle, 90, 45,
                         PlayerInteractionLevels.RED.getR(), PlayerInteractionLevels.RED.getG(), PlayerInteractionLevels.RED.getB()

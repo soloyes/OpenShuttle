@@ -166,6 +166,9 @@ public class Profiles implements Model<ProfileDAO> {
 
     public void dispose() {
         resultsToActiveProfile();
+        if (Rules.DEBUG && getActive() != null) {
+            getActive().getPreferences().setLevel(0);
+        }
         write();
     }
 

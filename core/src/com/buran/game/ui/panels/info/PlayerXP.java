@@ -26,7 +26,7 @@ public class PlayerXP {
     private Vector2 position;
     private BitmapFont font60_C;
     private BitmapFont font44;
-    private BitmapFont font72;
+    private BitmapFont font64;
     private StringBuilder scoreBuilder;
     private StringBuilder levelBuilder;
     private GlyphLayout score;
@@ -45,7 +45,7 @@ public class PlayerXP {
         this.position.set(43, Rules.WORLD_HEIGHT - height - 43);
         this.font44 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT44, BitmapFont.class);
         this.font60_C = Assets.getInstance().getAssetManager().get(PaintConstants.FONT60_C, BitmapFont.class);
-        this.font72 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT72, BitmapFont.class);
+        this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
         this.level = new GlyphLayout();
         this.levelLabel = new GlyphLayout(font44, "level");
         this.scoreBuilder = new StringBuilder();
@@ -64,7 +64,7 @@ public class PlayerXP {
                 1.0f, 1.0f,
                 0.0f
         );
-        font72.draw(
+        font64.draw(
                 batch,
                 level, position.x + width / 2 - level.width / 2,
                 position.y + height / 2 + level.height / 2 + 14
@@ -95,24 +95,35 @@ public class PlayerXP {
     }
 
     public void update(float dt) {
-        if (standing.getScoreView() <= 0) {
-            angle = 1;
-        } else {
-            angle = 360 * (1 - 1.0f * (standing.getScoreToLevel() - standing.getScoreView()) / standing.getScoreToLevel());
-        }
+        if (Standing.getInstance().getPlayingLevel() < 19) {
+            if (standing.getScoreView() <= 0) {
+                angle = 1;
+            } else {
+                angle = 360 * (1 - 1.0f * (standing.getScoreToLevel() - standing.getScoreView()) / standing.getScoreToLevel());
+            }
 
-        if (standing.isScoreAlertRadiationAnomaly()) {
-            scaleCircle.setColor(Color.RED);
-            font60_C.setColor(Color.RED);
+            if (standing.isScoreAlertRadiationAnomaly()) {
+                scaleCircle.setColor(Color.RED);
+                font60_C.setColor(Color.RED);
+            } else {
+                scaleCircle.setColor(Color.WHITE);
+                font60_C.setColor(Color.WHITE);
+            }
         } else {
-            scaleCircle.setColor(Color.WHITE);
-            font60_C.setColor(Color.WHITE);
+            angle = 360;
+            if (standing.isScoreAlertRadiationAnomaly()) {
+                scaleCircle.setColor(Color.RED);
+                font60_C.setColor(Color.RED);
+            } else {
+                scaleCircle.setColor(Color.GRAY);
+                font60_C.setColor(Color.WHITE);
+            }
         }
         scoreBuilder.setLength(0);
         scoreBuilder = Rounder.round(Standing.getInstance().getScoreView());
         score.setText(font60_C, scoreBuilder);
         levelBuilder.setLength(0);
-        levelBuilder.append(standing.getPlayingLevel());
-        level.setText(font72, levelBuilder);
+        levelBuilder.append(standing.getPlayingLevel()).append("|").append(19);
+        level.setText(font64, levelBuilder);
     }
 }

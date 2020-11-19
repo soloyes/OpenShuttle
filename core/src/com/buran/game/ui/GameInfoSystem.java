@@ -2,7 +2,6 @@ package com.buran.game.ui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.buran.game.conf.Rules;
 import com.buran.game.effects.FlyingText;
 
 /**
@@ -66,19 +65,21 @@ public class GameInfoSystem {
         BOOM("BOOOOM"),
         SAD("[RED]SO SAD[]"),
         OUT("[YELLOW]OUT OF RANGE[]"),
-        REPAIR("REPAIR [GREEN]+" + Rules.CONSUMABLE_REPAIR_ADD),
-        FUEL("FUEL"),
-        TURBO("TURBO [GREEN]x" + (int) Rules.PLAYER_ENGINE_POWER_FACTOR + "[]"),
-        TRASH("TRASH"),
-        SPLASH("[GREEN]SPLASH[]"),
-        LOST_SCORE("SCORE"),
-        MURDERER("MURDERER" + "\n[RED]-" + Rules.CONSUMABLE_MURDER_SCORE_DECREASE + "[]"),
-        EASY("BE EASY"),
-        ROCKETS("[GREEN]ROCKETS[]"),
-        RADAR("RADAR"),
-        SHIELD("SHIELD [GREEN]+" + (int) Rules.CONSUMABLE_SHIELD_TIME + "[]"),
-        SCAN("SCAN [GREEN]+" + (int) Rules.CONSUMABLE_SCAN_TIME + "[]"),
+        //
+        TURBO("TURBO"),
+        REPAIR("REPAIR"),
+        SHIELD("SHIELD"),
+        SPLASH("SPLASH"),
+        SCAN("SCAN"),
         LASER("LASER"),
+        RADAR("RADAR"),
+        ROCKETS("ROCKETS"),
+        FUEL("FUEL"),
+        TRASH("TRASH"),
+        //
+        LOST_SCORE("SCORE"),
+        MURDERER("MURDERER"),
+        EASY("BE EASY"),
         BONUS_CRATE("[GREEN]BONUS CRATE[]"),
         BONUS_STORAGE("[GREEN]BONUS STORAGE[]"),
         BIG_BONUS("[GREEN]BIG BONUS[]"),

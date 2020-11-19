@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.buran.game.bot.blackhole.Blackhole;
 import com.buran.game.bot.consumable.AbstractConsumable;
+import com.buran.game.conf.Buffs;
 import com.buran.game.conf.Rules;
 import com.buran.game.effects.BoomBox;
 import com.buran.game.effects.MoveProcessor;
@@ -108,12 +109,12 @@ public abstract class AbstractPoolable implements Poolable {
 
     public void collideBlackhole() {
         float dst = Blackhole.position.dst(position);
-        if (dst <= Rules.BLACKHOLE_TAKE_RANGE) {
+        if (dst <= Buffs.getBlackholeTakeRange()) {
             taken = true;
             atRayPoint = false;
             velocity.scl(0.5f);
-            float scaleX = (dst / Rules.BLACKHOLE_TAKE_RANGE) * saveScaleX;
-            float scaleY = (dst / Rules.BLACKHOLE_TAKE_RANGE) * saveScaleY;
+            float scaleX = (dst / Buffs.getBlackholeTakeRange()) * saveScaleX;
+            float scaleY = (dst / Buffs.getBlackholeTakeRange()) * saveScaleY;
             if (scaleX >= saveScaleX) {
                 scaleX = saveScaleX;
             }
