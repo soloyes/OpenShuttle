@@ -610,7 +610,7 @@ public class GameScreen extends BaseScreen {
                 anomaly.addEatTimer(dt);
                 if (anomaly.getEatTimer() >= Rules.ANOMALIES_RADIATION_EAT_TIME) {
                     anomaly.setEatTimer(0.0f);
-                    Standing.getInstance().changeScore(-Buffs.getScoreDecrease(), Buran.position, "-[RED]" + GameInfoSystem.Preset.LOST_SCORE.getValue() + "[]", 2.0f, true);
+                    Standing.getInstance().changeScore(-Buffs.getScoreDecrease(), Buran.position, "-[RED]" + GameInfoSystem.Preset.LOST_SCORE + "[]", 2.0f, true);
                     boomBox.playSound(MSConstants.LOSE_SCORE);
                 }
             }

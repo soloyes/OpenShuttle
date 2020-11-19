@@ -230,7 +230,7 @@ public final class Standing {
             GameInfoSystem.setup(
                     Buran.position.x,
                     Buran.position.y,
-                    "+[GREEN]" + GameInfoSystem.Preset.UP + "[]",
+                    "+1[GREEN] " + GameInfoSystem.Preset.UP + "[]",
                     4.0f,
                     true
             );
@@ -280,14 +280,24 @@ public final class Standing {
         if (lives == 0) {
             Rules.GAME_OVER = true;
         } else {
-            Buran.respawn();
-            GameInfoSystem.setup(
-                    Buran.position.x,
-                    Buran.position.y,
-                    "[RED]DESTROYED[]",
-                    8.0f,
-                    true
-            );
+            if (amount < 0) {
+                Buran.respawn();
+                GameInfoSystem.setup(
+                        Buran.position.x,
+                        Buran.position.y,
+                        "[RED]DESTROYED[]",
+                        8.0f,
+                        true
+                );
+            } else {
+                GameInfoSystem.setup(
+                        Buran.position.x,
+                        Buran.position.y,
+                        "+1[GREEN] " + GameInfoSystem.Preset.UP + "[]",
+                        4.0f,
+                        true
+                );
+            }
         }
     }
 

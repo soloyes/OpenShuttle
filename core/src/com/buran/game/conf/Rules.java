@@ -98,8 +98,6 @@ public final class Rules {
     public static final float ANOMALIES_RADIATION_EAT_TIME = 0.4f;
     //2.0f
     public static final float ANOMALIES_RADIATION_BORN_SPEED = 2.0f;
-    //5000
-    public static final int ANOMALIES_RADIATION_BONUS_SCORE = 5000;
     //
     //0
     public static final int ANOMALIES_MAGNETIC_AT_START = 0;
@@ -117,8 +115,6 @@ public final class Rules {
     public static final float ANOMALIES_MAGNETIC_EAT_TIME = 0.4f;
     //2.0f
     public static final float ANOMALIES_MAGNETIC_BORN_SPEED = 2.0f;
-    //5000
-    public static final int ANOMALIES_MAGNETIC_BONUS_SCORE = 5000;
     //
     //2
     public static final int ANOMALIES_CORROSIVE_AT_START = 2;
@@ -299,8 +295,8 @@ public final class Rules {
     public static final int SELECTOR_MAX_COUNT = 5;
     //2
     public static final int SELECTOR_GOLDEN_COUNT = 2;
-    //3
-    public static final int SELECTOR_SHABBY_BASE_BONUS = 3;
+    //2
+    public static final int SELECTOR_SHABBY_BASE_BONUS = 2;
     //0.7f
     public static final float LINE_PRESSED_WAIT = 0.7f;
     //2.0f
