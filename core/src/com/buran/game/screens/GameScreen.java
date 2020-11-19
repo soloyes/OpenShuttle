@@ -699,7 +699,8 @@ public class GameScreen extends BaseScreen {
                             .boom(asteroid.getPosition(), PlayerInteractionLevels.NONE);
                     GameInfoSystem.setup(anomaly.getPosition().x, anomaly.getPosition().y, GameInfoSystem.Preset.BOOM, 3.0f, false);
                     if (anomaly.getLevel() == 0) {
-                        anomaly.destroyWithEffect();
+                        anomaly.showSprayBoom();
+                        anomaly.destroy();
                     } else {
                         anomaly.takeDamage(1);
                     }
