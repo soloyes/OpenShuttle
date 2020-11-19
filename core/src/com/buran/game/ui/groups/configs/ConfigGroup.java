@@ -1097,7 +1097,7 @@ public class ConfigGroup extends Group {
     private void refreshLevelLine() {
         if (screenType == ScreenManager.ScreenType.MENU) {
             levelLine.setActive(true);
-            level = level % (Rules.StartLevel.values().length);
+            level = level % (Rules.StartLevel.values().length - 1);
             Profiles.getSettings().setLevel(level);
             levelCheckBox.setLocked(false);
         } else {
