@@ -9,7 +9,7 @@ import com.buran.game.labelsticker.Sticker;
 public class Buffs {
 
     public static int getScoreDecrease() {
-        return (int) (Sticker.REGULAR.getCoefficient() * (Rules.ANOMALIES_RADIATION_SCORE_DECREASE / Sticker.SCIENTIST.getCoefficient()));
+        return (int) (Sticker.COMMANDER.getCoefficient() * (Rules.ANOMALIES_RADIATION_SCORE_DECREASE / Sticker.SCIENTIST.getCoefficient()));
     }
 
     public static float getAsteroidBurnTime() {
@@ -41,7 +41,7 @@ public class Buffs {
     }
 
     public static float getBlackholeTakeRange() {
-        return Rules.BLACKHOLE_TAKE_RANGE / Sticker.REGULAR.getCoefficient();
+        return Rules.BLACKHOLE_TAKE_RANGE / Sticker.COMMANDER.getCoefficient();
     }
 
     public static float getBlackholeNoiseRange() {
@@ -49,6 +49,6 @@ public class Buffs {
     }
 
     public static float getPlayerEnginePower() {
-        return Rules.PLAYER_ENGINE_POWER_COMPONENT1 + Rules.PLAYER_ENGINE_POWER_COMPONENT2 * Sticker.REGULAR.getCoefficient();
+        return Rules.PLAYER_ENGINE_POWER_COMPONENT1 + Rules.PLAYER_ENGINE_POWER_COMPONENT2 * Sticker.COMMANDER.getCoefficient();
     }
 }

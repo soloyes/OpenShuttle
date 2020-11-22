@@ -94,7 +94,7 @@ public class MenuScreen extends BaseScreen {
 
     public void update(float delta) {
         background.update(delta);
-        stage.act();
+        stage.act(delta);
     }
 
     @Override

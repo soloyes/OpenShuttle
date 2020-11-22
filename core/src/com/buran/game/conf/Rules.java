@@ -11,6 +11,9 @@ public final class Rules {
     public static final boolean DEBUG = false;
 
     public static final boolean ADS_ENABLED = true;
+    public static final float ADS_DELAY = 60.0f;
+    public static final int ADS_RUNTIME_GAME = 20;
+    public static final int ADS_RUNTIME_DEATH_MODE = ADS_RUNTIME_GAME / 2;
 
     public static final String RATE_US = "https://play.google.com/store/apps/details?id=com.buran.game.free.pack";
     public static final String ABOUT_US = "https://play.google.com/store/apps/details?id=com.buran.game.free.pack";
@@ -238,6 +241,8 @@ public final class Rules {
     //GAME
     //false
     public static boolean GAME_OVER = false;
+    //false
+    public static boolean DEATH_MODE = false;
     //1.0f
     public static float STANDARD_COEFFICIENT = 1.0f;
     //1.3f
@@ -383,9 +388,9 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(18);
                 Standing.getInstance().setLives(1);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setStartLevel(1);
-                Standing.getInstance().setScore(0);
-                Standing.getInstance().setScoreView(0);
+                Standing.getInstance().setStartLevel(18);
+                Standing.getInstance().setScore(144000);
+                Standing.getInstance().setScoreView(144000);
             }
         };
 

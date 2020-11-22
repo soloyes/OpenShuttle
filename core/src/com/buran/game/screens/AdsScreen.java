@@ -19,7 +19,7 @@ public class AdsScreen extends BaseScreen implements Screen {
     @Override
     public void show() {
         super.show();
-        ScreenManager.getInstance().getAdsController().showBannerAd();
+        ScreenManager.getInstance().getAdsController().showBannerAd(true);
     }
 
     @Override
@@ -36,6 +36,6 @@ public class AdsScreen extends BaseScreen implements Screen {
     }
 
     private void update(float delta) {
-        stage.act();
+        stage.act(delta);
     }
 }

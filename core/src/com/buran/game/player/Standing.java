@@ -83,6 +83,8 @@ public final class Standing {
     private Profiles profiles;
     @Getter
     private float playTime;
+    @Getter
+    private float deathModeTime;
     private float dmgReceived;
     private float dmgDone;
     @Getter
@@ -113,6 +115,7 @@ public final class Standing {
         astronauts.clear();
         usedItems.clear();
         playTime = 0;
+        deathModeTime = 0;
         dmgReceived = 0;
         dmgDone = 0;
         levelsToLive = 0;
@@ -193,6 +196,10 @@ public final class Standing {
         calcScoreToLevel();
         if (playingLevel >= 19) {
             playingLevel = 19;
+            if (!Rules.DEATH_MODE) {
+                Rules.DEATH_MODE = true;
+                boomBox.stopAllMusicAndPlayThese(MSConstants.DEATH_MODE, MSConstants.BLACKHOLE_ROAR_MUSIC);
+            }
         } else {
             if (score - scoreToLevel >= 0) {
                 playingLevel += 1;
@@ -311,6 +318,9 @@ public final class Standing {
         detailedResultDAO.setLevelAchieved(playingLevel);
         // time
         detailedResultDAO.setTime((int) playTime);
+        //todo: add to Effectiveness index
+        // deathModeTIme
+        detailedResultDAO.setDeathModeTime((int) deathModeTime);
         // dmgDone
         detailedResultDAO.setDmgDone((int) dmgDone);
         // dmgReceived
@@ -489,5 +499,8 @@ public final class Standing {
 
     public void addTime(float amount) {
         playTime += amount;
+        if (Rules.DEATH_MODE) {
+            deathModeTime += amount;
+        }
     }
 }

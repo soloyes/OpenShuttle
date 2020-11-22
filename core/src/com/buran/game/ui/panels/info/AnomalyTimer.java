@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 import com.buran.game.bot.anomaly.AbstractAnomaly;
 import com.buran.game.bot.anomaly.CorrosiveAnomaly;
 import com.buran.game.bot.anomaly.CorrosiveAnomalyEmitter;
@@ -47,26 +48,32 @@ public class AnomalyTimer {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(timerBackground,
-                position.x, position.y,
-                width / 2, height / 2,
-                width, height,
-                1.0f, 1.0f,
-                0.0f
-        );
-        timerBox.draw(batch, position.x, position.y,
-                width, height,
-                angle
-        );
-        font44.draw(batch,
-                glyphLayout,
-                Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2,
-                position.y - 14
-        );
+        float x, y;
+        if (!Rules.DEATH_MODE) {
+            batch.draw(timerBackground,
+                    position.x, position.y,
+                    width / 2, height / 2,
+                    width, height,
+                    1.0f, 1.0f,
+                    0.0f
+            );
+            timerBox.draw(batch, position.x, position.y,
+                    width, height,
+                    angle
+            );
+            x = Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2;
+            y = position.y - 14;
+        } else {
+            x = Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2;
+            y = position.y + glyphLayout.height / 2;
+        }
+        font44.draw(batch, glyphLayout, x, y);
     }
 
     public void update(float dt) {
-        counter -= dt;
+        if (!Rules.DEATH_MODE) {
+            counter -= dt;
+        }
         if (counter >= Rules.ANOMALIES_CORROSIVE_HUNT_TIME * 0.6f) {
             color.set(Color.WHITE);
         } else if (counter >= Rules.ANOMALIES_CORROSIVE_HUNT_TIME * 0.3f) {
@@ -87,7 +94,13 @@ public class AnomalyTimer {
                 }
             }
         }
-        glyphLayout.setText(font44, TimeFormat.formatMS(counter));
         angle = -360.0f * counter / Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
+        if (!Rules.DEATH_MODE) {
+            glyphLayout.setText(font44, TimeFormat.formatMS(counter));
+        } else {
+            glyphLayout.setText(font44, "Death\nmode");
+            float w = glyphLayout.width;
+            glyphLayout.setText(font44, "Death\nmode", Color.RED, w, Align.center, false);
+        }
     }
 }

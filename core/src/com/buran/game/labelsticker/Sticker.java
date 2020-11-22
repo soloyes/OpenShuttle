@@ -169,7 +169,7 @@ public enum Sticker {
                     (MathUtils.random(Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MIN, Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_MAX) *
                             ((isGolden) ? Rules.CONSUMABLE_TRASH_GOLDEN_SCORE_FACTOR : 1)
                     );
-            score = (int) (score * Sticker.REGULAR.getCoefficient());
+            score = (int) (score * Sticker.COMMANDER.getCoefficient());
         }
 
         @Override
@@ -491,7 +491,7 @@ public enum Sticker {
         }
     },
     //Astronaut
-    REGULAR("[#FFFFFF]REGULAR[]\n[#cc6e54][]") {
+    COMMANDER("[#FFFFFF]COMMANDER[]\n[#cc6e54]Every troop needs a leader. A real chief gets more points, his Buran is faster than fast and evades the obstacles like a snake.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
         }
@@ -511,7 +511,7 @@ public enum Sticker {
 
         }
     },
-    MECHANIC("[#FFFFFF]MECHANIC[]\n[#cc6e54][]") {
+    MECHANIC("[#FFFFFF]MECHANIC[]\n[#cc6e54]His SHIELD BAR is a full metal jacket. Effectively repairs holes from fuel anomalies and enrich reloads of REPAIR and BOOST items.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
         }
@@ -531,7 +531,7 @@ public enum Sticker {
 
         }
     },
-    MEDIC("[#FFFFFF]MEDIC[]\n[#cc6e54][]") {
+    MEDIC("[#FFFFFF]MEDIC[]\n[#cc6e54]Boosts health for all teammates and keeps an extended HEALTH BAR in his first-aid kit. Cures any damage with a band-aid and aspirin like a field medic.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
         }
@@ -551,7 +551,7 @@ public enum Sticker {
 
         }
     },
-    MILITARY("[#FFFFFF]MILITARY[]\n[#cc6e54][]") {
+    MILITARY("[#FFFFFF]MILITARY[]\n[#cc6e54]Armed and dangerous. Fights longer, reloads faster. No doubt, he is a loaded gun who is extending LASER BAR.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
         }
@@ -571,7 +571,7 @@ public enum Sticker {
 
         }
     },
-    SCIENTIST("[#FFFFFF]SCIENTIST[]\n[#cc6e54][]") {
+    SCIENTIST("[#FFFFFF]SCIENTIST[]\n[#cc6e54]Ph.D. in fuel consumption efficiency, extended FUEL BAR. Been studying laser impact on asteroids and some types of anomalies since high school.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
         }
@@ -597,7 +597,7 @@ public enum Sticker {
     }
 
     public static List<Sticker> SELECTABLE = Arrays.asList(BOOST, REPAIR, SHIELD, SPLASH, SCAN, ROCKETS);
-    public static List<Sticker> ASTRONAUTS = new LinkedList<Sticker>(Arrays.asList(REGULAR, MEDIC, SCIENTIST, MECHANIC, MILITARY));
+    public static List<Sticker> ASTRONAUTS = new LinkedList<Sticker>(Arrays.asList(COMMANDER, MEDIC, SCIENTIST, MECHANIC, MILITARY));
     public static List<Sticker> ALL = Arrays.asList(Sticker.values());
     private static BoomBox boomBox;
     private static Standing standing;
@@ -655,7 +655,7 @@ public enum Sticker {
                 break;
             case 1:
                 int score = (level + 1) * Rules.SCORE_BASE_BONUS;
-                score = (int) (score * Sticker.REGULAR.getCoefficient());
+                score = (int) (score * Sticker.COMMANDER.getCoefficient());
                 Standing.getInstance().changeScore(score, consumable.getPosition(), GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 5.0f, true);
                 boomBox.playSound(MSConstants.ADD_SCORE);
                 break;
@@ -783,7 +783,7 @@ public enum Sticker {
                 break;
             case 1:
                 int score = (level + 1) * Rules.SCORE_BASE_BONUS;
-                score = (int) (score * Sticker.REGULAR.getCoefficient());
+                score = (int) (score * Sticker.COMMANDER.getCoefficient());
                 Standing.getInstance().changeScore(-score, consumable.getPosition(), GameInfoSystem.Preset.SCORE + " -[RED]" + score + "[]", 5.0f, true);
                 boomBox.playSound(MSConstants.DEL_SCORE);
                 break;

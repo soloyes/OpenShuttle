@@ -175,7 +175,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
     public void destroyWithEffect() {
         super.destroyWithEffect();
         Standing.getInstance().addToStatistics(this.type, this.level);
-        int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.REGULAR.getCoefficient());
+        int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.COMMANDER.getCoefficient());
         Standing.getInstance().changeScore(score, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
         showSprayBoom();
     }

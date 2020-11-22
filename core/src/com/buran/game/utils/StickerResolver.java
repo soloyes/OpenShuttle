@@ -80,7 +80,7 @@ public class StickerResolver {
             case PATTERN_GOLD:
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.PATTERN_SIGN_GOLD_LABEL_REGION);
                 break;
-            case REGULAR:
+            case COMMANDER:
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.ASTRONAUT_ICON);
                 operation = Operation.SELF;
                 break;

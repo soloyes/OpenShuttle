@@ -143,6 +143,7 @@ public class GameScreen extends BaseScreen {
     private float nebulaA = 0.5f;
     private int nebulaRegionX, nebulaRegionY;
     private HoleFence holeFence;
+    private float adsDelay;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -374,7 +375,7 @@ public class GameScreen extends BaseScreen {
                 profiles.dispose();
                 detailedResultGroup.init();
                 if (Rules.ADS_ENABLED) {
-                    ScreenManager.getInstance().getAdsController().showBannerAd();
+                    ScreenManager.getInstance().getAdsController().showBannerAd(true);
                 }
             }
         }
@@ -422,7 +423,10 @@ public class GameScreen extends BaseScreen {
             gameInfoSystem.update(dt);
             playerPointer.update(dt);
             if (!Rules.GAME_OVER) {
-                boomBox.playRandomMusicEffects(dt);
+                if (!Rules.DEATH_MODE) {
+                    boomBox.playRandomMusicEffects(dt);
+                }
+                calcAdsDelay(dt);
                 checkCollision(dt);
             } else {
                 if (!gameOverDeactivate) {
@@ -445,7 +449,10 @@ public class GameScreen extends BaseScreen {
                     nebulaA = 0.0f;
                 }
             }
-
+        } else {
+            if (Rules.ADS_ENABLED && profiles.getActive().getPreferences().getRunTimes() >= Rules.ADS_RUNTIME_DEATH_MODE) {
+                ScreenManager.getInstance().getAdsController().hideBannerAd();
+            }
         }
         cameraUpdate(dt);
         if (!PauseGroup.isPause() && !Rules.GAME_OVER) {
@@ -455,7 +462,7 @@ public class GameScreen extends BaseScreen {
             UIRightPanel.getInstance().update(dt);
             holeFence.update(dt);
         }
-        stage.act();
+        stage.act(dt);
     }
 
     //It is works, somehow.
@@ -850,13 +857,42 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void resume() {
-        if (!Rules.GAME_OVER && !PauseGroup.isPause()) {
-            boomBox.resumeThisMusic(MSConstants.GAME_SONG);
-            boomBox.resumeThisMusic(MSConstants.BLACKHOLE_ROAR_MUSIC);
-        } else if (PauseGroup.isPause()) {
-            boomBox.resumeThisMusic(MSConstants.MENU_SONG);
-        } else if (Rules.GAME_OVER) {
+        if (!Rules.GAME_OVER) {
+            if (Rules.DEATH_MODE) {
+                if (PauseGroup.isPause()) {
+                    boomBox.resumeThisMusic(MSConstants.PAUSE);
+                } else {
+                    boomBox.resumeThisMusic(MSConstants.DEATH_MODE);
+                    boomBox.resumeThisMusic(MSConstants.BLACKHOLE_ROAR_MUSIC);
+                }
+            } else {
+                if (PauseGroup.isPause()) {
+                    boomBox.resumeThisMusic(MSConstants.PAUSE);
+                } else {
+                    boomBox.resumeThisMusic(MSConstants.GAME_SONG);
+                    boomBox.resumeThisMusic(MSConstants.BLACKHOLE_ROAR_MUSIC);
+                }
+            }
+        } else {
             boomBox.resumeThisMusic(MSConstants.GAME_OVER);
+        }
+    }
+
+    private void calcAdsDelay(float dt) {
+        if (Rules.ADS_ENABLED) {
+            if (profiles.getActive().getPreferences().getRunTimes() >= Rules.ADS_RUNTIME_DEATH_MODE && Rules.DEATH_MODE) {
+                adsDelay += dt;
+                if (adsDelay >= Rules.ADS_DELAY) {
+                    adsDelay = 0.0f;
+                    ScreenManager.getInstance().getAdsController().showBannerAd(false);
+                }
+            } else if (profiles.getActive().getPreferences().getRunTimes() >= Rules.ADS_RUNTIME_GAME) {
+                adsDelay += dt;
+                if (adsDelay >= Rules.ADS_DELAY) {
+                    adsDelay = 0.0f;
+                    ScreenManager.getInstance().getAdsController().showBannerAd(false);
+                }
+            }
         }
     }
 }

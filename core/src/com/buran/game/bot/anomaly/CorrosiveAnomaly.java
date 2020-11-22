@@ -74,6 +74,9 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         this.clockwise = MathUtils.randomSign();
         this.position.set(x, y);
         this.active = true;
+        if (Rules.DEATH_MODE){
+            this.activated = true;
+        }
         this.born = false;
         this.color.a = PaintConstants.ANOMALY_CORROSIVE_GLOW_OSCILLATOR_MAX;
         float rnd = MathUtils.random(0.0f, 1.0f);
@@ -151,7 +154,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                     showSprayBoom();
                     boomBox.playSound(MSConstants.SPLASH_ANOMALY);
                     Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY);
-                    int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.REGULAR.getCoefficient());
+                    int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.COMMANDER.getCoefficient());
                     Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
                     Standing.getInstance().addToStatistics(this.type, this.level);
                 }
@@ -178,7 +181,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 destroy();
                 boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
                 Standing.getInstance().addToStatistics(this.type, this.level);
-                int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.REGULAR.getCoefficient());
+                int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.COMMANDER.getCoefficient());
                 Standing.getInstance().changeScore(score, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
                 showSprayBoom();
             }
@@ -248,7 +251,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     @Override
     public void destroyWithEffect() {
         super.destroyWithEffect();
-        int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.REGULAR.getCoefficient());
+        int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.COMMANDER.getCoefficient());
         Standing.getInstance().changeScore(score, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
         Standing.getInstance().addToStatistics(this.type, this.level);
         showSprayCollision();
