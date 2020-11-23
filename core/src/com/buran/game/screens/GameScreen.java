@@ -40,6 +40,7 @@ import com.buran.game.bot.consumable.fuel.Fuel;
 import com.buran.game.bot.rocket.RocketEmitter;
 import com.buran.game.bot.rocket.RocketLauncher;
 import com.buran.game.conf.Buffs;
+import com.buran.game.conf.DeathMode;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.PlayerInteractionLevels;
@@ -425,6 +426,8 @@ public class GameScreen extends BaseScreen {
             if (!Rules.GAME_OVER) {
                 if (!Rules.DEATH_MODE) {
                     boomBox.playRandomMusicEffects(dt);
+                } else {
+                    DeathMode.update(dt);
                 }
                 calcAdsDelay(dt);
                 checkCollision(dt);

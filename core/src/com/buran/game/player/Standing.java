@@ -7,6 +7,7 @@ import com.buran.game.bot.consumable.AstronautEmitter;
 import com.buran.game.bot.consumable.CrateEmitter;
 import com.buran.game.bot.consumable.FuelEmitter;
 import com.buran.game.bot.consumable.StorageEmitter;
+import com.buran.game.conf.DeathMode;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.conf.VConstants;
@@ -194,15 +195,24 @@ public final class Standing {
                 colored
         );
         calcScoreToLevel();
-        if (playingLevel >= 19) {
-            playingLevel = 19;
-            if (!Rules.DEATH_MODE) {
-                Rules.DEATH_MODE = true;
-                boomBox.stopAllMusicAndPlayThese(MSConstants.DEATH_MODE, MSConstants.BLACKHOLE_ROAR_MUSIC);
-            }
-        } else {
-            if (score - scoreToLevel >= 0) {
-                playingLevel += 1;
+        if (score - scoreToLevel >= 0) {
+            playingLevel += 1;
+            if (playingLevel >= 19) {
+                playingLevel = 19;
+                if (!Rules.DEATH_MODE) {
+                    DeathMode.activate();
+                    boomBox.stopAllMusicAndPlayThese(MSConstants.DEATH_MODE, MSConstants.BLACKHOLE_ROAR_MUSIC);
+                    GameInfoSystem.setup(
+                            ScreenManager.getInstance().getCamera().position.x,
+                            ScreenManager.getInstance().getCamera().position.y,
+                            GameInfoSystem.Preset.DEATH_MODE.getValue(),
+                            4.0f,
+                            2.0f,
+                            true,
+                            true
+                    );
+                }
+            } else {
                 addLevelToLive();
                 GameInfoSystem.setup(
                         ScreenManager.getInstance().getCamera().position.x,

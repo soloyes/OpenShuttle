@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.buran.game.conf.DeathMode;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
@@ -88,8 +89,8 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         }
         this.taken = false;
         this.v = MathUtils.random(
-                Rules.ANOMALIES_CORROSIVE_VELOCITY,
-                3 * Rules.ANOMALIES_CORROSIVE_VELOCITY
+                DeathMode.corrosiveAnomalyVelocity(),
+                3 * DeathMode.corrosiveAnomalyVelocity()
         );
         this.spiralRadius = MathUtils.random(20, 60);
         this.scaleX = this.scaleY = 0;

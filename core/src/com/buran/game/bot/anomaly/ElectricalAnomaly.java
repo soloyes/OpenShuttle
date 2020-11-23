@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.buran.game.conf.DeathMode;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
@@ -61,7 +62,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.scaleX = this.saveScaleX = 1.0f;
         this.scaleY = this.saveScaleY = 1.0f;
         this.taken = false;
-        this.v = Rules.ANOMALY_ELECTRIC_VELOCITY;
+        this.v = DeathMode.electricAnomalyVelocity();
         this.spiralRadius = MathUtils.random(20, 60);
     }
 
@@ -155,7 +156,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         super.destroyWithEffect();
         Standing.getInstance().addToStatistics(this.type, this.level);
         //score amount decrease when kicked
-        int score = (int) (level * Rules.ANOMALIES_BASE_SCORE_ADD * (v / Rules.ANOMALY_ELECTRIC_VELOCITY));
+        int score = (int) (level * Rules.ANOMALIES_BASE_SCORE_ADD * (v / DeathMode.electricAnomalyVelocity()));
         score = (int) (score * Sticker.COMMANDER.getCoefficient());
         Standing.getInstance().changeScore(score, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
         showSprayBoom();
