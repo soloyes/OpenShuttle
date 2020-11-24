@@ -37,18 +37,14 @@ public class Assets {
         switch (type) {
             case MENU:
                 createStandardFont(32, "fonts/college.regular", "");
-                createStandardFont(54, "fonts/college.regular", "");
-                createStandardFont(48, "fonts/college.regular", "");
-                createStandardFont(48, "fonts/college.regular", "");
                 createStandardFont(44, "fonts/college.regular", "");
+                createStandardFont(48, "fonts/college.regular", "");
+                createStandardFont(54, "fonts/college.regular", "");
                 createStandardFont(64, "fonts/college.regular", "");
                 createStandardFont(72, "fonts/college.regular", "");
                 createStandardFont(96, "fonts/college.regular", "");
                 createStandardFont(128, "fonts/college.regular", "");
                 createStandardFont(175, "fonts/college.regular", "");
-                createStandardFont(180, "fonts/college.regular", "");
-                createStandardFont(188, "fonts/college.regular", "");
-                createStandardFont(256, "fonts/college.regular", "");
                 assetManager.load(MSConstants.MENU_SONG, Music.class);
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
@@ -68,16 +64,14 @@ public class Assets {
                 createStandardFont(48, "fonts/college.regular", "");
                 createStandardFont(48, "fonts/college.regular", "Coloured");
                 createStandardFont(54, "fonts/college.regular", "");
-                createStandardFont(64, "fonts/college.regular", "");
-                createStandardFont(64, "fonts/college.regular", "Coloured");
                 createStandardFont(60, "fonts/college.regular", "");
                 createStandardFont(60, "fonts/college.regular", "Coloured");
+                createStandardFont(64, "fonts/college.regular", "");
                 createStandardFont(72, "fonts/college.regular", "");
                 createStandardFont(96, "fonts/college.regular", "");
                 createStandardFont(128, "fonts/college.regular", "");
                 createStandardFont(128, "fonts/college.regular", "Coloured");
-                createStandardFont(180, "fonts/college.regular", "");
-                createStandardFont(256, "fonts/college.regular", "");
+                createStandardFont(175, "fonts/college.regular", "");
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
                 assetManager.load(MSConstants.MENU_SONG, Music.class);
                 assetManager.load(MSConstants.GAME_SONG, Music.class);

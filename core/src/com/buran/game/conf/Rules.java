@@ -346,7 +346,7 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(27);
                 Standing.getInstance().setLives(1);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setStartLevel(1);
+                Standing.getInstance().setStartLevel(0);
                 Standing.getInstance().setScore(0);
                 Standing.getInstance().setScoreView(0);
             }
@@ -363,7 +363,7 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(24);
                 Standing.getInstance().setLives(2);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setStartLevel(1);
+                Standing.getInstance().setStartLevel(0);
                 Standing.getInstance().setScore(0);
                 Standing.getInstance().setScoreView(0);
             }
@@ -380,7 +380,7 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(21);
                 Standing.getInstance().setLives(3);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setStartLevel(1);
+                Standing.getInstance().setStartLevel(0);
                 Standing.getInstance().setScore(0);
                 Standing.getInstance().setScoreView(0);
             }
