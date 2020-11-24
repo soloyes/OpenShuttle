@@ -40,6 +40,7 @@ import com.buran.game.bot.consumable.fuel.Fuel;
 import com.buran.game.bot.rocket.RocketEmitter;
 import com.buran.game.bot.rocket.RocketLauncher;
 import com.buran.game.conf.Buffs;
+import com.buran.game.conf.DeathMode;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.PlayerInteractionLevels;
@@ -143,6 +144,7 @@ public class GameScreen extends BaseScreen {
     private float nebulaA = 0.5f;
     private int nebulaRegionX, nebulaRegionY;
     private HoleFence holeFence;
+    private float adsDelay;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
         super(batch);
@@ -374,7 +376,7 @@ public class GameScreen extends BaseScreen {
                 profiles.dispose();
                 detailedResultGroup.init();
                 if (Rules.ADS_ENABLED) {
-                    ScreenManager.getInstance().getAdsController().showBannerAd();
+                    ScreenManager.getInstance().getAdsController().showBannerAd(true);
                 }
             }
         }
@@ -422,7 +424,12 @@ public class GameScreen extends BaseScreen {
             gameInfoSystem.update(dt);
             playerPointer.update(dt);
             if (!Rules.GAME_OVER) {
-                boomBox.playRandomMusicEffects(dt);
+                if (!Rules.DEATH_MODE) {
+                    boomBox.playRandomMusicEffects(dt);
+                } else {
+                    DeathMode.update(dt);
+                }
+                calcAdsDelay(dt);
                 checkCollision(dt);
             } else {
                 if (!gameOverDeactivate) {
@@ -445,7 +452,10 @@ public class GameScreen extends BaseScreen {
                     nebulaA = 0.0f;
                 }
             }
-
+        } else {
+            if (Rules.ADS_ENABLED && profiles.getActive().getPreferences().getRunTimes() >= Rules.ADS_RUNTIME_DEATH_MODE) {
+                ScreenManager.getInstance().getAdsController().hideBannerAd();
+            }
         }
         cameraUpdate(dt);
         if (!PauseGroup.isPause() && !Rules.GAME_OVER) {
@@ -455,7 +465,7 @@ public class GameScreen extends BaseScreen {
             UIRightPanel.getInstance().update(dt);
             holeFence.update(dt);
         }
-        stage.act();
+        stage.act(dt);
     }
 
     //It is works, somehow.
@@ -803,7 +813,7 @@ public class GameScreen extends BaseScreen {
         player.getRamShield().blink(1.0f);
         player.slowDown(abstractAnomaly.getLevel() * 50.0f);
         if (Buran.velocity.len() <= Buffs.getPlayerEnginePower()) {
-            Standing.getInstance().changeRamPower(-abstractAnomaly.getLevel());
+            Standing.getInstance().changeRamPower(-1.0f * abstractAnomaly.getLevel() / Rules.PLAYER_RAM_POWER_DECREASE_FACTOR);
         }
         abstractAnomaly.showSprayCollision();
         player.killPlusPlus(abstractAnomaly);
@@ -850,13 +860,42 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void resume() {
-        if (!Rules.GAME_OVER && !PauseGroup.isPause()) {
-            boomBox.resumeThisMusic(MSConstants.GAME_SONG);
-            boomBox.resumeThisMusic(MSConstants.BLACKHOLE_ROAR_MUSIC);
-        } else if (PauseGroup.isPause()) {
-            boomBox.resumeThisMusic(MSConstants.MENU_SONG);
-        } else if (Rules.GAME_OVER) {
+        if (!Rules.GAME_OVER) {
+            if (Rules.DEATH_MODE) {
+                if (PauseGroup.isPause()) {
+                    boomBox.resumeThisMusic(MSConstants.PAUSE);
+                } else {
+                    boomBox.resumeThisMusic(MSConstants.DEATH_MODE);
+                    boomBox.resumeThisMusic(MSConstants.BLACKHOLE_ROAR_MUSIC);
+                }
+            } else {
+                if (PauseGroup.isPause()) {
+                    boomBox.resumeThisMusic(MSConstants.PAUSE);
+                } else {
+                    boomBox.resumeThisMusic(MSConstants.GAME_SONG);
+                    boomBox.resumeThisMusic(MSConstants.BLACKHOLE_ROAR_MUSIC);
+                }
+            }
+        } else {
             boomBox.resumeThisMusic(MSConstants.GAME_OVER);
+        }
+    }
+
+    private void calcAdsDelay(float dt) {
+        if (Rules.ADS_ENABLED) {
+            if (profiles.getActive().getPreferences().getRunTimes() >= Rules.ADS_RUNTIME_DEATH_MODE && Rules.DEATH_MODE) {
+                adsDelay += dt;
+                if (adsDelay >= Rules.ADS_DELAY) {
+                    adsDelay = 0.0f;
+                    ScreenManager.getInstance().getAdsController().showBannerAd(false);
+                }
+            } else if (profiles.getActive().getPreferences().getRunTimes() >= Rules.ADS_RUNTIME_GAME) {
+                adsDelay += dt;
+                if (adsDelay >= Rules.ADS_DELAY) {
+                    adsDelay = 0.0f;
+                    ScreenManager.getInstance().getAdsController().showBannerAd(false);
+                }
+            }
         }
     }
 }

@@ -111,7 +111,13 @@ public class Crate extends AbstractConsumable {
     }
 
     private void stickLabel() {
-        boolean r = MathUtils.random(0, Rules.CONSUMABLE_CRATE_DANGER_PROBABILITY) == 0;
+        boolean r;
+        if (Rules.DEATH_MODE) {
+            //50%
+            r = MathUtils.random(0, 1) == 0;
+        } else {
+            r = MathUtils.random(0, Rules.CONSUMABLE_CRATE_DANGER_PROBABILITY) == 0;
+        }
         if (r) {
             labels.get(Label.Layer.LABEL).get(0).setSticker(generateDanger());
         } else {

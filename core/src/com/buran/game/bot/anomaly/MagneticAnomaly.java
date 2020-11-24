@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.buran.game.conf.DeathMode;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
@@ -74,8 +75,8 @@ public class MagneticAnomaly extends AbstractAnomaly {
         this.angle = MathUtils.random(365);
         this.clockwise = MathUtils.randomSign();
         this.v = MathUtils.random(
-                Rules.ANOMALIES_MAGNETIC_VELOCITY,
-                3 * Rules.ANOMALIES_MAGNETIC_VELOCITY
+                DeathMode.magneticAnomalyVelocity(),
+                3 * DeathMode.magneticAnomalyVelocity()
         );
         this.spiralRadius = MathUtils.random(20, 60);
         this.touched = false;
@@ -175,7 +176,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
     public void destroyWithEffect() {
         super.destroyWithEffect();
         Standing.getInstance().addToStatistics(this.type, this.level);
-        int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.REGULAR.getCoefficient());
+        int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.COMMANDER.getCoefficient());
         Standing.getInstance().changeScore(score, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
         showSprayBoom();
     }

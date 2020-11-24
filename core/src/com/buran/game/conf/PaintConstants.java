@@ -252,8 +252,6 @@ public final class PaintConstants {
     public static final String UI_MENU_BACKGROUND_ASTEROID2 = "menubackgroundasteroid2";
 
     public static final String UI_RULES_BACKGROUND = "rulesback";
-    public static final String UI_RULES_BACKGROUND_TOP = "rulesbacktop";
-    public static final int UI_RULES_BACKGROUND_TOP_HEIGHT = 4;
 
     public static int UI_MENU_BACKGROUND_STORAGE_Y = 400;
     public static int UI_MENU_BACKGROUND_ASTRONAUT_X = 70;
@@ -374,23 +372,20 @@ public final class PaintConstants {
 
     public static final String SKIN_FILE = "uiskin/gameSkin.json";
     public static final String FONT32 = "fonts/college.regular32.ttf";
-    public static final String FONT36 = "fonts/college.regular36.ttf";
-    public static final String FONT54 = "fonts/college.regular54.ttf";
     public static final String FONT32_C = "fonts/college.regular32Coloured.ttf";
+    public static final String FONT36 = "fonts/college.regular36.ttf";
     public static final String FONT44 = "fonts/college.regular44.ttf";
     public static final String FONT48 = "fonts/college.regular48.ttf";
     public static final String FONT48_C = "fonts/college.regular48Coloured.ttf";
+    public static final String FONT54 = "fonts/college.regular54.ttf";
     public static final String FONT60 = "fonts/college.regular60.ttf";
     public static final String FONT60_C = "fonts/college.regular60Coloured.ttf";
     public static final String FONT64 = "fonts/college.regular64.ttf";
-    public static final String FONT64_C = "fonts/college.regular64Coloured.ttf";
     public static final String FONT72 = "fonts/college.regular72.ttf";
     public static final String FONT96 = "fonts/college.regular96.ttf";
     public static final String FONT128 = "fonts/college.regular128.ttf";
     public static final String FONT128_C = "fonts/college.regular128Coloured.ttf";
     public static final String FONT175 = "fonts/college.regular175.ttf";
-    public static final String FONT180 = "fonts/college.regular180.ttf";
-    public static final String FONT256 = "fonts/college.regular256.ttf";
     public static final String GAME_PACK = "pics/atlas/game.pack";
     public static final String LOAD_TEXTURES = "pics/load/";
     public static final String BACKGROUND_COLOR_HEX = "100514ff";
@@ -398,7 +393,7 @@ public final class PaintConstants {
     public static final float BACKGROUND_OSCILLATE_WIDTH = 50;
     public static final int DUMMY_PROFILES = 5;
     public static final int DUMMY_RESULTS = 14;
-    public static final int RESULTS_DETAILED = 11;
+    public static final int RESULTS_DETAILED = 12;
     public static final float NOTICE_BLINK_TIME = 1.0f;
 
     public static final String UI_YOUR_USERNAME = "Your profile username";

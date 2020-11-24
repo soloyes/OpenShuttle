@@ -159,7 +159,13 @@ public class Storage extends AbstractConsumable {
 
     private void stickLabel() {
         for (int i = 0; i <= size.ordinal(); i++) {
-            boolean r = MathUtils.random(0, Rules.CONSUMABLE_STORAGE_DANGER_PROBABILITY) == 0;
+            boolean r;
+            if (Rules.DEATH_MODE) {
+                //50%
+                r = MathUtils.random(0, 1) == 0;
+            } else {
+                r = MathUtils.random(0, Rules.CONSUMABLE_STORAGE_DANGER_PROBABILITY) == 0;
+            }
             if (r) {
                 labels.get(Label.Layer.LABEL).get(i).setSticker(generateDanger());
                 danger = true;

@@ -63,12 +63,14 @@ public class ScreenManager {
             case MENU:
                 targetScreen = menuScreen;
                 Rules.GAME_OVER = false;
+                Rules.DEATH_MODE = false;
                 Rules.setSpace(1);
                 Assets.getInstance().loadAssets(ScreenType.MENU);
                 break;
             case GAME:
                 targetScreen = gameScreen;
                 Rules.GAME_OVER = false;
+                Rules.DEATH_MODE = false;
                 //SPACE_WIDTH/SPACE_HEIGHT depends from game level
                 Assets.getInstance().loadAssets(ScreenType.GAME);
                 Profiles profiles = new Profiles();

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.buran.game.conf.DeathMode;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
@@ -72,8 +73,8 @@ public class RadiationAnomaly extends AbstractAnomaly {
         this.taken = false;
         this.color.a = 0.0f;
         this.v = MathUtils.random(
-                Rules.ANOMALIES_RADIATION_VELOCITY,
-                3 * Rules.ANOMALIES_RADIATION_VELOCITY
+                DeathMode.radiationAnomalyVelocity(),
+                3 * DeathMode.radiationAnomalyVelocity()
         );
         this.spiralRadius = MathUtils.random(20, 60);
         this.touched = false;
@@ -171,7 +172,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
     public void destroyWithEffect() {
         super.destroyWithEffect();
         Standing.getInstance().addToStatistics(this.type, this.level);
-        int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.REGULAR.getCoefficient());
+        int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.COMMANDER.getCoefficient());
         Standing.getInstance().changeScore(score, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
         showSprayBoom();
     }

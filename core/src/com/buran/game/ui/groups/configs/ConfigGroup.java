@@ -109,7 +109,10 @@ public class ConfigGroup extends Group {
     private Group noticeGroup;
     private GlyphLayout glyphLayout;
     private GlyphLayout glyphLayoutTitle;
-    private GlyphLayout timeGlyphLayout;
+    private GlyphLayout gameTimeGlyphLayout;
+    private GlyphLayout deathModeTimeGlyphLayout;
+    private Label gameTimeLabel;
+    private Label deathModeLabel;
     private Array<Music> musicArray;
     private BoomBox boomBox;
     private Label shaderLabel;
@@ -152,7 +155,11 @@ public class ConfigGroup extends Group {
         this.glyphLayoutTitle = new GlyphLayout();
         initLines();
         this.glyphLayout = new GlyphLayout();
-        this.timeGlyphLayout = new GlyphLayout();
+        this.gameTimeGlyphLayout = new GlyphLayout();
+        this.deathModeTimeGlyphLayout = new GlyphLayout();
+        this.gameTimeLabel = new Label("Game mode", labelStyle54);
+
+        this.deathModeLabel = new Label("Death mode", labelStyle54);
 
         this.noticeLabel = new Label(notice, noticeStyle44);
         this.noticeGroup = new Group();
@@ -238,7 +245,7 @@ public class ConfigGroup extends Group {
     public void refreshCardContainer(Sticker sticker) {
         cardVerticalGroup.clear();
         //todo:// add List and delete @new operator
-        Card card = new Card(sticker, true);
+        Card card = new Card(sticker);
         cardVerticalGroup.addActor(card);
     }
 
@@ -1127,7 +1134,21 @@ public class ConfigGroup extends Group {
     public void act(float delta) {
         super.act(delta);
         if (PauseGroup.isPause() && ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
-            timeGlyphLayout.setText(font96, TimeFormat.formatYDHMS(Standing.getInstance().getPlayTime()));
+            gameTimeGlyphLayout.setText(font44, TimeFormat.formatYDHMS(Standing.getInstance().getPlayTime()));
+            deathModeTimeGlyphLayout.setText(font44, TimeFormat.formatYDHMS(Standing.getInstance().getDeathModeTime()));
+            float w = deathModeTimeGlyphLayout.width;
+            deathModeTimeGlyphLayout.setText(font44, TimeFormat.formatYDHMS(Standing.getInstance().getDeathModeTime()), Color.RED, w, 0, false);
+
+            gameTimeLabel.setPosition(
+                    Rules.WORLD_WIDTH / 3 - gameTimeLabel.getWidth() / 2,
+                    2 * Rules.WORLD_HEIGHT / 3 - PaintConstants.UI_SETTINGS_HEIGHT - gameTimeLabel.getHeight()
+            );
+
+            deathModeLabel.setPosition(
+                    2 * Rules.WORLD_WIDTH / 3 - deathModeLabel.getWidth() / 2,
+                    2 * Rules.WORLD_HEIGHT / 3 - PaintConstants.UI_SETTINGS_HEIGHT - deathModeLabel.getHeight()
+            );
+
             notifySlider.setVisible(true);
             table.setBounds(Rules.WORLD_WIDTH - PaintConstants.PLAY_PAUSE_BUTTON_WIDTH / 2 - PauseGroup.playPauseWidth / 2 - 43,
                     Rules.WORLD_HEIGHT - 225 - PauseGroup.playPauseHeight, PauseGroup.playPauseWidth, PauseGroup.playPauseHeight);
@@ -1339,10 +1360,17 @@ public class ConfigGroup extends Group {
                 2 * Rules.WORLD_HEIGHT / 3 + 2 * glyphLayoutTitle.height
         );
         if (PauseGroup.isPause() && ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
-            font96.draw(batch,
-                    timeGlyphLayout,
-                    (Rules.WORLD_WIDTH - timeGlyphLayout.width) / 2,
-                    2 * Rules.WORLD_HEIGHT / 3 - PaintConstants.UI_SETTINGS_HEIGHT - timeGlyphLayout.height
+            gameTimeLabel.draw(batch, parentAlpha);
+            font44.draw(batch,
+                    gameTimeGlyphLayout,
+                    Rules.WORLD_WIDTH / 3 - gameTimeGlyphLayout.width / 2,
+                    2 * Rules.WORLD_HEIGHT / 3 - PaintConstants.UI_SETTINGS_HEIGHT - gameTimeLabel.getHeight()
+            );
+            deathModeLabel.draw(batch, parentAlpha);
+            font44.draw(batch,
+                    deathModeTimeGlyphLayout,
+                    2 * Rules.WORLD_WIDTH / 3 - deathModeTimeGlyphLayout.width / 2,
+                    2 * Rules.WORLD_HEIGHT / 3 - PaintConstants.UI_SETTINGS_HEIGHT - deathModeLabel.getHeight()
             );
         }
     }

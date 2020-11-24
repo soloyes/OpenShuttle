@@ -100,6 +100,7 @@ public class Profiles implements Model<ProfileDAO> {
 
     private void resultsToActiveProfile() {
         if (getActive() != null && ScreenManager.getInstance().getCurrentScreen() != ScreenManager.ScreenType.MENU) {
+            getActive().getPreferences().setRunTimes(instance.getActive().getPreferences().getRunTimes() + 1);
             Standing.getInstance().writeResult();
         }
     }
@@ -166,9 +167,6 @@ public class Profiles implements Model<ProfileDAO> {
 
     public void dispose() {
         resultsToActiveProfile();
-        if (Rules.DEBUG && getActive() != null) {
-            getActive().getPreferences().setLevel(0);
-        }
         write();
     }
 

@@ -171,7 +171,7 @@ public class Buran extends AbstractBuran {
         if (abstractPoolable.getLevel() != 0) {
             killTimer = Rules.PLAYER_KILL_TIMER;
             int score = (abstractPoolable.getLevel()) * Rules.ANOMALIES_BASE_SCORE_ADD * killSeries;
-            score = (int) (score * Sticker.REGULAR.getCoefficient());
+            score = (int) (score * Sticker.COMMANDER.getCoefficient());
             standing.changeScore(score, position, KillingSpree.getKillingSpreeFromKillsCount(killSeries).getText() + "[GREEN] +" + score + "[]", KillingSpree.getKillingSpreeFromKillsCount(killSeries).getTextSizeModifier(), true);
             killSeries++;
         }

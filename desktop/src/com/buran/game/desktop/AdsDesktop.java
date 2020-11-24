@@ -14,7 +14,7 @@ public class AdsDesktop implements AdsController {
     }
 
     @Override
-    public void showBannerAd() {
+    public void showBannerAd(boolean isTop) {
     }
 
     @Override

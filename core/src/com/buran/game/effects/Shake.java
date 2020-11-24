@@ -50,7 +50,7 @@ public class Shake {
         }
     }
 
-    public void shakeVector(float d, int frequency, int amplitude) {
+    private void shakeVector(float d, int frequency, int amplitude) {
         this.vectorShakeDuration = d;
         this.vectorAmplitude = amplitude;
         this.vectorFrequency = frequency;
@@ -97,7 +97,7 @@ public class Shake {
      */
     private void update(float dt) {
         if (vectorShakeDuration <= 0.0f) {
-            shakeVector(2, 30, 20);
+            shakeVector(2, 35, 20);
         }
         vectorInternalTimer += dt;
         if (vectorInternalTimer > duration) {

@@ -61,6 +61,7 @@ public class GameInfoSystem {
 
     public enum Preset {
         BRAKED("BRAKED"),
+        DEATH_MODE("[RED]DEATH MODE[]"),
         SCREECH("[RED]SCREECH[]"),
         BOOM("BOOOOM"),
         SAD("[RED]SO SAD[]"),

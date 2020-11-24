@@ -8,7 +8,7 @@ public interface AdsController {
 
     void loadBannerAd();
 
-    void showBannerAd();
+    void showBannerAd(boolean isTop);
 
     void hideBannerAd();
 }

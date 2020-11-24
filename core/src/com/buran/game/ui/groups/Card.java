@@ -19,23 +19,17 @@ import com.buran.game.utils.StickerResolver;
 
 public class Card extends Group {
     private TextureRegion back;
-    private TextureRegion backTop;
-    private boolean isTop;
     private Table table;
     private StickerResolver stickerResolver;
     private Label.LabelStyle labelStyle54;
 
-    public Card(Sticker sticker, boolean isTop) {
+    public Card(Sticker sticker) {
         this.stickerResolver = new StickerResolver();
         labelStyle54 = new Label.LabelStyle(
                 Assets.getInstance().getAssetManager().get(PaintConstants.FONT54, BitmapFont.class),
                 null
         );
         this.back = Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RULES_BACKGROUND);
-        if (isTop) {
-            this.backTop = Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_RULES_BACKGROUND_TOP);
-            this.isTop = true;
-        }
         this.table = new Table();
         Image image = new Image(stickerResolver.getRegion(sticker));
         table.row().height(32).width(PaintConstants.UI_CONFIG_CELL_WIDTH);
@@ -60,9 +54,6 @@ public class Card extends Group {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(back, getX(), getY());
-        if (isTop) {
-            batch.draw(backTop, getX(), getY() + PaintConstants.UI_SETTINGS_HEIGHT - PaintConstants.UI_RULES_BACKGROUND_TOP_HEIGHT);
-        }
         super.draw(batch, parentAlpha);
     }
 }

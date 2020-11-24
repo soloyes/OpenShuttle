@@ -25,6 +25,8 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 
     private static final String BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
     private AdView bannerAd;
+    private RelativeLayout.LayoutParams params;
+    private RelativeLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +42,11 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
         View gameView = initializeForView(buranGame, config);
 
         // Define the layout
-        RelativeLayout layout = new RelativeLayout(this);
+        layout = new RelativeLayout(this);
         layout.addView(gameView);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+        params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        layout.addView(bannerAd, params);
 
         setContentView(layout);
     }
@@ -98,10 +98,20 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
     }
 
     @Override
-    public void showBannerAd() {
+    @TargetApi(19)
+    public void showBannerAd(final boolean isTop) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                layout.removeViewInLayout(bannerAd);
+                if (isTop) {
+                    params.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                } else {
+                    params.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
+                    params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                }
+                layout.addView(bannerAd, params);
                 loadBannerAd();
                 bannerAd.setVisibility(View.VISIBLE);
             }
@@ -110,15 +120,16 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 
     @Override
     public void hideBannerAd() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                bannerAd.setVisibility(View.INVISIBLE);
-            }
-        });
+        if (bannerAd.getVisibility() == View.VISIBLE) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    bannerAd.setVisibility(View.INVISIBLE);
+                }
+            });
+        }
     }
 
-    //todo: звать каждую миниту из GameScreen
     private void setupAds() {
         MobileAds.setRequestConfiguration(new RequestConfiguration.Builder().setTestDeviceIds(Collections.singletonList("E5DF21F0D60E82C4991F2034B48C44BE")).build());
         MobileAds.initialize(this);

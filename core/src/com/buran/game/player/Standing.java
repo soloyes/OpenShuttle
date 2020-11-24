@@ -7,6 +7,7 @@ import com.buran.game.bot.consumable.AstronautEmitter;
 import com.buran.game.bot.consumable.CrateEmitter;
 import com.buran.game.bot.consumable.FuelEmitter;
 import com.buran.game.bot.consumable.StorageEmitter;
+import com.buran.game.conf.DeathMode;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.conf.VConstants;
@@ -83,6 +84,8 @@ public final class Standing {
     private Profiles profiles;
     @Getter
     private float playTime;
+    @Getter
+    private float deathModeTime;
     private float dmgReceived;
     private float dmgDone;
     @Getter
@@ -113,6 +116,7 @@ public final class Standing {
         astronauts.clear();
         usedItems.clear();
         playTime = 0;
+        deathModeTime = 0;
         dmgReceived = 0;
         dmgDone = 0;
         levelsToLive = 0;
@@ -191,11 +195,24 @@ public final class Standing {
                 colored
         );
         calcScoreToLevel();
-        if (playingLevel >= 19) {
-            playingLevel = 19;
-        } else {
-            if (score - scoreToLevel >= 0) {
-                playingLevel += 1;
+        if (score - scoreToLevel >= 0) {
+            playingLevel += 1;
+            if (playingLevel >= 19) {
+                playingLevel = 19;
+                if (!Rules.DEATH_MODE) {
+                    DeathMode.activate();
+                    boomBox.stopAllMusicAndPlayThese(MSConstants.DEATH_MODE, MSConstants.BLACKHOLE_ROAR_MUSIC);
+                    GameInfoSystem.setup(
+                            ScreenManager.getInstance().getCamera().position.x,
+                            ScreenManager.getInstance().getCamera().position.y,
+                            GameInfoSystem.Preset.DEATH_MODE.getValue(),
+                            4.0f,
+                            2.0f,
+                            true,
+                            true
+                    );
+                }
+            } else {
                 addLevelToLive();
                 GameInfoSystem.setup(
                         ScreenManager.getInstance().getCamera().position.x,
@@ -311,6 +328,9 @@ public final class Standing {
         detailedResultDAO.setLevelAchieved(playingLevel);
         // time
         detailedResultDAO.setTime((int) playTime);
+        //todo: add to Effectiveness index
+        // deathModeTIme
+        detailedResultDAO.setDeathModeTime((int) deathModeTime);
         // dmgDone
         detailedResultDAO.setDmgDone((int) dmgDone);
         // dmgReceived
@@ -489,5 +509,8 @@ public final class Standing {
 
     public void addTime(float amount) {
         playTime += amount;
+        if (Rules.DEATH_MODE) {
+            deathModeTime += amount;
+        }
     }
 }

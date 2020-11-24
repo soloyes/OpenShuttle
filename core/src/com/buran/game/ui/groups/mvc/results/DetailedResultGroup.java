@@ -149,6 +149,13 @@ public class DetailedResultGroup extends Group {
                         Integer.compare(resultDAO.getCurrent().getTime(), resultDAO.getPrevious().getTime())
         );
         verticalGroup.addActor(timeLine);
+        Line deathModeTimeLine = new Line(
+                "Death Mode",
+                TimeFormat.formatYDHMS(resultDAO.getCurrent().getDeathModeTime()),
+                resultDAO.getPrevious() == null ? 1 :
+                        Integer.compare(resultDAO.getCurrent().getDeathModeTime(), resultDAO.getPrevious().getDeathModeTime())
+        );
+        verticalGroup.addActor(deathModeTimeLine);
         Line dmgDoneLine = new Line(
                 "Dmg done",
                 String.valueOf(resultDAO.getCurrent().getDmgDone()),

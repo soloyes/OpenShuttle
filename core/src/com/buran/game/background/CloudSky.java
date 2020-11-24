@@ -146,5 +146,15 @@ public class CloudSky {
             }
         }
         a = aOscillator.oscillate(a, 0.03f, 0.2f, 0.4f, dt);
+
+        if (Rules.DEATH_MODE) {
+            changeClouds();
+        }
+    }
+
+    private void changeClouds() {
+        this.bcColor = Color.valueOf("0024ffe0");
+        this.mcColor = Color.valueOf("9e000f70");
+        this.scColor = Color.valueOf("ffffffff");
     }
 }

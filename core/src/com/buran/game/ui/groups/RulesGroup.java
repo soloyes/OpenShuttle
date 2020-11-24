@@ -113,11 +113,7 @@ public class RulesGroup extends Group {
             if (Sticker.ALL.get(i) == Sticker.FUEL) {
                 continue;
             }
-            if (i == 0) {
-                verticalGroup.addActor(new Card(Sticker.ALL.get(i), true));
-            } else {
-                verticalGroup.addActor(new Card(Sticker.ALL.get(i), false));
-            }
+            verticalGroup.addActor(new Card(Sticker.ALL.get(i)));
         }
 
         this.addActor(buttonBack);

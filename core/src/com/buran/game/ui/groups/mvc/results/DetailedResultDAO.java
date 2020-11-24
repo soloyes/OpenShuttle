@@ -21,6 +21,9 @@ public class DetailedResultDAO {
     private int time;
     @Getter
     @Setter
+    private int deathModeTime;
+    @Getter
+    @Setter
     private int dmgDone;
     @Getter
     @Setter
@@ -48,6 +51,7 @@ public class DetailedResultDAO {
         this.effectiveness = 0;
         this.score = 0L;
         this.time = 0;
+        this.deathModeTime = 0;
         this.dmgDone = 0;
         this.dmgReceived = 0;
         this.enemiesDestroyed = 0;
@@ -63,6 +67,7 @@ public class DetailedResultDAO {
                 detailedResultDAO.getEffectiveness(),
                 detailedResultDAO.getScore(),
                 detailedResultDAO.getTime(),
+                detailedResultDAO.getDeathModeTime(),
                 detailedResultDAO.getDmgDone(),
                 detailedResultDAO.getDmgReceived(),
                 detailedResultDAO.getEnemiesDestroyed(),

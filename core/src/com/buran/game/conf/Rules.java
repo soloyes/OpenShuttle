@@ -10,7 +10,10 @@ import com.buran.game.player.Standing;
 public final class Rules {
     public static final boolean DEBUG = false;
 
-    public static final boolean ADS_ENABLED = true;
+    public static final boolean ADS_ENABLED = false;
+    public static final float ADS_DELAY = 60.0f;
+    public static final int ADS_RUNTIME_GAME = 20;
+    public static final int ADS_RUNTIME_DEATH_MODE = ADS_RUNTIME_GAME / 2;
 
     public static final String RATE_US = "https://play.google.com/store/apps/details?id=com.buran.game.free.pack";
     public static final String ABOUT_US = "https://play.google.com/store/apps/details?id=com.buran.game.free.pack";
@@ -39,7 +42,7 @@ public final class Rules {
     //10.0f
     public static final float CONSUMABLE_ASTRONAUT_RESPAWN_TIME = 0.1f;
     //2
-    public static final int CONSUMABLE_ASTRONAUT_MAX_COUNT = 2;
+    public static final int CONSUMABLE_ASTRONAUT_MAX_COUNT = 4;
     //2
     public static final int CONSUMABLE_CRATE_AT_START = 2;
     //6.0f
@@ -166,6 +169,8 @@ public final class Rules {
     public static final float PLAYER_TURBO_THRESHOLD_VELOCITY = 1500.0f;
     //4.0f
     private static final float PLAYER_MAX_POWER = 4.0f;
+    //12
+    public static final int PLAYER_RAM_POWER_DECREASE_FACTOR = 12;
     //5.0f
     public static final float PLAYER_TIMER_HP_OUT_OF_MAP = 5.0f;
     //5
@@ -238,6 +243,16 @@ public final class Rules {
     //GAME
     //false
     public static boolean GAME_OVER = false;
+    //false
+    public static boolean DEATH_MODE = false;
+    //0.5f
+    public static float DEATH_MODE_RESPAWN_TIME_FACTOR = 0.5f;
+    //60.0f
+    public static float DEATH_MODE_MAX_COUNT_TIME_PERIOD = 60.0f;
+    //1.2f
+    public static float DEATH_MODE_MAX_COUNT_TIME_FACTOR = 1.2f;
+    //1.5
+    public static float DEATH_MODE_VELOCITY_FACTOR = 1.5f;
     //1.0f
     public static float STANDARD_COEFFICIENT = 1.0f;
     //1.3f
@@ -247,8 +262,9 @@ public final class Rules {
     //400
     //todo: Balance
     public static final int INDEX_SCORE_TO_LEVEL = 400;
-    //10000
-    public static final int SCORE_BASE_BONUS = 10000;
+    //todo: Balance
+    //20000
+    public static final int SCORE_BASE_BONUS = 20000;
     //3
     public static final int CONSUMABLE_GENERATE_BASE_BONUS = 3;
     //500
@@ -263,12 +279,12 @@ public final class Rules {
     public static final int ANOMALY_GENERATE_BASE_BONUS = 3;
     //500
     public static final int ANOMALIES_BASE_SCORE_ADD = 500;
-    //10000
-    public static final int CONSUMABLE_ASTRONAUT_BASE_SCORE_ADD = 10000;
-    //1000
-    public static final int CONSUMABLE_ASTRONAUT_BONUS_SCORE_ADD = 1000;
-    //500
-    public static final int CONSUMABLE_ASTRONAUT_RANGE_SCORE_ADD = 500;
+    //20000
+    public static final int CONSUMABLE_ASTRONAUT_BASE_SCORE_ADD = 20000;
+    //2000
+    public static final int CONSUMABLE_ASTRONAUT_BONUS_SCORE_ADD = 2000;
+    //100
+    public static final int CONSUMABLE_ASTRONAUT_RANGE_SCORE_ADD = 1000;
     //50000
     public static final int CONSUMABLE_MURDER_SCORE_DECREASE = 50000;
     //30.0f
@@ -308,7 +324,7 @@ public final class Rules {
     //0.9f
     public static final float SETTINGS_WAIT_DISABLE = 0.5f + SETTINGS_WAIT_TOUCH;
     //3
-    public static final int LEVELS_TO_LIVE = 3;
+    public static final int LEVELS_TO_LIVE = 6;
     //0.1f
     public static final float INCREMENT_OF_SINGLE_BAR = 0.1f;
 
@@ -323,8 +339,8 @@ public final class Rules {
         LOW {
             @Override
             public void setGameLevel() {
-                Standing.getInstance().setMaxFuel(270);
-                Standing.getInstance().setFuel(270);
+                Standing.getInstance().setMaxFuel(135);
+                Standing.getInstance().setFuel(135);
                 Standing.getInstance().setHp(27);
                 Standing.getInstance().setMaxHp(27);
                 Standing.getInstance().setMaxLaserChargeLevel(27);
@@ -332,7 +348,7 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(27);
                 Standing.getInstance().setLives(1);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setStartLevel(1);
+                Standing.getInstance().setStartLevel(0);
                 Standing.getInstance().setScore(0);
                 Standing.getInstance().setScoreView(0);
             }
@@ -340,8 +356,8 @@ public final class Rules {
         MEDIUM {
             @Override
             public void setGameLevel() {
-                Standing.getInstance().setMaxFuel(240);
-                Standing.getInstance().setFuel(240);
+                Standing.getInstance().setMaxFuel(120);
+                Standing.getInstance().setFuel(120);
                 Standing.getInstance().setHp(24);
                 Standing.getInstance().setMaxHp(24);
                 Standing.getInstance().setMaxLaserChargeLevel(24);
@@ -349,7 +365,7 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(24);
                 Standing.getInstance().setLives(2);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setStartLevel(1);
+                Standing.getInstance().setStartLevel(0);
                 Standing.getInstance().setScore(0);
                 Standing.getInstance().setScoreView(0);
             }
@@ -357,16 +373,16 @@ public final class Rules {
         HIGH {
             @Override
             public void setGameLevel() {
-                Standing.getInstance().setMaxFuel(210);
-                Standing.getInstance().setFuel(210);
+                Standing.getInstance().setMaxFuel(105);
+                Standing.getInstance().setFuel(105);
                 Standing.getInstance().setHp(21);
                 Standing.getInstance().setMaxHp(21);
                 Standing.getInstance().setMaxLaserChargeLevel(21);
                 Standing.getInstance().setLifeShield(21);
                 Standing.getInstance().setMaxLifeShield(21);
-                Standing.getInstance().setLives(2);
+                Standing.getInstance().setLives(3);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setStartLevel(1);
+                Standing.getInstance().setStartLevel(0);
                 Standing.getInstance().setScore(0);
                 Standing.getInstance().setScoreView(0);
             }
@@ -381,9 +397,9 @@ public final class Rules {
                 Standing.getInstance().setMaxLaserChargeLevel(18);
                 Standing.getInstance().setLifeShield(18);
                 Standing.getInstance().setMaxLifeShield(18);
-                Standing.getInstance().setLives(1);
+                Standing.getInstance().setLives(2);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setStartLevel(1);
+                Standing.getInstance().setStartLevel(0);
                 Standing.getInstance().setScore(0);
                 Standing.getInstance().setScoreView(0);
             }

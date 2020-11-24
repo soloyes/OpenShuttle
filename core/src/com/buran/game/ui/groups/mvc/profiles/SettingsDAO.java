@@ -50,6 +50,10 @@ public class SettingsDAO {
     @Setter
     private boolean joystickColor;
 
+    @Getter
+    @Setter
+    private int runTimes;
+
     public SettingsDAO() {
         notification = true;
         soundVolume = 1.0f;
@@ -64,6 +68,7 @@ public class SettingsDAO {
         joystick = false;
         joystickColor = true;
         joystick_mode = 0;
+        runTimes = 0;
     }
 
     public SettingsDAO(SettingsDAO settingsDAO) {
@@ -80,6 +85,7 @@ public class SettingsDAO {
         this.joystick = settingsDAO.joystick;
         this.joystickColor = settingsDAO.joystickColor;
         this.joystick_mode = settingsDAO.joystick_mode;
+        this.runTimes = settingsDAO.runTimes;
     }
 
     public float overallMusicVolume() {

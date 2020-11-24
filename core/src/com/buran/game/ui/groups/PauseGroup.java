@@ -142,10 +142,14 @@ public class PauseGroup extends Group {
                 if (pointer == 0) {
                     pause = !pause;
                     if (pause) {
-                        boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
+                        boomBox.stopAllMusicAndPlayThese(MSConstants.PAUSE);
                         playPauseBtn.getStyle().imageUp = playTexture;
                     } else {
-                        boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
+                        if (Rules.DEATH_MODE){
+                            boomBox.stopAllMusicAndPlayThese(MSConstants.DEATH_MODE, MSConstants.BLACKHOLE_ROAR_MUSIC);
+                        } else {
+                            boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
+                        }
                         playPauseBtn.getStyle().imageUp = pauseTexture;
                         watched = true;
                     }
