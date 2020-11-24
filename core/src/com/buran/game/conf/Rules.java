@@ -51,22 +51,22 @@ public final class Rules {
     public static final int CONSUMABLE_CRATE_MAX_COUNT = 3;
     //0
     public static final int CONSUMABLE_FUEL_AT_START = 0;
-    //10.0f
-    public static final float CONSUMABLE_FUEL_RESPAWN_TIME = 10.0f;
-    //5
-    public static final int CONSUMABLE_FUEL_MAX_COUNT = 5;
+    //15.0f
+    public static final float CONSUMABLE_FUEL_RESPAWN_TIME = 15.0f;
+    //3
+    public static final int CONSUMABLE_FUEL_MAX_COUNT = 3;
     //1
     public static final int CONSUMABLE_FUEL_ADD_FACTOR = 1;
-    //10
-    public static final int CONSUMABLE_FUEL_MIN_ADD = 10;
-    //20
-    public static final int CONSUMABLE_FUEL_MAX_ADD = 20;
+    //8
+    public static final int CONSUMABLE_FUEL_MIN_ADD = 8;
+    //15
+    public static final int CONSUMABLE_FUEL_MAX_ADD = 15;
     //2
     public static final int CONSUMABLE_FUEL_HP_DAMAGE = 2;
     //0
     public static final int CONSUMABLE_STORAGE_AT_START = 0;
-    //2.0f
-    public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 2.0f;
+    //3.0f
+    public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 3.0f;
     //2
     public static final int CONSUMABLE_STORAGE_MAX_COUNT = 2;
     //5
@@ -181,8 +181,8 @@ public final class Rules {
     public static final float PLAYER_TIMER_FUEL_OUT_OF_MAP = 2.5f;
     //3.0f
     public static final float PLAYER_FUEL_OUT_OF_MAP = 3.0f;
-    //30.0f
-    public static final float PLAYER_KILL_TIMER = 30.0f;
+    //10.0f
+    public static final float PLAYER_KILL_TIMER = 10.0f;
     //3.0f
     public static final float PLAYER_ENGINE_POWER_FACTOR = 3.0f;
     //

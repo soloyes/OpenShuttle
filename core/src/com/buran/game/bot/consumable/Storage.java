@@ -246,24 +246,23 @@ public class Storage extends AbstractConsumable {
                         return Sticker.ROCKETS;
                 }
             default:
-                r = MathUtils.random(0, 8);
-                switch (r) {
-                    case 0:
-                        return Sticker.BOOST;
-                    case 1:
-                        return Sticker.REPAIR;
-                    case 2:
-                        return Sticker.TRASH;
-                    case 3:
-                        return Sticker.SPLASH;
-                    case 5:
-                        return Sticker.SCAN;
-                    case 6:
-                        return Sticker.FREEZE;
-                    case 7:
-                        return Sticker.DEGRADE;
-                    default:
-                        return Sticker.SHIELD;
+                float r1 = MathUtils.random(0.0f, 1.0f);
+                if (r1 >= 0.0f && r1 < 0.15f) {
+                    return Sticker.BOOST;
+                } else if (r1 >= 0.15f && r1 < 0.30f) {
+                    return Sticker.REPAIR;
+                } else if (r1 >= 0.30f && r1 < 0.45f) {
+                    return Sticker.TRASH;
+                } else if (r1 >= 0.45f && r1 < 0.6f) {
+                    return Sticker.SPLASH;
+                } else if (r1 >= 0.6f && r1 < 0.75f) {
+                    return Sticker.FREEZE;
+                } else if (r1 >= 0.75f && r1 < 0.9f) {
+                    return Sticker.DEGRADE;
+                } else if (r1 >= 0.9f && r1 < 0.96f) {
+                    return Sticker.SHIELD;
+                } else {
+                    return Sticker.SCAN;
                 }
         }
     }
