@@ -46,6 +46,74 @@ import lombok.Setter;
 
 public enum Sticker {
     //Crate
+    FREEZE("[#FFFFFF]FREEZE[]\n[#cc6e54]Stop as much anomalies as possible![]") {
+        @Override
+        public void consume(Vector2 position, boolean isGolden) {
+            if (!isGolden) {
+                Sticker.abstractAnomalyFeed(((CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class)).getActiveList());
+                Sticker.abstractAnomalyFeed(((RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class)).getActiveList());
+                Sticker.abstractAnomalyFeed(((MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class)).getActiveList());
+                Sticker.abstractAnomalyFeed(((ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class)).getActiveList());
+                GameInfoSystem.setup(
+                        position.x, position.y,
+                        "[GREEN]" + GameInfoSystem.Preset.FREEZE + "[]",
+                        5.0f,
+                        true
+                );
+            }
+        }
+
+        @Override
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
+            notify(consumable);
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.FREEZE);
+            sound();
+        }
+
+        @Override
+        public void sound() {
+            boomBox.playSound(MSConstants.GET_FREEZE);
+        }
+    },
+    DEGRADE("[#FFFFFF]DEGRADE[]\n[#cc6e54]You able to change the anomaly level. This items right for that.[]") {
+        @Override
+        public void consume(Vector2 position, boolean isGolden) {
+            if (!isGolden) {
+                List<AbstractAnomaly> anomalies = ((CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class)).getActiveList();
+                for (int i = 0; i < anomalies.size(); i++) {
+                    anomalies.get(i).setLevel(0);
+                }
+                GameInfoSystem.setup(
+                        position.x, position.y,
+                        "[GREEN]" + GameInfoSystem.Preset.DEGRADE + "[]",
+                        5.0f,
+                        true
+                );
+            }
+        }
+
+        @Override
+        public void consume(AbstractConsumable consumable) {
+            consume(consumable.getPosition(), consumable.isGolden());
+            notify(consumable);
+        }
+
+        @Override
+        public void notify(AbstractConsumable consumable) {
+            print(consumable, GameInfoSystem.Preset.DEGRADE);
+            sound();
+        }
+
+        @Override
+        public void sound() {
+            boomBox.playSound(MSConstants.GET_DEGRADE);
+        }
+    },
     BOOST("[#FFFFFF]BOOST[]\n[#cc6e54]Acceleration is the rate of change in the velocity of the ship with respect to time. When you get this object, you can activate it from the Storage menu at the top. Warning! When velocity is too high, your ship can get more damage. Or you may kill more anomalies.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
@@ -596,7 +664,7 @@ public enum Sticker {
         this.description = description;
     }
 
-    public static List<Sticker> SELECTABLE = Arrays.asList(BOOST, REPAIR, SHIELD, SPLASH, SCAN, ROCKETS);
+    public static List<Sticker> SELECTABLE = Arrays.asList(BOOST, REPAIR, SHIELD, SPLASH, SCAN, ROCKETS, FREEZE, DEGRADE);
     public static List<Sticker> ASTRONAUTS = new LinkedList<Sticker>(Arrays.asList(COMMANDER, MEDIC, SCIENTIST, MECHANIC, MILITARY));
     public static List<Sticker> ALL = Arrays.asList(Sticker.values());
     private static BoomBox boomBox;
@@ -904,5 +972,13 @@ public enum Sticker {
                 (consumable.isGolden() ? 7.0f : 3.0f),
                 true
         );
+    }
+
+    private static void abstractAnomalyFeed(List<AbstractAnomaly> anomalies) {
+        for (int i = 0; i < anomalies.size(); i++) {
+            if (anomalies.get(i).isHungry()) {
+                anomalies.get(i).setHungry(false);
+            }
+        }
     }
 }

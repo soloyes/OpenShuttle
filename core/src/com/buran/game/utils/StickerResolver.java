@@ -32,6 +32,14 @@ public class StickerResolver {
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FUEL_LABEL_REGION_UI);
                 operation = Operation.SELF;
                 break;
+            case FREEZE:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.FREEZE_LABEL_REGION);
+                operation = Operation.ATTACK;
+                break;
+            case DEGRADE:
+                textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.DEGRADE_LABEL_REGION);
+                operation = Operation.ATTACK;
+                break;
             case BOOST:
                 textureRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.BOOST_LABEL_REGION);
                 operation = Operation.SELF;

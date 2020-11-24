@@ -132,6 +132,8 @@ public final class PaintConstants {
     public static final String SHABBY_SIGN_LABEL_REGION = "shabby";
     public static final String SHABBY_SIGN_GOLD_LABEL_REGION = "shabbygold";
     public static final String BOOST_LABEL_REGION = "boost";
+    public static final String FREEZE_LABEL_REGION = "freeze";
+    public static final String DEGRADE_LABEL_REGION = "degrade";
     public static final String BOX_SHIELD_LABEL_REGION = "boxshield";
     public static final String REPAIR_LABEL_REGION = "repair";
     public static final String FUEL_LABEL_REGION = "fuelv1";

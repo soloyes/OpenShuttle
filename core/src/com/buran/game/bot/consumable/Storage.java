@@ -246,7 +246,7 @@ public class Storage extends AbstractConsumable {
                         return Sticker.ROCKETS;
                 }
             default:
-                r = MathUtils.random(0, 6);
+                r = MathUtils.random(0, 8);
                 switch (r) {
                     case 0:
                         return Sticker.BOOST;
@@ -258,6 +258,10 @@ public class Storage extends AbstractConsumable {
                         return Sticker.SPLASH;
                     case 5:
                         return Sticker.SCAN;
+                    case 6:
+                        return Sticker.FREEZE;
+                    case 7:
+                        return Sticker.DEGRADE;
                     default:
                         return Sticker.SHIELD;
                 }
