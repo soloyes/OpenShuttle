@@ -813,7 +813,7 @@ public class GameScreen extends BaseScreen {
         player.getRamShield().blink(1.0f);
         player.slowDown(abstractAnomaly.getLevel() * 50.0f);
         if (Buran.velocity.len() <= Buffs.getPlayerEnginePower()) {
-            Standing.getInstance().changeRamPower(-abstractAnomaly.getLevel());
+            Standing.getInstance().changeRamPower(-1.0f * abstractAnomaly.getLevel() / Rules.PLAYER_RAM_POWER_DECREASE_FACTOR);
         }
         abstractAnomaly.showSprayCollision();
         player.killPlusPlus(abstractAnomaly);

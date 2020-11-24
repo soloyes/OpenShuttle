@@ -252,8 +252,6 @@ public final class PaintConstants {
     public static final String UI_MENU_BACKGROUND_ASTEROID2 = "menubackgroundasteroid2";
 
     public static final String UI_RULES_BACKGROUND = "rulesback";
-    public static final String UI_RULES_BACKGROUND_TOP = "rulesbacktop";
-    public static final int UI_RULES_BACKGROUND_TOP_HEIGHT = 4;
 
     public static int UI_MENU_BACKGROUND_STORAGE_Y = 400;
     public static int UI_MENU_BACKGROUND_ASTRONAUT_X = 70;

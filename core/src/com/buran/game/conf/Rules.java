@@ -169,6 +169,8 @@ public final class Rules {
     public static final float PLAYER_TURBO_THRESHOLD_VELOCITY = 1500.0f;
     //4.0f
     private static final float PLAYER_MAX_POWER = 4.0f;
+    //12
+    public static final int PLAYER_RAM_POWER_DECREASE_FACTOR = 12;
     //5.0f
     public static final float PLAYER_TIMER_HP_OUT_OF_MAP = 5.0f;
     //5
@@ -337,8 +339,8 @@ public final class Rules {
         LOW {
             @Override
             public void setGameLevel() {
-                Standing.getInstance().setMaxFuel(270);
-                Standing.getInstance().setFuel(270);
+                Standing.getInstance().setMaxFuel(135);
+                Standing.getInstance().setFuel(135);
                 Standing.getInstance().setHp(27);
                 Standing.getInstance().setMaxHp(27);
                 Standing.getInstance().setMaxLaserChargeLevel(27);
@@ -354,8 +356,8 @@ public final class Rules {
         MEDIUM {
             @Override
             public void setGameLevel() {
-                Standing.getInstance().setMaxFuel(240);
-                Standing.getInstance().setFuel(240);
+                Standing.getInstance().setMaxFuel(120);
+                Standing.getInstance().setFuel(120);
                 Standing.getInstance().setHp(24);
                 Standing.getInstance().setMaxHp(24);
                 Standing.getInstance().setMaxLaserChargeLevel(24);
@@ -371,8 +373,8 @@ public final class Rules {
         HIGH {
             @Override
             public void setGameLevel() {
-                Standing.getInstance().setMaxFuel(210);
-                Standing.getInstance().setFuel(210);
+                Standing.getInstance().setMaxFuel(105);
+                Standing.getInstance().setFuel(105);
                 Standing.getInstance().setHp(21);
                 Standing.getInstance().setMaxHp(21);
                 Standing.getInstance().setMaxLaserChargeLevel(21);
@@ -397,9 +399,9 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(18);
                 Standing.getInstance().setLives(2);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setStartLevel(15);
-                Standing.getInstance().setScore(1327000);
-                Standing.getInstance().setScoreView(1327000);
+                Standing.getInstance().setStartLevel(0);
+                Standing.getInstance().setScore(0);
+                Standing.getInstance().setScoreView(0);
             }
         };
 

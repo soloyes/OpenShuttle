@@ -245,7 +245,7 @@ public class ConfigGroup extends Group {
     public void refreshCardContainer(Sticker sticker) {
         cardVerticalGroup.clear();
         //todo:// add List and delete @new operator
-        Card card = new Card(sticker, true);
+        Card card = new Card(sticker);
         cardVerticalGroup.addActor(card);
     }
 
