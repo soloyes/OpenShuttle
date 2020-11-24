@@ -102,6 +102,8 @@ public class Assets {
                 assetManager.load(MSConstants.DESTROY_STORAGE, Sound.class);
                 assetManager.load(MSConstants.LOSE_RADAR, Sound.class);
                 assetManager.load(MSConstants.GET_BOOST, Sound.class);
+                assetManager.load(MSConstants.GET_FREEZE, Sound.class);
+                assetManager.load(MSConstants.GET_DEGRADE, Sound.class);
                 assetManager.load(MSConstants.UP, Sound.class);
                 assetManager.load(MSConstants.LEVEL_UP, Sound.class);
                 assetManager.load(MSConstants.GET_FUEL, Sound.class);

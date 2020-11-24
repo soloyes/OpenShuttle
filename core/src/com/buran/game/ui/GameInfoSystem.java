@@ -67,6 +67,8 @@ public class GameInfoSystem {
         SAD("[RED]SO SAD[]"),
         OUT("[YELLOW]OUT OF RANGE[]"),
         //
+        FREEZE("FREEZE"),
+        DEGRADE("DEGRADE"),
         TURBO("TURBO"),
         REPAIR("REPAIR"),
         SHIELD("SHIELD"),

@@ -136,168 +136,168 @@ storage
   orig: 256, 256
   offset: 0, 0
   index: -1
-stop
+splash
   rotate: false
   xy: 3423, 1448
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-splash
+shieldstorage
   rotate: false
   xy: 3689, 1448
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-shieldstorage
+shieldfuel
   rotate: false
   xy: 1044, 2516
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-shieldfuel
+shieldcrate
   rotate: false
   xy: 1044, 2782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-shieldcrate
+shabbygold
   rotate: false
   xy: 1044, 3048
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-shabbygold
+shabby
   rotate: false
   xy: 1044, 3314
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-shabby
+scan
   rotate: false
   xy: 1044, 3580
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-scan
+rockets
   rotate: false
   xy: 1438, 2297
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-rockets
+repair
   rotate: false
   xy: 1704, 2297
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-repair
+ramshield
   rotate: false
   xy: 1438, 2563
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-ramshield
+radar
   rotate: false
   xy: 1704, 2563
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-radar
+patterngold
   rotate: false
   xy: 1438, 2829
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-patterngold
+pattern
   rotate: false
   xy: 1704, 2829
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-pattern
+outmark
   rotate: false
   xy: 1438, 3095
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outmark
+outarrow
   rotate: false
   xy: 1704, 3095
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outarrow
+lifeshield
   rotate: false
   xy: 1438, 3361
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-lifeshield
+laser
   rotate: false
   xy: 1438, 3627
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-laser
+glow
   rotate: false
   xy: 1704, 3361
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-glow
+fuelv2
   rotate: false
   xy: 1704, 3627
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelv2
+fuelv1
   rotate: false
   xy: 2216, 2031
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelv1
+fuelboxgold
   rotate: false
   xy: 2482, 2031
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelboxgold
+fuelbox
   rotate: false
   xy: 2748, 2031
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelbox
+fuelback
   rotate: false
   xy: 3014, 2031
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-fuelback
+freeze
   rotate: false
   xy: 3280, 2031
   size: 256, 256

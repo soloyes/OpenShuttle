@@ -42,6 +42,8 @@ public final class MSConstants {
     public static final String GET_TRASH = GAME + "get_trash.ogg";
     public static final String GET_FRAGMENT = GAME + "get_fragment.ogg";
     public static final String GET_BOOST = GAME + "get_boost.ogg";
+    public static final String GET_FREEZE = GAME + "get_freeze.ogg";
+    public static final String GET_DEGRADE = GAME + "get_degrade.ogg";
     public static final String GET_ASTRONAUT = GAME + "get_astronaut.ogg";
     public static final String GET_REPAIR = GAME + "get_repair.ogg";
     public static final String GET_SPLASH = GAME + "get_splash.ogg";

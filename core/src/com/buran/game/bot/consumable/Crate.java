@@ -142,20 +142,23 @@ public class Crate extends AbstractConsumable {
     }
 
     private Sticker generateSafe() {
-        int r = MathUtils.random(0, 6);
-        switch (r) {
-            case 0:
-                return Sticker.BOOST;
-            case 1:
-                return Sticker.REPAIR;
-            case 2:
-                return Sticker.TRASH;
-            case 3:
-                return Sticker.SPLASH;
-            case 5:
-                return Sticker.SCAN;
-            default:
-                return Sticker.SHIELD;
+        float r = MathUtils.random(0.0f, 1.0f);
+        if (r >= 0.0f && r < 0.15f) {
+            return Sticker.BOOST;
+        } else if (r >= 0.15f && r < 0.30f) {
+            return Sticker.REPAIR;
+        } else if (r >= 0.30f && r < 0.45f) {
+            return Sticker.TRASH;
+        } else if (r >= 0.45f && r < 0.6f) {
+            return Sticker.SPLASH;
+        } else if (r >= 0.6f && r < 0.75f) {
+            return Sticker.FREEZE;
+        } else if (r >= 0.75f && r < 0.9f) {
+            return Sticker.DEGRADE;
+        } else if (r >= 0.9f && r < 0.96f) {
+            return Sticker.SHIELD;
+        } else {
+            return Sticker.SCAN;
         }
     }
 
