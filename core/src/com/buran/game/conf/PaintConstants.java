@@ -442,9 +442,9 @@ public final class PaintConstants {
     public static final String UI_LEVEL_DISABLE = "LEVEL CHANGED";
     public static final String UI_LEVEL_HOLD = "TUNING GAME LEVEL";
 
-    public static final String UI_VIBRATION_NOTICE = "HOLD TO ON/OFF";
-    public static final String UI_VIBRATION_ENABLE = "VIBRATION ENABLED";
-    public static final String UI_VIBRATION_DISABLE = "VIBRATION DISABLED";
+    public static final String UI_VIBRATION_NOTICE = "HOLD TO CHANGE";
+    public static final String UI_VIBRATION_ENABLE = "VIBRATION LEVEL CHANGED";
+    public static final String UI_VIBRATION_DISABLE = "VIBRATION LEVEL CHANGED";
     public static final String UI_VIBRATION_HOLD = "SWITCHING DEVICE VIBRATION";
 
     public static final String UI_JOYSTICK_NOTICE = "HOLD TO ON/OFF";

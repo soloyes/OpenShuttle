@@ -178,7 +178,7 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                 timeAndFlag.setPressed(false);
                 timeAndFlag.setConfirm(true);
                 MenuGroup.setNotice(PaintConstants.UI_DELETION_PROCESS);
-                Vibrator.vibrate(VConstants.UI_CHANGED);
+                Vibrator.vibrateUI(VConstants.UI_CHANGED);
             }
             if (timeAndFlag.isConfirm()) {
                 timeAndFlag.addDeleteWait(delta);
@@ -209,7 +209,7 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                 }
                 MenuGroup.setNotice(PaintConstants.UI_PROFILE_DELETED);
                 boomBox.playSound(MSConstants.UI_CHANGED);
-                Vibrator.vibrate(VConstants.UI_CHANGED);
+                Vibrator.vibrateUI(VConstants.UI_CHANGED);
             }
         }
 
@@ -251,7 +251,7 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                             MenuGroup.setNotice(PaintConstants.UI_CANCEL_DELETION);
                         }
                         boomBox.playSound(MSConstants.UI_CLICK);
-                        Vibrator.vibrate(VConstants.UI_CLICK);
+                        Vibrator.vibrateUI(VConstants.UI_CLICK);
                     }
                     return true;
                 }
@@ -287,7 +287,7 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                             configGroup.refresh();
                             MenuGroup.setNotice(PaintConstants.UI_SELECT_PROFILE);
                             boomBox.playSound(MSConstants.UI_CHANGED);
-                            Vibrator.vibrate(VConstants.UI_CHANGED);
+                            Vibrator.vibrateUI(VConstants.UI_CHANGED);
                         }
                     }
                 });
@@ -362,7 +362,7 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     if (MenuGroup.isValidUserName()) {
                         boomBox.playSound(MSConstants.UI_CLICK);
-                        Vibrator.vibrate(VConstants.UI_CLICK);
+                        Vibrator.vibrateUI(VConstants.UI_CLICK);
                     }
                     return super.touchDown(event, x, y, pointer, button);
                 }
@@ -381,7 +381,7 @@ public class ProfilesView extends VerticalGroup implements View<ProfileDAO> {
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     if (MenuGroup.isValidUserName()) {
                         boomBox.playSound(MSConstants.UI_CLICK);
-                        Vibrator.vibrate(VConstants.UI_CLICK);
+                        Vibrator.vibrateUI(VConstants.UI_CLICK);
                     }
                     return super.touchDown(event, x, y, pointer, button);
                 }

@@ -38,7 +38,7 @@ public class SettingsDAO {
     private int level;
     @Getter
     @Setter
-    private boolean vibration;
+    private int vibration;
 
     @Getter
     @Setter
@@ -64,7 +64,7 @@ public class SettingsDAO {
         shader = true;
         child = false;
         level = 0;
-        vibration = true;
+        vibration = 2;
         joystick = false;
         joystickColor = true;
         joystick_mode = 0;

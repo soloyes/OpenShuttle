@@ -112,7 +112,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                     hungry = false;
                     touched = true;
                     if (!taken) {
-                        Vibrator.vibrate(VConstants.PLAYER_ANOMALY_ELECTRICAL_DESTROY);
+                        Vibrator.vibrateGame(VConstants.PLAYER_ANOMALY_ELECTRICAL_DESTROY);
                     }
                 }
             }

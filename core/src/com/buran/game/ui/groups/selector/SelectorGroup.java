@@ -104,7 +104,7 @@ public class SelectorGroup extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (!PauseGroup.isPause()) {
                     boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -115,7 +115,7 @@ public class SelectorGroup extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (!PauseGroup.isPause()) {
                     boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -128,7 +128,7 @@ public class SelectorGroup extends Group {
                     if (centerSelector.isActive() && !PauseGroup.isPause()) {
                         removeSelector();
                         centerSelector.press();
-                        Vibrator.vibrate(VConstants.UI_CLICK);
+                        Vibrator.vibrateUI(VConstants.UI_CLICK);
                     }
                 }
                 return super.touchDown(event, x, y, pointer, button);

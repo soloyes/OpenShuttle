@@ -225,7 +225,7 @@ public final class Standing {
                 );
                 boomBox.playSound(MSConstants.LEVEL_UP);
                 Shake.getInstance().shakeCamera(0.3f, 35, 150);
-                Vibrator.vibrate(VConstants.LEVEL_UP);
+                Vibrator.vibrateGame(VConstants.LEVEL_UP);
             }
         }
     }
@@ -280,7 +280,7 @@ public final class Standing {
                 Shake.getInstance().shakeCamera(1, 35, 50);
                 fuel = maxFuel;
                 if (!Rules.GAME_OVER) {
-                    Vibrator.vibrate(VConstants.PLAYER_LOST_LIVE);
+                    Vibrator.vibrateGame(VConstants.PLAYER_LOST_LIVE);
                     boomBox.playSound(MSConstants.DOWN);
                 }
             }
@@ -328,7 +328,6 @@ public final class Standing {
         detailedResultDAO.setLevelAchieved(playingLevel);
         // time
         detailedResultDAO.setTime((int) playTime);
-        //todo: add to Effectiveness index
         // deathModeTIme
         detailedResultDAO.setDeathModeTime((int) deathModeTime);
         // dmgDone
@@ -428,6 +427,13 @@ public final class Standing {
             te = 1.0f * Rules.GAME_SESSION_TIME / detailedResultDAO.getTime();
         }
 
+        float dmte;
+        if (detailedResultDAO.getDeathModeTime() <= Rules.GAME_SESSION_TIME) {
+            dmte = 1.0f * detailedResultDAO.getDeathModeTime() / Rules.GAME_SESSION_TIME;
+        } else {
+            dmte = 1.0f * Rules.GAME_SESSION_TIME / detailedResultDAO.getDeathModeTime();
+        }
+
         c = AstronautEmitter.getEmitted() * Rules.PLAYER_DAMAGE_DONE_ASTRONAUT +
                 (CrateEmitter.getEmitted() + CrateEmitter.getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_CRATE +
                 (StorageEmitter.getEmitted() + StorageEmitter.getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_STORAGE +
@@ -437,10 +443,10 @@ public final class Standing {
             dde = 1 - (1.0f * detailedResultDAO.getDmgDone() / c);
         }
 
-        //todo: get avg from play testing
+        //todo: Balance (Playtests)
         float dre = 0.5f;
 
-        detailedResultDAO.setEffectiveness(Math.abs((int) (scoreView * (ate + uie + pie + mae + ede + dde + te + dre) / 8)));
+        detailedResultDAO.setEffectiveness(Math.abs((int) (scoreView * (ate + uie + pie + mae + ede + dde + te + dmte + dre) / 9)));
         //
         return detailedResultDAO;
     }

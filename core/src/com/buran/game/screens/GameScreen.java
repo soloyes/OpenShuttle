@@ -27,7 +27,7 @@ import com.buran.game.bot.asteroids.AbstractAsteroid;
 import com.buran.game.bot.asteroids.MetalAsteroidEmitter;
 import com.buran.game.bot.asteroids.MineralAsteroidEmitter;
 import com.buran.game.bot.blackhole.Blackhole;
-import com.buran.game.bot.blackhole.HoleFence;
+import com.buran.game.bot.blackhole.CircleRenderer;
 import com.buran.game.bot.consumable.AbstractConsumable;
 import com.buran.game.bot.consumable.Astronaut;
 import com.buran.game.bot.consumable.AstronautEmitter;
@@ -143,7 +143,7 @@ public class GameScreen extends BaseScreen {
     private Oscillator nebulaAOscillator;
     private float nebulaA = 0.5f;
     private int nebulaRegionX, nebulaRegionY;
-    private HoleFence holeFence;
+    private CircleRenderer circleRenderer;
     private float adsDelay;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
@@ -217,7 +217,7 @@ public class GameScreen extends BaseScreen {
         nebulaRegionX = MathUtils.random(0, Rules.SPACE_WIDTH - Rules.WORLD_WIDTH);
         nebulaRegionY = MathUtils.random(0, Rules.SPACE_HEIGHT - Rules.WORLD_HEIGHT);
         this.nebulaAOscillator = new Oscillator();
-        this.holeFence = new HoleFence();
+        this.circleRenderer = new CircleRenderer();
     }
 
     private void calcMusicEffectVolume() {
@@ -271,7 +271,7 @@ public class GameScreen extends BaseScreen {
 
         //BEGIN
         batch.begin();
-        holeFence.render(camera);
+        circleRenderer.render(camera);
         batch.end();
         //END
 
@@ -463,7 +463,7 @@ public class GameScreen extends BaseScreen {
             standing.update(dt);
             SelectorGroup.getInstance().update(dt);
             UIRightPanel.getInstance().update(dt);
-            holeFence.update(dt);
+            circleRenderer.update(dt);
         }
         stage.act(dt);
     }
@@ -570,7 +570,7 @@ public class GameScreen extends BaseScreen {
                         boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
                     }
                     damageToAnomaly(anomaly);
-                    Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
+                    Vibrator.vibrateGame(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
                 } else {
                     damageToPlayer(anomaly);
                     if (anomaly.getLevel() != 4) {
@@ -579,7 +579,7 @@ public class GameScreen extends BaseScreen {
                     anomaly.setHungry(false);
                     anomaly.setSlimTimer(0);
                     prettyCorrosiveKick.playSound(MSConstants.KICKED_BY_CORROSIVE);
-                    Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
+                    Vibrator.vibrateGame(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
                 }
             }
         }
@@ -593,7 +593,7 @@ public class GameScreen extends BaseScreen {
             if (Buran.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 && anomaly.isBorn()) {
                 anomaly.setHungry(false);
                 damageToPlayer(anomaly);
-                Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
+                Vibrator.vibrateGame(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
                 prettyElectricKick.playSound(MSConstants.KICKED_BY_ELECTRIC);
                 anomaly.setV(anomaly.getV() * Rules.ANOMALY_ELECTRIC_DECREASE_FACTOR);
             }
@@ -672,7 +672,7 @@ public class GameScreen extends BaseScreen {
             if (Buran.position.dst(asteroid.getPosition()) < asteroid.getHeight() * asteroid.getScaleX()) {
                 if (!asteroid.isFragmented()) {
                     asteroid.destroyWithEffect();
-                    Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
+                    Vibrator.vibrateGame(VConstants.PLAYER_ASTEROID_DESTROY);
                     player.getLifeShield().blink(1.0f);
                     ObjectPool.EMITTERS.get(asteroid.getClass())
                             .boom(asteroid.getPosition(), PlayerInteractionLevels.NONE);

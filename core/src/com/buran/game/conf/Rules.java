@@ -15,9 +15,17 @@ public final class Rules {
     public static final int ADS_RUNTIME_GAME = 20;
     public static final int ADS_RUNTIME_DEATH_MODE = ADS_RUNTIME_GAME / 2;
 
-    public static final String RATE_US = "https://play.google.com/store/apps/details?id=com.buran.game.free.pack";
-    public static final String ABOUT_US = "https://play.google.com/store/apps/details?id=com.buran.game.free.pack";
-    public static final String PAY_US = "https://play.google.com/store/apps/details?id=com.buran.game.free.pack";
+    public static final String RATE_US =
+            ADS_ENABLED ?
+                    "https://play.google.com/store/apps/details?id=com.buran.game.free.pack"
+                    :
+                    "https://play.google.com/store/apps/details?id=com.buran.game.pack";
+    public static final String ABOUT_US =
+            ADS_ENABLED ?
+                    "https://play.google.com/store/apps/details?id=com.buran.game.free.pack"
+                    :
+                    "https://play.google.com/store/apps/details?id=com.buran.game.pack";
+    public static final String PAY_US = "https://play.google.com/store/apps/details?id=com.buran.game.pack";
 
     private Rules() {
     }

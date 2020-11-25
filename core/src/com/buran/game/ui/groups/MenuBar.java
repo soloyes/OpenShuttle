@@ -67,7 +67,7 @@ public class MenuBar extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     boomBox.playSound(MSConstants.UI_MENU);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -86,14 +86,14 @@ public class MenuBar extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (buttonPlay.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                 } else if (pointer == 0 && !buttonResults.isDisabled()) {
                     if (MenuGroup.isValidUserName()) {
                         boomBox.playSound(MSConstants.UI_MENU);
-                        Vibrator.vibrate(VConstants.UI_CLICK);
+                        Vibrator.vibrateUI(VConstants.UI_CLICK);
                     } else {
                         boomBox.playSound(MSConstants.UI_EMPTY_NAME);
-                        Vibrator.vibrate(VConstants.UI_EMPTY_NAME);
+                        Vibrator.vibrateUI(VConstants.UI_EMPTY_NAME);
                     }
                 }
                 return super.touchDown(event, x, y, pointer, button);
@@ -132,10 +132,10 @@ public class MenuBar extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (buttonSettings.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                 } else if (pointer == 0) {
                     boomBox.playSound(MSConstants.UI_MENU);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -174,10 +174,10 @@ public class MenuBar extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (buttonResults.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                 } else if (pointer == 0) {
                     boomBox.playSound(MSConstants.UI_MENU);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                 }
 
                 return super.touchDown(event, x, y, pointer, button);
@@ -217,10 +217,10 @@ public class MenuBar extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (buttonInfo.isDisabled()) {
                     boomBox.playSound(MSConstants.UI_CLICK);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                 } else if (pointer == 0) {
                     boomBox.playSound(MSConstants.UI_MENU);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }

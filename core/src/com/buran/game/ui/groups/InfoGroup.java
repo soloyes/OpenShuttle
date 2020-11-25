@@ -9,10 +9,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.buran.game.BuranGame;
@@ -22,6 +24,7 @@ import com.buran.game.conf.Rules;
 import com.buran.game.conf.VConstants;
 import com.buran.game.effects.BoomBox;
 import com.buran.game.effects.Vibrator;
+import com.buran.game.ui.UIButton;
 import com.buran.game.ui.groups.mvc.results.Results;
 import com.buran.game.utils.Assets;
 
@@ -36,6 +39,7 @@ public class InfoGroup extends Group {
     private BoomBox boomBox;
     private Results results;
     private BitmapFont font96;
+    private Button buttonGetFull;
 
     public InfoGroup() {
         this.setName(GroupType.INFO.name());
@@ -70,12 +74,32 @@ public class InfoGroup extends Group {
         final Line rulesLine = new Line(rulesLabel);
         table.add(rulesLine).width(PaintConstants.UI_MENU_CELL_WIDTH).height(PaintConstants.UI_CELL_HEIGHT).padBottom(12).align(Align.center);
 
+        this.buttonGetFull = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.GET_FULL_BUTTON)));
+        this.buttonGetFull.setSize(PaintConstants.GET_FULL_BUTTON_WIDTH, PaintConstants.GET_FULL_BUTTON_HEIGHT);
+        buttonGetFull.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.GET_FULL_BUTTON_WIDTH / 2, Rules.WORLD_HEIGHT / 4 - PaintConstants.GET_FULL_BUTTON_HEIGHT / 2);
+
+        buttonGetFull.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (pointer == 0) {
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
+                    Gdx.net.openURI(Rules.PAY_US);
+                }
+            }
+        });
+
+        if (Rules.ADS_ENABLED) {
+            table.row();
+            table.add(buttonGetFull);
+        }
+
         shareLine.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     boomBox.playSound(MSConstants.UI_MENU);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                     shareLine.setTouched(true);
                 }
                 return true;
@@ -95,7 +119,7 @@ public class InfoGroup extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     rateLine.setTouched(true);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                     boomBox.playSound(MSConstants.UI_MENU);
                 }
                 return true;
@@ -115,7 +139,7 @@ public class InfoGroup extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     aboutLine.setTouched(true);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                     boomBox.playSound(MSConstants.UI_MENU);
                 }
                 return true;
@@ -135,7 +159,7 @@ public class InfoGroup extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     rulesLine.setTouched(true);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                     boomBox.playSound(MSConstants.UI_MENU);
                 }
                 return true;
