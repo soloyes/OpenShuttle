@@ -27,7 +27,7 @@ import com.buran.game.bot.asteroids.AbstractAsteroid;
 import com.buran.game.bot.asteroids.MetalAsteroidEmitter;
 import com.buran.game.bot.asteroids.MineralAsteroidEmitter;
 import com.buran.game.bot.blackhole.Blackhole;
-import com.buran.game.bot.blackhole.HoleFence;
+import com.buran.game.bot.blackhole.CircleRenderer;
 import com.buran.game.bot.consumable.AbstractConsumable;
 import com.buran.game.bot.consumable.Astronaut;
 import com.buran.game.bot.consumable.AstronautEmitter;
@@ -143,7 +143,7 @@ public class GameScreen extends BaseScreen {
     private Oscillator nebulaAOscillator;
     private float nebulaA = 0.5f;
     private int nebulaRegionX, nebulaRegionY;
-    private HoleFence holeFence;
+    private CircleRenderer circleRenderer;
     private float adsDelay;
 
     public GameScreen(SpriteBatch batch, Camera camera) {
@@ -217,7 +217,7 @@ public class GameScreen extends BaseScreen {
         nebulaRegionX = MathUtils.random(0, Rules.SPACE_WIDTH - Rules.WORLD_WIDTH);
         nebulaRegionY = MathUtils.random(0, Rules.SPACE_HEIGHT - Rules.WORLD_HEIGHT);
         this.nebulaAOscillator = new Oscillator();
-        this.holeFence = new HoleFence();
+        this.circleRenderer = new CircleRenderer();
     }
 
     private void calcMusicEffectVolume() {
@@ -271,7 +271,7 @@ public class GameScreen extends BaseScreen {
 
         //BEGIN
         batch.begin();
-        holeFence.render(camera);
+        circleRenderer.render(camera);
         batch.end();
         //END
 
@@ -463,7 +463,7 @@ public class GameScreen extends BaseScreen {
             standing.update(dt);
             SelectorGroup.getInstance().update(dt);
             UIRightPanel.getInstance().update(dt);
-            holeFence.update(dt);
+            circleRenderer.update(dt);
         }
         stage.act(dt);
     }

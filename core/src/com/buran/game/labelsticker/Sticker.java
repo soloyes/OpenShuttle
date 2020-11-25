@@ -11,6 +11,7 @@ import com.buran.game.bot.anomaly.MagneticAnomaly;
 import com.buran.game.bot.anomaly.MagneticAnomalyEmitter;
 import com.buran.game.bot.anomaly.RadiationAnomaly;
 import com.buran.game.bot.anomaly.RadiationAnomalyEmitter;
+import com.buran.game.bot.blackhole.CircleRenderer;
 import com.buran.game.bot.consumable.AbstractConsumable;
 import com.buran.game.bot.consumable.Crate;
 import com.buran.game.bot.consumable.CrateEmitter;
@@ -54,6 +55,7 @@ public enum Sticker {
                 Sticker.abstractAnomalyFeed(((RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class)).getActiveList());
                 Sticker.abstractAnomalyFeed(((MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class)).getActiveList());
                 Sticker.abstractAnomalyFeed(((ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class)).getActiveList());
+                CircleRenderer.freeze = true;
                 GameInfoSystem.setup(
                         position.x, position.y,
                         "[GREEN]" + GameInfoSystem.Preset.FREEZE + "[]",
