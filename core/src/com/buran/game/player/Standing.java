@@ -328,7 +328,6 @@ public final class Standing {
         detailedResultDAO.setLevelAchieved(playingLevel);
         // time
         detailedResultDAO.setTime((int) playTime);
-        //todo: add to Effectiveness index
         // deathModeTIme
         detailedResultDAO.setDeathModeTime((int) deathModeTime);
         // dmgDone
@@ -428,6 +427,13 @@ public final class Standing {
             te = 1.0f * Rules.GAME_SESSION_TIME / detailedResultDAO.getTime();
         }
 
+        float dmte;
+        if (detailedResultDAO.getDeathModeTime() <= Rules.GAME_SESSION_TIME) {
+            dmte = 1.0f * detailedResultDAO.getDeathModeTime() / Rules.GAME_SESSION_TIME;
+        } else {
+            dmte = 1.0f * Rules.GAME_SESSION_TIME / detailedResultDAO.getDeathModeTime();
+        }
+
         c = AstronautEmitter.getEmitted() * Rules.PLAYER_DAMAGE_DONE_ASTRONAUT +
                 (CrateEmitter.getEmitted() + CrateEmitter.getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_CRATE +
                 (StorageEmitter.getEmitted() + StorageEmitter.getEmittedGolden() * Rules.PLAYER_DAMAGE_DONE_GOLDEN_FACTOR) * Rules.PLAYER_DAMAGE_DONE_STORAGE +
@@ -437,10 +443,10 @@ public final class Standing {
             dde = 1 - (1.0f * detailedResultDAO.getDmgDone() / c);
         }
 
-        //todo: get avg from play testing
+        //todo: Balance (Playtests)
         float dre = 0.5f;
 
-        detailedResultDAO.setEffectiveness(Math.abs((int) (scoreView * (ate + uie + pie + mae + ede + dde + te + dre) / 8)));
+        detailedResultDAO.setEffectiveness(Math.abs((int) (scoreView * (ate + uie + pie + mae + ede + dde + te + dmte + dre) / 9)));
         //
         return detailedResultDAO;
     }

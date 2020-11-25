@@ -25,6 +25,7 @@ import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.effects.AsteroidLaunchEmitter;
 import com.buran.game.effects.BoomBox;
+import com.buran.game.effects.Shake;
 import com.buran.game.player.Buran;
 import com.buran.game.player.Standing;
 import com.buran.game.player.navigation.Radar;
@@ -47,7 +48,7 @@ import lombok.Setter;
 
 public enum Sticker {
     //Crate
-    FREEZE("[#FFFFFF]FREEZE[]\n[#cc6e54]Stop as much anomalies as possible![]") {
+    FREEZE("[#FFFFFF]FREEZE[]\n[#cc6e54]Freeze is change from the liquid to the solid state by loss of heat. Stop as much anomalies as possible![]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
@@ -82,7 +83,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_FREEZE);
         }
     },
-    DEGRADE("[#FFFFFF]DEGRADE[]\n[#cc6e54]You able to change the anomaly level. This items right for that.[]") {
+    DEGRADE("[#FFFFFF]DEGRADE[]\n[#cc6e54]You can change the level of the anomaly. All corrosive anomalies have 4 attack levels. This option can help you to use the minimum level of shields, as the anomalies become weak.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
@@ -90,6 +91,7 @@ public enum Sticker {
                 for (int i = 0; i < anomalies.size(); i++) {
                     anomalies.get(i).setLevel(0);
                 }
+                Shake.getInstance().shakeCamera(1.0f, 35, 10);
                 GameInfoSystem.setup(
                         position.x, position.y,
                         "[GREEN]" + GameInfoSystem.Preset.DEGRADE + "[]",
