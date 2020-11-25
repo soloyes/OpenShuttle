@@ -75,6 +75,7 @@ public class ConfigGroup extends Group {
 
     private Slider.SliderStyle sliderStyle;
     private int level;
+    private int vibration;
     private float a;
     private float touchTime;
     private float shadowTime;
@@ -106,6 +107,7 @@ public class ConfigGroup extends Group {
     private ConfigCheckBox joyStickPresetCheckBox;
     private Label noticeLabel;
     private Label levelLabel;
+    private Label vibrationLabel;
     private Group noticeGroup;
     private GlyphLayout glyphLayout;
     private GlyphLayout glyphLayoutTitle;
@@ -251,7 +253,7 @@ public class ConfigGroup extends Group {
 
     private void setNotify() {
         boomBox.playSound(MSConstants.UI_MENU);
-        Vibrator.vibrate(VConstants.UI_CLICK);
+        Vibrator.vibrateUI(VConstants.UI_CLICK);
         if (notifySlider.getValue() == notifySlider.getMinValue()) {
             notifySlider.setValue(notifySlider.getMaxValue());
             notifySlider.getColor().a = 1.0f;
@@ -344,7 +346,7 @@ public class ConfigGroup extends Group {
                 }
                 if (soundSlider.isDragging()) {
                     boomBox.playSound(MSConstants.UI_MENU);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                 }
                 soundLine.setMuted(soundSlider.getValue() == 0.0f);
                 soundCheckBoxStyle.setFront(soundSlider.getPercent());
@@ -376,7 +378,7 @@ public class ConfigGroup extends Group {
                 }
                 if (musicSlider.isDragging()) {
                     boomBox.playSound(MSConstants.UI_MENU);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                 }
                 musicLine.setMuted(musicSlider.getValue() == 0.0f);
             }
@@ -402,7 +404,7 @@ public class ConfigGroup extends Group {
                 Profiles.getSettings().setEffectsVolume(effectsSlider.getValue());
                 if (effectsSlider.isDragging()) {
                     boomBox.playSound(MSConstants.UI_MENU);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                 }
                 effectsLine.setMuted(effectsSlider.getValue() == 0.0f);
             }
@@ -428,7 +430,7 @@ public class ConfigGroup extends Group {
                 Profiles.getSettings().setJoystick_mode((int) joyStickModeSlider.getValue());
                 if (joyStickModeSlider.isDragging()) {
                     boomBox.playSound(MSConstants.UI_MENU);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                 }
             }
         });
@@ -595,9 +597,8 @@ public class ConfigGroup extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 boolean enabled = vibrationCheckBox.isChecked();
-                Profiles.getSettings().setVibration(enabled);
                 if (enabled && Gdx.input.isTouched() && isVisible()) {
-                    Vibrator.vibrate(VConstants.VIBRATION_ENABLED);
+                    Vibrator.vibrateUI(VConstants.VIBRATION_ENABLED);
                 }
             }
         });
@@ -624,7 +625,7 @@ public class ConfigGroup extends Group {
                 Profiles.getSettings().setJoystick(enabled);
                 if (joyStickCheckBox.isPressed()) {
                     boomBox.playSound(MSConstants.UI_CHANGED);
-                    Vibrator.vibrate(VConstants.UI_CHANGED);
+                    Vibrator.vibrateUI(VConstants.UI_CHANGED);
                 }
             }
         });
@@ -653,7 +654,7 @@ public class ConfigGroup extends Group {
                 scrollPane.setFlickScroll(false);
                 if (pointer == 0 && joystickPresetLine.isActive()) {
                     boomBox.playSound(MSConstants.UI_CHANGED);
-                    Vibrator.vibrate(VConstants.UI_CHANGED);
+                    Vibrator.vibrateUI(VConstants.UI_CHANGED);
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -775,7 +776,7 @@ public class ConfigGroup extends Group {
             }
         });
 
-        Label vibrationLabel = new Label("VIBRATION", labelStyle54);
+        vibrationLabel = new Label("VIBRATION", labelStyle54);
         vibrationLabel.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -1008,7 +1009,7 @@ public class ConfigGroup extends Group {
         refreshChildLine();
         level = Profiles.getSettings().getLevel();
         refreshLevelLine();
-        vibrationLine.setActive(Profiles.getSettings().isVibration());
+        vibration = Profiles.getSettings().getVibration();
         refreshVibrationLine();
         joystickLine.setActive(Profiles.getSettings().isJoystick());
         refreshJoystickPresetLine();
@@ -1022,7 +1023,7 @@ public class ConfigGroup extends Group {
             scrollPane.setFlickScroll(false);
             tmpLine = line;
             boomBox.playSound(MSConstants.UI_CLICK);
-            Vibrator.vibrate(VConstants.UI_CLICK);
+            Vibrator.vibrateUI(VConstants.UI_CLICK);
         }
     }
 
@@ -1118,7 +1119,11 @@ public class ConfigGroup extends Group {
     }
 
     private void refreshVibrationLine() {
-        vibrationCheckBox.setChecked(vibrationLine.isActive());
+        vibration = vibration % 3;
+        Profiles.getSettings().setVibration(vibration);
+        vibrationLabel.setText("VIBRATION " + (vibration == 0 ? "(OFF)" : vibration == 1 ? "(on UI)" : "(ALL)"));
+        vibrationCheckBox.setChecked(vibration != 0);
+        vibrationLine.setActive(vibration != 0);
     }
 
     private void refreshJoystickPresetLine() {
@@ -1181,7 +1186,7 @@ public class ConfigGroup extends Group {
 
         if (touchTime >= Rules.SETTINGS_WAIT_DISABLE) {
             boomBox.playSound(MSConstants.UI_CHANGED);
-            Vibrator.vibrate(VConstants.UI_CHANGED);
+            Vibrator.vibrateUI(VConstants.UI_CHANGED);
             if (tmpLine.isActive()) {
                 setNoticeAndAlpha(tmpLine.getDisabledMessage());
             } else {
@@ -1206,6 +1211,7 @@ public class ConfigGroup extends Group {
                 level++;
                 refreshLevelLine();
             } else if (tmpLine == vibrationLine) {
+                vibration++;
                 refreshVibrationLine();
             } else if (tmpLine == joystickLine) {
                 refreshJoystickPresetLine();

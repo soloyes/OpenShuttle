@@ -120,7 +120,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                     hungry = false;
                     touched = true;
                     if (!taken) {
-                        Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, level);
+                        Vibrator.vibrateGame(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, level);
                     }
                 }
             }
@@ -154,7 +154,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                     destroy();
                     showSprayBoom();
                     boomBox.playSound(MSConstants.SPLASH_ANOMALY);
-                    Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY);
+                    Vibrator.vibrateGame(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY);
                     int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.COMMANDER.getCoefficient());
                     Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
                     Standing.getInstance().addToStatistics(this.type, this.level);

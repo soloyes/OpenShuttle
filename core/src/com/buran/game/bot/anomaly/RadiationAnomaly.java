@@ -125,7 +125,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
                 if (tmp.dst(position) < PaintConstants.ANOMALY_MAGNETIC_WIDTH) {
                     touched = true;
                     if (!taken) {
-                        Vibrator.vibrate(VConstants.PLAYER_ANOMALY_RADIATION_DESTROY);
+                        Vibrator.vibrateGame(VConstants.PLAYER_ANOMALY_RADIATION_DESTROY);
                     }
                 }
             }

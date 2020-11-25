@@ -61,7 +61,7 @@ public class Storage extends AbstractConsumable {
                 false
         );
         boomBox.playSound(MSConstants.DESTROY_STORAGE);
-        Vibrator.vibrate(VConstants.PLAYER_STORAGE_DESTROY);
+        Vibrator.vibrateGame(VConstants.PLAYER_STORAGE_DESTROY);
     }
 
     @Override

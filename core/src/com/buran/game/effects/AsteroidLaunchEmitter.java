@@ -97,7 +97,7 @@ public class AsteroidLaunchEmitter extends ObjectPool<AsteroidLaunchEmitter.Elem
                 }
             }
             Shake.getInstance().shakeCamera(1.0f, 35, 10);
-            Vibrator.vibrate(VConstants.TRASH_ASTEROIDS);
+            Vibrator.vibrateGame(VConstants.TRASH_ASTEROIDS);
             boomBox.playSound(MSConstants.TRASH_ASTEROIDS);
         }
 

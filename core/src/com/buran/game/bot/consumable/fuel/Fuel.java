@@ -55,7 +55,7 @@ public class Fuel extends AbstractConsumable {
         );
         boomBox.playSound(MSConstants.DESTROY_FUEL);
         Standing.getInstance().takeDamage(Rules.CONSUMABLE_FUEL_HP_DAMAGE);
-        Vibrator.vibrate(VConstants.PLAYER_FUEL_DESTROY);
+        Vibrator.vibrateGame(VConstants.PLAYER_FUEL_DESTROY);
     }
 
     @Override

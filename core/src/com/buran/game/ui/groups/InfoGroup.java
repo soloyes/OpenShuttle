@@ -75,7 +75,7 @@ public class InfoGroup extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     boomBox.playSound(MSConstants.UI_MENU);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                     shareLine.setTouched(true);
                 }
                 return true;
@@ -95,7 +95,7 @@ public class InfoGroup extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     rateLine.setTouched(true);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                     boomBox.playSound(MSConstants.UI_MENU);
                 }
                 return true;
@@ -115,7 +115,7 @@ public class InfoGroup extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     aboutLine.setTouched(true);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                     boomBox.playSound(MSConstants.UI_MENU);
                 }
                 return true;
@@ -135,7 +135,7 @@ public class InfoGroup extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     rulesLine.setTouched(true);
-                    Vibrator.vibrate(VConstants.UI_CLICK);
+                    Vibrator.vibrateUI(VConstants.UI_CLICK);
                     boomBox.playSound(MSConstants.UI_MENU);
                 }
                 return true;

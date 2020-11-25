@@ -225,7 +225,7 @@ public final class Standing {
                 );
                 boomBox.playSound(MSConstants.LEVEL_UP);
                 Shake.getInstance().shakeCamera(0.3f, 35, 150);
-                Vibrator.vibrate(VConstants.LEVEL_UP);
+                Vibrator.vibrateGame(VConstants.LEVEL_UP);
             }
         }
     }
@@ -280,7 +280,7 @@ public final class Standing {
                 Shake.getInstance().shakeCamera(1, 35, 50);
                 fuel = maxFuel;
                 if (!Rules.GAME_OVER) {
-                    Vibrator.vibrate(VConstants.PLAYER_LOST_LIVE);
+                    Vibrator.vibrateGame(VConstants.PLAYER_LOST_LIVE);
                     boomBox.playSound(MSConstants.DOWN);
                 }
             }

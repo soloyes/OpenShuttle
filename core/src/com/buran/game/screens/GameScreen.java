@@ -570,7 +570,7 @@ public class GameScreen extends BaseScreen {
                         boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
                     }
                     damageToAnomaly(anomaly);
-                    Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
+                    Vibrator.vibrateGame(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
                 } else {
                     damageToPlayer(anomaly);
                     if (anomaly.getLevel() != 4) {
@@ -579,7 +579,7 @@ public class GameScreen extends BaseScreen {
                     anomaly.setHungry(false);
                     anomaly.setSlimTimer(0);
                     prettyCorrosiveKick.playSound(MSConstants.KICKED_BY_CORROSIVE);
-                    Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
+                    Vibrator.vibrateGame(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
                 }
             }
         }
@@ -593,7 +593,7 @@ public class GameScreen extends BaseScreen {
             if (Buran.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 && anomaly.isBorn()) {
                 anomaly.setHungry(false);
                 damageToPlayer(anomaly);
-                Vibrator.vibrate(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
+                Vibrator.vibrateGame(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
                 prettyElectricKick.playSound(MSConstants.KICKED_BY_ELECTRIC);
                 anomaly.setV(anomaly.getV() * Rules.ANOMALY_ELECTRIC_DECREASE_FACTOR);
             }
@@ -672,7 +672,7 @@ public class GameScreen extends BaseScreen {
             if (Buran.position.dst(asteroid.getPosition()) < asteroid.getHeight() * asteroid.getScaleX()) {
                 if (!asteroid.isFragmented()) {
                     asteroid.destroyWithEffect();
-                    Vibrator.vibrate(VConstants.PLAYER_ASTEROID_DESTROY);
+                    Vibrator.vibrateGame(VConstants.PLAYER_ASTEROID_DESTROY);
                     player.getLifeShield().blink(1.0f);
                     ObjectPool.EMITTERS.get(asteroid.getClass())
                             .boom(asteroid.getPosition(), PlayerInteractionLevels.NONE);
