@@ -26,7 +26,7 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = "Buran-19"
+        appName = "Free Buran-19"
         gdxVersion = '1.9.10'
         roboVMVersion = '2.3.3'
         box2DLightsVersion = '1.4'
