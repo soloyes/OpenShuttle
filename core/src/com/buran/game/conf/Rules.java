@@ -101,8 +101,8 @@ public final class Rules {
     public static final int ANOMALIES_RADIATION_MAX_COUNT = 2;
     //50.0f
     public static final float ANOMALIES_RADIATION_VELOCITY = 50.0f;
-    //2000
-    public static final int ANOMALIES_RADIATION_SCORE_DECREASE = 2000;
+    //20000
+    public static final int ANOMALIES_RADIATION_SCORE_DECREASE = 20000;
     //120.0f
     public static final float ANOMALIES_RADIATION_LIVE_TIME = 120.0f;
     //0.4f
@@ -279,8 +279,8 @@ public final class Rules {
     public static final int SCORE_BASE_BONUS = 20000;
     //3
     public static final int CONSUMABLE_GENERATE_BASE_BONUS = 3;
-    //500
-    public static final int CONSUMABLE_TRASH_BASE_SCORE = 500;
+    //2000
+    public static final int CONSUMABLE_TRASH_BASE_SCORE = 2000;
     //2
     public static final int CONSUMABLE_TRASH_GOLDEN_SCORE_MIN = 2;
     //4
@@ -291,14 +291,15 @@ public final class Rules {
     public static final int ANOMALY_GENERATE_BASE_BONUS = 3;
     //2000
     public static final int ANOMALIES_BASE_SCORE_ADD = 2000;
+    //todo: Balance
     //20000
     public static final int CONSUMABLE_ASTRONAUT_BASE_SCORE_ADD = 20000;
     //2000
     public static final int CONSUMABLE_ASTRONAUT_BONUS_SCORE_ADD = 2000;
     //100
     public static final int CONSUMABLE_ASTRONAUT_RANGE_SCORE_ADD = 1000;
-    //50000
-    public static final int CONSUMABLE_MURDER_SCORE_DECREASE = 50000;
+    //70000
+    public static final int CONSUMABLE_MURDER_SCORE_DECREASE = 70000;
     //30.0f
     public static final float CONSUMABLE_SHIELD_TIME = 30.0f;
     //30.0f
