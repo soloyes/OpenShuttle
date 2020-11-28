@@ -130,6 +130,10 @@ public class RadiationAnomaly extends AbstractAnomaly {
                 }
             }
 
+            if (!hungry) {
+                hungryTimer += dt;
+            }
+
             if (hungryTimer > Rules.ANOMALIES_RADIATION_HUNGRY_TIME) {
                 hungryTimer = 0;
                 hungry = true;
