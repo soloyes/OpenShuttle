@@ -10,7 +10,7 @@ import com.buran.game.player.Standing;
 public final class Rules {
     public static final boolean DEBUG = false;
 
-    public static final boolean ADS_ENABLED = false;
+    public static final boolean ADS_ENABLED = true;
     public static final float ADS_DELAY = 60.0f;
     public static final int ADS_RUNTIME_GAME = 20;
     public static final int ADS_RUNTIME_DEATH_MODE = ADS_RUNTIME_GAME / 2;
@@ -109,6 +109,8 @@ public final class Rules {
     public static final float ANOMALIES_RADIATION_EAT_TIME = 0.4f;
     //2.0f
     public static final float ANOMALIES_RADIATION_BORN_SPEED = 2.0f;
+    //10.0f
+    public static final float ANOMALIES_RADIATION_HUNGRY_TIME = 10.0f;
     //
     //0
     public static final int ANOMALIES_MAGNETIC_AT_START = 0;
@@ -126,6 +128,8 @@ public final class Rules {
     public static final float ANOMALIES_MAGNETIC_EAT_TIME = 0.4f;
     //2.0f
     public static final float ANOMALIES_MAGNETIC_BORN_SPEED = 2.0f;
+    //10.0f
+    public static final float ANOMALIES_MAGNETIC_HUNGRY_TIME = 10.0f;
     //
     //2
     public static final int ANOMALIES_CORROSIVE_AT_START = 2;

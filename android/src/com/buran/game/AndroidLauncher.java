@@ -13,9 +13,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.RequestConfiguration;
-
-import java.util.Collections;
 
 /**
  * @author soloyes on 03/06/18.
@@ -23,7 +20,8 @@ import java.util.Collections;
 
 public class AndroidLauncher extends AndroidApplication implements AdsController {
 
-    private static final String BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
+    private static final String BANNER_AD_UNIT_ID = "ca-app-pub-8110897645955731/9706242705";
+    //private static final String BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
     private AdView bannerAd;
     private RelativeLayout.LayoutParams params;
     private RelativeLayout layout;
@@ -92,9 +90,14 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 
     @Override
     public void loadBannerAd() {
-        AdRequest.Builder builder = new AdRequest.Builder();
-        AdRequest ad = builder.build();
-        bannerAd.loadAd(ad);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AdRequest.Builder builder = new AdRequest.Builder();
+                AdRequest ad = builder.build();
+                bannerAd.loadAd(ad);
+            }
+        });
     }
 
     @Override
@@ -131,7 +134,7 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
     }
 
     private void setupAds() {
-        MobileAds.setRequestConfiguration(new RequestConfiguration.Builder().setTestDeviceIds(Collections.singletonList("E5DF21F0D60E82C4991F2034B48C44BE")).build());
+//        MobileAds.setRequestConfiguration(new RequestConfiguration.Builder().setTestDeviceIds(Collections.singletonList("E5DF21F0D60E82C4991F2034B48C44BE")).build());
         MobileAds.initialize(this);
 
         bannerAd = new AdView(this);
@@ -139,5 +142,6 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
         bannerAd.setBackgroundColor(PaintConstants.BACKGROUND_COLOR_HEX_INT);
         bannerAd.setAdUnitId(BANNER_AD_UNIT_ID);
         bannerAd.setAdSize(AdSize.SMART_BANNER);
+        loadBannerAd();
     }
 }

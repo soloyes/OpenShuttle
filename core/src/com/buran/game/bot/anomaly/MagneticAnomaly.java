@@ -133,6 +133,10 @@ public class MagneticAnomaly extends AbstractAnomaly {
                     }
                 }
             }
+            if (hungryTimer > Rules.ANOMALIES_MAGNETIC_HUNGRY_TIME) {
+                hungryTimer = 0;
+                hungry = true;
+            }
         }
         boundCheck.checkAndHandleBoundsAndDestroy(this);
     }
