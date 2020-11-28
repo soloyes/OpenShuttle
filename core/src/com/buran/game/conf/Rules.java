@@ -289,8 +289,8 @@ public final class Rules {
     public static final int CONSUMABLE_TRASH_GOLDEN_SCORE_FACTOR = 5;
     //3
     public static final int ANOMALY_GENERATE_BASE_BONUS = 3;
-    //500
-    public static final int ANOMALIES_BASE_SCORE_ADD = 500;
+    //2000
+    public static final int ANOMALIES_BASE_SCORE_ADD = 2000;
     //20000
     public static final int CONSUMABLE_ASTRONAUT_BASE_SCORE_ADD = 20000;
     //2000
