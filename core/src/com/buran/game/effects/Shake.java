@@ -123,4 +123,8 @@ public class Shake {
     public void subscribe(Vector2 position) {
         array.add(position);
     }
+
+    public void dispose() {
+        instance = null;
+    }
 }

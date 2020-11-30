@@ -40,6 +40,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     private int glowWidth, glowHeight;
     private Oscillator oscillator;
     private boolean touched;
+    private float liveTime;
 
     public CorrosiveAnomaly(ParticleEmitter particleEmitter) {
         super(particleEmitter);
@@ -75,7 +76,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         this.clockwise = MathUtils.randomSign();
         this.position.set(x, y);
         this.active = true;
-        if (Rules.DEATH_MODE){
+        if (Rules.DEATH_MODE) {
             this.activated = true;
         }
         this.born = false;
@@ -125,10 +126,6 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 }
             }
 
-            color.a = oscillator.oscillate(
-                    color.a, PaintConstants.ANOMALY_CORROSIVE_OSCILLATION_FREQUENCY,
-                    PaintConstants.ANOMALY_CORROSIVE_GLOW_OSCILLATOR_MIN, PaintConstants.ANOMALY_CORROSIVE_GLOW_OSCILLATOR_MAX, dt
-            );
             if (activated) {
                 slimTimer += dt;
             }
@@ -169,13 +166,31 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         if (!taken) {
             moveProcessor.archimedesInit(this);
             if (!touched) {
-                scaleX = scaleY += dt;
-                saveScaleX = saveScaleY += dt;
-                if (scaleX >= 1 + level * 0.15f) {
-                    scaleX = saveScaleX = 1 + level * 0.15f;
-                    scaleY = saveScaleY = 1 + level * 0.15f;
-                    if (!born) {
+                if (!born) {
+                    scaleX = scaleY += dt;
+                    saveScaleX = saveScaleY += dt;
+                    if (scaleX >= 1 + level * 0.15f) {
+                        scaleX = saveScaleX = 1 + level * 0.15f;
+                        scaleY = saveScaleY = 1 + level * 0.15f;
                         born = true;
+                    }
+                } else {
+                    if (Rules.DEATH_MODE){
+                        liveTime += dt;
+                    }
+                    if (liveTime >= Rules.ANOMALIES_CORROSIVE_LIVE_TIME && !Rules.GAME_OVER) {
+                        color.a -= dt;
+                        if (color.a <= 0.0f) {
+                            color.a = 0.0f;
+                            liveTime = 0.0f;
+                            born = false;
+                            destroy();
+                        }
+                    } else {
+                        color.a = oscillator.oscillate(
+                                color.a, PaintConstants.ANOMALY_CORROSIVE_OSCILLATION_FREQUENCY,
+                                PaintConstants.ANOMALY_CORROSIVE_GLOW_OSCILLATOR_MIN, PaintConstants.ANOMALY_CORROSIVE_GLOW_OSCILLATOR_MAX, dt
+                        );
                     }
                 }
             } else {

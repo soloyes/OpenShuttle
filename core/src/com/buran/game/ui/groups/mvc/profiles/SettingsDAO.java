@@ -63,7 +63,7 @@ public class SettingsDAO {
         musicVolume = 0.5f;
         shader = true;
         child = false;
-        level = 0;
+        level = 1;
         vibration = 2;
         joystick = false;
         joystickColor = true;

@@ -90,6 +90,10 @@ public enum Sticker {
                 List<AbstractAnomaly> anomalies = ((CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class)).getActiveList();
                 for (int i = 0; i < anomalies.size(); i++) {
                     anomalies.get(i).setLevel(0);
+                    anomalies.get(i).setScaleX(1 + 0.15f);
+                    anomalies.get(i).setScaleY(1 + 0.15f);
+                    anomalies.get(i).setSaveScaleX(1 + 0.15f);
+                    anomalies.get(i).setSaveScaleY(1 + 0.15f);
                 }
                 Shake.getInstance().shakeCamera(1.0f, 35, 10);
                 GameInfoSystem.setup(
@@ -949,11 +953,15 @@ public enum Sticker {
                             electricalAnomalyEmitter.createBonusAnomaly(consumable.getPosition());
                         } else {
                             if (MathUtils.random(0, 1) == 0) {
-                                RadiationAnomalyEmitter radiationAnomalyEmitter = (RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class);
-                                radiationAnomalyEmitter.createBonusAnomaly(consumable.getPosition());
+                                for (int i = 0; i < Rules.ANOMALY_GENERATE_BASE; i++) {
+                                    RadiationAnomalyEmitter radiationAnomalyEmitter = (RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class);
+                                    radiationAnomalyEmitter.createBonusAnomaly(consumable.getPosition());
+                                }
                             } else {
-                                MagneticAnomalyEmitter magneticAnomalyEmitter = (MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class);
-                                magneticAnomalyEmitter.createBonusAnomaly(consumable.getPosition());
+                                for (int i = 0; i < Rules.ANOMALY_GENERATE_BASE; i++) {
+                                    MagneticAnomalyEmitter magneticAnomalyEmitter = (MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class);
+                                    magneticAnomalyEmitter.createBonusAnomaly(consumable.getPosition());
+                                }
                             }
                         }
                         GameInfoSystem.setup(

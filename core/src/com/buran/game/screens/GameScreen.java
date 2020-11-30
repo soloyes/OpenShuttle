@@ -196,6 +196,9 @@ public class GameScreen extends BaseScreen {
         BoundCheck.avoidPosition(Blackhole.position, Buran.position, (int) Buffs.getBlackholeTakeRange() + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         playerPointer = new PlayerPointer(player);
         Rules.StartLevel.values()[Profiles.getSettings().getLevel()].setGameLevel();
+        if (Profiles.getSettings().getLevel() == 0) {
+            astronautEmitter.setConsumablesMaxCount(Rules.CONSUMABLE_ASTRONAUT_MAX_COUNT * 2);
+        }
 
         InputMultiplexer im = new InputMultiplexer(player, stage, joystick);
         Gdx.input.setInputProcessor(im);
@@ -740,7 +743,14 @@ public class GameScreen extends BaseScreen {
             if (asteroid.isFragmented()) {
                 ray.setCount(12);
                 ray.setSize(2);
-                ray.setPreset(Ray.Preset.GREY);
+                switch (asteroid.getType()) {
+                    case ASTEROID_METAL:
+                        ray.setPreset(Ray.Preset.GREY);
+                        break;
+                    case ASTEROID_MINERAL:
+                        ray.setPreset(Ray.Preset.MAGENTA);
+                        break;
+                }
                 ray.setHarvestVelocity(Rules.PLAYER_RAY_FRAGMENT_HARVEST_VELOCITY);
                 ray.setTakeRange(Rules.PLAYER_FRAGMENT_TAKE_RANGE);
                 ray.harvest(asteroid, dt);

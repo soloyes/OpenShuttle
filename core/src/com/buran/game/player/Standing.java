@@ -214,15 +214,27 @@ public final class Standing {
                 }
             } else {
                 addLevelToLive();
-                GameInfoSystem.setup(
-                        ScreenManager.getInstance().getCamera().position.x,
-                        ScreenManager.getInstance().getCamera().position.y,
-                        String.valueOf(playingLevel),
-                        6.0f,
-                        2.0f,
-                        false,
-                        true
-                );
+                if (playingLevel % 5 == 0){
+                    GameInfoSystem.setup(
+                            ScreenManager.getInstance().getCamera().position.x,
+                            ScreenManager.getInstance().getCamera().position.y,
+                            String.valueOf(GameInfoSystem.Preset.KEEP_GOING.getValue()),
+                            4.0f,
+                            2.0f,
+                            true,
+                            true
+                    );
+                } else {
+                    GameInfoSystem.setup(
+                            ScreenManager.getInstance().getCamera().position.x,
+                            ScreenManager.getInstance().getCamera().position.y,
+                            String.valueOf(playingLevel),
+                            6.0f,
+                            2.0f,
+                            false,
+                            true
+                    );
+                }
                 boomBox.playSound(MSConstants.LEVEL_UP);
                 Shake.getInstance().shakeCamera(0.3f, 35, 150);
                 Vibrator.vibrateGame(VConstants.LEVEL_UP);
