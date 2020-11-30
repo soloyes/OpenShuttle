@@ -26,9 +26,8 @@ public class CloudSky {
     @Getter
     private float bcWidth, bcHeight, mcWidth, mcHeight, scWidth, scHeight;
     private float bcScaleX, bcScaleY, mcScaleX, mcScaleY, scScaleX, scScaleY;
-    @Getter
-    private float bcDx, mcDx, scDx;
-    private float bcDy, mcDy, scDy;
+    public static float bcDx, mcDx, scDx;
+    public static float bcDy, mcDy, scDy;
     @Getter
     private Oscillator bcOscillator;
     private Oscillator aOscillator;
@@ -73,14 +72,14 @@ public class CloudSky {
         batch.setColor(bcColor);
         for (int i = -1; i < bcW + 1; i++) {
             for (int j = -1; j < bcH + 1; j++) {
-                batch.draw(bc, i * bcWidth - bcDx % bcWidth, j * bcHeight - bcDy % bcHeight, bcWidth, bcHeight);
+                batch.draw(bc, i * bcWidth - bcDx % bcWidth + (Rules.SPACE_WIDTH / 2.0f - bcWidth / 2.0f), j * bcHeight - bcDy % bcHeight, bcWidth, bcHeight);
             }
         }
 
         batch.setColor(mcColor);
         for (int i = -1; i < mcW + 1; i++) {
             for (int j = -1; j < mcH + 1; j++) {
-                batch.draw(mc, i * mcWidth - mcDx % mcWidth, j * mcHeight - mcDy % mcHeight, mcWidth, mcHeight);
+                batch.draw(mc, i * mcWidth - mcDx % mcWidth + (Rules.SPACE_WIDTH / 2.0f - mcWidth / 2.0f), j * mcHeight - mcDy % mcHeight, mcWidth, mcHeight);
             }
         }
 
@@ -88,7 +87,7 @@ public class CloudSky {
         batch.setColor(scColor);
         for (int i = -1; i < scW + 1; i++) {
             for (int j = -1; j < scH + 1; j++) {
-                batch.draw(sc, i * scWidth - scDx % scWidth, j * scHeight - scDy % scHeight, scWidth, scHeight);
+                batch.draw(sc, i * scWidth - scDx % scWidth + (Rules.SPACE_WIDTH / 2.0f - scWidth / 2.0f), j * scHeight - scDy % scHeight, scWidth, scHeight);
             }
         }
         batch.setColor(color);

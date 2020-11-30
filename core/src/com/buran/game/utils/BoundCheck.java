@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.buran.game.background.CloudSky;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.conf.VConstants;
@@ -50,6 +51,18 @@ public class BoundCheck {
         if (!rectangle.contains(Buran.position)) {
             checkCount(dt);
             playerOnScreen = false;
+            if (Buran.position.x >= Rules.SPACE_WIDTH + 2 * Rules.WORLD_WIDTH ||
+                    Buran.position.x <= -2 * Rules.WORLD_WIDTH ||
+                    Buran.position.y >= Rules.SPACE_HEIGHT + Rules.WORLD_HEIGHT ||
+                    Buran.position.y <= -Rules.WORLD_HEIGHT) {
+                Standing.getInstance().changeHP(-Standing.getInstance().getHp());
+                CloudSky.bcDx = 0.0f;
+                CloudSky.mcDx = 0.0f;
+                CloudSky.scDx = 0.0f;
+                CloudSky.bcDy = 0.0f;
+                CloudSky.mcDy = 0.0f;
+                CloudSky.scDy = 0.0f;
+            }
         } else {
             alertTimer = 0;
             fuelTimer = 0;
