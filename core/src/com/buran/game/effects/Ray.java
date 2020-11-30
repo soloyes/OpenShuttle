@@ -172,7 +172,8 @@ public class Ray {
     public enum Preset {
         GREEN(0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f),
         GREY(0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f),
-        RED(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+        RED(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f),
+        MAGENTA(1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
         @Getter
         private float startR, startG, startB;
         @Getter

@@ -69,13 +69,13 @@ public class Star {
             }
         } else {
             if (dt > 1) dt = 1;
-            if (cloudSky.getBcDx() > PaintConstants.BACKGROUND_OSCILLATE_WIDTH) {
+            if (CloudSky.bcDx > PaintConstants.BACKGROUND_OSCILLATE_WIDTH) {
                 position.x += speed * dt + scaleX * dt * dt / 2;
             } else {
                 position.x += speed * dt - scaleX * dt * dt / 2;
             }
 
-            float tmp = cloudSky.getBcOscillator().prettyOscillate(cloudSky.getBcDx(), cloudSky.getBcFrequency(), 1f, 0, cloudSky.getBcWidth() / 4, dt);
+            float tmp = cloudSky.getBcOscillator().prettyOscillate(CloudSky.bcDx, cloudSky.getBcFrequency(), 1f, 0, cloudSky.getBcWidth() / 4, dt);
             if (tmp > PaintConstants.BACKGROUND_OSCILLATE_WIDTH) {
                 speed += scaleX * dt;
             } else {

@@ -11,9 +11,13 @@ public final class Rules {
     public static final boolean DEBUG = false;
 
     public static final boolean ADS_ENABLED = true;
+    //60.0f
     public static final float ADS_DELAY = 60.0f;
-    public static final int ADS_RUNTIME_GAME = 20;
+    //14
+    public static final int ADS_RUNTIME_GAME = 14;
     public static final int ADS_RUNTIME_DEATH_MODE = ADS_RUNTIME_GAME / 2;
+    //6
+    public static final int ADS_TIME = 6;
 
     public static final String RATE_US =
             ADS_ENABLED ?
@@ -47,10 +51,10 @@ public final class Rules {
     //CONSUMABLE
     //2
     public static final int CONSUMABLE_ASTRONAUT_AT_START = 2;
-    //10.0f
-    public static final float CONSUMABLE_ASTRONAUT_RESPAWN_TIME = 0.1f;
-    //2
-    public static final int CONSUMABLE_ASTRONAUT_MAX_COUNT = 4;
+    //1.5f
+    public static final float CONSUMABLE_ASTRONAUT_RESPAWN_TIME = 1.5f;
+    //3
+    public static final int CONSUMABLE_ASTRONAUT_MAX_COUNT = 3;
     //2
     public static final int CONSUMABLE_CRATE_AT_START = 2;
     //6.0f
@@ -101,8 +105,8 @@ public final class Rules {
     public static final int ANOMALIES_RADIATION_MAX_COUNT = 2;
     //50.0f
     public static final float ANOMALIES_RADIATION_VELOCITY = 50.0f;
-    //20000
-    public static final int ANOMALIES_RADIATION_SCORE_DECREASE = 20000;
+    //10000
+    public static final int ANOMALIES_RADIATION_SCORE_DECREASE = 100000;
     //120.0f
     public static final float ANOMALIES_RADIATION_LIVE_TIME = 120.0f;
     //0.4f
@@ -120,8 +124,8 @@ public final class Rules {
     public static final int ANOMALIES_MAGNETIC_MAX_COUNT = 2;
     //50.0f
     public static final float ANOMALIES_MAGNETIC_VELOCITY = 50.0f;
-    //1.0f
-    public static final float ANOMALIES_MAGNETIC_FUEL_DECREASE = 1.0f;
+    //1.5f
+    public static final float ANOMALIES_MAGNETIC_FUEL_DECREASE = 1.5f;
     //120.0f
     public static final float ANOMALIES_MAGNETIC_LIVE_TIME = 120.0f;
     //0.4f
@@ -133,10 +137,10 @@ public final class Rules {
     //
     //2
     public static final int ANOMALIES_CORROSIVE_AT_START = 2;
-    //4.0f
-    public static final float ANOMALIES_CORROSIVE_RESPAWN_TIME = 4.0f;
-    //30
-    public static final int ANOMALIES_CORROSIVE_MAX_COUNT = 30;
+    //2.0f
+    public static final float ANOMALIES_CORROSIVE_RESPAWN_TIME = 2.0f;
+    //40
+    public static final int ANOMALIES_CORROSIVE_MAX_COUNT = 40;
     //60.0f
     public static final float ANOMALIES_CORROSIVE_VELOCITY = 60.0f;
     //0.15f
@@ -149,6 +153,8 @@ public final class Rules {
     public static final float ANOMALIES_CORROSIVE_SLIM_TIME = 15.0f;
     //2
     public static final int ANOMALIES_CORROSIVE_AFRAID_FACTOR = 2;
+    //30
+    public static final int ANOMALIES_CORROSIVE_LIVE_TIME = 30;
     //ASTEROID
     //4.0f
     public static final float ASTEROID_METAL_RESPAWN_TIME = 4.0f;
@@ -177,7 +183,7 @@ public final class Rules {
     public static final float PLAYER_ENGINE_POWER_COMPONENT2 = 100.0f;
     //
     public static final float PLAYER_ENGINE_POWER = PLAYER_ENGINE_POWER_COMPONENT1 + PLAYER_ENGINE_POWER_COMPONENT2;
-    //1200.0f
+    //1500.0f
     public static final float PLAYER_TURBO_THRESHOLD_VELOCITY = 1500.0f;
     //4.0f
     private static final float PLAYER_MAX_POWER = 4.0f;
@@ -275,10 +281,12 @@ public final class Rules {
     //todo: Balance
     public static final int INDEX_SCORE_TO_LEVEL = 400;
     //todo: Balance
-    //20000
-    public static final int SCORE_BASE_BONUS = 20000;
+    //50000
+    public static final int SCORE_BASE_BONUS = 50000;
     //3
-    public static final int CONSUMABLE_GENERATE_BASE_BONUS = 3;
+    public static final int ANOMALY_GENERATE_BASE = 3;
+    //4
+    public static final int CONSUMABLE_GENERATE_BASE_BONUS = 4;
     //2000
     public static final int CONSUMABLE_TRASH_BASE_SCORE = 2000;
     //2
@@ -288,12 +296,12 @@ public final class Rules {
     //5
     public static final int CONSUMABLE_TRASH_GOLDEN_SCORE_FACTOR = 5;
     //3
-    public static final int ANOMALY_GENERATE_BASE_BONUS = 3;
+    public static final int ANOMALY_GENERATE_BASE_BONUS = 10;
     //2000
     public static final int ANOMALIES_BASE_SCORE_ADD = 2000;
     //todo: Balance
-    //20000
-    public static final int CONSUMABLE_ASTRONAUT_BASE_SCORE_ADD = 20000;
+    //18000
+    public static final int CONSUMABLE_ASTRONAUT_BASE_SCORE_ADD = 18000;
     //2000
     public static final int CONSUMABLE_ASTRONAUT_BONUS_SCORE_ADD = 2000;
     //100
@@ -306,8 +314,6 @@ public final class Rules {
     public static final float CONSUMABLE_SCAN_TIME = 30.0f;
     //60
     public static final int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
-    //6
-    public static final int ADS_TIME = 6;
     //3
     public static final int LAUNCH_ROCKETS_TIME = 3;
     //1500
@@ -410,7 +416,7 @@ public final class Rules {
                 Standing.getInstance().setMaxLaserChargeLevel(18);
                 Standing.getInstance().setLifeShield(18);
                 Standing.getInstance().setMaxLifeShield(18);
-                Standing.getInstance().setLives(2);
+                Standing.getInstance().setLives(3);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
                 Standing.getInstance().setStartLevel(0);
                 Standing.getInstance().setScore(0);
