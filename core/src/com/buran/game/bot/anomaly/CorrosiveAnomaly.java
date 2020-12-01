@@ -88,6 +88,20 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 break;
             }
         }
+        switch (level) {
+            case 0:
+                color.set(Color.TAN.r, Color.TAN.g, Color.TAN.b, color.a);
+                break;
+            case 1:
+                color.set(Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, color.a);
+                break;
+            case 2:
+                color.set(Color.YELLOW.r, Color.YELLOW.g, Color.YELLOW.b, color.a);
+                break;
+            case 3:
+                color.set(Color.RED.r, Color.RED.g, Color.RED.b, color.a);
+                break;
+        }
         this.taken = false;
         this.v = MathUtils.random(
                 DeathMode.corrosiveAnomalyVelocity(),
@@ -166,6 +180,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         if (!taken) {
             moveProcessor.archimedesInit(this);
             if (!touched) {
+
                 if (!born) {
                     scaleX = scaleY += dt;
                     saveScaleX = saveScaleY += dt;
@@ -175,7 +190,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                         born = true;
                     }
                 } else {
-                    if (Rules.DEATH_MODE){
+                    if (Rules.DEATH_MODE) {
                         liveTime += dt;
                     }
                     if (liveTime >= Rules.ANOMALIES_CORROSIVE_LIVE_TIME && !Rules.GAME_OVER) {
@@ -247,19 +262,23 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
 
         angle += 48 * dt;
 
-        switch (level) {
-            case 0:
-                color.set(Color.TAN.r, Color.TAN.g, Color.TAN.b, color.a);
-                break;
-            case 1:
-                color.set(Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, color.a);
-                break;
-            case 2:
-                color.set(Color.YELLOW.r, Color.YELLOW.g, Color.YELLOW.b, color.a);
-                break;
-            case 3:
-                color.set(Color.RED.r, Color.RED.g, Color.RED.b, color.a);
-                break;
+        if (born && !taken) {
+            switch (level) {
+                case 0:
+                    color.set(Color.TAN.r, Color.TAN.g, Color.TAN.b, color.a);
+                    break;
+                case 1:
+                    color.set(Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, color.a);
+                    break;
+                case 2:
+                    color.set(Color.YELLOW.r, Color.YELLOW.g, Color.YELLOW.b, color.a);
+                    break;
+                case 3:
+                    color.set(Color.RED.r, Color.RED.g, Color.RED.b, color.a);
+                    break;
+            }
+            scaleX = saveScaleX = 1 + level * 0.15f;
+            scaleY = saveScaleY = 1 + level * 0.15f;
         }
         spreeColor.set(color);
     }
