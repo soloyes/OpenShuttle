@@ -90,10 +90,6 @@ public enum Sticker {
                 List<AbstractAnomaly> anomalies = ((CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class)).getActiveList();
                 for (int i = 0; i < anomalies.size(); i++) {
                     anomalies.get(i).setLevel(0);
-                    anomalies.get(i).setScaleX(1 + 0.15f);
-                    anomalies.get(i).setScaleY(1 + 0.15f);
-                    anomalies.get(i).setSaveScaleX(1 + 0.15f);
-                    anomalies.get(i).setSaveScaleY(1 + 0.15f);
                 }
                 Shake.getInstance().shakeCamera(1.0f, 35, 10);
                 GameInfoSystem.setup(

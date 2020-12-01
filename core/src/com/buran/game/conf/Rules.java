@@ -298,6 +298,8 @@ public final class Rules {
     public static final int ANOMALY_GENERATE_BASE_BONUS = 10;
     //2000
     public static final int ANOMALIES_BASE_SCORE_ADD = 2000;
+    //10000
+    public static final int ANOMALIES_BURST_SCORE_ADD = 10000;
     //todo: Balance
     //18000
     public static final int CONSUMABLE_ASTRONAUT_BASE_SCORE_ADD = 18000;

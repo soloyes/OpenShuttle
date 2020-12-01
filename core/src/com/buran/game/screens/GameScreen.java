@@ -569,6 +569,8 @@ public class GameScreen extends BaseScreen {
                 if (anomaly.getLevel() < player.getPushPower() || Buran.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                     if (Buran.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                         boomBox.playSound(MSConstants.BURST_CORROSIVE_ANOMALY);
+                        int score = (int) (Rules.ANOMALIES_BURST_SCORE_ADD * Sticker.COMMANDER.getCoefficient());
+                        Standing.getInstance().changeScore(score, Buran.position, GameInfoSystem.Preset.SCORE + "[GOLD] +" + score + "[]", 7.0f, true);
                     } else {
                         boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
                     }
