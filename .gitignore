@@ -8,6 +8,10 @@ hs_err_pid*
 ## Robovm
 /ios/robovm-build/
 
+/ios/IOSLauncher/
+/android/assets/exception.txt
+/android/assets/profiles.json
+
 ## GWT
 /html/war/
 /html/gwt-unitCache/
