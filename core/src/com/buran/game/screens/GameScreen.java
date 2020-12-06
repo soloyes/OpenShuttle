@@ -559,6 +559,7 @@ public class GameScreen extends BaseScreen {
 
         player.showTakeRangeField(dt, anyAtHarvestPoint);
 
+        int count = 0;
         for (int i = 0; i < corrosiveAnomalyEmitter.getActiveList().size(); i++) {
             CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(i);
             collideWithRocket(anomaly);
@@ -570,7 +571,8 @@ public class GameScreen extends BaseScreen {
                     if (Buran.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                         boomBox.playSound(MSConstants.BURST_CORROSIVE_ANOMALY);
                         int score = (int) (Rules.ANOMALIES_BURST_SCORE_ADD * Sticker.COMMANDER.getCoefficient());
-                        Standing.getInstance().changeScore(score, Buran.position, GameInfoSystem.Preset.SCORE + "[GOLD] +" + score + "[]", 7.0f, true);
+                        Standing.getInstance().changeScore(score, Buran.position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
+                        count ++;
                     } else {
                         boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
                     }
@@ -587,6 +589,18 @@ public class GameScreen extends BaseScreen {
                     Vibrator.vibrateGame(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
                 }
             }
+        }
+
+        if (count > 0){
+            GameInfoSystem.setup(
+                    ScreenManager.getInstance().getCamera().position.x,
+                    ScreenManager.getInstance().getCamera().position.y,
+                    String.valueOf(GameInfoSystem.Preset.ROCKETMAN.getValue()),
+                    3.0f,
+                    2.0f,
+                    true,
+                    true
+            );
         }
 
         for (int i = 0; i < electricalAnomalyEmitter.getActiveList().size(); i++) {

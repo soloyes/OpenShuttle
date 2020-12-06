@@ -214,7 +214,7 @@ public final class Standing {
                 }
             } else {
                 addLevelToLive();
-                if (playingLevel % 5 == 0){
+                if (playingLevel % 5 == 0) {
                     GameInfoSystem.setup(
                             ScreenManager.getInstance().getCamera().position.x,
                             ScreenManager.getInstance().getCamera().position.y,
@@ -455,10 +455,8 @@ public final class Standing {
             dde = 1 - (1.0f * detailedResultDAO.getDmgDone() / c);
         }
 
-        //todo: Balance (Playtests)
-        float dre = 0.5f;
-
-        detailedResultDAO.setEffectiveness(Math.abs((int) (scoreView * (ate + uie + pie + mae + ede + dde + te + dmte + dre) / 9)));
+        int ef = (int) (100 * (ate + uie + pie + mae + ede + dde + te + dmte) / 8);
+        detailedResultDAO.setEffectiveness(ef >= 100 ? 100 : ef);
         //
         return detailedResultDAO;
     }

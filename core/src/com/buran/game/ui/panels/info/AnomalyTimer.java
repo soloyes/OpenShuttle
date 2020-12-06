@@ -98,9 +98,9 @@ public class AnomalyTimer {
         if (!Rules.DEATH_MODE) {
             glyphLayout.setText(font44, TimeFormat.formatMS(counter));
         } else {
-            glyphLayout.setText(font44, "Death\nmode");
+            glyphLayout.setText(font44, "Death mode");
             float w = glyphLayout.width;
-            glyphLayout.setText(font44, "Death\nmode", Color.RED, w, Align.center, false);
+            glyphLayout.setText(font44, "Death mode", Color.RED, w, Align.center, false);
         }
     }
 }
