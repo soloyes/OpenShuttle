@@ -559,7 +559,6 @@ public class GameScreen extends BaseScreen {
 
         player.showTakeRangeField(dt, anyAtHarvestPoint);
 
-        int count = 0;
         for (int i = 0; i < corrosiveAnomalyEmitter.getActiveList().size(); i++) {
             CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(i);
             collideWithRocket(anomaly);
@@ -572,7 +571,15 @@ public class GameScreen extends BaseScreen {
                         boomBox.playSound(MSConstants.BURST_CORROSIVE_ANOMALY);
                         int score = (int) (Rules.ANOMALIES_BURST_SCORE_ADD * Sticker.COMMANDER.getCoefficient());
                         Standing.getInstance().changeScore(score, Buran.position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
-                        count ++;
+                        GameInfoSystem.setup(
+                                ScreenManager.getInstance().getCamera().position.x,
+                                ScreenManager.getInstance().getCamera().position.y,
+                                String.valueOf(GameInfoSystem.Preset.ROCKETMAN.getValue()),
+                                3.0f,
+                                2.0f,
+                                true,
+                                true
+                        );
                     } else {
                         boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
                     }
@@ -589,18 +596,6 @@ public class GameScreen extends BaseScreen {
                     Vibrator.vibrateGame(VConstants.PLAYER_ANOMALY_CORROSIVE_COLLISION);
                 }
             }
-        }
-
-        if (count > 0){
-            GameInfoSystem.setup(
-                    ScreenManager.getInstance().getCamera().position.x,
-                    ScreenManager.getInstance().getCamera().position.y,
-                    String.valueOf(GameInfoSystem.Preset.ROCKETMAN.getValue()),
-                    3.0f,
-                    2.0f,
-                    true,
-                    true
-            );
         }
 
         for (int i = 0; i < electricalAnomalyEmitter.getActiveList().size(); i++) {

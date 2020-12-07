@@ -26,7 +26,6 @@ import com.buran.game.ui.groups.configs.LeftGroup;
 import com.buran.game.ui.groups.configs.RightGroup;
 import com.buran.game.ui.groups.mvc.profiles.Profiles;
 import com.buran.game.utils.Assets;
-import com.buran.game.utils.Restart;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -40,6 +39,7 @@ public class PauseGroup extends Group {
     private final Button buttonRestart;
     private final ImageButton playPauseBtn;
     private final ConfigGroup configGroup;
+    private CommitGroup commitGroup;
     private final LeftGroup leftGroup;
     private final RightGroup rightGroup;
     private final BitmapFont font60;
@@ -57,6 +57,8 @@ public class PauseGroup extends Group {
     private static boolean watched = true;
 
     public PauseGroup() {
+        this.commitGroup = new CommitGroup();
+        commitGroup.setPauseGroup(this);
         this.boomBox = new BoomBox();
         this.oscillatorA = new Oscillator();
         pause = false;
@@ -102,11 +104,8 @@ public class PauseGroup extends Group {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
-                    if (Rules.ADS_ENABLED) {
-                        ScreenManager.getInstance().getAdsController().hideBannerAd();
-                    }
-                    ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
-                    Restart.doRestart();
+                    commitVisible(true);
+                    commitGroup.setDstScreen(ScreenManager.ScreenType.MENU);
                 }
             }
         });
@@ -125,13 +124,8 @@ public class PauseGroup extends Group {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
-                    if (Rules.ADS_ENABLED) {
-                        ScreenManager.getInstance().getAdsController().hideBannerAd();
-                        ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.ADS);
-                    } else {
-                        ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
-                    }
-                    Restart.doRestart();
+                    commitVisible(true);
+                    commitGroup.setDstScreen(ScreenManager.ScreenType.GAME);
                 }
             }
         });
@@ -158,6 +152,9 @@ public class PauseGroup extends Group {
                     rightGroup.setVisible(pause);
                     buttonMenu.setVisible(pause);
                     buttonRestart.setVisible(pause);
+                    if (!configGroup.isVisible()) {
+                        commitGroup.setVisible(pause);
+                    }
                     boomBox.stopAllSound();
                     boomBox.playSound(MSConstants.UI_PAUSE);
                     Vibrator.vibrateUI(VConstants.UI_CLICK);
@@ -172,6 +169,16 @@ public class PauseGroup extends Group {
         this.addActor(rightGroup);
         this.addActor(buttonMenu);
         this.addActor(buttonRestart);
+        this.addActor(commitGroup);
+    }
+
+    public void commitVisible(boolean visible) {
+        commitGroup.setVisible(visible);
+        leftGroup.setVisible(!visible);
+        rightGroup.setVisible(!visible);
+        configGroup.setVisible(!visible);
+        buttonMenu.setVisible(!visible);
+        buttonRestart.setVisible(!visible);
     }
 
     public void setGameOver() {
