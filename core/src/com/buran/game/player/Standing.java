@@ -224,6 +224,13 @@ public final class Standing {
                             true,
                             true
                     );
+                    if (playingLevel == 5){
+                        boomBox.playSound(MSConstants.LEVEL_5_KEEP_GOING);
+                    } else if (playingLevel == 10){
+                        boomBox.playSound(MSConstants.LEVEL_10_KEEP_GOING);
+                    } else if (playingLevel == 15){
+                        boomBox.playSound(MSConstants.LEVEL_15_KEEP_GOING);
+                    }
                 } else {
                     GameInfoSystem.setup(
                             ScreenManager.getInstance().getCamera().position.x,
