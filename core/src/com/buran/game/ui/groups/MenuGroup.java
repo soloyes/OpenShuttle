@@ -166,12 +166,12 @@ public class MenuGroup extends Group {
         Skin skin = Assets.getInstance().getAssetManager().get(PaintConstants.SKIN_FILE);
         this.font44 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT44, BitmapFont.class);
         this.font72 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT72, BitmapFont.class);
-        Label.LabelStyle noticeStyle64 = new Label.LabelStyle(
+        Label.LabelStyle noticeStyle44 = new Label.LabelStyle(
                 font44,
                 new Color(1.0f, 1.0f, 1.0f, 1.0f)
         );
 
-        noticeLabel = new Label(notice, noticeStyle64);
+        noticeLabel = new Label(notice, noticeStyle44);
         this.buttonProfiles = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PROFILES_BUTTON_MENU)));
         buttonProfiles.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
 

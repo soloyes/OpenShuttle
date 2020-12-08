@@ -29,6 +29,7 @@ import com.buran.game.effects.Shake;
 import com.buran.game.player.Buran;
 import com.buran.game.player.Standing;
 import com.buran.game.player.navigation.Radar;
+import com.buran.game.screens.ScreenManager;
 import com.buran.game.ui.GameInfoSystem;
 import com.buran.game.ui.groups.selector.SelectorGroup;
 import com.buran.game.ui.panels.UILeftPanel;
@@ -267,10 +268,12 @@ public enum Sticker {
             if (!isGolden) {
                 CorrosiveAnomalyEmitter corrosiveAnomalyEmitter = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
                 List<AbstractAnomaly> anomalies = corrosiveAnomalyEmitter.getActiveList();
+                int count = 0;
                 for (int i = 0; i < anomalies.size(); i++) {
                     if (anomalies.get(i).getPosition().dst(Buran.position) <= Rules.WORLD_WIDTH) {
                         if (!anomalies.get(i).isTaken()) {
                             anomalies.get(i).setMarkedToBoom(true);
+                            count ++;
                         }
                     }
                 }
@@ -280,6 +283,15 @@ public enum Sticker {
                         5.0f,
                         true
                 );
+                if (count >= 15){
+                    GameInfoSystem.setup(
+                            ScreenManager.getInstance().getCamera().position.x,
+                            ScreenManager.getInstance().getCamera().position.y,
+                            String.valueOf(GameInfoSystem.Preset.EXTERMINATOR.getValue()),
+                            15.0f,
+                            false
+                    );
+                }
             }
         }
 

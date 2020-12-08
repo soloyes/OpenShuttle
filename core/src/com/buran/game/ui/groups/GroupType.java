@@ -13,6 +13,7 @@ public enum GroupType {
     RESULTS_DETAILED,
     INFO,
     RULES,
+    COMMIT,
     LEFT,
     RIGHT
 }

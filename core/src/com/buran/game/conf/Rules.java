@@ -57,10 +57,10 @@ public final class Rules {
     public static final int CONSUMABLE_ASTRONAUT_MAX_COUNT = 3;
     //2
     public static final int CONSUMABLE_CRATE_AT_START = 2;
-    //6.0f
-    public static final float CONSUMABLE_CRATE_RESPAWN_TIME = 6.0f;
-    //3
-    public static final int CONSUMABLE_CRATE_MAX_COUNT = 3;
+    //5.0f
+    public static final float CONSUMABLE_CRATE_RESPAWN_TIME = 5.0f;
+    //4
+    public static final int CONSUMABLE_CRATE_MAX_COUNT = 4;
     //0
     public static final int CONSUMABLE_FUEL_AT_START = 0;
     //15.0f
@@ -77,10 +77,10 @@ public final class Rules {
     public static final int CONSUMABLE_FUEL_HP_DAMAGE = 2;
     //0
     public static final int CONSUMABLE_STORAGE_AT_START = 0;
-    //3.0f
-    public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 3.0f;
+    //2.5f
+    public static final float CONSUMABLE_STORAGE_RESPAWN_TIME = 2.5f;
     //2
-    public static final int CONSUMABLE_STORAGE_MAX_COUNT = 2;
+    public static final int CONSUMABLE_STORAGE_MAX_COUNT = 3;
     //5
     public static final int CONSUMABLE_REPAIR_ADD = 5;
     //ANOMALY
@@ -328,18 +328,18 @@ public final class Rules {
     public static int CONSUMABLE_STORAGE_DANGER_PROBABILITY = 4;
     //3 means 1/3. 0 means 100%
     public static int CONSUMABLE_CRATE_DANGER_PROBABILITY = 4;
-    //5
-    public static final int SELECTOR_MAX_COUNT = 5;
-    //2
-    public static final int SELECTOR_GOLDEN_COUNT = 2;
-    //2
-    public static final int SELECTOR_SHABBY_BASE_BONUS = 2;
+    //6
+    public static final int SELECTOR_MAX_COUNT = 6;
+    //3
+    public static final int SELECTOR_GOLDEN_COUNT = 3;
+    //3
+    public static final int SELECTOR_SHABBY_BASE_BONUS = 3;
     //0.7f
     public static final float LINE_PRESSED_WAIT = 0.7f;
-    //2.0f
-    public static final float LINE_DELETE_WAIT = 2.0f;
-    //2.0f better less than LINE_DELETE_WAIT
-    public static final float NOTICE_WAIT = 1.5f;
+    //3.0f
+    public static final float LINE_DELETE_WAIT = 3.0f;
+    //2.5f better less than LINE_DELETE_WAIT
+    public static final float NOTICE_WAIT = 2.5f;
     //0.4f
     public static final float SETTINGS_WAIT_TOUCH = 0.4f;
     //0.9f

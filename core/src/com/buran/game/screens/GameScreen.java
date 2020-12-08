@@ -570,7 +570,16 @@ public class GameScreen extends BaseScreen {
                     if (Buran.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                         boomBox.playSound(MSConstants.BURST_CORROSIVE_ANOMALY);
                         int score = (int) (Rules.ANOMALIES_BURST_SCORE_ADD * Sticker.COMMANDER.getCoefficient());
-                        Standing.getInstance().changeScore(score, Buran.position, GameInfoSystem.Preset.SCORE + "[GOLD] +" + score + "[]", 7.0f, true);
+                        Standing.getInstance().changeScore(score, Buran.position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
+                        GameInfoSystem.setup(
+                                ScreenManager.getInstance().getCamera().position.x,
+                                ScreenManager.getInstance().getCamera().position.y,
+                                String.valueOf(GameInfoSystem.Preset.ROCKETMAN.getValue()),
+                                3.0f,
+                                2.0f,
+                                true,
+                                true
+                        );
                     } else {
                         boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
                     }
