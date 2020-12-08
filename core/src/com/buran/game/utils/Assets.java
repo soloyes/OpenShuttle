@@ -147,6 +147,9 @@ public class Assets {
                 assetManager.load(MSConstants.DEL_SCORE, Sound.class);
                 assetManager.load(MSConstants.ADD_CORROSIVE, Sound.class);
                 assetManager.load(MSConstants.ADD_HP, Sound.class);
+                assetManager.load(MSConstants.LEVEL_5_KEEP_GOING, Sound.class);
+                assetManager.load(MSConstants.LEVEL_10_KEEP_GOING, Sound.class);
+                assetManager.load(MSConstants.LEVEL_15_KEEP_GOING, Sound.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 break;
             case TEST:
