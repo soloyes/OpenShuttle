@@ -95,8 +95,8 @@ public class CloudSky {
 
     public void update(float dt) {
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
-            bcDx += Buran.velocity.x / 12;
-            bcDy += Buran.velocity.y / 12;
+            bcDx += Buran.velocity.x / 1200;
+            bcDy += Buran.velocity.y / 1200;
             if (normal.set(Buran.velocity).len() < 150) {
                 normal.set(Buran.velocity).nor();
                 bcDx += 0.1 * normal.x;
