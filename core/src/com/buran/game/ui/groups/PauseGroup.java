@@ -26,6 +26,7 @@ import com.buran.game.ui.groups.configs.LeftGroup;
 import com.buran.game.ui.groups.configs.RightGroup;
 import com.buran.game.ui.groups.mvc.profiles.Profiles;
 import com.buran.game.utils.Assets;
+import com.buran.game.utils.Restart;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -104,8 +105,16 @@ public class PauseGroup extends Group {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
-                    commitVisible(true);
-                    commitGroup.setDstScreen(ScreenManager.ScreenType.MENU);
+                    if (!Rules.GAME_OVER) {
+                        commitVisible(true);
+                        commitGroup.setDstScreen(ScreenManager.ScreenType.MENU);
+                    } else {
+                        if (Rules.ADS_ENABLED) {
+                            ScreenManager.getInstance().getAdsController().hideBannerAd();
+                        }
+                        ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
+                        Restart.doRestart();
+                    }
                 }
             }
         });
@@ -124,8 +133,18 @@ public class PauseGroup extends Group {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
-                    commitVisible(true);
-                    commitGroup.setDstScreen(ScreenManager.ScreenType.GAME);
+                    if (!Rules.GAME_OVER) {
+                        commitVisible(true);
+                        commitGroup.setDstScreen(ScreenManager.ScreenType.GAME);
+                    } else {
+                        if (Rules.ADS_ENABLED) {
+                            ScreenManager.getInstance().getAdsController().hideBannerAd();
+                            ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.ADS);
+                        } else {
+                            ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
+                        }
+                        Restart.doRestart();
+                    }
                 }
             }
         });

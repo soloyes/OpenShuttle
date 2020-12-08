@@ -283,7 +283,7 @@ public enum Sticker {
                         5.0f,
                         true
                 );
-                if (count >= 15){
+                if (count >= 10){
                     GameInfoSystem.setup(
                             ScreenManager.getInstance().getCamera().position.x,
                             ScreenManager.getInstance().getCamera().position.y,

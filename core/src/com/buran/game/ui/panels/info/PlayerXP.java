@@ -96,10 +96,10 @@ public class PlayerXP {
 
     public void update(float dt) {
         if (Standing.getInstance().getPlayingLevel() < 19) {
-            if (standing.getScoreView() <= 0) {
+            if (standing.getScore() <= 0) {
                 angle = 1;
             } else {
-                angle = 360 * (1 - 1.0f * (standing.getScoreToLevel() - standing.getScoreView()) / standing.getScoreToLevel());
+                angle = 360 * (1 - 1.0f * (standing.getScoreToLevel() - standing.getScore()) / standing.getScoreToLevel());
             }
 
             if (standing.isScoreAlertRadiationAnomaly()) {
