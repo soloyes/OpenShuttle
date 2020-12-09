@@ -110,8 +110,8 @@ public final class PaintConstants {
     public static final int STAR16_HEIGHT = 16;
     public static final float STAR16_BLINK_FACTOR = 1.5f;
     public static final String CLOUD512_REGION = "map512";
-    public static final int CLOUD512_WIDTH = 512;
-    public static final int CLOUD512_HEIGHT = 512;
+    public static final int CLOUD512_WIDTH = 1024;
+    public static final int CLOUD512_HEIGHT = 1024;
     public static final String JOYSTICK_REGION = "joystick";
     public static final int JOYSTICK_WIDTH = 200;
     public static final int JOYSTICK_HEIGHT = 200;
