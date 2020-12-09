@@ -303,6 +303,10 @@ public class Buran extends AbstractBuran {
         if (!isTaken) {
             startEngine(dt);
         }
+
+        if (!isLaser){
+            boomBox.stopMusicEffect(MSConstants.LASER);
+        }
     }
 
     private void makeShadow(float dt) {

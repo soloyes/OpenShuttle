@@ -267,10 +267,12 @@ public enum Sticker {
             if (!isGolden) {
                 CorrosiveAnomalyEmitter corrosiveAnomalyEmitter = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
                 List<AbstractAnomaly> anomalies = corrosiveAnomalyEmitter.getActiveList();
+                int count = 0;
                 for (int i = 0; i < anomalies.size(); i++) {
                     if (anomalies.get(i).getPosition().dst(Buran.position) <= Rules.WORLD_WIDTH) {
                         if (!anomalies.get(i).isTaken()) {
                             anomalies.get(i).setMarkedToBoom(true);
+                            count ++;
                         }
                     }
                 }
@@ -280,6 +282,15 @@ public enum Sticker {
                         5.0f,
                         true
                 );
+                if (count >= 10){
+                    GameInfoSystem.setup(
+                            Buran.position.x,
+                            Buran.position.y,
+                            String.valueOf(GameInfoSystem.Preset.EXTERMINATOR.getValue()),
+                            15.0f,
+                            false
+                    );
+                }
             }
         }
 

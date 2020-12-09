@@ -61,6 +61,9 @@ public class GameInfoSystem {
 
     public enum Preset {
         BRAKED("BRAKED"),
+        ROCKETMAN("[GOLD]ROCKETMAN![]"),
+        EXTERMINATOR("EXTERMINATOR!"),
+        ADIEU("ADIEU!"),
         KEEP_GOING("[GREEN]KEEP GOING![]"),
         DEATH_MODE("[RED]DEATH MODE[]"),
         SCREECH("[RED]SCREECH[]"),
