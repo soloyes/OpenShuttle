@@ -43,9 +43,9 @@ public class CloudSky {
         this.bc = Assets.getInstance().getAtlas().findRegion(PaintConstants.CLOUD1024_REGION);
         this.mc = Assets.getInstance().getAtlas().findRegion(PaintConstants.CLOUD1024_REGION);
         this.sc = Assets.getInstance().getAtlas().findRegion(PaintConstants.CLOUD1024_REGION);
-        this.bcScaleX = this.bcScaleY = 12.0f;
-        this.mcScaleX = this.mcScaleY = 8.0f;
-        this.scScaleX = this.scScaleY = 4.0f;
+        this.bcScaleX = this.bcScaleY = 15.0f;
+        this.mcScaleX = this.mcScaleY = 10.0f;
+        this.scScaleX = this.scScaleY = 6.0f;
         this.bcWidth = PaintConstants.CLOUD1024_WIDTH * bcScaleX;
         this.bcHeight = PaintConstants.CLOUD1024_HEIGHT * bcScaleY;
         this.mcWidth = PaintConstants.CLOUD1024_WIDTH * mcScaleX;
