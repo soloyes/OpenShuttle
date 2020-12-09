@@ -40,18 +40,18 @@ public class CloudSky {
     private Color bcColor, mcColor, scColor;
 
     public CloudSky() {
-        this.bc = Assets.getInstance().getAtlas().findRegion(PaintConstants.CLOUD512_REGION);
-        this.mc = Assets.getInstance().getAtlas().findRegion(PaintConstants.CLOUD512_REGION);
-        this.sc = Assets.getInstance().getAtlas().findRegion(PaintConstants.CLOUD512_REGION);
-        this.bcScaleX = this.bcScaleY = 8.0f;
-        this.mcScaleX = this.mcScaleY = 5.0f;
-        this.scScaleX = this.scScaleY = 3.0f;
-        this.bcWidth = PaintConstants.CLOUD512_WIDTH * bcScaleX;
-        this.bcHeight = PaintConstants.CLOUD512_HEIGHT * bcScaleY;
-        this.mcWidth = PaintConstants.CLOUD512_WIDTH * mcScaleX;
-        this.mcHeight = PaintConstants.CLOUD512_HEIGHT * mcScaleY;
-        this.scWidth = PaintConstants.CLOUD512_WIDTH * scScaleX;
-        this.scHeight = PaintConstants.CLOUD512_HEIGHT * scScaleY;
+        this.bc = Assets.getInstance().getAtlas().findRegion(PaintConstants.CLOUD1024_REGION);
+        this.mc = Assets.getInstance().getAtlas().findRegion(PaintConstants.CLOUD1024_REGION);
+        this.sc = Assets.getInstance().getAtlas().findRegion(PaintConstants.CLOUD1024_REGION);
+        this.bcScaleX = this.bcScaleY = 12.0f;
+        this.mcScaleX = this.mcScaleY = 8.0f;
+        this.scScaleX = this.scScaleY = 4.0f;
+        this.bcWidth = PaintConstants.CLOUD1024_WIDTH * bcScaleX;
+        this.bcHeight = PaintConstants.CLOUD1024_HEIGHT * bcScaleY;
+        this.mcWidth = PaintConstants.CLOUD1024_WIDTH * mcScaleX;
+        this.mcHeight = PaintConstants.CLOUD1024_HEIGHT * mcScaleY;
+        this.scWidth = PaintConstants.CLOUD1024_WIDTH * scScaleX;
+        this.scHeight = PaintConstants.CLOUD1024_HEIGHT * scScaleY;
         this.bcW = (int) Math.ceil(Rules.SPACE_WIDTH / bcWidth);
         this.bcH = (int) Math.ceil(Rules.SPACE_HEIGHT / bcHeight);
         this.mcW = (int) Math.ceil(Rules.SPACE_WIDTH / mcWidth);
