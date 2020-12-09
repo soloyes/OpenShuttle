@@ -40,6 +40,7 @@ public class PauseGroup extends Group {
     private final Button buttonRestart;
     private final ImageButton playPauseBtn;
     private final ConfigGroup configGroup;
+    private CommitGroup commitGroup;
     private final LeftGroup leftGroup;
     private final RightGroup rightGroup;
     private final BitmapFont font60;
@@ -57,6 +58,8 @@ public class PauseGroup extends Group {
     private static boolean watched = true;
 
     public PauseGroup() {
+        this.commitGroup = new CommitGroup();
+        commitGroup.setPauseGroup(this);
         this.boomBox = new BoomBox();
         this.oscillatorA = new Oscillator();
         pause = false;
@@ -102,11 +105,16 @@ public class PauseGroup extends Group {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
-                    if (Rules.ADS_ENABLED) {
-                        ScreenManager.getInstance().getAdsController().hideBannerAd();
+                    if (!Rules.GAME_OVER) {
+                        commitVisible(true);
+                        commitGroup.setDstScreen(ScreenManager.ScreenType.MENU);
+                    } else {
+                        if (Rules.ADS_ENABLED) {
+                            ScreenManager.getInstance().getAdsController().hideBannerAd();
+                        }
+                        ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
+                        Restart.doRestart();
                     }
-                    ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
-                    Restart.doRestart();
                 }
             }
         });
@@ -125,13 +133,18 @@ public class PauseGroup extends Group {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 if (pointer == 0) {
-                    if (Rules.ADS_ENABLED) {
-                        ScreenManager.getInstance().getAdsController().hideBannerAd();
-                        ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.ADS);
+                    if (!Rules.GAME_OVER) {
+                        commitVisible(true);
+                        commitGroup.setDstScreen(ScreenManager.ScreenType.GAME);
                     } else {
-                        ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
+                        if (Rules.ADS_ENABLED) {
+                            ScreenManager.getInstance().getAdsController().hideBannerAd();
+                            ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.ADS);
+                        } else {
+                            ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
+                        }
+                        Restart.doRestart();
                     }
-                    Restart.doRestart();
                 }
             }
         });
@@ -158,6 +171,9 @@ public class PauseGroup extends Group {
                     rightGroup.setVisible(pause);
                     buttonMenu.setVisible(pause);
                     buttonRestart.setVisible(pause);
+                    if (!configGroup.isVisible()) {
+                        commitGroup.setVisible(pause);
+                    }
                     boomBox.stopAllSound();
                     boomBox.playSound(MSConstants.UI_PAUSE);
                     Vibrator.vibrateUI(VConstants.UI_CLICK);
@@ -172,6 +188,16 @@ public class PauseGroup extends Group {
         this.addActor(rightGroup);
         this.addActor(buttonMenu);
         this.addActor(buttonRestart);
+        this.addActor(commitGroup);
+    }
+
+    public void commitVisible(boolean visible) {
+        commitGroup.setVisible(visible);
+        leftGroup.setVisible(!visible);
+        rightGroup.setVisible(!visible);
+        configGroup.setVisible(!visible);
+        buttonMenu.setVisible(!visible);
+        buttonRestart.setVisible(!visible);
     }
 
     public void setGameOver() {

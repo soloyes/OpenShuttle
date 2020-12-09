@@ -13,6 +13,9 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
+
+import java.util.Collections;
 
 /**
  * @author soloyes on 03/06/18.
@@ -134,7 +137,7 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
     }
 
     private void setupAds() {
-//        MobileAds.setRequestConfiguration(new RequestConfiguration.Builder().setTestDeviceIds(Collections.singletonList("E5DF21F0D60E82C4991F2034B48C44BE")).build());
+        MobileAds.setRequestConfiguration(new RequestConfiguration.Builder().setTestDeviceIds(Collections.singletonList("E5DF21F0D60E82C4991F2034B48C44BE")).build());
         MobileAds.initialize(this);
 
         bannerAd = new AdView(this);

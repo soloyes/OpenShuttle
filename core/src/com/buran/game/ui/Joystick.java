@@ -196,6 +196,10 @@ public class Joystick extends Actor implements InputProcessor {
     }
 
     public float getPower() {
-        return vs.len() / stickDeviation;
+        float power = vs.len() / stickDeviation;
+        if (power >= 1.0f){
+            power = 1.0f;
+        }
+        return power;
     }
 }

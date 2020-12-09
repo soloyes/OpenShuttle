@@ -109,9 +109,9 @@ public final class PaintConstants {
     public static final int STAR16_WIDTH = 16;
     public static final int STAR16_HEIGHT = 16;
     public static final float STAR16_BLINK_FACTOR = 1.5f;
-    public static final String CLOUD512_REGION = "map512";
-    public static final int CLOUD512_WIDTH = 512;
-    public static final int CLOUD512_HEIGHT = 512;
+    public static final String CLOUD1024_REGION = "map1024";
+    public static final int CLOUD1024_WIDTH = 1024;
+    public static final int CLOUD1024_HEIGHT = 1024;
     public static final String JOYSTICK_REGION = "joystick";
     public static final int JOYSTICK_WIDTH = 200;
     public static final int JOYSTICK_HEIGHT = 200;
@@ -402,7 +402,7 @@ public final class PaintConstants {
     public static final String UI_PROFILE_SAVED = "Profile is saved";
     public static final String UI_PROFILE_EDIT = "Rename profile";
     public static final String UI_EMPTY_USERNAME = "Empty username";
-    public static final String UI_CAN_SAVE = "Can save username";
+    public static final String UI_CAN_SAVE = "Press OK and save";
     public static final String UI_DELETION_PROCESS = "Deleting...Click to cancel";
     public static final String UI_PROFILE_DELETED = "Profile is deleted";
     public static final String UI_PROFILE_DEL = "Hold for delete profile";

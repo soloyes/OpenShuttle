@@ -122,7 +122,7 @@ public class DetailedResultGroup extends Group {
 
         Line effectivenessLine = new Line(
                 "Effectiveness",
-                String.valueOf(resultDAO.getCurrent().getEffectiveness()),
+                resultDAO.getCurrent().getEffectiveness() + "/100",
                 resultDAO.getPrevious() == null ? 1 :
                         Integer.compare(resultDAO.getCurrent().getEffectiveness(), resultDAO.getPrevious().getEffectiveness())
         );
