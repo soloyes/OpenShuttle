@@ -7,7 +7,6 @@ import com.buran.game.conf.Rules;
 import com.buran.game.effects.BoomBox;
 import com.buran.game.effects.Shake;
 import com.buran.game.player.Buran;
-import com.buran.game.screens.ScreenManager;
 import com.buran.game.ui.GameInfoSystem;
 import com.buran.game.utils.BoundCheck;
 import com.buran.game.utils.ListOfListsJoiner;
@@ -69,10 +68,10 @@ public class RocketLauncher {
                 boomBox.playSound(MSConstants.LAUNCH_ROCKETS);
                 Shake.getInstance().shakeCamera(1, 35, 10 + 5 * amplitude);
             }
-            if (count >= 15) {
+            if (count >= 10) {
                 GameInfoSystem.setup(
-                        ScreenManager.getInstance().getCamera().position.x,
-                        ScreenManager.getInstance().getCamera().position.y,
+                        Buran.position.x,
+                        Buran.position.y,
                         String.valueOf(GameInfoSystem.Preset.ADIEU.getValue()),
                         15.0f,
                         false

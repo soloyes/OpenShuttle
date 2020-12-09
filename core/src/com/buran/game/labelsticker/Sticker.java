@@ -29,7 +29,6 @@ import com.buran.game.effects.Shake;
 import com.buran.game.player.Buran;
 import com.buran.game.player.Standing;
 import com.buran.game.player.navigation.Radar;
-import com.buran.game.screens.ScreenManager;
 import com.buran.game.ui.GameInfoSystem;
 import com.buran.game.ui.groups.selector.SelectorGroup;
 import com.buran.game.ui.panels.UILeftPanel;
@@ -285,8 +284,8 @@ public enum Sticker {
                 );
                 if (count >= 10){
                     GameInfoSystem.setup(
-                            ScreenManager.getInstance().getCamera().position.x,
-                            ScreenManager.getInstance().getCamera().position.y,
+                            Buran.position.x,
+                            Buran.position.y,
                             String.valueOf(GameInfoSystem.Preset.EXTERMINATOR.getValue()),
                             15.0f,
                             false
