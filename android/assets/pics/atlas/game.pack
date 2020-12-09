@@ -69,8 +69,8 @@ menubackgroundstorage
 map512
   rotate: false
   xy: 2901, 1044
-  size: 512, 511
-  orig: 512, 511
+  size: 512, 512
+  orig: 512, 512
   offset: 0, 0
   index: -1
 menubackgroundshield
@@ -432,21 +432,21 @@ timericon
   index: -1
 selectorscale
   rotate: false
-  xy: 2901, 1565
+  xy: 2901, 1566
   size: 154, 154
   orig: 154, 154
   offset: 0, 0
   index: -1
 xpscale
   rotate: false
-  xy: 3065, 1565
+  xy: 3065, 1566
   size: 140, 140
   orig: 140, 140
   offset: 0, 0
   index: -1
 selectoroutcenter
   rotate: false
-  xy: 3215, 1565
+  xy: 3215, 1566
   size: 140, 140
   orig: 140, 140
   offset: 0, 0
