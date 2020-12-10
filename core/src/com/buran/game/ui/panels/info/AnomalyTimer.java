@@ -65,7 +65,7 @@ public class AnomalyTimer {
             y = position.y - 14;
         } else {
             x = Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2;
-            y = position.y + glyphLayout.height / 2;
+            y = position.y + glyphLayout.height / 2 + 24;
         }
         font44.draw(batch, glyphLayout, x, y);
     }

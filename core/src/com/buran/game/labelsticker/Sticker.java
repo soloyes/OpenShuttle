@@ -59,7 +59,7 @@ public enum Sticker {
                 CircleRenderer.freeze = true;
                 GameInfoSystem.setup(
                         position.x, position.y,
-                        "[GREEN]" + GameInfoSystem.Preset.FREEZE + "[]",
+                        "[GREEN]" + GameInfoSystem.Preset.FREEZE + "[] " + (int) Rules.ANOMALIES_CORROSIVE_HUNGRY_TIME,
                         5.0f,
                         true
                 );
@@ -272,7 +272,7 @@ public enum Sticker {
                     if (anomalies.get(i).getPosition().dst(Buran.position) <= Rules.WORLD_WIDTH) {
                         if (!anomalies.get(i).isTaken()) {
                             anomalies.get(i).setMarkedToBoom(true);
-                            count ++;
+                            count++;
                         }
                     }
                 }
@@ -282,7 +282,7 @@ public enum Sticker {
                         5.0f,
                         true
                 );
-                if (count >= 10){
+                if (count >= 10) {
                     GameInfoSystem.setup(
                             Buran.position.x,
                             Buran.position.y,
@@ -311,10 +311,11 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_SPLASH);
         }
     },
-    SCAN("[#FFFFFF]SCAN[]\n[#cc6e54]You may find boxes that are difficult to recognize. They can contain anything. Use the scanner to peek inside.[]") {
+    SCAN("[#FFFFFF]SCAN[]\n[#cc6e54]You may find boxes that are difficult to recognize. They can contain anything. Use the scanner to peek inside. Also you able to activate radar for a small period.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
+                CircleRenderer.activateScan();
                 CrateEmitter crateEmitter = (CrateEmitter) ObjectPool.EMITTERS.get(Crate.class);
                 List<AbstractConsumable> list = crateEmitter.getActiveList();
                 for (int i = 0; i < list.size(); i++) {
@@ -384,6 +385,7 @@ public enum Sticker {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             Radar.isActive = true;
+            CircleRenderer.scan = false;
         }
 
         @Override
@@ -875,6 +877,7 @@ public enum Sticker {
                     case CRATE:
                         if (consumable.isGolden()) {
                             Radar.isActive = false;
+                            CircleRenderer.scan = false;
                             GameInfoSystem.setup(
                                     consumable.getPosition().x, consumable.getPosition().y,
                                     "-[RED]" + GameInfoSystem.Preset.RADAR + "[]",

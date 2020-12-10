@@ -152,8 +152,8 @@ public final class Rules {
     public static final float ANOMALIES_CORROSIVE_SLIM_TIME = 15.0f;
     //2
     public static final int ANOMALIES_CORROSIVE_AFRAID_FACTOR = 2;
-    //30
-    public static final int ANOMALIES_CORROSIVE_LIVE_TIME = 30;
+    //45
+    public static final int ANOMALIES_CORROSIVE_LIVE_TIME = 45;
     //ASTEROID
     //4.0f
     public static final float ASTEROID_METAL_RESPAWN_TIME = 4.0f;
@@ -347,6 +347,8 @@ public final class Rules {
     public static final int LEVELS_TO_LIVE = 6;
     //0.1f
     public static final float INCREMENT_OF_SINGLE_BAR = 0.1f;
+    //5
+    public static final int CIRCLE_RENDER = 5;
 
     public static void setSpace(int n) {
         STARS_COUNT = STARS * n;
