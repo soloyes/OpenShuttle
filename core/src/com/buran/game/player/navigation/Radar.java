@@ -9,6 +9,7 @@ import com.buran.game.bot.anomaly.AbstractAnomaly;
 import com.buran.game.bot.anomaly.CorrosiveAnomaly;
 import com.buran.game.bot.anomaly.ElectricalAnomaly;
 import com.buran.game.bot.blackhole.Blackhole;
+import com.buran.game.bot.blackhole.CircleRenderer;
 import com.buran.game.bot.consumable.AbstractConsumable;
 import com.buran.game.bot.consumable.Astronaut;
 import com.buran.game.bot.consumable.Crate;
@@ -68,7 +69,7 @@ public class Radar {
     }
 
     public void render(SpriteBatch batch) {
-        if (isActive) {
+        if (isActive || CircleRenderer.scan) {
             if (!Buran.isTaken) {
                 drawRadar(batch);
             }
@@ -126,7 +127,7 @@ public class Radar {
     }
 
     public void update(float dt) {
-        if (isActive) {
+        if (isActive || CircleRenderer.scan) {
             updateRadar(dt);
             float d = Vector2.dst(Buran.position.x, Buran.position.y, Blackhole.position.x, Blackhole.position.y);
             if (d <= Buffs.getBlackholeNoiseRange()) {

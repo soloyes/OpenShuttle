@@ -13,6 +13,8 @@ import com.buran.game.bot.anomaly.MagneticAnomalyEmitter;
 import com.buran.game.bot.anomaly.RadiationAnomaly;
 import com.buran.game.bot.anomaly.RadiationAnomalyEmitter;
 import com.buran.game.conf.Buffs;
+import com.buran.game.conf.Rules;
+import com.buran.game.player.Buran;
 import com.buran.game.player.navigation.Radar;
 import com.buran.game.utils.ListOfListsJoiner;
 import com.buran.game.utils.pool.ObjectPool;
@@ -24,8 +26,12 @@ import com.buran.game.utils.pool.ObjectPool;
 public class CircleRenderer {
     private ShapeRenderer shapeRenderer;
     private ListOfListsJoiner<AbstractAnomaly> anomalyJoiner;
-    private float d;
+    private float d1;
+    private static float d2;
+    private static float d3;
     public static boolean freeze;
+    public static boolean scan;
+    private static boolean scanRender;
 
     public CircleRenderer() {
         this.shapeRenderer = new ShapeRenderer();
@@ -50,20 +56,45 @@ public class CircleRenderer {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             for (int i = 0; i < anomalyJoiner.size(); i++) {
                 if (!anomalyJoiner.get(i).isTaken()) {
-                    shapeRenderer.circle(anomalyJoiner.get(i).getPosition().x, anomalyJoiner.get(i).getPosition().y, d);
+                    shapeRenderer.circle(anomalyJoiner.get(i).getPosition().x, anomalyJoiner.get(i).getPosition().y, d1);
                 }
             }
+            shapeRenderer.end();
+        }
+
+        if (scanRender && !Buran.isTaken){
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.circle(Buran.position.x, Buran.position.y, d2);
             shapeRenderer.end();
         }
     }
 
     public void update(float dt) {
         if (freeze) {
-            d += dt * 60 * 5;
-            if (d >= 120) {
-                d = 0.0f;
+            d1 += dt * 60 * Rules.CIRCLE_RENDER;
+            if (d1 >= 120) {
+                d1 = 0.0f;
                 freeze = false;
             }
         }
+
+        if (scan){
+            d2 += dt * 60 * Rules.CIRCLE_RENDER;
+            if (d2 >= 360) {
+                d2 = 0.0f;
+                scanRender = false;
+            }
+            d3 += dt;
+            if (d3 >= Rules.CONSUMABLE_SCAN_TIME){
+                scan = false;
+            }
+        }
+    }
+
+    public static void activateScan(){
+        scan = true;
+        scanRender = true;
+        d2 = 0.0f;
+        d3 = 0.0f;
     }
 }
