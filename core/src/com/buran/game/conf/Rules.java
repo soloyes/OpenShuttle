@@ -10,8 +10,7 @@ import com.buran.game.player.Standing;
 public final class Rules {
     public static final boolean DEBUG = false;
 
-    public static final boolean ADS_ENABLED = true;
-    //60.0f
+    public static final boolean ADS_ENABLED = false;
     public static final float ADS_DELAY = 60.0f;
     //14
     public static final int ADS_RUNTIME_GAME = 14;
@@ -420,7 +419,7 @@ public final class Rules {
                 Standing.getInstance().setMaxLaserChargeLevel(18);
                 Standing.getInstance().setLifeShield(18);
                 Standing.getInstance().setMaxLifeShield(18);
-                Standing.getInstance().setLives(3);
+                Standing.getInstance().setLives(2);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
                 Standing.getInstance().setStartLevel(0);
                 Standing.getInstance().setScore(0);
