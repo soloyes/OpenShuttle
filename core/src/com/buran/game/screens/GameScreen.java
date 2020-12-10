@@ -845,6 +845,7 @@ public class GameScreen extends BaseScreen {
             if (Radar.isActive) {
                 boomBox.playSound(MSConstants.LOSE_RADAR);
                 Radar.isActive = false;
+                CircleRenderer.scan = false;
             }
         }
 

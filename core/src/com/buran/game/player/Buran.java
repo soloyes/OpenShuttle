@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.buran.game.bot.blackhole.Blackhole;
+import com.buran.game.bot.blackhole.CircleRenderer;
 import com.buran.game.bot.consumable.AbstractConsumable;
 import com.buran.game.bot.consumable.Consumable;
 import com.buran.game.conf.Buffs;
@@ -230,6 +231,7 @@ public class Buran extends AbstractBuran {
         Buran.position.set(Rules.SPACE_WIDTH / 2, Rules.SPACE_HEIGHT / 2);
         Buran.velocity.set(0.0f, 0.0f);
         Radar.isActive = false;
+        CircleRenderer.scan = false;
         Standing.getInstance().setRamPower(0.0f);
     }
 
