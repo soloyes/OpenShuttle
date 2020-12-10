@@ -311,7 +311,7 @@ public enum Sticker {
             boomBox.playSound(MSConstants.GET_SPLASH);
         }
     },
-    SCAN("[#FFFFFF]SCAN[]\n[#cc6e54]You may find boxes that are difficult to recognize. They can contain anything. Use the scanner to peek inside.[]") {
+    SCAN("[#FFFFFF]SCAN[]\n[#cc6e54]You may find boxes that are difficult to recognize. They can contain anything. Use the scanner to peek inside. Also you able to activate radar for a small period.[]") {
         @Override
         public void consume(Vector2 position, boolean isGolden) {
             if (!isGolden) {
