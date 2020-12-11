@@ -72,8 +72,8 @@ public final class Rules {
     public static final int CONSUMABLE_FUEL_MIN_ADD = 8;
     //15
     public static final int CONSUMABLE_FUEL_MAX_ADD = 15;
-    //2
-    public static final int CONSUMABLE_FUEL_HP_DAMAGE = 2;
+    //7
+    public static final int CONSUMABLE_FUEL_HP_DAMAGE = 7;
     //0
     public static final int CONSUMABLE_STORAGE_AT_START = 0;
     //2.5f
