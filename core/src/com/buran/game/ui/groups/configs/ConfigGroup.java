@@ -475,7 +475,11 @@ public class ConfigGroup extends Group {
                 boolean enabled = musicCheckBox.isChecked();
                 Profiles.getSettings().setMusic(enabled);
                 boomBox.setAllMusicVolume(Profiles.getSettings().getMusicVolume());
-                boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
+                if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.MENU) {
+                    boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
+                } else if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME){
+                    boomBox.stopAllMusicAndPlayThese(MSConstants.PAUSE);
+                }
             }
         });
 
