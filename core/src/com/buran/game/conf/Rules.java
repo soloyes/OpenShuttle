@@ -263,13 +263,13 @@ public final class Rules {
     //false
     public static boolean DEATH_MODE = false;
     //0.5f
-    public static float DEATH_MODE_RESPAWN_TIME_FACTOR = 0.5f;
-    //60.0f
-    public static float DEATH_MODE_MAX_COUNT_TIME_PERIOD = 60.0f;
+    public static float DEATH_MODE_RESPAWN_TIME_FACTOR = 0.45f;
+    //50.0f
+    public static float DEATH_MODE_MAX_COUNT_TIME_PERIOD = 50.0f;
     //1.2f
-    public static float DEATH_MODE_MAX_COUNT_TIME_FACTOR = 1.2f;
+    public static float DEATH_MODE_MAX_COUNT_TIME_FACTOR = 1.25f;
     //1.5
-    public static float DEATH_MODE_VELOCITY_FACTOR = 1.5f;
+    public static float DEATH_MODE_VELOCITY_FACTOR = 1.6f;
     //1.0f
     public static float STANDARD_COEFFICIENT = 1.0f;
     //1.3f
