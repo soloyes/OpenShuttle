@@ -10,7 +10,7 @@ import com.buran.game.player.Standing;
 public final class Rules {
     public static final boolean DEBUG = false;
 
-    public static final boolean ADS_ENABLED = false;
+    public static final boolean ADS_ENABLED = true;
     public static final float ADS_DELAY = 60.0f;
     //14
     public static final int ADS_RUNTIME_GAME = 14;
