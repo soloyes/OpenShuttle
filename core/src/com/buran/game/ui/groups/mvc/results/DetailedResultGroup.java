@@ -139,7 +139,7 @@ public class DetailedResultGroup extends Group {
                 "Level achieved",
                 String.valueOf(resultDAO.getCurrent().getLevelAchieved()),
                 resultDAO.getPrevious() == null ? 1 :
-                        Long.compare(resultDAO.getPrevious().getLevelAchieved(), resultDAO.getCurrent().getLevelAchieved())
+                        Long.compare(resultDAO.getCurrent().getLevelAchieved(), resultDAO.getPrevious().getLevelAchieved())
         );
         verticalGroup.addActor(levelLine);
         Line timeLine = new Line(
