@@ -93,7 +93,16 @@ public class Profiles implements Model<ProfileDAO> {
     private void initDefaultProfiles() {
         if (getList().size() < PaintConstants.DUMMY_PROFILES) {
             for (int i = 0; i < PaintConstants.DUMMY_PROFILES; i++) {
-                getList().add(asDummy());
+                if (i == 0) {
+                    ProfileDAO profileDAO = asDummy();
+                    profileDAO.setType(ProfileDAO.Type.PROFILE);
+                    profileDAO.setActive(true);
+                    profileDAO.setUsername(Rules.DEFAULT_NAME);
+                    profileDAO.setPreferences(new SettingsDAO());
+                    getList().add(profileDAO);
+                } else {
+                    getList().add(asDummy());
+                }
             }
         }
     }

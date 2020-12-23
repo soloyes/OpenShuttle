@@ -1,6 +1,7 @@
 package com.buran.game.ui.groups;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -14,9 +15,11 @@ import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.conf.VConstants;
 import com.buran.game.effects.BoomBox;
+import com.buran.game.effects.Oscillator;
 import com.buran.game.effects.Vibrator;
 import com.buran.game.screens.ScreenManager;
 import com.buran.game.ui.UIButton;
+import com.buran.game.ui.groups.mvc.global.Global;
 import com.buran.game.ui.groups.mvc.profiles.ProfilesController;
 import com.buran.game.utils.Assets;
 
@@ -31,10 +34,15 @@ public class MenuBar extends Group {
     private Button buttonResults;
     private Button buttonInfo;
     private BoomBox boomBox;
+    private float a;
+    private Oscillator oscillatorA;
+    private Global global;
 
     public MenuBar() {
         this.boomBox = new BoomBox();
+        this.global = new Global();
         this.setName(GroupType.MENU_BAR.name());
+        this.oscillatorA = new Oscillator();
         this.buttonPlay = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PLAY_BUTTON_MENU)));
         buttonPlay.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
         this.buttonExit = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.EXIT_BUTTON_MENU)));
@@ -49,16 +57,18 @@ public class MenuBar extends Group {
         this.buttonExit.setOrigin(Align.center);
         this.buttonSettings.setOrigin(Align.center);
         this.buttonResults.setOrigin(Align.center);
-        this.buttonPlay.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
+        this.buttonPlay.setSize(2 * PaintConstants.MENU_BUTTON_WIDTH, 2 * PaintConstants.MENU_BUTTON_HEIGHT);
         this.buttonExit.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
         this.buttonSettings.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
         this.buttonResults.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
         this.buttonInfo.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
 
 
-        buttonPlay.setPosition(24, 24);
+        buttonInfo.setPosition(24, 24);
         buttonResults.setPosition(Rules.WORLD_WIDTH / 4 - 12, 24);
-        buttonInfo.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.MENU_BUTTON_WIDTH / 2, 24);
+
+        buttonPlay.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.MENU_BUTTON_WIDTH, 24);
+
         buttonSettings.setPosition(3 * Rules.WORLD_WIDTH / 4 - PaintConstants.MENU_BUTTON_WIDTH + 12, 24);
         buttonExit.setPosition(Rules.WORLD_WIDTH - PaintConstants.MENU_BUTTON_WIDTH - 24, 24);
 
@@ -262,6 +272,17 @@ public class MenuBar extends Group {
     }
 
     @Override
+    public void draw(Batch batch, float parentAlpha) {
+        if (!global.isGlobalStart()) {
+            buttonPlay.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.MENU_BUTTON_WIDTH, Rules.WORLD_HEIGHT / 2 - PaintConstants.MENU_BUTTON_WIDTH);
+            buttonPlay.getColor().a = a;
+            buttonPlay.draw(batch, parentAlpha);
+        } else {
+            super.draw(batch, parentAlpha);
+        }
+    }
+
+    @Override
     public void act(float delta) {
         super.act(delta);
         if (ProfilesController.isEmpty()) {
@@ -274,6 +295,10 @@ public class MenuBar extends Group {
             buttonPlay.setDisabled(false);
             buttonSettings.setDisabled(false);
             buttonResults.setDisabled(false);
+        }
+
+        if (!Gdx.input.isTouched()) {
+            a = oscillatorA.oscillate(a, 1.0f, 0.3f, 1.0f, delta);
         }
     }
 }

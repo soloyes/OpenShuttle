@@ -204,6 +204,7 @@ public enum Sticker {
                 for (int i = 0; i < list.size(); i++) {
                     list.get(i).setShielded(true);
                 }
+                Standing.getInstance().setRamPower(Standing.getInstance().getRamMaxPower());
                 GameInfoSystem.setup(
                         position.x, position.y,
                         "[GREEN]" + GameInfoSystem.Preset.SHIELD + "[] " + (int) Rules.CONSUMABLE_SHIELD_TIME,

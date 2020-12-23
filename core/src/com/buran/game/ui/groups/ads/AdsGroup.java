@@ -20,6 +20,7 @@ import com.buran.game.effects.Oscillator;
 import com.buran.game.effects.Vibrator;
 import com.buran.game.screens.ScreenManager;
 import com.buran.game.ui.UIButton;
+import com.buran.game.ui.groups.mvc.profiles.Profiles;
 import com.buran.game.utils.Assets;
 import com.buran.game.utils.RadialSprite;
 
@@ -46,7 +47,7 @@ public class AdsGroup extends Group {
 
     public AdsGroup() {
         this.timerBox = new RadialSprite(Assets.getInstance().getAtlas().findRegion(PaintConstants.TIMER_BOX));
-        this.counter = Rules.ADS_TIME;
+        this.counter = Rules.ADS_TIME + Rules.ADS_TIME_DELTA * Profiles.getSettings().getRunTimes();
         this.boomBox = new BoomBox();
         this.shieldScaleOscillator = new Oscillator();
         this.shieldScale = 1.0f;
@@ -123,7 +124,7 @@ public class AdsGroup extends Group {
             buttonContinue.setVisible(false);
         }
 
-        angle = -360.0f * counter / Rules.ADS_TIME;
+        angle = -360.0f * counter / (Rules.ADS_TIME + Rules.ADS_TIME_DELTA * Profiles.getSettings().getRunTimes());
     }
 
     @Override

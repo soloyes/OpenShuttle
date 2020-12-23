@@ -65,6 +65,7 @@ import com.buran.game.ui.groups.PauseGroup;
 import com.buran.game.ui.groups.configs.ConfigImageButton;
 import com.buran.game.ui.groups.configs.LeftGroup;
 import com.buran.game.ui.groups.configs.RightGroup;
+import com.buran.game.ui.groups.mvc.global.Global;
 import com.buran.game.ui.groups.mvc.profiles.Profiles;
 import com.buran.game.ui.groups.mvc.results.DetailedResultGroup;
 import com.buran.game.ui.groups.selector.SelectorGroup;
@@ -124,6 +125,7 @@ public class GameScreen extends BaseScreen {
     private UITopPanel uiTopPanel;
     private Standing standing;
     private Profiles profiles;
+    private Global global;
 
     private MineralAsteroidEmitter mineralAsteroidEmitter;
     private MetalAsteroidEmitter metalAsteroidEmitter;
@@ -237,6 +239,9 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void createGUI() {
+        global = new Global();
+        global.init();
+        global.setGlobalStart(true);
         // Workaround (Android restarts via app manager)
         RightGroup.doStart();
         LeftGroup.doStart();
@@ -873,6 +878,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void dispose() {
         super.dispose();
+        global.dispose();
         ShaderManager.PAUSE.dispose();
         ShaderManager.BLACKHOLE.dispose();
         if (!Rules.GAME_OVER) {

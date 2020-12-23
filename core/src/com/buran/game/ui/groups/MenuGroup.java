@@ -3,6 +3,7 @@ package com.buran.game.ui.groups;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
@@ -24,10 +25,12 @@ import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.conf.VConstants;
 import com.buran.game.effects.BoomBox;
+import com.buran.game.effects.Oscillator;
 import com.buran.game.effects.Vibrator;
 import com.buran.game.screens.ScreenManager;
 import com.buran.game.ui.UIButton;
 import com.buran.game.ui.groups.configs.ConfigGroup;
+import com.buran.game.ui.groups.mvc.global.Global;
 import com.buran.game.ui.groups.mvc.profiles.ProfileDAO;
 import com.buran.game.ui.groups.mvc.profiles.Profiles;
 import com.buran.game.ui.groups.mvc.profiles.ProfilesController;
@@ -58,9 +61,15 @@ public class MenuGroup extends Group {
     private Label noticeLabel;
     private BoomBox boomBox;
     private Group noticeGroup;
+    private float a1;
+    private Oscillator oscillatorA1;
+    private Global global;
 
     public MenuGroup(ConfigGroup configGroup, ResultGroup resultGroup) {
         this(GroupType.MENU.name(), configGroup, resultGroup);
+        this.global = new Global();
+        global.init();
+        this.oscillatorA1 = new Oscillator();
         username.setAlignment(Align.center);
         username.setMaxLength(8);
         username.setWidth(540);
@@ -202,8 +211,23 @@ public class MenuGroup extends Group {
     }
 
     @Override
+    public void draw(Batch batch, float parentAlpha) {
+        if (!global.isGlobalStart()) {
+            this.setVisible(false);
+        } else {
+            buttonProfiles.getColor().a = a1;
+            super.draw(batch, parentAlpha);
+        }
+    }
+
+    @Override
     public void act(float delta) {
         super.act(delta);
+        if (profilesController.getActive() != null) {
+            a1 = oscillatorA1.oscillate(a1, 1.0f, 0.3f, 1.0f, delta);
+        } else {
+            a1 = 1.0f;
+        }
         tmp1V2.set(Gdx.input.getX(), Gdx.input.getY());
         tmp2V2 = ScreenManager.getInstance().getViewport().unproject(tmp1V2);
         if (Gdx.input.justTouched() && !rectangle.contains(tmp2V2.x, tmp2V2.y)) {

@@ -11,12 +11,14 @@ public final class Rules {
     public static final boolean DEBUG = false;
 
     public static final boolean ADS_ENABLED = true;
-    public static final float ADS_DELAY = 60.0f;
-    //14
-    public static final int ADS_RUNTIME_GAME = 14;
+    public static final float ADS_DELAY = 30.0f;
+    //4
+    public static final int ADS_RUNTIME_GAME = 4;
     public static final int ADS_RUNTIME_DEATH_MODE = ADS_RUNTIME_GAME / 2;
     //6
     public static final int ADS_TIME = 6;
+    //0.5f
+    public static final float ADS_TIME_DELTA = 0.5f;
 
     public static final String RATE_US =
             ADS_ENABLED ?
@@ -29,6 +31,8 @@ public final class Rules {
                     :
                     "https://play.google.com/store/apps/details?id=com.buran.game.pack";
     public static final String PAY_US = "https://play.google.com/store/apps/details?id=com.buran.game.pack";
+
+    public static String DEFAULT_NAME = "Player";
 
     private Rules() {
     }

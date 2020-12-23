@@ -46,17 +46,17 @@ public class CommitGroup extends Group {
         this.boomBox = new BoomBox();
         this.font72 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT72, BitmapFont.class);
         Label.LabelStyle noticeStyle72 = new Label.LabelStyle(
-                font72,
-                new Color(1.0f, 1.0f, 1.0f, 1.0f)
+                Assets.getInstance().getAssetManager().get(PaintConstants.FONT72, BitmapFont.class),
+                new Color(0.8f, 0.43f, 0.33f, 1f)
         );
         sureLabel = new Label("Are u sure?", noticeStyle72);
-        sureLabel.setPosition(Rules.WORLD_WIDTH / 2 - sureLabel.getWidth() / 2, Rules.WORLD_HEIGHT / 2 - sureLabel.getHeight() / 2);
+        sureLabel.setPosition(Rules.WORLD_WIDTH / 2 - sureLabel.getWidth() / 2, Rules.WORLD_HEIGHT / 3 + 5);
         this.textureRegion = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_INFO_CELL));
 
         this.buttonRestart = new UIButton(new TextureRegionDrawable(new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_MENU_RESTART))));
         buttonRestart.setPosition(
                 Rules.WORLD_WIDTH / 2 - PaintConstants.UI_MENU_CELL_WIDTH / 3,
-                Rules.WORLD_HEIGHT / 2 - PaintConstants.UI_CELL_HEIGHT / 2 - PaintConstants.MENU_BUTTON_HEIGHT - 24
+                Rules.WORLD_HEIGHT / 2 - PaintConstants.UI_CELL_HEIGHT / 2 - PaintConstants.MENU_BUTTON_HEIGHT - 48
         );
         buttonRestart.addListener(new ClickListener() {
             @Override
@@ -85,7 +85,7 @@ public class CommitGroup extends Group {
         this.buttonMenu = new UIButton(new TextureRegionDrawable(new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_MENU_HOME))));
         buttonMenu.setPosition(
                 Rules.WORLD_WIDTH / 2 - PaintConstants.UI_MENU_CELL_WIDTH / 3,
-                Rules.WORLD_HEIGHT / 2 - PaintConstants.UI_CELL_HEIGHT / 2 - PaintConstants.MENU_BUTTON_HEIGHT - 24
+                Rules.WORLD_HEIGHT / 2 - PaintConstants.UI_CELL_HEIGHT / 2 - PaintConstants.MENU_BUTTON_HEIGHT - 48
         );
         buttonMenu.addListener(new ClickListener() {
             @Override
@@ -112,7 +112,7 @@ public class CommitGroup extends Group {
         this.buttonBack = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.BACK_BUTTON)));
         buttonBack.setPosition(
                 Rules.WORLD_WIDTH / 2 + PaintConstants.UI_MENU_CELL_WIDTH / 3 - PaintConstants.MENU_BUTTON_WIDTH,
-                Rules.WORLD_HEIGHT / 2 - PaintConstants.UI_CELL_HEIGHT / 2 - PaintConstants.MENU_BUTTON_HEIGHT - 24
+                Rules.WORLD_HEIGHT / 2 - PaintConstants.UI_CELL_HEIGHT / 2 - PaintConstants.MENU_BUTTON_HEIGHT - 48
         );
         buttonBack.addListener(new ClickListener() {
             @Override
@@ -139,7 +139,7 @@ public class CommitGroup extends Group {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(textureRegion, Rules.WORLD_WIDTH / 2 - PaintConstants.UI_MENU_CELL_WIDTH / 2, Rules.WORLD_HEIGHT / 2 - PaintConstants.UI_CELL_HEIGHT / 2);
+        batch.draw(textureRegion, Rules.WORLD_WIDTH / 2 - PaintConstants.UI_MENU_CELL_WIDTH / 2, Rules.WORLD_HEIGHT / 3);
         sureLabel.draw(batch, parentAlpha);
         switch (dstScreen) {
             case MENU:

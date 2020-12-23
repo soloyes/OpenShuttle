@@ -402,7 +402,7 @@ public final class PaintConstants {
     public static final String UI_PROFILE_SAVED = "Profile is saved";
     public static final String UI_PROFILE_EDIT = "Rename profile";
     public static final String UI_EMPTY_USERNAME = "Empty username";
-    public static final String UI_CAN_SAVE = "Press OK and save";
+    public static final String UI_CAN_SAVE = "Press OK/Enter and save";
     public static final String UI_DELETION_PROCESS = "Deleting...Click to cancel";
     public static final String UI_PROFILE_DELETED = "Profile is deleted";
     public static final String UI_PROFILE_DEL = "Hold for delete profile";
