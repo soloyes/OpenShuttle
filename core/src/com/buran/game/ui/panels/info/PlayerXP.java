@@ -47,7 +47,7 @@ public class PlayerXP {
         this.font60_C = Assets.getInstance().getAssetManager().get(PaintConstants.FONT60_C, BitmapFont.class);
         this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
         this.level = new GlyphLayout();
-        this.levelLabel = new GlyphLayout(font44, "level");
+        this.levelLabel = new GlyphLayout(font44, "degree");
         this.scoreBuilder = new StringBuilder();
         this.levelBuilder = new StringBuilder();
         this.score = new GlyphLayout();

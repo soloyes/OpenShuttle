@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.buran.game.conf.Rules;
 import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.ui.help.HandPointer;
 import com.buran.game.utils.pool.ObjectPool;
 
 import lombok.Getter;
@@ -59,7 +60,9 @@ public abstract class AbstractConsumableEmitter extends ObjectPool<AbstractConsu
     }
 
     public void update(float dt) {
-        time += dt;
+        if (HandPointer.done) {
+            time += dt;
+        }
         if (time > respawnTime && !Rules.GAME_OVER) {
             time = 0.0f;
             if (activeList.size() < consumablesMaxCount)

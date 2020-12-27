@@ -7,6 +7,7 @@ import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.PlayerInteractionLevels;
 import com.buran.game.conf.Rules;
 import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.ui.help.HandPointer;
 import com.buran.game.utils.pool.ObjectPool;
 
 import lombok.Getter;
@@ -62,7 +63,9 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     }
 
     public void update(float dt) {
-        time += dt;
+        if (HandPointer.done) {
+            time += dt;
+        }
         if (time > respawnTime) {
             time = 0.0f;
             if (activeList.size() < asteroidsMaxCount) {

@@ -87,6 +87,13 @@ takefield384
   orig: 384, 384
   offset: 0, 0
   index: -1
+hand
+  rotate: false
+  xy: 3750, 10
+  size: 295, 364
+  orig: 295, 364
+  offset: 0, 0
+  index: -1
 menubackgroundsitastronaut
   rotate: false
   xy: 3168, 1693
@@ -117,287 +124,294 @@ buranblur
   index: -1
 trash
   rotate: false
-  xy: 3750, 10
+  xy: 3750, 384
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 storagegold
   rotate: false
-  xy: 3750, 276
+  xy: 3750, 650
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 storage
   rotate: false
-  xy: 3750, 542
+  xy: 2856, 1765
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 splash
   rotate: false
-  xy: 2856, 1765
+  xy: 3550, 1693
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shieldstorage
   rotate: false
-  xy: 3550, 1693
+  xy: 3816, 1693
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shieldfuel
   rotate: false
-  xy: 3816, 1693
+  xy: 1044, 2876
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shieldcrate
   rotate: false
-  xy: 1044, 2876
+  xy: 1044, 3142
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shabbygold
   rotate: false
-  xy: 1044, 3142
+  xy: 1044, 3408
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shabby
   rotate: false
-  xy: 1044, 3408
+  xy: 1044, 3674
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 scan
   rotate: false
-  xy: 1044, 3674
+  xy: 1461, 2344
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 rockets
   rotate: false
-  xy: 1461, 2344
+  xy: 1461, 2610
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 repair
   rotate: false
-  xy: 1461, 2610
+  xy: 1461, 2876
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 ramshield
   rotate: false
-  xy: 1461, 2876
+  xy: 1461, 3142
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 radar
   rotate: false
-  xy: 1461, 3142
+  xy: 1461, 3408
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 patterngold
   rotate: false
-  xy: 1461, 3408
+  xy: 1461, 3674
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 pattern
   rotate: false
-  xy: 1461, 3674
+  xy: 1727, 2344
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outmark
   rotate: false
-  xy: 1727, 2344
+  xy: 1727, 2610
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outarrow
   rotate: false
-  xy: 1727, 2610
+  xy: 1727, 2876
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 lifeshield
   rotate: false
-  xy: 1727, 2876
+  xy: 1727, 3142
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 laser
   rotate: false
-  xy: 1727, 3142
+  xy: 1727, 3408
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 glow
   rotate: false
-  xy: 1727, 3408
+  xy: 1727, 3674
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 fuelv2
   rotate: false
-  xy: 1727, 3674
+  xy: 1993, 2344
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 fuelv1
   rotate: false
-  xy: 1993, 2344
+  xy: 1993, 2610
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 fuelboxgold
   rotate: false
-  xy: 1993, 2610
+  xy: 1993, 2876
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 fuelbox
   rotate: false
-  xy: 1993, 2876
+  xy: 1993, 3142
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 fuelback
   rotate: false
-  xy: 1993, 3142
+  xy: 1993, 3408
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 freeze
   rotate: false
-  xy: 1993, 3408
+  xy: 1993, 3674
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 degrade
   rotate: false
-  xy: 1993, 3674
+  xy: 2259, 2344
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 crategold
   rotate: false
-  xy: 2259, 2344
+  xy: 2259, 2610
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 crate
   rotate: false
-  xy: 2259, 2610
+  xy: 2259, 2876
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 buran
   rotate: false
-  xy: 2259, 2876
+  xy: 2259, 3142
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 boxshield
   rotate: false
-  xy: 2259, 3142
+  xy: 2259, 3408
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 boxscan
   rotate: false
-  xy: 2259, 3408
+  xy: 2259, 3674
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 boost
   rotate: false
-  xy: 2259, 3674
+  xy: 2525, 2344
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 blackholespiral
   rotate: false
-  xy: 2525, 2344
+  xy: 2791, 2344
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 blackhole
   rotate: false
-  xy: 2791, 2344
+  xy: 3057, 2344
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 atrocketpoint
   rotate: false
-  xy: 3057, 2344
+  xy: 3323, 2344
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 joystick
   rotate: false
-  xy: 3323, 2344
+  xy: 3589, 2344
   size: 400, 250
   orig: 400, 250
   offset: 0, 0
   index: -1
+handpointer
+  rotate: false
+  xy: 2525, 2610
+  size: 237, 237
+  orig: 237, 237
+  offset: 0, 0
+  index: -1
 menubackgroundburan
   rotate: false
-  xy: 3750, 808
+  xy: 2772, 2610
   size: 252, 219
   orig: 252, 219
   offset: 0, 0
   index: -1
 menubackgroundasteroid1
   rotate: false
-  xy: 3733, 2344
+  xy: 2525, 2857
   size: 233, 213
   orig: 233, 213
   offset: 0, 0
   index: -1
 configcelltype3
   rotate: false
-  xy: 2525, 2610
+  xy: 3034, 2610
   size: 628, 200
   orig: 628, 200
   offset: 0, 0
@@ -432,7 +446,7 @@ timericon
   index: -1
 selectorscale
   rotate: false
-  xy: 3163, 2610
+  xy: 2525, 3080
   size: 154, 154
   orig: 154, 154
   offset: 0, 0
@@ -495,56 +509,56 @@ cellcenter
   index: -1
 scientisticon
   rotate: false
-  xy: 1310, 3544
+  xy: 3750, 916
   size: 118, 118
   orig: 118, 118
   offset: 0, 0
   index: -1
 militaryicon
   rotate: false
-  xy: 1310, 3674
+  xy: 3878, 916
   size: 118, 118
   orig: 118, 118
   offset: 0, 0
   index: -1
 medicicon
   rotate: false
-  xy: 1310, 3802
+  xy: 1310, 3544
   size: 118, 118
   orig: 118, 118
   offset: 0, 0
   index: -1
 mechanicicon
   rotate: false
-  xy: 1461, 3940
+  xy: 1310, 3674
   size: 118, 118
   orig: 118, 118
   offset: 0, 0
   index: -1
 glowcell
   rotate: false
-  xy: 1589, 3940
+  xy: 1310, 3802
   size: 118, 118
   orig: 118, 118
   offset: 0, 0
   index: -1
 emptybox
   rotate: false
-  xy: 1727, 3940
+  xy: 1461, 3940
   size: 118, 118
   orig: 118, 118
   offset: 0, 0
   index: -1
 emptyastronaut
   rotate: false
-  xy: 1855, 3940
+  xy: 1589, 3940
   size: 118, 118
   orig: 118, 118
   offset: 0, 0
   index: -1
 astronauticon
   rotate: false
-  xy: 1993, 3940
+  xy: 1727, 3940
   size: 118, 118
   orig: 118, 118
   offset: 0, 0
@@ -558,119 +572,119 @@ settingsbuttonmenu
   index: -1
 selectorright
   rotate: false
-  xy: 2121, 3940
+  xy: 1855, 3940
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 selectorout
   rotate: false
-  xy: 2259, 3940
+  xy: 1993, 3940
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 selectorleft
   rotate: false
-  xy: 2381, 3940
+  xy: 2115, 3940
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 resultsbuttonmenu
   rotate: false
-  xy: 3327, 2610
+  xy: 2259, 3940
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 profilesbuttonmenu
   rotate: false
-  xy: 3449, 2610
+  xy: 2381, 3940
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 playbuttonmenu
   rotate: false
-  xy: 3571, 2610
+  xy: 2525, 3244
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 menupauserestart
   rotate: false
-  xy: 3693, 2610
+  xy: 2647, 3244
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 menupausehome
   rotate: false
-  xy: 3815, 2610
+  xy: 2525, 3366
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 lock
   rotate: false
-  xy: 3937, 2610
+  xy: 2647, 3366
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 infobuttonmenu
   rotate: false
-  xy: 2525, 2820
+  xy: 2525, 3488
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 exitbuttonmenu
   rotate: false
-  xy: 2525, 2942
+  xy: 2647, 3488
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 continuebutton
   rotate: false
-  xy: 2525, 3064
+  xy: 2525, 3610
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 circleglow
   rotate: false
-  xy: 2525, 3186
+  xy: 2647, 3610
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 backbutton
   rotate: false
-  xy: 2525, 3308
+  xy: 2525, 3732
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
 profilesborder
   rotate: false
-  xy: 2647, 2820
+  xy: 2772, 2839
   size: 510, 108
   orig: 510, 108
   offset: 0, 0
   index: -1
 switchon
   rotate: false
-  xy: 4016, 10
+  xy: 4016, 384
   size: 37, 103
   orig: 37, 103
   offset: 0, 0
   index: -1
 switchoff
   rotate: false
-  xy: 4016, 123
+  xy: 4016, 497
   size: 37, 103
   orig: 37, 103
   offset: 0, 0
@@ -691,70 +705,70 @@ menubackgroundasteroid2
   index: -1
 resultscellempty
   rotate: false
-  xy: 2647, 2938
+  xy: 2772, 2957
   size: 956, 82
   orig: 956, 82
   offset: 0, 0
   index: -1
 resultscelldetailed
   rotate: false
-  xy: 2647, 3030
+  xy: 2772, 3049
   size: 956, 82
   orig: 956, 82
   offset: 0, 0
   index: -1
 resultscellchild
   rotate: false
-  xy: 2647, 3122
+  xy: 2772, 3141
   size: 956, 82
   orig: 956, 82
   offset: 0, 0
   index: -1
 resultscell
   rotate: false
-  xy: 2647, 3214
+  xy: 2772, 3233
   size: 956, 82
   orig: 956, 82
   offset: 0, 0
   index: -1
 configcelltype2
   rotate: false
-  xy: 3167, 2820
+  xy: 3292, 2839
   size: 628, 82
   orig: 628, 82
   offset: 0, 0
   index: -1
 configcelltype1
   rotate: false
-  xy: 2647, 3306
+  xy: 2772, 3325
   size: 628, 82
   orig: 628, 82
   offset: 0, 0
   index: -1
 infocell
   rotate: false
-  xy: 2647, 3398
+  xy: 2772, 3417
   size: 510, 82
   orig: 510, 82
   offset: 0, 0
   index: -1
 menucellhead
   rotate: false
-  xy: 2647, 3490
+  xy: 2772, 3509
   size: 498, 82
   orig: 498, 82
   offset: 0, 0
   index: -1
 menucellactive
   rotate: false
-  xy: 2647, 3582
+  xy: 2772, 3601
   size: 498, 82
   orig: 498, 82
   offset: 0, 0
   index: -1
 menucell
   rotate: false
-  xy: 2647, 3674
+  xy: 2772, 3693
   size: 498, 82
   orig: 498, 82
   offset: 0, 0
@@ -775,28 +789,28 @@ resultscelldetailedequal
   index: -1
 resultscelldetaileddown
   rotate: false
-  xy: 3976, 2344
+  xy: 3999, 2344
   size: 82, 82
   orig: 82, 82
   offset: 0, 0
   index: -1
 menuplus
   rotate: false
-  xy: 3976, 2436
+  xy: 3999, 2436
   size: 82, 82
   orig: 82, 82
   offset: 0, 0
   index: -1
 menuminus
   rotate: false
-  xy: 2525, 3430
+  xy: 2647, 3732
   size: 82, 82
   orig: 82, 82
   offset: 0, 0
   index: -1
 icoconfigload
   rotate: false
-  xy: 2525, 3522
+  xy: 2525, 3854
   size: 82, 82
   orig: 82, 82
   offset: 0, 0
@@ -894,105 +908,105 @@ icoconfigoff
   index: -1
 icoconfigmusic
   rotate: false
-  xy: 4016, 276
+  xy: 4016, 650
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfiglock
   rotate: false
-  xy: 4016, 322
+  xy: 4016, 696
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfiglevel4
   rotate: false
-  xy: 4016, 368
+  xy: 4016, 742
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfiglevel3
   rotate: false
-  xy: 4016, 414
+  xy: 4016, 788
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfiglevel2
   rotate: false
-  xy: 4016, 460
+  xy: 4016, 834
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfiglevel1
   rotate: false
-  xy: 4016, 542
+  xy: 4006, 916
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigjoystickpreseton
   rotate: false
-  xy: 4016, 588
+  xy: 4006, 962
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigjoystickpresetoff
   rotate: false
-  xy: 4016, 634
+  xy: 972, 3890
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigjoystick
   rotate: false
-  xy: 4016, 680
+  xy: 972, 3936
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigeffects
   rotate: false
-  xy: 4016, 726
+  xy: 972, 3982
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigchild
   rotate: false
-  xy: 4012, 808
+  xy: 972, 4028
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 timerbox
   rotate: false
-  xy: 4012, 854
+  xy: 4052, 916
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 timerbackground
   rotate: false
-  xy: 4054, 854
+  xy: 4052, 962
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 scrollback.9
   rotate: false
-  xy: 4012, 896
+  xy: 2078, 2031
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 scroll.9
   rotate: false
-  xy: 4054, 896
+  xy: 2120, 2031
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

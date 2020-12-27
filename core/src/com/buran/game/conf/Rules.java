@@ -8,7 +8,7 @@ import com.buran.game.player.Standing;
  */
 
 public final class Rules {
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     public static final boolean ADS_ENABLED = false;
     public static final float ADS_DELAY = 30.0f;
@@ -53,13 +53,13 @@ public final class Rules {
     public static String DATE_FORMAT = "dd/MM/yyyy";
     //CONSUMABLE
     //2
-    public static final int CONSUMABLE_ASTRONAUT_AT_START = 2;
+    public static final int CONSUMABLE_ASTRONAUT_AT_START = 0;
     //1.5f
     public static final float CONSUMABLE_ASTRONAUT_RESPAWN_TIME = 1.5f;
     //3
     public static final int CONSUMABLE_ASTRONAUT_MAX_COUNT = 3;
     //2
-    public static final int CONSUMABLE_CRATE_AT_START = 2;
+    public static final int CONSUMABLE_CRATE_AT_START = 0;
     //5.0f
     public static final float CONSUMABLE_CRATE_RESPAWN_TIME = 5.0f;
     //4
@@ -139,7 +139,7 @@ public final class Rules {
     public static final float ANOMALIES_MAGNETIC_HUNGRY_TIME = 10.0f;
     //
     //2
-    public static final int ANOMALIES_CORROSIVE_AT_START = 2;
+    public static final int ANOMALIES_CORROSIVE_AT_START = 0;
     //2.0f
     public static final float ANOMALIES_CORROSIVE_RESPAWN_TIME = 2.0f;
     //40

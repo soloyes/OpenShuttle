@@ -70,6 +70,7 @@ import com.buran.game.ui.groups.mvc.profiles.Profiles;
 import com.buran.game.ui.groups.mvc.results.DetailedResultGroup;
 import com.buran.game.ui.groups.selector.SelectorGroup;
 import com.buran.game.ui.groups.switches.SwitchGroup;
+import com.buran.game.ui.help.Tutorial;
 import com.buran.game.ui.panels.UILeftPanel;
 import com.buran.game.ui.panels.UIRightPanel;
 import com.buran.game.ui.panels.UITopPanel;
@@ -126,6 +127,7 @@ public class GameScreen extends BaseScreen {
     private Standing standing;
     private Profiles profiles;
     private Global global;
+    private Tutorial tutorial;
 
     private MineralAsteroidEmitter mineralAsteroidEmitter;
     private MetalAsteroidEmitter metalAsteroidEmitter;
@@ -163,6 +165,7 @@ public class GameScreen extends BaseScreen {
         standing = Standing.getInstance();
         fadeInAlpha = 0.0f;
         gameOverDeactivate = false;
+        tutorial = new Tutorial();
 
         particleEmitter = new ParticleEmitter();
         mineralAsteroidEmitter = new MineralAsteroidEmitter(particleEmitter);
@@ -252,8 +255,10 @@ public class GameScreen extends BaseScreen {
         //
         detailedResultGroup = new DetailedResultGroup();
         pauseGroup = new PauseGroup();
+        tutorial = new Tutorial();
         stage.addActor(detailedResultGroup);
         stage.addActor(pauseGroup);
+        stage.addActor(tutorial);
         stage.addActor(SelectorGroup.getInstance());
         stage.addActor(SwitchGroup.getInstance());
     }

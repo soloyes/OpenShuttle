@@ -254,6 +254,8 @@ public final class PaintConstants {
     public static final String UI_MENU_BACKGROUND_ASTEROID2 = "menubackgroundasteroid2";
 
     public static final String UI_RULES_BACKGROUND = "rulesback";
+    public static final String UI_HELP_HAND = "hand";
+    public static final String UI_HELP_HAND_POINTER = "handpointer";
 
     public static int UI_MENU_BACKGROUND_STORAGE_Y = 400;
     public static int UI_MENU_BACKGROUND_ASTRONAUT_X = 70;
@@ -288,6 +290,11 @@ public final class PaintConstants {
     public static int UI_MENU_BACKGROUND_ASTEROID2_HEIGHT = 95;
     public static int UI_MENU_BACKGROUND_PLANET_WIDTH = 1080;
     public static int UI_MENU_BACKGROUND_PLANET_HEIGHT = 711;
+
+    public static int UI_HELP_HAND_WIDTH = 295;
+    public static int UI_HELP_HAND_HEIGHT = 364;
+    public static int UI_HELP_HAND_POINTER_WIDTH = 237;
+    public static int UI_HELP_HAND_POINTER_HEIGHT = 237;
 
     public static final int UI_ICO_CONFIG_WIDTH = 36;
     public static final int UI_ICO_CONFIG_HEIGHT = 36;
