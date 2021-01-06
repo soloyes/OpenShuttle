@@ -626,58 +626,65 @@ playbuttonmenu
   orig: 112, 112
   offset: 0, 0
   index: -1
-menupauserestart
+okbuttonmenu
   rotate: false
   xy: 2647, 3366
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-menupausehome
+menupauserestart
   rotate: false
   xy: 2525, 3488
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-lock
+menupausehome
   rotate: false
   xy: 2647, 3488
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-infobuttonmenu
+lock
   rotate: false
   xy: 2525, 3610
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-exitbuttonmenu
+infobuttonmenu
   rotate: false
   xy: 2647, 3610
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-continuebutton
+exitbuttonmenu
   rotate: false
   xy: 2525, 3732
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-circleglow
+continuebutton
   rotate: false
   xy: 2647, 3732
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-backbutton
+circleglow
   rotate: false
   xy: 2525, 3854
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+backbutton
+  rotate: false
+  xy: 2647, 3854
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
@@ -824,7 +831,7 @@ menuminus
   index: -1
 icoconfigload
   rotate: false
-  xy: 2647, 3854
+  xy: 2647, 3976
   size: 82, 82
   orig: 82, 82
   offset: 0, 0

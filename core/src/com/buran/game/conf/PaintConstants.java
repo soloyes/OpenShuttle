@@ -322,6 +322,7 @@ public final class PaintConstants {
     public static final int PROFILES_BUTTON_WIDTH = 118;
     public static final int PROFILES_BUTTON_HEIGHT = 118;
     public static final String PLAY_BUTTON_MENU = "playbuttonmenu";
+    public static final String OK_BUTTON_MENU = "okbuttonmenu";
     public static final String RESULTS_BUTTON_MENU = "resultsbuttonmenu";
     public static final String INFO_BUTTON_MENU = "infobuttonmenu";
     public static final String SETTINGS_BUTTON_MENU = "settingsbuttonmenu";

@@ -64,6 +64,7 @@ public class MenuGroup extends Group {
     private float a1;
     private Oscillator oscillatorA1;
     private Global global;
+    private static Button buttonOK;
 
     public MenuGroup(ConfigGroup configGroup, ResultGroup resultGroup) {
         this(GroupType.MENU.name(), configGroup, resultGroup);
@@ -118,6 +119,7 @@ public class MenuGroup extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 setNotice(PaintConstants.UI_CAN_SAVE);
+                buttonOK.setVisible(true);
                 boomBox.playSound(MSConstants.UI_INPUT);
             }
         });
@@ -151,6 +153,7 @@ public class MenuGroup extends Group {
                         }
                         Vibrator.vibrateUI(VConstants.UI_CHANGED);
                         Gdx.input.setOnscreenKeyboardVisible(false);
+                        buttonOK.setVisible(false);
                     } else {
                         boomBox.playSound(MSConstants.UI_EMPTY_NAME);
                         Vibrator.vibrateUI(VConstants.UI_EMPTY_NAME);
@@ -160,12 +163,56 @@ public class MenuGroup extends Group {
             }
         });
 
+        buttonOK.setPosition(username.getX() + username.getWidth() + 24, username.getY());
+        buttonOK.setVisible(false);
+        buttonOK.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (pointer == 0) {
+                    boomBox.playSound(MSConstants.UI_MENU);
+                    if (!validUserName) {
+                        Vibrator.vibrateUI(VConstants.UI_CLICK);
+                    }
+                }
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                if (validUserName) {
+                    getStage().unfocusAll();
+                    ProfileDAO profile = profilesController.getActive();
+                    if (profile == null) {
+                        profile = profilesView.addProfile(username.getText());
+                        profilesController.select(profile);
+                        setNotice(PaintConstants.UI_YOUR_USERNAME);
+                        boomBox.playSound(MSConstants.UI_PROFILE_SAVED);
+                    } else {
+                        setNotice(PaintConstants.UI_PROFILE_SAVED);
+                        boomBox.playSound(MSConstants.UI_PROFILE_CHANGED);
+                        profile.setUsername(username.getText());
+                        profilesController.flush();
+                        profilesController.update();
+                        profilesView.getResultGroup().init();
+                    }
+                    Vibrator.vibrateUI(VConstants.UI_CHANGED);
+                    Gdx.input.setOnscreenKeyboardVisible(false);
+                    buttonOK.setVisible(false);
+                } else {
+                    boomBox.playSound(MSConstants.UI_EMPTY_NAME);
+                    Vibrator.vibrateUI(VConstants.UI_EMPTY_NAME);
+                }
+            }
+        });
+
         noticeGroup = new Group();
         noticeGroup.addActor(noticeLabel);
         noticeLabel.setFillParent(true);
         this.addActor(buttonProfiles);
         this.addActor(noticeGroup);
         this.addActor(username);
+        this.addActor(buttonOK);
         this.addActor(profilesView);
     }
 
@@ -190,6 +237,7 @@ public class MenuGroup extends Group {
         tfs.cursor.setMinWidth(10);
         tfs.background = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PROFILES_BORDER));
         username = new TextField("", skin, "default");
+        buttonOK = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.OK_BUTTON_MENU)));
         this.glyphLayout = new GlyphLayout();
         //MVC
         Profiles profiles = new Profiles();
@@ -284,5 +332,6 @@ public class MenuGroup extends Group {
 
     public static void setUsername(String username) {
         MenuGroup.username.setText(username);
+        MenuGroup.buttonOK.setVisible(false);
     }
 }

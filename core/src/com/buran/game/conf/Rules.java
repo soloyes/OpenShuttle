@@ -425,9 +425,9 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(18);
                 Standing.getInstance().setLives(2);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setStartLevel(19);
-                Standing.getInstance().setScore(19000000);
-                Standing.getInstance().setScoreView(19000000);
+                Standing.getInstance().setStartLevel(0);
+                Standing.getInstance().setScore(0);
+                Standing.getInstance().setScoreView(0);
             }
         };
 
