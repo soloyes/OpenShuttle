@@ -259,8 +259,8 @@ public class GameScreen extends BaseScreen {
         stage.addActor(detailedResultGroup);
         stage.addActor(pauseGroup);
         stage.addActor(tutorial);
-        stage.addActor(SelectorGroup.getInstance());
         stage.addActor(SwitchGroup.getInstance());
+        stage.addActor(SelectorGroup.getInstance());
     }
 
     @Override

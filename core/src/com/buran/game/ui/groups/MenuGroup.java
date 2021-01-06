@@ -170,9 +170,6 @@ public class MenuGroup extends Group {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
                     boomBox.playSound(MSConstants.UI_MENU);
-                    if (!validUserName) {
-                        Vibrator.vibrateUI(VConstants.UI_CLICK);
-                    }
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
