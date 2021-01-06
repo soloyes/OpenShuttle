@@ -39,17 +39,19 @@ import lombok.Getter;
 public class SelectorGroup extends Group {
     private static SelectorGroup instance;
     private List<Selector> selectors;
-    private Selector leftSelector, centerSelector, rightSelector;
-    private Button leftButton, centerButton, rightButton;
+    private Selector upSelector, centerSelector, downSelector;
+    private Button upButton, centerButton, downButton;
     private TextureRegionDrawable circleGlow;
     private TextureRegion circleScale;
-    private Image circleOut, circleOutBack, leftArrow, rightArrow;
+    private Image circleOut, circleOutBack, upArrow, downArrow, upArrow1, downArrow1;
     private int select;
     private boolean paused;
     private BoomBox boomBox;
     @Getter
     private int items;
     private RadialSprite radialSprite;
+    private float centerWidth, centerHeight;
+    private int width, height;
 
     public static SelectorGroup getInstance() {
         if (instance == null) {
@@ -62,33 +64,29 @@ public class SelectorGroup extends Group {
         this.boomBox = new BoomBox();
         this.selectors = new LinkedList<Selector>();
         this.circleGlow = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.CIRCLE_GLOW));
-        this.leftButton = new Button(circleGlow);
-        this.rightButton = new Button(circleGlow);
+        this.upButton = new Button(circleGlow);
+        this.downButton = new Button(circleGlow);
         this.centerButton = new Button(circleGlow);
         this.circleScale = new TextureRegion(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_SCALE));
         this.circleOut = new Image(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_OUT));
         this.radialSprite = new RadialSprite(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_OUT_CENTER));
         this.circleOutBack = new Image(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_OUT_CENTER_BACK));
-        this.leftArrow = new Image(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_LEFT));
-        this.rightArrow = new Image(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_RIGHT));
-        int width = PaintConstants.SELECTOR_WIDTH;
-        int height = PaintConstants.SELECTOR_HEIGHT;
+        this.upArrow = new Image(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_UP));
+        this.downArrow = new Image(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_DOWN));
+        this.upArrow1 = new Image(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_UP_1));
+        this.downArrow1 = new Image(Assets.getInstance().getAtlas().findRegion(PaintConstants.SELECTOR_DOWN_1));
 
-        float centerWidth = PaintConstants.SELECTOR_CENTER_WIDTH;
-        float centerHeight = PaintConstants.SELECTOR_CENTER_HEIGHT;
+        this.width = PaintConstants.SELECTOR_WIDTH;
+        this.height = PaintConstants.SELECTOR_HEIGHT;
+
+        this.centerWidth = PaintConstants.SELECTOR_CENTER_WIDTH;
+        this.centerHeight = PaintConstants.SELECTOR_CENTER_HEIGHT;
 
         centerButton.setSize(centerWidth, centerHeight);
-        leftButton.setSize(width, height);
-        rightButton.setSize(width, height);
+        upButton.setSize(width, height);
+        downButton.setSize(width, height);
 
-        leftButton.setPosition(Rules.WORLD_WIDTH / 2 - centerWidth / 2 - width - 14, Rules.WORLD_HEIGHT - 323);
-        rightButton.setPosition(Rules.WORLD_WIDTH / 2 + centerWidth / 2 + 14, Rules.WORLD_HEIGHT - 323);
-        centerButton.setPosition(Rules.WORLD_WIDTH / 2 - centerWidth / 2, Rules.WORLD_HEIGHT - 351);
-
-        leftArrow.setPosition(leftButton.getX(), leftButton.getY());
-        rightArrow.setPosition(rightButton.getX(), rightButton.getY());
-
-        leftButton.addListener(new ChangeListener() {
+        upButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (!paused) {
@@ -99,7 +97,7 @@ public class SelectorGroup extends Group {
                 }
             }
         });
-        leftButton.addListener(new ClickListener() {
+        upButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (!PauseGroup.isPause()) {
@@ -110,7 +108,7 @@ public class SelectorGroup extends Group {
             }
         });
 
-        rightButton.addListener(new ClickListener() {
+        downButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (!PauseGroup.isPause()) {
@@ -135,7 +133,7 @@ public class SelectorGroup extends Group {
             }
         });
 
-        rightButton.addListener(new ChangeListener() {
+        downButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (!paused) {
@@ -147,10 +145,12 @@ public class SelectorGroup extends Group {
             }
         });
 
-        this.addActor(leftArrow);
-        this.addActor(rightArrow);
-        this.addActor(leftButton);
-        this.addActor(rightButton);
+        this.addActor(upArrow);
+        this.addActor(downArrow);
+        this.addActor(upArrow1);
+        this.addActor(downArrow1);
+        this.addActor(upButton);
+        this.addActor(downButton);
         this.addActor(centerButton);
     }
 
@@ -169,7 +169,7 @@ public class SelectorGroup extends Group {
         } else {
             batch.setShader(null);
         }
-        if (!Rules.GAME_OVER) {
+        if (!Rules.GAME_OVER && !PauseGroup.isPause()) {
             this.drawChildren(batch, 0.5f);
         }
     }
@@ -214,9 +214,9 @@ public class SelectorGroup extends Group {
             renderCenter(batch, selectors.get(select).getCount());
         }
 
-        circleOut.setPosition(leftButton.getX(), leftButton.getY());
+        circleOut.setPosition(upButton.getX(), upButton.getY());
         circleOut.draw(batch, 1.0f);
-        circleOut.setPosition(rightButton.getX(), rightArrow.getY());
+        circleOut.setPosition(downButton.getX(), downButton.getY());
         circleOut.draw(batch, 1.0f);
 
         circleOutBack.setPosition(centerButton.getX(), centerButton.getY());
@@ -229,10 +229,10 @@ public class SelectorGroup extends Group {
     private void renderLeft(SpriteBatch batch) {
         Color color = batch.getColor();
         batch.setColor(color.a, color.g, color.b, PaintConstants.SELECTOR_ALPHA);
-        leftSelector.draw(batch,
-                leftButton.getX(), leftButton.getY(),
-                leftButton.getOriginX(), leftButton.getOriginY(),
-                leftButton.getWidth(), leftButton.getHeight(),
+        upSelector.draw(batch,
+                upButton.getX(), upButton.getY(),
+                upButton.getOriginX(), upButton.getOriginY(),
+                upButton.getWidth(), upButton.getHeight(),
                 1.0f, 1.0f, 0.0f
         );
         batch.setColor(Color.WHITE);
@@ -265,48 +265,52 @@ public class SelectorGroup extends Group {
     private void renderRight(SpriteBatch batch) {
         Color color = batch.getColor();
         batch.setColor(color.a, color.g, color.b, PaintConstants.SELECTOR_ALPHA);
-        rightSelector.draw(batch,
-                rightButton.getX(), rightButton.getY(),
-                rightButton.getOriginX(), rightButton.getOriginY(),
-                rightButton.getWidth(), rightButton.getHeight(),
+        downSelector.draw(batch,
+                downButton.getX(), downButton.getY(),
+                downButton.getOriginX(), downButton.getOriginY(),
+                downButton.getWidth(), downButton.getHeight(),
                 1.0f, 1.0f, 0.0f
         );
         batch.setColor(Color.WHITE);
     }
 
     public void update(float dt) {
-        if (leftButton.isPressed()) {
-            leftArrow.setColor(Color.RED);
+        if (upButton.isPressed()) {
+            upArrow.setColor(Color.RED);
+            upArrow1.setColor(Color.RED);
         } else {
-            leftArrow.setColor(Color.WHITE);
+            upArrow.setColor(Color.WHITE);
+            upArrow1.setColor(Color.WHITE);
         }
 
-        if (rightButton.isPressed()) {
-            rightArrow.setColor(Color.RED);
+        if (downButton.isPressed()) {
+            downArrow.setColor(Color.RED);
+            downArrow1.setColor(Color.RED);
         } else {
-            rightArrow.setColor(Color.WHITE);
+            downArrow.setColor(Color.WHITE);
+            downArrow1.setColor(Color.WHITE);
         }
 
         if (selectors.size() >= 3) {
             centerSelector = selectors.get(select);
             if (select == 0) {
-                leftSelector = selectors.get(selectors.size() - 1);
-                rightSelector = selectors.get(select + 1);
+                upSelector = selectors.get(selectors.size() - 1);
+                downSelector = selectors.get(select + 1);
             } else if (select == selectors.size() - 1) {
-                leftSelector = selectors.get(select - 1);
-                rightSelector = selectors.get(0);
+                upSelector = selectors.get(select - 1);
+                downSelector = selectors.get(0);
             } else {
-                rightSelector = selectors.get(select + 1);
-                leftSelector = selectors.get(select - 1);
+                downSelector = selectors.get(select + 1);
+                upSelector = selectors.get(select - 1);
             }
 
         } else if (selectors.size() == 2) {
             if (select == 1) {
-                leftSelector = selectors.get(0);
+                upSelector = selectors.get(0);
                 centerSelector = selectors.get(1);
             }
             if (select == 0) {
-                rightSelector = selectors.get(1);
+                downSelector = selectors.get(1);
                 centerSelector = selectors.get(0);
             }
         } else if (selectors.size() == 1) {
@@ -332,6 +336,31 @@ public class SelectorGroup extends Group {
                 select = 0;
             }
         }
+    }
+
+    public void changePosition(boolean isLeft) {
+        if (isLeft) {
+            centerButton.setPosition(56, Rules.WORLD_HEIGHT / 3 - centerHeight / 2);
+            upButton.setPosition(56, Rules.WORLD_HEIGHT / 3 - height / 2 + centerHeight);
+            downButton.setPosition(56, Rules.WORLD_HEIGHT / 3 - height / 2 - centerHeight);
+            upArrow.setVisible(true);
+            upArrow1.setVisible(false);
+            downArrow.setVisible(true);
+            downArrow1.setVisible(false);
+        } else {
+            centerButton.setPosition(Rules.WORLD_WIDTH - 56 - centerWidth, Rules.WORLD_HEIGHT / 3 - centerHeight / 2);
+            upButton.setPosition(Rules.WORLD_WIDTH - 56 - width, Rules.WORLD_HEIGHT / 3 - height / 2 + centerHeight);
+            downButton.setPosition(Rules.WORLD_WIDTH - 56 - width, Rules.WORLD_HEIGHT / 3 - height / 2 - centerHeight);
+            upArrow.setVisible(false);
+            upArrow1.setVisible(true);
+            downArrow.setVisible(false);
+            downArrow1.setVisible(true);
+        }
+
+        upArrow.setPosition(upButton.getX(), upButton.getY());
+        downArrow.setPosition(downButton.getX(), downButton.getY());
+        upArrow1.setPosition(upButton.getX(), upButton.getY());
+        downArrow1.setPosition(downButton.getX(), downButton.getY());
     }
 
     public void dispose() {

@@ -8,7 +8,7 @@ import com.buran.game.player.Standing;
  */
 
 public final class Rules {
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     public static final boolean ADS_ENABLED = false;
     public static final float ADS_DELAY = 30.0f;
@@ -425,9 +425,9 @@ public final class Rules {
                 Standing.getInstance().setMaxLifeShield(18);
                 Standing.getInstance().setLives(2);
                 Standing.getInstance().setRamMaxPower(PLAYER_MAX_POWER);
-                Standing.getInstance().setStartLevel(0);
-                Standing.getInstance().setScore(0);
-                Standing.getInstance().setScoreView(0);
+                Standing.getInstance().setStartLevel(19);
+                Standing.getInstance().setScore(19000000);
+                Standing.getInstance().setScoreView(19000000);
             }
         };
 

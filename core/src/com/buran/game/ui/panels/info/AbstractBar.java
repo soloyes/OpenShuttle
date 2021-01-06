@@ -27,7 +27,7 @@ public abstract class AbstractBar {
     protected float percentage;
     protected boolean redAlert;
     protected GlyphLayout glyphLayout;
-    protected BitmapFont font32;
+    protected BitmapFont font54;
     protected StringBuilder stringBuilder;
 
     public AbstractBar() {
@@ -41,7 +41,7 @@ public abstract class AbstractBar {
         this.redAlert = false;
         this.iconWidth = PaintConstants.BAR_ICON_WIDTH;
         this.iconHeight = PaintConstants.BAR_ICON_HEIGHT;
-        this.font32 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT32, BitmapFont.class);
+        this.font54 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT54, BitmapFont.class);
         this.glyphLayout = new GlyphLayout();
         this.stringBuilder = new StringBuilder();
     }
@@ -75,13 +75,13 @@ public abstract class AbstractBar {
                 position.y,
                 iconWidth / 2, iconHeight / 2,
                 iconWidth, iconHeight,
-                1.0f, 1.0f,
+                2.0f, 2.0f,
                 0.0f
         );
 
-        font32.draw(batch, glyphLayout,
-                side.factor == 0 ? (position.x + 28) : (position.x + width - 28 - glyphLayout.width),
-                position.y + height + 28
+        font54.draw(batch, glyphLayout,
+                side.factor == 0 ? (position.x + 38) : (position.x + width - 38 - glyphLayout.width),
+                position.y + height + 48
         );
         batch.setColor(tmpColor);
     }

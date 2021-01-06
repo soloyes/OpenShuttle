@@ -16,7 +16,7 @@ public class BarHP extends AbstractBar {
         this.width = Rules.WORLD_WIDTH / 4;
         this.height = PaintConstants.BAR_HEIGHT;
         this.side = Side.LEFT;
-        this.position.set(43 + PaintConstants.XP_WIDTH + 12, Rules.WORLD_HEIGHT - 168);
+        this.position.set(53 + PaintConstants.XP_WIDTH + 12, Rules.WORLD_HEIGHT - 168);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class BarHP extends AbstractBar {
             color.set(0.8f, 0.43f, 0.33f, 1f);
         }
         stringBuilder.setLength(0);
-        glyphLayout.setText(font32,
+        glyphLayout.setText(font54,
                 stringBuilder
                         .append((int)standing.getHp())
                         .append(" (")

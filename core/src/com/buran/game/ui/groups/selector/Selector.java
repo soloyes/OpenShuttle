@@ -10,6 +10,7 @@ import com.buran.game.conf.Rules;
 import com.buran.game.labelsticker.Sticker;
 import com.buran.game.ui.groups.configs.ConfigImageButton;
 import com.buran.game.ui.groups.configs.LeftGroup;
+import com.buran.game.ui.groups.switches.SwitchGroup;
 import com.buran.game.utils.Assets;
 import com.buran.game.utils.StickerResolver;
 
@@ -72,7 +73,11 @@ public class Selector {
                 width, height,
                 v, v1, v2
         );
-        font32.draw(batch, glyphLayout, x + width / 2 - glyphLayout.width / 2, y - 14);
+        if (SwitchGroup.getInstance().isLeft()) {
+            font32.draw(batch, glyphLayout, x + width + glyphLayout.width / 2, y + height / 2 + glyphLayout.height / 2);
+        } else {
+            font32.draw(batch, glyphLayout, x - 5 * glyphLayout.width / 4, y + height / 2 + glyphLayout.height / 2);
+        }
     }
 
     public void update(float dt) {

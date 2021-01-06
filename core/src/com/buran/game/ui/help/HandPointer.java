@@ -23,6 +23,7 @@ public class HandPointer extends Group {
     public static boolean done;
 
     public HandPointer() {
+        done = false;
         this.hand = Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_HELP_HAND);
         this.handPointer = Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_HELP_HAND_POINTER);
         this.oscillatorScale = new Oscillator();

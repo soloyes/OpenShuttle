@@ -570,100 +570,114 @@ settingsbuttonmenu
   orig: 112, 112
   offset: 0, 0
   index: -1
-selectorright
+selectorup1
   rotate: false
   xy: 1855, 3940
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-selectorout
+selectorup
   rotate: false
   xy: 1993, 3940
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-selectorleft
+selectorout
   rotate: false
   xy: 2115, 3940
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-resultsbuttonmenu
+selectordown1
   rotate: false
   xy: 2259, 3940
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-profilesbuttonmenu
+selectordown
   rotate: false
   xy: 2381, 3940
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-playbuttonmenu
+resultsbuttonmenu
   rotate: false
   xy: 2525, 3244
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-menupauserestart
+profilesbuttonmenu
   rotate: false
   xy: 2647, 3244
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-menupausehome
+playbuttonmenu
   rotate: false
   xy: 2525, 3366
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-lock
+menupauserestart
   rotate: false
   xy: 2647, 3366
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-infobuttonmenu
+menupausehome
   rotate: false
   xy: 2525, 3488
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-exitbuttonmenu
+lock
   rotate: false
   xy: 2647, 3488
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-continuebutton
+infobuttonmenu
   rotate: false
   xy: 2525, 3610
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-circleglow
+exitbuttonmenu
   rotate: false
   xy: 2647, 3610
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
   index: -1
-backbutton
+continuebutton
   rotate: false
   xy: 2525, 3732
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+circleglow
+  rotate: false
+  xy: 2647, 3732
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+backbutton
+  rotate: false
+  xy: 2525, 3854
   size: 112, 112
   orig: 112, 112
   offset: 0, 0
@@ -803,140 +817,140 @@ menuplus
   index: -1
 menuminus
   rotate: false
-  xy: 2647, 3732
+  xy: 2525, 3976
   size: 82, 82
   orig: 82, 82
   offset: 0, 0
   index: -1
 icoconfigload
   rotate: false
-  xy: 2525, 3854
+  xy: 2647, 3854
   size: 82, 82
   orig: 82, 82
   offset: 0, 0
   index: -1
 buraniconscale
   rotate: false
-  xy: 3112, 972
-  size: 44, 44
-  orig: 44, 44
+  xy: 4016, 650
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 buranicon
   rotate: false
-  xy: 3166, 972
-  size: 44, 44
-  orig: 44, 44
+  xy: 4016, 724
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 spicon
   rotate: false
-  xy: 3220, 972
+  xy: 3112, 972
   size: 32, 41
   orig: 32, 41
   offset: 0, 0
   index: -1
 lpicon
   rotate: false
-  xy: 3262, 972
+  xy: 3154, 972
   size: 32, 41
   orig: 32, 41
   offset: 0, 0
   index: -1
 hpicon
   rotate: false
-  xy: 3304, 972
+  xy: 3196, 972
   size: 32, 41
   orig: 32, 41
   offset: 0, 0
   index: -1
 fpicon
   rotate: false
-  xy: 3346, 972
+  xy: 3238, 972
   size: 32, 41
   orig: 32, 41
   offset: 0, 0
   index: -1
 icoconfigvibration
   rotate: false
-  xy: 3388, 972
+  xy: 3280, 972
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigsound4
   rotate: false
-  xy: 3434, 972
+  xy: 3326, 972
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigsound3
   rotate: false
-  xy: 3480, 972
+  xy: 3372, 972
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigsound2
   rotate: false
-  xy: 3526, 972
+  xy: 3418, 972
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigsound1
   rotate: false
-  xy: 3572, 972
+  xy: 3464, 972
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigshaders
   rotate: false
-  xy: 3618, 972
+  xy: 3510, 972
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigoff
   rotate: false
-  xy: 3664, 972
+  xy: 3556, 972
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfigmusic
   rotate: false
-  xy: 4016, 650
+  xy: 3602, 972
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfiglock
   rotate: false
-  xy: 4016, 696
+  xy: 3648, 972
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfiglevel4
   rotate: false
-  xy: 4016, 742
+  xy: 3694, 972
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfiglevel3
   rotate: false
-  xy: 4016, 788
+  xy: 4016, 798
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 icoconfiglevel2
   rotate: false
-  xy: 4016, 834
+  xy: 4016, 844
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
@@ -1013,63 +1027,63 @@ scroll.9
   index: -1
 star16
   rotate: false
-  xy: 3388, 1018
+  xy: 3280, 1018
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 itemtypeself
   rotate: false
-  xy: 3434, 1018
+  xy: 3326, 1018
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 itemtypeprotection
   rotate: false
-  xy: 3480, 1018
+  xy: 3372, 1018
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 itemtypeattack
   rotate: false
-  xy: 3526, 1018
+  xy: 3418, 1018
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 itemnewstar
   rotate: false
-  xy: 3572, 1018
+  xy: 3464, 1018
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 itemnewcircle
   rotate: false
-  xy: 3618, 1018
+  xy: 3510, 1018
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 consumabledot
   rotate: false
-  xy: 3664, 1018
+  xy: 3556, 1018
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 bubble16
   rotate: false
-  xy: 3710, 972
+  xy: 3602, 1018
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 anomalydot
   rotate: false
-  xy: 3710, 998
+  xy: 3648, 1018
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

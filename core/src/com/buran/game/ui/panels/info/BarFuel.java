@@ -16,7 +16,7 @@ public class BarFuel extends AbstractBar {
         this.width = Rules.WORLD_WIDTH / 4;
         this.height = PaintConstants.BAR_HEIGHT;
         this.side = Side.RIGHT;
-        this.position.set(Rules.WORLD_WIDTH - width - 43 - PaintConstants.PLAY_PAUSE_BUTTON_WIDTH - 14, Rules.WORLD_HEIGHT - 168);
+        this.position.set(Rules.WORLD_WIDTH - width - 53 - PaintConstants.PLAY_PAUSE_BUTTON_WIDTH - 14, Rules.WORLD_HEIGHT - 168);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class BarFuel extends AbstractBar {
             color.set(1.0f, 0.94f, 0.0f, 1.0f);
         }
         stringBuilder.setLength(0);
-        glyphLayout.setText(font32,
+        glyphLayout.setText(font54,
                 stringBuilder
                         .append((int) standing.getFuel())
                         .append(" (")

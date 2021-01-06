@@ -16,7 +16,7 @@ public class BarShield extends AbstractBar {
         this.width = Rules.WORLD_WIDTH / 4;
         this.height = PaintConstants.BAR_HEIGHT;
         this.side = Side.LEFT;
-        this.position.set(43 + PaintConstants.XP_WIDTH + 12, Rules.WORLD_HEIGHT - 90);
+        this.position.set(53 + PaintConstants.XP_WIDTH + 12, Rules.WORLD_HEIGHT - 90);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class BarShield extends AbstractBar {
             color.set(0.28f, 1.0f, 1.0f, 1.0f);
         }
         stringBuilder.setLength(0);
-        glyphLayout.setText(font32,
+        glyphLayout.setText(font54,
                 stringBuilder
                         .append((int) standing.getLifeShield())
                         .append(" (")

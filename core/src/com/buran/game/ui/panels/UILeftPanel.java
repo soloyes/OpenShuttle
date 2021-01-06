@@ -60,4 +60,10 @@ public class UILeftPanel extends AbstractLatestPanel {
         }
         return instance;
     }
+
+    @Override
+    public void render(SpriteBatch batch) {
+        //Hide render
+        //super.render(batch);
+    }
 }

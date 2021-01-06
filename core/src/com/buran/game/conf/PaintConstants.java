@@ -11,8 +11,8 @@ public final class PaintConstants {
     public static final int BURAN_HEIGHT = 256;
     public static final String BURAN_ICON = "buranicon";
     public static final String BURAN_ICON_SCALE = "buraniconscale";
-    public static final int BURAN_ICON_WIDTH = 44;
-    public static final int BURAN_ICON_HEIGHT = 44;
+    public static final int BURAN_ICON_WIDTH = 64;
+    public static final int BURAN_ICON_HEIGHT = 64;
     public static final String BURAN_TAKE_RANGE_FIELD_REGION = "takefield384";
     public static final int BURAN_TAKE_RANGE_FIELD_WIDTH = 384;
     public static final int BURAN_TAKE_RANGE_FIELD_HEIGHT = 384;
@@ -367,8 +367,10 @@ public final class PaintConstants {
     public static final String SELECTOR_OUT_CENTER = "selectoroutcenter";
     public static final String SELECTOR_OUT_CENTER_BACK = "selectoroutback";
     public static final String SELECTOR_SCALE = "selectorscale";
-    public static final String SELECTOR_LEFT = "selectorleft";
-    public static final String SELECTOR_RIGHT = "selectorright";
+    public static final String SELECTOR_UP = "selectorup";
+    public static final String SELECTOR_DOWN = "selectordown";
+    public static final String SELECTOR_UP_1 = "selectorup1";
+    public static final String SELECTOR_DOWN_1 = "selectordown1";
     public static final int SELECTOR_WIDTH = 112;
     public static final int SELECTOR_HEIGHT = 112;
     public static final int SELECTOR_CENTER_WIDTH = 140;

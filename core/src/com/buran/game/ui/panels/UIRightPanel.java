@@ -61,4 +61,10 @@ public class UIRightPanel extends AbstractLatestPanel {
         }
         return instance;
     }
+
+    @Override
+    public void render(SpriteBatch batch) {
+        //Hide render
+        //super.render(batch);
+    }
 }

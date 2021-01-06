@@ -49,25 +49,26 @@ public class AnomalyTimer {
 
     public void render(SpriteBatch batch) {
         float x, y;
-        if (!Rules.DEATH_MODE) {
-            batch.draw(timerBackground,
-                    position.x, position.y,
-                    width / 2, height / 2,
-                    width, height,
-                    1.0f, 1.0f,
-                    0.0f
-            );
-            timerBox.draw(batch, position.x, position.y,
-                    width, height,
-                    angle
-            );
-            x = Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2;
-            y = position.y - 14;
-        } else {
+//        if (!Rules.DEATH_MODE) {
+//            batch.draw(timerBackground,
+//                    position.x, position.y,
+//                    width / 2, height / 2,
+//                    width, height,
+//                    1.0f, 1.0f,
+//                    0.0f
+//            );
+//            timerBox.draw(batch, position.x, position.y,
+//                    width, height,
+//                    angle
+//            );
+//            x = Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2;
+//            y = position.y - 14;
+//        } else {
+        if (Rules.DEATH_MODE) {
             x = Rules.WORLD_WIDTH / 2 - glyphLayout.width / 2;
             y = position.y + glyphLayout.height / 2 + 24;
+            font44.draw(batch, glyphLayout, x, y);
         }
-        font44.draw(batch, glyphLayout, x, y);
     }
 
     public void update(float dt) {

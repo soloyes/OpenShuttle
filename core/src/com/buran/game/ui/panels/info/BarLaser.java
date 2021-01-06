@@ -23,7 +23,7 @@ public class BarLaser extends AbstractBar {
         this.width = Rules.WORLD_WIDTH / 4;
         this.height = PaintConstants.BAR_HEIGHT;
         this.side = Side.RIGHT;
-        this.position.set(Rules.WORLD_WIDTH - width - 43 - PaintConstants.PLAY_PAUSE_BUTTON_WIDTH - 14, Rules.WORLD_HEIGHT - 90);
+        this.position.set(Rules.WORLD_WIDTH - width - 53 - PaintConstants.PLAY_PAUSE_BUTTON_WIDTH - 14, Rules.WORLD_HEIGHT - 90);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class BarLaser extends AbstractBar {
         percentage = 1.0f * standing.getLaserChargeLevel() / standing.getMaxLaserChargeLevel();
         color.set(1.0f, 0.67f, 1.0f, 1.0f);
         stringBuilder.setLength(0);
-        glyphLayout.setText(font32,
+        glyphLayout.setText(font54,
                 stringBuilder
                         .append((int) standing.getLaserChargeLevel())
                         .append(" (")
@@ -47,8 +47,8 @@ public class BarLaser extends AbstractBar {
             Color color = batch.getColor();
             batch.setColor(Color.RED);
             batch.draw(block,
-                    side.getFactor() == 0 ? position.x : position.x + width - iconWidth + 6, position.y + height + 2,
-                    iconWidth - 5, iconWidth - 5);
+                    side.getFactor() == 0 ? position.x : position.x + width - iconWidth, position.y + height + 2,
+                    iconWidth * 1.5f, iconWidth * 1.5f);
             batch.setColor(color);
         }
     }
