@@ -82,7 +82,7 @@ public abstract class AbstractAsteroid extends AbstractPoolable {
     public void update(float dt) {
         basicUpdate(dt);
         moveProcessor.update(this, dt);
-        boundCheck.checkAndHandleBoundsAndDestroy(this);
+        color.a = boundCheck.edgeFade(this);
     }
 
     @Override

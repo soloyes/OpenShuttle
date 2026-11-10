@@ -141,7 +141,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
                 hungry = true;
             }
         }
-        boundCheck.checkAndHandleBoundsAndDestroy(this);
+        boundCheck.keepInside(this);
     }
 
     private void scaleAndBorn(float dt) {

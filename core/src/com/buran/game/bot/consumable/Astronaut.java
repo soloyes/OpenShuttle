@@ -95,7 +95,7 @@ public class Astronaut extends AbstractConsumable {
     public void update(float dt) {
         basicUpdate(dt);
         moveProcessor.update(this, dt);
-        boundCheck.checkAndHandleBoundsAndDestroy(this);
+        boundCheck.keepInside(this);
     }
 
     @Override

@@ -166,7 +166,7 @@ public class Crate extends AbstractConsumable {
     public void update(float dt) {
         basicUpdate(dt);
         moveProcessor.update(this, dt);
-        boundCheck.checkAndHandleBoundsAndDestroy(this);
+        boundCheck.keepInside(this);
         for (int i = 0; i < labels.get(Label.Layer.BACK).size(); i++) {
             labels.get(Label.Layer.BACK).get(i).update(dt);
         }

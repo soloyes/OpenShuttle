@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>Buran-19</title>
     <style>
+        @font-face {
+            font-family: "College";
+            src: url("assets/fonts/college.regular.ttf") format("truetype");
+            font-display: block;
+        }
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: #0e0414;
-            color: #fff;
-            font-family: "Segoe UI", system-ui, sans-serif;
+            background: #04050c;
+            color: #e8eef7;
         }
         #canvas {
             display: block;
@@ -21,62 +25,151 @@
             height: 100vh;
             outline: none;
         }
-        #start {
+        #boot {
             position: fixed;
             inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2vh;
-            background: #0e0414;
-            cursor: pointer;
             z-index: 10;
-            text-align: center;
+            cursor: pointer;
             user-select: none;
+            overflow: hidden;
+            background:
+                radial-gradient(ellipse 60% 50% at 70% 40%, rgba(36, 80, 126, 0.35), transparent 70%),
+                radial-gradient(ellipse 40% 35% at 25% 75%, rgba(122, 52, 99, 0.22), transparent 70%),
+                #04050c;
+            transition: opacity 0.6s ease;
         }
-        #start h1 {
+        #boot.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        /* Sparse twinkling stars, generated below. */
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            background: #fff;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.25; }
+            50% { opacity: 0.9; }
+        }
+        #panel {
+            position: absolute;
+            left: 9vw;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        #title {
+            font-family: "College", "Segoe UI", sans-serif;
+            font-size: 15vh;
+            line-height: 0.9;
+            letter-spacing: 0.02em;
             margin: 0;
-            font-size: 9vh;
-            letter-spacing: 0.08em;
+            color: #f2f5fa;
+            text-shadow: 0 0 40px rgba(120, 180, 255, 0.25);
         }
-        #start p {
-            margin: 0;
-            font-size: 3.2vh;
-            opacity: 0.85;
+        #subtitle {
+            font-family: "College", "Segoe UI", sans-serif;
+            font-size: 3.4vh;
+            letter-spacing: 0.35em;
+            margin: 1.6vh 0 5vh 0.4vh;
+            color: #9fb3cc;
         }
-        #start .btn {
+        #telemetry {
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 2.1vh;
+            line-height: 1.7;
+            color: #6f86a3;
+            min-height: 12vh;
+            white-space: pre;
+        }
+        #telemetry .ok {
+            color: #7fd3a8;
+        }
+        #bar {
+            width: 34vw;
+            height: 2px;
+            margin-top: 3vh;
+            background: rgba(159, 179, 204, 0.18);
+            position: relative;
+            overflow: hidden;
+        }
+        #bar::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -30%;
+            width: 30%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, #9fd0ff, transparent);
+            animation: scan 1.6s linear infinite;
+        }
+        #boot.ready #bar::after {
+            animation: none;
+            left: 0;
+            width: 100%;
+            background: #9fd0ff;
+        }
+        @keyframes scan {
+            to { left: 100%; }
+        }
+        #press {
+            font-family: "College", "Segoe UI", sans-serif;
+            font-size: 3.6vh;
+            letter-spacing: 0.12em;
+            margin-top: 5vh;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+        #boot.ready #press {
+            opacity: 1;
+            animation: breathe 2.2s ease-in-out infinite;
+        }
+        @keyframes breathe {
+            0%, 100% { opacity: 0.55; }
+            50% { opacity: 1; }
+        }
+        .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 1.6em;
-            height: 1.6em;
+            width: 1.5em;
+            height: 1.5em;
             border-radius: 50%;
             background: #107c10;
+            color: #fff;
+            font-family: "Segoe UI", sans-serif;
             font-weight: 700;
-            margin: 0 0.2em;
+            margin: 0 0.25em;
+            vertical-align: middle;
         }
-        #start .hint {
-            font-size: 2.2vh;
-            opacity: 0.6;
-            max-width: 70vw;
-            line-height: 1.5;
-        }
-        #start.hidden {
-            display: none;
+        #hint {
+            position: absolute;
+            left: 9vw;
+            bottom: 6vh;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 1.8vh;
+            color: #4f6480;
+            line-height: 1.7;
         }
     </style>
 </head>
 <body oncontextmenu="return false">
 <canvas id="canvas" tabindex="0"></canvas>
-<div id="start" role="button" tabindex="0">
-    <h1>BURAN-19</h1>
-    <p>Press <span class="btn">A</span> to start</p>
-    <p class="hint">
-        Left stick: fly / move cursor &middot; A: use item / click &middot; LB RB: switch item &middot;
-        Menu: pause &middot; B: resume &middot; Right stick: scroll.<br>
-        Keyboard: arrows/WASD, Space, Q/E, Esc.
-    </p>
+<div id="boot" role="button" tabindex="0">
+    <div id="panel">
+        <h1 id="title">BURAN-19</h1>
+        <div id="subtitle">THE LAST FLIGHT &middot; 1991</div>
+        <div id="telemetry"></div>
+        <div id="bar"></div>
+        <div id="press">PRESS <span class="btn">A</span> TO START</div>
+    </div>
+    <div id="hint">
+        LEFT STICK fly &middot; A use / select &middot; LB RB switch item &middot; Y EMP pulse &middot; MENU pause<br>
+        KEYBOARD arrows / WASD &middot; SPACE &middot; Q E &middot; F &middot; ESC
+    </div>
 </div>
 <script>
     // Edge on Xbox: give the page raw gamepad input instead of mouse emulation (legacy flag, harmless elsewhere).
@@ -88,11 +181,63 @@
         history.pushState({ game: true }, "", location.href);
     });
 
+    var boot = document.getElementById("boot");
+
+    // Stars.
+    for (var i = 0; i < 90; i++) {
+        var s = document.createElement("div");
+        s.className = "star";
+        s.style.left = (Math.random() * 100) + "vw";
+        s.style.top = (Math.random() * 100) + "vh";
+        var size = Math.random() < 0.85 ? 1.5 : 2.5;
+        s.style.width = s.style.height = size + "px";
+        s.style.animationDelay = (Math.random() * 3) + "s";
+        s.style.animationDuration = (2 + Math.random() * 3) + "s";
+        boot.appendChild(s);
+    }
+
+    // Telemetry: flavour lines while the game downloads.
+    var lines = [
+        "BAIKONUR UPLINK ............",
+        "GYROSCOPES .................",
+        "LIFE SUPPORT ...............",
+        "TRANSPONDER, CREW 5 ........",
+        "OBJECT-19 TELEMETRY ........"
+    ];
+    var tele = document.getElementById("telemetry");
+    var shown = [];
+    var step = 0;
+    var ready = false;
+    function tick() {
+        if (step < lines.length) {
+            shown.push(lines[step] + " <span class=\"ok\">OK</span>");
+            step++;
+        } else if (!ready) {
+            return;
+        }
+        tele.innerHTML = shown.slice(-4).join("\n");
+    }
+    var teleTimer = setInterval(function () {
+        tick();
+        if (step >= lines.length) clearInterval(teleTimer);
+    }, 700);
+
+    // Called by the game (WebLauncher) once assets are in and the first screen is up.
+    window.onGameReady = function () {
+        ready = true;
+        while (step < lines.length) tick();
+        shown.push("MISSION CONTROL ............ <span class=\"ok\">NO SIGNAL</span>");
+        tele.innerHTML = shown.slice(-4).join("\n");
+        boot.classList.add("ready");
+    };
+
     var started = false;
     function begin() {
-        if (started) return;
+        if (started || !ready) return;
         started = true;
-        document.getElementById("start").classList.add("hidden");
+        boot.classList.add("hidden");
+        // The game ignores pad input until the button that dismissed this overlay is released.
+        window.__gameStarted = true;
         var el = document.documentElement;
         var fs = el.requestFullscreen || el.webkitRequestFullscreen;
         if (fs) {
@@ -107,8 +252,7 @@
         }
         document.getElementById("canvas").focus();
     }
-    var startEl = document.getElementById("start");
-    startEl.addEventListener("click", begin);
+    boot.addEventListener("click", begin);
     window.addEventListener("keydown", function (e) {
         if (!started && (e.key === "Enter" || e.key === " ")) begin();
     });
@@ -118,7 +262,7 @@
         if (started) return;
         var pads = navigator.getGamepads ? navigator.getGamepads() : [];
         for (var i = 0; i < pads.length; i++) {
-            if (pads[i] && pads[i].buttons[0] && pads[i].buttons[0].pressed) { begin(); return; }
+            if (pads[i] && pads[i].buttons[0] && pads[i].buttons[0].pressed) { begin(); break; }
         }
         requestAnimationFrame(pollPad);
     })();

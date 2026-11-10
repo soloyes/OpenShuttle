@@ -88,6 +88,11 @@ public class SpaceBackground implements Disposable {
 
     /** Renders the nebula into its half-resolution buffer for this frame. */
     public void prepare(SpriteBatch batch, Camera camera) {
+        prepare(batch, camera, Rules.VIEW_WIDTH, Rules.VIEW_HEIGHT);
+    }
+
+    /** Renders the nebula for a view of the given world size centred on the camera. */
+    public void prepare(SpriteBatch batch, Camera camera, float viewW, float viewH) {
         if (!ok) {
             return;
         }
@@ -110,7 +115,7 @@ public class SpaceBackground implements Disposable {
         batch.begin();
         nebulaShader.setUniformf("u_resolution", w, h);
         nebulaShader.setUniformf("u_camera", camera.position.x, camera.position.y);
-        nebulaShader.setUniformf("u_view", Rules.VIEW_WIDTH, Rules.VIEW_HEIGHT);
+        nebulaShader.setUniformf("u_view", viewW, viewH);
         nebulaShader.setUniformf("u_time", time);
         nebulaShader.setUniformf("u_seed", seed);
         nebulaShader.setUniformf("u_deep", palette.deep.r, palette.deep.g, palette.deep.b);
@@ -125,11 +130,13 @@ public class SpaceBackground implements Disposable {
 
     /** Draws the backdrop over the current view. The batch must be begun with the world camera. */
     public void render(SpriteBatch batch, Camera camera) {
+        render(batch, camera, Rules.VIEW_WIDTH, Rules.VIEW_HEIGHT);
+    }
+
+    public void render(SpriteBatch batch, Camera camera, float vw, float vh) {
         if (!ok || nebulaRegion == null) {
             return;
         }
-        float vw = Rules.VIEW_WIDTH;
-        float vh = Rules.VIEW_HEIGHT;
         float x = camera.position.x - vw / 2f;
         float y = camera.position.y - vh / 2f;
 

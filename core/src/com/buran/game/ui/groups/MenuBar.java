@@ -1,5 +1,8 @@
 package com.buran.game.ui.groups;
 
+import com.buran.game.ui.menu.MenuItem;
+import com.buran.game.input.Gamepad;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -28,6 +31,10 @@ import com.buran.game.utils.Assets;
  */
 
 public class MenuBar extends Group {
+    /** Left edge of the menu column, shared with the title. */
+    public static float leftX() {
+        return Rules.WORLD_WIDTH * 0.085f;
+    }
     private Button buttonExit;
     private Button buttonPlay;
     private Button buttonSettings;
@@ -43,34 +50,25 @@ public class MenuBar extends Group {
         this.global = new Global();
         this.setName(GroupType.MENU_BAR.name());
         this.oscillatorA = new Oscillator();
-        this.buttonPlay = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PLAY_BUTTON_MENU)));
-        buttonPlay.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
-        this.buttonExit = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.EXIT_BUTTON_MENU)));
-        buttonExit.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
-        this.buttonSettings = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.SETTINGS_BUTTON_MENU)));
-        buttonSettings.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
-        this.buttonResults = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.RESULTS_BUTTON_MENU)));
-        buttonResults.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
-        this.buttonInfo = new UIButton(new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.INFO_BUTTON_MENU)));
-        buttonInfo.getStyle().disabled = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.LOCK_BUTTON));
-        this.buttonPlay.setOrigin(Align.center);
-        this.buttonExit.setOrigin(Align.center);
-        this.buttonSettings.setOrigin(Align.center);
-        this.buttonResults.setOrigin(Align.center);
-        this.buttonPlay.setSize(2 * PaintConstants.MENU_BUTTON_WIDTH, 2 * PaintConstants.MENU_BUTTON_HEIGHT);
-        this.buttonExit.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
-        this.buttonSettings.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
-        this.buttonResults.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
-        this.buttonInfo.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
+        // Vertical text menu on the left (TV layout). Order matches the importance of each entry.
+        BitmapFont font = Assets.getInstance().getAssetManager().get(PaintConstants.FONT72, BitmapFont.class);
+        this.buttonPlay = new MenuItem("PLAY", font);
+        this.buttonResults = new MenuItem("RESULTS", font);
+        this.buttonSettings = new MenuItem("SETTINGS", font);
+        this.buttonInfo = new MenuItem("INFO", font);
+        this.buttonExit = new MenuItem("EXIT", font);
 
-
-        buttonInfo.setPosition(24, 24);
-        buttonResults.setPosition(Rules.WORLD_WIDTH / 4 - 12, 24);
-
-        buttonPlay.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.MENU_BUTTON_WIDTH, 24);
-
-        buttonSettings.setPosition(3 * Rules.WORLD_WIDTH / 4 - PaintConstants.MENU_BUTTON_WIDTH + 12, 24);
-        buttonExit.setPosition(Rules.WORLD_WIDTH - PaintConstants.MENU_BUTTON_WIDTH - 24, 24);
+        float x = leftX() - 40f;
+        float y = Rules.WORLD_HEIGHT * 0.5f;
+        float step = 118f;
+        Button[] order = Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.WebGL
+                ? new Button[]{buttonPlay, buttonResults, buttonSettings, buttonInfo}
+                : new Button[]{buttonPlay, buttonResults, buttonSettings, buttonInfo, buttonExit};
+        for (Button b : order) {
+            b.setPosition(x, y - b.getHeight() / 2f);
+            y -= step;
+            Gamepad.addFocusable(b);
+        }
 
         buttonExit.addListener(new ClickListener() {
             @Override
@@ -275,13 +273,7 @@ public class MenuBar extends Group {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (!global.isGlobalStart()) {
-            buttonPlay.setPosition(Rules.WORLD_WIDTH / 2 - PaintConstants.MENU_BUTTON_WIDTH, Rules.WORLD_HEIGHT / 2 - PaintConstants.MENU_BUTTON_WIDTH);
-            buttonPlay.getColor().a = a;
-            buttonPlay.draw(batch, parentAlpha);
-        } else {
-            super.draw(batch, parentAlpha);
-        }
+        super.draw(batch, parentAlpha);
     }
 
     @Override

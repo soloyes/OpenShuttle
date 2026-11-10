@@ -62,6 +62,31 @@ public final class Gamepad {
         A, B, START, BACK, PREV, NEXT, UP, DOWN, LEFT, RIGHT, USE_ALT, PULSE
     }
 
+    /** Menu entries the D-pad can step through (the cursor jumps onto them). */
+    private static final com.badlogic.gdx.utils.Array<com.badlogic.gdx.scenes.scene2d.Actor> FOCUSABLES =
+            new com.badlogic.gdx.utils.Array<com.badlogic.gdx.scenes.scene2d.Actor>();
+    private int focusIndex = -1;
+    private final Vector2 tmpFocus = new Vector2();
+
+    public static void addFocusable(com.badlogic.gdx.scenes.scene2d.Actor actor) {
+        FOCUSABLES.add(actor);
+    }
+
+    private boolean enabled = true;
+    private boolean waitRelease;
+
+    /**
+     * Platforms can hold input back (the web start overlay). When re-enabled, buttons held at
+     * that moment are ignored until released, so the press that closed the overlay does not
+     * also click in the menu.
+     */
+    public void setEnabled(boolean enabled) {
+        if (enabled && !this.enabled) {
+            waitRelease = true;
+        }
+        this.enabled = enabled;
+    }
+
     public static Gamepad get() {
         return INSTANCE;
     }
@@ -75,6 +100,20 @@ public final class Gamepad {
         controller = Controllers.getCurrent();
         System.arraycopy(now, 0, prev, 0, now.length);
         readButtons();
+        if (!enabled || waitRelease) {
+            boolean any = false;
+            for (boolean b : now) {
+                any |= b;
+            }
+            if (enabled && !any) {
+                waitRelease = false;
+            }
+            // Pretend everything is held so nothing registers as a fresh press.
+            java.util.Arrays.fill(prev, true);
+            java.util.Arrays.fill(now, false);
+            steering = false;
+            return;
+        }
 
         float lx = 0, ly = 0, ry = 0;
         if (controller != null) {
@@ -217,14 +256,22 @@ public final class Gamepad {
 
         float dx = curve(lx);
         float dy = curve(ly);
+        boolean focusMode = hasVisibleFocusables();
+        if (focusMode && focusIndex < 0) {
+            moveFocus(1);   // start on the first entry (PLAY)
+        }
+        if (focusMode && (pressed(Action.UP) || pressed(Action.DOWN))) {
+            moveFocus(pressed(Action.DOWN) ? 1 : -1);
+        }
         if (held(Action.LEFT)) dx -= 0.6f;
         if (held(Action.RIGHT)) dx += 0.6f;
-        if (held(Action.UP)) dy -= 0.6f;
-        if (held(Action.DOWN)) dy += 0.6f;
+        if (!focusMode) {
+            if (held(Action.UP)) dy -= 0.6f;
+            if (held(Action.DOWN)) dy += 0.6f;
+        }
 
         boolean moved = dx != 0 || dy != 0;
-        boolean anyButton = held(Action.A) || held(Action.B) || held(Action.START);
-        if (moved || anyButton || ry != 0) {
+        if (moved || ry != 0) {
             cursorVisible = true;
         }
 
@@ -260,6 +307,38 @@ public final class Gamepad {
         }
     }
 
+    private static boolean hasVisibleFocusables() {
+        for (com.badlogic.gdx.scenes.scene2d.Actor a : FOCUSABLES) {
+            if (a.isVisible() && a.getStage() != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Steps the D-pad focus and puts the cursor on the entry (so A clicks it). */
+    private void moveFocus(int dir) {
+        int n = FOCUSABLES.size;
+        for (int k = 0; k < n; k++) {
+            focusIndex = focusIndex < 0 ? (dir > 0 ? 0 : n - 1) : (focusIndex + dir + n) % n;
+            com.badlogic.gdx.scenes.scene2d.Actor a = FOCUSABLES.get(focusIndex);
+            if (a.isVisible() && a.getStage() != null) {
+                tmpFocus.set(a.getWidth() * 0.3f, a.getHeight() / 2f);
+                a.localToStageCoordinates(tmpFocus);
+                a.getStage().stageToScreenCoordinates(tmpFocus);
+                cursorX = tmpFocus.x;
+                cursorY = tmpFocus.y;
+                // The entry highlights itself; the cursor would only cover the text.
+                cursorVisible = false;
+                InputProcessor ip = Gdx.input.getInputProcessor();
+                if (ip != null) {
+                    ip.mouseMoved((int) cursorX, (int) cursorY);
+                }
+                return;
+            }
+        }
+    }
+
     private void releaseCursor() {
         if (cursorDown) {
             cursorDown = false;
@@ -273,6 +352,9 @@ public final class Gamepad {
     /** Called when the screen changes so a held A does not leak into the next screen. */
     public void onScreenChange() {
         cursorDown = false;
+        FOCUSABLES.clear();
+        focusIndex = -1;
+        cursorVisible = false;
     }
 
     private static float curve(float v) {
