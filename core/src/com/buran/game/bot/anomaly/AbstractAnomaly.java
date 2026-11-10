@@ -80,6 +80,7 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
     }
 
     public void showSprayBoom() {
+        com.buran.game.effects.Juice.kill();
         float R, G, B;
         for (int j = 0; j < 8; j++) {
             R = this.getSpreeColor().r;

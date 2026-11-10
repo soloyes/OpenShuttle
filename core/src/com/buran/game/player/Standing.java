@@ -1,5 +1,6 @@
 package com.buran.game.player;
 
+import com.buran.game.effects.Juice;
 import com.badlogic.gdx.math.Vector2;
 import com.buran.game.bot.anomaly.AbstractAnomalyEmitter;
 import com.buran.game.bot.asteroids.AbstractAsteroidEmitter;
@@ -276,6 +277,9 @@ public final class Standing {
     public void takeDamage(float amount) {
         if (!Rules.GAME_OVER) {
             float count = amount * Rules.PLAYER_SHIELD_DAMAGE_FACTOR;
+            if (count > 0f) {
+                Juice.damage(count, lifeShield - count > 0f);
+            }
             lifeShield -= count;
             dmgReceived += count;
             if (lifeShield <= 0.0f) {
@@ -317,6 +321,13 @@ public final class Standing {
 
     public void changeLives(int amount) {
         lives += amount;
+        if (amount < 0) {
+            if (lives <= 0) {
+                Juice.gameOver();
+            } else {
+                Juice.lifeLost();
+            }
+        }
         if (lives <= 0) {
             lives = 0;
             Rules.GAME_OVER = true;

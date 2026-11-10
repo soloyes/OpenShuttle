@@ -52,6 +52,7 @@ import com.buran.game.effects.AsteroidLaunchEmitter;
 import com.buran.game.effects.Oscillator;
 import com.buran.game.effects.PrettySound;
 import com.buran.game.effects.PostProcessor;
+import com.buran.game.effects.Juice;
 import com.buran.game.input.Gamepad;
 import com.buran.game.effects.Ray;
 import com.buran.game.effects.Shake;
@@ -206,6 +207,7 @@ public class GameScreen extends BaseScreen {
         }
         postProcessor = new PostProcessor();
         flash = 0f;
+        Juice.reset();
         gameInfoSystem = new GameInfoSystem();
         joystick = new Joystick();
 

@@ -3,6 +3,7 @@ package com.buran.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.buran.game.effects.Juice;
 import com.buran.game.input.Gamepad;
 import com.buran.game.screens.ScreenManager;
 import com.buran.game.ui.groups.mvc.profiles.Profiles;
@@ -55,7 +56,7 @@ public class BuranGame extends Game {
     public void render() {
         // A hidden browser tab stops frames; the first frame back would carry the whole gap.
         // Physics multiplies velocity by (1 - dt), so a large dt flips and explodes it.
-        float dt = Math.min(Gdx.graphics.getDeltaTime(), MAX_FRAME_DT);
+        float dt = Juice.filter(Math.min(Gdx.graphics.getDeltaTime(), MAX_FRAME_DT));
         Gamepad.get().update(dt);
         getScreen().render(dt);
         Gamepad.get().render(batch);
