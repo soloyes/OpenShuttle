@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/banner.svg" alt="Buran-19" width="100%"/>
+  <img src="docs/banner.gif" alt="Buran-19" width="100%"/>
 </p>
 
 <p align="center">
