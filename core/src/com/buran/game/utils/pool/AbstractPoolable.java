@@ -1,5 +1,6 @@
 package com.buran.game.utils.pool;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -84,6 +85,8 @@ public abstract class AbstractPoolable implements Poolable {
     @Getter
     @Setter
     protected int spiralRadius;
+    /** Distance to the black hole when it caught this object (0 = not caught). */
+    private float captureDst;
     @Getter
     @Setter
     protected boolean atRayPoint;
@@ -117,13 +120,22 @@ public abstract class AbstractPoolable implements Poolable {
             com.buran.game.bot.blackhole.BlackholeDebris.shed(position.x, position.y, tint, 4);
             atRayPoint = false;
             velocity.scl(0.5f);
-            float t = dst / Buffs.getBlackholeTakeRange();
-            if (t < 0.5f) {
+            // Crumble right after capture: fade over the first stretch of the fall, then burst into sand.
+            if (captureDst <= 0f) {
+                captureDst = dst;
+            }
+            float fall = MathUtils.clamp((captureDst - dst) / (Buffs.getBlackholeTakeRange() * 0.12f), 0f, 1f);
+            com.buran.game.bot.blackhole.BlackholeDebris.shed(position.x, position.y, tint, 3 + (int) (fall * 6));
+            if (color != null) {
+                color.a = 1f - 0.7f * fall;
+            }
+            if (fall >= 1f) {
                 com.buran.game.bot.blackhole.BlackholeDebris.burst(position.x, position.y, Math.max(width, height) * saveScaleX, tint);
+                captureDst = 0f;
                 destroy();
                 return;
             }
-            float shrink = 0.6f + 0.4f * (t - 0.5f) * 2f;
+            float shrink = 1f - 0.35f * fall;
             float scaleX = shrink * saveScaleX;
             float scaleY = shrink * saveScaleY;
             if (scaleX >= saveScaleX) {
@@ -138,6 +150,7 @@ public abstract class AbstractPoolable implements Poolable {
                 destroy();
             }
         } else {
+            captureDst = 0f;
             if (!(this instanceof AbstractConsumable)) {
                 this.scaleX = this.saveScaleX;
                 this.scaleY = this.saveScaleY;
