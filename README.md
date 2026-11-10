@@ -9,18 +9,22 @@
   <img src="https://img.shields.io/badge/commits-595-39e6c8?style=flat-square" alt="Commits"/>
 </p>
 
-**Buran-19** is an indie 2D space arcade. You fly the Buran shuttle through open space, rescue stranded astronauts
-and try to stay alive as long as the fuel lasts.
+Buran-19 is an indie 2D space arcade. You fly the Buran shuttle through open space, rescue stranded astronauts
+and stay alive as long as the fuel lasts.
 
 ![Gameplay](tools/google/feature.jpg)
 
 ## Gameplay
 
-- **Rescue astronauts.** Fly close and the tractor beam pulls them aboard. Medics, mechanics, scientists and military crew each bring their own bonus.
-- **Collect supplies.** Crates, fuel boxes and storages refill fuel, shields and weapons.
-- **Survive.** Metal and mineral asteroids, homing rockets, black holes and four kinds of anomalies (corrosive, electrical, magnetic, radiation) are all out to get you.
-- **Fight back.** Lasers, rockets, shields, freeze, scan and radar, with killing sprees for chain kills.
-- **Profiles and results.** Several player profiles, difficulty levels, detailed score history.
+Fly close to a stranded astronaut and the tractor beam pulls him aboard. Medics, mechanics, scientists and military crew
+each bring their own bonus. Crates, fuel boxes and storages refill fuel, shields and weapons.
+
+Space is full of things that want you dead: metal and mineral asteroids, black holes and four kinds of anomalies
+(corrosive, electrical, magnetic, radiation). The laser burns asteroids, and a burned asteroid splits into fragments.
+Rockets launch from the shuttle and home in on anomalies. You also have shields, freeze, scan and radar,
+and chain kills count as killing sprees.
+
+The game keeps several player profiles, has difficulty levels and stores a detailed score history.
 
 ## Screenshots
 
@@ -39,7 +43,7 @@ and try to stay alive as long as the fuel lasts.
 
 ## Build and run
 
-The project is a standard libGDX Gradle setup from 2018–2021: Gradle 4.6 wrapper and Android Gradle plugin 3.1, so use **JDK 8**.
+This is a standard libGDX Gradle project from 2018 to 2021: Gradle 4.6 wrapper and Android Gradle plugin 3.1, so build it with JDK 8.
 
 ```bash
 git clone https://github.com/soloyes/buran-19.git
