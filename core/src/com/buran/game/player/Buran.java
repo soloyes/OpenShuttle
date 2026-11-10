@@ -131,17 +131,32 @@ public class Buran extends AbstractBuran {
     public void collideBlackhole(float dt) {
         if (position.dst(Blackhole.position) <= Buffs.getBlackholeTakeRange()) {
             isTaken = true;
-            com.buran.game.bot.blackhole.BlackholeDebris.shed(position.x, position.y, com.badlogic.gdx.graphics.Color.SALMON, 6);
             velocity.scl(0.5f);
-            tmpV2.set(Blackhole.position).sub(position).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER);
-            position.mulAdd(tmpV2, dt);
+            // Fall along the accretion disk: Keplerian orbit in the tilted disk plane (same tilt
+            // as the shader and the sand), spiralling inward faster the closer it gets.
+            float tilt = com.buran.game.bot.blackhole.BlackholeDebris.TILT;
+            float px = position.x - Blackhole.position.x;
+            float py = (position.y - Blackhole.position.y) / tilt;
+            float r = Math.max(1f, (float) Math.sqrt(px * px + py * py));
+            float phi = MathUtils.atan2(py, px);
+            float omega = 4000f / (float) Math.pow(Math.max(r, 40f), 1.5f);
+            phi += omega * dt;
+            r -= (Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER * 0.6f + 9000f / Math.max(r, 40f)) * dt;
+            r = Math.max(r, 0f);
+            position.set(Blackhole.position.x + r * MathUtils.cos(phi), Blackhole.position.y + r * MathUtils.sin(phi) * tilt);
+            // Nose along the orbit instead of spinning.
+            float tx = -MathUtils.sin(phi);
+            float ty = MathUtils.cos(phi) * tilt;
+            float heading = MathUtils.atan2(ty, tx) * MathUtils.radiansToDegrees;
+            float diff = ((heading - angle) % 360f + 540f) % 360f - 180f;
+            angle += diff * Math.min(1f, dt * 5f);
             float dst = Blackhole.position.dst(position);
-            float scaleX = dst / Buffs.getBlackholeTakeRange();
-            float scaleY = dst / Buffs.getBlackholeTakeRange();
-            a = dst / Buffs.getBlackholeTakeRange();
-            setLayersScale(scaleX, scaleY);
-            angle += 365 * dt * Rules.PLAYER_BLACKHOLE_ROTATION;
-            if (Blackhole.position.dst(position) <= Rules.BLACKHOLE_EVENT_HORIZON) {
+            float k = dst / Buffs.getBlackholeTakeRange();
+            com.buran.game.bot.blackhole.BlackholeDebris.shed(position.x, position.y, com.badlogic.gdx.graphics.Color.SALMON,
+                    4 + (int) (14 * (1f - k)));
+            a = k;
+            setLayersScale(0.35f + 0.65f * k, 0.35f + 0.65f * k);
+            if (Blackhole.position.dst(position) <= Math.max(Rules.BLACKHOLE_EVENT_HORIZON, Buffs.getBlackholeTakeRange() * 0.17f)) {
                 BoundCheck.avoidPosition(Blackhole.position, position, (int) Buffs.getBlackholeTakeRange() + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
                 setLayersScale(1.0f, 1.0f);
                 isTaken = false;

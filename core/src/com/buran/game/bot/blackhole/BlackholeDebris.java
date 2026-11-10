@@ -17,7 +17,7 @@ import com.buran.game.conf.Buffs;
  */
 public class BlackholeDebris implements Disposable {
     /** Must match TILT in composite.frag (cosine of the disk inclination). */
-    private static final float TILT = 0.30f;
+    public static final float TILT = 0.30f;
     private static final int MAX = 1400;
 
     private static BlackholeDebris instance;
@@ -103,13 +103,13 @@ public class BlackholeDebris implements Disposable {
 
     public void update(float dt) {
         // A faint constant inflow keeps the disk alive even when nothing is caught.
-        ambient += dt * 45f;
+        ambient += dt * 28f;
         float range = Buffs.getBlackholeTakeRange();
         while (ambient >= 1f && count < MAX) {
             ambient -= 1f;
-            r[count] = range * MathUtils.random(0.55f, 0.95f);
+            r[count] = range * MathUtils.random(0.45f, 0.9f);
             phi[count] = MathUtils.random(MathUtils.PI2);
-            life[count] = 0.6f;
+            life[count] = 0.28f;
             cr[count] = 1f;
             cg[count] = 0.55f;
             cb[count] = 0.25f;
@@ -164,8 +164,9 @@ public class BlackholeDebris implements Disposable {
             float blue = MathUtils.lerp(cb[i], 0.75f, heat * heat * heat);
             float fadeIn = MathUtils.clamp((range - rr) / 80f + 0.3f, 0f, 1f);
             float fadeOut = MathUtils.clamp((rr - horizon) / 40f, 0f, 1f);
-            batch.setColor(red, green, blue, 0.75f * life[i] * fadeIn * fadeOut);
-            float h = 7f + 5f * heat;
+            batch.setColor(red, green, blue, 0.75f * life[i] * fadeIn * fadeOut * (0.4f + 0.6f * heat));
+            float h = 4f + 4f * heat;
+            len *= life[i] < 0.5f ? 0.6f : 1f;
             batch.draw(dot, x - len / 2f, y - h / 2f, len / 2f, h / 2f, len, h, 1f, 1f, angle, 0, 0, 32, 32, false, false);
         }
         batch.setColor(Color.WHITE);

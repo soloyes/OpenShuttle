@@ -238,8 +238,10 @@
         if (started || !ready) return;
         started = true;
         boot.classList.add("launch");
+        LaunchAudio.play();
         Scene.launch(function () {
             boot.classList.add("hidden");
+            LaunchAudio.restoreMusic();
         });
         // The game ignores pad input until the button that dismissed this overlay is released.
         window.__gameStarted = true;
@@ -275,6 +277,133 @@
     window.addEventListener("load", function () {
         main();
     });
+
+    /*
+     * Launch sound, synthesised with Web Audio: engine ignition rumble, a rising whoosh as the
+     * shuttle passes the camera, a deep thud on the flash and a fading tail. The game music is
+     * ducked for the animation and brought back as the menu appears.
+     */
+    var LaunchAudio = (function () {
+        function ctx() {
+            return window.Howler && Howler.ctx ? Howler.ctx : null;
+        }
+
+        function noiseBuffer(c, seconds) {
+            var len = Math.floor(c.sampleRate * seconds);
+            var buf = c.createBuffer(1, len, c.sampleRate);
+            var d = buf.getChannelData(0);
+            var last = 0;
+            for (var i = 0; i < len; i++) {
+                // Brown-ish noise: deeper than white noise, better for rumble.
+                last = (last + 0.04 * (Math.random() * 2 - 1)) / 1.04;
+                d[i] = last * 3.5;
+            }
+            return buf;
+        }
+
+        function schedule(c) {
+            var t = c.currentTime + 0.02;
+            var out = c.createGain();
+            out.gain.value = 0.9;
+            out.connect(c.destination);
+
+            // 1) Ignition rumble: low-passed noise swelling over the first second.
+            var rumble = c.createBufferSource();
+            rumble.buffer = noiseBuffer(c, 3.2);
+            var lp = c.createBiquadFilter();
+            lp.type = "lowpass";
+            lp.frequency.setValueAtTime(120, t);
+            lp.frequency.linearRampToValueAtTime(380, t + 2.0);
+            var rg = c.createGain();
+            rg.gain.setValueAtTime(0.0001, t);
+            rg.gain.exponentialRampToValueAtTime(0.9, t + 0.7);
+            rg.gain.setValueAtTime(0.9, t + 1.9);
+            rg.gain.exponentialRampToValueAtTime(0.0001, t + 3.1);
+            rumble.connect(lp).connect(rg).connect(out);
+            rumble.start(t);
+
+            // 2) Whoosh: band-passed noise sweeping up as the shuttle tears past the camera.
+            var whoosh = c.createBufferSource();
+            var wb = c.createBuffer(1, Math.floor(c.sampleRate * 1.8), c.sampleRate);
+            var wd = wb.getChannelData(0);
+            for (var i = 0; i < wd.length; i++) wd[i] = Math.random() * 2 - 1;
+            whoosh.buffer = wb;
+            var bp = c.createBiquadFilter();
+            bp.type = "bandpass";
+            bp.Q.value = 1.2;
+            bp.frequency.setValueAtTime(250, t + 0.8);
+            bp.frequency.exponentialRampToValueAtTime(2400, t + 2.1);
+            var wg = c.createGain();
+            wg.gain.setValueAtTime(0.0001, t + 0.8);
+            wg.gain.exponentialRampToValueAtTime(0.5, t + 1.95);
+            wg.gain.exponentialRampToValueAtTime(0.0001, t + 2.5);
+            var pan = c.createStereoPanner ? c.createStereoPanner() : null;
+            if (pan) {
+                pan.pan.setValueAtTime(0.6, t + 0.8);
+                pan.pan.linearRampToValueAtTime(-0.8, t + 2.3);
+                whoosh.connect(bp).connect(wg).connect(pan).connect(out);
+            } else {
+                whoosh.connect(bp).connect(wg).connect(out);
+            }
+            whoosh.start(t + 0.8);
+
+            // 3) Thud on the flash: a falling sine with a short attack.
+            var o = c.createOscillator();
+            o.type = "sine";
+            o.frequency.setValueAtTime(110, t + 2.1);
+            o.frequency.exponentialRampToValueAtTime(32, t + 3.2);
+            var og = c.createGain();
+            og.gain.setValueAtTime(0.0001, t + 2.08);
+            og.gain.exponentialRampToValueAtTime(0.85, t + 2.14);
+            og.gain.exponentialRampToValueAtTime(0.0001, t + 3.4);
+            o.connect(og).connect(out);
+            o.start(t + 2.05);
+            o.stop(t + 3.5);
+
+            // 4) Shimmer tail: a soft high chord fading into the menu.
+            [523.25, 783.99, 1046.5].forEach(function (f, k) {
+                var s = c.createOscillator();
+                s.type = "triangle";
+                s.frequency.value = f;
+                var sg = c.createGain();
+                sg.gain.setValueAtTime(0.0001, t + 2.15);
+                sg.gain.exponentialRampToValueAtTime(0.05 - k * 0.012, t + 2.4);
+                sg.gain.exponentialRampToValueAtTime(0.0001, t + 4.6);
+                s.connect(sg).connect(out);
+                s.start(t + 2.1);
+                s.stop(t + 4.7);
+            });
+        }
+
+        function fadeMusic(to, ms) {
+            if (!window.Howler) return;
+            var from = Howler.volume();
+            var start = performance.now();
+            (function step(now) {
+                var k = Math.min(1, (now - start) / ms);
+                Howler.volume(from + (to - from) * k);
+                if (k < 1) requestAnimationFrame(step);
+            })(start);
+        }
+
+        return {
+            play: function () {
+                var c = ctx();
+                if (!c) return;
+                // Duck the game music for the duration of the animation.
+                fadeMusic(0.12, 500);
+                var go = function () { schedule(c); };
+                if (c.state === "suspended") {
+                    c.resume().then(go);
+                } else {
+                    go();
+                }
+            },
+            restoreMusic: function () {
+                fadeMusic(1, 1800);
+            }
+        };
+    })();
 
     /*
      * Title scene: a still, breathing picture (the shuttle in its shield, the rift behind it,

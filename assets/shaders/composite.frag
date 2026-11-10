@@ -55,7 +55,7 @@ float diskDensity(float rd, float phi) {
     // Keplerian shear: inner rings orbit faster.
     float omega = 0.9 / pow(max(rd, 0.05), 1.5);
     float a = phi + u_spin * omega;
-    float n = vnoise(vec2(a * 5.0, rd * 26.0)) * 0.6 + vnoise(vec2(a * 13.0, rd * 61.0)) * 0.4;
+    float n = vnoise(vec2(a * 4.0, rd * 14.0)) * 0.7 + vnoise(vec2(a * 8.0, rd * 28.0)) * 0.3;
     return 0.55 + 0.75 * n;
 }
 

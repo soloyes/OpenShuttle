@@ -29,7 +29,7 @@ public class PostProcessor implements Disposable {
         public float bloom = 0.75f;
         public float threshold = 0.78f;
         public float vignette = 0.55f;
-        public float grain = 0.035f;
+        public float grain = 0.022f;
     }
 
     private final ShaderProgram bright;
