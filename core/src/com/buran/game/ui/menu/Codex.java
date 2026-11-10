@@ -137,7 +137,7 @@ public class Codex {
         add(threats, new Entry("MINERAL ASTEROID", "THREAT",
                 sheet(PaintConstants.ASTEROID_MINERAL_REGION, 8, 8, PaintConstants.ASTEROID_METAL_FRAMES), 20f,
                 "Rock torn from Object-19. Burn it with the laser; mineral fragments recharge the laser."));
-        Entry hole = add(threats, new Entry("BLACK HOLE", "PHENOMENON",
+        Entry hole = add(threats, new Entry("THE RIFT", "PHENOMENON  -  BLACK HOLE",
                 new TextureRegion[]{region(PaintConstants.BLACKHOLE_REGION)}, 0f,
                 "The rift at the heart of Object-19. Anything inside the capture ring spirals in and crumbles. "
                         + "Survive the fall and it throws you out elsewhere in the sector with a damaged hull."));
