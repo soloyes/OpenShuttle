@@ -1,19 +1,14 @@
 package com.buran.game.utils;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
-import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.buran.game.conf.MSConstants;
 import com.buran.game.conf.PaintConstants;
+import com.buran.game.effects.BoomBox;
 import com.buran.game.screens.ScreenManager;
 
 /**
@@ -30,6 +25,7 @@ public class Assets {
     }
 
     public void clear() {
+        BoomBox.forgetSounds();
         assetManager.clear();
     }
 
@@ -168,20 +164,13 @@ public class Assets {
         }
     }
 
+    /**
+     * Fonts are pre-rendered from the TTF by {@code ./gradlew desktop:generateFonts}
+     * (same size, border and shadow the FreeType loader used to produce at runtime),
+     * so the web build does not need FreeType.
+     */
     private void createStandardFont(int size, String font, String postfix) {
-        FileHandleResolver resolver = new InternalFileHandleResolver();
-        assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
-        assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
-        FreetypeFontLoader.FreeTypeFontLoaderParameter fontParameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
-        fontParameter.fontFileName = font + ".ttf";
-        fontParameter.fontParameters.size = size;
-        fontParameter.fontParameters.color = Color.valueOf("ffffffff");
-        fontParameter.fontParameters.borderWidth = 1;
-        fontParameter.fontParameters.borderColor = Color.valueOf("000000ff");
-        fontParameter.fontParameters.shadowOffsetX = 3;
-        fontParameter.fontParameters.shadowOffsetY = 3;
-        fontParameter.fontParameters.shadowColor = Color.valueOf("000000ff");
-        assetManager.load(font + size + postfix + ".ttf", BitmapFont.class, fontParameter);
+        assetManager.load(font + size + postfix + ".fnt", BitmapFont.class);
     }
 
     public void makeLinks() {

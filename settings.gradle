@@ -1,1 +1,9 @@
-include 'desktop', 'android', 'core', 'ios'
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'openshuttle'
+include 'core', 'desktop', 'web'

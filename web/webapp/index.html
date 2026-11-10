@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Buran-19</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #0e0414;
+            color: #fff;
+            font-family: "Segoe UI", system-ui, sans-serif;
+        }
+        #canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            outline: none;
+        }
+        #start {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2vh;
+            background: #0e0414;
+            cursor: pointer;
+            z-index: 10;
+            text-align: center;
+            user-select: none;
+        }
+        #start h1 {
+            margin: 0;
+            font-size: 9vh;
+            letter-spacing: 0.08em;
+        }
+        #start p {
+            margin: 0;
+            font-size: 3.2vh;
+            opacity: 0.85;
+        }
+        #start .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.6em;
+            height: 1.6em;
+            border-radius: 50%;
+            background: #107c10;
+            font-weight: 700;
+            margin: 0 0.2em;
+        }
+        #start .hint {
+            font-size: 2.2vh;
+            opacity: 0.6;
+            max-width: 70vw;
+            line-height: 1.5;
+        }
+        #start.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false">
+<canvas id="canvas" tabindex="0"></canvas>
+<div id="start" role="button" tabindex="0">
+    <h1>BURAN-19</h1>
+    <p>Press <span class="btn">A</span> to start</p>
+    <p class="hint">
+        Left stick: fly / move cursor &middot; A: use item / click &middot; LB RB: switch item &middot;
+        Menu: pause &middot; B: resume &middot; Right stick: scroll.<br>
+        Keyboard: arrows/WASD, Space, Q/E, Esc.
+    </p>
+</div>
+<script>
+    // Edge on Xbox: give the page raw gamepad input instead of mouse emulation (legacy flag, harmless elsewhere).
+    try { navigator.gamepadInputEmulation = "gamepad"; } catch (e) {}
+
+    // On Xbox, B is the browser "Back" button. Keep the game page on top of the history stack.
+    history.pushState({ game: true }, "", location.href);
+    window.addEventListener("popstate", function () {
+        history.pushState({ game: true }, "", location.href);
+    });
+
+    var started = false;
+    function begin() {
+        if (started) return;
+        started = true;
+        document.getElementById("start").classList.add("hidden");
+        var el = document.documentElement;
+        var fs = el.requestFullscreen || el.webkitRequestFullscreen;
+        if (fs) {
+            try {
+                var p = fs.call(el);
+                if (p && p.catch) p.catch(function () {});
+            } catch (e) {}
+        }
+        // The click is the user gesture browsers need before audio can play.
+        if (window.Howler && Howler.ctx && Howler.ctx.state === "suspended") {
+            Howler.ctx.resume();
+        }
+        document.getElementById("canvas").focus();
+    }
+    var startEl = document.getElementById("start");
+    startEl.addEventListener("click", begin);
+    window.addEventListener("keydown", function (e) {
+        if (!started && (e.key === "Enter" || e.key === " ")) begin();
+    });
+
+    // If the controller drives the page directly (no Edge mouse cursor), A also starts.
+    (function pollPad() {
+        if (started) return;
+        var pads = navigator.getGamepads ? navigator.getGamepads() : [];
+        for (var i = 0; i < pads.length; i++) {
+            if (pads[i] && pads[i].buttons[0] && pads[i].buttons[0].pressed) { begin(); return; }
+        }
+        requestAnimationFrame(pollPad);
+    })();
+
+    window.addEventListener("load", function () {
+        main();
+    });
+</script>
+<script type="text/javascript" charset="utf-8" src="app.js"></script>
+</body>
+</html>

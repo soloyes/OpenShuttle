@@ -174,6 +174,39 @@ public class SelectorGroup extends Group {
         }
     }
 
+    /** Gamepad/keyboard: same as tapping the upper arrow. */
+    public void selectPrevious() {
+        if (paused || PauseGroup.isPause() || selectors.size() < 2) {
+            return;
+        }
+        boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
+        select--;
+        if (select < 0) {
+            select = selectors.size() - 1;
+        }
+    }
+
+    /** Gamepad/keyboard: same as tapping the lower arrow. */
+    public void selectNext() {
+        if (paused || PauseGroup.isPause() || selectors.size() < 2) {
+            return;
+        }
+        boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
+        select++;
+        if (select > selectors.size() - 1) {
+            select = 0;
+        }
+    }
+
+    /** Gamepad/keyboard: same as tapping the centre item. */
+    public void useSelected() {
+        if (selectors.size() != 0 && centerSelector != null && centerSelector.isActive() && !PauseGroup.isPause()) {
+            removeSelector();
+            centerSelector.press();
+            Vibrator.vibrateUI(VConstants.UI_CLICK);
+        }
+    }
+
     public void addSelector(Sticker sticker, int amount) {
         LeftGroup.getInstance().updateScroll(sticker);
         boolean present = false;

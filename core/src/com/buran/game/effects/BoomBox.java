@@ -83,7 +83,9 @@ public class BoomBox {
         Sound tmp = Assets.getInstance()
                 .getAssetManager()
                 .get(sound, Sound.class);
-        soundIdList.add(tmp);
+        if (!soundIdList.contains(tmp, true)) {
+            soundIdList.add(tmp);
+        }
         if (Profiles.getSettings().isEffects()) {
             return tmp.play(Profiles.getSettings().overallEffectsVolume());
         }
@@ -182,6 +184,14 @@ public class BoomBox {
             stopAllMusic();
             playMusicInLoop(music);
         }
+    }
+
+    /**
+     * Sounds belong to the AssetManager and are disposed when it is cleared on a screen change.
+     * Forget them so stopAllSound() never touches a disposed sound (crashes on the web backend).
+     */
+    public static void forgetSounds() {
+        soundIdList.clear();
     }
 
     public void stopAllSound() {

@@ -10,7 +10,7 @@ import com.buran.game.player.Standing;
 public final class Rules {
     public static final boolean DEBUG = false;
 
-    public static final boolean ADS_ENABLED = true;
+    public static final boolean ADS_ENABLED = false;
     public static final float ADS_DELAY = 30.0f;
     //4
     public static final int ADS_RUNTIME_GAME = 4;
@@ -20,17 +20,10 @@ public final class Rules {
     //0.5f
     public static final float ADS_TIME_DELTA = 0.5f;
 
-    public static final String RATE_US =
-            ADS_ENABLED ?
-                    "https://play.google.com/store/apps/details?id=com.buran.game.free.pack"
-                    :
-                    "https://play.google.com/store/apps/details?id=com.buran.game.pack";
-    public static final String ABOUT_US =
-            ADS_ENABLED ?
-                    "https://play.google.com/store/apps/details?id=com.buran.game.free.pack"
-                    :
-                    "https://play.google.com/store/apps/details?id=com.buran.game.pack";
-    public static final String PAY_US = "https://play.google.com/store/apps/details?id=com.buran.game.pack";
+    public static final String PROJECT_URL = "https://github.com/soloyes/OpenShuttle";
+    public static final String RATE_US = PROJECT_URL;
+    public static final String ABOUT_US = PROJECT_URL;
+    public static final String PAY_US = PROJECT_URL;
 
     public static String DEFAULT_NAME = "Player";
 
