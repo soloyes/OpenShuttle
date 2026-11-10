@@ -362,7 +362,7 @@ public final class PaintConstants {
     public static final String SP_BAR = "bar";
     public static final String SP_BAR_SCALE = "barscale";
     public static final String SP_BAR_ICON = "spicon";
-    public static final int BAR_HEIGHT = 14;
+    public static final int BAR_HEIGHT = 24;
     public static final String CIRCLE_GLOW = "circleglow";
     public static final String SELECTOR_OUT = "selectorout";
     public static final String SELECTOR_OUT_CENTER = "selectoroutcenter";

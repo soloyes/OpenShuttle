@@ -373,17 +373,17 @@ public class SelectorGroup extends Group {
 
     public void changePosition(boolean isLeft) {
         if (isLeft) {
-            centerButton.setPosition(56, Rules.WORLD_HEIGHT / 3 - centerHeight / 2 + 70);
-            upButton.setPosition(56, Rules.WORLD_HEIGHT / 3 - height / 2 + centerHeight + 70);
-            downButton.setPosition(56, Rules.WORLD_HEIGHT / 3 - height / 2 - centerHeight + 70);
+            centerButton.setPosition(Rules.SAFE_X + 13, Rules.WORLD_HEIGHT / 3 - centerHeight / 2 + 70);
+            upButton.setPosition(Rules.SAFE_X + 13, Rules.WORLD_HEIGHT / 3 - height / 2 + centerHeight + 70);
+            downButton.setPosition(Rules.SAFE_X + 13, Rules.WORLD_HEIGHT / 3 - height / 2 - centerHeight + 70);
             upArrow.setVisible(true);
             upArrow1.setVisible(false);
             downArrow.setVisible(true);
             downArrow1.setVisible(false);
         } else {
-            centerButton.setPosition(Rules.WORLD_WIDTH - 56 - centerWidth, Rules.WORLD_HEIGHT / 3 - centerHeight / 2 + 70);
-            upButton.setPosition(Rules.WORLD_WIDTH - 56 - width, Rules.WORLD_HEIGHT / 3 - height / 2 + centerHeight + 70);
-            downButton.setPosition(Rules.WORLD_WIDTH - 56 - width, Rules.WORLD_HEIGHT / 3 - height / 2 - centerHeight + 70);
+            centerButton.setPosition(Rules.WORLD_WIDTH - Rules.SAFE_X - 13 - centerWidth, Rules.WORLD_HEIGHT / 3 - centerHeight / 2 + 70);
+            upButton.setPosition(Rules.WORLD_WIDTH - Rules.SAFE_X - 13 - width, Rules.WORLD_HEIGHT / 3 - height / 2 + centerHeight + 70);
+            downButton.setPosition(Rules.WORLD_WIDTH - Rules.SAFE_X - 13 - width, Rules.WORLD_HEIGHT / 3 - height / 2 - centerHeight + 70);
             upArrow.setVisible(false);
             upArrow1.setVisible(true);
             downArrow.setVisible(false);

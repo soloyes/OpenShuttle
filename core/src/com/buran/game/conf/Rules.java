@@ -35,6 +35,25 @@ public final class Rules {
     //300
     private static final int STARS = 300;
     //1080
+    /**
+     * Visible part of the game world (camera zoom applied). The UI keeps the full WORLD size.
+     * On landscape screens the camera zooms in so objects read from the sofa and the visible
+     * area matches the portrait game the balance was designed for.
+     */
+    public static float VIEW_ZOOM = 1.0f;
+    public static int VIEW_WIDTH;
+    public static int VIEW_HEIGHT;
+    public static final float LANDSCAPE_VIEW_ZOOM = 0.6f;
+    /** Title-safe inset for HUD on TVs (set from the world size at start). */
+    public static int SAFE_X = 43;
+    public static int SAFE_Y = 43;
+    /** EMP pulse (gamepad Y / keyboard F): replaces tapping an anomaly on touch screens. */
+    public static final float PULSE_RANGE = 700.0f;
+    public static final float PULSE_COOLDOWN = 2.0f;
+    /** Camera: seconds of velocity to look ahead, cap as a share of the view, follow stiffness. */
+    public static final float CAMERA_LOOK_AHEAD_TIME = 0.35f;
+    public static final float CAMERA_LOOK_AHEAD_MAX = 0.22f;
+    public static final float CAMERA_FOLLOW_RATE = 6.0f;
     public static int WORLD_WIDTH;
     //1920
     public static int WORLD_HEIGHT;
@@ -349,8 +368,8 @@ public final class Rules {
 
     public static void setSpace(int n) {
         STARS_COUNT = STARS * n;
-        SPACE_WIDTH = WORLD_WIDTH * n;
-        SPACE_HEIGHT = WORLD_HEIGHT * n;
+        SPACE_WIDTH = VIEW_WIDTH * n;
+        SPACE_HEIGHT = VIEW_HEIGHT * n;
         BLACKHOLE_ROAR_RANGE = n * BLACKHOLE_ROAR_FACTOR;
     }
 

@@ -75,7 +75,7 @@ public class PauseGroup extends Group {
         this.playPauseBtn = new ImageButton(pauseTexture);
         playPauseBtn.setOrigin(Align.center);
         playPauseBtn.setSize(PaintConstants.PLAY_PAUSE_BUTTON_WIDTH, PaintConstants.PLAY_PAUSE_BUTTON_HEIGHT);
-        playPauseBtn.setPosition(Rules.WORLD_WIDTH - playPauseBtn.getWidth() - 43, Rules.WORLD_HEIGHT - playPauseBtn.getHeight() - 43);
+        playPauseBtn.setPosition(Rules.WORLD_WIDTH - playPauseBtn.getWidth() - Rules.SAFE_X, Rules.WORLD_HEIGHT - playPauseBtn.getHeight() - Rules.SAFE_Y);
         this.color = new Color();
         this.configGroup = new ConfigGroup();
         this.leftGroup = LeftGroup.getInstance();
@@ -93,8 +93,8 @@ public class PauseGroup extends Group {
         buttonMenu.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
         buttonRestart.setSize(PaintConstants.MENU_BUTTON_WIDTH, PaintConstants.MENU_BUTTON_HEIGHT);
 
-        buttonRestart.setPosition(22, 22);
-        buttonMenu.setPosition(Rules.WORLD_WIDTH - buttonMenu.getWidth() - 22, 22);
+        buttonRestart.setPosition(Rules.SAFE_X, Rules.SAFE_Y);
+        buttonMenu.setPosition(Rules.WORLD_WIDTH - buttonMenu.getWidth() - Rules.SAFE_X, Rules.SAFE_Y);
 
         buttonMenu.addListener(new ClickListener() {
             @Override
@@ -245,8 +245,8 @@ public class PauseGroup extends Group {
         if (!Rules.GAME_OVER) {
             font60.draw(
                     batch,
-                    glyphLayout, Rules.WORLD_WIDTH - playPauseBtn.getWidth() / 2 - glyphLayout.width / 2 - 43,
-                    Rules.WORLD_HEIGHT - 225
+                    glyphLayout, Rules.WORLD_WIDTH - playPauseBtn.getWidth() / 2 - glyphLayout.width / 2 - Rules.SAFE_X,
+                    Rules.WORLD_HEIGHT - Rules.SAFE_Y + 43 - 225
             );
         }
     }

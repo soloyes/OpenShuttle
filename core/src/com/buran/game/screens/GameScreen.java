@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.buran.game.background.Background;
+import com.buran.game.background.SectorBorder;
 import com.buran.game.bot.anomaly.AbstractAnomaly;
 import com.buran.game.bot.anomaly.CorrosiveAnomaly;
 import com.buran.game.bot.anomaly.CorrosiveAnomalyEmitter;
@@ -49,6 +50,7 @@ import com.buran.game.conf.VConstants;
 import com.buran.game.effects.AsteroidLaunchEmitter;
 import com.buran.game.effects.Oscillator;
 import com.buran.game.effects.PrettySound;
+import com.buran.game.input.Gamepad;
 import com.buran.game.effects.Ray;
 import com.buran.game.effects.Shake;
 import com.buran.game.effects.Vibrator;
@@ -189,6 +191,10 @@ public class GameScreen extends BaseScreen {
         ShaderManager.BLACKHOLE.load();
 
         background = new Background();
+        if (sectorBorder != null) {
+            sectorBorder.dispose();
+        }
+        sectorBorder = new SectorBorder();
         gameInfoSystem = new GameInfoSystem();
         joystick = new Joystick();
 
@@ -220,8 +226,8 @@ public class GameScreen extends BaseScreen {
         storageEmitter.emit();
         this.profiles = new Profiles();
         this.nebulaRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.CIRCLE_GLOW);
-        nebulaRegionX = MathUtils.random(0, Rules.SPACE_WIDTH - Rules.WORLD_WIDTH);
-        nebulaRegionY = MathUtils.random(0, Rules.SPACE_HEIGHT - Rules.WORLD_HEIGHT);
+        nebulaRegionX = MathUtils.random(0, Rules.SPACE_WIDTH - Rules.VIEW_WIDTH);
+        nebulaRegionY = MathUtils.random(0, Rules.SPACE_HEIGHT - Rules.VIEW_HEIGHT);
         this.nebulaAOscillator = new Oscillator();
         this.circleRenderer = new CircleRenderer();
     }
@@ -257,6 +263,9 @@ public class GameScreen extends BaseScreen {
         stage.addActor(detailedResultGroup);
         stage.addActor(pauseGroup);
         stage.addActor(tutorial);
+        // Side tabs are a touch-screen affordance; on web/desktop they only clutter the TV frame.
+        SwitchGroup.getInstance().setVisible(Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.Android
+                || Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.iOS);
         stage.addActor(SwitchGroup.getInstance());
         stage.addActor(SelectorGroup.getInstance());
     }
@@ -277,6 +286,7 @@ public class GameScreen extends BaseScreen {
         //BEGIN
         batch.begin();
         background.render(batch);
+        sectorBorder.render(batch);
         batch.end();
         //END
 
@@ -311,13 +321,13 @@ public class GameScreen extends BaseScreen {
         batch.setColor(color);
         batch.draw(nebulaRegion,
                 nebulaRegionX, nebulaRegionY,
-                Rules.WORLD_WIDTH, (3 * Rules.WORLD_HEIGHT / 4)
+                Rules.VIEW_WIDTH, (3 * Rules.VIEW_HEIGHT / 4)
         );
         batch.setColor(Color.WHITE);
         batch.end();
 
-        float shaderHoleX = (Blackhole.position.x - camera.position.x + Rules.WORLD_WIDTH / 2) / Rules.WORLD_WIDTH;
-        float shaderHoleY = (Blackhole.position.y - camera.position.y + Rules.WORLD_HEIGHT / 2) / Rules.WORLD_HEIGHT;
+        float shaderHoleX = (Blackhole.position.x - camera.position.x + Rules.VIEW_WIDTH / 2f) / Rules.VIEW_WIDTH;
+        float shaderHoleY = (Blackhole.position.y - camera.position.y + Rules.VIEW_HEIGHT / 2f) / Rules.VIEW_HEIGHT;
 
         //
         ScreenManager.getInstance().resetCamera();
@@ -409,6 +419,10 @@ public class GameScreen extends BaseScreen {
     }
 
     public void update(float dt) {
+        if (Gamepad.get().isPulse()) {
+            firePulseEffect();
+        }
+        sectorBorder.update(dt);
         cameraUpdate(dt);
         if (!PauseGroup.isPause()) {
             PrettySound.update(dt);
@@ -483,6 +497,9 @@ public class GameScreen extends BaseScreen {
 
     //It is works, somehow.
     //Cam position is reset when fbo.end(), copy-paste from cameraHelper is the hack.
+    private final Vector2 lookAhead = new Vector2();
+    private SectorBorder sectorBorder;
+
     private void cameraUpdate(float dt) {
         if (player.isCameraSmooth()) {
             tmp1V3.set(Buran.position, 0.0f).sub(cameraHelper.position.x, cameraHelper.position.y, 0.0f).nor();
@@ -499,8 +516,13 @@ public class GameScreen extends BaseScreen {
                 player.setCameraSmooth(false);
             }
         } else {
-            camera.position.set(Buran.position.x, Buran.position.y, 0);
-            cameraHelper.position.set(Buran.position.x, Buran.position.y, 0);
+            // Look ahead along the velocity and ease toward it (critically damped feel).
+            lookAhead.set(Buran.velocity).scl(Rules.CAMERA_LOOK_AHEAD_TIME)
+                    .limit(Math.min(Rules.VIEW_WIDTH, Rules.VIEW_HEIGHT) * Rules.CAMERA_LOOK_AHEAD_MAX);
+            float k = 1.0f - (float) Math.exp(-Rules.CAMERA_FOLLOW_RATE * dt);
+            cameraHelper.position.x += (Buran.position.x + lookAhead.x - cameraHelper.position.x) * k;
+            cameraHelper.position.y += (Buran.position.y + lookAhead.y - cameraHelper.position.y) * k;
+            camera.position.set(cameraHelper.position);
         }
         cameraUpdater(cameraHelper);
         cameraUpdater(camera);
@@ -798,18 +820,19 @@ public class GameScreen extends BaseScreen {
     }
 
     private void cameraUpdater(Camera camera) {
-        if (camera.position.x < Rules.WORLD_WIDTH / 2) {
-            camera.position.x = Rules.WORLD_WIDTH / 2;
-        }
-        if (camera.position.y < Rules.WORLD_HEIGHT / 2) {
-            camera.position.y = Rules.WORLD_HEIGHT / 2;
-        }
-        if (camera.position.x > Rules.SPACE_WIDTH - Rules.WORLD_WIDTH / 2) {
-            camera.position.x = Rules.SPACE_WIDTH - Rules.WORLD_WIDTH / 2;
-        }
-        if (camera.position.y > Rules.SPACE_HEIGHT - Rules.WORLD_HEIGHT / 2) {
-            camera.position.y = Rules.SPACE_HEIGHT - Rules.WORLD_HEIGHT / 2;
-        }
+        ((OrthographicCamera) camera).zoom = Rules.VIEW_ZOOM;
+        float halfW = Rules.VIEW_WIDTH / 2f;
+        float halfH = Rules.VIEW_HEIGHT / 2f;
+        // Stay mostly inside the map, but peek a quarter view past the edge so the border is seen...
+        float peekX = Rules.VIEW_WIDTH * 0.25f;
+        float peekY = Rules.VIEW_HEIGHT * 0.25f;
+        camera.position.x = MathUtils.clamp(camera.position.x, halfW - peekX, Rules.SPACE_WIDTH - halfW + peekX);
+        camera.position.y = MathUtils.clamp(camera.position.y, halfH - peekY, Rules.SPACE_HEIGHT - halfH + peekY);
+        // ...but never lose the ship: past the edge the camera follows it out.
+        float marginX = halfW * 0.6f;
+        float marginY = halfH * 0.6f;
+        camera.position.x = MathUtils.clamp(camera.position.x, Buran.position.x - marginX, Buran.position.x + marginX);
+        camera.position.y = MathUtils.clamp(camera.position.y, Buran.position.y - marginY, Buran.position.y + marginY);
         camera.update();
     }
 
@@ -880,6 +903,22 @@ public class GameScreen extends BaseScreen {
         }
     }
 
+    /** Expanding cyan ring for the EMP pulse. */
+    private void firePulseEffect() {
+        boomBox.playSound(MSConstants.GET_SCANNER);
+        Shake.getInstance().shakeCamera(0.25f, 35, 12);
+        float duration = 0.45f;
+        float speed = Rules.PULSE_RANGE / duration;
+        for (int i = 0; i < 90; i++) {
+            float a = i * MathUtils.PI2 / 90;
+            particleEmitter.setup(Buran.position.x, Buran.position.y,
+                    MathUtils.cos(a) * speed, MathUtils.sin(a) * speed,
+                    duration, 3.0f, 1.0f,
+                    0.4f, 0.95f, 1.0f, 0.9f,
+                    0.4f, 0.95f, 1.0f, 0.0f);
+        }
+    }
+
     /**
      * Everything below is static or lives on enum singletons, so it survives from one game
      * to the next unless reset here.
@@ -935,6 +974,10 @@ public class GameScreen extends BaseScreen {
         }
         if (circleRenderer != null) {
             circleRenderer.dispose();
+        }
+        if (sectorBorder != null) {
+            sectorBorder.dispose();
+            sectorBorder = null;
         }
         global.dispose();
         ShaderManager.PAUSE.dispose();

@@ -97,6 +97,7 @@ public class ScreenManager {
     }
 
     public void resetCamera() {
+        ((OrthographicCamera) camera).zoom = 1.0f;
         camera.position.set(Rules.WORLD_WIDTH / 2, Rules.WORLD_HEIGHT / 2, 0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -120,6 +121,15 @@ public class ScreenManager {
                 Rules.WORLD_HEIGHT = height;
             }
             Rules.WORLD_WIDTH = Rules.WORLD_HEIGHT * width / height;
+        }
+
+        Rules.VIEW_ZOOM = Rules.WORLD_WIDTH > Rules.WORLD_HEIGHT ? Rules.LANDSCAPE_VIEW_ZOOM : 1.0f;
+        Rules.VIEW_WIDTH = Math.round(Rules.WORLD_WIDTH * Rules.VIEW_ZOOM);
+        Rules.VIEW_HEIGHT = Math.round(Rules.WORLD_HEIGHT * Rules.VIEW_ZOOM);
+        if (Rules.WORLD_WIDTH > Rules.WORLD_HEIGHT) {
+            // TVs may crop the picture edges (overscan): keep HUD within ~4% of the frame.
+            Rules.SAFE_X = Math.round(Rules.WORLD_WIDTH * 0.035f);
+            Rules.SAFE_Y = Math.round(Rules.WORLD_HEIGHT * 0.045f);
         }
 
         this.camera = new OrthographicCamera(Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);

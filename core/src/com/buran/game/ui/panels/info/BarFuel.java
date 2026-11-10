@@ -16,7 +16,7 @@ public class BarFuel extends AbstractBar {
         this.width = Rules.WORLD_WIDTH / 4;
         this.height = PaintConstants.BAR_HEIGHT;
         this.side = Side.RIGHT;
-        this.position.set(Rules.WORLD_WIDTH - width - 53 - PaintConstants.PLAY_PAUSE_BUTTON_WIDTH - 14, Rules.WORLD_HEIGHT - 168);
+        this.position.set(Rules.WORLD_WIDTH - width - Rules.SAFE_X - 10 - PaintConstants.PLAY_PAUSE_BUTTON_WIDTH - 14, Rules.WORLD_HEIGHT - Rules.SAFE_Y + 43 - 168);
     }
 
     @Override

@@ -16,7 +16,7 @@ public class BarShield extends AbstractBar {
         this.width = Rules.WORLD_WIDTH / 4;
         this.height = PaintConstants.BAR_HEIGHT;
         this.side = Side.LEFT;
-        this.position.set(53 + PaintConstants.XP_WIDTH + 12, Rules.WORLD_HEIGHT - 90);
+        this.position.set(Rules.SAFE_X + 10 + PaintConstants.XP_WIDTH + 12, Rules.WORLD_HEIGHT - Rules.SAFE_Y + 43 - 90);
     }
 
     @Override
