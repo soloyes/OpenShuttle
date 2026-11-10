@@ -16,7 +16,7 @@ and stay alive as long as the fuel lasts.
 
 ## Gameplay
 
-Fly close to a stranded astronaut and the tractor beam pulls him aboard. Medics, mechanics, scientists and military crew
+Fly close to a stranded astronaut and the tractor beam pulls them aboard. Medics, mechanics, scientists and military crew
 each bring their own bonus. Crates, fuel boxes and storages refill fuel, shields and weapons.
 
 Space is full of things that want you dead: metal and mineral asteroids, black holes and four kinds of anomalies
