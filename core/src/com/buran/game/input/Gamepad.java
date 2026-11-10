@@ -154,7 +154,8 @@ public final class Gamepad {
             } else if (controller != null) {
                 updateCursor(dt, lx, ly, ry);
             }
-            if (inGameScreen() && !Rules.GAME_OVER && (pressed(Action.START) || pressed(Action.B))) {
+            boolean menuOwnsB = com.buran.game.ui.menu.MenuNav.get() != null;
+            if (inGameScreen() && !Rules.GAME_OVER && (pressed(Action.START) || (pressed(Action.B) && !menuOwnsB))) {
                 PauseGroup.togglePause();
             }
         }

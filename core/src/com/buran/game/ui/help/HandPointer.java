@@ -64,6 +64,9 @@ public class HandPointer extends Group {
 
     /** On TV/PC the first-run hint is the control scheme, not a tapping hand. */
     private void drawControlsHint(Batch batch) {
+        if (com.buran.game.ui.groups.PauseGroup.isPause() || com.buran.game.conf.Rules.GAME_OVER) {
+            return;
+        }
         String line1 = "LEFT STICK - FLY      A - USE ITEM      LB / RB - SWITCH ITEM";
         String line2 = "Y - EMP PULSE      MENU - PAUSE";
         Color c = hintFont.getColor().cpy();
