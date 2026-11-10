@@ -1,6 +1,6 @@
 Vertex.shader
 
-При передаче цвет из SpriteBatch в шейдер, происходит преобразование из ABGR int цвета в float.
-что-бы избежать NAN при преобразовании, доступен не весь диапазон для альфы, а только значения от (0-254)
-чтобы полностью передать непрозрачность цвета, когда альфа во float равна 1, то всю альфу приходится умножать.
-это специфика libgdx и о ней надо помнить при переопределении вершинного шейдера.
+When SpriteBatch passes a colour to the shader, the ABGR int colour is converted to a float.
+To avoid NaN in that conversion, alpha can't use the full range, only 0-254.
+So to pass a fully opaque colour (alpha 1.0 as a float), the alpha has to be scaled up.
+This is a libGDX quirk; keep it in mind when you override the vertex shader.
