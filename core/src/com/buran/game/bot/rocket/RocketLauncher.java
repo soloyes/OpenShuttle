@@ -29,6 +29,8 @@ public class RocketLauncher {
 
     public RocketLauncher(RocketEmitter rocketEmitter, ListOfListsJoiner<AbstractAnomaly> anomalyJoiner) {
         this.charged = false;
+        launched = false;
+        amplitude = 0;
         this.boomBox = new BoomBox();
         this.anomalyJoiner = anomalyJoiner;
         this.rocketEmitter = rocketEmitter;

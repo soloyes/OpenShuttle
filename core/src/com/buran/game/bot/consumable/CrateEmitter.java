@@ -17,6 +17,8 @@ public class CrateEmitter extends AbstractConsumableEmitter {
 
     public CrateEmitter(ParticleEmitter particleEmitter) {
         this(Crate.class, particleEmitter);
+        emitted = 0;
+        emittedGolden = 0;
         super.setRespawnTime(Rules.CONSUMABLE_CRATE_RESPAWN_TIME);
         super.setConsumablesAtStart(Rules.CONSUMABLE_CRATE_AT_START);
         super.setConsumablesMaxCount(Rules.CONSUMABLE_CRATE_MAX_COUNT);

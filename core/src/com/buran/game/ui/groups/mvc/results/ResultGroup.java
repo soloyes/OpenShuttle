@@ -93,6 +93,7 @@ public class ResultGroup extends Group {
 
     public void init() {
         verticalGroup.clear();
+        Line.lines = 0;
         int lines = 0;
 
         Map<ResultDAO, ProfileDAO> map = new TreeMap<ResultDAO, ProfileDAO>(new Comparator<ResultDAO>() {

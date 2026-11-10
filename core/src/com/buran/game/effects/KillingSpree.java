@@ -12,8 +12,8 @@ public enum KillingSpree {
     MULTI("MULTI KILL", 4, 1.3f, 5.0f),
     ULTRA("ULTRA KILL!", 5, 1.5f, 6.0f),
     RAMPAGE("RAMPAGE...", 6, 2.0f, 7.0f),
-    DISTRACTION("DISTRACTION!", 5, 2.5f, 10.0f),
-    HOLY("WHITE FURY!", 7, 3.0f, 15.0f);
+    DISTRACTION("DISTRACTION!", 7, 2.5f, 10.0f),
+    HOLY("WHITE FURY!", 8, 3.0f, 15.0f);
 
     private String text;
     private int killsCount;
@@ -28,10 +28,13 @@ public enum KillingSpree {
     }
 
     public static KillingSpree getKillingSpreeFromKillsCount(int killsCount) {
-        if (killsCount > values().length - 1) {
-            return values()[values().length - 1];
+        KillingSpree result = NONE;
+        for (KillingSpree k : values()) {
+            if (killsCount >= k.killsCount) {
+                result = k;
+            }
         }
-        return values()[killsCount];
+        return result;
     }
 
     public float getScoreModifier() {

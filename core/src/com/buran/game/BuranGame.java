@@ -14,6 +14,7 @@ import lombok.Getter;
  */
 
 public class BuranGame extends Game {
+    private static final float MAX_FRAME_DT = 1f / 20f;
     private SpriteBatch batch;
     private ScreenManager.ScreenType screenType;
     @Getter
@@ -52,7 +53,9 @@ public class BuranGame extends Game {
 
     @Override
     public void render() {
-        float dt = Gdx.graphics.getDeltaTime();
+        // A hidden browser tab stops frames; the first frame back would carry the whole gap.
+        // Physics multiplies velocity by (1 - dt), so a large dt flips and explodes it.
+        float dt = Math.min(Gdx.graphics.getDeltaTime(), MAX_FRAME_DT);
         Gamepad.get().update(dt);
         getScreen().render(dt);
         Gamepad.get().render(batch);

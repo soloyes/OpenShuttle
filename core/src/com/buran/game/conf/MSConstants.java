@@ -19,7 +19,7 @@ public final class MSConstants {
     private static final String MUSIC_FOLDER = "music/";
     private static final String EFFECT_FOLDER = "effect/";
     private static final String MUSIC_EFFECT_FOLDER = MUSIC_ROOT_FOLDER + EFFECT_FOLDER;
-    private static final String SONG_FOLDER = MUSIC_ROOT_FOLDER + MUSIC_FOLDER;
+    public static final String SONG_FOLDER = MUSIC_ROOT_FOLDER + MUSIC_FOLDER;
 
     //SOUND
     public static final String UI_PROFILE_SAVED = UI + "ui_profile_saved.mp3";

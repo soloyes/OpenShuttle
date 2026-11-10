@@ -17,6 +17,8 @@ public class StorageEmitter extends AbstractConsumableEmitter {
 
     public StorageEmitter(ParticleEmitter particleEmitter) {
         this(Storage.class, particleEmitter);
+        emitted = 0;
+        emittedGolden = 0;
         super.setRespawnTime(Rules.CONSUMABLE_STORAGE_RESPAWN_TIME);
         super.setConsumablesAtStart(Rules.CONSUMABLE_STORAGE_AT_START);
         super.setConsumablesMaxCount(Rules.CONSUMABLE_STORAGE_MAX_COUNT);

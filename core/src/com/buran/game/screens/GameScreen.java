@@ -162,6 +162,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
+        resetSessionState();
         standing = Standing.getInstance();
         fadeInAlpha = 0.0f;
         gameOverDeactivate = false;
@@ -182,10 +183,7 @@ public class GameScreen extends BaseScreen {
         asteroidLaunchEmitter = new AsteroidLaunchEmitter();
 
         boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
-        fbo = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(),
-                Gdx.graphics.getHeight(), false);
-        fboTexRegion = new TextureRegion(fbo.getColorBufferTexture());
-        fboTexRegion.flip(false, true);
+        rebuildFbo(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         ShaderManager.PAUSE.load();
         ShaderManager.BLACKHOLE.load();
@@ -353,7 +351,7 @@ public class GameScreen extends BaseScreen {
         }
         //batch.end();
 
-        if (PauseGroup.isPause()) {
+        if (PauseGroup.isPause() && ShaderManager.PAUSE.getProgram() != null) {
             batch.setShader(ShaderManager.PAUSE.getProgram());
             ShaderManager.PAUSE.getProgram().setUniformf("resolution", Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
         } else {
@@ -729,7 +727,7 @@ public class GameScreen extends BaseScreen {
 
             for (int j = 0; j < corrosiveAnomalyEmitter.getActiveList().size(); j++) {
                 CorrosiveAnomaly anomaly = (CorrosiveAnomaly) corrosiveAnomalyEmitter.getActiveList().get(j);
-                if (!asteroid.isFragmented() && anomaly.getPosition().dst(asteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
+                if (asteroid.isActive() && !asteroid.isFragmented() && anomaly.getPosition().dst(asteroid.getPosition()) < PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2) {
                     asteroid.destroyWithEffect();
                     ObjectPool.EMITTERS.get(asteroid.getClass())
                             .boom(asteroid.getPosition(), PlayerInteractionLevels.NONE);
@@ -745,7 +743,7 @@ public class GameScreen extends BaseScreen {
 
             for (int k = 0; k < consumableJoiner.size(); k++) {
                 AbstractConsumable consumable = consumableJoiner.get(k);
-                if (!asteroid.isFragmented() && consumable.getPosition().dst(asteroid.getPosition()) < 128) {
+                if (asteroid.isActive() && !asteroid.isFragmented() && consumable.getPosition().dst(asteroid.getPosition()) < 128) {
                     asteroid.destroyWithEffect();
                     if (!consumable.isShielded()) {
                         consumable.destroyWithEffect();
@@ -882,9 +880,62 @@ public class GameScreen extends BaseScreen {
         }
     }
 
+    /**
+     * Everything below is static or lives on enum singletons, so it survives from one game
+     * to the next unless reset here.
+     */
+    private void resetSessionState() {
+        for (Sticker crew : Sticker.ASTRONAUTS) {
+            crew.setCoefficient(Rules.STANDARD_COEFFICIENT);
+        }
+        Buran.isLaser = false;
+        Standing.getInstance().setLaserChargeLevel(0.0f);
+        PrettySound.clear();
+    }
+
+    /** Scene buffer: 8-bit channels (RGB565 banded the dark gradients), rebuilt when the window changes. */
+    private void rebuildFbo(int width, int height) {
+        if (width <= 0 || height <= 0) {
+            return;
+        }
+        if (fbo != null) {
+            if (fbo.getWidth() == width && fbo.getHeight() == height) {
+                return;
+            }
+            fbo.dispose();
+        }
+        fbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false);
+        fboTexRegion = new TextureRegion(fbo.getColorBufferTexture());
+        fboTexRegion.flip(false, true);
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        if (fbo != null) {
+            rebuildFbo(width, height);
+        }
+    }
+
+    /** The app lost focus (hidden tab, Xbox guide): pause the game instead of letting it run blind. */
+    @Override
+    public void pause() {
+        if (!Rules.GAME_OVER && !PauseGroup.isPause()) {
+            PauseGroup.togglePause();
+        }
+        super.pause();
+    }
+
     @Override
     public void dispose() {
         super.dispose();
+        if (fbo != null) {
+            fbo.dispose();
+            fbo = null;
+        }
+        if (circleRenderer != null) {
+            circleRenderer.dispose();
+        }
         global.dispose();
         ShaderManager.PAUSE.dispose();
         ShaderManager.BLACKHOLE.dispose();

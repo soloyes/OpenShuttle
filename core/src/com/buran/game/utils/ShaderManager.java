@@ -30,11 +30,15 @@ public interface ShaderManager {
 
         @Override
         public void load() {
+            ShaderProgram.pedantic = false;
             shaderPause = new ShaderProgram(
                     Gdx.files.internal("shaders/grey_screen.vert").readString(),
                     Gdx.files.internal("shaders/grey_screen.frag").readString()
             );
-            ShaderProgram.pedantic = false;
+            if (!shaderPause.isCompiled()) {
+                Gdx.app.error("ShaderManager", "shaderPause failed to compile: " + shaderPause.getLog());
+            }
+
         }
 
         @Override
@@ -60,11 +64,15 @@ public interface ShaderManager {
 
         @Override
         public void load() {
+            ShaderProgram.pedantic = false;
             shaderBlackHole = new ShaderProgram(
                     Gdx.files.internal("shaders/black_hole.vert").readString(),
                     Gdx.files.internal("shaders/black_hole.frag").readString()
             );
-            ShaderProgram.pedantic = false;
+            if (!shaderBlackHole.isCompiled()) {
+                Gdx.app.error("ShaderManager", "shaderBlackHole failed to compile: " + shaderBlackHole.getLog());
+            }
+
         }
 
         @Override

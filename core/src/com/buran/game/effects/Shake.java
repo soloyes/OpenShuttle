@@ -72,12 +72,12 @@ public class Shake {
         update(dt);
         internalTimer += dt;
         if (internalTimer > duration) {
-            internalTimer -= duration;
+            internalTimer %= duration;
         }
         if (shakeDuration > 0) {
             shakeDuration -= dt;
             float shakeTime = (internalTimer * frequency);
-            int first = (int) shakeTime;
+            int first = (int) shakeTime % sampleCount;
             int second = (first + 1) % sampleCount;
             int third = (first + 2) % sampleCount;
             float deltaT = shakeTime - (int) shakeTime;
@@ -101,12 +101,12 @@ public class Shake {
         }
         vectorInternalTimer += dt;
         if (vectorInternalTimer > duration) {
-            vectorInternalTimer -= duration;
+            vectorInternalTimer %= duration;
         }
         if (vectorShakeDuration > 0) {
             vectorShakeDuration -= dt;
             float shakeTime = (vectorInternalTimer * vectorFrequency);
-            int first = (int) shakeTime;
+            int first = (int) shakeTime % vectorSampleCount;
             int second = (first + 1) % vectorSampleCount;
             int third = (first + 2) % vectorSampleCount;
             float deltaT = shakeTime - (int) shakeTime;

@@ -68,7 +68,7 @@ public class Blackhole {
         this.angle = MathUtils.random(365);
         this.rotation = MathUtils.random(365);
         this.radialSpeed = MathUtils.random(30, 50);
-        this.radius = new Vector2(MathUtils.random(Rules.SPACE_WIDTH / 6, Rules.SPACE_WIDTH / 3), 0);
+        this.radius = new Vector2(MathUtils.random(Math.min(Rules.SPACE_WIDTH, Rules.SPACE_HEIGHT) / 6, Math.min(Rules.SPACE_WIDTH, Rules.SPACE_HEIGHT) / 3), 0);
         this.oscillator = new Oscillator();
         setPosition();
     }

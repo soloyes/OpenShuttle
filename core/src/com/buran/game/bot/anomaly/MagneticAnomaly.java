@@ -66,6 +66,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
         this.hungry = true;
         this.eat = false;
         this.hungryTimer = 0.0f;
+        this.liveTime = 0.0f;
         this.born = false;
         this.level = 2;
         this.scaleX = this.saveScaleX = 1.0f;
