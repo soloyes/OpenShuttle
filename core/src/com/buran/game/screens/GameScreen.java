@@ -260,6 +260,7 @@ public class GameScreen extends BaseScreen {
             threatTextures = new ThreatTextures();
         }
         threatOverlay = new ThreatOverlay(anomalyJoiner, threatTextures);
+        tutorialPrompts = new com.buran.game.ui.hud.TutorialPrompts();
         // Campaign sector: apply its threat table and goal; arcade keeps the classic rules.
         Rules.corrosiveHuntTime = Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
         if (Campaign.current() != null) {
@@ -380,6 +381,7 @@ public class GameScreen extends BaseScreen {
         radiationAnomalyEmitter.render(batch);
         magneticAnomalyEmitter.render(batch);
         threatOverlay.renderWorld(batch, Theme.font(44));
+        tutorialPrompts.render(batch, Theme.font(44), threatTextures);
         rocketLauncher.render(batch);
         asteroidLaunchEmitter.render(batch);
         if (Profiles.getSettings().isShader()) {
@@ -525,6 +527,7 @@ public class GameScreen extends BaseScreen {
             Shelters.update(dt);
             threatOverlay.update(dt);
         }
+        tutorialPrompts.update(dt);
         spaceBackground.update(dt);
         if (!frozen) {
             if (Blackhole.enabled) {
@@ -609,6 +612,7 @@ public class GameScreen extends BaseScreen {
     private SectorBorder sectorBorder;
     private ThreatTextures threatTextures;
     private ThreatOverlay threatOverlay;
+    private com.buran.game.ui.hud.TutorialPrompts tutorialPrompts;
     private SectorRun sectorRun;
     private GameMenu gameMenu;
     private boolean runReported;
@@ -852,13 +856,16 @@ public class GameScreen extends BaseScreen {
                     player.getLifeShield().blink(1.0f);
                     ObjectPool.EMITTERS.get(asteroid.getClass())
                             .boom(asteroid.getPosition(), PlayerInteractionLevels.NONE);
-                    Standing.getInstance().takeDamage(player.getShieldLevel().getLevel() + 1);
-                    GameInfoSystem.setup(
-                            Buran.position.x, Buran.position.y,
-                            GameInfoSystem.Preset.SCREECH,
-                            3.0f,
-                            true
-                    );
+                    Standing st0 = Standing.getInstance();
+                    float hp0 = st0.getHp();
+                    float sh0 = st0.getLifeShield();
+                    st0.takeDamage(player.getShieldLevel().getLevel() + 1);
+                    // Say what the rock took, and teach the laser after the first hit.
+                    int lostHp = Math.round(hp0 - st0.getHp());
+                    int lostSh = Math.round(sh0 - st0.getLifeShield());
+                    String what = lostHp > 0 ? "[RED]-" + lostHp + " HULL[]" : "[RED]-" + Math.max(1, lostSh) + " SHIELD[]";
+                    GameInfoSystem.setup(Buran.position.x, Buran.position.y, what, 3.0f, true);
+                    com.buran.game.ui.hud.TutorialPrompts.rammed();
                     boomBox.playSound(MSConstants.DESTROY_ASTEROID);
                 } else {
                     player.getRamShield().blink(0.5f);

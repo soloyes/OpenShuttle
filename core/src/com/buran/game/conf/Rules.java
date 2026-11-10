@@ -48,6 +48,10 @@ public final class Rules {
     public static boolean DEBUG_START_AT_HOLE = false;
     /** Testing aid (web: ?debug=clear): sector goals count as met, the beacon is placed nearby. */
     public static boolean DEBUG_FAST_GOAL = false;
+    /** Test builds: every campaign sector can be started. */
+    public static boolean DEBUG_UNLOCK = false;
+    /** Test builds: a sector starts a third of the way to its goal. */
+    public static boolean DEBUG_THIRD = false;
     /** Title-safe inset for HUD on TVs (set from the world size at start). */
     public static int SAFE_X = 43;
     public static int SAFE_Y = 43;

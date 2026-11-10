@@ -270,8 +270,10 @@ public class GameMenu extends Group implements MenuNav.Target {
         Theme.hairline(batch, bx + 30f, by + FOOT, bw - 60f, a);
         if (!Hints.touch()) {
             String back = mode == Mode.PAUSE ? "RESUME" : "BASE";
-            String hints = Hints.key("A", "ENTER") + "SELECT      " + Hints.key("B", "ESC") + back;
-            draw(batch, smallFont, hints, bx + 66f, by + FOOT / 2f + smallFont.getCapHeight() / 2f, Theme.DIM, a);
+            float hx = bx + 66f;
+            float cy = by + FOOT / 2f;
+            hx += Theme.hint(batch, smallFont, Hints.button("A", "ENTER"), "SELECT", hx, cy, Theme.DIM, a) + 60f;
+            Theme.hint(batch, smallFont, Hints.button("B", "ESC"), back, hx, cy, Theme.DIM, a);
         }
         String title = mode == Mode.REPORT ? "SIGNAL LOST" : mode == Mode.CLEAR ? "SECTOR " + clearedSector.code() + " CLEAR" : "PAUSED";
         draw(batch, headFont, title, boxX() + 66f, boxY() + boxH() - 50f,

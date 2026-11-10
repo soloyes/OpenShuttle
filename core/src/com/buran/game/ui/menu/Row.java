@@ -72,13 +72,15 @@ public abstract class Row extends Actor {
                     return;
                 }
                 list.focus(Row.this, false);
+                Nav nav;
                 if (hasValue() && x < getWidth() * 0.33f && x > getWidth() * 0.0f && valueTapZones()) {
-                    onNav(Nav.LEFT);
+                    nav = Nav.LEFT;
                 } else if (hasValue() && x > getWidth() * 0.67f && valueTapZones()) {
-                    onNav(Nav.RIGHT);
+                    nav = Nav.RIGHT;
                 } else {
-                    onNav(Nav.ACCEPT);
+                    nav = Nav.ACCEPT;
                 }
+                list.clicked(Row.this, nav);
             }
         });
     }

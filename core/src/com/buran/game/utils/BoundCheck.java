@@ -45,10 +45,15 @@ public class BoundCheck {
         // The dashed line itself is the wall: crossing it hurts at once.
         rectangle.set(0f, 0f, Rules.SPACE_WIDTH, Rules.SPACE_HEIGHT);
         if (!rectangle.contains(Buran.position)) {
-            checkCount(dt);
+            // Training sectors: the edge only pushes back, it does not hurt.
+            com.buran.game.campaign.Sector sec = com.buran.game.campaign.Campaign.current();
+            boolean harm = sec == null || sec.borderDamage;
+            if (harm) {
+                checkCount(dt);
+            }
             playerOnScreen = false;
             pushBack(dt);
-            if (Buran.position.x >= Rules.SPACE_WIDTH + 1.5f * Rules.VIEW_WIDTH ||
+            if (harm && Buran.position.x >= Rules.SPACE_WIDTH + 1.5f * Rules.VIEW_WIDTH ||
                     Buran.position.x <= -1.5f * Rules.VIEW_WIDTH ||
                     Buran.position.y >= Rules.SPACE_HEIGHT + 1.5f * Rules.VIEW_HEIGHT ||
                     Buran.position.y <= -1.5f * Rules.VIEW_HEIGHT) {

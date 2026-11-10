@@ -36,7 +36,7 @@ public final class Campaign {
         s1.space = 1.4f;
         SECTORS.add(s1);
 
-        Sector s2 = new Sector(2, "DEBRIS FIELD", Sector.Goal.SALVAGE, 12,
+        Sector s2 = new Sector(2, "DEBRIS FIELD", Sector.Goal.SALVAGE, 50,
                 "The hull is holding. But we need metal to get home. The laser is charged. Burn the rocks, then pull the pieces in.",
                 "THE LASER FIRES AHEAD AUTOMATICALLY      MINERAL RECHARGES IT");
         empty(s2);
@@ -69,6 +69,7 @@ public final class Campaign {
         s.crateMax = 0;
         s.storageMax = 0;
         s.fuelMax = 0;
+        s.borderDamage = false;
     }
 
     private Campaign() {
@@ -104,6 +105,9 @@ public final class Campaign {
 
     /** Highest sector number the player may start (1 = only the first). */
     public static int unlocked() {
+        if (com.buran.game.conf.Rules.DEBUG_UNLOCK) {
+            return TOTAL;
+        }
         return Math.max(1, prefs().getInteger("campaign.unlocked", 1));
     }
 

@@ -55,7 +55,36 @@ public class Astronaut extends AbstractConsumable {
         score = (int) (score * Sticker.COMMANDER.getCoefficient());
         Standing.getInstance().changeScore(score, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
         boomBox.playSound(MSConstants.GET_ASTRONAUT);
-        Consumer.consume(labels.get(Label.Layer.LABEL).get(0).getSticker(), this);
+        Sticker who = labels.get(Label.Layer.LABEL).get(0).getSticker();
+        Consumer.consume(who, this);
+        // Each profession brings something you can feel at once, and the ship says what.
+        Standing st = Standing.getInstance();
+        String gift;
+        switch (who) {
+            case MEDIC:
+                st.changeHP(st.getMaxHp());
+                gift = "MEDIC ABOARD  -  HULL REPAIRED";
+                break;
+            case MECHANIC:
+                st.setLifeShield(st.getMaxLifeShield());
+                gift = "MECHANIC ABOARD  -  SHIELD RESTORED";
+                break;
+            case SCIENTIST:
+                st.changeFuel(st.getMaxFuel());
+                gift = "SCIENTIST ABOARD  -  FUEL REFILLED";
+                break;
+            case MILITARY:
+                st.changeLaserChargeLevel(st.getMaxLaserChargeLevel());
+                gift = "MILITARY ABOARD  -  LASER CHARGED";
+                break;
+            default:
+                st.changeHP(st.getMaxHp() * 0.5f);
+                st.setLifeShield(Math.min(st.getMaxLifeShield(), st.getLifeShield() + st.getMaxLifeShield() * 0.5f));
+                st.changeFuel(st.getMaxFuel() * 0.5f);
+                gift = "COMMANDER ABOARD  -  ALL SYSTEMS +50%";
+                break;
+        }
+        GameInfoSystem.setup(position.x, position.y + 110f, "[GREEN]" + gift + "[]", 3.0f, true);
     }
 
     @Override

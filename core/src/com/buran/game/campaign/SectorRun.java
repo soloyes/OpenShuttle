@@ -107,6 +107,8 @@ public final class SectorRun {
         baseline = counter();
         if (Rules.DEBUG_FAST_GOAL) {
             baseline -= sector.target;
+        } else if (Rules.DEBUG_THIRD) {
+            baseline -= sector.target / 3;
         }
     }
 
@@ -181,6 +183,7 @@ public final class SectorRun {
                 break;
             case ACTIVE:
                 progress = counter() - baseline;
+                script(dt);
                 if (progress >= sector.target) {
                     startExtraction();
                 }
@@ -198,6 +201,124 @@ public final class SectorRun {
             default:
                 break;
         }
+    }
+
+    // ------------------------------------------------------------------ scripted lessons
+
+    /** A short line from the ship under the goal (seconds left). */
+    private String notice;
+    private float noticeTime;
+    private int crewStage;
+    private int laserStage;
+    private float laserTimer;
+    private com.buran.game.bot.anomaly.AbstractAnomaly discharge;
+    private com.buran.game.bot.consumable.AbstractConsumable laserBox;
+
+    private void say(String line, float seconds) {
+        notice = line;
+        noticeTime = seconds;
+    }
+
+    private void script(float dt) {
+        noticeTime -= dt;
+        if (sector.goal == Sector.Goal.RESCUE) {
+            crewScript();
+        }
+        if (sector.number == 2) {
+            laserScript(dt);
+        }
+    }
+
+    /**
+     * Sector 01: the first one comes aboard freely. Then the hull shield charges, and from now on
+     * the nose and tail hurt people: they must come in over the wings. Anyone lost is replaced.
+     */
+    private void crewScript() {
+        if (sector.number == 1 && crewStage == 0 && progress >= 1) {
+            crewStage = 1;
+            Standing st = Standing.getInstance();
+            st.changeRamPower(2.5f - st.getRamPower());
+            say("HULL SHIELD CHARGED  -  THE NOSE AND TAIL WILL KILL THEM NOW. TAKE THEM IN OVER THE WINGS", 9f);
+        }
+        AstronautEmitter e = (AstronautEmitter) ObjectPool.EMITTERS.get(Astronaut.class);
+        int out = 0;
+        for (Object o : e.getActiveList()) {
+            com.buran.game.utils.pool.AbstractPoolable ap = (com.buran.game.utils.pool.AbstractPoolable) o;
+            if (ap.isActive() && !ap.isTaken()) {
+                out++;
+            }
+        }
+        if (progress + out < sector.target && !Rules.GAME_OVER) {
+            float ang = MathUtils.random(MathUtils.PI2);
+            float r = Rules.VIEW_HEIGHT * 0.8f;
+            float m = 260f;
+            e.emitAt(MathUtils.clamp(Buran.position.x + MathUtils.cos(ang) * r, m, Rules.SPACE_WIDTH - m),
+                    MathUtils.clamp(Buran.position.y + MathUtils.sin(ang) * r, m, Rules.SPACE_HEIGHT - m));
+            say("WE LOST ONE.  ANOTHER BEACON IS CALLING", 6f);
+        }
+    }
+
+    /**
+     * Sector 02: a third of the way in, a discharge burns the laser out. A storage drifts close by
+     * with a new one; without it no rock can be burned.
+     */
+    private void laserScript(float dt) {
+        switch (laserStage) {
+            case 0:
+                if (progress >= sector.target / 3 && Buran.isLaser) {
+                    float ang = MathUtils.random(MathUtils.PI2);
+                    float r = Rules.VIEW_HEIGHT * 0.9f;
+                    float m = 300f;
+                    discharge = ((com.buran.game.bot.anomaly.AbstractAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class))
+                            .emitAt(MathUtils.clamp(Buran.position.x + MathUtils.cos(ang) * r, m, Rules.SPACE_WIDTH - m),
+                                    MathUtils.clamp(Buran.position.y + MathUtils.sin(ang) * r, m, Rules.SPACE_HEIGHT - m));
+                    laserStage = 1;
+                    laserTimer = 0f;
+                    say("DISCHARGE ON THE SCOPE  -  IT IS COMING FOR US", 5f);
+                }
+                break;
+            case 1:
+                laserTimer += dt;
+                if (!Buran.isLaser) {
+                    removeDischarge();
+                    placeLaserBox();
+                    com.buran.game.player.navigation.Radar.isActive = true;
+                    laserStage = 2;
+                    say("THE DISCHARGE BURNED OUR LASER.  A STORAGE IS DRIFTING NEARBY  -  A NEW ONE IS INSIDE", 9f);
+                } else if (laserTimer > 30f) {
+                    removeDischarge();
+                    laserStage = 3;
+                }
+                break;
+            case 2:
+                if (Buran.isLaser) {
+                    laserStage = 3;
+                    say("LASER ONLINE", 3f);
+                } else if (laserBox == null || !laserBox.isActive() || laserBox.isTaken() && !Buran.isLaser && laserBox.getPosition().dst(Buran.position) > 400f) {
+                    placeLaserBox();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void removeDischarge() {
+        if (discharge != null && discharge.isActive()) {
+            discharge.destroyWithEffect();
+        }
+        discharge = null;
+    }
+
+    private void placeLaserBox() {
+        float ang = MathUtils.random(MathUtils.PI2);
+        float r = Rules.VIEW_HEIGHT * 0.7f;
+        float m = 300f;
+        com.buran.game.bot.consumable.AbstractConsumableEmitter se =
+                (com.buran.game.bot.consumable.AbstractConsumableEmitter) ObjectPool.EMITTERS.get(com.buran.game.bot.consumable.Storage.class);
+        laserBox = se.emitAt(MathUtils.clamp(Buran.position.x + MathUtils.cos(ang) * r, m, Rules.SPACE_WIDTH - m),
+                MathUtils.clamp(Buran.position.y + MathUtils.sin(ang) * r, m, Rules.SPACE_HEIGHT - m));
+        ((com.buran.game.bot.consumable.Storage) laserBox).force(com.buran.game.labelsticker.Sticker.LASER);
     }
 
     private boolean voiced;
@@ -296,6 +417,19 @@ public final class SectorRun {
         }
         text(batch, small, "SECTOR " + sector.code() + "  " + sector.name, W / 2f, top - 100f, Theme.DIM, 1f, true);
         text(batch, font, line, W / 2f, top - 100f - small.getLineHeight() - 6f, c, 1f, true);
+        if (notice != null && noticeTime > 0f && phase == Phase.ACTIVE) {
+            float a = Math.min(1f, noticeTime) * Math.min(1f, (phaseTime) * 2f);
+            com.buran.game.ui.hud.Prompt.text(batch, small, notice, W / 2f,
+                    top - 100f - small.getLineHeight() - font.getLineHeight() - 70f, a);
+        }
+        if (laserStage == 2 && laserBox != null && laserBox.isActive() && !laserBox.isTaken()) {
+            float dx = laserBox.getPosition().x - worldCamera.position.x;
+            float dy = laserBox.getPosition().y - worldCamera.position.y;
+            if (!com.buran.game.world.EdgeMarker.inView(dx, dy, 0f)) {
+                com.buran.game.world.EdgeMarker.draw(batch, tx, small, tx.diamond, dx, dy,
+                        laserBox.getPosition().dst(Buran.position), WARM, 1f, 0.7f + 0.3f * MathUtils.sin(time * 4f));
+            }
+        }
 
         if (phase == Phase.ACTIVE && sector.goal == Sector.Goal.RESCUE) {
             crewMarkers(batch, worldCamera, tx, Theme.font(32));
@@ -355,8 +489,9 @@ public final class SectorRun {
         // Continue prompt once the message is fully on screen.
         if (ready) {
             float blink = 0.55f + 0.45f * MathUtils.sin(time * 4f);
-            layout.setText(font, "A  -  CONTINUE");
-            text(batch, font, "A  -  CONTINUE", x + w - 40f - layout.width, y - h + 40f + layout.height, Theme.ACCENT, a * blink, false);
+            String k = com.buran.game.ui.menu.Hints.button("A", "ENTER");
+            float hw = Theme.hintWidth(font, k, "CONTINUE");
+            Theme.hint(batch, font, k, "CONTINUE", x + w - 40f - hw, y - h + 40f + Theme.keyHeight(font) / 2f, Theme.TEXT, a * blink);
         }
     }
 

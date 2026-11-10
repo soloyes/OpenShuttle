@@ -159,6 +159,8 @@ public final class Gamepad {
             }
         } else {
             steering = false;
+            // ESC is both BACK in a menu and START; in a menu it must act only once.
+            boolean menuHadNav = com.buran.game.ui.menu.MenuNav.get() != null;
             if (com.buran.game.ui.menu.MenuNav.get() != null) {
                 cursorVisible = false;
                 releaseCursor();
@@ -167,7 +169,8 @@ public final class Gamepad {
                 updateCursor(dt, lx, ly, ry);
             }
             boolean menuOwnsB = com.buran.game.ui.menu.MenuNav.get() != null;
-            if (inGameScreen() && !Rules.GAME_OVER && (pressed(Action.START) || (pressed(Action.B) && !menuOwnsB))) {
+            if (inGameScreen() && !Rules.GAME_OVER && ((pressed(Action.START) && !(menuHadNav && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)))
+                    || (pressed(Action.B) && !menuOwnsB))) {
                 PauseGroup.togglePause();
             }
         }

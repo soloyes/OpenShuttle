@@ -165,5 +165,107 @@ public final class Theme {
         rect(batch, x, y, s, s, c, alpha * (lit ? 1f : 0.25f));
     }
 
+    // ------------------------------------------------------------------ button glyphs
+
+    private static Texture disc;
+    private static Texture ring;
+
+    private static Texture circle(boolean filled) {
+        int n = 96;
+        Pixmap p = new Pixmap(n, n, Pixmap.Format.RGBA8888);
+        p.setBlending(Pixmap.Blending.None);
+        for (int y = 0; y < n; y++) {
+            for (int x = 0; x < n; x++) {
+                float sum = 0f;
+                for (int j = 0; j < 4; j++) {
+                    for (int i = 0; i < 4; i++) {
+                        float dx = (x + (i + 0.5f) / 4f) / n * 2f - 1f;
+                        float dy = (y + (j + 0.5f) / 4f) / n * 2f - 1f;
+                        float d = (float) Math.sqrt(dx * dx + dy * dy);
+                        sum += filled ? (d < 0.98f ? 1f : 0f) : (d < 0.98f && d > 0.84f ? 1f : 0f);
+                    }
+                }
+                p.setColor(1f, 1f, 1f, sum / 16f);
+                p.drawPixel(x, y);
+            }
+        }
+        Texture t = new Texture(p);
+        t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        p.dispose();
+        return t;
+    }
+
+    /** Face-button colours of the pad, so A/B/X/Y read at a glance. */
+    private static Color faceColor(String key) {
+        switch (key) {
+            case "A": return FACE_A;
+            case "B": return FACE_B;
+            case "X": return FACE_X;
+            case "Y": return FACE_Y;
+            default: return null;
+        }
+    }
+
+    private static final Color FACE_A = Color.valueOf("6cc24aff");
+    private static final Color FACE_B = Color.valueOf("e5533dff");
+    private static final Color FACE_X = Color.valueOf("3f8fe8ff");
+    private static final Color FACE_Y = Color.valueOf("f2c230ff");
+
+    /** Height of a key glyph for this font. */
+    public static float keyHeight(BitmapFont font) {
+        return font.getCapHeight() * 1.9f;
+    }
+
+    /** Width of a key glyph. */
+    public static float keyWidth(BitmapFont font, String key) {
+        float h = keyHeight(font);
+        if (faceColor(key) != null) {
+            return h;
+        }
+        return Math.max(h * 1.3f, width(font, key) + h * 0.8f);
+    }
+
+    /**
+     * Draws one button the same way everywhere: pad face buttons as a dark disc with a ring and
+     * letter in the button's colour, every other key as a dark keycap with a hairline frame.
+     * {@code cy} is the vertical centre. Returns the width.
+     */
+    public static float key(Batch batch, BitmapFont font, String key, float x, float cy, float alpha) {
+        if (disc == null) {
+            disc = circle(true);
+            ring = circle(false);
+        }
+        float h = keyHeight(font);
+        float w = keyWidth(font, key);
+        Color face = faceColor(key);
+        float ty = cy + font.getCapHeight() / 2f;
+        if (face != null) {
+            batch.setColor(BODY_LO.r, BODY_LO.g, BODY_LO.b, alpha);
+            batch.draw(disc, x, cy - h / 2f, h, h);
+            batch.setColor(face.r, face.g, face.b, alpha);
+            batch.draw(ring, x, cy - h / 2f, h, h);
+            batch.setColor(Color.WHITE);
+            text(batch, font, key, x + h / 2f - width(font, key) / 2f, ty, face, alpha);
+        } else {
+            rect(batch, x, cy - h / 2f, w, h, EDGE, alpha);
+            rect(batch, x + 2f, cy - h / 2f + 2f, w - 4f, h - 4f, BODY_LO, alpha);
+            rect(batch, x + 2f, cy - h / 2f + 2f, w - 4f, 3f, Color.BLACK, 0.4f * alpha);
+            text(batch, font, key, x + w / 2f - width(font, key) / 2f, ty, TEXT, alpha);
+        }
+        return w;
+    }
+
+    /** "[key]  ACTION": the key glyph and the action next to it. Returns the width. */
+    public static float hint(Batch batch, BitmapFont font, String key, String action, float x, float cy, Color c, float alpha) {
+        float w = key(batch, font, key, x, cy, alpha);
+        float gap = keyHeight(font) * 0.4f;
+        text(batch, font, action, x + w + gap, cy + font.getCapHeight() / 2f, c, alpha);
+        return w + gap + width(font, action);
+    }
+
+    public static float hintWidth(BitmapFont font, String key, String action) {
+        return keyWidth(font, key) + keyHeight(font) * 0.4f + width(font, action);
+    }
+
     private static final com.badlogic.gdx.graphics.g2d.GlyphLayout GLYPHS = new com.badlogic.gdx.graphics.g2d.GlyphLayout();
 }

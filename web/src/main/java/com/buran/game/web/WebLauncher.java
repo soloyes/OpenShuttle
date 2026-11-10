@@ -33,6 +33,8 @@ public class WebLauncher {
     public static void main(String[] args) {
         com.buran.game.conf.Rules.DEBUG_START_AT_HOLE = query().contains("debug=hole");
         com.buran.game.conf.Rules.DEBUG_FAST_GOAL = query().contains("debug=clear");
+        com.buran.game.conf.Rules.DEBUG_UNLOCK = query().contains("unlock");
+        com.buran.game.conf.Rules.DEBUG_THIRD = query().contains("third");
         WebApplicationConfiguration config = new WebApplicationConfiguration("canvas");
         // 0 x 0 = follow the browser window size.
         config.width = 0;

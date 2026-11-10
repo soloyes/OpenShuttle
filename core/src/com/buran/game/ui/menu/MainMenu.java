@@ -83,12 +83,12 @@ public class MainMenu extends Group implements MenuNav.Target {
             });
         }
 
-        String text() {
-            return Hints.key("B", "ESC") + "BACK";
+        String key() {
+            return Hints.button("B", "ESC");
         }
 
         void place() {
-            float w = Theme.width(smallFont, text()) + 40f;
+            float w = Theme.hintWidth(smallFont, key(), "BACK") + 40f;
             setSize(w, FOOT);
             setPosition(panelX() + panelW() - w - 30f, panelY());
         }
@@ -96,7 +96,7 @@ public class MainMenu extends Group implements MenuNav.Target {
         @Override
         public void draw(Batch batch, float parentAlpha) {
             float a = parentAlpha * panelAlpha;
-            Theme.textR(batch, smallFont, text(), getX() + getWidth() - 20f, footTextY(), isOver() ? Theme.AMBER : Theme.DIM, a);
+            Theme.hint(batch, smallFont, key(), "BACK", getX() + 20f, panelY() + FOOT / 2f, isOver() ? Theme.AMBER : Theme.DIM, a);
         }
 
         private boolean isOver() {
@@ -640,12 +640,13 @@ public class MainMenu extends Group implements MenuNav.Target {
             Theme.hairline(batch, x + 30f, y + h - HEAD + 6f, w - 60f, a);
             // Footer: what the buttons do here.
             Theme.hairline(batch, x + 30f, y + FOOT, w - 60f, a);
-            String hints = Hints.key("A", "ENTER") + "SELECT";
-            if (open == Panel.SETTINGS) {
-                hints += "      " + Hints.key("D-PAD", "ARROWS") + "ADJUST";
-            }
             if (!Hints.touch()) {
-                drawText(batch, smallFont, hints, x + 66f, footTextY(), Theme.DIM, a);
+                float hx = x + 66f;
+                float cy = y + FOOT / 2f;
+                hx += Theme.hint(batch, smallFont, Hints.button("A", "ENTER"), "SELECT", hx, cy, Theme.DIM, a) + 60f;
+                if (open == Panel.SETTINGS) {
+                    Theme.hint(batch, smallFont, Hints.button("D-PAD", "ARROWS"), "ADJUST", hx, cy, Theme.DIM, a);
+                }
             }
             if (hasDetail()) {
                 drawDetail(batch, a);

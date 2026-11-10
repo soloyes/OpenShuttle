@@ -18,6 +18,11 @@ public final class Hints {
         return !pad() && Gdx.input.isPeripheralAvailable(Input.Peripheral.MultitouchScreen);
     }
 
+    /** The key to show: the pad button when a pad is connected, else the keyboard key. */
+    public static String button(String padButton, String keyboardKey) {
+        return pad() ? padButton : keyboardKey;
+    }
+
     /** "A  -  " with a pad, "ENTER  -  " on a keyboard. */
     public static String key(String padButton, String keyboardKey) {
         return (pad() ? padButton : keyboardKey) + "  -  ";

@@ -99,10 +99,30 @@ public class Radar {
         }
     }
 
-    private Color setPointColor(AbstractPoolable abstractPoolable) {
+    /** Radiation anomalies jam the radar this close, like the rift does. */
+    private static final float RADIATION_NOISE_RANGE = 1300f;
+
+    /** The radar is jammed: near the rift, or near a radiation anomaly. */
+    private static boolean noisy() {
         float d = Vector2.dst(Buran.position.x, Buran.position.y, Blackhole.position.x, Blackhole.position.y);
+        if (d <= Buffs.getBlackholeNoiseRange()) {
+            return true;
+        }
+        ObjectPool<?> rad = ObjectPool.EMITTERS.get(com.buran.game.bot.anomaly.RadiationAnomaly.class);
+        if (rad != null) {
+            for (Object o : rad.getActiveList()) {
+                AbstractPoolable a = (AbstractPoolable) o;
+                if (a.isBorn() && !a.isTaken() && a.getPosition().dst(Buran.position) < RADIATION_NOISE_RANGE) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private Color setPointColor(AbstractPoolable abstractPoolable) {
         int c;
-        if (d <= Buffs.getBlackholeNoiseRange() && !PauseGroup.isPause()) {
+        if (noisy() && !PauseGroup.isPause()) {
             c = MathUtils.random(0, 4);
             if (MathUtils.random(0, 100) <= 60) {
                 return color;
@@ -129,8 +149,7 @@ public class Radar {
     public void update(float dt) {
         if (isActive || CircleRenderer.scan) {
             updateRadar(dt);
-            float d = Vector2.dst(Buran.position.x, Buran.position.y, Blackhole.position.x, Blackhole.position.y);
-            if (d <= Buffs.getBlackholeNoiseRange()) {
+            if (noisy()) {
                 if (!Buran.isTaken && !Rules.GAME_OVER) {
                     boomBox.playMusicEffectInLoop(MSConstants.RADAR_WHITE_NOISE_MUSIC, 1.0f);
                 } else {

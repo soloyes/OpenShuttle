@@ -53,6 +53,10 @@ public class SelectorGroup extends Group {
     private float centerWidth, centerHeight;
     private int width, height;
 
+    /** Tutorial: the player has used an item / switched items at least once this game. */
+    public static boolean usedOnce;
+    public static boolean switchedOnce;
+
     public static SelectorGroup getInstance() {
         if (instance == null) {
             instance = new SelectorGroup();
@@ -201,6 +205,7 @@ public class SelectorGroup extends Group {
             return;
         }
         boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
+        switchedOnce = true;
         select--;
         if (select < 0) {
             select = selectors.size() - 1;
@@ -213,6 +218,7 @@ public class SelectorGroup extends Group {
             return;
         }
         boomBox.playSound(MSConstants.UI_LEFT_RIGHT);
+        switchedOnce = true;
         select++;
         if (select > selectors.size() - 1) {
             select = 0;
@@ -224,6 +230,7 @@ public class SelectorGroup extends Group {
         if (selectors.size() != 0 && centerSelector != null && centerSelector.isActive() && !PauseGroup.isPause()) {
             removeSelector();
             centerSelector.press();
+            usedOnce = true;
             Vibrator.vibrateUI(VConstants.UI_CLICK);
         }
     }

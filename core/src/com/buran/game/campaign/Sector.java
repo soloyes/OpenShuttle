@@ -40,6 +40,8 @@ public final class Sector {
     public int crateMax = 4;
     public int storageMax = 3;
     public int fuelMax = 3;
+    /** Whether crossing the edge of space hurts (off in the training sectors). */
+    public boolean borderDamage = true;
     /** Start with a charged laser (the sector that teaches it). */
     public boolean startWithLaser;
 

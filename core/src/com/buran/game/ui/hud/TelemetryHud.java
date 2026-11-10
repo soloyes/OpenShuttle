@@ -90,11 +90,11 @@ public class TelemetryHud {
 
         // ---- propulsion (mirror)
         float rx = x0 + 2f * sec + pad;
-        textL(batch, small, com.buran.game.ui.menu.Hints.key("B", "ESC") + "PAUSE", rx, headY, HEAD);
+        Theme.hint(batch, small, com.buran.game.ui.menu.Hints.button("B", "ESC"), "PAUSE", rx, headY - small.getCapHeight() / 2f, HEAD, 1f);
         textR(batch, small, "PROPULSION", rx + lw, headY, HEAD);
         boolean fuelAlert = (st.isFuelAlertOutOfBounds() || st.isFuelAlertMagneticAnomaly() || st.getFuel() < st.getMaxFuel() * 0.2f) && blink;
         bar(batch, "FUEL", st.getFuel(), st.getMaxFuel(), FUEL, rx, headY - 58f, lw, fuelAlert, false);
-        boolean offline = !Buran.isLaser && st.getLaserChargeLevel() <= 0f;
+        boolean offline = !Buran.isLaser;
         bar(batch, "LASER", st.getLaserChargeLevel(), st.getMaxLaserChargeLevel(), LASER, rx, headY - 158f, lw, false, offline);
 
         // ---- cargo drum, with the task progress as a row of pips along its top
@@ -133,19 +133,27 @@ public class TelemetryHud {
         float textY = y0 + 46f;
         socket(batch, sg.getPrevious(), cx - big / 2f - gap - side, sideY, side, false, 0.45f);
         socket(batch, sg.getNext(), cx + big / 2f + gap, sideY, side, false, 0.45f);
+        float keyCy = textY - small.getCapHeight() / 2f;
         if (sg.getPrevious() != null) {
-            textC(batch, small, "< " + (com.buran.game.ui.menu.Hints.pad() ? "LB" : "Q"), cx - big / 2f - gap - side / 2f, textY, HEAD);
+            String k = com.buran.game.ui.menu.Hints.button("LB", "Q");
+            Theme.key(batch, small, k, cx - big / 2f - gap - side / 2f - Theme.keyWidth(small, k) / 2f, keyCy, 1f);
         }
         if (sg.getNext() != null) {
-            textC(batch, small, (com.buran.game.ui.menu.Hints.pad() ? "RB" : "E") + " >", cx + big / 2f + gap + side / 2f, textY, HEAD);
+            String k = com.buran.game.ui.menu.Hints.button("RB", "E");
+            Theme.key(batch, small, k, cx + big / 2f + gap + side / 2f - Theme.keyWidth(small, k) / 2f, keyCy, 1f);
         }
         socket(batch, cur, cx - big / 2f, by, big, true, cur == null || cur.isActive() ? 1f : 0.4f);
         if (cur == null) {
             textC(batch, small, "BAY EMPTY", cx, textY, HEAD);
         } else {
             textR(batch, small, "x" + cur.getCount(), cx + big / 2f - 10f, by + small.getLineHeight() - 2f, Theme.TEXT);
-            textC(batch, small, cur.isActive() ? com.buran.game.ui.menu.Hints.key("A", "SPACE") + cur.getSticker().name() : "RECHARGING",
-                    cx, textY, cur.isActive() ? CARGO : HEAD);
+            if (cur.isActive()) {
+                String k = com.buran.game.ui.menu.Hints.button("A", "SPACE");
+                String n = cur.getSticker().name();
+                Theme.hint(batch, small, k, n, cx - Theme.hintWidth(small, k, n) / 2f, keyCy, CARGO, 1f);
+            } else {
+                textC(batch, small, "RECHARGING", cx, textY, HEAD);
+            }
         }
     }
 
@@ -194,13 +202,56 @@ public class TelemetryHud {
     }
 
     /** Label and value on one line, a segmented gauge under it (dark when offline). */
+    /** Per gauge: last value, flash (+1 gain, -1 loss, fading) and the change shown. */
+    private final java.util.HashMap<String, float[]> gaugeState = new java.util.HashMap<String, float[]>();
+
     private void bar(SpriteBatch batch, String name, float v, float max, Color c, float x, float y, float w,
                      boolean alert, boolean offline) {
         float p = max <= 0 ? 0f : MathUtils.clamp(v / max, 0f, 1f);
-        textL(batch, label, name, x, y, offline ? HEAD : alert ? ALERT : c);
-        textR(batch, label, offline ? "OFFLINE" : Math.round(v) + " / " + Math.round(max), x + w, y,
-                offline ? HEAD : alert ? ALERT : Theme.TEXT);
-        ledStrip(batch, x, y - label.getLineHeight() - 8f, w, offline ? 0f : p, alert ? ALERT : c);
+        float[] g = gaugeState.get(name);
+        if (g == null) {
+            g = new float[]{v, 0f, 0f};
+            gaugeState.put(name, g);
+        }
+        float dt = Math.min(0.05f, Gdx.graphics.getDeltaTime());
+        float change = v - g[0];
+        // Fuel and laser charge drift every frame; only real jumps flash.
+        float step = "FUEL".equals(name) || "LASER".equals(name) ? Math.max(2f, max * 0.06f) : 0.5f;
+        if (Math.abs(change) >= step) {
+            g[1] = change < 0 ? -1f : 1f;
+            g[2] = (Math.signum(g[2]) == Math.signum(change) && Math.abs(g[1]) > 0.2f ? g[2] : 0f) + change;
+            g[0] = v;
+        } else if (Math.abs(g[1]) < 0.01f) {
+            g[0] = v;
+        }
+        g[1] = Math.signum(g[1]) * Math.max(0f, Math.abs(g[1]) - dt / 1.4f);
+        if (Math.abs(g[1]) < 0.01f) {
+            g[0] = v;
+            g[2] = 0f;
+        }
+        float f = Math.abs(g[1]);
+        boolean loss = g[1] < 0f;
+        Color flash = loss ? ALERT : Theme.OK;
+        boolean lit = f > 0f && ((int) (f * 14f)) % 2 == 0;
+        Color nameC = offline ? HEAD : (alert || (lit && loss)) ? ALERT : c;
+        textL(batch, label, name, x, y, nameC);
+        String val = offline ? "OFFLINE" : Math.round(v) + " / " + Math.round(max);
+        textR(batch, label, val, x + w, y, offline ? HEAD : alert ? ALERT : Theme.TEXT);
+        if (f > 0f && Math.round(g[2]) != 0) {
+            layout.setText(label, val);
+            String d = (g[2] > 0 ? "+" : "") + Math.round(g[2]);
+            text(batch, label, d, x + w - layout.width - 30f - widthOf(label, d), y, flash, Math.min(1f, f * 2f));
+        }
+        float sy = y - label.getLineHeight() - 8f;
+        ledStrip(batch, x, sy, w, offline ? 0f : p, alert ? ALERT : c);
+        if (f > 0f) {
+            Theme.rect(batch, x - 6f, sy - 40f, w + 12f, 46f, flash, 0.35f * f);
+        }
+    }
+
+    private float widthOf(BitmapFont f, String s) {
+        layout.setText(f, s);
+        return layout.width;
     }
 
     /** An LED strip in a recessed track: lit segments in colour, the rest dark. */

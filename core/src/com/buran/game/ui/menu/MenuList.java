@@ -109,6 +109,13 @@ public class MenuList extends Group implements MenuNav.Target {
         }
     }
 
+    /** A tap or click on a row: the same action and sound as the pad. */
+    void clicked(Row row, Nav nav) {
+        if (row.onNav(nav)) {
+            boomBox.playSound(nav == Nav.ACCEPT ? MSConstants.UI_MENU : MSConstants.UI_CHANGED);
+        }
+    }
+
     private void applyFocus() {
         for (int i = 0; i < rows.size; i++) {
             rows.get(i).focused = i == focus;

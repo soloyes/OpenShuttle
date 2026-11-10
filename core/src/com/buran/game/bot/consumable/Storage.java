@@ -152,6 +152,15 @@ public class Storage extends AbstractConsumable {
         }
     }
 
+    /** A plain single storage holding one known item (scripted sector events). */
+    public void force(Sticker sticker) {
+        size = Size.SINGLE;
+        danger = false;
+        golden = false;
+        labels.get(Label.Layer.LABEL).get(0).setSticker(sticker);
+        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.STORAGE_REGION);
+    }
+
     private void generateSize() {
         int r = MathUtils.random(0, Size.values().length - 1);
         size = Size.values()[r];

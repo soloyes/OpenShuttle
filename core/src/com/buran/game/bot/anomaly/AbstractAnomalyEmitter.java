@@ -73,6 +73,14 @@ public abstract class AbstractAnomalyEmitter extends ObjectPool<AbstractAnomaly>
         emitted++;
     }
 
+    /** Places one at a chosen spot (scripted sector events). */
+    public AbstractAnomaly emitAt(float x, float y) {
+        AbstractAnomaly a = getActiveElement();
+        a.init(x, y);
+        emitted++;
+        return a;
+    }
+
     protected void emit() {
         if (anomaliesAtStart != 0) {
             for (int i = 0; i <= anomaliesAtStart; i++) {

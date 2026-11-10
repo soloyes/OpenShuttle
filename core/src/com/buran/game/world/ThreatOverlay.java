@@ -40,6 +40,7 @@ public final class ThreatOverlay {
     public ThreatOverlay(ListOfListsJoiner<AbstractAnomaly> anomalies, ThreatTextures tx) {
         this.anomalies = anomalies;
         this.tx = tx;
+        empUsed = false;
     }
 
     /** Same rule as the movement code: an awake, hungry anomaly within its chase range. */
@@ -82,6 +83,8 @@ public final class ThreatOverlay {
     }
 
     private static final Color EMP = Color.valueOf("7fe8ffff");
+    /** The pulse has been fired at least once in this game. */
+    private static boolean empUsed;
     private float empHint;
 
     /** World pass, after anomalies are drawn. */
@@ -107,24 +110,25 @@ public final class ThreatOverlay {
                 batch.draw(tx.chevron, cx - cs / 2f, cy - cs / 2f, cs / 2f, cs / 2f, cs, cs, 1f, 1f,
                         ang * MathUtils.radiansToDegrees, 0, 0, 64, 64, false, false);
             } else if (!a.isActivated() || !a.isHungry()) {
-                float pulse = 0.5f + 0.5f * MathUtils.sin(time * 1.5f + y * 0.01f);
-                batch.setColor(CALM.r, CALM.g, CALM.b, 0.14f + 0.08f * pulse);
-                batch.draw(tx.ring, x - r, y - r, r * 2f, r * 2f);
+                // Asleep: dimmed under a slow dark veil, no ring. Lit = awake, dim = asleep.
+                float pulse = 0.5f + 0.5f * MathUtils.sin(time * 1.2f + y * 0.01f);
+                float vr = r * 1.15f;
+                batch.setColor(0f, 0.01f, 0.03f, 0.38f + 0.12f * pulse);
+                batch.draw(tx.dot, x - vr, y - vr, vr * 2f, vr * 2f);
             }
             Float t = alerts.get(a);
             if (t != null) {
+                // Waking up: two sonar pings spread from it.
                 float k = 1f - t / ALERT_TIME;
-                float rr = r * (1f + 1.2f * k);
-                batch.setColor(HUNT.r, HUNT.g, HUNT.b, 1f - k);
-                batch.draw(tx.ring, x - rr, y - rr, rr * 2f, rr * 2f);
-                // "!" made of a bar and a dot above the anomaly.
-                float h = r * 0.55f;
-                float w = r * 0.12f;
-                float bx = x - w / 2f;
-                float by = y + r + 20f;
-                batch.setColor(HUNT.r, HUNT.g, HUNT.b, 1f - k * 0.6f);
-                batch.draw(tx.dot, bx - w * 0.3f, by, w * 1.6f, w * 1.6f);
-                batch.draw(tx.dot, bx - w * 0.3f, by + w * 2.2f, w * 1.6f, h);
+                for (int p = 0; p < 2; p++) {
+                    float kk = MathUtils.clamp(k * 1.4f - p * 0.4f, 0f, 1f);
+                    if (kk <= 0f || kk >= 1f) {
+                        continue;
+                    }
+                    float rr = r * (1f + 1.6f * kk);
+                    batch.setColor(HUNT.r, HUNT.g, HUNT.b, 0.8f * (1f - kk));
+                    batch.draw(tx.ring, x - rr, y - rr, rr * 2f, rr * 2f);
+                }
             }
         }
         batch.setColor(Color.WHITE);
@@ -156,13 +160,13 @@ public final class ThreatOverlay {
         float pulse = 0.75f + 0.25f * MathUtils.sin(time * 6f);
         batch.setColor(EMP.r, EMP.g, EMP.b, empHint * (charge >= 1f ? 0.35f * pulse : 0.12f));
         batch.draw(tx.ring, x - r, y - r, r * 2f, r * 2f);
-        if (font != null) {
-            String s = charge >= 1f ? "Y  -  EMP" : "EMP CHARGING";
-            com.badlogic.gdx.graphics.g2d.GlyphLayout l = new com.badlogic.gdx.graphics.g2d.GlyphLayout(font, s);
-            Color old = font.getColor().cpy();
-            font.setColor(EMP.r, EMP.g, EMP.b, empHint * (charge >= 1f ? pulse : 0.5f));
-            font.draw(batch, s, x - l.width / 2f, y + 230f);
-            font.setColor(old);
+        if (charge < 1f) {
+            empUsed = true;
+        }
+        // Until the pulse is fired once, the button is shown big above the ship.
+        if (font != null && !empUsed) {
+            String k = com.buran.game.ui.menu.Hints.button("Y", "F");
+            com.buran.game.ui.hud.Prompt.draw(batch, font, k, "EMP", x, y + 260f, empHint * pulse);
         }
         batch.setColor(Color.WHITE);
     }
@@ -177,21 +181,7 @@ public final class ThreatOverlay {
         float cx = worldCamera.position.x;
         float cy = worldCamera.position.y;
         float scale = Rules.WORLD_HEIGHT / vh;
-        for (int i = 0; i < anomalies.size(); i++) {
-            AbstractAnomaly a = anomalies.get(i);
-            if (!hunting(a)) {
-                continue;
-            }
-            float dx = a.getPosition().x - cx;
-            float dy = a.getPosition().y - cy;
-            if (EdgeMarker.inView(dx, dy, 0f)) {
-                continue;
-            }
-            float dist = a.getPosition().dst(Buran.position);
-            float near = 1f - MathUtils.clamp((dist - vh * 0.5f) / 2400f, 0f, 1f);
-            float pulse = 0.6f + 0.4f * MathUtils.sin(time * (4f + 8f * near));
-            edgeMarker(batch, dx, dy, scale, 46f + 40f * near, HUNT, (0.35f + 0.6f * near) * pulse, true);
-        }
+        // Anomalies off screen are the radar's job; only shelters get edge pins.
         for (Shelters.Shelter s : Shelters.all()) {
             float dx = s.position.x - cx;
             float dy = s.position.y - cy;
