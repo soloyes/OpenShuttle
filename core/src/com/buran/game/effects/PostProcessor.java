@@ -25,8 +25,8 @@ public class PostProcessor implements Disposable {
         public float flash;
         public float flashR = 1f, flashG = 1f, flashB = 1f;
         public float tintR = 1f, tintG = 1f, tintB = 1f;
-        public float bloom = 0.9f;
-        public float threshold = 0.55f;
+        public float bloom = 0.75f;
+        public float threshold = 0.78f;
         public float vignette = 0.55f;
         public float grain = 0.035f;
     }
