@@ -19,6 +19,8 @@ gdxTeaVM {
         htmlWidth = 0
         htmlHeight = 0
         serverPort = 8080
+        // In-process compile: the out-of-process RMI daemon breaks when the machine's IP changes.
+        outOfProcess = false
     }
 
     // Development build: readable JS, fast to iterate.

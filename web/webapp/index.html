@@ -32,11 +32,8 @@
             cursor: pointer;
             user-select: none;
             overflow: hidden;
-            background:
-                radial-gradient(ellipse 60% 50% at 70% 40%, rgba(36, 80, 126, 0.35), transparent 70%),
-                radial-gradient(ellipse 40% 35% at 25% 75%, rgba(122, 52, 99, 0.22), transparent 70%),
-                #04050c;
-            transition: opacity 0.6s ease;
+            background: #04050c;
+            transition: opacity 0.9s ease;
         }
         /* Phones: tap instead of A, no gamepad legend. */
         body.touch #hint { display: none; }
@@ -46,18 +43,20 @@
             opacity: 0;
             pointer-events: none;
         }
-        /* Sparse twinkling stars, generated below. */
-        .star {
+        #scene {
             position: absolute;
-            width: 2px;
-            height: 2px;
-            border-radius: 50%;
-            background: #fff;
-            animation: twinkle 3s ease-in-out infinite;
+            inset: 0;
+            width: 100%;
+            height: 100%;
         }
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.25; }
-            50% { opacity: 0.9; }
+        #panel, #hint {
+            transition: opacity 0.35s ease;
+        }
+        #boot.launch #panel, #boot.launch #hint {
+            opacity: 0;
+        }
+        #boot.launch {
+            cursor: default;
         }
         :root {
             /* One unit that fits both TV landscape and phone portrait. */
@@ -174,6 +173,7 @@
 <body oncontextmenu="return false">
 <canvas id="canvas" tabindex="0"></canvas>
 <div id="boot" role="button" tabindex="0">
+    <canvas id="scene"></canvas>
     <div id="panel">
         <h1 id="title">BURAN-19</h1>
         <div id="subtitle">THE LAST FLIGHT &middot; 1991</div>
@@ -196,19 +196,6 @@
     var boot = document.getElementById("boot");
     if (window.matchMedia && matchMedia("(pointer: coarse)").matches && navigator.maxTouchPoints > 0) {
         document.body.classList.add("touch");
-    }
-
-    // Stars.
-    for (var i = 0; i < 90; i++) {
-        var s = document.createElement("div");
-        s.className = "star";
-        s.style.left = (Math.random() * 100) + "vw";
-        s.style.top = (Math.random() * 100) + "vh";
-        var size = Math.random() < 0.85 ? 1.5 : 2.5;
-        s.style.width = s.style.height = size + "px";
-        s.style.animationDelay = (Math.random() * 3) + "s";
-        s.style.animationDuration = (2 + Math.random() * 3) + "s";
-        boot.appendChild(s);
     }
 
     // Telemetry: flavour lines while the game downloads.
@@ -250,7 +237,10 @@
     function begin() {
         if (started || !ready) return;
         started = true;
-        boot.classList.add("hidden");
+        boot.classList.add("launch");
+        Scene.launch(function () {
+            boot.classList.add("hidden");
+        });
         // The game ignores pad input until the button that dismissed this overlay is released.
         window.__gameStarted = true;
         var el = document.documentElement;
@@ -285,6 +275,213 @@
     window.addEventListener("load", function () {
         main();
     });
+
+    /*
+     * Title scene: a still, breathing picture (the shuttle in its shield, the rift behind it,
+     * debris drifting in) that comes alive when the player starts: engines ignite, the shuttle
+     * tears past the camera, stars stretch, white flash, fade to black, then the menu.
+     */
+    var Scene = (function () {
+        var cv = document.getElementById("scene");
+        var g = cv.getContext("2d");
+        var W = 0, H = 0, dpr = 1;
+        var ship = new Image();
+        var shield = new Image();
+        ship.src = "assets/pics/load/menubackgroundburan.png";
+        shield.src = "assets/pics/load/menubackgroundshield.png";
+        var stars = [];
+        var debris = [];
+        var t0 = performance.now();
+        var launchAt = -1;
+        var onDone = null;
+        var doneCalled = false;
+
+        function rnd(a, b) { return a + Math.random() * (b - a); }
+
+        function resize() {
+            dpr = Math.min(window.devicePixelRatio || 1, 2);
+            W = cv.clientWidth; H = cv.clientHeight;
+            cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+            g.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+        window.addEventListener("resize", resize);
+        resize();
+
+        for (var i = 0; i < 320; i++) {
+            stars.push({ x: Math.random(), y: Math.random(), z: rnd(0.15, 1), tw: rnd(0, 6.28), sp: rnd(0.5, 2.5) });
+        }
+        for (var k = 0; k < 26; k++) {
+            debris.push({ a: rnd(0, 6.28), r: rnd(0.15, 0.55), s: rnd(2, 7), w: rnd(0.02, 0.08), spin: rnd(-1, 1) });
+        }
+
+        function sm(t, a, b) { var x = Math.max(0, Math.min(1, (t - a) / (b - a))); return x * x * (3 - 2 * x); }
+
+        function frame(now) {
+            var t = (now - t0) / 1000;
+            var L = launchAt < 0 ? -1 : (now - launchAt) / 1000;
+            var u = Math.min(W, H);
+
+            // Launch timeline (seconds).
+            var ignite = L < 0 ? 0 : sm(L, 0.15, 0.8);
+            var fly = L < 0 ? 0 : sm(L, 0.8, 2.3);
+            var flash = L < 0 ? 0 : Math.max(0, 1 - Math.abs(L - 2.15) / 0.3);
+            var black = L < 0 ? 0 : sm(L, 2.2, 2.9);
+            var shake = L < 0 ? 0 : (ignite * 3 + fly * 14) * (1 - black);
+
+            g.save();
+            if (shake > 0) g.translate(rnd(-shake, shake), rnd(-shake, shake));
+
+            // Deep space.
+            g.fillStyle = "#04050c";
+            g.fillRect(-20, -20, W + 40, H + 40);
+            var neb = g.createRadialGradient(W * 0.72, H * 0.38, 0, W * 0.72, H * 0.38, u * 0.9);
+            neb.addColorStop(0, "rgba(36,80,126,0.32)"); neb.addColorStop(1, "rgba(36,80,126,0)");
+            g.fillStyle = neb; g.fillRect(0, 0, W, H);
+            var neb2 = g.createRadialGradient(W * 0.2, H * 0.8, 0, W * 0.2, H * 0.8, u * 0.7);
+            neb2.addColorStop(0, "rgba(122,52,99,0.22)"); neb2.addColorStop(1, "rgba(122,52,99,0)");
+            g.fillStyle = neb2; g.fillRect(0, 0, W, H);
+
+            // Stars: twinkle while still, stretch into streaks during the launch.
+            var vx = W * 0.62, vy = H * 0.5;
+            var warp = fly * fly;
+            for (var i = 0; i < stars.length; i++) {
+                var st = stars[i];
+                var x = st.x * W + Math.sin(t * 0.03 + st.z * 9) * 6 * st.z;
+                var y = st.y * H;
+                var a = 0.35 + 0.55 * (0.5 + 0.5 * Math.sin(t * st.sp + st.tw));
+                var sz = 0.6 + st.z * 1.6;
+                if (warp > 0.001) {
+                    var dx = x - vx, dy = y - vy;
+                    var len = warp * 0.9 * st.z;
+                    g.strokeStyle = "rgba(220,235,255," + (0.5 + 0.5 * st.z) + ")";
+                    g.lineWidth = sz;
+                    g.beginPath(); g.moveTo(x, y); g.lineTo(x + dx * len, y + dy * len); g.stroke();
+                } else {
+                    g.fillStyle = "rgba(255,255,255," + a * st.z + ")";
+                    g.fillRect(x, y, sz, sz);
+                }
+            }
+
+            // The rift: dark core, tilted accretion ring, halo. Flares up when the engines light.
+            var rx = W * 0.84, ry = H * 0.24, rr = u * (0.16 + 0.04 * ignite);
+            var halo = g.createRadialGradient(rx, ry, rr * 0.3, rx, ry, rr * 3.2);
+            halo.addColorStop(0, "rgba(255,150,80," + (0.28 + 0.4 * ignite) + ")");
+            halo.addColorStop(1, "rgba(255,120,60,0)");
+            g.fillStyle = halo; g.fillRect(rx - rr * 3.2, ry - rr * 3.2, rr * 6.4, rr * 6.4);
+            // Disk: back half, then the shadow, then the front half crossing in front of it;
+            // the far side of the disk shows as a lensed arc over the top (Gargantua-like).
+            function disk(front) {
+                g.save();
+                g.translate(rx, ry); g.rotate(-0.18);
+                g.scale(1, 0.22);
+                for (var ring = 0; ring < 4; ring++) {
+                    var rad = rr * (1.05 + ring * 0.2);
+                    var grad = g.createLinearGradient(-rad, 0, rad, 0);
+                    var a0 = (0.95 - ring * 0.18) * (1 + 0.4 * ignite);
+                    grad.addColorStop(0, "rgba(255,240,215," + a0 + ")");
+                    grad.addColorStop(0.5, "rgba(255,150,70," + a0 * 0.7 + ")");
+                    grad.addColorStop(1, "rgba(200,70,40," + a0 * 0.45 + ")");
+                    g.strokeStyle = grad;
+                    g.lineWidth = rr * (0.2 - ring * 0.035);
+                    g.beginPath();
+                    if (front) g.arc(0, 0, rad, 0, Math.PI); else g.arc(0, 0, rad, Math.PI, Math.PI * 2);
+                    g.stroke();
+                }
+                g.restore();
+            }
+            disk(false);
+            // Lensed far side: an arc hugging the shadow from above.
+            var arcG = g.createRadialGradient(rx, ry, rr * 0.62, rx, ry, rr * 0.95);
+            arcG.addColorStop(0, "rgba(255,225,180," + (0.9 + 0.1 * ignite) + ")");
+            arcG.addColorStop(1, "rgba(255,140,60,0)");
+            g.fillStyle = arcG;
+            g.beginPath(); g.arc(rx, ry, rr * 0.95, Math.PI * 1.05, Math.PI * 1.95); g.arc(rx, ry, rr * 0.62, Math.PI * 1.95, Math.PI * 1.05, true); g.fill();
+            g.fillStyle = "#000";
+            g.beginPath(); g.arc(rx, ry, rr * 0.62, 0, Math.PI * 2); g.fill();
+            g.strokeStyle = "rgba(255,225,190,0.9)"; g.lineWidth = Math.max(1, rr * 0.022);
+            g.beginPath(); g.arc(rx, ry, rr * 0.645, 0, Math.PI * 2); g.stroke();
+            disk(true);
+
+            // Debris drifting into the rift.
+            for (var d = 0; d < debris.length; d++) {
+                var db = debris[d];
+                db.a += 0.0016 / db.r; db.r -= 0.00005 * (1 + 6 * ignite);
+                if (db.r < 0.08) { db.r = rnd(0.4, 0.6); db.a = rnd(0, 6.28); }
+                var px = rx + Math.cos(db.a) * db.r * W * 0.6;
+                var py = ry + Math.sin(db.a) * db.r * H * 0.35;
+                g.save(); g.translate(px, py); g.rotate(t * db.spin);
+                g.fillStyle = "rgba(90,100,120,0.8)";
+                g.fillRect(-db.s / 2, -db.s / 2, db.s, db.s * 0.7);
+                g.restore();
+            }
+
+            // The shuttle: hanging still, then lighting up and tearing past the camera.
+            if (ship.complete && ship.naturalWidth) {
+                var baseW = u * 0.42;
+                var sw = baseW * (1 + fly * fly * 6);
+                var sh = sw * ship.naturalHeight / ship.naturalWidth;
+                var cx = W * 0.62 + Math.sin(t * 0.4) * 4 - fly * fly * W * 0.9;
+                var cy = H * 0.52 + Math.sin(t * 0.7) * 6 + fly * fly * H * 0.75;
+                var tilt = Math.sin(t * 0.3) * 0.03 - fly * 0.25;
+                g.save(); g.translate(cx, cy); g.rotate(tilt);
+
+                // Engine flames toward the upper right (the nose points lower left).
+                if (ignite > 0) {
+                    var fl = (0.7 + 0.3 * Math.random()) * ignite;
+                    var nozzles = [[0.30, -0.10], [0.36, 0.08]];
+                    for (var n = 0; n < nozzles.length; n++) {
+                        var nx = nozzles[n][0] * sw, ny = nozzles[n][1] * sh;
+                        var fx = nx + sw * 0.42 * fl, fy = ny - sw * 0.30 * fl;
+                        var fg = g.createLinearGradient(nx, ny, fx, fy);
+                        fg.addColorStop(0, "rgba(255,255,230,0.95)");
+                        fg.addColorStop(0.35, "rgba(255,170,70,0.8)");
+                        fg.addColorStop(1, "rgba(255,80,30,0)");
+                        g.strokeStyle = fg; g.lineCap = "round";
+                        g.lineWidth = sw * 0.035 * (0.8 + 0.4 * Math.random());
+                        g.beginPath(); g.moveTo(nx, ny); g.lineTo(fx, fy); g.stroke();
+                    }
+                    var glow = g.createRadialGradient(sw * 0.33, 0, 0, sw * 0.33, 0, sw * 0.5);
+                    glow.addColorStop(0, "rgba(255,180,90," + 0.45 * ignite + ")");
+                    glow.addColorStop(1, "rgba(255,120,60,0)");
+                    g.fillStyle = glow; g.fillRect(-sw, -sh, sw * 2, sh * 2);
+                }
+                g.drawImage(ship, -sw / 2, -sh / 2, sw, sh);
+
+                // Shield: steady while idle, flickers out on ignition.
+                var shOn = L < 0 ? 0.55 + 0.08 * Math.sin(t * 1.8) : (L < 0.5 && Math.random() < 0.5 ? 0.6 : 0) * (1 - ignite);
+                if (shield.complete && shOn > 0) {
+                    var ss = sw * 1.75;
+                    g.globalAlpha = shOn;
+                    g.drawImage(shield, -ss / 2, -ss / 2 * shield.naturalHeight / shield.naturalWidth, ss, ss * shield.naturalHeight / shield.naturalWidth);
+                    g.globalAlpha = 1;
+                }
+                g.restore();
+            }
+
+            g.restore();
+
+            // Vignette, flash, fade.
+            var vig = g.createRadialGradient(W / 2, H / 2, u * 0.35, W / 2, H / 2, Math.max(W, H) * 0.75);
+            vig.addColorStop(0, "rgba(0,0,0,0)"); vig.addColorStop(1, "rgba(0,0,4,0.75)");
+            g.fillStyle = vig; g.fillRect(0, 0, W, H);
+            if (flash > 0) { g.fillStyle = "rgba(255,250,240," + flash + ")"; g.fillRect(0, 0, W, H); }
+            if (black > 0) { g.fillStyle = "rgba(2,3,8," + black + ")"; g.fillRect(0, 0, W, H); }
+
+            if (L > 2.95 && !doneCalled) {
+                doneCalled = true;
+                if (onDone) onDone();
+            }
+            if (!(L > 4)) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+
+        return {
+            launch: function (done) {
+                launchAt = performance.now();
+                onDone = done;
+            }
+        };
+    })();
 </script>
 <script type="text/javascript" charset="utf-8" src="app.js?v=__BUILD__"></script>
 </body>
