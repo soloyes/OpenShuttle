@@ -12,6 +12,7 @@ The book is a toolbox, not a rulebook: pick the principles that fit the problem.
 ## Sources (read these, don't improvise)
 - `references/chapter4-troubleshooting.md` — all 21 principles of chapter 4 (pp. 168–209), from the full text the owner supplied, each mapped to Buran-19.
 - `references/chapters1-3-index-only.md` — chapters 1–3: **only titles and index terms are available** (the supplied PDF is a 71-page excerpt). Never invent their content; say the text is missing and ask the owner for those chapters if a decision depends on them.
+- `references/100-tips-markhulets.md` — "100 советов и фишек геймдизайна" by Vlad Markhulets (DARQ), paraphrased and grouped, with Buran-19 notes. Tip 86 was not retrieved; tip 84 does not exist in the source.
 - Notes in the sections below that cite chapter 1–3 principles (Flow, Interest Curve, Hick's law, Doubling and Halving, Variable Rewards, Punishment, etc.) are general design knowledge, not quotes from the book.
 
 ## How to use
