@@ -30,24 +30,7 @@ public class WebLauncher {
     @JSBody(script = "return location.search || '';")
     private static native String query();
 
-    @JSBody(params = "text", script = "if (window.radioSay) window.radioSay(text);")
-    private static native void radioSay(String text);
-
-    @JSBody(script = "if (window.radioStop) window.radioStop();")
-    private static native void radioStop();
-
     public static void main(String[] args) {
-        com.buran.game.platform.Radio.install(new com.buran.game.platform.Radio.Speaker() {
-            @Override
-            public void say(String text) {
-                radioSay(text);
-            }
-
-            @Override
-            public void stop() {
-                radioStop();
-            }
-        });
         com.buran.game.conf.Rules.DEBUG_START_AT_HOLE = query().contains("debug=hole");
         com.buran.game.conf.Rules.DEBUG_FAST_GOAL = query().contains("debug=clear");
         WebApplicationConfiguration config = new WebApplicationConfiguration("canvas");

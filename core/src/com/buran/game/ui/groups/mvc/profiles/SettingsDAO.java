@@ -33,6 +33,10 @@ public class SettingsDAO {
     @Getter
     @Setter
     private boolean child;
+    /** Radio messages are shown as text as well as spoken. */
+    @Getter
+    @Setter
+    private boolean subtitles;
     @Getter
     @Setter
     private int level;
@@ -63,6 +67,7 @@ public class SettingsDAO {
         musicVolume = 0.5f;
         shader = true;
         child = false;
+        subtitles = true;
         level = 1;
         vibration = 2;
         joystick = false;
@@ -80,6 +85,7 @@ public class SettingsDAO {
         this.musicVolume = settingsDAO.musicVolume;
         this.shader = settingsDAO.shader;
         this.child = settingsDAO.child;
+        this.subtitles = settingsDAO.subtitles;
         this.level = settingsDAO.level;
         this.vibration = settingsDAO.vibration;
         this.joystick = settingsDAO.joystick;

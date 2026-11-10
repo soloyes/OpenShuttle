@@ -515,6 +515,10 @@ public class MainMenu extends Group implements MenuNav.Target {
             s.setChild(v);
             save();
         }));
+        panel.add(new Row.Toggle("SUBTITLES", rowFont, s::isSubtitles, v -> {
+            s.setSubtitles(v);
+            save();
+        }));
         panel.add(new Row.Toggle("SHADERS", rowFont, s::isShader, v -> {
             s.setShader(v);
             save();

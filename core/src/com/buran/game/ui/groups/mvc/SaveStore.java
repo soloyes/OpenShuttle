@@ -133,6 +133,7 @@ public final class SaveStore {
         s.setMusic(v.getBoolean("music", s.isMusic()));
         s.setMusicVolume(v.getFloat("musicVolume", s.getMusicVolume()));
         s.setShader(v.getBoolean("shader", s.isShader()));
+        s.setSubtitles(v.getBoolean("subtitles", s.isSubtitles()));
         s.setChild(v.getBoolean("child", s.isChild()));
         s.setLevel(v.getInt("level", s.getLevel()));
         s.setVibration(v.getInt("vibration", s.getVibration()));
@@ -152,6 +153,7 @@ public final class SaveStore {
         w.set("music", s.isMusic());
         w.set("musicVolume", s.getMusicVolume());
         w.set("shader", s.isShader());
+        w.set("subtitles", s.isSubtitles());
         w.set("child", s.isChild());
         w.set("level", s.getLevel());
         w.set("vibration", s.getVibration());

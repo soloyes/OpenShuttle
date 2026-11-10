@@ -503,6 +503,8 @@ public class GameScreen extends BaseScreen {
 
     public void update(float dt) {
         boolean held = PauseGroup.isPause() || (sectorRun != null && sectorRun.isClear());
+        com.buran.game.platform.Radio.setPaused(PauseGroup.isPause());
+        com.buran.game.platform.Radio.update();
         if (sectorRun != null && !held && !Rules.GAME_OVER) {
             sectorRun.update(dt);
         }

@@ -41,7 +41,10 @@ public final class SectorRun {
     public enum Phase { BRIEFING, ACTIVE, EXTRACT, CLEAR }
 
     private static final float CARD_FADE = 0.4f;
-    private static final float TYPE_SPEED = 45f;
+    /** Typing keeps pace with the voice (about 13 characters a second) and starts with it. */
+    private static final float TYPE_SPEED = 13f;
+    private static final float VOICE_AT = 0.5f;
+    private static final float TYPE_DELAY = VOICE_AT + 0.45f;
     private static final float BEACON_RADIUS = 260f;
     private static final Color WARM = Color.valueOf("ffc06aff");
 
@@ -128,10 +131,11 @@ public final class SectorRun {
         switch (phase) {
             case BRIEFING:
                 // The world holds still until the player has heard the radio and pressed A.
-                if (!voiced && phaseTime > 0.5f) {
+                if (!voiced && phaseTime > VOICE_AT) {
                     voiced = true;
-                    com.buran.game.platform.Radio.say(sector.briefing);
+                    com.buran.game.platform.Radio.play("sector" + sector.code());
                 }
+                com.buran.game.platform.Radio.update();
                 if (com.badlogic.gdx.Gdx.input.justTouched()) {
                     advance();
                 }
@@ -159,6 +163,7 @@ public final class SectorRun {
 
     private boolean voiced;
     private boolean typedAll;
+    private final boolean subtitles = com.buran.game.ui.groups.mvc.profiles.Profiles.getSettings().isSubtitles();
 
     public boolean isBriefing() {
         return phase == Phase.BRIEFING;
@@ -169,7 +174,7 @@ public final class SectorRun {
         if (phase != Phase.BRIEFING || phaseTime < 0.4f) {
             return;
         }
-        if (!typedAll && typed() < sector.briefing.length()) {
+        if (subtitles && !typedAll && typed() < sector.briefing.length()) {
             typedAll = true;
             return;
         }
@@ -179,7 +184,7 @@ public final class SectorRun {
     }
 
     private int typed() {
-        return typedAll ? sector.briefing.length() : (int) Math.min(sector.briefing.length(), phaseTime * TYPE_SPEED);
+        return typedAll ? sector.briefing.length() : (int) MathUtils.clamp((phaseTime - TYPE_DELAY) * TYPE_SPEED, 0f, sector.briefing.length());
     }
 
     private void setPhase(Phase p) {
@@ -270,20 +275,41 @@ public final class SectorRun {
         float x = (W - w) / 2f;
         float y = H * 0.30f;
         int n = phase == Phase.BRIEFING ? typed() : sector.briefing.length();
-        String shown = sector.briefing.substring(0, n) + ((((int) (time * 2.5f)) % 2 == 0 || n < sector.briefing.length()) ? "_" : "");
-        layout.setText(font, sector.briefing, Theme.DIM, w - 80f, Align.left, true);
-        float h = layout.height + 240f;
-        Theme.frame(batch, x, y - h, w, h, a);
+        boolean ready;
+        float h;
+        if (subtitles) {
+            String shown = sector.briefing.substring(0, n) + ((((int) (time * 2.5f)) % 2 == 0 || n < sector.briefing.length()) ? "_" : "");
+            layout.setText(font, sector.briefing, Theme.DIM, w - 80f, Align.left, true);
+            h = layout.height + 240f;
+            Theme.frame(batch, x, y - h, w, h, a);
+            Color old = font.getColor().cpy();
+            font.setColor(Theme.TEXT.r, Theme.TEXT.g, Theme.TEXT.b, a);
+            font.draw(batch, shown, x + 40f, y - 30f - font.getLineHeight() * 1.5f, w - 80f, Align.left, true);
+            font.setColor(old);
+            ready = n >= sector.briefing.length();
+        } else {
+            // No text: a live signal meter while the voice is on the air.
+            h = 300f;
+            Theme.frame(batch, x, y - h, w, h, a);
+            boolean onAir = com.buran.game.platform.Radio.isPlaying();
+            int bars = 48;
+            float bw = (w - 80f) / bars;
+            float mid = y - h / 2f - 20f;
+            for (int i = 0; i < bars; i++) {
+                float level = onAir
+                        ? 0.15f + 0.85f * Math.abs(MathUtils.sin(time * 11f + i * 0.7f) * MathUtils.sin(time * 3.3f + i * 0.23f))
+                        : 0.04f;
+                float bh = 8f + 110f * level;
+                Theme.rect(batch, x + 40f + i * bw + bw * 0.2f, mid - bh / 2f, bw * 0.6f, bh, Theme.ACCENT, a * (onAir ? 0.8f : 0.3f));
+            }
+            ready = phaseTime > 1.2f;
+        }
         text(batch, font, "RADIO  -  SECTOR " + sector.code(), x + 40f, y - 30f, Theme.ACCENT, a, false);
-        Color old = font.getColor().cpy();
-        font.setColor(Theme.TEXT.r, Theme.TEXT.g, Theme.TEXT.b, a);
-        font.draw(batch, shown, x + 40f, y - 30f - font.getLineHeight() * 1.5f, w - 80f, Align.left, true);
-        font.setColor(old);
         if (sector.lesson != null) {
             text(batch, font, sector.lesson, W / 2f, y - h - 50f, Theme.OK, a, true);
         }
         // Continue prompt once the message is fully on screen.
-        if (n >= sector.briefing.length()) {
+        if (ready) {
             float blink = 0.55f + 0.45f * MathUtils.sin(time * 4f);
             layout.setText(font, "A  -  CONTINUE");
             text(batch, font, "A  -  CONTINUE", x + w - 40f - layout.width, y - h + 40f + layout.height, Theme.ACCENT, a * blink, false);
