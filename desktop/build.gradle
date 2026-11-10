@@ -1,60 +1,53 @@
-import org.apache.tools.ant.taskdefs.condition.Os
+import org.gradle.internal.os.OperatingSystem
 
-apply plugin: "java"
+apply plugin: 'application'
 
-sourceCompatibility = 1.6
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = ['src/']
 
-project.ext.mainClassName = "com.buran.game.desktop.DesktopLauncher"
-project.ext.assetsDir = new File("../android/assets");
+def assetsDir = rootProject.file('assets')
 
-task run(dependsOn: classes, type: JavaExec) {
-    main = project.mainClassName
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-    workingDir = project.assetsDir
-    ignoreExitValue = true
-    
-    if(Os.isFamily(Os.FAMILY_MAC))
-        jvmArgs += "-XstartOnFirstThread"
+application {
+    mainClass = 'com.buran.game.desktop.DesktopLauncher'
 }
 
-task debug(dependsOn: classes, type: JavaExec) {
-    main = project.mainClassName
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-    workingDir = project.assetsDir
-    ignoreExitValue = true
-    debug = true
+dependencies {
+    implementation project(':core')
+    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    implementation "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
 }
 
-task dist(type: Jar) {
-    from files(sourceSets.main.output.classesDir)
-    from files(sourceSets.main.output.resourcesDir)
-    from {configurations.compile.collect {zipTree(it)}}
-    from files(project.assetsDir);
- 
-    manifest {
-        attributes 'Main-Class': project.mainClassName
+tasks.named('run', JavaExec) {
+    workingDir = assetsDir
+    ignoreExitValue = true
+    if (OperatingSystem.current().isMacOsX()) {
+        jvmArgs += '-XstartOnFirstThread'
     }
 }
 
-dist.dependsOn classes
-
-eclipse {
-    project {
-        name = appName + "-desktop"
-        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/android/assets'
+// Regenerates the pre-rendered bitmap fonts in assets/fonts from the TTF.
+// Web builds cannot run FreeType at load time cheaply, so fonts ship as .fnt + .png.
+configurations { fontgen }
+dependencies {
+    fontgen "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    fontgen "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+    fontgen "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+}
+sourceSets {
+    fontgen {
+        java.srcDirs = ['fontgen/']
+        compileClasspath += configurations.fontgen
+        runtimeClasspath += configurations.fontgen
     }
 }
-
-task afterEclipseImport(description: "Post processing after project generation", group: "IDE") {
-  doLast {
-    def classpath = new XmlParser().parse(file(".classpath"))
-    new Node(classpath, "classpathentry", [ kind: 'src', path: 'assets' ]);
-    def writer = new FileWriter(file(".classpath"))
-    def printer = new XmlNodePrinter(new PrintWriter(writer))
-    printer.setPreserveWhitespace(true)
-    printer.print(classpath)
-  }
+dependencies {
+    fontgen "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+    fontgen "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}
+tasks.register('generateFonts', JavaExec) {
+    group = 'build'
+    description = 'Pre-renders assets/fonts/*.fnt from the TTF font'
+    mainClass = 'com.buran.game.fontgen.FontGenerator'
+    classpath = sourceSets.fontgen.runtimeClasspath
+    args assetsDir.absolutePath
 }

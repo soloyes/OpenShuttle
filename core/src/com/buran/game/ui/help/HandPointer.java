@@ -1,5 +1,6 @@
 package com.buran.game.ui.help;
 
+import com.buran.game.input.Gamepad;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -62,7 +63,7 @@ public class HandPointer extends Group {
         if (t >= time * 2) {
             t = 0.0f;
         }
-        if (Gdx.input.justTouched() && !done) {
+        if ((Gdx.input.justTouched() || Gamepad.get().isSteering()) && !done) {
             setVisible(false);
             done = true;
         }

@@ -1,0 +1,49 @@
+import org.teavm.gradle.api.OptimizationLevel
+
+plugins {
+    id 'com.github.xpenatan.gdx-teavm' version "${gdxTeaVMVersion}"
+}
+
+dependencies {
+    implementation project(':core')
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "com.github.xpenatan.gdx-teavm:gdx-controllers-web:$gdxTeaVMVersion"
+}
+
+gdxTeaVM {
+    assets(rootProject.file('assets'))
+
+    webDefaults {
+        mainClass = 'com.buran.game.web.WebLauncher'
+        htmlTitle = 'Buran-19'
+        htmlWidth = 0
+        htmlHeight = 0
+        serverPort = 8080
+    }
+
+    // Development build: readable JS, fast to iterate.
+    js {
+        optimization = OptimizationLevel.NONE
+        obfuscated = false
+    }
+
+    // Release build that goes to GitHub Pages.
+    js('release') {
+        optimization = OptimizationLevel.BALANCED
+        obfuscated = true
+        serverPort = 8180
+    }
+}
+
+// Our own entry page (Xbox start screen, fullscreen, audio unlock) replaces the generated one.
+['gdx_teavm_web_js_build', 'gdx_teavm_web_js_release_build'].each { name ->
+    tasks.matching { it.name == name }.configureEach { t ->
+        t.doLast {
+            def out = name.contains('release') ? 'dist/js/release/webapp' : 'dist/js/webapp'
+            copy {
+                from file('webapp')
+                into layout.buildDirectory.dir(out)
+            }
+        }
+    }
+}

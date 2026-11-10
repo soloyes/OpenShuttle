@@ -39,6 +39,8 @@ public class PauseGroup extends Group {
     private final Button buttonMenu;
     private final Button buttonRestart;
     private final ImageButton playPauseBtn;
+    private final TextureRegionDrawable playTexture;
+    private final TextureRegionDrawable pauseTexture;
     private final ConfigGroup configGroup;
     private CommitGroup commitGroup;
     private final LeftGroup leftGroup;
@@ -56,8 +58,11 @@ public class PauseGroup extends Group {
     private Color color;
     @Setter
     private static boolean watched = true;
+    /** The pause group of the running game screen, for gamepad/keyboard shortcuts. */
+    private static PauseGroup current;
 
     public PauseGroup() {
+        current = this;
         this.commitGroup = new CommitGroup();
         commitGroup.setPauseGroup(this);
         this.boomBox = new BoomBox();
@@ -65,8 +70,8 @@ public class PauseGroup extends Group {
         pause = false;
         this.font60 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT60, BitmapFont.class);
         this.glyphLayout = new GlyphLayout();
-        final TextureRegionDrawable playTexture = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PLAY_BUTTON));
-        final TextureRegionDrawable pauseTexture = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_BUTTON));
+        this.playTexture = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PLAY_BUTTON));
+        this.pauseTexture = new TextureRegionDrawable(Assets.getInstance().getAtlas().findRegion(PaintConstants.PAUSE_BUTTON));
         this.playPauseBtn = new ImageButton(pauseTexture);
         playPauseBtn.setOrigin(Align.center);
         playPauseBtn.setSize(PaintConstants.PLAY_PAUSE_BUTTON_WIDTH, PaintConstants.PLAY_PAUSE_BUTTON_HEIGHT);
@@ -153,30 +158,7 @@ public class PauseGroup extends Group {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (pointer == 0) {
-                    pause = !pause;
-                    if (pause) {
-                        boomBox.stopAllMusicAndPlayThese(MSConstants.PAUSE);
-                        playPauseBtn.getStyle().imageUp = playTexture;
-                    } else {
-                        if (Rules.DEATH_MODE){
-                            boomBox.stopAllMusicAndPlayThese(MSConstants.DEATH_MODE, MSConstants.BLACKHOLE_ROAR_MUSIC);
-                        } else {
-                            boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
-                        }
-                        playPauseBtn.getStyle().imageUp = pauseTexture;
-                        watched = true;
-                    }
-                    configGroup.setVisible(pause);
-                    leftGroup.setVisible(pause);
-                    rightGroup.setVisible(pause);
-                    buttonMenu.setVisible(pause);
-                    buttonRestart.setVisible(pause);
-                    if (!configGroup.isVisible()) {
-                        commitGroup.setVisible(pause);
-                    }
-                    boomBox.stopAllSound();
-                    boomBox.playSound(MSConstants.UI_PAUSE);
-                    Vibrator.vibrateUI(VConstants.UI_CLICK);
+                    doTogglePause();
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -189,6 +171,50 @@ public class PauseGroup extends Group {
         this.addActor(buttonMenu);
         this.addActor(buttonRestart);
         this.addActor(commitGroup);
+    }
+
+    private void doTogglePause() {
+        pause = !pause;
+        if (pause) {
+            boomBox.stopAllMusicAndPlayThese(MSConstants.PAUSE);
+            playPauseBtn.getStyle().imageUp = playTexture;
+        } else {
+            if (Rules.DEATH_MODE){
+                boomBox.stopAllMusicAndPlayThese(MSConstants.DEATH_MODE, MSConstants.BLACKHOLE_ROAR_MUSIC);
+            } else {
+                boomBox.stopAllMusicAndPlayThese(MSConstants.GAME_SONG, MSConstants.BLACKHOLE_ROAR_MUSIC);
+            }
+            playPauseBtn.getStyle().imageUp = pauseTexture;
+            watched = true;
+        }
+        configGroup.setVisible(pause);
+        leftGroup.setVisible(pause);
+        rightGroup.setVisible(pause);
+        buttonMenu.setVisible(pause);
+        buttonRestart.setVisible(pause);
+        if (!configGroup.isVisible()) {
+            commitGroup.setVisible(pause);
+        }
+        boomBox.stopAllSound();
+        boomBox.playSound(MSConstants.UI_PAUSE);
+        Vibrator.vibrateUI(VConstants.UI_CLICK);
+    }
+
+    /** Same as tapping the play/pause button. No-op outside a running game. */
+    public static void togglePause() {
+        if (current != null && current.playPauseBtn.isVisible() && !Rules.GAME_OVER) {
+            current.doTogglePause();
+        }
+    }
+
+    /** True while a game screen with a pause button is alive. */
+    public static boolean isActive() {
+        return current != null;
+    }
+
+    /** Forget the pause group when its screen goes away. */
+    public static void clearCurrent() {
+        current = null;
     }
 
     public void commitVisible(boolean visible) {

@@ -1,20 +1,13 @@
 package com.buran.game.ui.groups.mvc.profiles;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.buran.game.conf.FileConstants;
 import com.buran.game.conf.PaintConstants;
 import com.buran.game.conf.Rules;
 import com.buran.game.player.Standing;
 import com.buran.game.screens.ScreenManager;
 import com.buran.game.ui.groups.mvc.Model;
+import com.buran.game.ui.groups.mvc.SaveStore;
 import com.buran.game.ui.groups.mvc.results.DetailedResultDAO;
 import com.buran.game.ui.groups.mvc.results.ResultDAO;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionLikeType;
-import com.fasterxml.jackson.databind.type.TypeFactory;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -32,12 +25,10 @@ public class Profiles implements Model<ProfileDAO> {
     private static Profiles instance;
     private static boolean empty;
     private List<ProfileDAO> profiles;
-    private FileHandle file;
     private ProfileDAO emptyProfile;
 
     public Profiles() {
         this.profiles = new ArrayList<ProfileDAO>();
-        this.file = Gdx.files.local(FileConstants.PROFILES);
         this.emptyProfile = asEmpty();
     }
 
@@ -64,16 +55,10 @@ public class Profiles implements Model<ProfileDAO> {
 
     @Override
     public void write() {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            if (instance.file.exists()) {
-                mapper.writeValue(instance.file.file(), instance.profiles);
-            } else {
-                initDefaultProfiles();
-            }
-        } catch (IOException e) {
+        if (SaveStore.hasProfiles()) {
+            SaveStore.writeProfiles(instance.profiles);
+        } else {
             initDefaultProfiles();
-            e.printStackTrace();
         }
 
         empty = true;
@@ -119,21 +104,12 @@ public class Profiles implements Model<ProfileDAO> {
         if (instance == null) {
             instance = new Profiles();
             //First game start
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-                if (instance.file.exists()) {
-                    CollectionLikeType collectionLikeType =
-                            TypeFactory
-                                    .defaultInstance()
-                                    .constructCollectionLikeType(List.class, ProfileDAO.class);
-                    instance.profiles = mapper.readValue(instance.file.file(), collectionLikeType);
-                } else {
-                    initDefaultProfiles();
-                    mapper.writeValue(instance.file.file(), instance.profiles);
-                }
-            } catch (IOException e) {
+            List<ProfileDAO> saved = SaveStore.readProfiles();
+            if (saved != null) {
+                instance.profiles = saved;
+            } else {
                 initDefaultProfiles();
-                e.printStackTrace();
+                SaveStore.writeProfiles(instance.profiles);
             }
             //
         }

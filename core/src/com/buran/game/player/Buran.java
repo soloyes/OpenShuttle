@@ -17,6 +17,7 @@ import com.buran.game.conf.Rules;
 import com.buran.game.effects.Fibonacci;
 import com.buran.game.effects.KillingSpree;
 import com.buran.game.effects.particle.ParticleEmitter;
+import com.buran.game.input.Gamepad;
 import com.buran.game.labelsticker.Sticker;
 import com.buran.game.player.layers.LifeShield;
 import com.buran.game.player.layers.RamShield;
@@ -282,7 +283,9 @@ public class Buran extends AbstractBuran {
         }
 
         if (!isTaken) {
-            if (joystick.isActive()) {
+            if (Gamepad.get().isSteering()) {
+                move(dt, Gamepad.get().getSteerAngle());
+            } else if (joystick.isActive()) {
                 float angleToTarget = joystick.getAngle();
                 move(dt, angleToTarget);
             } else {
@@ -397,7 +400,8 @@ public class Buran extends AbstractBuran {
         }
 
         float acceleration =
-                (joystick.isActive() ? joystick.getPower() : 1) * enginePower;
+                (Gamepad.get().isSteering() ? Gamepad.get().getSteerPower()
+                        : joystick.isActive() ? joystick.getPower() : 1) * enginePower;
         velocity.add(
                 acceleration * (float) Math.cos(Math.toRadians(angle)) * dt,
                 acceleration * (float) Math.sin(Math.toRadians(angle)) * dt

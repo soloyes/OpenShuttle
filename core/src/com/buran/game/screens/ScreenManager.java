@@ -10,6 +10,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.buran.game.AdsController;
 import com.buran.game.BuranGame;
 import com.buran.game.conf.Rules;
+import com.buran.game.input.Gamepad;
+import com.buran.game.ui.groups.PauseGroup;
 import com.buran.game.ui.groups.mvc.profiles.Profiles;
 import com.buran.game.utils.Assets;
 
@@ -51,6 +53,8 @@ public class ScreenManager {
 
     public void changeScreen(ScreenType type) {
         Screen screen = game.getScreen();
+        Gamepad.get().onScreenChange();
+        PauseGroup.clearCurrent();
         Gdx.input.setInputProcessor(null);
         Assets.getInstance().clear();
         if (screen != null) {

@@ -1,7 +1,7 @@
 package com.buran.game.desktop;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.buran.game.BuranGame;
 import com.buran.game.screens.ScreenManager;
 
@@ -13,7 +13,7 @@ public class DesktopLauncher {
     private static ScreenResolutionTester tester = ScreenResolutionTester.SIXTEEN_TO_NINE;
 
     public static void main(String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         try {
             if (arg.length > 1) {
                 tester = ScreenResolutionTester.valueOf(arg[1]);
@@ -22,9 +22,10 @@ public class DesktopLauncher {
             e.printStackTrace();
         }
 
-        config.width = tester.getHalfWidth();
-        config.height = tester.getHalfHeight();
-        config.vSyncEnabled = true;
+        config.setTitle("Buran-19");
+        config.setWindowedMode(tester.getHalfWidth(), tester.getHalfHeight());
+        config.useVsync(true);
+        config.setPreferencesConfig(".prefs/", com.badlogic.gdx.Files.FileType.External);
         //config.foregroundFPS = 10;
 
         //This is for easy operate during test. Just run game with key from enum ScreenManager.ScreenType
@@ -40,6 +41,6 @@ public class DesktopLauncher {
         game.setRunScreen(screenType);
         //
 
-        new LwjglApplication(game, config);
+        new Lwjgl3Application(game, config);
     }
 }
