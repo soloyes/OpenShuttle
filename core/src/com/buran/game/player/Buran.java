@@ -131,6 +131,7 @@ public class Buran extends AbstractBuran {
     public void collideBlackhole(float dt) {
         if (position.dst(Blackhole.position) <= Buffs.getBlackholeTakeRange()) {
             isTaken = true;
+            com.buran.game.bot.blackhole.BlackholeDebris.shed(position.x, position.y, com.badlogic.gdx.graphics.Color.SALMON);
             velocity.scl(0.5f);
             tmpV2.set(Blackhole.position).sub(position).nor().scl(Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER);
             position.mulAdd(tmpV2, dt);

@@ -44,6 +44,8 @@ public final class Rules {
     public static int VIEW_WIDTH;
     public static int VIEW_HEIGHT;
     public static final float LANDSCAPE_VIEW_ZOOM = 0.6f;
+    /** Testing aid (web: ?debug=hole): start the run next to the black hole. */
+    public static boolean DEBUG_START_AT_HOLE = false;
     /** Title-safe inset for HUD on TVs (set from the world size at start). */
     public static int SAFE_X = 43;
     public static int SAFE_Y = 43;

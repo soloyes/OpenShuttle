@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.buran.game.background.Background;
 import com.buran.game.background.SectorBorder;
 import com.buran.game.background.SpaceBackground;
+import com.buran.game.bot.blackhole.BlackholeDebris;
 import com.buran.game.bot.anomaly.AbstractAnomaly;
 import com.buran.game.bot.anomaly.CorrosiveAnomaly;
 import com.buran.game.bot.anomaly.CorrosiveAnomalyEmitter;
@@ -201,6 +202,10 @@ public class GameScreen extends BaseScreen {
             spaceBackground.dispose();
         }
         spaceBackground = new SpaceBackground();
+        if (debris != null) {
+            debris.dispose();
+        }
+        debris = new BlackholeDebris();
         if (postProcessor != null) {
             postProcessor.dispose();
         }
@@ -216,6 +221,9 @@ public class GameScreen extends BaseScreen {
         uiTopPanel = new UITopPanel();
 
         BoundCheck.avoidPosition(Blackhole.position, Buran.position, (int) Buffs.getBlackholeTakeRange() + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+        if (Rules.DEBUG_START_AT_HOLE) {
+            Buran.position.set(Blackhole.position.x + Buffs.getBlackholeTakeRange() + 260, Blackhole.position.y + 120);
+        }
         Rules.StartLevel.values()[Profiles.getSettings().getLevel()].setGameLevel();
         if (Profiles.getSettings().getLevel() == 0) {
             astronautEmitter.setConsumablesMaxCount(Rules.CONSUMABLE_ASTRONAUT_MAX_COUNT * 2);
@@ -335,6 +343,9 @@ public class GameScreen extends BaseScreen {
         magneticAnomalyEmitter.render(batch);
         rocketLauncher.render(batch);
         asteroidLaunchEmitter.render(batch);
+        if (Profiles.getSettings().isShader()) {
+            debris.render(batch);
+        }
         batch.setColor(Color.WHITE);
         batch.end();
 
@@ -353,8 +364,10 @@ public class GameScreen extends BaseScreen {
             post.hole = Profiles.getSettings().isShader();
             post.holeX = shaderHoleX;
             post.holeY = shaderHoleY;
-            post.holeRadius = blackhole.getShaderDiameter() / Rules.VIEW_ZOOM * 1.25f;
-            post.holeSpin = 1.5f + 1.5f * MathUtils.sin(holeTime * 0.7f);
+            // Lens radius = capture range, in units of the visible height.
+            post.holeRadius = Buffs.getBlackholeTakeRange() / Rules.VIEW_HEIGHT;
+            post.holeSpin = holeTime;
+            post.aspect = (float) Rules.VIEW_WIDTH / Rules.VIEW_HEIGHT;
             post.grey = PauseGroup.isPause() || Rules.GAME_OVER;
             post.flash = Math.max(0f, flash);
             post.flashR = flashColor.r;
@@ -454,6 +467,9 @@ public class GameScreen extends BaseScreen {
         }
         sectorBorder.update(dt);
         spaceBackground.update(dt);
+        if (!PauseGroup.isPause()) {
+            debris.update(dt);
+        }
         cameraUpdate(dt);
         if (!PauseGroup.isPause()) {
             PrettySound.update(dt);
@@ -532,6 +548,7 @@ public class GameScreen extends BaseScreen {
     private GameMenu gameMenu;
     private boolean runReported;
     private SpaceBackground spaceBackground;
+    private BlackholeDebris debris;
     private PostProcessor postProcessor;
     private final PostProcessor.Params post = new PostProcessor.Params();
     /** Full-screen flash strength (decays); see {@link #flash(float, float, float, float)}. */
@@ -1028,6 +1045,10 @@ public class GameScreen extends BaseScreen {
         if (spaceBackground != null) {
             spaceBackground.dispose();
             spaceBackground = null;
+        }
+        if (debris != null) {
+            debris.dispose();
+            debris = null;
         }
         if (postProcessor != null) {
             postProcessor.dispose();
