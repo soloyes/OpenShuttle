@@ -135,6 +135,15 @@
             opacity: 0;
             transition: opacity 0.6s ease;
         }
+        #soundnote {
+            font-family: Consolas, "Courier New", monospace;
+            font-size: calc(var(--u) * 1.7);
+            color: #4f6480;
+            margin-top: calc(var(--u) * 1.6);
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+        #boot.ready #soundnote { opacity: 1; }
         #boot.ready #press {
             opacity: 1;
             animation: breathe 2.2s ease-in-out infinite;
@@ -171,6 +180,7 @@
         <div id="telemetry"></div>
         <div id="bar"></div>
         <div id="press"><span class="touch-only">TAP TO START</span><span class="pad-only">PRESS <svg class="btn" viewBox="0 0 40 40" aria-label="A"><circle cx="20" cy="20" r="19" fill="#107c10"/><path d="M20 10 L28.5 30 H24.6 L22.9 25.6 H17.1 L15.4 30 H11.5 Z M18.3 22.4 H21.7 L20 17.8 Z" fill="#fff" fill-rule="evenodd"/></svg> TO START</span></div>
+        <div id="soundnote">SOUND STARTS WITH THE FIRST PRESS</div>
     </div>
     <div id="hint">
         LEFT STICK fly &middot; A use / select &middot; LB RB switch item &middot; Y EMP pulse &middot; MENU pause
