@@ -305,94 +305,169 @@
             return buf;
         }
 
+        function whiteBuffer(c, seconds) {
+            var len = Math.floor(c.sampleRate * seconds);
+            var buf = c.createBuffer(2, len, c.sampleRate);
+            for (var ch = 0; ch < 2; ch++) {
+                var d = buf.getChannelData(ch);
+                for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+            }
+            return buf;
+        }
+
+        // Synthetic hall: decaying stereo noise as an impulse response.
+        function reverb(c, seconds, decay) {
+            var len = Math.floor(c.sampleRate * seconds);
+            var ir = c.createBuffer(2, len, c.sampleRate);
+            for (var ch = 0; ch < 2; ch++) {
+                var d = ir.getChannelData(ch);
+                for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+            }
+            var cv = c.createConvolver();
+            cv.buffer = ir;
+            return cv;
+        }
+
+        // Soft saturation: gives the engine noise body instead of hiss.
+        function saturator(c, amount) {
+            var ws = c.createWaveShaper();
+            var n = 1024, curve = new Float32Array(n);
+            for (var i = 0; i < n; i++) {
+                var x = i / (n - 1) * 2 - 1;
+                curve[i] = Math.tanh(x * amount) / Math.tanh(amount);
+            }
+            ws.curve = curve;
+            return ws;
+        }
+
+        function env(g, t, points) {
+            g.gain.setValueAtTime(0.0001, t);
+            points.forEach(function (p) { g.gain.exponentialRampToValueAtTime(Math.max(0.0001, p[1]), t + p[0]); });
+        }
+
         function schedule(c) {
-            var t = c.currentTime + 0.02;
+            var t = c.currentTime + 0.03;
+            var master = c.createDynamicsCompressor();
+            master.threshold.value = -16;
+            master.ratio.value = 3;
+            master.attack.value = 0.01;
+            master.release.value = 0.4;
             var out = c.createGain();
-            out.gain.value = 0.9;
-            out.connect(c.destination);
+            out.gain.value = 0.95;
+            master.connect(out).connect(c.destination);
+            var hall = reverb(c, 4.0, 2.6);
+            var wet = c.createGain();
+            wet.gain.value = 0.55;
+            hall.connect(wet).connect(master);
 
-            // 1) Ignition rumble: low-passed noise swelling over the first second.
-            var rumble = c.createBufferSource();
-            rumble.buffer = noiseBuffer(c, 3.2);
-            var lp = c.createBiquadFilter();
-            lp.type = "lowpass";
-            lp.frequency.setValueAtTime(120, t);
-            lp.frequency.linearRampToValueAtTime(380, t + 2.0);
+            function send(node, dry, rev) {
+                var d = c.createGain(); d.gain.value = dry; node.connect(d).connect(master);
+                var r = c.createGain(); r.gain.value = rev; node.connect(r).connect(hall);
+            }
+
+            // 1) Ignition: a deep cough as the engines catch.
+            var kick = c.createOscillator();
+            kick.type = "sine";
+            kick.frequency.setValueAtTime(70, t + 0.15);
+            kick.frequency.exponentialRampToValueAtTime(30, t + 0.9);
+            var kg = c.createGain();
+            env(kg, t + 0.15, [[0.02, 0.7], [0.8, 0.0001]]);
+            kick.connect(kg);
+            send(kg, 0.9, 0.3);
+            kick.start(t + 0.15); kick.stop(t + 1.1);
+
+            // 2) Engine roar: brown noise, saturated, opening up as thrust builds, with a slow flutter.
+            var roar = c.createBufferSource();
+            roar.buffer = noiseBuffer(c, 3.6);
+            var rlp = c.createBiquadFilter();
+            rlp.type = "lowpass";
+            rlp.Q.value = 0.7;
+            rlp.frequency.setValueAtTime(90, t + 0.15);
+            rlp.frequency.exponentialRampToValueAtTime(700, t + 1.4);
+            rlp.frequency.exponentialRampToValueAtTime(2200, t + 2.1);
+            rlp.frequency.exponentialRampToValueAtTime(200, t + 3.4);
             var rg = c.createGain();
-            rg.gain.setValueAtTime(0.0001, t);
-            rg.gain.exponentialRampToValueAtTime(0.25, t + 0.4);
-            rg.gain.exponentialRampToValueAtTime(0.9, t + 1.1);
-            rg.gain.setValueAtTime(0.9, t + 1.9);
-            rg.gain.exponentialRampToValueAtTime(0.0001, t + 3.1);
-            rumble.connect(lp).connect(rg).connect(out);
-            rumble.start(t);
+            env(rg, t + 0.15, [[0.25, 0.35], [1.0, 0.8], [1.9, 0.9], [3.3, 0.0001]]);
+            var flutter = c.createOscillator();
+            flutter.frequency.value = 11;
+            var fg = c.createGain();
+            fg.gain.value = 0.12;
+            flutter.connect(fg).connect(rg.gain);
+            roar.connect(saturator(c, 2.5)).connect(rlp).connect(rg);
+            send(rg, 0.8, 0.35);
+            roar.start(t + 0.15); flutter.start(t + 0.15);
+            flutter.stop(t + 3.6);
 
-            // 1b) Turbine whine rising with the spool-up.
-            var whine = c.createOscillator();
-            whine.type = "sawtooth";
-            whine.frequency.setValueAtTime(90, t);
-            whine.frequency.exponentialRampToValueAtTime(520, t + 1.6);
-            var wlp = c.createBiquadFilter();
-            wlp.type = "lowpass";
-            wlp.frequency.value = 900;
-            var wg2 = c.createGain();
-            wg2.gain.setValueAtTime(0.0001, t);
-            wg2.gain.exponentialRampToValueAtTime(0.09, t + 1.0);
-            wg2.gain.exponentialRampToValueAtTime(0.0001, t + 2.3);
-            whine.connect(wlp).connect(wg2).connect(out);
-            whine.start(t);
-            whine.stop(t + 2.4);
+            // 3) Crackle: sparse impulses, the texture of a real rocket plume.
+            var cb = c.createBuffer(1, Math.floor(c.sampleRate * 2.6), c.sampleRate);
+            var cd = cb.getChannelData(0);
+            for (var i = 0; i < cd.length; i++) cd[i] = Math.random() < 0.0018 ? (Math.random() * 2 - 1) : 0;
+            var crack = c.createBufferSource();
+            crack.buffer = cb;
+            var chp = c.createBiquadFilter();
+            chp.type = "highpass";
+            chp.frequency.value = 1400;
+            var cg = c.createGain();
+            env(cg, t + 0.4, [[0.6, 0.5], [1.6, 0.6], [2.4, 0.0001]]);
+            crack.connect(chp).connect(cg);
+            send(cg, 0.6, 0.4);
+            crack.start(t + 0.4);
 
-            // 2) Whoosh: band-passed noise sweeping up as the shuttle tears past the camera.
-            var whoosh = c.createBufferSource();
-            var wb = c.createBuffer(1, Math.floor(c.sampleRate * 1.8), c.sampleRate);
-            var wd = wb.getChannelData(0);
-            for (var i = 0; i < wd.length; i++) wd[i] = Math.random() * 2 - 1;
-            whoosh.buffer = wb;
+            // 4) Pass-by: air tearing, sweeping across the stereo field with a Doppler drop.
+            var air = c.createBufferSource();
+            air.buffer = whiteBuffer(c, 2.0);
             var bp = c.createBiquadFilter();
             bp.type = "bandpass";
-            bp.Q.value = 1.2;
-            bp.frequency.setValueAtTime(250, t + 0.8);
-            bp.frequency.exponentialRampToValueAtTime(2400, t + 2.1);
-            var wg = c.createGain();
-            wg.gain.setValueAtTime(0.0001, t + 0.8);
-            wg.gain.exponentialRampToValueAtTime(0.5, t + 1.95);
-            wg.gain.exponentialRampToValueAtTime(0.0001, t + 2.5);
-            var pan = c.createStereoPanner ? c.createStereoPanner() : null;
-            if (pan) {
-                pan.pan.setValueAtTime(0.6, t + 0.8);
-                pan.pan.linearRampToValueAtTime(-0.8, t + 2.3);
-                whoosh.connect(bp).connect(wg).connect(pan).connect(out);
-            } else {
-                whoosh.connect(bp).connect(wg).connect(out);
+            bp.Q.value = 0.9;
+            bp.frequency.setValueAtTime(300, t + 0.8);
+            bp.frequency.exponentialRampToValueAtTime(1800, t + 1.95);
+            bp.frequency.exponentialRampToValueAtTime(420, t + 2.6);
+            var ag = c.createGain();
+            env(ag, t + 0.8, [[0.9, 0.18], [1.15, 0.55], [1.9, 0.0001]]);
+            var pan = c.createStereoPanner ? c.createStereoPanner() : c.createGain();
+            if (pan.pan) {
+                pan.pan.setValueAtTime(0.7, t + 0.8);
+                pan.pan.linearRampToValueAtTime(-0.9, t + 2.4);
             }
-            whoosh.start(t + 0.8);
+            air.connect(bp).connect(ag).connect(pan);
+            send(pan, 0.7, 0.5);
+            air.start(t + 0.8);
 
-            // 3) Thud on the flash: a falling sine with a short attack.
-            var o = c.createOscillator();
-            o.type = "sine";
-            o.frequency.setValueAtTime(110, t + 2.1);
-            o.frequency.exponentialRampToValueAtTime(32, t + 3.2);
-            var og = c.createGain();
-            og.gain.setValueAtTime(0.0001, t + 2.08);
-            og.gain.exponentialRampToValueAtTime(0.85, t + 2.14);
-            og.gain.exponentialRampToValueAtTime(0.0001, t + 3.4);
-            o.connect(og).connect(out);
-            o.start(t + 2.05);
-            o.stop(t + 3.5);
+            // 5) The flash: sub drop plus a soft noise thump, mostly into the hall.
+            var sub = c.createOscillator();
+            sub.type = "sine";
+            sub.frequency.setValueAtTime(58, t + 2.15);
+            sub.frequency.exponentialRampToValueAtTime(24, t + 3.6);
+            var sg = c.createGain();
+            env(sg, t + 2.12, [[0.04, 0.9], [1.6, 0.0001]]);
+            sub.connect(sg);
+            send(sg, 0.9, 0.25);
+            sub.start(t + 2.1); sub.stop(t + 3.9);
+            var thump = c.createBufferSource();
+            thump.buffer = noiseBuffer(c, 1.2);
+            var tlp = c.createBiquadFilter();
+            tlp.type = "lowpass";
+            tlp.frequency.setValueAtTime(900, t + 2.15);
+            tlp.frequency.exponentialRampToValueAtTime(80, t + 3.2);
+            var tg = c.createGain();
+            env(tg, t + 2.13, [[0.02, 0.8], [1.0, 0.0001]]);
+            thump.connect(tlp).connect(tg);
+            send(tg, 0.5, 0.9);
+            thump.start(t + 2.13);
 
-            // 4) Shimmer tail: a soft high chord fading into the menu.
-            [523.25, 783.99, 1046.5].forEach(function (f, k) {
-                var s = c.createOscillator();
-                s.type = "triangle";
-                s.frequency.value = f;
-                var sg = c.createGain();
-                sg.gain.setValueAtTime(0.0001, t + 2.15);
-                sg.gain.exponentialRampToValueAtTime(0.05 - k * 0.012, t + 2.4);
-                sg.gain.exponentialRampToValueAtTime(0.0001, t + 4.6);
-                s.connect(sg).connect(out);
-                s.start(t + 2.1);
-                s.stop(t + 4.7);
+            // 6) Afterglow: a slow, detuned sine pad that blooms out of the reverb into the menu.
+            [110, 164.81, 220, 329.63].forEach(function (f, k) {
+                [-4, 4].forEach(function (cents) {
+                    var o = c.createOscillator();
+                    o.type = "sine";
+                    o.frequency.value = f;
+                    o.detune.value = cents;
+                    var g = c.createGain();
+                    env(g, t + 2.3, [[1.2, 0.035 - k * 0.006], [2.6, 0.02], [4.5, 0.0001]]);
+                    o.connect(g);
+                    send(g, 0.4, 0.9);
+                    o.start(t + 2.3); o.stop(t + 7.0);
+                });
             });
         }
 
@@ -426,6 +501,90 @@
             }
         };
     })();
+
+    /*
+     * Radio voice for sector briefings: the browser's speech voice over a band-limited static bed,
+     * squelch clicks at the start and end, game music ducked while the channel is open.
+     */
+    var Radio = (function () {
+        var bed = null, bedGain = null, crackleTimer = null, utter = null;
+        function ctx() { return window.Howler && Howler.ctx ? Howler.ctx : null; }
+        function pickVoice() {
+            if (!window.speechSynthesis) return null;
+            var vs = speechSynthesis.getVoices().filter(function (v) { return /^en/i.test(v.lang); });
+            var prefer = [/Natural/i, /Online/i, /Guy|Christopher|Ryan|Davis|Eric|Daniel|Male/i];
+            for (var p = 0; p < prefer.length; p++) {
+                for (var i = 0; i < vs.length; i++) if (prefer[p].test(vs[i].name)) return vs[i];
+            }
+            return vs[0] || null;
+        }
+        function squelch(c, level) {
+            var n = c.createBufferSource();
+            var b = c.createBuffer(1, Math.floor(c.sampleRate * 0.16), c.sampleRate);
+            var d = b.getChannelData(0);
+            for (var i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2);
+            n.buffer = b;
+            var f = c.createBiquadFilter(); f.type = "bandpass"; f.frequency.value = 2200; f.Q.value = 0.8;
+            var g = c.createGain(); g.gain.value = level;
+            n.connect(f).connect(g).connect(c.destination);
+            n.start();
+        }
+        function openBed(c) {
+            closeBed();
+            bed = c.createBufferSource();
+            var len = c.sampleRate * 2;
+            var b = c.createBuffer(1, len, c.sampleRate);
+            var d = b.getChannelData(0);
+            for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+            bed.buffer = b; bed.loop = true;
+            var hp = c.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 600;
+            var lp = c.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 3800;
+            bedGain = c.createGain(); bedGain.gain.value = 0.0001;
+            bedGain.gain.exponentialRampToValueAtTime(0.03, c.currentTime + 0.15);
+            bed.connect(hp).connect(lp).connect(bedGain).connect(c.destination);
+            bed.start();
+            // Random bursts of interference.
+            crackleTimer = setInterval(function () {
+                if (!bedGain) return;
+                var now = c.currentTime;
+                var peak = 0.03 + Math.random() * (Math.random() < 0.25 ? 0.12 : 0.03);
+                bedGain.gain.setValueAtTime(bedGain.gain.value, now);
+                bedGain.gain.linearRampToValueAtTime(peak, now + 0.02);
+                bedGain.gain.linearRampToValueAtTime(0.03, now + 0.05 + Math.random() * 0.15);
+            }, 180);
+        }
+        function closeBed() {
+            if (crackleTimer) { clearInterval(crackleTimer); crackleTimer = null; }
+            if (bed) { try { bed.stop(); } catch (e) {} bed = null; bedGain = null; }
+        }
+        function duck(v) { if (window.Howler) Howler.volume(v); }
+        return {
+            say: function (text) {
+                var c = ctx();
+                this.stop(true);
+                if (c) { if (c.state === "suspended") c.resume(); squelch(c, 0.35); openBed(c); }
+                duck(0.45);
+                if (!window.speechSynthesis) return;
+                utter = new SpeechSynthesisUtterance(text);
+                var v = pickVoice();
+                if (v) { utter.voice = v; utter.lang = v.lang; }
+                utter.rate = 0.98; utter.pitch = 0.85; utter.volume = 1;
+                var self = this;
+                utter.onend = function () { self.stop(); };
+                setTimeout(function () { speechSynthesis.speak(utter); }, 220);
+            },
+            stop: function (quiet) {
+                var c = ctx();
+                if (window.speechSynthesis) { utter = null; speechSynthesis.cancel(); }
+                if (bed && c && !quiet) squelch(c, 0.25);
+                closeBed();
+                duck(1);
+            }
+        };
+    })();
+    window.radioSay = function (t) { try { Radio.say(t); } catch (e) {} };
+    window.radioStop = function () { try { Radio.stop(); } catch (e) {} };
+    if (window.speechSynthesis) { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = function () {}; }
 
     /*
      * Title scene: a still, breathing picture (the shuttle in its shield, the rift behind it,

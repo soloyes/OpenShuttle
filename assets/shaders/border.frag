@@ -26,18 +26,20 @@ void main() {
     float sd = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0);
     float d = abs(sd);
 
-    float glow = exp(-(d * d) / (170.0 * 170.0)) * 0.45;
+    // Soft halo, a little stronger on the outside so "out" reads as a different place.
+    float glow = exp(-(d * d) / (110.0 * 110.0)) * 0.16 + step(0.0, sd) * exp(-sd / 600.0) * 0.08;
 
     // Coordinate along the edge: y on the left/right sides, x on the top/bottom.
     float along = q.x > q.y ? p.y : p.x;
-    float dash = step(0.42, fract((along - u_time * 120.0) / 220.0));
+    float f = fract((along - u_time * 60.0) / 160.0);
+    float dash = smoothstep(0.0, 0.06, f) * (1.0 - smoothstep(0.46, 0.52, f));
     // Corners are solid so dashes never meet at odd angles.
-    float corner = step(-60.0, min(q.x, q.y));
-    dash = max(dash, corner);
+    float corner = 1.0 - smoothstep(-80.0, -40.0, min(q.x, q.y));
+    dash = max(dash, 1.0 - corner);
 
-    float hw = 9.0;
+    float hw = max(2.5, u_pixel * 1.2);
     float line = 1.0 - smoothstep(hw - u_pixel, hw + u_pixel, d);
 
-    vec3 c = u_color * (glow + line * dash) * u_alpha;
+    vec3 c = u_color * (glow + line * dash * 0.7) * u_alpha;
     gl_FragColor = vec4(c, 1.0);
 }

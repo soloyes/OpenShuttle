@@ -22,8 +22,8 @@ import com.buran.game.utils.pool.AbstractPoolable;
  */
 
 public class BoundCheck {
-    private float alertTimer;
-    private float hpTimer;
+    private float alertTimer = 1.0f;
+    private float hpTimer = Rules.PLAYER_TIMER_HP_OUT_OF_MAP - 0.35f;
     private float fuelTimer;
     private Rectangle rectangle;
     private BoomBox boomBox;
@@ -42,11 +42,8 @@ public class BoundCheck {
     }
 
     public void checkAndHandleBounds(Buran player, float dt) {
-        rectangle.set(
-                -player.getWidth() / 2, -player.getHeight() / 2,
-                Rules.SPACE_WIDTH + player.getWidth(),
-                Rules.SPACE_HEIGHT + player.getHeight()
-        );
+        // The dashed line itself is the wall: crossing it hurts at once.
+        rectangle.set(0f, 0f, Rules.SPACE_WIDTH, Rules.SPACE_HEIGHT);
         if (!rectangle.contains(Buran.position)) {
             checkCount(dt);
             playerOnScreen = false;
@@ -64,9 +61,10 @@ public class BoundCheck {
                 CloudSky.scDy = 0.0f;
             }
         } else {
-            alertTimer = 0;
+            // Primed so the next crossing alerts and bites immediately.
+            alertTimer = 1.0f;
             fuelTimer = 0;
-            hpTimer = 0;
+            hpTimer = Rules.PLAYER_TIMER_HP_OUT_OF_MAP - 0.35f;
             Standing.getInstance().setFuelAlertOutOfBounds(false);
             Standing.getInstance().setHpAlert(false);
             playerOnScreen = true;

@@ -374,7 +374,7 @@ public class GameScreen extends BaseScreen {
         player.getRamShield().render(batch);
         radiationAnomalyEmitter.render(batch);
         magneticAnomalyEmitter.render(batch);
-        threatOverlay.renderWorld(batch);
+        threatOverlay.renderWorld(batch, Theme.font(44));
         rocketLauncher.render(batch);
         asteroidLaunchEmitter.render(batch);
         if (Profiles.getSettings().isShader()) {
@@ -454,7 +454,7 @@ public class GameScreen extends BaseScreen {
 
         if (!Rules.GAME_OVER) {
             if (!PauseGroup.isPause()) {
-                threatOverlay.renderEdges(batch, cameraHelper);
+                threatOverlay.renderEdges(batch, cameraHelper, Theme.font(32));
             }
             hud.render(batch);
             if (sectorRun != null) {
@@ -502,11 +502,13 @@ public class GameScreen extends BaseScreen {
     }
 
     public void update(float dt) {
-        boolean frozen = PauseGroup.isPause() || (sectorRun != null && sectorRun.isClear());
-        if (sectorRun != null && !frozen && !Rules.GAME_OVER) {
+        boolean held = PauseGroup.isPause() || (sectorRun != null && sectorRun.isClear());
+        if (sectorRun != null && !held && !Rules.GAME_OVER) {
             sectorRun.update(dt);
         }
-        if (Gamepad.get().isPulse()) {
+        // The briefing holds the world still too, so nothing happens while the radio talks.
+        boolean frozen = held || (sectorRun != null && sectorRun.isBriefing());
+        if (Gamepad.get().isPulse() && !frozen && !Rules.GAME_OVER) {
             firePulseEffect();
         }
         sectorBorder.update(dt);
@@ -1031,6 +1033,27 @@ public class GameScreen extends BaseScreen {
                     duration, 3.0f, 1.0f,
                     0.4f, 0.95f, 1.0f, 0.9f,
                     0.4f, 0.95f, 1.0f, 0.0f);
+        }
+        // The pulse shorts out electric anomalies and stuns the rest (they lose the scent).
+        float r2 = Rules.PULSE_RANGE * Rules.PULSE_RANGE;
+        boolean killed = false;
+        for (int i = electricalAnomalyEmitter.getActiveList().size() - 1; i >= 0; i--) {
+            AbstractAnomaly a = electricalAnomalyEmitter.getActiveList().get(i);
+            if (a.isBorn() && !a.isTaken() && a.isActive() && a.getPosition().dst2(Buran.position) <= r2) {
+                a.destroyWithEffect();
+                player.killPlusPlus(a);
+                killed = true;
+            }
+        }
+        for (int i = 0; i < anomalyJoiner.size(); i++) {
+            AbstractAnomaly a = anomalyJoiner.get(i);
+            if (a.isActive() && a.getPosition().dst2(Buran.position) <= r2) {
+                a.setHungry(false);
+            }
+        }
+        if (killed) {
+            boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
+            Juice.flash(0.25f, 0.45f, 0.9f, 1f);
         }
     }
 

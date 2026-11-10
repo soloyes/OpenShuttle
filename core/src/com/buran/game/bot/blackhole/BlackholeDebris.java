@@ -28,6 +28,7 @@ public class BlackholeDebris implements Disposable {
     private final float[] cr = new float[MAX];
     private final float[] cg = new float[MAX];
     private final float[] cb = new float[MAX];
+    private final float[] sz = new float[MAX];
     private int count;
     private final Texture dot;
     private float ambient;
@@ -73,8 +74,30 @@ public class BlackholeDebris implements Disposable {
             cr[count] = red;
             cg[count] = green;
             cb[count] = blue;
+            sz[count] = 1f;
             count++;
         }
+    }
+
+    /**
+     * One coarse grain of a dissolving object at its exact position, own colour, no tint.
+     * Used for the shuttle breaking up so its sand is recognisably the shuttle's.
+     */
+    public static void grain(float x, float y, float red, float green, float blue, float size) {
+        BlackholeDebris d = instance;
+        if (d == null || d.count >= MAX) {
+            return;
+        }
+        float dx = x - Blackhole.position.x;
+        float dy = (y - Blackhole.position.y) / TILT;
+        int i = d.count++;
+        d.r[i] = Math.max(shadowRadius() * 1.2f, (float) Math.sqrt(dx * dx + dy * dy));
+        d.phi[i] = MathUtils.atan2(dy, dx);
+        d.life[i] = 1f;
+        d.cr[i] = red;
+        d.cg[i] = green;
+        d.cb[i] = blue;
+        d.sz[i] = size;
     }
 
     public static void shed(float x, float y, Color c) {
@@ -113,6 +136,7 @@ public class BlackholeDebris implements Disposable {
             cr[count] = 1f;
             cg[count] = 0.55f;
             cb[count] = 0.25f;
+            sz[count] = 1f;
             count++;
         }
         float horizon = shadowRadius();
@@ -130,6 +154,7 @@ public class BlackholeDebris implements Disposable {
                 cr[i] = cr[count];
                 cg[i] = cg[count];
                 cb[i] = cb[count];
+                sz[i] = sz[count];
                 i--;
             }
         }
@@ -164,9 +189,10 @@ public class BlackholeDebris implements Disposable {
             float blue = MathUtils.lerp(cb[i], 0.75f, heat * heat * heat);
             float fadeIn = MathUtils.clamp((range - rr) / 80f + 0.3f, 0f, 1f);
             float fadeOut = MathUtils.clamp((rr - horizon) / 40f, 0f, 1f);
-            batch.setColor(red, green, blue, 0.75f * life[i] * fadeIn * fadeOut * (0.4f + 0.6f * heat));
-            float h = 4f + 4f * heat;
+            batch.setColor(red, green, blue, 0.75f * life[i] * fadeIn * fadeOut * (sz[i] > 1f ? 1f : 0.4f + 0.6f * heat));
+            float h = (4f + 4f * heat) * sz[i];
             len *= life[i] < 0.5f ? 0.6f : 1f;
+            len = Math.max(len, h);
             batch.draw(dot, x - len / 2f, y - h / 2f, len / 2f, h / 2f, len, h, 1f, 1f, angle, 0, 0, 32, 32, false, false);
         }
         batch.setColor(Color.WHITE);

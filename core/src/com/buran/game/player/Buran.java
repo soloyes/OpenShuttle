@@ -139,9 +139,10 @@ public class Buran extends AbstractBuran {
             float py = (position.y - Blackhole.position.y) / tilt;
             float r = Math.max(1f, (float) Math.sqrt(px * px + py * py));
             float phi = MathUtils.atan2(py, px);
-            float omega = 4000f / (float) Math.pow(Math.max(r, 40f), 1.5f);
+            float omega = 5200f / (float) Math.pow(Math.max(r, 40f), 1.5f);
             phi += omega * dt;
-            r -= (Rules.BLACKHOLE_VELOCITY_CONSUME_PLAYER * 0.6f + 9000f / Math.max(r, 40f)) * dt;
+            // Quick, accelerating plunge: about a second and a half from capture to the horizon.
+            r -= (r * 0.8f + 60f + 2000f / Math.max(r, 40f)) * dt;
             r = Math.max(r, 0f);
             position.set(Blackhole.position.x + r * MathUtils.cos(phi), Blackhole.position.y + r * MathUtils.sin(phi) * tilt);
             // Nose along the orbit instead of spinning.
@@ -152,9 +153,8 @@ public class Buran extends AbstractBuran {
             angle += diff * Math.min(1f, dt * 5f);
             float dst = Blackhole.position.dst(position);
             float k = dst / Buffs.getBlackholeTakeRange();
-            com.buran.game.bot.blackhole.BlackholeDebris.shed(position.x, position.y, com.badlogic.gdx.graphics.Color.SALMON,
-                    4 + (int) (14 * (1f - k)));
             a = k;
+            crumble();
             setLayersScale(0.75f + 0.25f * k, 0.75f + 0.25f * k);
             if (Blackhole.position.dst(position) <= Math.max(Rules.BLACKHOLE_EVENT_HORIZON, Buffs.getBlackholeTakeRange() * 0.17f)) {
                 BoundCheck.avoidPosition(Blackhole.position, position, (int) Buffs.getBlackholeTakeRange() + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
@@ -171,6 +171,48 @@ public class Buran extends AbstractBuran {
         } else {
             setLayersScale(1.0f, 1.0f);
             isTaken = false;
+            crumbled = 0f;
+        }
+    }
+
+    private float crumbled;
+
+    /** How far the hull has turned to sand, 0..1 (done two thirds of the way in). */
+    private float dissolveAmount() {
+        float horizon = 0.17f;
+        return MathUtils.clamp((1f - a) / (1f - horizon) * 1.5f, 0f, 1f);
+    }
+
+    /**
+     * The hull breaks into coarse grains in its own colours, spread over its footprint, and the
+     * disk winds them in. Grains are released in step with the dissolve shader eating the sprite.
+     */
+    private void crumble() {
+        float d = dissolveAmount();
+        if (d < crumbled) {
+            crumbled = d;
+        }
+        int total = 450;
+        int n = (int) ((d - crumbled) * total);
+        if (n <= 0) {
+            return;
+        }
+        crumbled += n / (float) total;
+        float cos = MathUtils.cosDeg(angle);
+        float sin = MathUtils.sinDeg(angle);
+        for (int i = 0; i < n; i++) {
+            float u = MathUtils.random(-0.5f, 0.5f) * width * scaleX;
+            float v = MathUtils.random(-0.5f, 0.5f) * height * scaleY * (1f - Math.abs(u) / (width * scaleX));
+            float x = position.x + u * cos - v * sin;
+            float y = position.y + u * sin + v * cos;
+            float pick = MathUtils.random();
+            if (pick < 0.55f) {
+                com.buran.game.bot.blackhole.BlackholeDebris.grain(x, y, 0.95f, 0.95f, 0.97f, MathUtils.random(1.3f, 2.2f));
+            } else if (pick < 0.85f) {
+                com.buran.game.bot.blackhole.BlackholeDebris.grain(x, y, 1f, 0.42f, 0.38f, MathUtils.random(1.3f, 2.2f));
+            } else {
+                com.buran.game.bot.blackhole.BlackholeDebris.grain(x, y, 0.5f, 0.56f, 0.68f, MathUtils.random(1.2f, 1.8f));
+            }
         }
     }
 
@@ -217,8 +259,7 @@ public class Buran extends AbstractBuran {
         if (Rules.GAME_OVER) {
             tmpColor.a = 0.3f;
         }
-        float horizon = 0.17f;
-        float dis = isTaken ? MathUtils.clamp((1f - a) / (1f - horizon), 0f, 1f) : rematerialize / REMATERIALIZE_TIME;
+        float dis = isTaken ? dissolveAmount() : rematerialize / REMATERIALIZE_TIME;
         batch.setColor(tmpColor);
         boolean dissolving = dis > 0f && com.buran.game.effects.Dissolve.begin(batch, dis);
         batch.draw(

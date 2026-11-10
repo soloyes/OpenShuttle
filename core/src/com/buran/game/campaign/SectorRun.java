@@ -40,7 +40,7 @@ import com.buran.game.world.ThreatTextures;
 public final class SectorRun {
     public enum Phase { BRIEFING, ACTIVE, EXTRACT, CLEAR }
 
-    private static final float BRIEFING_TIME = 9f;
+    private static final float CARD_FADE = 0.4f;
     private static final float TYPE_SPEED = 45f;
     private static final float BEACON_RADIUS = 260f;
     private static final Color WARM = Color.valueOf("ffc06aff");
@@ -85,7 +85,10 @@ public final class SectorRun {
             e.setAsteroidsMaxCount(sector.asteroidMax / 2);
             e.setRespawnTime(sector.asteroidRespawn);
         }
-        ((AstronautEmitter) ObjectPool.EMITTERS.get(Astronaut.class)).setConsumablesMaxCount(sector.astronautMax);
+        limit(Astronaut.class, sector.astronautMax);
+        limit(com.buran.game.bot.consumable.Crate.class, sector.crateMax);
+        limit(com.buran.game.bot.consumable.Storage.class, sector.storageMax);
+        limit(com.buran.game.bot.consumable.fuel.Fuel.class, sector.fuelMax);
         if (sector.startWithLaser) {
             Buran.isLaser = true;
             Standing.getInstance().setLaserChargeLevel(Standing.getInstance().getMaxLaserChargeLevel());
@@ -93,6 +96,20 @@ public final class SectorRun {
         baseline = counter();
         if (Rules.DEBUG_FAST_GOAL) {
             baseline -= sector.target;
+        }
+    }
+
+    /** Caps a consumable emitter and removes anything spawned at start beyond the cap. */
+    private static void limit(Class<?> k, int max) {
+        com.buran.game.bot.consumable.AbstractConsumableEmitter e =
+                (com.buran.game.bot.consumable.AbstractConsumableEmitter) ObjectPool.EMITTERS.get(k);
+        if (e == null) {
+            return;
+        }
+        e.setConsumablesMaxCount(max);
+        e.setConsumablesAtStart(Math.min(e.getConsumablesAtStart(), max));
+        while (e.getActiveList().size() > max) {
+            e.free(e.getActiveList().size() - 1);
         }
     }
 
@@ -110,13 +127,13 @@ public final class SectorRun {
         phaseTime += dt;
         switch (phase) {
             case BRIEFING:
-                progress = counter() - baseline;
-                if (phaseTime > BRIEFING_TIME) {
-                    setPhase(Phase.ACTIVE);
+                // The world holds still until the player has heard the radio and pressed A.
+                if (!voiced && phaseTime > 0.5f) {
+                    voiced = true;
+                    com.buran.game.platform.Radio.say(sector.briefing);
                 }
-                // Progress made during the briefing still counts.
-                if (progress >= sector.target) {
-                    startExtraction();
+                if (com.badlogic.gdx.Gdx.input.justTouched()) {
+                    advance();
                 }
                 break;
             case ACTIVE:
@@ -129,6 +146,8 @@ public final class SectorRun {
                 if (!Rules.GAME_OVER && Buran.position.dst(beacon) < BEACON_RADIUS) {
                     setPhase(Phase.CLEAR);
                     Campaign.complete(sector);
+                    boomBox.stopAllSound();
+                    boomBox.stopLoopingEffects();
                     boomBox.playSound(MSConstants.LEVEL_UP);
                     Juice.flash(0.35f, 1f, 0.85f, 0.6f);
                 }
@@ -138,11 +157,29 @@ public final class SectorRun {
         }
     }
 
-    /** Lets the player skip the briefing (A). */
-    public void skipBriefing() {
-        if (phase == Phase.BRIEFING && phaseTime > 0.6f) {
-            setPhase(Phase.ACTIVE);
+    private boolean voiced;
+    private boolean typedAll;
+
+    public boolean isBriefing() {
+        return phase == Phase.BRIEFING;
+    }
+
+    /** A on the briefing: first press finishes the typing, the next one starts the sector. */
+    public void advance() {
+        if (phase != Phase.BRIEFING || phaseTime < 0.4f) {
+            return;
         }
+        if (!typedAll && typed() < sector.briefing.length()) {
+            typedAll = true;
+            return;
+        }
+        com.buran.game.platform.Radio.stop();
+        boomBox.playSound(MSConstants.UI_MENU);
+        setPhase(Phase.ACTIVE);
+    }
+
+    private int typed() {
+        return typedAll ? sector.briefing.length() : (int) Math.min(sector.briefing.length(), phaseTime * TYPE_SPEED);
     }
 
     private void setPhase(Phase p) {
@@ -217,26 +254,25 @@ public final class SectorRun {
         text(batch, font, line, W / 2f, top - 100f - small.getLineHeight() - 6f, c, 1f, true);
 
         if (phase == Phase.EXTRACT) {
-            edgeMarker(batch, worldCamera, tx);
+            edgeMarker(batch, worldCamera, tx, Theme.font(32));
         }
         if (phase == Phase.BRIEFING) {
-            renderBriefing(batch, small);
+            renderBriefing(batch, small, MathUtils.clamp(phaseTime / 0.5f, 0f, 1f));
+        } else if (phase == Phase.ACTIVE && phaseTime < CARD_FADE) {
+            renderBriefing(batch, small, 1f - phaseTime / CARD_FADE);
         }
     }
 
-    private void renderBriefing(SpriteBatch batch, BitmapFont font) {
+    private void renderBriefing(SpriteBatch batch, BitmapFont font, float a) {
         float W = Rules.WORLD_WIDTH;
         float H = Rules.WORLD_HEIGHT;
-        float fadeIn = MathUtils.clamp(phaseTime / 0.5f, 0f, 1f);
-        float fadeOut = MathUtils.clamp((BRIEFING_TIME - phaseTime) / 0.8f, 0f, 1f);
-        float a = fadeIn * fadeOut;
         float w = Math.min(W * 0.62f, 1700f);
         float x = (W - w) / 2f;
         float y = H * 0.30f;
-        int n = (int) Math.min(sector.briefing.length(), phaseTime * TYPE_SPEED);
+        int n = phase == Phase.BRIEFING ? typed() : sector.briefing.length();
         String shown = sector.briefing.substring(0, n) + ((((int) (time * 2.5f)) % 2 == 0 || n < sector.briefing.length()) ? "_" : "");
         layout.setText(font, sector.briefing, Theme.DIM, w - 80f, Align.left, true);
-        float h = layout.height + 170f;
+        float h = layout.height + 240f;
         Theme.frame(batch, x, y - h, w, h, a);
         text(batch, font, "RADIO  -  SECTOR " + sector.code(), x + 40f, y - 30f, Theme.ACCENT, a, false);
         Color old = font.getColor().cpy();
@@ -246,32 +282,23 @@ public final class SectorRun {
         if (sector.lesson != null) {
             text(batch, font, sector.lesson, W / 2f, y - h - 50f, Theme.OK, a, true);
         }
+        // Continue prompt once the message is fully on screen.
+        if (n >= sector.briefing.length()) {
+            float blink = 0.55f + 0.45f * MathUtils.sin(time * 4f);
+            layout.setText(font, "A  -  CONTINUE");
+            text(batch, font, "A  -  CONTINUE", x + w - 40f - layout.width, y - h + 40f + layout.height, Theme.ACCENT, a * blink, false);
+        }
     }
 
-    private void edgeMarker(SpriteBatch batch, Camera cam, ThreatTextures tx) {
-        float W = Rules.WORLD_WIDTH;
-        float H = Rules.WORLD_HEIGHT;
+    private void edgeMarker(SpriteBatch batch, Camera cam, ThreatTextures tx, BitmapFont font) {
         float dx = beacon.x - cam.position.x;
         float dy = beacon.y - cam.position.y;
         if (Math.abs(dx) < Rules.VIEW_WIDTH / 2f && Math.abs(dy) < Rules.VIEW_HEIGHT / 2f) {
             return;
         }
-        float scale = H / Rules.VIEW_HEIGHT;
-        float sx = dx * scale;
-        float sy = dy * scale;
-        float hx = W / 2f - Rules.SAFE_X - 110f;
-        float hy = H / 2f - Rules.SAFE_Y - 110f;
-        float k = Math.min(hx / Math.max(Math.abs(sx), 0.001f), hy / Math.max(Math.abs(sy), 0.001f));
-        float px = W / 2f + sx * k;
-        float py = H / 2f + sy * k;
-        float pulse = 0.7f + 0.3f * MathUtils.sin(time * 5f);
-        float size = 90f;
-        batch.setColor(WARM.r, WARM.g, WARM.b, pulse);
-        batch.draw(tx.ring, px - size / 2f, py - size / 2f, size, size);
-        float ang = MathUtils.atan2(sy, sx) * MathUtils.radiansToDegrees;
-        batch.draw(tx.chevron, px - 30f + MathUtils.cosDeg(ang) * 70f, py - 30f + MathUtils.sinDeg(ang) * 70f, 30f, 30f,
-                60f, 60f, 1f, 1f, ang, 0, 0, 64, 64, false, false);
-        batch.setColor(Color.WHITE);
+        float pulse = 0.7f + 0.3f * MathUtils.sin(time * 4f);
+        com.buran.game.world.EdgeMarker.draw(batch, tx, font, tx.diamond, dx, dy,
+                Math.max(0f, beacon.dst(Buran.position) - BEACON_RADIUS), WARM, 1f, pulse);
     }
 
     private void text(SpriteBatch batch, BitmapFont font, String s, float x, float y, Color c, float a, boolean center) {

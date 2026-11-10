@@ -132,6 +132,17 @@ public final class Gamepad {
                 pulseCooldown = Rules.PULSE_COOLDOWN;
             }
             releaseCursor();
+            com.buran.game.campaign.SectorRun run = com.buran.game.campaign.Campaign.run();
+            if (run != null && run.isBriefing()) {
+                steering = false;
+                if (pressed(Action.A)) {
+                    run.advance();
+                }
+                if (pressed(Action.START)) {
+                    PauseGroup.togglePause();
+                }
+                return;
+            }
             updateFlight(lx, ly);
             if (pressed(Action.A) || pressed(Action.USE_ALT)) {
                 SelectorGroup.getInstance().useSelected();
@@ -217,6 +228,11 @@ public final class Gamepad {
             steer.set(kx, ky).nor();
         }
         steering = steer.len2() > 0;
+    }
+
+    /** 0 right after a pulse, 1 when the next one is ready. */
+    public float pulseCharge() {
+        return 1f - com.badlogic.gdx.math.MathUtils.clamp(pulseCooldown / Rules.PULSE_COOLDOWN, 0f, 1f);
     }
 
     /** True for the single frame an EMP pulse is fired. */

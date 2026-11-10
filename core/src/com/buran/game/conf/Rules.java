@@ -212,9 +212,9 @@ public final class Rules {
     //12
     public static final int PLAYER_RAM_POWER_DECREASE_FACTOR = 12;
     //5.0f
-    public static final float PLAYER_TIMER_HP_OUT_OF_MAP = 5.0f;
+    public static final float PLAYER_TIMER_HP_OUT_OF_MAP = 1.0f;
     //5
-    public static final int PLAYER_HP_OUT_OF_MAP = 5;
+    public static final int PLAYER_HP_OUT_OF_MAP = 3;
     //0.2f
     public static final float PLAYER_LOW_LIFE_HP_PERCENT = 0.2f;
     //2.5f

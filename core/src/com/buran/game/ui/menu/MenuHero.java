@@ -82,7 +82,7 @@ public class MenuHero extends Group {
     }
 
     /** Rescue cycle: a nearby astronaut is reeled in by the tractor beam, then taken aboard. */
-    private static final float RESCUE_CYCLE = 9f;
+    private static final float RESCUE_CYCLE = 10f;
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -107,14 +107,15 @@ public class MenuHero extends Group {
         float c = time % RESCUE_CYCLE;
         float pull = MathUtils.clamp(c / (RESCUE_CYCLE - 1.5f), 0f, 1f);
         float ease = pull * pull * (3f - 2f * pull);
-        float emX = baseX - 150f * k;
-        float emY = baseY - 110f * k + bob;
-        float axp = emX + MathUtils.lerp(-430f, -110f, ease) * k;
-        float ayp = emY + MathUtils.lerp(-230f, -60f, ease) * k + MathUtils.sin(time * 1.3f) * 10f;
+        // Emitter at the nose tip, clear of the hull; the astronaut starts far down-left.
+        float emX = baseX - 215f * k;
+        float emY = baseY - 160f * k + bob;
+        float axp = emX + MathUtils.lerp(-760f, -70f, ease) * k;
+        float ayp = emY + MathUtils.lerp(-420f, -40f, ease) * k + MathUtils.sin(time * 1.3f) * 10f * (1f - ease);
         float taken = MathUtils.clamp((c - (RESCUE_CYCLE - 1.5f)) / 0.6f, 0f, 1f);
-        float appear = MathUtils.clamp(c / 0.8f, 0f, 1f);
+        float appear = MathUtils.clamp(c / 1.2f, 0f, 1f);
         float astroAlpha = a * appear * (1f - taken);
-        float astroScale = 0.9f * k * (1f - 0.5f * taken);
+        float astroScale = 0.75f * k * (1f - 0.35f * ease) * (1f - 0.6f * taken);
 
         if (astroAlpha > 0.01f) {
             // Beam: a soft cone of light with pulses running toward the ship.

@@ -224,6 +224,18 @@ public class BoomBox {
         }
     }
 
+    /** Silences every looping effect (hum, laser, roar, anomaly feeding) but keeps the songs. */
+    public void stopLoopingEffects() {
+        musicArray.clear();
+        Assets.getInstance().getAssetManager().getAll(Music.class, musicArray);
+        for (int i = 0; i < musicArray.size; i++) {
+            String name = Assets.getInstance().getAssetManager().getAssetFileName(musicArray.get(i));
+            if (name == null || !name.startsWith(MSConstants.SONG_FOLDER)) {
+                musicArray.get(i).stop();
+            }
+        }
+    }
+
     public void stopMusicEffect(String musicEffect) {
         Assets.getInstance()
                 .getAssetManager()

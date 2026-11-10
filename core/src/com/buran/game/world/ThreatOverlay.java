@@ -81,8 +81,12 @@ public final class ThreatOverlay {
         }
     }
 
+    private static final Color EMP = Color.valueOf("7fe8ffff");
+    private float empHint;
+
     /** World pass, after anomalies are drawn. */
-    public void renderWorld(SpriteBatch batch) {
+    public void renderWorld(SpriteBatch batch, com.badlogic.gdx.graphics.g2d.BitmapFont font) {
+        renderEmpHint(batch, font);
         for (int i = 0; i < anomalies.size(); i++) {
             AbstractAnomaly a = anomalies.get(i);
             if (!a.isActive() || !a.isBorn() || a.isTaken()) {
@@ -127,10 +131,47 @@ public final class ThreatOverlay {
     }
 
     /**
+     * When an electric anomaly closes in, show the EMP reach around the ship and the button that
+     * fires it: the counter is taught exactly when it is needed (tips 9, 28).
+     */
+    private void renderEmpHint(SpriteBatch batch, com.badlogic.gdx.graphics.g2d.BitmapFont font) {
+        boolean near = false;
+        float reach = Rules.PULSE_RANGE * 1.5f;
+        for (int i = 0; i < anomalies.size(); i++) {
+            AbstractAnomaly a = anomalies.get(i);
+            if (a instanceof com.buran.game.bot.anomaly.ElectricalAnomaly && a.isActive() && a.isBorn() && !a.isTaken()
+                    && a.getPosition().dst2(Buran.position) < reach * reach) {
+                near = true;
+                break;
+            }
+        }
+        empHint = MathUtils.clamp(empHint + (near ? 1f : -1f) * 0.05f, 0f, 1f);
+        if (empHint <= 0f || Rules.GAME_OVER) {
+            return;
+        }
+        float charge = com.buran.game.input.Gamepad.get().pulseCharge();
+        float r = Rules.PULSE_RANGE;
+        float x = Buran.position.x;
+        float y = Buran.position.y;
+        float pulse = 0.75f + 0.25f * MathUtils.sin(time * 6f);
+        batch.setColor(EMP.r, EMP.g, EMP.b, empHint * (charge >= 1f ? 0.35f * pulse : 0.12f));
+        batch.draw(tx.ring, x - r, y - r, r * 2f, r * 2f);
+        if (font != null) {
+            String s = charge >= 1f ? "Y  -  EMP" : "EMP CHARGING";
+            com.badlogic.gdx.graphics.g2d.GlyphLayout l = new com.badlogic.gdx.graphics.g2d.GlyphLayout(font, s);
+            Color old = font.getColor().cpy();
+            font.setColor(EMP.r, EMP.g, EMP.b, empHint * (charge >= 1f ? pulse : 0.5f));
+            font.draw(batch, s, x - l.width / 2f, y + 230f);
+            font.setColor(old);
+        }
+        batch.setColor(Color.WHITE);
+    }
+
+    /**
      * Screen pass (UI camera, 1920-high world units): edge markers for threats and shelters that
      * are outside the view.
      */
-    public void renderEdges(SpriteBatch batch, Camera worldCamera) {
+    public void renderEdges(SpriteBatch batch, Camera worldCamera, com.badlogic.gdx.graphics.g2d.BitmapFont font) {
         float vw = Rules.VIEW_WIDTH;
         float vh = Rules.VIEW_HEIGHT;
         float cx = worldCamera.position.x;
@@ -157,7 +198,8 @@ public final class ThreatOverlay {
             if (Math.abs(dx) < vw / 2f + Shelters.RADIUS && Math.abs(dy) < vh / 2f + Shelters.RADIUS) {
                 continue;
             }
-            edgeMarker(batch, dx, dy, scale, 40f, s.online() ? SHELTER : CALM, s.online() ? 0.7f : 0.3f, false);
+            EdgeMarker.draw(batch, tx, font, tx.dome, dx, dy, s.position.dst(Buran.position),
+                    s.online() ? SHELTER : CALM, s.online() ? 0.85f : 0.4f, 0.7f + 0.3f * MathUtils.sin(time * 2f));
         }
         batch.setColor(Color.WHITE);
     }

@@ -192,6 +192,7 @@ public class GameMenu extends Group implements MenuNav.Target {
 
     private void restart() {
         MenuNav.clear(this);
+        com.buran.game.platform.Radio.stop();
         com.buran.game.campaign.Campaign.setRun(null);
         ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
         Restart.doRestart();
@@ -199,6 +200,7 @@ public class GameMenu extends Group implements MenuNav.Target {
 
     private void quit() {
         MenuNav.clear(this);
+        com.buran.game.platform.Radio.stop();
         com.buran.game.campaign.Campaign.setRun(null);
         ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
         Restart.doRestart();

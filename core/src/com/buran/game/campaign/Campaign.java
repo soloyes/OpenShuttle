@@ -40,6 +40,10 @@ public final class Campaign {
         s1.asteroidRespawn = 8f;
         s1.astronautMax = 2;
         s1.shelters = 1;
+        s1.asteroidMax = 8;
+        s1.crateMax = 0;
+        s1.storageMax = 0;
+        s1.fuelMax = 1;
         SECTORS.add(s1);
 
         Sector s2 = new Sector(2, "DEBRIS FIELD", Sector.Goal.SALVAGE, 12,
@@ -52,10 +56,13 @@ public final class Campaign {
         s2.electricMax = 0;
         s2.radiationMax = 0;
         s2.magneticMax = 1;
-        s2.asteroidMax = 40;
+        s2.asteroidMax = 22;
         s2.asteroidRespawn = 2.5f;
         s2.astronautMax = 1;
         s2.shelters = 2;
+        s2.crateMax = 1;
+        s2.storageMax = 0;
+        s2.fuelMax = 2;
         s2.startWithLaser = true;
         SECTORS.add(s2);
 
@@ -69,10 +76,13 @@ public final class Campaign {
         s3.electricMax = 2;
         s3.radiationMax = 0;
         s3.magneticMax = 1;
-        s3.asteroidMax = 30;
+        s3.asteroidMax = 14;
         s3.asteroidRespawn = 3.5f;
         s3.astronautMax = 3;
         s3.shelters = 2;
+        s3.crateMax = 2;
+        s3.storageMax = 1;
+        s3.fuelMax = 2;
         SECTORS.add(s3);
     }
 
