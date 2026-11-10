@@ -25,7 +25,7 @@ public final class Rules {
     public static final String ABOUT_US = PROJECT_URL;
     public static final String PAY_US = PROJECT_URL;
 
-    public static String DEFAULT_NAME = "Player";
+    public static String DEFAULT_NAME = "SOKOL";
 
     private Rules() {
     }

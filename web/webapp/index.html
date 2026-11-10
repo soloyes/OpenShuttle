@@ -38,6 +38,10 @@
                 #04050c;
             transition: opacity 0.6s ease;
         }
+        /* Phones: tap instead of A, no gamepad legend. */
+        body.touch #hint { display: none; }
+        body.touch .pad-only { display: none; }
+        body:not(.touch) .touch-only { display: none; }
         #boot.hidden {
             opacity: 0;
             pointer-events: none;
@@ -55,15 +59,21 @@
             0%, 100% { opacity: 0.25; }
             50% { opacity: 0.9; }
         }
+        :root {
+            /* One unit that fits both TV landscape and phone portrait. */
+            --u: min(1vh, 1.6vw);
+        }
         #panel {
             position: absolute;
-            left: 9vw;
+            left: max(6vw, 24px);
+            right: max(6vw, 24px);
             top: 50%;
             transform: translateY(-50%);
         }
         #title {
             font-family: "College", "Segoe UI", sans-serif;
-            font-size: 15vh;
+            font-size: calc(var(--u) * 15);
+            white-space: nowrap;
             line-height: 0.9;
             letter-spacing: 0.02em;
             margin: 0;
@@ -72,26 +82,27 @@
         }
         #subtitle {
             font-family: "College", "Segoe UI", sans-serif;
-            font-size: 3.4vh;
+            font-size: calc(var(--u) * 3.4);
             letter-spacing: 0.35em;
-            margin: 1.6vh 0 5vh 0.4vh;
+            white-space: nowrap;
+            margin: calc(var(--u) * 1.6) 0 calc(var(--u) * 5) calc(var(--u) * 0.4);
             color: #9fb3cc;
         }
         #telemetry {
             font-family: Consolas, "Courier New", monospace;
-            font-size: 2.1vh;
+            font-size: calc(var(--u) * 2.1);
             line-height: 1.7;
             color: #6f86a3;
-            min-height: 12vh;
+            min-height: calc(var(--u) * 12);
             white-space: pre;
         }
         #telemetry .ok {
             color: #7fd3a8;
         }
         #bar {
-            width: 34vw;
+            width: min(34vw, 100%);
             height: 2px;
-            margin-top: 3vh;
+            margin-top: calc(var(--u) * 3);
             background: rgba(159, 179, 204, 0.18);
             position: relative;
             overflow: hidden;
@@ -117,9 +128,10 @@
         }
         #press {
             font-family: "College", "Segoe UI", sans-serif;
-            font-size: 3.6vh;
+            font-size: calc(var(--u) * 3.6);
             letter-spacing: 0.12em;
-            margin-top: 5vh;
+            white-space: nowrap;
+            margin-top: calc(var(--u) * 5);
             opacity: 0;
             transition: opacity 0.6s ease;
         }
@@ -140,10 +152,11 @@
         }
         #hint {
             position: absolute;
-            left: 9vw;
+            left: max(6vw, 24px);
+            right: max(6vw, 24px);
             bottom: 6vh;
             font-family: Consolas, "Courier New", monospace;
-            font-size: 1.8vh;
+            font-size: calc(var(--u) * 1.8);
             color: #4f6480;
             line-height: 1.7;
         }
@@ -157,7 +170,7 @@
         <div id="subtitle">THE LAST FLIGHT &middot; 1991</div>
         <div id="telemetry"></div>
         <div id="bar"></div>
-        <div id="press">PRESS <svg class="btn" viewBox="0 0 40 40" aria-label="A"><circle cx="20" cy="20" r="19" fill="#107c10"/><text x="20" y="20" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="22">A</text></svg> TO START</div>
+        <div id="press"><span class="touch-only">TAP TO START</span><span class="pad-only">PRESS <svg class="btn" viewBox="0 0 40 40" aria-label="A"><circle cx="20" cy="20" r="19" fill="#107c10"/><text x="20" y="20" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="22">A</text></svg> TO START</span></div>
     </div>
     <div id="hint">
         LEFT STICK fly &middot; A use / select &middot; LB RB switch item &middot; Y EMP pulse &middot; MENU pause
@@ -171,6 +184,9 @@
     });
 
     var boot = document.getElementById("boot");
+    if (window.matchMedia && matchMedia("(pointer: coarse)").matches && navigator.maxTouchPoints > 0) {
+        document.body.classList.add("touch");
+    }
 
     // Stars.
     for (var i = 0; i < 90; i++) {

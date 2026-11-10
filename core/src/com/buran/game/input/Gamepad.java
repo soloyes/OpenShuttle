@@ -147,7 +147,11 @@ public final class Gamepad {
             }
         } else {
             steering = false;
-            if (controller != null) {
+            if (com.buran.game.ui.menu.MenuNav.get() != null) {
+                cursorVisible = false;
+                releaseCursor();
+                updateMenuNav(dt, lx, ly);
+            } else if (controller != null) {
                 updateCursor(dt, lx, ly, ry);
             }
             if (inGameScreen() && !Rules.GAME_OVER && (pressed(Action.START) || pressed(Action.B))) {
@@ -336,6 +340,44 @@ public final class Gamepad {
                 }
                 return;
             }
+        }
+    }
+
+    private com.buran.game.ui.menu.Nav heldNav;
+    private float navRepeat;
+
+    /** Menus with a focus list get discrete navigation instead of the cursor. */
+    private void updateMenuNav(float dt, float lx, float ly) {
+        com.buran.game.ui.menu.Nav dir = null;
+        if (held(Action.UP) || ly < -0.5f) dir = com.buran.game.ui.menu.Nav.UP;
+        else if (held(Action.DOWN) || ly > 0.5f) dir = com.buran.game.ui.menu.Nav.DOWN;
+        else if (held(Action.LEFT) || lx < -0.5f) dir = com.buran.game.ui.menu.Nav.LEFT;
+        else if (held(Action.RIGHT) || lx > 0.5f) dir = com.buran.game.ui.menu.Nav.RIGHT;
+
+        if (dir != heldNav) {
+            heldNav = dir;
+            navRepeat = 0.38f;
+            if (dir != null) {
+                com.buran.game.ui.menu.MenuNav.send(dir);
+            }
+        } else if (dir != null) {
+            navRepeat -= dt;
+            if (navRepeat <= 0f) {
+                navRepeat = 0.11f;
+                com.buran.game.ui.menu.MenuNav.send(dir);
+            }
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) com.buran.game.ui.menu.MenuNav.send(com.buran.game.ui.menu.Nav.UP);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) com.buran.game.ui.menu.MenuNav.send(com.buran.game.ui.menu.Nav.DOWN);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) com.buran.game.ui.menu.MenuNav.send(com.buran.game.ui.menu.Nav.LEFT);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) com.buran.game.ui.menu.MenuNav.send(com.buran.game.ui.menu.Nav.RIGHT);
+
+        if (pressed(Action.A)) {
+            com.buran.game.ui.menu.MenuNav.send(com.buran.game.ui.menu.Nav.ACCEPT);
+        } else if (pressed(Action.B) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)
+                || Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE)) {
+            com.buran.game.ui.menu.MenuNav.send(com.buran.game.ui.menu.Nav.BACK);
         }
     }
 
