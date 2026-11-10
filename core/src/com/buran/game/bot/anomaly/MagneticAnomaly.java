@@ -145,7 +145,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
                 hungry = true;
             }
         }
-        boundCheck.keepInside(this);
+        boundCheck.keepInside(this, Rules.VIEW_HEIGHT * 0.6f);
     }
 
     private void scaleAndBorn(float dt) {

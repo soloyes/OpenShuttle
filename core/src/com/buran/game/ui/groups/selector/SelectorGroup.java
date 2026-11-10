@@ -174,6 +174,15 @@ public class SelectorGroup extends Group {
         }
     }
 
+    /** The item that A would use now, or null. */
+    public Selector getCenter() {
+        return selectors.size() == 0 ? null : centerSelector;
+    }
+
+    public int getSelectorCount() {
+        return selectors.size();
+    }
+
     /** Gamepad/keyboard: same as tapping the upper arrow. */
     public void selectPrevious() {
         if (paused || PauseGroup.isPause() || selectors.size() < 2) {

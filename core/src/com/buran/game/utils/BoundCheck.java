@@ -123,11 +123,12 @@ public class BoundCheck {
             GameInfoSystem.setup(
                     ScreenManager.getInstance().getCamera().position.x,
                     ScreenManager.getInstance().getCamera().position.y,
-                    GameInfoSystem.Preset.OUT,
+                    "[RED]CRITICAL DAMAGE[]",
                     3,
                     true
             );
-            boomBox.playSound(MSConstants.OUT_OF_SCREEN);
+            boomBox.playSound(MSConstants.LOW_LIFE_WARNING);
+            com.buran.game.effects.Juice.flash(0.18f, 1f, 0.15f, 0.1f);
             Shake.getInstance().shakeCamera(duration, 35, 10);
             Vibrator.vibrateGame(VConstants.PLAYER_OUT_OF_SCREEN);
         }
@@ -147,10 +148,15 @@ public class BoundCheck {
      * vanishing behind it (the camera can see a bit past the edge).
      */
     public void keepInside(AbstractPoolable poolable) {
+        keepInside(poolable, 0f);
+    }
+
+    /** Same, with an extra margin past the border (hunting anomalies follow the ship out). */
+    public void keepInside(AbstractPoolable poolable, float margin) {
         Vector2 p = poolable.getPosition();
         Vector2 v = poolable.getVelocity();
-        float rx = poolable.getWidth() / 2f;
-        float ry = poolable.getHeight() / 2f;
+        float rx = poolable.getWidth() / 2f - margin;
+        float ry = poolable.getHeight() / 2f - margin;
         if (p.x < rx) {
             p.x = rx;
             if (v != null && v.x < 0) v.x = -v.x;

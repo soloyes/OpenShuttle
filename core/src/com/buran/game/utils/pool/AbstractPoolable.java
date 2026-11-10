@@ -111,12 +111,21 @@ public abstract class AbstractPoolable implements Poolable {
         float dst = Blackhole.position.dst(position);
         if (dst <= Buffs.getBlackholeTakeRange()) {
             taken = true;
-            // Shed glowing matter into the accretion flow while being pulled in.
-            com.buran.game.bot.blackhole.BlackholeDebris.shed(position.x, position.y, color != null ? color : com.badlogic.gdx.graphics.Color.WHITE);
+            com.badlogic.gdx.graphics.Color tint = color != null ? color : com.badlogic.gdx.graphics.Color.WHITE;
+            // The object crumbles into the accretion flow: it sheds sand as it falls and, half-way in,
+            // disintegrates completely instead of shrinking to a dot.
+            com.buran.game.bot.blackhole.BlackholeDebris.shed(position.x, position.y, tint, 4);
             atRayPoint = false;
             velocity.scl(0.5f);
-            float scaleX = (dst / Buffs.getBlackholeTakeRange()) * saveScaleX;
-            float scaleY = (dst / Buffs.getBlackholeTakeRange()) * saveScaleY;
+            float t = dst / Buffs.getBlackholeTakeRange();
+            if (t < 0.5f) {
+                com.buran.game.bot.blackhole.BlackholeDebris.burst(position.x, position.y, Math.max(width, height) * saveScaleX, tint);
+                destroy();
+                return;
+            }
+            float shrink = 0.6f + 0.4f * (t - 0.5f) * 2f;
+            float scaleX = shrink * saveScaleX;
+            float scaleY = shrink * saveScaleY;
             if (scaleX >= saveScaleX) {
                 scaleX = saveScaleX;
             }

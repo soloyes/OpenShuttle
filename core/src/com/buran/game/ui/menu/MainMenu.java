@@ -61,6 +61,61 @@ public class MainMenu extends Group implements MenuNav.Target {
     // Detail pane content (results / codex).
     private DetailedResultDAO detailResult;
     private Codex codex;
+    private BackButton backButton;
+
+    /** "B  BACK" in the panel header: B on a pad, a tap or click elsewhere. */
+    private class BackButton extends com.badlogic.gdx.scenes.scene2d.Actor {
+        private final GlyphLayout gl = new GlyphLayout();
+
+        BackButton() {
+            addListener(new com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+                @Override
+                public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                    if (open != Panel.NONE) {
+                        boomBox.playSound(MSConstants.UI_CLICK);
+                        closePanel();
+                    }
+                }
+            });
+        }
+
+        void place() {
+            gl.setText(smallFont, "BACK");
+            float glyph = 64f;
+            float w = glyph + 24f + gl.width + 20f;
+            setSize(w, 90f);
+            setPosition(panelX() + panelW() - w - 40f, panelY() + panelH() - 135f);
+        }
+
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
+            float a = parentAlpha * panelAlpha * (isOver() ? 1f : 0.85f);
+            float glyph = 64f;
+            float cy = getY() + getHeight() / 2f;
+            // Xbox-style B glyph: a red disc with the letter.
+            drawDisc(batch, getX() + glyph / 2f, cy, glyph / 2f, new Color(0.82f, 0.18f, 0.16f, 1f), a);
+            gl.setText(smallFont, "B");
+            drawText(batch, smallFont, "B", getX() + glyph / 2f - gl.width / 2f, cy + smallFont.getCapHeight() / 2f, Theme.TEXT, a);
+            drawText(batch, smallFont, "BACK", getX() + glyph + 24f, cy + smallFont.getCapHeight() / 2f,
+                    isOver() ? Theme.TEXT : Theme.DIM, a);
+        }
+
+        private boolean isOver() {
+            return getListeners().size > 0 && ((com.badlogic.gdx.scenes.scene2d.utils.ClickListener) getListeners().first()).isOver();
+        }
+    }
+
+    /** A filled disc made of horizontal strips (no extra textures needed). */
+    private static void drawDisc(Batch batch, float cx, float cy, float r, Color c, float a) {
+        int strips = 24;
+        for (int i = 0; i < strips; i++) {
+            float y0 = -r + 2f * r * i / strips;
+            float y1 = -r + 2f * r * (i + 1) / strips;
+            float ym = (y0 + y1) / 2f;
+            float half = (float) Math.sqrt(Math.max(0f, r * r - ym * ym));
+            Theme.rect(batch, cx - half, cy + y0, half * 2f, y1 - y0 + 0.5f, c, a);
+        }
+    }
     private String detailTitle;
     private Sticker detailSticker;
 
@@ -78,6 +133,9 @@ public class MainMenu extends Group implements MenuNav.Target {
         buildHome();
         addActor(home);
         addActor(panel);
+        backButton = new BackButton();
+        backButton.setVisible(false);
+        addActor(backButton);
         panel.setVisible(false);
         layoutLists();
         home.focusFirst();
@@ -186,6 +244,8 @@ public class MainMenu extends Group implements MenuNav.Target {
         }
         panel.onBack(this::closePanel);
         layoutLists();
+        backButton.place();
+        backButton.setVisible(true);
         panel.setVisible(true);
         home.setVisible(!Theme.portrait());
         home.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.disabled);
@@ -194,6 +254,7 @@ public class MainMenu extends Group implements MenuNav.Target {
 
     private void closePanel() {
         open = Panel.NONE;
+        backButton.setVisible(false);
         panel.setVisible(false);
         home.setVisible(true);
         home.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.enabled);
@@ -246,7 +307,6 @@ public class MainMenu extends Group implements MenuNav.Target {
                 }
             });
         }
-        panel.add(new Row.Action("BACK", rowFont, this::closePanel));
     }
 
     private void newPilot() {
@@ -337,7 +397,6 @@ public class MainMenu extends Group implements MenuNav.Target {
                 detailTitle = formatDate(all.get(i)) + "  " + levelName(all.get(i).getLevel());
             }
         });
-        panel.add(new Row.Action("BACK", rowFont, this::closePanel));
     }
 
     private void buildCodex() {
@@ -362,24 +421,24 @@ public class MainMenu extends Group implements MenuNav.Target {
                 codex.select(byRow.get(index));
             }
         });
-        panel.add(new Row.Action("BACK", rowFont, this::closePanel));
     }
 
     private void buildSettings() {
         final SettingsDAO s = Profiles.getSettings();
         panel.add(new Row.Slider("SOUND", rowFont, s::getSoundVolume, v -> {
             s.setSoundVolume(v);
-            applyAudio(s);
+            applyAudio(s, s.isMusic());
         }));
         panel.add(new Row.Slider("MUSIC", rowFont, () -> s.isMusic() ? s.getMusicVolume() : 0f, v -> {
+            boolean was = s.isMusic();
             s.setMusic(v > 0f);
             s.setMusicVolume(Math.max(v, 0.1f));
-            applyAudio(s);
+            applyAudio(s, was);
         }));
         panel.add(new Row.Slider("EFFECTS", rowFont, () -> s.isEffects() ? s.getEffectsVolume() : 0f, v -> {
             s.setEffects(v > 0f);
             s.setEffectsVolume(Math.max(v, 0.1f));
-            applyAudio(s);
+            applyAudio(s, s.isMusic());
         }));
         panel.add(new Row.Choice("DIFFICULTY", rowFont, LEVELS,
                 () -> Math.min(s.getLevel(), LEVELS.length - 1),
@@ -401,7 +460,6 @@ public class MainMenu extends Group implements MenuNav.Target {
                 save();
             }));
         }
-        panel.add(new Row.Action("BACK", rowFont, this::closePanel));
     }
 
     private void buildAbout() {
@@ -417,16 +475,15 @@ public class MainMenu extends Group implements MenuNav.Target {
         panel.add(new Row.Info("MENU", smallFont, "PAUSE"));
         panel.add(new Row.Text("Made by Vitaly Solovev with FlameXander, Pavel Guryanov and htfdream. "
                 + "github.com/soloyes/OpenShuttle", smallFont));
-        panel.add(new Row.Action("BACK", rowFont, this::closePanel));
     }
 
-    private void applyAudio(SettingsDAO s) {
+    /** Volume changes apply live; the menu song only (re)starts when music is switched on. */
+    private void applyAudio(SettingsDAO s, boolean musicWasOn) {
         boomBox.setAllMusicVolume(s.overallMusicVolume());
-        if (s.isMusic()) {
-            boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
-        } else {
-            boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
+        if (!s.isMusic()) {
             boomBox.pauseAllMusic();
+        } else if (!musicWasOn) {
+            boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
         }
         save();
     }

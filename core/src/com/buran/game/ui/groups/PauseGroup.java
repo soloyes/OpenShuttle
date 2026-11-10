@@ -164,6 +164,8 @@ public class PauseGroup extends Group {
             }
         });
 
+        // On TV/PC the pause is the Menu button; the on-screen button is for touch screens.
+        playPauseBtn.setVisible(com.badlogic.gdx.Gdx.input.isPeripheralAvailable(com.badlogic.gdx.Input.Peripheral.MultitouchScreen));
         this.addActor(configGroup);
         this.addActor(playPauseBtn);
         this.addActor(leftGroup);
@@ -241,7 +243,7 @@ public class PauseGroup extends Group {
         color.a = a;
         super.draw(batch, parentAlpha);
         playPauseBtn.setColor(color);
-        if (!Rules.GAME_OVER) {
+        if (!Rules.GAME_OVER && playPauseBtn.isVisible()) {
             font60.draw(
                     batch,
                     glyphLayout, Rules.WORLD_WIDTH - playPauseBtn.getWidth() / 2 - glyphLayout.width / 2 - Rules.SAFE_X,
