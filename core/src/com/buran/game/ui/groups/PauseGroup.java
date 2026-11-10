@@ -203,7 +203,8 @@ public class PauseGroup extends Group {
 
     /** Same as tapping the play/pause button. No-op outside a running game. */
     public static void togglePause() {
-        if (current != null && current.playPauseBtn.isVisible() && !Rules.GAME_OVER) {
+        // Works with or without the on-screen button (it only exists on touch screens).
+        if (current != null && !Rules.GAME_OVER) {
             current.doTogglePause();
         }
     }

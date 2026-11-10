@@ -147,6 +147,10 @@ public class TelemetryHud {
 
         if (usesCargoBay()) {
             cargoBay(batch);
+            // Where the way out is: bottom right, quiet.
+            String hint = com.buran.game.input.Gamepad.get().hasController() ? "B  -  PAUSE" : "ESC  -  PAUSE";
+            layout.setText(label, hint);
+            text(batch, label, hint, W - Rules.SAFE_X - layout.width, Rules.SAFE_Y + label.getCapHeight(), Theme.FAINT, 1f);
         }
 
         // Shelter status, centred above the bottom edge while the ship is inside one.

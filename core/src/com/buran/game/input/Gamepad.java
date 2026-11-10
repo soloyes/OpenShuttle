@@ -138,7 +138,7 @@ public final class Gamepad {
                 if (pressed(Action.A)) {
                     run.advance();
                 }
-                if (pressed(Action.START)) {
+                if (pressed(Action.START) || pressed(Action.B)) {
                     PauseGroup.togglePause();
                 }
                 return;
@@ -153,7 +153,8 @@ public final class Gamepad {
             if (pressed(Action.NEXT) || pressed(Action.DOWN) || pressed(Action.RIGHT)) {
                 SelectorGroup.getInstance().selectNext();
             }
-            if (pressed(Action.START) || pressed(Action.BACK)) {
+            // Menu, View or B: Edge on Xbox may keep Menu/View for itself, B always reaches us.
+            if (pressed(Action.START) || pressed(Action.BACK) || pressed(Action.B)) {
                 PauseGroup.togglePause();
             }
         } else {
