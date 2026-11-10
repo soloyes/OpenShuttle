@@ -61,6 +61,7 @@ public class MainMenu extends Group implements MenuNav.Target {
     // Detail pane content (results / codex).
     private DetailedResultDAO detailResult;
     private Codex codex;
+    private Codex.Group codexGroup;
     private BackButton backButton;
 
     /** "B  BACK" in the panel header: B on a pad, a tap or click elsewhere. */
@@ -73,7 +74,7 @@ public class MainMenu extends Group implements MenuNav.Target {
                 public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                     if (open != Panel.NONE) {
                         boomBox.playSound(MSConstants.UI_CLICK);
-                        closePanel();
+                        panelBack();
                     }
                 }
             });
@@ -160,6 +161,11 @@ public class MainMenu extends Group implements MenuNav.Target {
         return Theme.portrait() ? Rules.WORLD_HEIGHT * 0.86f : Rules.WORLD_HEIGHT * 0.78f;
     }
 
+    /** Share of the panel width taken by the list when a detail pane is shown. */
+    private float listShare() {
+        return open == Panel.CODEX ? 0.3f : 0.5f;
+    }
+
     private boolean hasDetail() {
         return open == Panel.RESULTS || open == Panel.CODEX;
     }
@@ -178,10 +184,10 @@ public class MainMenu extends Group implements MenuNav.Target {
         float ph = panelH() - head - 60f;
         if (hasDetail()) {
             if (Theme.portrait()) {
-                float listH = ph * 0.40f;
+                float listH = ph * (open == Panel.CODEX ? 0.30f : 0.40f);
                 panel.setBox(px, py + ph - listH, pw, listH);
             } else {
-                panel.setBox(px, py, pw * 0.5f, ph);
+                panel.setBox(px, py, pw * listShare(), ph);
             }
         } else {
             panel.setBox(px, py, pw, ph);
@@ -242,7 +248,7 @@ public class MainMenu extends Group implements MenuNav.Target {
             case ABOUT: buildAbout(); break;
             default: break;
         }
-        panel.onBack(this::closePanel);
+        panel.onBack(this::panelBack);
         layoutLists();
         backButton.place();
         backButton.setVisible(true);
@@ -254,6 +260,7 @@ public class MainMenu extends Group implements MenuNav.Target {
 
     private void closePanel() {
         open = Panel.NONE;
+        codexGroup = null;
         backButton.setVisible(false);
         panel.setVisible(false);
         home.setVisible(true);
@@ -266,7 +273,7 @@ public class MainMenu extends Group implements MenuNav.Target {
         switch (open) {
             case PILOTS: return "PILOTS";
             case RESULTS: return "FLIGHT LOG";
-            case CODEX: return "CODEX";
+            case CODEX: return codexGroup == null ? "CODEX" : "CODEX / " + codexGroup.title();
             case SETTINGS: return "SETTINGS";
             case ABOUT: return "ABOUT";
             default: return "";
@@ -403,32 +410,60 @@ public class MainMenu extends Group implements MenuNav.Target {
         if (codex == null) {
             codex = new Codex();
         }
-        final List<Codex.Entry> byRow = new ArrayList<Codex.Entry>();
-        String lastCategory = null;
-        for (Codex.Entry e : codex.entries()) {
-            String group = e.category.startsWith("ITEM") || e.category.equals("SYSTEM") ? "ITEMS"
-                    : e.category.equals("PHENOMENON") ? "THREATS" : e.category + (e.category.equals("CREW") ? "" : "S");
-            if (!group.equals(lastCategory)) {
-                lastCategory = group;
-                panel.add(new Row.Info("- " + group + " -", smallFont, null));
-                byRow.add(null);
+        if (codexGroup == null) {
+            // Top level: one row per section, opening its own list.
+            for (final Codex.Group g : codex.groups()) {
+                panel.add(new Row.Action(g.title(), rowFont, () -> {
+                    codexGroup = g;
+                    reopenPanel();
+                }).withValue(String.valueOf(g.entries().size())));
             }
-            panel.add(new Row.Action(e.name, smallFont, null));
-            byRow.add(e);
+            panel.onFocus((row, index) -> {
+                if (index >= 0 && index < codex.groups().size()) {
+                    codex.select(codex.groups().get(index).entries().get(0));
+                }
+            });
+        } else {
+            final List<Codex.Entry> entries = codexGroup.entries();
+            for (Codex.Entry e : entries) {
+                panel.add(new Row.Action(e.name(), smallFont, null));
+            }
+            panel.onFocus((row, index) -> {
+                if (index >= 0 && index < entries.size()) {
+                    codex.select(entries.get(index));
+                }
+            });
         }
-        panel.onFocus((row, index) -> {
-            if (index >= 0 && index < byRow.size() && byRow.get(index) != null) {
-                codex.select(byRow.get(index));
+    }
+
+    /** Rebuilds the open panel in place (used by the codex sections). */
+    private void reopenPanel() {
+        Panel p = open;
+        Codex.Group g = codexGroup;
+        openPanel(p);
+        codexGroup = g;
+    }
+
+    /** BACK inside a panel: up one codex level, otherwise close. */
+    private void panelBack() {
+        if (open == Panel.CODEX && codexGroup != null) {
+            Codex.Group from = codexGroup;
+            codexGroup = null;
+            openPanel(Panel.CODEX);
+            // Keep the section we came from focused.
+            int idx = codex.groups().indexOf(from);
+            for (int k = 0; k < idx; k++) {
+                panel.nav(Nav.DOWN);
             }
-        });
+            return;
+        }
+        closePanel();
     }
 
     private void buildSettings() {
         final SettingsDAO s = Profiles.getSettings();
-        panel.add(new Row.Slider("SOUND", rowFont, s::getSoundVolume, v -> {
-            s.setSoundVolume(v);
-            applyAudio(s, s.isMusic());
-        }));
+        // One master volume is redundant: music and effects have their own sliders.
+        s.setSoundVolume(1f);
         panel.add(new Row.Slider("MUSIC", rowFont, () -> s.isMusic() ? s.getMusicVolume() : 0f, v -> {
             boolean was = s.isMusic();
             s.setMusic(v > 0f);
@@ -561,13 +596,14 @@ public class MainMenu extends Group implements MenuNav.Target {
         if (Theme.portrait()) {
             x = px + 36f;
             w = pw - 72f;
-            y = py + ph * 0.40f;
+            y = open == Panel.CODEX ? py + ph * 0.70f - 30f : py + ph * 0.40f;
         } else {
-            x = px + pw * 0.5f + 60f;
-            w = pw * 0.5f - 96f;
+            float share = listShare();
+            x = px + pw * share + 60f;
+            w = pw * (1f - share) - 96f;
             y = py + ph;
         }
-        Theme.rect(batch, Theme.portrait() ? px : px + pw * 0.5f + 20f, Theme.portrait() ? y + 24f : py,
+        Theme.rect(batch, Theme.portrait() ? px : px + pw * listShare() + 20f, Theme.portrait() ? y + 24f : py,
                 Theme.portrait() ? pw : 3f, Theme.portrait() ? 3f : ph, Theme.FAINT, a);
 
         if (open == Panel.RESULTS && detailResult != null) {
@@ -594,7 +630,8 @@ public class MainMenu extends Group implements MenuNav.Target {
                 y -= 66f;
             }
         } else if (open == Panel.CODEX && codex != null) {
-            float box = Theme.portrait() ? 190f : 330f;
+            // Big scanner frame in the middle of the detail pane, the note under it.
+            float box = Theme.portrait() ? Math.min(w * 0.62f, ph * 0.36f) : Math.min(w * 0.62f, ph * 0.56f);
             codex.draw(batch, x, y - 10f, w, a, headFont, smallFont, box);
         }
     }

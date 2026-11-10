@@ -28,7 +28,7 @@ public class MoveProcessor {
     public void update(AbstractConsumable abstractConsumable, float dt) {
         if (abstractConsumable.isTaken()) {
             //*Archimedes spiral*//
-            radius = radius - dt * abstractConsumable.getSpiralRadius();
+            radius = radius - dt * abstractConsumable.getSpiralRadius() * 4f;
             abstractConsumable.getPosition().x = Blackhole.position.x + radius * MathUtils.cos(angle);
             abstractConsumable.getPosition().y = Blackhole.position.y + radius * MathUtils.sin(angle);
             angle += dt;
@@ -96,7 +96,7 @@ public class MoveProcessor {
             }
         } else {
             //*Archimedes spiral*//
-            radius = radius - dt * abstractAnomaly.getSpiralRadius();
+            radius = radius - dt * abstractAnomaly.getSpiralRadius() * 4f;
             abstractAnomaly.getPosition().x = Blackhole.position.x + radius * MathUtils.cos(angle);
             abstractAnomaly.getPosition().y = Blackhole.position.y + radius * MathUtils.sin(angle);
             angle += dt;
@@ -111,7 +111,7 @@ public class MoveProcessor {
             archimedesInit(asteroid);
         } else {
             //*Archimedes spiral*//
-            radius = radius - dt * asteroid.getSpiralRadius();
+            radius = radius - dt * asteroid.getSpiralRadius() * 4f;
             asteroid.getPosition().x = Blackhole.position.x + radius * MathUtils.cos(angle);
             asteroid.getPosition().y = Blackhole.position.y + radius * MathUtils.sin(angle);
             angle += dt;

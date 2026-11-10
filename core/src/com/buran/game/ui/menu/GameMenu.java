@@ -90,10 +90,8 @@ public class GameMenu extends Group implements MenuNav.Target {
         list.clearRows();
         final SettingsDAO s = Profiles.getSettings();
         list.add(new Row.Action("RESUME", rowFont, PauseGroup::togglePause));
-        list.add(new Row.Slider("SOUND", rowFont, s::getSoundVolume, v -> {
-            s.setSoundVolume(v);
-            applyAudio(s);
-        }));
+        // One master volume is redundant: music and effects have their own sliders.
+        s.setSoundVolume(1f);
         list.add(new Row.Slider("MUSIC", rowFont, () -> s.isMusic() ? s.getMusicVolume() : 0f, v -> {
             s.setMusic(v > 0f);
             s.setMusicVolume(Math.max(v, 0.1f));
