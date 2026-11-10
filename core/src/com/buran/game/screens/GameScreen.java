@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.buran.game.background.Background;
 import com.buran.game.background.SectorBorder;
+import com.buran.game.background.SpaceBackground;
 import com.buran.game.bot.anomaly.AbstractAnomaly;
 import com.buran.game.bot.anomaly.CorrosiveAnomaly;
 import com.buran.game.bot.anomaly.CorrosiveAnomalyEmitter;
@@ -50,6 +51,7 @@ import com.buran.game.conf.VConstants;
 import com.buran.game.effects.AsteroidLaunchEmitter;
 import com.buran.game.effects.Oscillator;
 import com.buran.game.effects.PrettySound;
+import com.buran.game.effects.PostProcessor;
 import com.buran.game.input.Gamepad;
 import com.buran.game.effects.Ray;
 import com.buran.game.effects.Shake;
@@ -195,6 +197,15 @@ public class GameScreen extends BaseScreen {
             sectorBorder.dispose();
         }
         sectorBorder = new SectorBorder();
+        if (spaceBackground != null) {
+            spaceBackground.dispose();
+        }
+        spaceBackground = new SpaceBackground();
+        if (postProcessor != null) {
+            postProcessor.dispose();
+        }
+        postProcessor = new PostProcessor();
+        flash = 0f;
         gameInfoSystem = new GameInfoSystem();
         joystick = new Joystick();
 
@@ -273,6 +284,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void render(float dt) {
         FitViewport v = (FitViewport) ScreenManager.getInstance().getViewport();
+        spaceBackground.prepare(batch, camera);
         //FBO BEGIN
         fbo.begin();
         super.render(dt);
@@ -285,7 +297,11 @@ public class GameScreen extends BaseScreen {
         }
         //BEGIN
         batch.begin();
-        background.render(batch);
+        if (spaceBackground.isAvailable()) {
+            spaceBackground.render(batch, camera);
+        } else {
+            background.render(batch);
+        }
         sectorBorder.render(batch);
         batch.end();
         //END
@@ -316,13 +332,6 @@ public class GameScreen extends BaseScreen {
         magneticAnomalyEmitter.render(batch);
         rocketLauncher.render(batch);
         asteroidLaunchEmitter.render(batch);
-        Color color = batch.getColor();
-        color.a = nebulaA;
-        batch.setColor(color);
-        batch.draw(nebulaRegion,
-                nebulaRegionX, nebulaRegionY,
-                Rules.VIEW_WIDTH, (3 * Rules.VIEW_HEIGHT / 4)
-        );
         batch.setColor(Color.WHITE);
         batch.end();
 
@@ -334,6 +343,28 @@ public class GameScreen extends BaseScreen {
         //FBO END
         fbo.end(v.getScreenX(), v.getScreenY(), v.getScreenWidth(), v.getScreenHeight());
 
+        if (!PauseGroup.isPause()) {
+            holeTime += dt;
+        }
+        if (postProcessor.isAvailable()) {
+            post.hole = Profiles.getSettings().isShader();
+            post.holeX = shaderHoleX;
+            post.holeY = shaderHoleY;
+            post.holeRadius = blackhole.getShaderDiameter() / Rules.VIEW_ZOOM * 1.25f;
+            post.holeSpin = 1.5f + 1.5f * MathUtils.sin(holeTime * 0.7f);
+            post.grey = PauseGroup.isPause() || Rules.GAME_OVER;
+            post.flash = Math.max(0f, flash);
+            post.flashR = flashColor.r;
+            post.flashG = flashColor.g;
+            post.flashB = flashColor.b;
+            flash -= dt * 2.5f;
+            postProcessor.prepare(batch, fboTexRegion, fbo.getWidth(), fbo.getHeight(), post, dt);
+            v.apply();
+            batch.setProjectionMatrix(camera.combined);
+            super.render(dt);
+            postProcessor.draw(batch, fboTexRegion, 0, 0, Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT, fbo.getWidth(), fbo.getHeight(), post);
+            batch.begin();
+        } else {
         //BEGIN
         batch.begin();
         super.render(dt);
@@ -344,9 +375,6 @@ public class GameScreen extends BaseScreen {
         } else {
             batch.setShader(ShaderManager.BLACKHOLE.getProgram());
             ShaderManager.BLACKHOLE.getProgram().setUniformf("resolution", Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
-            if (!PauseGroup.isPause()) {
-                holeTime += dt;
-            }
             holeTime = holeTime % (MathUtils.PI2);
             ShaderManager.BLACKHOLE.getProgram().setUniformf("time", holeTime);
             ShaderManager.BLACKHOLE.getProgram().setUniformf("center", shaderHoleX, shaderHoleY);
@@ -359,7 +387,7 @@ public class GameScreen extends BaseScreen {
             }
             batch.draw(fboTexRegion, 0, 0, Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
         }
-        //batch.end();
+        }
 
         if (PauseGroup.isPause() && ShaderManager.PAUSE.getProgram() != null) {
             batch.setShader(ShaderManager.PAUSE.getProgram());
@@ -423,6 +451,7 @@ public class GameScreen extends BaseScreen {
             firePulseEffect();
         }
         sectorBorder.update(dt);
+        spaceBackground.update(dt);
         cameraUpdate(dt);
         if (!PauseGroup.isPause()) {
             PrettySound.update(dt);
@@ -499,6 +528,20 @@ public class GameScreen extends BaseScreen {
     //Cam position is reset when fbo.end(), copy-paste from cameraHelper is the hack.
     private final Vector2 lookAhead = new Vector2();
     private SectorBorder sectorBorder;
+    private SpaceBackground spaceBackground;
+    private PostProcessor postProcessor;
+    private final PostProcessor.Params post = new PostProcessor.Params();
+    /** Full-screen flash strength (decays); see {@link #flash(float, float, float, float)}. */
+    private static float flash;
+    private static final com.badlogic.gdx.graphics.Color flashColor = new com.badlogic.gdx.graphics.Color(1f, 1f, 1f, 1f);
+
+    /** Flash the whole scene, e.g. on a hit or an explosion. */
+    public static void flash(float strength, float r, float g, float b) {
+        if (strength > flash) {
+            flash = strength;
+            flashColor.set(r, g, b, 1f);
+        }
+    }
 
     private void cameraUpdate(float dt) {
         if (player.isCameraSmooth()) {
@@ -978,6 +1021,14 @@ public class GameScreen extends BaseScreen {
         if (sectorBorder != null) {
             sectorBorder.dispose();
             sectorBorder = null;
+        }
+        if (spaceBackground != null) {
+            spaceBackground.dispose();
+            spaceBackground = null;
+        }
+        if (postProcessor != null) {
+            postProcessor.dispose();
+            postProcessor = null;
         }
         global.dispose();
         ShaderManager.PAUSE.dispose();
