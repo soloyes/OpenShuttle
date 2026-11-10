@@ -111,7 +111,7 @@ public class Fuel extends AbstractConsumable {
         for (int i = 0; i < PaintConstants.FUEL_BUBBLE_COUNT; i++) {
             bubble[i].update(dt);
         }
-        boundCheck.checkAndHandleBoundsAndDestroy(this);
+        boundCheck.keepInside(this);
         shield.update(dt);
     }
 

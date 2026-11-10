@@ -118,6 +118,48 @@ public class BoundCheck {
         return !rectangle.contains(poolable.getPosition());
     }
 
+    /**
+     * Keeps a drifting object inside the sector: it bounces off the border instead of
+     * vanishing behind it (the camera can see a bit past the edge).
+     */
+    public void keepInside(AbstractPoolable poolable) {
+        Vector2 p = poolable.getPosition();
+        Vector2 v = poolable.getVelocity();
+        float rx = poolable.getWidth() / 2f;
+        float ry = poolable.getHeight() / 2f;
+        if (p.x < rx) {
+            p.x = rx;
+            if (v != null && v.x < 0) v.x = -v.x;
+        } else if (p.x > Rules.SPACE_WIDTH - rx) {
+            p.x = Rules.SPACE_WIDTH - rx;
+            if (v != null && v.x > 0) v.x = -v.x;
+        }
+        if (p.y < ry) {
+            p.y = ry;
+            if (v != null && v.y < 0) v.y = -v.y;
+        } else if (p.y > Rules.SPACE_HEIGHT - ry) {
+            p.y = Rules.SPACE_HEIGHT - ry;
+            if (v != null && v.y > 0) v.y = -v.y;
+        }
+    }
+
+    /**
+     * For objects that fly through the sector (asteroids): opacity fades from 1 at the border
+     * to 0 half a size outside it, where the object is recycled. No popping in or out.
+     *
+     * @return the opacity to draw the object with
+     */
+    public float edgeFade(AbstractPoolable poolable) {
+        Vector2 p = poolable.getPosition();
+        float half = Math.max(poolable.getWidth(), poolable.getHeight()) / 2f;
+        float out = Math.max(Math.max(-p.x, p.x - Rules.SPACE_WIDTH), Math.max(-p.y, p.y - Rules.SPACE_HEIGHT));
+        if (out >= half) {
+            poolable.destroy();
+            return 0f;
+        }
+        return out <= 0f ? 1f : 1f - out / half;
+    }
+
     public void checkAndHandleBoundsAndDestroy(AbstractPoolable poolable) {
         rectangle.set(
                 -poolable.getWidth() / 2, -poolable.getHeight() / 2,

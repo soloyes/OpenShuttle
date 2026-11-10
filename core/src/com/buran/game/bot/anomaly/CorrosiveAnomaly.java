@@ -177,7 +177,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
             }
             moveProcessor.update(this, dt);
         }
-        boundCheck.checkAndHandleBoundsAndDestroy(this);
+        boundCheck.keepInside(this);
     }
 
     private void scaleAndBorn(float dt) {
