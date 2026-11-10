@@ -52,6 +52,11 @@ public class MainMenu extends Group implements MenuNav.Target {
     private final BitmapFont rowFont;
     private final BitmapFont headFont;
     private final BitmapFont smallFont;
+    private final BitmapFont labelFont;
+    /** Panel header (title) and footer (button hints) heights. */
+    private static final float HEAD = 170f;
+    private static final float FOOT = 96f;
+    private float clock;
     private final GlyphLayout layout = new GlyphLayout();
     private final StickerResolver stickers = new StickerResolver();
     private float panelAlpha;
@@ -64,10 +69,8 @@ public class MainMenu extends Group implements MenuNav.Target {
     private Codex.Group codexGroup;
     private BackButton backButton;
 
-    /** "B  BACK" in the panel header: B on a pad, a tap or click elsewhere. */
+    /** "B  -  BACK" in the panel footer: B on a pad, a tap or click on the hint. */
     private class BackButton extends com.badlogic.gdx.scenes.scene2d.Actor {
-        private final GlyphLayout gl = new GlyphLayout();
-
         BackButton() {
             addListener(new com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
                 @Override
@@ -80,43 +83,27 @@ public class MainMenu extends Group implements MenuNav.Target {
             });
         }
 
+        String text() {
+            return Hints.key("B", "ESC") + "BACK";
+        }
+
         void place() {
-            gl.setText(smallFont, "BACK");
-            float glyph = 64f;
-            float w = glyph + 24f + gl.width + 20f;
-            setSize(w, 90f);
-            setPosition(panelX() + panelW() - w - 40f, panelY() + panelH() - 135f);
+            float w = Theme.width(smallFont, text()) + 40f;
+            setSize(w, FOOT);
+            setPosition(panelX() + panelW() - w - 30f, panelY());
         }
 
         @Override
         public void draw(Batch batch, float parentAlpha) {
-            float a = parentAlpha * panelAlpha * (isOver() ? 1f : 0.85f);
-            float glyph = 64f;
-            float cy = getY() + getHeight() / 2f;
-            // Xbox-style B glyph: a red disc with the letter.
-            drawDisc(batch, getX() + glyph / 2f, cy, glyph / 2f, new Color(0.82f, 0.18f, 0.16f, 1f), a);
-            gl.setText(smallFont, "B");
-            drawText(batch, smallFont, "B", getX() + glyph / 2f - gl.width / 2f, cy + smallFont.getCapHeight() / 2f, Theme.TEXT, a);
-            drawText(batch, smallFont, "BACK", getX() + glyph + 24f, cy + smallFont.getCapHeight() / 2f,
-                    isOver() ? Theme.TEXT : Theme.DIM, a);
+            float a = parentAlpha * panelAlpha;
+            Theme.textR(batch, smallFont, text(), getX() + getWidth() - 20f, footTextY(), isOver() ? Theme.AMBER : Theme.DIM, a);
         }
 
         private boolean isOver() {
-            return getListeners().size > 0 && ((com.badlogic.gdx.scenes.scene2d.utils.ClickListener) getListeners().first()).isOver();
+            return ((com.badlogic.gdx.scenes.scene2d.utils.ClickListener) getListeners().first()).isOver();
         }
     }
 
-    /** A filled disc made of horizontal strips (no extra textures needed). */
-    private static void drawDisc(Batch batch, float cx, float cy, float r, Color c, float a) {
-        int strips = 24;
-        for (int i = 0; i < strips; i++) {
-            float y0 = -r + 2f * r * i / strips;
-            float y1 = -r + 2f * r * (i + 1) / strips;
-            float ym = (y0 + y1) / 2f;
-            float half = (float) Math.sqrt(Math.max(0f, r * r - ym * ym));
-            Theme.rect(batch, cx - half, cy + y0, half * 2f, y1 - y0 + 0.5f, c, a);
-        }
-    }
     private String detailTitle;
     private Sticker detailSticker;
 
@@ -130,6 +117,7 @@ public class MainMenu extends Group implements MenuNav.Target {
         rowFont = Theme.font(portrait ? 64 : 72);
         headFont = Theme.font(portrait ? 72 : 96);
         smallFont = Theme.font(44);
+        labelFont = Theme.font(32);
 
         buildHome();
         addActor(home);
@@ -170,18 +158,29 @@ public class MainMenu extends Group implements MenuNav.Target {
         return open == Panel.RESULTS || open == Panel.CODEX;
     }
 
+    /** Footer hint baseline. */
+    private float footTextY() {
+        return panelY() + FOOT / 2f + smallFont.getCapHeight() / 2f;
+    }
+
+    /** The home list sits in its own instrument ("FLIGHT DECK") under the title. */
+    private float homeTop() {
+        return Rules.WORLD_HEIGHT * 0.56f;
+    }
+
     private void layoutLists() {
         float mx = Theme.marginX();
         if (Theme.portrait()) {
             home.setBox(mx - 36f, Rules.WORLD_HEIGHT * 0.07f, Rules.WORLD_WIDTH - 2 * mx + 72f, Rules.WORLD_HEIGHT * 0.36f);
         } else {
-            home.setBox(mx - 36f, Rules.WORLD_HEIGHT * 0.10f, Rules.WORLD_WIDTH * 0.24f, Rules.WORLD_HEIGHT * 0.46f);
+            float h = home.contentHeight();
+            home.setBox(mx - 36f, homeTop() - h, Rules.WORLD_WIDTH * 0.24f, h);
         }
-        float head = 170f;
+        float head = HEAD;
         float px = panelX() + 30f;
         float pw = panelW() - 60f;
-        float py = panelY() + 40f;
-        float ph = panelH() - head - 60f;
+        float py = panelY() + FOOT + 14f;
+        float ph = panelH() - head - FOOT - 34f;
         if (hasDetail()) {
             if (Theme.portrait()) {
                 float listH = ph * (open == Panel.CODEX ? 0.30f : 0.40f);
@@ -306,6 +305,19 @@ public class MainMenu extends Group implements MenuNav.Target {
             case CODEX: return codexGroup == null ? "CODEX" : "CODEX / " + codexGroup.title();
             case SETTINGS: return "SETTINGS";
             case ABOUT: return "ABOUT";
+            default: return "";
+        }
+    }
+
+    /** Instrument code shown in the panel header, like a plate on a ship's console. */
+    private String panelCode() {
+        switch (open) {
+            case PLAY: return "NAV-01";
+            case PILOTS: return "CREW-02";
+            case RESULTS: return "LOG-03";
+            case CODEX: return "DB-04";
+            case SETTINGS: return "SYS-05";
+            case ABOUT: return "ARC-06";
             default: return "";
         }
     }
@@ -583,6 +595,7 @@ public class MainMenu extends Group implements MenuNav.Target {
     @Override
     public void act(float delta) {
         super.act(delta);
+        clock += delta;
         if (codex != null) {
             codex.update(delta);
         }
@@ -602,15 +615,38 @@ public class MainMenu extends Group implements MenuNav.Target {
         float mx = Theme.marginX();
         float titleY = portrait ? Rules.WORLD_HEIGHT * 0.90f : Rules.WORLD_HEIGHT * 0.80f;
         if (!(portrait && open != Panel.NONE)) {
+            drawText(batch, labelFont, "ORBITAL SHIP 11F35  -  FLIGHT 19", mx + 6, titleY + 44f, Theme.HEAD, parentAlpha);
             drawText(batch, titleFont, "BURAN-19", mx, titleY, Theme.TEXT, parentAlpha);
             drawText(batch, subFont, "THE LAST FLIGHT  -  1991", mx + 6, titleY - titleFont.getLineHeight() + 10,
                     Theme.DIM, parentAlpha);
         }
+        if (!portrait) {
+            drawHomeDeck(batch, parentAlpha * home.getColor().a);
+            drawStatusStrip(batch, parentAlpha);
+        }
 
         if (panelAlpha > 0.01f) {
             float a = parentAlpha * panelAlpha;
-            Theme.frame(batch, panelX(), panelY(), panelW(), panelH(), a);
-            drawText(batch, headFont, panelTitle(), panelX() + 66f, panelY() + panelH() - 50f, Theme.TEXT, a);
+            float x = panelX();
+            float y = panelY();
+            float w = panelW();
+            float h = panelH();
+            Theme.panel(batch, x, y, w, h, a);
+            drawText(batch, headFont, panelTitle(), x + 66f, y + h - 50f, Theme.TEXT, a);
+            // Header plate: instrument code and a lit lamp.
+            float plateY = y + h - 62f;
+            Theme.textR(batch, labelFont, panelCode(), x + w - 84f, plateY, Theme.HEAD, a);
+            Theme.lamp(batch, x + w - 66f, plateY - 20f, Theme.OK, true, a);
+            Theme.hairline(batch, x + 30f, y + h - HEAD + 6f, w - 60f, a);
+            // Footer: what the buttons do here.
+            Theme.hairline(batch, x + 30f, y + FOOT, w - 60f, a);
+            String hints = Hints.key("A", "ENTER") + "SELECT";
+            if (open == Panel.SETTINGS) {
+                hints += "      " + Hints.key("D-PAD", "ARROWS") + "ADJUST";
+            }
+            if (!Hints.touch()) {
+                drawText(batch, smallFont, hints, x + 66f, footTextY(), Theme.DIM, a);
+            }
             if (hasDetail()) {
                 drawDetail(batch, a);
             }
@@ -618,12 +654,57 @@ public class MainMenu extends Group implements MenuNav.Target {
         super.draw(batch, parentAlpha);
     }
 
+    /** The home list's instrument: a panel sized to the list, with its plate. */
+    private void drawHomeDeck(Batch batch, float a) {
+        float bx = Theme.marginX() - 36f;
+        float bw = Rules.WORLD_WIDTH * 0.24f;
+        float h = home.contentHeight();
+        float top = homeTop();
+        float plate = 80f;
+        float x = bx - 30f;
+        float y = top - h - 30f;
+        float w = bw + 60f;
+        float ph = h + 30f + plate;
+        Theme.panel(batch, x, y, w, ph, a);
+        drawText(batch, labelFont, "FLIGHT DECK", x + 66f, y + ph - 28f, Theme.HEAD, a);
+        Theme.lamp(batch, x + w - 48f, y + ph - 50f, Theme.OK, true, a);
+        Theme.hairline(batch, x + 30f, top + 14f, w - 60f, a);
+    }
+
+    /**
+     * A thin telemetry strip along the bottom: the radio status (no one answers), the pilot,
+     * mission elapsed time. Quiet, but alive: the lamp blinks and the clock runs.
+     */
+    private void drawStatusStrip(Batch batch, float a) {
+        float x = Rules.SAFE_X;
+        float y = Rules.SAFE_Y;
+        float w = Rules.WORLD_WIDTH - 2f * Rules.SAFE_X;
+        float h = 76f;
+        Theme.panel(batch, x, y, w, h, a);
+        float ty = y + h / 2f + labelFont.getCapHeight() / 2f;
+        boolean blink = (clock % 1.6f) < 0.8f;
+        Theme.lamp(batch, x + 44f, y + h / 2f - 7f, Theme.ACCENT, blink, a);
+        drawText(batch, labelFont, "MISSION CONTROL  -  NO CARRIER", x + 80f, ty, Theme.HEAD, a);
+        ProfileDAO p = activePilot();
+        String mid = "PILOT  " + (p == null ? "NONE" : p.getUsername()) + "      SECTORS  "
+                + com.buran.game.campaign.Campaign.unlocked() + " / 19";
+        float mw = Theme.width(labelFont, mid);
+        drawText(batch, labelFont, mid, x + w / 2f - mw / 2f, ty, Theme.HEAD, a);
+        int t = 412 * 3600 + 7 * 60 + (int) clock;
+        String met = "MET  " + t / 3600 + ":" + pad2(t / 60 % 60) + ":" + pad2(t % 60);
+        Theme.textR(batch, labelFont, met, x + w - 44f, ty, Theme.HEAD, a);
+    }
+
+    private static String pad2(int v) {
+        return v < 10 ? "0" + v : String.valueOf(v);
+    }
+
     private void drawDetail(Batch batch, float a) {
-        float head = 170f;
+        float head = HEAD;
         float px = panelX() + 30f;
         float pw = panelW() - 60f;
-        float py = panelY() + 40f;
-        float ph = panelH() - head - 60f;
+        float py = panelY() + FOOT + 14f;
+        float ph = panelH() - head - FOOT - 34f;
         float x;
         float y;
         float w;
@@ -638,7 +719,7 @@ public class MainMenu extends Group implements MenuNav.Target {
             y = py + ph;
         }
         Theme.rect(batch, Theme.portrait() ? px : px + pw * listShare() + 20f, Theme.portrait() ? y + 24f : py,
-                Theme.portrait() ? pw : 3f, Theme.portrait() ? 3f : ph, Theme.FAINT, a);
+                Theme.portrait() ? pw : 2f, Theme.portrait() ? 2f : ph, Theme.EDGE, a);
 
         if (open == Panel.RESULTS && detailResult != null) {
             DetailedResultDAO d = detailResult;

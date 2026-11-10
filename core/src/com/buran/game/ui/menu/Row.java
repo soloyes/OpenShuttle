@@ -121,8 +121,13 @@ public abstract class Row extends Actor {
         float a = parentAlpha * getColor().a * (enabled ? 1f : 0.4f);
         float f = focusAmount;
         if (f > 0.01f) {
-            Theme.rect(batch, getX(), getY() + 4, getWidth(), getHeight() - 8, Theme.LINE, 0.07f * f * a);
-            Theme.rect(batch, getX(), getY() + 14, 8f, getHeight() - 28, Theme.ACCENT, f * a);
+            // The lit slot of the console: amber wash, amber hairlines, a marker on the left.
+            float y0 = getY() + 4f;
+            float h = getHeight() - 8f;
+            Theme.rect(batch, getX(), y0, getWidth(), h, Theme.AMBER, 0.07f * f * a);
+            Theme.rect(batch, getX(), y0, getWidth(), 2f, Theme.AMBER, 0.35f * f * a);
+            Theme.rect(batch, getX(), y0 + h - 2f, getWidth(), 2f, Theme.AMBER, 0.35f * f * a);
+            Theme.rect(batch, getX(), y0, 8f, h, Theme.AMBER, f * a);
         }
         tmp.set(Theme.DIM).lerp(Theme.TEXT, f);
         tmp.a = a;
@@ -140,8 +145,8 @@ public abstract class Row extends Actor {
             return;
         }
         Color old = font.getColor().cpy();
-        font.setColor(focusAmount > 0.5f ? Theme.TEXT.r : Theme.DIM.r, focusAmount > 0.5f ? Theme.TEXT.g : Theme.DIM.g,
-                focusAmount > 0.5f ? Theme.TEXT.b : Theme.DIM.b, alpha);
+        Color vc = focusAmount > 0.5f ? Theme.AMBER : Theme.DIM;
+        font.setColor(vc.r, vc.g, vc.b, alpha);
         String shown = focusAmount > 0.5f ? "<  " + v + "  >" : v;
         layout.setText(font, shown);
         font.draw(batch, shown, getX() + getWidth() - 36f - layout.width, textY);
@@ -271,17 +276,25 @@ public abstract class Row extends Actor {
 
         @Override
         protected void drawValue(Batch batch, float alpha, float textY) {
+            // A gauge like the console's: dark track in a hairline, segmented fill.
             int cells = 10;
             float cw = 30f;
-            float gap = 8f;
+            float gap = 6f;
             float total = cells * cw + (cells - 1) * gap;
             float x = getX() + getWidth() - 36f - total;
-            float h = 26f;
+            float h = 24f;
             float y = getY() + getHeight() / 2f - h / 2f;
+            Theme.rect(batch, x - 6f, y - 6f, total + 12f, h + 12f, Theme.EDGE, alpha);
+            Theme.rect(batch, x - 4f, y - 4f, total + 8f, h + 8f, Theme.TRACK, alpha);
             int on = Math.round(get.get() * cells);
+            Color c = focusAmount > 0.5f ? Theme.AMBER : Theme.DIM;
             for (int i = 0; i < cells; i++) {
-                Color c = i < on ? (focusAmount > 0.5f ? Theme.TEXT : Theme.DIM) : Theme.FAINT;
-                Theme.rect(batch, x + i * (cw + gap), y, cw, h, c, alpha * (i < on ? 1f : 0.5f));
+                if (i < on) {
+                    Theme.rect(batch, x + i * (cw + gap), y, cw, h, c, alpha);
+                    Theme.rect(batch, x + i * (cw + gap), y + h - 4f, cw, 4f, Color.WHITE, 0.18f * alpha);
+                } else {
+                    Theme.rect(batch, x + i * (cw + gap), y, cw, h, Theme.EDGE, alpha * 0.5f);
+                }
             }
         }
     }
@@ -345,7 +358,7 @@ public abstract class Row extends Actor {
             float a = parentAlpha * getColor().a;
             float textY = getY() + getHeight() / 2f + font.getCapHeight() / 2f;
             Color old = font.getColor().cpy();
-            font.setColor(Theme.DIM.r, Theme.DIM.g, Theme.DIM.b, a);
+            font.setColor(Theme.HEAD.r, Theme.HEAD.g, Theme.HEAD.b, a);
             font.draw(batch, label, getX() + 36f, textY);
             if (value != null) {
                 font.setColor(Theme.TEXT.r, Theme.TEXT.g, Theme.TEXT.b, a);

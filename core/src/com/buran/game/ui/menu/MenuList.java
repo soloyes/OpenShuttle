@@ -165,7 +165,7 @@ public class MenuList extends Group implements MenuNav.Target {
     }
 
     /** Total height of all rows. */
-    private float contentHeight() {
+    public float contentHeight() {
         float h = 0;
         for (Row r : rows) {
             h += r.getHeight() + gap;

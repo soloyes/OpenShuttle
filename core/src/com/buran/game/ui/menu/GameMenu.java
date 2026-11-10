@@ -33,6 +33,10 @@ public class GameMenu extends Group implements MenuNav.Target {
     private final BitmapFont headFont;
     private final BitmapFont rowFont;
     private final BitmapFont smallFont;
+    private final BitmapFont labelFont;
+    private static final float HEAD = 230f;
+    private static final float FOOT = 96f;
+    private float clock;
     private final GlyphLayout layout = new GlyphLayout();
     private Mode mode = Mode.HIDDEN;
     private float alpha;
@@ -46,6 +50,7 @@ public class GameMenu extends Group implements MenuNav.Target {
         headFont = Theme.font(portrait ? 72 : 96);
         rowFont = Theme.font(portrait ? 64 : 72);
         smallFont = Theme.font(44);
+        labelFont = Theme.font(32);
         addActor(list);
         list.setVisible(false);
         setTouchable(Touchable.childrenOnly);
@@ -72,8 +77,8 @@ public class GameMenu extends Group implements MenuNav.Target {
     private void layoutList() {
         float px = boxX() + 30f;
         float pw = boxW() - 60f;
-        float py = boxY() + 40f;
-        float ph = boxH() - 230f;
+        float py = boxY() + FOOT + 14f;
+        float ph = boxH() - HEAD - FOOT - 34f;
         if (Theme.portrait()) {
             list.setBox(px, py, pw, ph * 0.58f);
         } else {
@@ -223,6 +228,7 @@ public class GameMenu extends Group implements MenuNav.Target {
     @Override
     public void act(float delta) {
         super.act(delta);
+        clock += delta;
         com.buran.game.campaign.SectorRun run = com.buran.game.campaign.Campaign.run();
         if (run != null && run.isClear() && !Rules.GAME_OVER) {
             showClear(run);
@@ -248,7 +254,25 @@ public class GameMenu extends Group implements MenuNav.Target {
         float a = parentAlpha * alpha;
         // Other actors (the item carousel) leave the grey pause shader on the batch.
         batch.setShader(null);
-        Theme.frame(batch, boxX(), boxY(), boxW(), boxH(), a);
+        float bx = boxX();
+        float by = boxY();
+        float bw = boxW();
+        float bh = boxH();
+        Theme.panel(batch, bx, by, bw, bh, a);
+        // Header plate: what this screen is, and a lamp in its colour.
+        String code = mode == Mode.REPORT ? "LOG  -  FINAL" : mode == Mode.CLEAR ? "NAV  -  SECTOR CLEAR" : "SYS  -  HOLD";
+        Color lampC = mode == Mode.REPORT ? Theme.ACCENT : mode == Mode.CLEAR ? Theme.OK : Theme.AMBER;
+        boolean lit = mode != Mode.PAUSE || (clock % 1.2f) < 0.6f;
+        float plateY = by + bh - 62f;
+        Theme.textR(batch, labelFont, code, bx + bw - 84f, plateY, Theme.HEAD, a);
+        Theme.lamp(batch, bx + bw - 66f, plateY - 20f, lampC, lit, a);
+        Theme.hairline(batch, bx + 30f, by + bh - HEAD + 10f, bw - 60f, a);
+        Theme.hairline(batch, bx + 30f, by + FOOT, bw - 60f, a);
+        if (!Hints.touch()) {
+            String back = mode == Mode.PAUSE ? "RESUME" : "BASE";
+            String hints = Hints.key("A", "ENTER") + "SELECT      " + Hints.key("B", "ESC") + back;
+            draw(batch, smallFont, hints, bx + 66f, by + FOOT / 2f + smallFont.getCapHeight() / 2f, Theme.DIM, a);
+        }
         String title = mode == Mode.REPORT ? "SIGNAL LOST" : mode == Mode.CLEAR ? "SECTOR " + clearedSector.code() + " CLEAR" : "PAUSED";
         draw(batch, headFont, title, boxX() + 66f, boxY() + boxH() - 50f,
                 mode == Mode.REPORT ? Theme.ACCENT : mode == Mode.CLEAR ? Theme.OK : Theme.TEXT, a);
@@ -262,8 +286,8 @@ public class GameMenu extends Group implements MenuNav.Target {
     private void drawSummary(Batch batch, float a) {
         float px = boxX() + 30f;
         float pw = boxW() - 60f;
-        float py = boxY() + 40f;
-        float ph = boxH() - 230f;
+        float py = boxY() + FOOT + 14f;
+        float ph = boxH() - HEAD - FOOT - 34f;
         float x;
         float y;
         float w;
@@ -271,13 +295,15 @@ public class GameMenu extends Group implements MenuNav.Target {
             x = px + 36f;
             w = pw - 72f;
             y = py + ph;
-            Theme.rect(batch, px, py + ph * 0.58f + 20f, pw, 3f, Theme.FAINT, a);
+            Theme.hairline(batch, px, py + ph * 0.58f + 20f, pw, a);
         } else {
             x = px + pw * 0.5f + 60f;
             w = pw * 0.5f - 96f;
             y = py + ph;
-            Theme.rect(batch, px + pw * 0.5f + 20f, py, 3f, ph, Theme.FAINT, a);
+            Theme.vline(batch, px + pw * 0.5f + 20f, py, ph, a);
         }
+        draw(batch, labelFont, "TELEMETRY", x, y, Theme.HEAD, a);
+        y -= 56f;
         Standing st = Standing.getInstance();
         DetailedResultDAO d = (mode == Mode.REPORT || mode == Mode.CLEAR) && report != null ? report : st.getDetails();
         String[][] lines = {
@@ -295,9 +321,11 @@ public class GameMenu extends Group implements MenuNav.Target {
         if (Theme.portrait()) {
             return;   // no room for the crew table on a phone
         }
+        y -= 10f;
+        Theme.hairline(batch, x, y, w, a);
         y -= 30f;
-        draw(batch, smallFont, "CREW ABOARD", x, y, Theme.TEXT, a);
-        y -= 74f;
+        draw(batch, labelFont, "CREW ABOARD", x, y, Theme.HEAD, a);
+        y -= 56f;
         float icon = 64f;
         for (Sticker crew : Sticker.ASTRONAUTS) {
             Integer n = st.getAstronauts() == null ? null : st.getAstronauts().get(crew);
