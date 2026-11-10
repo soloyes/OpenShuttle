@@ -30,7 +30,25 @@ public class GameInfoSystem {
         setupElement(x, y, preset.getValue(), scale, 2.0f, colored, false);
     }
 
+    /** Arcade shouts that break the quiet mood (tip 61); the event itself still has sound and light. */
+    private static final Preset[] MUTED = {
+            Preset.ROCKETMAN, Preset.EXTERMINATOR, Preset.ADIEU, Preset.KEEP_GOING, Preset.SCREECH,
+            Preset.BOOM, Preset.SAD, Preset.EASY
+    };
+
+    private static boolean muted(String text) {
+        for (Preset p : MUTED) {
+            if (text.contains(p.getValue()) || text.startsWith(p.name())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static void setupElement(float x, float y, String text, float scale, float dstScale, boolean colored, boolean giant) {
+        if (text == null || muted(text)) {
+            return;
+        }
         for (int i = 0; i < elements.length; i++) {
             float dy;
             if (MathUtils.random(0, 1) == 0) {
@@ -85,7 +103,7 @@ public class GameInfoSystem {
         TRASH("TRASH"),
         //
         LOST_SCORE("SCORE"),
-        MURDERER("MURDERER"),
+        MURDERER("[RED]CREW LOST[]"),
         EASY("BE EASY"),
         BONUS_CRATE("[GREEN]BONUS CRATE[]"),
         BONUS_STORAGE("[GREEN]BONUS STORAGE[]"),

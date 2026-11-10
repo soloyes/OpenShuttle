@@ -127,6 +127,8 @@ public final class SectorRun {
             float y = MathUtils.clamp(Buran.position.y + MathUtils.sin(ang) * r, margin, Rules.SPACE_HEIGHT - margin);
             e.emitAt(x, y);
         }
+        // Only these people are out there: no one new drifts in after they are aboard.
+        e.setConsumablesMaxCount(0);
     }
 
     /** Removes whatever an emitter spawned at construction beyond the sector's cap. */

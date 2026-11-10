@@ -25,8 +25,8 @@ public final class Theme {
     /** Selected / current item, as the lit cargo slot of the console. */
     public static final Color AMBER = Color.valueOf("ffb547ff");
     /** Instrument body: lighter on top, darker below. */
-    public static final Color BODY = new Color(0.075f, 0.098f, 0.14f, 0.95f);
-    public static final Color BODY_LO = new Color(0.035f, 0.05f, 0.075f, 0.95f);
+    public static final Color BODY = new Color(0.075f, 0.098f, 0.14f, 1f);
+    public static final Color BODY_LO = new Color(0.035f, 0.05f, 0.075f, 1f);
     /** Hairlines, dividers, frames. */
     public static final Color EDGE = Color.valueOf("2a3647ff");
     /** Section labels ("LIFE SUPPORT", "NAV-01"). */
