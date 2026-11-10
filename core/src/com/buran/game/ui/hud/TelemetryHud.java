@@ -52,8 +52,30 @@ public class TelemetryHud {
         return !touch;
     }
 
+    /** Contextual visibility (tips 90-91): a gauge shows while it changes, is not full, or alerts. */
+    private static final float LINGER = 3f;
+    private final float[] lastValue = {-1f, -1f, -1f, -1f};
+    private final float[] lastChange = {0f, 0f, 0f, 0f};
+    private final float[] visible = {1f, 1f, 1f, 1f};
+
+    private void track(int i, float value, float max, boolean alert, float dt) {
+        if (Math.abs(value - lastValue[i]) > 0.05f) {
+            lastValue[i] = value;
+            lastChange[i] = time;
+        }
+        boolean show = alert || value < max - 0.5f || time - lastChange[i] < LINGER || Rules.GAME_OVER;
+        visible[i] += ((show ? 1f : 0f) - visible[i]) * Math.min(1f, dt * (show ? 10f : 2.5f));
+    }
+
     public void update(float dt) {
         time += dt;
+        Standing st = Standing.getInstance();
+        track(0, st.getLifeShield(), st.getMaxLifeShield(), false, dt);
+        track(1, st.getHp(), st.getMaxHp(), st.isHpAlert(), dt);
+        track(2, st.getFuel(), st.getMaxFuel(), st.isFuelAlertOutOfBounds() || st.isFuelAlertMagneticAnomaly(), dt);
+        // Laser: shown while it has charge or just changed.
+        float laser = st.getLaserChargeLevel();
+        track(3, laser, laser > 0f ? Float.MAX_VALUE : 0f, false, dt);
     }
 
     public void render(SpriteBatch batch) {
@@ -93,23 +115,51 @@ public class TelemetryHud {
         float leftX = sx;
         float rightX = W - sx - colW;
         if (portrait) {
+            ga = visible[0];
             gauge(batch, "SHIELD", st.getLifeShield(), st.getMaxLifeShield(), SHIELD, leftX, gaugeTop, colW, false);
+            ga = visible[1];
             gauge(batch, "HULL", st.getHp(), st.getMaxHp(), HULL, leftX, gaugeTop - gaugeHeight(), colW,
                     st.isHpAlert() && blink);
+            ga = visible[2];
             gauge(batch, "FUEL", st.getFuel(), st.getMaxFuel(), FUEL, rightX, gaugeTop, colW,
                     (st.isFuelAlertOutOfBounds() || st.isFuelAlertMagneticAnomaly() || st.getFuel() < st.getMaxFuel() * 0.2f) && blink);
+            ga = visible[3];
             gaugeLaser(batch, st, rightX, gaugeTop - gaugeHeight(), colW);
+            ga = 1f;
         } else {
             float g2 = py - 16f - big.getLineHeight() - 20f;
-            gauge(batch, "SHIELD", st.getLifeShield(), st.getMaxLifeShield(), SHIELD, leftX, g2, colW, false);
-            gauge(batch, "HULL", st.getHp(), st.getMaxHp(), HULL, leftX, g2 - gaugeHeight(), colW, st.isHpAlert() && blink);
-            gauge(batch, "FUEL", st.getFuel(), st.getMaxFuel(), FUEL, rightX, top, colW,
+            // Gauges stack in their column without gaps when some are hidden.
+            float ly = g2;
+            ga = visible[0];
+            gauge(batch, "SHIELD", st.getLifeShield(), st.getMaxLifeShield(), SHIELD, leftX, ly, colW, false);
+            ly -= gaugeHeight() * visible[0];
+            ga = visible[1];
+            gauge(batch, "HULL", st.getHp(), st.getMaxHp(), HULL, leftX, ly, colW, st.isHpAlert() && blink);
+            float ry = top;
+            ga = visible[2];
+            gauge(batch, "FUEL", st.getFuel(), st.getMaxFuel(), FUEL, rightX, ry, colW,
                     (st.isFuelAlertOutOfBounds() || st.isFuelAlertMagneticAnomaly() || st.getFuel() < st.getMaxFuel() * 0.2f) && blink);
-            gaugeLaser(batch, st, rightX, top - gaugeHeight(), colW);
+            ry -= gaugeHeight() * visible[2];
+            ga = visible[3];
+            gaugeLaser(batch, st, rightX, ry, colW);
+            ga = 1f;
         }
 
         if (usesCargoBay()) {
             cargoBay(batch);
+        }
+
+        // Shelter status, centred above the bottom edge while the ship is inside one.
+        com.buran.game.world.Shelters.Shelter sh = com.buran.game.world.Shelters.occupied();
+        if (sh != null) {
+            String t = "SHELTER  " + Math.round(sh.integrity() * 100f) + "%";
+            layout.setText(value, t);
+            float bw = Math.min(W * 0.3f, 640f);
+            float bx = (W - bw) / 2f;
+            float by = Rules.SAFE_Y + 40f;
+            text(batch, value, t, (W - layout.width) / 2f, by + 70f, SHIELD, 1f);
+            Theme.rect(batch, bx, by, bw, 8f, Theme.FAINT, 0.5f);
+            Theme.rect(batch, bx, by, bw * sh.integrity(), 8f, SHIELD, sh.integrity() < 0.25f && blink ? 0.4f : 1f);
         }
     }
 
@@ -117,7 +167,12 @@ public class TelemetryHud {
         return label.getLineHeight() + 50f;
     }
 
+    private float ga = 1f;
+
     private void gaugeLaser(SpriteBatch batch, Standing st, float x, float y, float w) {
+        if (ga < 0.01f) {
+            return;
+        }
         if (!Buran.isLaser && st.getLaserChargeLevel() <= 0f) {
             text(batch, label, "LASER", x, y, Theme.FAINT, 1f);
             layout.setText(label, "OFFLINE");
@@ -129,6 +184,9 @@ public class TelemetryHud {
     }
 
     private void gauge(SpriteBatch batch, String name, float v, float max, Color c, float x, float y, float w, boolean alert) {
+        if (ga < 0.01f) {
+            return;
+        }
         float p = max <= 0 ? 0f : MathUtils.clamp(v / max, 0f, 1f);
         Color col = alert ? ALERT : c;
         text(batch, label, name, x, y, Theme.DIM, 1f);
@@ -146,9 +204,9 @@ public class TelemetryHud {
         float filled = p * n;
         for (int i = 0; i < n; i++) {
             float f = MathUtils.clamp(filled - i, 0f, 1f);
-            Theme.rect(batch, x + i * (sw + gap), y - h, sw, h, Theme.FAINT, 0.45f);
+            Theme.rect(batch, x + i * (sw + gap), y - h, sw, h, Theme.FAINT, 0.45f * ga);
             if (f > 0f) {
-                Theme.rect(batch, x + i * (sw + gap), y - h, sw * f, h, c, 1f);
+                Theme.rect(batch, x + i * (sw + gap), y - h, sw * f, h, c, ga);
             }
         }
     }
@@ -193,6 +251,7 @@ public class TelemetryHud {
     }
 
     private void text(SpriteBatch batch, BitmapFont font, String s, float x, float y, Color c, float a) {
+        a *= ga;
         tmp.set(font.getColor());
         font.setColor(c.r, c.g, c.b, c.a * a);
         font.draw(batch, s, x, y);

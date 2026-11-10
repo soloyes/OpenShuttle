@@ -66,7 +66,11 @@ public class MoveProcessor {
         abstractAnomaly.getVelocity().scl(/*FPS hack*/1.0f - dt/*FPS hack*/);
         if (!abstractAnomaly.isTaken()) {
             //*Standard move*//
-            if (abstractAnomaly.isHungry() && abstractAnomaly.isActivated()) {
+            com.buran.game.world.Shelters.repel(abstractAnomaly.getPosition(), abstractAnomaly.getVelocity(), dt);
+            // Inside a shelter the ship is out of reach: anomalies drift instead of hunting.
+            if (abstractAnomaly.isHungry() && abstractAnomaly.isActivated() && com.buran.game.world.Shelters.shipProtected()) {
+                abstractAnomaly.getPosition().mulAdd(abstractAnomaly.getVelocity(), dt);
+            } else if (abstractAnomaly.isHungry() && abstractAnomaly.isActivated()) {
                 abstractAnomaly.getPosition().mulAdd(abstractAnomaly.getVelocity(), dt);
                 float dst = Buran.position.dst(abstractAnomaly.getPosition());
                 if (abstractAnomaly.getLevel() + 1 != (int) Standing.getInstance().getRamPower()) {

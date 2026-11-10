@@ -15,6 +15,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.buran.game.background.Background;
 import com.buran.game.background.SectorBorder;
+import com.buran.game.world.Shelters;
+import com.buran.game.world.ThreatOverlay;
+import com.buran.game.world.ThreatTextures;
 import com.buran.game.background.SpaceBackground;
 import com.buran.game.bot.blackhole.BlackholeDebris;
 import com.buran.game.bot.anomaly.AbstractAnomaly;
@@ -224,6 +227,7 @@ public class GameScreen extends BaseScreen {
         hud = new TelemetryHud();
 
         BoundCheck.avoidPosition(Blackhole.position, Buran.position, (int) Buffs.getBlackholeTakeRange() + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+        Shelters.create(Math.max(2, Rules.SPACE_WIDTH * Rules.SPACE_HEIGHT / (Rules.VIEW_WIDTH * Rules.VIEW_HEIGHT * 4)));
         if (Rules.DEBUG_START_AT_HOLE) {
             Buran.position.set(Blackhole.position.x + Buffs.getBlackholeTakeRange() + 260, Blackhole.position.y + 120);
         }
@@ -246,6 +250,10 @@ public class GameScreen extends BaseScreen {
         anomalyJoiner = ListOfListsJoiner.newAbstractAnomalyList(corrosiveAnomalyEmitter.getActiveList(), electricalAnomalyEmitter.getActiveList(), radiationAnomalyEmitter.getActiveList(), magneticAnomalyEmitter.getActiveList());
         //
         rocketLauncher = new RocketLauncher(rocketEmitter, anomalyJoiner);
+        if (threatTextures == null) {
+            threatTextures = new ThreatTextures();
+        }
+        threatOverlay = new ThreatOverlay(anomalyJoiner, threatTextures);
         storageEmitter.emit();
         this.profiles = new Profiles();
         this.nebulaRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.CIRCLE_GLOW);
@@ -322,6 +330,7 @@ public class GameScreen extends BaseScreen {
             background.render(batch);
         }
         sectorBorder.render(batch, camera);
+        Shelters.render(batch, threatTextures);
         batch.end();
         //END
 
@@ -349,6 +358,7 @@ public class GameScreen extends BaseScreen {
         player.getRamShield().render(batch);
         radiationAnomalyEmitter.render(batch);
         magneticAnomalyEmitter.render(batch);
+        threatOverlay.renderWorld(batch);
         rocketLauncher.render(batch);
         asteroidLaunchEmitter.render(batch);
         if (Profiles.getSettings().isShader()) {
@@ -427,6 +437,9 @@ public class GameScreen extends BaseScreen {
         }
 
         if (!Rules.GAME_OVER) {
+            if (!PauseGroup.isPause()) {
+                threatOverlay.renderEdges(batch, cameraHelper);
+            }
             hud.render(batch);
             if (!PauseGroup.isPause() && !hud.usesCargoBay()) {
                 SelectorGroup.getInstance().render(batch);
@@ -474,6 +487,10 @@ public class GameScreen extends BaseScreen {
             firePulseEffect();
         }
         sectorBorder.update(dt);
+        if (!PauseGroup.isPause()) {
+            Shelters.update(dt);
+            threatOverlay.update(dt);
+        }
         spaceBackground.update(dt);
         if (!PauseGroup.isPause()) {
             debris.update(dt);
@@ -554,6 +571,8 @@ public class GameScreen extends BaseScreen {
     //Cam position is reset when fbo.end(), copy-paste from cameraHelper is the hack.
     private final Vector2 lookAhead = new Vector2();
     private SectorBorder sectorBorder;
+    private ThreatTextures threatTextures;
+    private ThreatOverlay threatOverlay;
     private GameMenu gameMenu;
     private boolean runReported;
     private SpaceBackground spaceBackground;
@@ -1050,6 +1069,10 @@ public class GameScreen extends BaseScreen {
         if (sectorBorder != null) {
             sectorBorder.dispose();
             sectorBorder = null;
+        }
+        if (threatTextures != null) {
+            threatTextures.dispose();
+            threatTextures = null;
         }
         if (spaceBackground != null) {
             spaceBackground.dispose();
