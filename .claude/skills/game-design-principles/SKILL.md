@@ -9,6 +9,11 @@ Reference: Wendy Despain (ed.), *100 Principles of Game Design*, New Riders 2013
 The owner chose it as the design reference. Notes below are our own paraphrase, tied to this game.
 The book is a toolbox, not a rulebook: pick the principles that fit the problem.
 
+## Sources (read these, don't improvise)
+- `references/chapter4-troubleshooting.md` — all 21 principles of chapter 4 (pp. 168–209), from the full text the owner supplied, each mapped to Buran-19.
+- `references/chapters1-3-index-only.md` — chapters 1–3: **only titles and index terms are available** (the supplied PDF is a 71-page excerpt). Never invent their content; say the text is missing and ask the owner for those chapters if a decision depends on them.
+- Notes in the sections below that cite chapter 1–3 principles (Flow, Interest Curve, Hick's law, Doubling and Halving, Variable Rewards, Punishment, etc.) are general design knowledge, not quotes from the book.
+
 ## How to use
 1. Name the problem in one sentence (Define the Problem).
 2. Walk the relevant checklist below and note which principles it violates.
