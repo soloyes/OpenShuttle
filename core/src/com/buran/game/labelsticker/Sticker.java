@@ -270,7 +270,7 @@ public enum Sticker {
                 List<AbstractAnomaly> anomalies = corrosiveAnomalyEmitter.getActiveList();
                 int count = 0;
                 for (int i = 0; i < anomalies.size(); i++) {
-                    if (anomalies.get(i).getPosition().dst(Buran.position) <= Rules.WORLD_WIDTH) {
+                    if (anomalies.get(i).getPosition().dst(Buran.position) <= Rules.VIEW_WIDTH) {
                         if (!anomalies.get(i).isTaken()) {
                             anomalies.get(i).setMarkedToBoom(true);
                             count++;

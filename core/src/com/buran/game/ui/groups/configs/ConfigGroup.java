@@ -218,7 +218,7 @@ public class ConfigGroup extends Group {
             }
         });
 
-        notifySlider.setPosition(Rules.WORLD_WIDTH - PaintConstants.PLAY_PAUSE_BUTTON_WIDTH / 2 - 25 - 42, Rules.WORLD_HEIGHT - 224);
+        notifySlider.setPosition(Rules.WORLD_WIDTH - PaintConstants.PLAY_PAUSE_BUTTON_WIDTH / 2 - 25 - Rules.SAFE_X + 1, Rules.WORLD_HEIGHT - Rules.SAFE_Y + 43 - 224);
         notifySlider.setWidth(50);
 
         verticalGroup.addActor(soundLine);
@@ -1159,8 +1159,8 @@ public class ConfigGroup extends Group {
             );
 
             notifySlider.setVisible(true);
-            table.setBounds(Rules.WORLD_WIDTH - PaintConstants.PLAY_PAUSE_BUTTON_WIDTH / 2 - PauseGroup.playPauseWidth / 2 - 43,
-                    Rules.WORLD_HEIGHT - 225 - PauseGroup.playPauseHeight, PauseGroup.playPauseWidth, PauseGroup.playPauseHeight);
+            table.setBounds(Rules.WORLD_WIDTH - PaintConstants.PLAY_PAUSE_BUTTON_WIDTH / 2 - PauseGroup.playPauseWidth / 2 - Rules.SAFE_X,
+                    Rules.WORLD_HEIGHT - Rules.SAFE_Y + 43 - 225 - PauseGroup.playPauseHeight, PauseGroup.playPauseWidth, PauseGroup.playPauseHeight);
         } else {
             notifySlider.setVisible(false);
         }

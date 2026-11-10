@@ -42,7 +42,7 @@ public class PlayerXP {
         this.scaleCircle = new RadialSprite(Assets.getInstance().getAtlas().findRegion(PaintConstants.XP_SCALE));
         this.standing = Standing.getInstance();
         this.position = new Vector2();
-        this.position.set(43, Rules.WORLD_HEIGHT - height - 43);
+        this.position.set(Rules.SAFE_X, Rules.WORLD_HEIGHT - height - Rules.SAFE_Y);
         this.font44 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT44, BitmapFont.class);
         this.font60_C = Assets.getInstance().getAssetManager().get(PaintConstants.FONT60_C, BitmapFont.class);
         this.font64 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT64, BitmapFont.class);
@@ -89,7 +89,7 @@ public class PlayerXP {
         font60_C.draw(
                 batch,
                 score, position.x + width / 2 - score.width / 2,
-                Rules.WORLD_HEIGHT - 225
+                Rules.WORLD_HEIGHT - Rules.SAFE_Y + 43 - 225
         );
         batch.setColor(tmpColor);
     }

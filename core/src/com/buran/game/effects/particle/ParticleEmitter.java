@@ -50,7 +50,7 @@ public class ParticleEmitter extends ObjectPool<ParticleEmitter.Particle> {
     }
 
     public void setup(float x, float y, float vx, float vy, float duration, float startSize, float endSize, float startR, float startG, float startB, float startA, float endR, float endG, float endB, float endA) {
-        getActiveElement().init(x, y, vx, vy, duration, startSize, endSize, startR, startG, startB, startA, startR, startG, startB, startA);
+        getActiveElement().init(x, y, vx, vy, duration, startSize, endSize, startR, startG, startB, startA, endR, endG, endB, endA);
     }
 
     public void setupFromPointToPoint(float x1, float y1, float x2, float y2, float size1, float size2, float r1, float g1, float b1, float a1, float r2, float g2, float b2, float a2) {

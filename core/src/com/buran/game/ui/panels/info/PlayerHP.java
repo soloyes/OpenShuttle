@@ -32,7 +32,7 @@ public class PlayerHP {
         this.iconWidth = PaintConstants.BURAN_ICON_WIDTH;
         this.iconHeight = PaintConstants.BURAN_ICON_HEIGHT;
         this.position = new Vector2();
-        this.position.set(Rules.WORLD_WIDTH / 2, Rules.WORLD_HEIGHT - 145);
+        this.position.set(Rules.WORLD_WIDTH / 2, Rules.WORLD_HEIGHT - Rules.SAFE_Y + 43 - 145);
         this.font44 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT44, BitmapFont.class);
         this.glyphLayout = new GlyphLayout();
         this.stringBuilder = new StringBuilder();

@@ -53,11 +53,13 @@ public final class Gamepad {
     private final Matrix4 savedMatrix = new Matrix4();
 
     private Controller controller;
+    private boolean pulse;
+    private float pulseCooldown;
     private final boolean[] prev = new boolean[Action.values().length];
     private final boolean[] now = new boolean[Action.values().length];
 
     private enum Action {
-        A, B, START, BACK, PREV, NEXT, UP, DOWN, LEFT, RIGHT, USE_ALT
+        A, B, START, BACK, PREV, NEXT, UP, DOWN, LEFT, RIGHT, USE_ALT, PULSE
     }
 
     public static Gamepad get() {
@@ -82,8 +84,14 @@ public final class Gamepad {
             ry = axis(m.axisRightY);
         }
 
+        pulse = false;
+        pulseCooldown = Math.max(0, pulseCooldown - dt);
         if (isFlight()) {
             cursorVisible = false;
+            if (pressed(Action.PULSE) && pulseCooldown <= 0) {
+                pulse = true;
+                pulseCooldown = Rules.PULSE_COOLDOWN;
+            }
             releaseCursor();
             updateFlight(lx, ly);
             if (pressed(Action.A) || pressed(Action.USE_ALT)) {
@@ -123,6 +131,7 @@ public final class Gamepad {
         now[Action.LEFT.ordinal()] = btn(c, m == null ? -1 : m.buttonDpadLeft);
         now[Action.RIGHT.ordinal()] = btn(c, m == null ? -1 : m.buttonDpadRight);
         // Right trigger also fires the selected item; on the standard mapping it is button 7.
+        now[Action.PULSE.ordinal()] = btn(c, m == null ? -1 : m.buttonY) || key(Input.Keys.F);
         now[Action.USE_ALT.ordinal()] = btn(c, m == null ? -1 : m.buttonR2) || btn(c, m == null ? -1 : m.buttonX);
     }
 
@@ -164,6 +173,21 @@ public final class Gamepad {
             steer.set(kx, ky).nor();
         }
         steering = steer.len2() > 0;
+    }
+
+    /** True for the single frame an EMP pulse is fired. */
+    public boolean isPulse() {
+        return pulse;
+    }
+
+    /** Whether this frame's pulse reaches the given world position. */
+    public static boolean pulseHits(Vector2 position) {
+        return INSTANCE.pulse && position.dst(com.buran.game.player.Buran.position) <= Rules.PULSE_RANGE;
+    }
+
+    /** True while a controller is the active input device. */
+    public boolean hasController() {
+        return controller != null;
     }
 
     /** True while the left stick (or arrow keys) asks the shuttle to fly somewhere. */

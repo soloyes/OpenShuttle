@@ -44,7 +44,7 @@ public class AnomalyTimer {
         this.glyphLayout = new GlyphLayout();
         this.color = new Color();
         this.position = new Vector2();
-        this.position.set(Rules.WORLD_WIDTH / 2 - width / 2, Rules.WORLD_HEIGHT - height / 2 - 43);
+        this.position.set(Rules.WORLD_WIDTH / 2 - width / 2, Rules.WORLD_HEIGHT - height / 2 - Rules.SAFE_Y);
     }
 
     public void render(SpriteBatch batch) {

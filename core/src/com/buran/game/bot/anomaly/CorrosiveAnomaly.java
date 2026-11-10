@@ -1,5 +1,6 @@
 package com.buran.game.bot.anomaly;
 
+import com.buran.game.input.Gamepad;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -131,10 +132,10 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         scaleAndBorn(dt);
 
         if (born) {
-            if (Gdx.input.isTouched() && !Rules.GAME_OVER && Profiles.getSettings().isChild()) {
+            if (!Rules.GAME_OVER && Profiles.getSettings().isChild() && (Gdx.input.isTouched() || Gamepad.pulseHits(position))) {
                 tmp.set(Gdx.input.getX(), Gdx.input.getY());
                 ScreenManager.getInstance().getViewport().unproject(tmp);
-                if (tmp.dst(position) < PaintConstants.ANOMALY_CORROSIVE_WIDTH) {
+                if (Gamepad.pulseHits(position) || (Gdx.input.isTouched() && tmp.dst(position) < PaintConstants.ANOMALY_CORROSIVE_WIDTH)) {
                     hungry = false;
                     touched = true;
                     if (!taken) {

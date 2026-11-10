@@ -50,10 +50,10 @@ public class BoundCheck {
         if (!rectangle.contains(Buran.position)) {
             checkCount(dt);
             playerOnScreen = false;
-            if (Buran.position.x >= Rules.SPACE_WIDTH + 2 * Rules.WORLD_WIDTH ||
-                    Buran.position.x <= -2 * Rules.WORLD_WIDTH ||
-                    Buran.position.y >= Rules.SPACE_HEIGHT + Rules.WORLD_HEIGHT ||
-                    Buran.position.y <= -Rules.WORLD_HEIGHT) {
+            if (Buran.position.x >= Rules.SPACE_WIDTH + 1.5f * Rules.VIEW_WIDTH ||
+                    Buran.position.x <= -1.5f * Rules.VIEW_WIDTH ||
+                    Buran.position.y >= Rules.SPACE_HEIGHT + 1.5f * Rules.VIEW_HEIGHT ||
+                    Buran.position.y <= -1.5f * Rules.VIEW_HEIGHT) {
                 Standing.getInstance().changeHP(-Standing.getInstance().getHp());
                 CloudSky.bcDx = 0.0f;
                 CloudSky.mcDx = 0.0f;
@@ -131,9 +131,9 @@ public class BoundCheck {
     public boolean checkAndHandleBoundsInCamera(AbstractPoolable poolable) {
         Camera camera = ScreenManager.getInstance().getViewport().getCamera();
         rectangle.set(
-                camera.position.x - Rules.WORLD_WIDTH / 2,
-                camera.position.y - Rules.WORLD_HEIGHT / 2,
-                Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT
+                camera.position.x - Rules.VIEW_WIDTH / 2f,
+                camera.position.y - Rules.VIEW_HEIGHT / 2f,
+                Rules.VIEW_WIDTH, Rules.VIEW_HEIGHT
         );
         return rectangle.contains(poolable.getPosition());
     }
