@@ -60,12 +60,14 @@ public class Star {
 
     public void update(float dt) {
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
-            position.x -= Buran.velocity.x / (1000 / scaleX);
-            position.y -= Buran.velocity.y / (1000 / scaleX);
+            // Tuned per frame at 60 FPS; scale by dt so high refresh rates match.
+            float f = dt * 60f;
+            position.x -= Buran.velocity.x / (1000 / scaleX) * f;
+            position.y -= Buran.velocity.y / (1000 / scaleX) * f;
             if (normal.set(Buran.velocity).len() < 150) {
                 normal.set(Buran.velocity).nor();
-                position.x -= 0.1 * normal.x * scaleX;
-                position.y -= 0.1 * normal.y * scaleX;
+                position.x -= 0.1 * normal.x * scaleX * f;
+                position.y -= 0.1 * normal.y * scaleX * f;
             }
         } else {
             if (dt > 1) dt = 1;

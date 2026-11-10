@@ -15,6 +15,7 @@ public class AstronautEmitter extends AbstractConsumableEmitter {
 
     public AstronautEmitter(ParticleEmitter particleEmitter) {
         this(Astronaut.class, particleEmitter);
+        emitted = 0;
         super.setRespawnTime(Rules.CONSUMABLE_ASTRONAUT_RESPAWN_TIME);
         super.setConsumablesAtStart(Rules.CONSUMABLE_ASTRONAUT_AT_START);
         super.setConsumablesMaxCount(Rules.CONSUMABLE_ASTRONAUT_MAX_COUNT);

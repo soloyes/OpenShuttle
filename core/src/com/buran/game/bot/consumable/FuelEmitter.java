@@ -18,6 +18,8 @@ public class FuelEmitter extends AbstractConsumableEmitter {
 
     public FuelEmitter(ParticleEmitter particleEmitter) {
         this(Fuel.class, particleEmitter);
+        emitted = 0;
+        emittedGolden = 0;
         super.setRespawnTime(Rules.CONSUMABLE_FUEL_RESPAWN_TIME);
         super.setConsumablesAtStart(Rules.CONSUMABLE_FUEL_AT_START);
         super.setConsumablesMaxCount(Rules.CONSUMABLE_FUEL_MAX_COUNT);

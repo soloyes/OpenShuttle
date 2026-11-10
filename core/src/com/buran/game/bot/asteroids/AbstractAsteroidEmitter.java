@@ -26,6 +26,8 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
     @Setter
     private int asteroidsMaxCount;
     private boolean boom;
+    private final com.badlogic.gdx.utils.Array<Vector2> pendingBooms = new com.badlogic.gdx.utils.Array<Vector2>();
+    private final com.badlogic.gdx.utils.Array<PlayerInteractionLevels> pendingRanges = new com.badlogic.gdx.utils.Array<PlayerInteractionLevels>();
     private Vector2 tmp1V2;
     private Vector2 position;
     private Vector2 destination;
@@ -43,6 +45,7 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
         this.destination = new Vector2();
         this.tmp1V2 = new Vector2();
         this.particleEmitter = particleEmitter;
+        emitted = 0;
     }
 
     @Override
@@ -50,9 +53,9 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
 
     @Override
     public void boom(Vector2 position, PlayerInteractionLevels range) {
-        this.range = range;
-        this.count = range.getFragmentAsteroidCount();
-        this.position.set(position);
+        // Several asteroids can burst in one frame; queue them all instead of keeping the last.
+        pendingBooms.add(new Vector2(position));
+        pendingRanges.add(range);
         this.boom = true;
     }
 
@@ -74,10 +77,18 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
         }
 
         if (boom) {
-            for (int i = 0; i < MathUtils.random(2 * count, 4 * count); i++) {
-                scale = size = range.getSize();
-                createFragment();
+            for (int b = 0; b < pendingBooms.size; b++) {
+                this.range = pendingRanges.get(b);
+                this.count = range.getFragmentAsteroidCount();
+                this.position.set(pendingBooms.get(b));
+                int fragments = MathUtils.random((int) (2 * count), (int) (4 * count));
+                for (int i = 0; i < fragments; i++) {
+                    scale = size = range.getSize();
+                    createFragment();
+                }
             }
+            pendingBooms.clear();
+            pendingRanges.clear();
             boom = false;
         }
 

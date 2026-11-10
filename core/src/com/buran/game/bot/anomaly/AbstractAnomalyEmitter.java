@@ -32,6 +32,8 @@ public abstract class AbstractAnomalyEmitter extends ObjectPool<AbstractAnomaly>
     AbstractAnomalyEmitter(Class<? extends AbstractAnomaly> clazz, ParticleEmitter particleEmitter) {
         super(clazz);
         this.particleEmitter = particleEmitter;
+        // Emitters are rebuilt for every game; the shared counter feeds "effectiveness".
+        emitted = 0;
     }
 
     protected abstract AbstractAnomaly newObject();

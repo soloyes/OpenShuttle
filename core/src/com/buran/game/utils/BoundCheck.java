@@ -35,9 +35,8 @@ public class BoundCheck {
     }
 
     public static void avoidPosition(Vector2 from, Vector2 to, int near, int x1, int x2, int y1, int y2) {
-        Vector2 tmp = from.cpy();
-        while (tmp.sub(to).len() <= near) {
-            //Prevent generation near given position
+        //Prevent generation near given position
+        while (from.dst(to) <= near) {
             to.set(MathUtils.random(x1, x2), MathUtils.random(y1, y2));
         }
     }

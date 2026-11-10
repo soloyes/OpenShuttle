@@ -18,6 +18,11 @@ public class PrettySound {
         this.delay = delay;
     }
 
+    /** Forget the previous game's throttles (the list is static). */
+    public static void clear() {
+        list.clear();
+    }
+
     public static PrettySound getPretty(float delay) {
         PrettySound p = new PrettySound(delay);
         list.add(p);

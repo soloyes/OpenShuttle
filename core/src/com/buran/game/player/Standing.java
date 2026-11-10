@@ -285,6 +285,10 @@ public final class Standing {
     }
 
     public void changeHP(float amount) {
+        if (Rules.GAME_OVER) {
+            // The ship keeps updating under the game-over screen; it must not lose more lives.
+            return;
+        }
         hp += amount;
         if (hp > maxHp) {
             hp = maxHp;
@@ -313,7 +317,8 @@ public final class Standing {
 
     public void changeLives(int amount) {
         lives += amount;
-        if (lives == 0) {
+        if (lives <= 0) {
+            lives = 0;
             Rules.GAME_OVER = true;
         } else {
             if (amount < 0) {

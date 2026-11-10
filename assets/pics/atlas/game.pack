@@ -1,7 +1,7 @@
 
 images1.png
 format: RGBA8888
-filter: Linear,Linear
+filter: MipMapLinearLinear,Linear
 repeat: none
 radiation
   rotate: false

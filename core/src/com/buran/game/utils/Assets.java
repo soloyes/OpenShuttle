@@ -1,6 +1,8 @@
 package com.buran.game.utils;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -170,7 +172,11 @@ public class Assets {
      * so the web build does not need FreeType.
      */
     private void createStandardFont(int size, String font, String postfix) {
-        assetManager.load(font + size + postfix + ".fnt", BitmapFont.class);
+        // Fonts are drawn scaled (1920-high world onto the real screen); Nearest made them jagged.
+        BitmapFontLoader.BitmapFontParameter p = new BitmapFontLoader.BitmapFontParameter();
+        p.minFilter = Texture.TextureFilter.Linear;
+        p.magFilter = Texture.TextureFilter.Linear;
+        assetManager.load(font + size + postfix + ".fnt", BitmapFont.class, p);
     }
 
     public void makeLinks() {

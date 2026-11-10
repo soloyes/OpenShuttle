@@ -35,6 +35,9 @@ public class CircleRenderer {
 
     public CircleRenderer() {
         this.shapeRenderer = new ShapeRenderer();
+        freeze = false;
+        scan = false;
+        scanRender = false;
         shapeRenderer.setColor(Color.DARK_GRAY);
         anomalyJoiner = ListOfListsJoiner.newAbstractAnomalyList(
                 ((CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class)).getActiveList(),
@@ -42,6 +45,10 @@ public class CircleRenderer {
                 ((MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class)).getActiveList(),
                 ((ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class)).getActiveList())
         ;
+    }
+
+    public void dispose() {
+        shapeRenderer.dispose();
     }
 
     public void render(Camera camera) {

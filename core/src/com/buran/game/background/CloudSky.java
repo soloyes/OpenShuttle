@@ -95,12 +95,14 @@ public class CloudSky {
 
     public void update(float dt) {
         if (ScreenManager.getInstance().getCurrentScreen() == ScreenManager.ScreenType.GAME) {
-            bcDx += Buran.velocity.x / 1200;
-            bcDy += Buran.velocity.y / 1200;
+            // Tuned per frame at 60 FPS; scale by dt so 120/144 Hz screens scroll the same.
+            float f = dt * 60f;
+            bcDx += Buran.velocity.x / 1200 * f;
+            bcDy += Buran.velocity.y / 1200 * f;
             if (normal.set(Buran.velocity).len() < 150) {
                 normal.set(Buran.velocity).nor();
-                bcDx += 0.1 * normal.x;
-                bcDy += 0.1 * normal.y;
+                bcDx += 0.1 * normal.x * f;
+                bcDy += 0.1 * normal.y * f;
             }
             if (bcDx > (bcW + 1) * bcWidth ) {
                 bcDx = bcDx % ( (bcW + 1) * bcWidth );

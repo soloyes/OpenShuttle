@@ -20,6 +20,11 @@ import java.util.List;
 public class DeathMode {
     private static float maxCountTime;
 
+    /** Grows a cap by the death-mode factor, at least by one (caps of 1-2 never grew with plain truncation). */
+    private static int grow(int max) {
+        return Math.max(max + 1, Math.round(max * Rules.DEATH_MODE_MAX_COUNT_TIME_FACTOR));
+    }
+
     private static void corrosiveAnomalyRespawnTime() {
         ((CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class)).setRespawnTime(Rules.DEATH_MODE_RESPAWN_TIME_FACTOR);
     }
@@ -37,19 +42,19 @@ public class DeathMode {
     }
 
     private static int corrosiveAnomalyMaxCount() {
-        return (int) (((CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class)).getAnomaliesMaxCount() * Rules.DEATH_MODE_MAX_COUNT_TIME_FACTOR);
+        return grow(((CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class)).getAnomaliesMaxCount());
     }
 
     private static int radiationAnomalyMaxCount() {
-        return (int) (((RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class)).getAnomaliesMaxCount() * Rules.DEATH_MODE_MAX_COUNT_TIME_FACTOR);
+        return grow(((RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class)).getAnomaliesMaxCount());
     }
 
     private static int magneticAnomalyMaxCount() {
-        return (int) (((MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class)).getAnomaliesMaxCount() * Rules.DEATH_MODE_MAX_COUNT_TIME_FACTOR);
+        return grow(((MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class)).getAnomaliesMaxCount());
     }
 
     private static int electricAnomalyMaxCount() {
-        return (int) (((ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class)).getAnomaliesMaxCount() * Rules.DEATH_MODE_MAX_COUNT_TIME_FACTOR);
+        return grow(((ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class)).getAnomaliesMaxCount());
     }
 
     public static float corrosiveAnomalyVelocity() {
@@ -86,6 +91,7 @@ public class DeathMode {
 
     public static void activate() {
         Rules.DEATH_MODE = true;
+        maxCountTime = 0.0f;
         abstractAnomalyDeactivate(((CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class)).getActiveList());
         abstractAnomalyDeactivate(((RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class)).getActiveList());
         abstractAnomalyDeactivate(((MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class)).getActiveList());

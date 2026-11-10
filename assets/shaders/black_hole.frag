@@ -1,15 +1,19 @@
 #ifdef GL_ES
     #define LOWP lowp
-    precision highp float;
+    #ifdef GL_FRAGMENT_PRECISION_HIGH
+        precision highp float;
+    #else
+        precision mediump float;
+    #endif
 #else
     #define LOWP
 #endif
 varying vec2 v_texCoord0;
 varying vec4 v_color;
 uniform LOWP sampler2D u_texture;
-uniform LOWP vec2 center;
-uniform LOWP float time;
-uniform LOWP float dmax;
+uniform vec2 center;
+uniform float time;
+uniform float dmax;
 uniform float isGrey;
 uniform vec2 resolution;
 

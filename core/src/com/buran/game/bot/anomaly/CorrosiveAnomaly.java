@@ -81,6 +81,9 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         }
         this.born = false;
         this.color.a = PaintConstants.ANOMALY_CORROSIVE_GLOW_OSCILLATOR_MAX;
+        // Pooled objects keep old fields: start every spawn from level 0 and a fresh life.
+        this.level = 0;
+        this.liveTime = 0.0f;
         float rnd = MathUtils.random(0.0f, 1.0f);
         for (int i = probabilities.length - 1; i > 0; i--) {
             if (rnd < probabilities[i]) {
@@ -167,7 +170,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                     boomBox.playSound(MSConstants.SPLASH_ANOMALY);
                     Vibrator.vibrateGame(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY);
                     int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.COMMANDER.getCoefficient());
-                    Standing.getInstance().changeScore(Rules.ANOMALIES_BASE_SCORE_ADD, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
+                    Standing.getInstance().changeScore(score, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
                     Standing.getInstance().addToStatistics(this.type, this.level);
                 }
             }

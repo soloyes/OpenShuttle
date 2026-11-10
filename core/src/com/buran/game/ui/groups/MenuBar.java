@@ -264,6 +264,8 @@ public class MenuBar extends Group {
             }
         });
 
+        // A browser tab cannot close itself (Gdx.app.exit() is a no-op on the web).
+        buttonExit.setVisible(Gdx.app.getType() != com.badlogic.gdx.Application.ApplicationType.WebGL);
         this.addActor(buttonExit);
         this.addActor(buttonPlay);
         this.addActor(buttonSettings);
