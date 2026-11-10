@@ -24,39 +24,31 @@ public class MenuHero extends Group {
     private float astronautX;
     private float astronautY;
 
-    public MenuHero() {
+    private final MainMenu menu;
+
+    public MenuHero(MainMenu menu) {
+        this.menu = menu;
         setName(GroupType.MENU_BACKGROUND.name());
         buran = Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_BURAN);
         shield = Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_SHIELD);
         astronaut = Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT);
-        baseX = Rules.WORLD_WIDTH * 0.74f;
-        baseY = Rules.WORLD_HEIGHT * 0.5f;
+        // Landscape: right third. Portrait: between the title and the menu.
+        baseX = Theme.portrait() ? Rules.WORLD_WIDTH * 0.55f : Rules.WORLD_WIDTH * 0.74f;
+        baseY = Theme.portrait() ? Rules.WORLD_HEIGHT * 0.60f : Rules.WORLD_HEIGHT * 0.5f;
         astronautX = Rules.WORLD_WIDTH * 0.55f;
         astronautY = Rules.WORLD_HEIGHT * 0.78f;
     }
 
     private float fade = 1f;
 
-    /** True while a menu panel (settings, results, info, rules) is open over the scene. */
     private boolean panelOpen() {
-        if (getStage() == null) {
-            return false;
-        }
-        for (com.badlogic.gdx.scenes.scene2d.Actor a : getStage().getActors()) {
-            String n = a.getName();
-            if (a.isVisible() && n != null && (n.equals(GroupType.CONFIG.name()) || n.equals(GroupType.RESULTS.name())
-                    || n.equals(GroupType.RESULTS_DETAILED.name()) || n.equals(GroupType.INFO.name())
-                    || n.equals(GroupType.RULES.name()))) {
-                return true;
-            }
-        }
-        return false;
+        return menu != null && menu.isPanelOpen();
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
-        float target = panelOpen() ? 0.12f : 1f;
+        float target = panelOpen() ? (Theme.portrait() ? 0f : 0.12f) : 1f;
         fade += (target - fade) * Math.min(1f, delta * 6f);
         time += delta;
         astronautX += 14f * delta;
@@ -81,7 +73,7 @@ public class MenuHero extends Group {
                 PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_WIDTH, PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT,
                 as, as, time * 9f);
 
-        float scale = 2.1f;
+        float scale = Theme.portrait() ? 1.45f : 2.1f;
         float bob = MathUtils.sin(time * 0.9f) * 22f;
         float tilt = MathUtils.sin(time * 0.45f) * 3f;
         float bw = PaintConstants.UI_MENU_BACKGROUND_BURAN_WIDTH;
