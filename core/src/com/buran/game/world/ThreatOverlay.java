@@ -184,7 +184,7 @@ public final class ThreatOverlay {
             }
             float dx = a.getPosition().x - cx;
             float dy = a.getPosition().y - cy;
-            if (Math.abs(dx) < vw / 2f && Math.abs(dy) < vh / 2f) {
+            if (EdgeMarker.inView(dx, dy, 0f)) {
                 continue;
             }
             float dist = a.getPosition().dst(Buran.position);
@@ -195,7 +195,7 @@ public final class ThreatOverlay {
         for (Shelters.Shelter s : Shelters.all()) {
             float dx = s.position.x - cx;
             float dy = s.position.y - cy;
-            if (Math.abs(dx) < vw / 2f + Shelters.RADIUS && Math.abs(dy) < vh / 2f + Shelters.RADIUS) {
+            if (EdgeMarker.inView(dx, dy, Shelters.RADIUS)) {
                 continue;
             }
             EdgeMarker.draw(batch, tx, font, tx.dome, dx, dy, s.position.dst(Buran.position),
@@ -206,18 +206,10 @@ public final class ThreatOverlay {
 
     private void edgeMarker(SpriteBatch batch, float dx, float dy, float scale, float size, Color c, float alpha,
                             boolean chevron) {
-        float W = Rules.WORLD_WIDTH;
-        float H = Rules.WORLD_HEIGHT;
-        float mx = Rules.SAFE_X + 90f;
-        float my = Rules.SAFE_Y + 90f;
-        float hx = W / 2f - mx;
-        float hy = H / 2f - my;
-        float sx = dx * scale;
-        float sy = dy * scale;
-        float k = Math.min(hx / Math.max(Math.abs(sx), 0.001f), hy / Math.max(Math.abs(sy), 0.001f));
-        float px = W / 2f + sx * k;
-        float py = H / 2f + sy * k;
-        float ang = MathUtils.atan2(sy, sx) * MathUtils.radiansToDegrees;
+        float[] p = EdgeMarker.project(dx, dy, 90f);
+        float px = p[0];
+        float py = p[1];
+        float ang = p[2] * MathUtils.radiansToDegrees;
         batch.setColor(c.r, c.g, c.b, alpha);
         if (chevron) {
             batch.draw(tx.chevron, px - size / 2f, py - size / 2f, size / 2f, size / 2f, size, size, 1f, 1f, ang,

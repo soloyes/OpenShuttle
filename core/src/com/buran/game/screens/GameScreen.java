@@ -649,7 +649,9 @@ public class GameScreen extends BaseScreen {
                     .limit(Math.min(Rules.VIEW_WIDTH, Rules.VIEW_HEIGHT) * Rules.CAMERA_LOOK_AHEAD_MAX);
             float k = 1.0f - (float) Math.exp(-Rules.CAMERA_FOLLOW_RATE * dt);
             cameraHelper.position.x += (Buran.position.x + lookAhead.x - cameraHelper.position.x) * k;
-            cameraHelper.position.y += (Buran.position.y + lookAhead.y - cameraHelper.position.y) * k;
+            // Centre the ship in the window above the console, not in the whole screen.
+            float lift = Rules.hudFraction() * Rules.VIEW_HEIGHT / 2f;
+            cameraHelper.position.y += (Buran.position.y - lift + lookAhead.y - cameraHelper.position.y) * k;
             camera.position.set(cameraHelper.position);
         }
         cameraUpdater(cameraHelper);
@@ -951,16 +953,22 @@ public class GameScreen extends BaseScreen {
         ((OrthographicCamera) camera).zoom = Rules.VIEW_ZOOM;
         float halfW = Rules.VIEW_WIDTH / 2f;
         float halfH = Rules.VIEW_HEIGHT / 2f;
+        // The world is seen through the window above the console: from the camera centre the
+        // window reaches halfH up and (halfH - console) down.
+        float console = Rules.hudFraction() * Rules.VIEW_HEIGHT;
+        float down = halfH - console;
         // Stay mostly inside the map, but peek a quarter view past the edge so the border is seen...
         float peekX = Rules.VIEW_WIDTH * 0.25f;
-        float peekY = Rules.VIEW_HEIGHT * 0.25f;
+        float peekY = (Rules.VIEW_HEIGHT - console) * 0.25f;
         camera.position.x = MathUtils.clamp(camera.position.x, halfW - peekX, Rules.SPACE_WIDTH - halfW + peekX);
-        camera.position.y = MathUtils.clamp(camera.position.y, halfH - peekY, Rules.SPACE_HEIGHT - halfH + peekY);
-        // ...but never lose the ship: past the edge the camera follows it out.
+        camera.position.y = MathUtils.clamp(camera.position.y, down - peekY, Rules.SPACE_HEIGHT - halfH + peekY);
+        // ...but never lose the ship: past the edge the camera follows it out, inside the window.
         float marginX = halfW * 0.6f;
-        float marginY = halfH * 0.6f;
+        float windowHalf = (Rules.VIEW_HEIGHT - console) / 2f;
+        float windowCentre = console / 2f;
         camera.position.x = MathUtils.clamp(camera.position.x, Buran.position.x - marginX, Buran.position.x + marginX);
-        camera.position.y = MathUtils.clamp(camera.position.y, Buran.position.y - marginY, Buran.position.y + marginY);
+        camera.position.y = MathUtils.clamp(camera.position.y,
+                Buran.position.y - windowCentre - windowHalf * 0.6f, Buran.position.y - windowCentre + windowHalf * 0.6f);
         camera.update();
     }
 

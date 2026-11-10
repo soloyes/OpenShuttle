@@ -179,6 +179,18 @@ public class SelectorGroup extends Group {
         return selectors.size() == 0 ? null : centerSelector;
     }
 
+    /** What LB would select (null when there is nothing else to switch to). */
+    public Selector getPrevious() {
+        int n = selectors.size();
+        return n < 3 ? null : selectors.get((select - 1 + n) % n);
+    }
+
+    /** What RB would select. */
+    public Selector getNext() {
+        int n = selectors.size();
+        return n < 2 ? null : selectors.get((select + 1) % n);
+    }
+
     public int getSelectorCount() {
         return selectors.size();
     }

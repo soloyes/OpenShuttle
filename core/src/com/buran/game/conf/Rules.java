@@ -51,6 +51,16 @@ public final class Rules {
     /** Title-safe inset for HUD on TVs (set from the world size at start). */
     public static int SAFE_X = 43;
     public static int SAFE_Y = 43;
+    /**
+     * Top of the instrument console in UI units (1920 high); 0 when there is none (touch).
+     * The world is seen through the "window" above it: camera, edge markers and cards use it.
+     */
+    public static float HUD_BOTTOM = 0f;
+
+    /** Share of the screen height taken by the console. */
+    public static float hudFraction() {
+        return HUD_BOTTOM / WORLD_HEIGHT;
+    }
     /** EMP pulse (gamepad Y / keyboard F): replaces tapping an anomaly on touch screens. */
     public static final float PULSE_RANGE = 700.0f;
     public static final float PULSE_COOLDOWN = 2.0f;

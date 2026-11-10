@@ -305,6 +305,7 @@ public final class SectorRun {
             String shown = sector.briefing.substring(0, n) + ((((int) (time * 2.5f)) % 2 == 0 || n < sector.briefing.length()) ? "_" : "");
             layout.setText(font, sector.briefing, Theme.DIM, w - 80f, Align.left, true);
             h = layout.height + 240f;
+            y = Math.max(y, com.buran.game.world.EdgeMarker.bottomEdge() + h + 130f);
             Theme.frame(batch, x, y - h, w, h, a);
             Color old = font.getColor().cpy();
             font.setColor(Theme.TEXT.r, Theme.TEXT.g, Theme.TEXT.b, a);
@@ -314,6 +315,7 @@ public final class SectorRun {
         } else {
             // No text: a live signal meter while the voice is on the air.
             h = 300f;
+            y = Math.max(y, com.buran.game.world.EdgeMarker.bottomEdge() + h + 130f);
             Theme.frame(batch, x, y - h, w, h, a);
             boolean onAir = com.buran.game.platform.Radio.isPlaying();
             int bars = 48;
@@ -351,7 +353,7 @@ public final class SectorRun {
             }
             float dx = a.getPosition().x - cam.position.x;
             float dy = a.getPosition().y - cam.position.y;
-            if (Math.abs(dx) < Rules.VIEW_WIDTH / 2f && Math.abs(dy) < Rules.VIEW_HEIGHT / 2f) {
+            if (com.buran.game.world.EdgeMarker.inView(dx, dy, 0f)) {
                 continue;
             }
             com.buran.game.world.EdgeMarker.draw(batch, tx, font, tx.dot, dx, dy,
@@ -362,7 +364,7 @@ public final class SectorRun {
     private void edgeMarker(SpriteBatch batch, Camera cam, ThreatTextures tx, BitmapFont font) {
         float dx = beacon.x - cam.position.x;
         float dy = beacon.y - cam.position.y;
-        if (Math.abs(dx) < Rules.VIEW_WIDTH / 2f && Math.abs(dy) < Rules.VIEW_HEIGHT / 2f) {
+        if (com.buran.game.world.EdgeMarker.inView(dx, dy, 0f)) {
             return;
         }
         float pulse = 0.7f + 0.3f * MathUtils.sin(time * 4f);

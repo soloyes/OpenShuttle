@@ -45,6 +45,172 @@ public class TelemetryHud {
         big = Theme.font(portrait ? 72 : 96);
         lifeIcon = Assets.getInstance().getAtlas().findRegion(PaintConstants.BURAN_ICON);
         touch = Gdx.input.isPeripheralAvailable(Input.Peripheral.MultitouchScreen);
+        small = Theme.font(32);
+        Rules.HUD_BOTTOM = touch ? 0f : Rules.SAFE_Y + CONSOLE_H + 24f;
+    }
+
+    // ------------------------------------------------------------------ console (TV / PC)
+
+    /** Height of the instrument console, UI units. */
+    private static final float CONSOLE_H = 300f;
+    private static final Color BODY = new Color(0.075f, 0.098f, 0.14f, 0.96f);
+    private static final Color BODY_LO = new Color(0.04f, 0.055f, 0.08f, 0.96f);
+    private static final Color EDGE = Color.valueOf("2a3647ff");
+    private static final Color TRACK = Color.valueOf("0a0f16ff");
+    private static final Color HEAD = Color.valueOf("6b7c93ff");
+    private static final Color CARGO = Color.valueOf("ffb547ff");
+    private final BitmapFont small;
+
+    /**
+     * One physical instrument panel along the bottom: life support | cargo drum | propulsion.
+     * The step progress runs along its top edge. Always present, like a real console;
+     * only the values and alerts move.
+     */
+    private void console(SpriteBatch batch, Standing st, boolean blink) {
+        float W = Rules.WORLD_WIDTH;
+        float x0 = Rules.SAFE_X;
+        float y0 = Rules.SAFE_Y;
+        float w = W - 2f * Rules.SAFE_X;
+        float h = CONSOLE_H;
+        // Body: darker lower half, a highlight line on top, a hairline frame.
+        int bands = 12;
+        for (int i = 0; i < bands; i++) {
+            float t = i / (float) (bands - 1);
+            tmp.set(BODY_LO).lerp(BODY, t);
+            Theme.rect(batch, x0, y0 + h * i / bands, w, h / bands + 1f, tmp, 1f);
+        }
+        Theme.rect(batch, x0, y0 + h - 2f, w, 2f, EDGE, 1f);
+        Theme.rect(batch, x0, y0, w, 2f, EDGE, 1f);
+        Theme.rect(batch, x0, y0, 2f, h, EDGE, 1f);
+        Theme.rect(batch, x0 + w - 2f, y0, 2f, h, EDGE, 1f);
+        // Step progress along the top edge.
+        int step = st.getPlayingLevel();
+        float progress = step >= 19 ? 1f : stepProgress(st);
+        Theme.rect(batch, x0, y0 + h, w * progress, 4f, step >= 19 ? ALERT : CARGO, 0.9f);
+        float sec = w / 3f;
+        Theme.rect(batch, x0 + sec, y0 + 18f, 2f, h - 36f, EDGE, 1f);
+        Theme.rect(batch, x0 + 2f * sec, y0 + 18f, 2f, h - 36f, EDGE, 1f);
+        float pad = 44f;
+        float headY = y0 + h - 30f;
+
+        // ---- life support
+        float lx = x0 + pad;
+        float lw = sec - 2f * pad;
+        textL(batch, small, "LIFE SUPPORT", lx, headY, HEAD);
+        Color scoreColor = st.isScoreAlertRadiationAnomaly() && blink ? ALERT : HEAD;
+        textR(batch, small, "SCORE  " + formatScore(st.getScoreView()), lx + lw, headY, scoreColor);
+        bar(batch, "SHIELD", st.getLifeShield(), st.getMaxLifeShield(), SHIELD, lx, headY - 62f, lw, false);
+        bar(batch, "HULL", st.getHp(), st.getMaxHp(), HULL, lx, headY - 160f, lw, st.isHpAlert() && blink);
+
+        // ---- propulsion (mirror)
+        float rx = x0 + 2f * sec + pad;
+        String pause = com.buran.game.input.Gamepad.get().hasController() ? "B  -  PAUSE" : "ESC  -  PAUSE";
+        textL(batch, small, pause, rx, headY, HEAD);
+        textR(batch, small, "PROPULSION", rx + lw, headY, HEAD);
+        boolean fuelAlert = (st.isFuelAlertOutOfBounds() || st.isFuelAlertMagneticAnomaly() || st.getFuel() < st.getMaxFuel() * 0.2f) && blink;
+        bar(batch, "FUEL", st.getFuel(), st.getMaxFuel(), FUEL, rx, headY - 62f, lw, fuelAlert);
+        if (!Buran.isLaser && st.getLaserChargeLevel() <= 0f) {
+            textL(batch, label, "LASER", rx, headY - 160f, LASER);
+            textR(batch, label, "OFFLINE", rx + lw, headY - 160f, HEAD);
+            track(batch, rx, headY - 160f - label.getLineHeight() - 6f, lw, 0f, LASER);
+        } else {
+            bar(batch, "LASER", st.getLaserChargeLevel(), st.getMaxLaserChargeLevel(), LASER, rx, headY - 160f, lw, false);
+        }
+
+        // ---- cargo drum
+        float cx = x0 + 1.5f * sec;
+        String stepText = step >= 19 ? "COLLAPSE" : "STEP " + pad2(step) + " / 19";
+        layout.setText(small, "CARGO");
+        textL(batch, small, "CARGO", cx - sec / 2f + pad, headY, HEAD);
+        textR(batch, small, stepText, cx + sec / 2f - pad, headY, step >= 19 ? ALERT : HEAD);
+        SelectorGroup sg = SelectorGroup.getInstance();
+        Selector cur = sg.getCenter();
+        float big = 176f;
+        float side = 112f;
+        float by = y0 + 36f;
+        float gap = 70f;
+        slot(batch, sg.getPrevious(), cx - big / 2f - gap - side, by + (big - side) / 2f + 14f, side, 0.45f);
+        slot(batch, sg.getNext(), cx + big / 2f + gap, by + (big - side) / 2f + 14f, side, 0.45f);
+        if (sg.getPrevious() != null) {
+            textC(batch, small, "< LB", cx - big / 2f - gap - side / 2f, by + 22f, HEAD);
+        }
+        if (sg.getNext() != null) {
+            textC(batch, small, "RB >", cx + big / 2f + gap + side / 2f, by + 22f, HEAD);
+        }
+        // Current: a lit frame.
+        float bx = cx - big / 2f;
+        float byy = by + 14f;
+        Theme.rect(batch, bx, byy, big, big, TRACK, 1f);
+        Color frame = cur == null ? EDGE : CARGO;
+        Theme.rect(batch, bx, byy, big, 3f, frame, 1f);
+        Theme.rect(batch, bx, byy + big - 3f, big, 3f, frame, 1f);
+        Theme.rect(batch, bx, byy, 3f, big, frame, 1f);
+        Theme.rect(batch, bx + big - 3f, byy, 3f, big, frame, 1f);
+        if (cur == null) {
+            textC(batch, small, "EMPTY", cx, byy + big / 2f + small.getCapHeight() / 2f, HEAD);
+        } else {
+            float a = cur.isActive() ? 1f : 0.4f;
+            TextureRegion r = cur.getTextureRegion();
+            if (r != null) {
+                batch.setColor(1f, 1f, 1f, a);
+                batch.draw(r, bx + 26f, byy + 26f, big - 52f, big - 52f);
+                batch.setColor(Color.WHITE);
+            }
+            textR(batch, small, "x" + cur.getCount(), bx + big - 12f, byy + small.getLineHeight() - 4f, Theme.TEXT);
+            textC(batch, small, cur.isActive() ? "A  -  " + cur.getSticker().name() : "RECHARGING",
+                    cx, byy + big + small.getLineHeight() - 2f, cur.isActive() ? CARGO : HEAD);
+        }
+    }
+
+    private void slot(SpriteBatch batch, Selector s, float x, float y, float size, float a) {
+        if (s == null) {
+            return;
+        }
+        Theme.rect(batch, x, y, size, size, TRACK, 1f);
+        Theme.rect(batch, x, y, size, 2f, EDGE, 1f);
+        Theme.rect(batch, x, y + size - 2f, size, 2f, EDGE, 1f);
+        Theme.rect(batch, x, y, 2f, size, EDGE, 1f);
+        Theme.rect(batch, x + size - 2f, y, 2f, size, EDGE, 1f);
+        TextureRegion r = s.getTextureRegion();
+        if (r != null) {
+            batch.setColor(1f, 1f, 1f, a);
+            batch.draw(r, x + 16f, y + 16f, size - 32f, size - 32f);
+            batch.setColor(Color.WHITE);
+        }
+    }
+
+    /** Label and value on one line, a solid bar in a dark track under it. */
+    private void bar(SpriteBatch batch, String name, float v, float max, Color c, float x, float y, float w, boolean alert) {
+        float p = max <= 0 ? 0f : MathUtils.clamp(v / max, 0f, 1f);
+        textL(batch, label, name, x, y, alert ? ALERT : c);
+        textR(batch, label, Math.round(v) + " / " + Math.round(max), x + w, y, alert ? ALERT : Theme.TEXT);
+        track(batch, x, y - label.getLineHeight() - 6f, w, p, alert ? ALERT : c);
+    }
+
+    private void track(SpriteBatch batch, float x, float y, float w, float p, Color c) {
+        float h = 22f;
+        Theme.rect(batch, x, y - h, w, h, TRACK, 1f);
+        Theme.rect(batch, x, y - h, w, 2f, EDGE, 1f);
+        Theme.rect(batch, x, y - 2f, w, 2f, EDGE, 1f);
+        if (p > 0f) {
+            Theme.rect(batch, x + 3f, y - h + 3f, (w - 6f) * p, h - 6f, c, 0.95f);
+            // Light along the top of the fill, a glassy instrument look.
+            Theme.rect(batch, x + 3f, y - 7f, (w - 6f) * p, 3f, Color.WHITE, 0.25f);
+        }
+    }
+
+    private void textL(SpriteBatch batch, BitmapFont f, String s, float x, float y, Color c) {
+        text(batch, f, s, x, y, c, 1f);
+    }
+
+    private void textR(SpriteBatch batch, BitmapFont f, String s, float x, float y, Color c) {
+        layout.setText(f, s);
+        text(batch, f, s, x - layout.width, y, c, 1f);
+    }
+
+    private void textC(SpriteBatch batch, BitmapFont f, String s, float x, float y, Color c) {
+        layout.setText(f, s);
+        text(batch, f, s, x - layout.width / 2f, y, c, 1f);
     }
 
     /** The touch carousel stays on phones; gamepad/keyboard get the cargo bay. */
@@ -80,6 +246,14 @@ public class TelemetryHud {
 
     public void render(SpriteBatch batch) {
         Standing st = Standing.getInstance();
+        if (!touch) {
+            ga = 1f;
+            boolean blinkC = ((int) (time * 4f)) % 2 == 0;
+            console(batch, st, blinkC);
+            lives(batch, st);
+            shelterStatus(batch, blinkC);
+            return;
+        }
         boolean portrait = Theme.portrait();
         float W = Rules.WORLD_WIDTH;
         float H = Rules.WORLD_HEIGHT;
@@ -153,14 +327,32 @@ public class TelemetryHud {
             text(batch, label, hint, W - Rules.SAFE_X - layout.width, Rules.SAFE_Y + label.getCapHeight(), Theme.FAINT, 1f);
         }
 
-        // Shelter status, centred above the bottom edge while the ship is inside one.
+        shelterStatus(batch, blink);
+    }
+
+    private void lives(SpriteBatch batch, Standing st) {
+        float W = Rules.WORLD_WIDTH;
+        float top = Rules.WORLD_HEIGHT - Rules.SAFE_Y;
+        int lives = Math.max(0, st.getLives());
+        float icon = 64f;
+        float lx = W / 2f - (lives * (icon + 12f)) / 2f;
+        for (int i = 0; i < lives; i++) {
+            batch.setColor(1f, 1f, 1f, 0.9f);
+            batch.draw(lifeIcon, lx + i * (icon + 12f), top - icon, icon, icon);
+        }
+        batch.setColor(Color.WHITE);
+    }
+
+    /** Shelter status, centred just above the console (or the bottom edge) while inside one. */
+    private void shelterStatus(SpriteBatch batch, boolean blink) {
+        float W = Rules.WORLD_WIDTH;
         com.buran.game.world.Shelters.Shelter sh = com.buran.game.world.Shelters.occupied();
         if (sh != null) {
             String t = "SHELTER  " + Math.round(sh.integrity() * 100f) + "%";
             layout.setText(value, t);
             float bw = Math.min(W * 0.3f, 640f);
             float bx = (W - bw) / 2f;
-            float by = Rules.SAFE_Y + 40f;
+            float by = Math.max(Rules.SAFE_Y, Rules.HUD_BOTTOM) + 40f;
             text(batch, value, t, (W - layout.width) / 2f, by + 70f, SHIELD, 1f);
             Theme.rect(batch, bx, by, bw, 8f, Theme.FAINT, 0.5f);
             Theme.rect(batch, bx, by, bw * sh.integrity(), 8f, SHIELD, sh.integrity() < 0.25f && blink ? 0.4f : 1f);
