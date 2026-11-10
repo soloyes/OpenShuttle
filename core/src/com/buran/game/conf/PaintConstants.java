@@ -154,13 +154,6 @@ public final class PaintConstants {
     public static final int ROCKET_WIDTH = 96;
     public static final int ROCKET_HEIGHT = 96;
     public static final int ROCKET_FRAMES = 3;
-    public static final String POINTER_ARROW = "outarrow";
-    public static final String POINTER_MARK = "outmark";
-    public static final int POINTER_WIDTH = 48;
-    public static final int POINTER_HEIGHT = 48;
-    public static final float POINTER_MARK_SCALE = 1.3f;
-    public static final int POINTER_D = 64;
-    public static final float POINTER_BLINK_FREQUENCY = 0.3f;
     public static final float BURAN_ICON_BLINK_FREQUENCY = 0.5f;
     public static final String SHIELD_FUEL_REGION = "shieldfuel";
     public static final float SHIELD_FUEL_WIDTH = FUEL_WIDTH * 1.1f;

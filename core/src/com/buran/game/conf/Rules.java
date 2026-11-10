@@ -54,6 +54,9 @@ public final class Rules {
     public static final float CAMERA_LOOK_AHEAD_TIME = 0.35f;
     public static final float CAMERA_LOOK_AHEAD_MAX = 0.22f;
     public static final float CAMERA_FOLLOW_RATE = 6.0f;
+    /** Soft sector wall: spring (1/s^2) pulling back past the border, damping of outward speed (1/s). */
+    public static final float BORDER_SPRING = 9.0f;
+    public static final float BORDER_DAMPING = 3.0f;
     public static int WORLD_WIDTH;
     //1920
     public static int WORLD_HEIGHT;

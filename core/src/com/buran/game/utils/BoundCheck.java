@@ -50,6 +50,7 @@ public class BoundCheck {
         if (!rectangle.contains(Buran.position)) {
             checkCount(dt);
             playerOnScreen = false;
+            pushBack(dt);
             if (Buran.position.x >= Rules.SPACE_WIDTH + 1.5f * Rules.VIEW_WIDTH ||
                     Buran.position.x <= -1.5f * Rules.VIEW_WIDTH ||
                     Buran.position.y >= Rules.SPACE_HEIGHT + 1.5f * Rules.VIEW_HEIGHT ||
@@ -69,6 +70,29 @@ public class BoundCheck {
             Standing.getInstance().setFuelAlertOutOfBounds(false);
             Standing.getInstance().setHpAlert(false);
             playerOnScreen = true;
+        }
+    }
+
+    private final Vector2 overshoot = new Vector2();
+
+    /**
+     * Soft wall: past the border a spring pulls the shuttle back and outward speed is damped,
+     * so the ship cannot drift far out and the border always stays in view.
+     */
+    private void pushBack(float dt) {
+        float cx = Math.max(0f, Math.min(Rules.SPACE_WIDTH, Buran.position.x));
+        float cy = Math.max(0f, Math.min(Rules.SPACE_HEIGHT, Buran.position.y));
+        overshoot.set(cx - Buran.position.x, cy - Buran.position.y);
+        float dist = overshoot.len();
+        if (dist <= 0f) {
+            return;
+        }
+        Buran.velocity.mulAdd(overshoot, Rules.BORDER_SPRING * dt);
+        overshoot.nor();
+        float outward = -Buran.velocity.dot(overshoot);
+        if (outward > 0f) {
+            // Bleed off the speed that carries the ship further out.
+            Buran.velocity.mulAdd(overshoot, outward * Math.min(1f, Rules.BORDER_DAMPING * dt));
         }
     }
 
