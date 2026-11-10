@@ -155,12 +155,14 @@ public class Buran extends AbstractBuran {
             com.buran.game.bot.blackhole.BlackholeDebris.shed(position.x, position.y, com.badlogic.gdx.graphics.Color.SALMON,
                     4 + (int) (14 * (1f - k)));
             a = k;
-            setLayersScale(0.35f + 0.65f * k, 0.35f + 0.65f * k);
+            setLayersScale(0.75f + 0.25f * k, 0.75f + 0.25f * k);
             if (Blackhole.position.dst(position) <= Math.max(Rules.BLACKHOLE_EVENT_HORIZON, Buffs.getBlackholeTakeRange() * 0.17f)) {
                 BoundCheck.avoidPosition(Blackhole.position, position, (int) Buffs.getBlackholeTakeRange() + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
                 setLayersScale(1.0f, 1.0f);
                 isTaken = false;
                 boomBox.playSound(MSConstants.TELEPORT);
+                rematerialize = REMATERIALIZE_TIME;
+                a = 1f;
                 if (!Profiles.getSettings().isChild()) {
                     Standing.getInstance().takeDamage(Buffs.getBlackholeDecrease());
                 }
@@ -215,11 +217,10 @@ public class Buran extends AbstractBuran {
         if (Rules.GAME_OVER) {
             tmpColor.a = 0.3f;
         }
-        if (isTaken) {
-            tmpColor.a = a;
-        }
-
+        float horizon = 0.17f;
+        float dis = isTaken ? MathUtils.clamp((1f - a) / (1f - horizon), 0f, 1f) : rematerialize / REMATERIALIZE_TIME;
         batch.setColor(tmpColor);
+        boolean dissolving = dis > 0f && com.buran.game.effects.Dissolve.begin(batch, dis);
         batch.draw(
                 textureRegion[!Rules.GAME_OVER ? 0 : 1],
                 position.x - width / 2, position.y - height / 2,
@@ -228,6 +229,9 @@ public class Buran extends AbstractBuran {
                 scaleX, scaleY,
                 angle
         );
+        if (dissolving) {
+            com.buran.game.effects.Dissolve.end(batch);
+        }
 
         tmpColor.a = 1.0f;
         batch.setColor(tmpColor);
@@ -279,7 +283,14 @@ public class Buran extends AbstractBuran {
         consumable.consumed();
     }
 
+    private static final float REMATERIALIZE_TIME = 0.9f;
+    /** Seconds left of re-assembling from sand after the black hole throws the ship out. */
+    private float rematerialize;
+
     public void update(float dt) {
+        if (rematerialize > 0f) {
+            rematerialize = Math.max(0f, rematerialize - dt);
+        }
         makeShadow(dt);
         checkSeries(dt);
         checkRamPower();

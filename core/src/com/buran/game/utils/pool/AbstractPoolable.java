@@ -87,6 +87,12 @@ public abstract class AbstractPoolable implements Poolable {
     protected int spiralRadius;
     /** Distance to the black hole when it caught this object (0 = not caught). */
     private float captureDst;
+    /** 0..1 how far this object has crumbled into the black hole (drawn with the Dissolve shader). */
+    protected float dissolve;
+
+    public float getDissolve() {
+        return dissolve;
+    }
     @Getter
     @Setter
     protected boolean atRayPoint;
@@ -124,18 +130,17 @@ public abstract class AbstractPoolable implements Poolable {
             if (captureDst <= 0f) {
                 captureDst = dst;
             }
-            float fall = MathUtils.clamp((captureDst - dst) / (Buffs.getBlackholeTakeRange() * 0.12f), 0f, 1f);
+            float fall = MathUtils.clamp((captureDst - dst) / (Buffs.getBlackholeTakeRange() * 0.35f), 0f, 1f);
+            dissolve = fall;
             com.buran.game.bot.blackhole.BlackholeDebris.shed(position.x, position.y, tint, 3 + (int) (fall * 6));
-            if (color != null) {
-                color.a = 1f - 0.7f * fall;
-            }
             if (fall >= 1f) {
                 com.buran.game.bot.blackhole.BlackholeDebris.burst(position.x, position.y, Math.max(width, height) * saveScaleX, tint);
                 captureDst = 0f;
+                dissolve = 0f;
                 destroy();
                 return;
             }
-            float shrink = 1f - 0.35f * fall;
+            float shrink = 1f - 0.15f * fall;
             float scaleX = shrink * saveScaleX;
             float scaleY = shrink * saveScaleY;
             if (scaleX >= saveScaleX) {
@@ -151,6 +156,7 @@ public abstract class AbstractPoolable implements Poolable {
             }
         } else {
             captureDst = 0f;
+            dissolve = 0f;
             if (!(this instanceof AbstractConsumable)) {
                 this.scaleX = this.saveScaleX;
                 this.scaleY = this.saveScaleY;

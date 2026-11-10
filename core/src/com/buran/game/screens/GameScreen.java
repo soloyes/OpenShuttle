@@ -229,7 +229,7 @@ public class GameScreen extends BaseScreen {
         BoundCheck.avoidPosition(Blackhole.position, Buran.position, (int) Buffs.getBlackholeTakeRange() + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         Shelters.create(Math.max(2, Rules.SPACE_WIDTH * Rules.SPACE_HEIGHT / (Rules.VIEW_WIDTH * Rules.VIEW_HEIGHT * 4)));
         if (Rules.DEBUG_START_AT_HOLE) {
-            Buran.position.set(Blackhole.position.x + Buffs.getBlackholeTakeRange() + 260, Blackhole.position.y + 120);
+            Buran.position.set(Blackhole.position.x + Buffs.getBlackholeTakeRange() * 0.9f, Blackhole.position.y);
         }
         Rules.StartLevel.values()[Profiles.getSettings().getLevel()].setGameLevel();
         if (Profiles.getSettings().getLevel() == 0) {

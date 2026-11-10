@@ -61,7 +61,12 @@ public abstract class AbstractAsteroidEmitter extends ObjectPool<AbstractAsteroi
 
     public void render(SpriteBatch batch) {
         for (int i = 0; i < activeList.size(); i++) {
+            float d = activeList.get(i).getDissolve();
+            boolean dis = d > 0f && com.buran.game.effects.Dissolve.begin(batch, d);
             activeList.get(i).render(batch);
+            if (dis) {
+                com.buran.game.effects.Dissolve.end(batch);
+            }
         }
     }
 
