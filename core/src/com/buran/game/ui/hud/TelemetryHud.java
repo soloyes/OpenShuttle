@@ -72,131 +72,163 @@ public class TelemetryHud {
         float y0 = Rules.SAFE_Y;
         float w = W - 2f * Rules.SAFE_X;
         float h = CONSOLE_H;
-        // Body: darker lower half, a highlight line on top, a hairline frame.
-        int bands = 12;
-        for (int i = 0; i < bands; i++) {
-            float t = i / (float) (bands - 1);
-            tmp.set(BODY_LO).lerp(BODY, t);
-            Theme.rect(batch, x0, y0 + h * i / bands, w, h / bands + 1f, tmp, 1f);
-        }
-        Theme.rect(batch, x0, y0 + h - 2f, w, 2f, EDGE, 1f);
-        Theme.rect(batch, x0, y0, w, 2f, EDGE, 1f);
-        Theme.rect(batch, x0, y0, 2f, h, EDGE, 1f);
-        Theme.rect(batch, x0 + w - 2f, y0, 2f, h, EDGE, 1f);
-        // Step progress along the top edge.
-        int step = st.getPlayingLevel();
-        float progress = step >= 19 ? 1f : stepProgress(st);
-        Theme.rect(batch, x0, y0 + h, w * progress, 4f, step >= 19 ? ALERT : CARGO, 0.9f);
+        Theme.panel(batch, x0, y0, w, h, 1f);
         float sec = w / 3f;
-        Theme.rect(batch, x0 + sec, y0 + 18f, 2f, h - 36f, EDGE, 1f);
-        Theme.rect(batch, x0 + 2f * sec, y0 + 18f, 2f, h - 36f, EDGE, 1f);
-        float pad = 44f;
+        Theme.vline(batch, x0 + sec, y0 + 24f, h - 48f, 1f);
+        Theme.vline(batch, x0 + 2f * sec, y0 + 24f, h - 48f, 1f);
+        float pad = 50f;
         float headY = y0 + h - 30f;
+        float lw = sec - 2f * pad;
 
         // ---- life support
         float lx = x0 + pad;
-        float lw = sec - 2f * pad;
         textL(batch, small, "LIFE SUPPORT", lx, headY, HEAD);
         Color scoreColor = st.isScoreAlertRadiationAnomaly() && blink ? ALERT : HEAD;
         textR(batch, small, "SCORE  " + formatScore(st.getScoreView()), lx + lw, headY, scoreColor);
-        bar(batch, "SHIELD", st.getLifeShield(), st.getMaxLifeShield(), SHIELD, lx, headY - 62f, lw, false);
-        bar(batch, "HULL", st.getHp(), st.getMaxHp(), HULL, lx, headY - 160f, lw, st.isHpAlert() && blink);
+        bar(batch, "SHIELD", st.getLifeShield(), st.getMaxLifeShield(), SHIELD, lx, headY - 58f, lw, false, false);
+        bar(batch, "HULL", st.getHp(), st.getMaxHp(), HULL, lx, headY - 158f, lw, st.isHpAlert() && blink, false);
 
         // ---- propulsion (mirror)
         float rx = x0 + 2f * sec + pad;
-        String pause = com.buran.game.input.Gamepad.get().hasController() ? "B  -  PAUSE" : "ESC  -  PAUSE";
-        textL(batch, small, pause, rx, headY, HEAD);
+        textL(batch, small, com.buran.game.ui.menu.Hints.key("B", "ESC") + "PAUSE", rx, headY, HEAD);
         textR(batch, small, "PROPULSION", rx + lw, headY, HEAD);
         boolean fuelAlert = (st.isFuelAlertOutOfBounds() || st.isFuelAlertMagneticAnomaly() || st.getFuel() < st.getMaxFuel() * 0.2f) && blink;
-        bar(batch, "FUEL", st.getFuel(), st.getMaxFuel(), FUEL, rx, headY - 62f, lw, fuelAlert);
-        if (!Buran.isLaser && st.getLaserChargeLevel() <= 0f) {
-            textL(batch, label, "LASER", rx, headY - 160f, LASER);
-            textR(batch, label, "OFFLINE", rx + lw, headY - 160f, HEAD);
-            track(batch, rx, headY - 160f - label.getLineHeight() - 6f, lw, 0f, LASER);
-        } else {
-            bar(batch, "LASER", st.getLaserChargeLevel(), st.getMaxLaserChargeLevel(), LASER, rx, headY - 160f, lw, false);
-        }
+        bar(batch, "FUEL", st.getFuel(), st.getMaxFuel(), FUEL, rx, headY - 58f, lw, fuelAlert, false);
+        boolean offline = !Buran.isLaser && st.getLaserChargeLevel() <= 0f;
+        bar(batch, "LASER", st.getLaserChargeLevel(), st.getMaxLaserChargeLevel(), LASER, rx, headY - 158f, lw, false, offline);
 
-        // ---- cargo drum
+        // ---- cargo drum, with the task progress as a row of pips along its top
         float cx = x0 + 1.5f * sec;
-        String stepText = step >= 19 ? "COLLAPSE" : "STEP " + pad2(step) + " / 19";
-        layout.setText(small, "CARGO");
-        textL(batch, small, "CARGO", cx - sec / 2f + pad, headY, HEAD);
-        textR(batch, small, stepText, cx + sec / 2f - pad, headY, step >= 19 ? ALERT : HEAD);
+        float cl = x0 + sec + pad;
+        float cw = sec - 2f * pad;
+        com.buran.game.campaign.SectorRun run = com.buran.game.campaign.Campaign.run();
+        int step = st.getPlayingLevel();
+        String right;
+        int pips;
+        float done;
+        Color pipColor = CARGO;
+        if (run != null) {
+            right = "SECTOR " + run.sector().code() + "  -  " + run.progress() + " / " + run.sector().target;
+            pips = run.sector().target;
+            done = run.progress();
+        } else {
+            right = step >= 19 ? "COLLAPSE" : "STEP " + pad2(step) + " / 19";
+            pips = 19;
+            done = step >= 19 ? 19f : step + stepProgress(st);
+            if (step >= 19) {
+                pipColor = ALERT;
+            }
+        }
+        textL(batch, small, "CARGO", cl, headY, HEAD);
+        textR(batch, small, right, cl + cw, headY, step >= 19 && run == null ? ALERT : HEAD);
+        pipRow(batch, cl, headY - 44f, cw, pips, done, pipColor);
+
         SelectorGroup sg = SelectorGroup.getInstance();
         Selector cur = sg.getCenter();
-        float big = 176f;
-        float side = 112f;
-        float by = y0 + 36f;
-        float gap = 70f;
-        slot(batch, sg.getPrevious(), cx - big / 2f - gap - side, by + (big - side) / 2f + 14f, side, 0.45f);
-        slot(batch, sg.getNext(), cx + big / 2f + gap, by + (big - side) / 2f + 14f, side, 0.45f);
+        float big = 140f;
+        float side = 96f;
+        float by = y0 + 58f;
+        float gap = 60f;
+        float sideY = by + (big - side) / 2f;
+        float textY = y0 + 46f;
+        socket(batch, sg.getPrevious(), cx - big / 2f - gap - side, sideY, side, false, 0.45f);
+        socket(batch, sg.getNext(), cx + big / 2f + gap, sideY, side, false, 0.45f);
         if (sg.getPrevious() != null) {
-            textC(batch, small, "< LB", cx - big / 2f - gap - side / 2f, by + 22f, HEAD);
+            textC(batch, small, "< " + (com.buran.game.ui.menu.Hints.pad() ? "LB" : "Q"), cx - big / 2f - gap - side / 2f, textY, HEAD);
         }
         if (sg.getNext() != null) {
-            textC(batch, small, "RB >", cx + big / 2f + gap + side / 2f, by + 22f, HEAD);
+            textC(batch, small, (com.buran.game.ui.menu.Hints.pad() ? "RB" : "E") + " >", cx + big / 2f + gap + side / 2f, textY, HEAD);
         }
-        // Current: a lit frame.
-        float bx = cx - big / 2f;
-        float byy = by + 14f;
-        Theme.rect(batch, bx, byy, big, big, TRACK, 1f);
-        Color frame = cur == null ? EDGE : CARGO;
-        Theme.rect(batch, bx, byy, big, 3f, frame, 1f);
-        Theme.rect(batch, bx, byy + big - 3f, big, 3f, frame, 1f);
-        Theme.rect(batch, bx, byy, 3f, big, frame, 1f);
-        Theme.rect(batch, bx + big - 3f, byy, 3f, big, frame, 1f);
+        socket(batch, cur, cx - big / 2f, by, big, true, cur == null || cur.isActive() ? 1f : 0.4f);
         if (cur == null) {
-            textC(batch, small, "EMPTY", cx, byy + big / 2f + small.getCapHeight() / 2f, HEAD);
+            textC(batch, small, "BAY EMPTY", cx, textY, HEAD);
         } else {
-            float a = cur.isActive() ? 1f : 0.4f;
-            TextureRegion r = cur.getTextureRegion();
-            if (r != null) {
-                batch.setColor(1f, 1f, 1f, a);
-                batch.draw(r, bx + 26f, byy + 26f, big - 52f, big - 52f);
-                batch.setColor(Color.WHITE);
-            }
-            textR(batch, small, "x" + cur.getCount(), bx + big - 12f, byy + small.getLineHeight() - 4f, Theme.TEXT);
-            textC(batch, small, cur.isActive() ? "A  -  " + cur.getSticker().name() : "RECHARGING",
-                    cx, byy + big + small.getLineHeight() - 2f, cur.isActive() ? CARGO : HEAD);
+            textR(batch, small, "x" + cur.getCount(), cx + big / 2f - 10f, by + small.getLineHeight() - 2f, Theme.TEXT);
+            textC(batch, small, cur.isActive() ? com.buran.game.ui.menu.Hints.key("A", "SPACE") + cur.getSticker().name() : "RECHARGING",
+                    cx, textY, cur.isActive() ? CARGO : HEAD);
         }
     }
 
-    private void slot(SpriteBatch batch, Selector s, float x, float y, float size, float a) {
+    /** A row of task pips: lit when done, the current one filling. */
+    private void pipRow(SpriteBatch batch, float x, float y, float w, int n, float done, Color c) {
+        if (n <= 0) {
+            return;
+        }
+        float gap = n > 12 ? 6f : 10f;
+        float pw = (w - gap * (n - 1)) / n;
+        float ph = 14f;
+        for (int i = 0; i < n; i++) {
+            float px = x + i * (pw + gap);
+            Theme.rect(batch, px, y, pw, ph, EDGE, 1f);
+            Theme.rect(batch, px + 2f, y + 2f, pw - 4f, ph - 4f, TRACK, 1f);
+            float f = MathUtils.clamp(done - i, 0f, 1f);
+            if (f > 0f) {
+                Theme.rect(batch, px, y, pw * f, ph, c, 0.95f);
+            }
+        }
+    }
+
+    /** A recessed cargo socket; the current one is lit amber. */
+    private void socket(SpriteBatch batch, Selector s, float x, float y, float size, boolean current, float a) {
+        Color frame = current && s != null ? CARGO : EDGE;
+        float t = current && s != null ? 3f : 2f;
+        if (current && s != null) {
+            Theme.rect(batch, x - 8f, y - 8f, size + 16f, size + 16f, CARGO, 0.08f);
+        }
+        Theme.rect(batch, x, y, size, size, TRACK, 1f);
+        Theme.rect(batch, x + t, y + size - t - 6f, size - 2f * t, 6f, Color.BLACK, 0.35f);
+        Theme.rect(batch, x, y, size, t, frame, 1f);
+        Theme.rect(batch, x, y + size - t, size, t, frame, 1f);
+        Theme.rect(batch, x, y, t, size, frame, 1f);
+        Theme.rect(batch, x + size - t, y, t, size, frame, 1f);
         if (s == null) {
             return;
         }
-        Theme.rect(batch, x, y, size, size, TRACK, 1f);
-        Theme.rect(batch, x, y, size, 2f, EDGE, 1f);
-        Theme.rect(batch, x, y + size - 2f, size, 2f, EDGE, 1f);
-        Theme.rect(batch, x, y, 2f, size, EDGE, 1f);
-        Theme.rect(batch, x + size - 2f, y, 2f, size, EDGE, 1f);
         TextureRegion r = s.getTextureRegion();
         if (r != null) {
+            float in = size * 0.16f;
             batch.setColor(1f, 1f, 1f, a);
-            batch.draw(r, x + 16f, y + 16f, size - 32f, size - 32f);
+            batch.draw(r, x + in, y + in, size - 2f * in, size - 2f * in);
             batch.setColor(Color.WHITE);
         }
     }
 
-    /** Label and value on one line, a solid bar in a dark track under it. */
-    private void bar(SpriteBatch batch, String name, float v, float max, Color c, float x, float y, float w, boolean alert) {
+    /** Label and value on one line, a segmented gauge under it (dark when offline). */
+    private void bar(SpriteBatch batch, String name, float v, float max, Color c, float x, float y, float w,
+                     boolean alert, boolean offline) {
         float p = max <= 0 ? 0f : MathUtils.clamp(v / max, 0f, 1f);
-        textL(batch, label, name, x, y, alert ? ALERT : c);
-        textR(batch, label, Math.round(v) + " / " + Math.round(max), x + w, y, alert ? ALERT : Theme.TEXT);
-        track(batch, x, y - label.getLineHeight() - 6f, w, p, alert ? ALERT : c);
+        textL(batch, label, name, x, y, offline ? HEAD : alert ? ALERT : c);
+        textR(batch, label, offline ? "OFFLINE" : Math.round(v) + " / " + Math.round(max), x + w, y,
+                offline ? HEAD : alert ? ALERT : Theme.TEXT);
+        ledStrip(batch, x, y - label.getLineHeight() - 8f, w, offline ? 0f : p, alert ? ALERT : c);
+    }
+
+    /** An LED strip in a recessed track: lit segments in colour, the rest dark. */
+    private void ledStrip(SpriteBatch batch, float x, float top, float w, float p, Color c) {
+        int n = 30;
+        float h = 34f;
+        float y = top - h;
+        Theme.rect(batch, x, y, w, h, EDGE, 1f);
+        Theme.rect(batch, x + 2f, y + 2f, w - 4f, h - 4f, TRACK, 1f);
+        float in = 6f;
+        float gap = 5f;
+        float sw = (float) Math.floor((w - 2f * in - gap * (n - 1)) / n);
+        float x1 = Math.round(x + (w - (sw * n + gap * (n - 1))) / 2f);
+        float lit = p * n;
+        for (int i = 0; i < n; i++) {
+            float sx = x1 + i * (sw + gap);
+            float f = MathUtils.clamp(lit - i, 0f, 1f);
+            if (f > 0.02f) {
+                Theme.rect(batch, sx, y + in, sw, h - 2f * in, c, 0.35f + 0.65f * f);
+                Theme.rect(batch, sx, y + h - in - 4f, sw, 4f, Color.WHITE, 0.22f * f);
+            } else {
+                Theme.rect(batch, sx, y + in, sw, h - 2f * in, EDGE, 0.55f);
+            }
+        }
     }
 
     private void track(SpriteBatch batch, float x, float y, float w, float p, Color c) {
-        float h = 22f;
-        Theme.rect(batch, x, y - h, w, h, TRACK, 1f);
-        Theme.rect(batch, x, y - h, w, 2f, EDGE, 1f);
-        Theme.rect(batch, x, y - 2f, w, 2f, EDGE, 1f);
-        if (p > 0f) {
-            Theme.rect(batch, x + 3f, y - h + 3f, (w - 6f) * p, h - 6f, c, 0.95f);
-            // Light along the top of the fill, a glassy instrument look.
-            Theme.rect(batch, x + 3f, y - 7f, (w - 6f) * p, 3f, Color.WHITE, 0.25f);
-        }
+        ledStrip(batch, x, y, w, p, c);
     }
 
     private void textL(SpriteBatch batch, BitmapFont f, String s, float x, float y, Color c) {

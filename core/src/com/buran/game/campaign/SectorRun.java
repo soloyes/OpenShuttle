@@ -80,13 +80,18 @@ public final class SectorRun {
         CorrosiveAnomalyEmitter c = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
         c.setAnomaliesMaxCount(sector.corrosiveMax);
         c.setRespawnTime(sector.corrosiveRespawn);
+        trim(c, sector.corrosiveMax);
         ((ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class)).setAnomaliesMaxCount(sector.electricMax);
+        trim(ObjectPool.EMITTERS.get(ElectricalAnomaly.class), sector.electricMax);
         ((RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class)).setAnomaliesMaxCount(sector.radiationMax);
+        trim(ObjectPool.EMITTERS.get(RadiationAnomaly.class), sector.radiationMax);
         ((MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class)).setAnomaliesMaxCount(sector.magneticMax);
+        trim(ObjectPool.EMITTERS.get(MagneticAnomaly.class), sector.magneticMax);
         for (Class<?> k : new Class<?>[]{MetalAsteroid.class, MineralAsteroid.class}) {
             AbstractAsteroidEmitter e = (AbstractAsteroidEmitter) ObjectPool.EMITTERS.get(k);
-            e.setAsteroidsMaxCount(sector.asteroidMax / 2);
+            e.setAsteroidsMaxCount((sector.asteroidMax + 1) / 2);
             e.setRespawnTime(sector.asteroidRespawn);
+            trim(e, (sector.asteroidMax + 1) / 2);
         }
         limit(Astronaut.class, sector.astronautMax);
         limit(com.buran.game.bot.consumable.Crate.class, sector.crateMax);
@@ -111,15 +116,26 @@ public final class SectorRun {
      */
     private void placeCrew() {
         AstronautEmitter e = (AstronautEmitter) ObjectPool.EMITTERS.get(Astronaut.class);
+        trim(e, 0);
         int n = Math.min(sector.target, sector.astronautMax);
         float base = MathUtils.random(MathUtils.PI2);
         float margin = 260f;
         for (int i = 0; i < n; i++) {
             float ang = base + i * MathUtils.PI2 / n + MathUtils.random(-0.4f, 0.4f);
-            float r = Rules.VIEW_HEIGHT * MathUtils.random(0.9f, 1.4f);
+            float r = Rules.VIEW_HEIGHT * MathUtils.random(0.6f, 0.85f);
             float x = MathUtils.clamp(Buran.position.x + MathUtils.cos(ang) * r, margin, Rules.SPACE_WIDTH - margin);
             float y = MathUtils.clamp(Buran.position.y + MathUtils.sin(ang) * r, margin, Rules.SPACE_HEIGHT - margin);
             e.emitAt(x, y);
+        }
+    }
+
+    /** Removes whatever an emitter spawned at construction beyond the sector's cap. */
+    private static void trim(ObjectPool<?> pool, int max) {
+        if (pool == null) {
+            return;
+        }
+        while (pool.getActiveList().size() > Math.max(0, max)) {
+            pool.free(pool.getActiveList().size() - 1);
         }
     }
 
@@ -356,7 +372,7 @@ public final class SectorRun {
             if (com.buran.game.world.EdgeMarker.inView(dx, dy, 0f)) {
                 continue;
             }
-            com.buran.game.world.EdgeMarker.draw(batch, tx, font, tx.dot, dx, dy,
+            com.buran.game.world.EdgeMarker.draw(batch, tx, font, tx.disc, dx, dy,
                     a.getPosition().dst(Buran.position), WARM, 0.9f, pulse);
         }
     }

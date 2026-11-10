@@ -18,6 +18,12 @@ public final class ThreatTextures implements Disposable {
     public final Texture diamond;
     /** A dome over a base line: the shelter icon. */
     public final Texture dome;
+    /** Marker body: a disc drawn out into a point at +x (fill and rim). */
+    public final Texture pin;
+    public final Texture pinRim;
+    /** Pin geometry in texture space ([-1, 1]): disc centre x and radius. */
+    public static final float PIN_CX = -0.3f;
+    public static final float PIN_R = 0.55f;
 
     public ThreatTextures() {
         dot = make(64, (dx, dy) -> {
@@ -47,6 +53,25 @@ public final class ThreatTextures implements Disposable {
             boolean core = d < 0.3f && dy > -0.35f;
             return arc || base || core ? 1f : 0f;
         });
+        pin = make(128, (dx, dy) -> pinSd(dx, dy) < 0f ? 1f : 0f);
+        pinRim = make(128, (dx, dy) -> {
+            float sd = pinSd(dx, dy);
+            return sd < 0f && sd > -0.07f ? 1f : 0f;
+        });
+    }
+
+    /** Signed distance to the pin outline (negative inside). */
+    private static float pinSd(float dx, float dy) {
+        float dc = (float) Math.sqrt((dx - PIN_CX) * (dx - PIN_CX) + dy * dy) - PIN_R;
+        float tip = 0.95f;
+        float d = tip - PIN_CX;
+        float half = (float) Math.asin(PIN_R / d);
+        float sn = MathUtils.sin(half);
+        float cs = MathUtils.cos(half);
+        float line = (dx - tip) * sn + Math.abs(dy) * cs;
+        float tangentX = PIN_CX + PIN_R * sn;
+        float cone = Math.max(line, tangentX - dx);
+        return Math.min(dc, cone);
     }
 
     private interface Shape {
@@ -88,5 +113,7 @@ public final class ThreatTextures implements Disposable {
         arrow.dispose();
         diamond.dispose();
         dome.dispose();
+        pin.dispose();
+        pinRim.dispose();
     }
 }

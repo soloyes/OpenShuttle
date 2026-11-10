@@ -26,67 +26,49 @@ public final class Campaign {
     }
 
     static {
+        // Each sector holds only what it teaches (tip 4): no extra threats, no loose cargo,
+        // and a small room where the whole task fits in a glance or two (tip 85).
         Sector s1 = new Sector(1, "SILENCE", Sector.Goal.RESCUE, 2,
                 "Buran-19, this is... no one. Baikonur is silent. Two beacons are still calling, close by. Sasha. Lena. Bring them home.",
                 "LEFT STICK - FLY      THE BEAM TAKES CREW ABOARD");
-        s1.corrosiveMax = 8;
-        s1.corrosiveRespawn = 6f;
-        s1.corrosiveHuntTime = 150f;
-        s1.electricMax = 0;
-        s1.radiationMax = 0;
-        s1.magneticMax = 0;
-        s1.asteroidMax = 12;
-        s1.asteroidRespawn = 8f;
+        empty(s1);
         s1.astronautMax = 2;
-        s1.shelters = 0;
-        s1.space = 2f;
-        s1.blackhole = false;
-        s1.asteroidMax = 8;
-        s1.crateMax = 0;
-        s1.storageMax = 0;
-        s1.fuelMax = 1;
+        s1.space = 1.4f;
         SECTORS.add(s1);
 
         Sector s2 = new Sector(2, "DEBRIS FIELD", Sector.Goal.SALVAGE, 12,
                 "The hull is holding. But we need metal to get home. The laser is charged. Burn the rocks, then pull the pieces in.",
                 "THE LASER FIRES AHEAD AUTOMATICALLY      MINERAL RECHARGES IT");
-        s2.corrosiveMax = 16;
-        s2.corrosiveRespawn = 4f;
-        s2.corrosiveHuntTime = 90f;
-        s2.electricMax = 0;
-        s2.radiationMax = 0;
-        s2.magneticMax = 1;
-        s2.asteroidMax = 22;
+        empty(s2);
+        s2.asteroidMax = 10;
         s2.asteroidRespawn = 2.5f;
-        s2.astronautMax = 1;
-        s2.shelters = 1;
-        s2.space = 2.5f;
-        s2.blackhole = false;
-        s2.crateMax = 1;
-        s2.storageMax = 0;
-        s2.fuelMax = 2;
+        s2.space = 1.6f;
         s2.startWithLaser = true;
         SECTORS.add(s2);
 
         Sector s3 = new Sector(3, "STATIC", Sector.Goal.RESCUE, 3,
                 "Static on every channel. The radar is going blind. Three more of ours are out there. If the discharge comes for you, let it close. Then hit the pulse.",
                 "Y - EMP PULSE STOPS ELECTRIC ANOMALIES NEARBY");
-        s3.corrosiveMax = 20;
-        s3.corrosiveRespawn = 3f;
-        s3.corrosiveHuntTime = 75f;
+        empty(s3);
         s3.electricMax = 2;
-        s3.radiationMax = 0;
-        s3.magneticMax = 1;
-        s3.asteroidMax = 14;
-        s3.asteroidRespawn = 3.5f;
         s3.astronautMax = 3;
-        s3.shelters = 1;
-        s3.space = 2.5f;
-        s3.blackhole = false;
-        s3.crateMax = 2;
-        s3.storageMax = 1;
-        s3.fuelMax = 2;
+        s3.space = 1.6f;
         SECTORS.add(s3);
+    }
+
+    /** Nothing in the sector until the sector table adds it. */
+    private static void empty(Sector s) {
+        s.corrosiveMax = 0;
+        s.electricMax = 0;
+        s.radiationMax = 0;
+        s.magneticMax = 0;
+        s.asteroidMax = 0;
+        s.astronautMax = 0;
+        s.shelters = 0;
+        s.blackhole = false;
+        s.crateMax = 0;
+        s.storageMax = 0;
+        s.fuelMax = 0;
     }
 
     private Campaign() {

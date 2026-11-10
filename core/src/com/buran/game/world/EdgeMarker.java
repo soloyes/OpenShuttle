@@ -15,7 +15,7 @@ import com.buran.game.conf.Rules;
  */
 public final class EdgeMarker {
     private static final GlyphLayout LAYOUT = new GlyphLayout();
-    private static final float SIZE = 104f;
+    private static final float TOP_RESERVE = 300f;
 
     private EdgeMarker() {
     }
@@ -44,7 +44,8 @@ public final class EdgeMarker {
         float W = Rules.WORLD_WIDTH;
         float H = Rules.WORLD_HEIGHT;
         float scale = H / Rules.VIEW_HEIGHT;
-        float top = H - Rules.SAFE_Y;
+        // Markers stay below the lives and the task line at the top.
+        float top = H - Rules.SAFE_Y - TOP_RESERVE;
         float bottom = bottomEdge();
         float cy = (top + bottom) / 2f;
         float hx = W / 2f - Rules.SAFE_X - inset;
@@ -56,47 +57,49 @@ public final class EdgeMarker {
     }
 
     /**
+     * A pin at the window edge: a dark disc drawn out into a point aimed at the target, a rim
+     * in the target's colour, the icon in the disc and the distance on the side facing inward.
+     *
      * @param dx,dy  target offset from the camera centre, world units
      * @param dist   distance from the ship, world units (negative = do not show)
      */
     public static void draw(SpriteBatch batch, ThreatTextures tx, BitmapFont font, Texture icon,
                             float dx, float dy, float dist, Color c, float alpha, float pulse) {
-        float[] p = project(dx, dy, 125f);
-        float px = p[0];
-        float py = p[1];
+        float S = 190f;
+        float r = ThreatTextures.PIN_R * S / 2f;
+        float[] p = project(dx, dy, 120f);
         float ang = p[2];
-        float r = SIZE / 2f;
+        // The disc sits back from the edge so the point reaches toward it.
+        float px = p[0] - MathUtils.cos(ang) * 22f;
+        float py = p[1] - MathUtils.sin(ang) * 22f;
+        float ox = S / 2f + ThreatTextures.PIN_CX * S / 2f;
+        float oy = S / 2f;
+        float deg = ang * MathUtils.radiansToDegrees;
 
-        // Soft glow that breathes with the pulse.
-        batch.setColor(c.r, c.g, c.b, alpha * 0.22f * pulse);
-        batch.draw(tx.dot, px - r * 2f, py - r * 2f, r * 4f, r * 4f);
-        // Body and rim.
-        batch.setColor(0.03f, 0.05f, 0.08f, alpha * 0.8f);
-        batch.draw(tx.disc, px - r, py - r, SIZE, SIZE);
+        batch.setColor(c.r, c.g, c.b, alpha * 0.18f * pulse);
+        batch.draw(tx.dot, px - r * 2.2f, py - r * 2.2f, r * 4.4f, r * 4.4f);
+        batch.setColor(0.03f, 0.045f, 0.07f, alpha * 0.88f);
+        batch.draw(tx.pin, px - ox, py - oy, ox, oy, S, S, 1f, 1f, deg, 0, 0, tx.pin.getWidth(), tx.pin.getHeight(), false, false);
         batch.setColor(c.r, c.g, c.b, alpha);
-        batch.draw(tx.ring, px - r, py - r, SIZE, SIZE);
-        // Icon.
-        float is = SIZE * 0.56f;
+        batch.draw(tx.pinRim, px - ox, py - oy, ox, oy, S, S, 1f, 1f, deg, 0, 0, tx.pinRim.getWidth(), tx.pinRim.getHeight(), false, false);
+        float is = r * 0.95f;
         batch.draw(icon, px - is / 2f, py - is / 2f, is, is);
-        // Arrow sitting on the rim.
-        float as = 34f;
-        float ax = px + MathUtils.cos(ang) * (r + as * 0.55f);
-        float ay = py + MathUtils.sin(ang) * (r + as * 0.55f);
-        batch.draw(tx.arrow, ax - as / 2f, ay - as / 2f, as / 2f, as / 2f, as, as, 1f, 1f,
-                ang * MathUtils.radiansToDegrees, 0, 0, tx.arrow.getWidth(), tx.arrow.getHeight(), false, false);
         batch.setColor(Color.WHITE);
 
         if (font != null && dist >= 0f) {
             String s = (int) (dist / 10f) + " M";
             Color old = font.getColor().cpy();
-            font.setColor(c.r, c.g, c.b, alpha * 0.9f);
             LAYOUT.setText(font, s);
-            // Text goes on the side away from the screen edge.
-            float ty = py - r - 14f;
-            if (py - r - LAYOUT.height - 30f < bottomEdge()) {
-                ty = py + r + LAYOUT.height + 14f;
-            }
-            font.draw(batch, s, px - LAYOUT.width / 2f, ty);
+            // Opposite the point: toward the middle of the window.
+            float tx0 = px - MathUtils.cos(ang) * (r + 18f + LAYOUT.width / 2f);
+            float ty0 = py - MathUtils.sin(ang) * (r + 18f + LAYOUT.height / 2f);
+            float bw = LAYOUT.width + 24f;
+            float bh = LAYOUT.height + 18f;
+            batch.setColor(0.03f, 0.045f, 0.07f, alpha * 0.75f);
+            com.buran.game.ui.menu.Theme.rect(batch, tx0 - bw / 2f, ty0 - bh / 2f, bw, bh,
+                    com.buran.game.ui.menu.Theme.BODY_LO, alpha * 0.85f);
+            font.setColor(c.r, c.g, c.b, alpha);
+            font.draw(batch, s, tx0 - LAYOUT.width / 2f, ty0 + LAYOUT.height / 2f);
             font.setColor(old);
         }
     }
