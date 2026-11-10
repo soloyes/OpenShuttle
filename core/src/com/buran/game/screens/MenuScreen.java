@@ -1,5 +1,8 @@
 package com.buran.game.screens;
 
+import com.buran.game.background.MenuSpace;
+import com.buran.game.ui.menu.MenuHero;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -23,11 +26,11 @@ import com.buran.game.utils.Assets;
  */
 
 public class MenuScreen extends BaseScreen {
-    private Background background;
+    private MenuSpace space;
     private MenuGroup menuGroup;
     private ResultGroup resultGroup;
     private ConfigGroup configGroup;
-    private MenuBackgroundGroup menuBackgroundGroup;
+    private MenuHero menuHero;
     private DetailedResultGroup detailedResultGroup;
     private RulesGroup rulesGroup;
     private BitmapFont font175;
@@ -49,8 +52,11 @@ public class MenuScreen extends BaseScreen {
     public void createGUI() {
         Profiles profiles = new Profiles();
         profiles.init();
-        menuBackgroundGroup = new MenuBackgroundGroup();
-        background = new Background();
+        menuHero = new MenuHero();
+        if (space != null) {
+            space.dispose();
+        }
+        space = new MenuSpace();
         configGroup = new ConfigGroup();
         rulesGroup = new RulesGroup();
         detailedResultGroup = new DetailedResultGroup();
@@ -59,16 +65,18 @@ public class MenuScreen extends BaseScreen {
         MenuBar menuBar = new MenuBar();
         InfoGroup infoGroup = new InfoGroup();
         this.font175 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT175, BitmapFont.class);
-        this.font48 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT48, BitmapFont.class);
+        this.font48 = Assets.getInstance().getAssetManager().get(PaintConstants.FONT54, BitmapFont.class);
         Label.LabelStyle labelStyle64 = new Label.LabelStyle();
         labelStyle64.font = font48;
         Label.LabelStyle labelStyle175 = new Label.LabelStyle();
         labelStyle175.font = font175;
+        // Title block, left-aligned with the menu column.
         this.head = new Label("BURAN-19", labelStyle175);
-        head.setPosition(Rules.WORLD_WIDTH / 2 - head.getWidth() / 2, Rules.WORLD_HEIGHT - 234);
-        this.underHead = new Label("2D GAME ARCADE", labelStyle64);
-        underHead.setPosition(Rules.WORLD_WIDTH / 2 - underHead.getWidth() / 2, Rules.WORLD_HEIGHT - 262);
-        stage.addActor(menuBackgroundGroup);
+        head.setPosition(MenuBar.leftX(), Rules.WORLD_HEIGHT * 0.66f);
+        this.underHead = new Label("THE LAST FLIGHT  -  1991", labelStyle64);
+        underHead.setColor(Color.valueOf("9fb3ccff"));
+        underHead.setPosition(MenuBar.leftX() + 6, head.getY() - underHead.getHeight() - 10);
+        stage.addActor(menuHero);
         stage.addActor(menuGroup);
         stage.addActor(configGroup);
         stage.addActor(rulesGroup);
@@ -82,9 +90,7 @@ public class MenuScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);
-        batch.begin();
-        background.render(batch);
-        batch.end();
+        space.render(batch);
         stage.draw();
         batch.begin();
         head.draw(batch, 1.0f);
@@ -93,7 +99,7 @@ public class MenuScreen extends BaseScreen {
     }
 
     public void update(float delta) {
-        background.update(delta);
+        space.update(delta);
         stage.act(delta);
     }
 
@@ -101,6 +107,10 @@ public class MenuScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         menuGroup.dispose();
+        if (space != null) {
+            space.dispose();
+            space = null;
+        }
     }
 
     @Override
