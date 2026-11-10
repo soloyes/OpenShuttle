@@ -22,7 +22,8 @@ float hash(vec2 p) {
 
 vec3 starLayer(float depth, float cell, float density, float radius, vec3 tint) {
     vec2 uv = gl_FragCoord.xy / u_resolution - 0.5;
-    vec2 w = u_camera * depth + uv * u_view + vec2(u_seed * 97.0, u_seed * 61.0);
+    vec2 w = u_camera * depth + uv * u_view + vec2(u_seed * 97.0, u_seed * 61.0)
+            + u_time * vec2(60.0, 22.0) * depth;
     vec2 g = floor(w / cell);
     vec2 f = w / cell - g;
     float h = hash(g);

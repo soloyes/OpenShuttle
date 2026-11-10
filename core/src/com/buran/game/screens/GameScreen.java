@@ -55,6 +55,7 @@ import com.buran.game.effects.PrettySound;
 import com.buran.game.effects.PostProcessor;
 import com.buran.game.effects.Juice;
 import com.buran.game.ui.menu.GameMenu;
+import com.buran.game.ui.hud.TelemetryHud;
 import com.buran.game.input.Gamepad;
 import com.buran.game.effects.Ray;
 import com.buran.game.effects.Shake;
@@ -129,6 +130,7 @@ public class GameScreen extends BaseScreen {
     private ListOfListsJoiner<AbstractAnomaly> anomalyJoiner;
     @Getter
     private UITopPanel uiTopPanel;
+    private TelemetryHud hud;
     private Standing standing;
     private Profiles profiles;
     private Global global;
@@ -219,6 +221,7 @@ public class GameScreen extends BaseScreen {
         blackhole = new Blackhole();
         player = new Buran(joystick, particleEmitter);
         uiTopPanel = new UITopPanel();
+        hud = new TelemetryHud();
 
         BoundCheck.avoidPosition(Blackhole.position, Buran.position, (int) Buffs.getBlackholeTakeRange() + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
         if (Rules.DEBUG_START_AT_HOLE) {
@@ -287,6 +290,11 @@ public class GameScreen extends BaseScreen {
         SwitchGroup.getInstance().setVisible(Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.Android
                 || Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.iOS);
         stage.addActor(SwitchGroup.getInstance());
+        if (hud == null) {
+            hud = new TelemetryHud();   // createGUI runs before the rest of show()
+        }
+        // Gamepad/keyboard use the HUD cargo bay; the touch carousel is for phones.
+        SelectorGroup.getInstance().setVisible(!hud.usesCargoBay());
         stage.addActor(SelectorGroup.getInstance());
         gameMenu = new GameMenu();
         stage.addActor(gameMenu);
@@ -419,8 +427,8 @@ public class GameScreen extends BaseScreen {
         }
 
         if (!Rules.GAME_OVER) {
-            uiTopPanel.render(batch);
-            if(!PauseGroup.isPause()) {
+            hud.render(batch);
+            if (!PauseGroup.isPause() && !hud.usesCargoBay()) {
                 SelectorGroup.getInstance().render(batch);
             }
         }
@@ -492,6 +500,7 @@ public class GameScreen extends BaseScreen {
             asteroidLaunchEmitter.update(dt);
             if (!Rules.GAME_OVER) {
                 uiTopPanel.update(dt);
+                hud.update(dt);
                 Standing.getInstance().addTime(dt);
             }
 

@@ -44,9 +44,12 @@ float fbm(vec2 p) {
 }
 
 // World position seen through a layer that moves at `depth` of the camera speed.
+// Each layer also drifts and sways on its own, so space is never frozen.
 vec2 layer(float depth) {
     vec2 uv = gl_FragCoord.xy / u_resolution - 0.5;
-    return u_camera * depth + uv * u_view;
+    vec2 drift = u_time * vec2(55.0, 20.0) * depth
+            + vec2(sin(u_time * 0.07 + depth * 9.0), cos(u_time * 0.05 + depth * 5.0)) * 260.0 * depth;
+    return u_camera * depth + uv * u_view + drift;
 }
 
 void main() {
@@ -54,7 +57,7 @@ void main() {
 
     // Far gas: big, slow, warped.
     vec2 p = layer(0.12) * 0.0011 + seed;
-    vec2 q = vec2(fbm(p + vec2(0.0, u_time * 0.004)), fbm(p + vec2(5.2, 1.3)));
+    vec2 q = vec2(fbm(p + vec2(0.0, u_time * 0.02)), fbm(p + vec2(5.2, 1.3) + u_time * 0.012));
     float gas = fbm(p + 1.8 * q);
     // Dust lanes cut dark filaments through the gas.
     float dust = smoothstep(0.45, 0.75, fbm(p * 2.3 + q * 1.5 + 7.0));

@@ -78,9 +78,26 @@ public class BlackholeDebris implements Disposable {
     }
 
     public static void shed(float x, float y, Color c) {
+        shed(x, y, c, 3);
+    }
+
+    public static void shed(float x, float y, Color c, int n) {
         if (instance != null) {
             float w = 0.55f;
-            instance.emit(x, y, 3, MathUtils.lerp(c.r, 1f, w), MathUtils.lerp(c.g, 0.7f, w), MathUtils.lerp(c.b, 0.45f, w));
+            instance.emit(x, y, n, MathUtils.lerp(c.r, 1f, w), MathUtils.lerp(c.g, 0.7f, w), MathUtils.lerp(c.b, 0.45f, w));
+        }
+    }
+
+    /** The whole object breaks into sand spread over its own footprint. */
+    public static void burst(float x, float y, float size, Color c) {
+        if (instance == null) {
+            return;
+        }
+        int n = MathUtils.clamp((int) (size * 0.5f), 30, 120);
+        for (int i = 0; i < n; i++) {
+            float a = MathUtils.random(MathUtils.PI2);
+            float r = MathUtils.random(size * 0.45f);
+            shed(x + MathUtils.cos(a) * r, y + MathUtils.sin(a) * r, c, 1);
         }
     }
 
