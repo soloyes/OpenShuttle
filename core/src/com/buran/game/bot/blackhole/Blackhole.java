@@ -19,6 +19,18 @@ import lombok.Setter;
 
 public class Blackhole {
     public static Vector2 position;
+    /**
+     * False in sectors without the rift: the hole is parked far outside the map, so every
+     * distance check (pull, capture, roar, lens) simply never fires.
+     */
+    public static boolean enabled = true;
+    private static final float PARKED = -1.0e6f;
+
+    /** Removes the rift from this sector. */
+    public static void park() {
+        enabled = false;
+        position.set(PARKED, PARKED);
+    }
     private TextureRegion texture;
     private TextureRegion spiralRegion;
     private TextureRegion glowRegion;
@@ -70,10 +82,15 @@ public class Blackhole {
         this.radialSpeed = MathUtils.random(30, 50);
         this.radius = new Vector2(MathUtils.random(Math.min(Rules.SPACE_WIDTH, Rules.SPACE_HEIGHT) / 6, Math.min(Rules.SPACE_WIDTH, Rules.SPACE_HEIGHT) / 3), 0);
         this.oscillator = new Oscillator();
+        enabled = true;
         setPosition();
     }
 
     private void setPosition() {
+        if (!enabled) {
+            position.set(PARKED, PARKED);
+            return;
+        }
         float r = radius.len();
         position.x = center.x + r * MathUtils.cos(angle);
         position.y = center.y + r * MathUtils.sin(angle);

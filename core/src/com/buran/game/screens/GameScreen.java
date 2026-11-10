@@ -225,6 +225,9 @@ public class GameScreen extends BaseScreen {
         joystick = new Joystick();
 
         blackhole = new Blackhole();
+        if (Campaign.current() != null && !Campaign.current().blackhole) {
+            Blackhole.park();
+        }
         player = new Buran(joystick, particleEmitter);
         uiTopPanel = new UITopPanel();
         hud = new TelemetryHud();
@@ -359,7 +362,9 @@ public class GameScreen extends BaseScreen {
         //BEGIN
         batch.begin();
         if (!Profiles.getSettings().isShader() || ShaderManager.BLACKHOLE.getProgram() == null) {
-            blackhole.render(batch);
+            if (Blackhole.enabled) {
+                blackhole.render(batch);
+            }
         }
         mineralAsteroidEmitter.render(batch);
         metalAsteroidEmitter.render(batch);
@@ -378,7 +383,9 @@ public class GameScreen extends BaseScreen {
         rocketLauncher.render(batch);
         asteroidLaunchEmitter.render(batch);
         if (Profiles.getSettings().isShader()) {
-            debris.render(batch);
+            if (Blackhole.enabled) {
+                debris.render(batch);
+            }
         }
         batch.setColor(Color.WHITE);
         batch.end();
@@ -395,7 +402,7 @@ public class GameScreen extends BaseScreen {
             holeTime += dt;
         }
         if (postProcessor.isAvailable()) {
-            post.hole = Profiles.getSettings().isShader();
+            post.hole = Profiles.getSettings().isShader() && Blackhole.enabled;
             post.holeX = shaderHoleX;
             post.holeY = shaderHoleY;
             // Lens radius = capture range, in units of the visible height.
@@ -520,7 +527,9 @@ public class GameScreen extends BaseScreen {
         }
         spaceBackground.update(dt);
         if (!frozen) {
-            debris.update(dt);
+            if (Blackhole.enabled) {
+                debris.update(dt);
+            }
         }
         cameraUpdate(dt);
         if (!frozen) {

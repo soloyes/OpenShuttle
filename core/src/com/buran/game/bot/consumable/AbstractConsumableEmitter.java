@@ -53,6 +53,13 @@ public abstract class AbstractConsumableEmitter extends ObjectPool<AbstractConsu
 
     protected abstract void calculateStat(AbstractConsumable consumable);
 
+    /** Places one at a chosen spot (designed sector layouts). */
+    public void emitAt(float x, float y) {
+        AbstractConsumable c = getActiveElement();
+        calculateStat(c);
+        c.init(x, y);
+    }
+
     public void render(SpriteBatch batch) {
         for (int i = 0; i < activeList.size(); i++) {
             float d = activeList.get(i).getDissolve();

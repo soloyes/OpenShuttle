@@ -376,10 +376,15 @@ public final class Rules {
     public static final int CIRCLE_RENDER = 5;
 
     public static void setSpace(int n) {
-        STARS_COUNT = STARS * n;
-        SPACE_WIDTH = VIEW_WIDTH * n;
-        SPACE_HEIGHT = VIEW_HEIGHT * n;
-        BLACKHOLE_ROAR_RANGE = n * BLACKHOLE_ROAR_FACTOR;
+        setSpace((float) n);
+    }
+
+    /** Sector size in screens (campaign sectors are sized to their task, tip 85). */
+    public static void setSpace(float n) {
+        STARS_COUNT = (int) (STARS * n);
+        SPACE_WIDTH = (int) (VIEW_WIDTH * n);
+        SPACE_HEIGHT = (int) (VIEW_HEIGHT * n);
+        BLACKHOLE_ROAR_RANGE = (int) (n * BLACKHOLE_ROAR_FACTOR);
     }
 
     public enum StartLevel {

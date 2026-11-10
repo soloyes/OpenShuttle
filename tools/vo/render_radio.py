@@ -56,28 +56,74 @@ def short_espeak_dir():
     return link
 
 
+def phrases(text):
+    """
+    Splits a line into phrases, each with the pause that follows it. Piper reads one sentence
+    with flat intonation; separate phrases get their own natural rise and fall, and the gaps
+    sound like a person thinking over a radio, not a machine reading a paragraph.
+    """
+    import re
+    out = []
+    for sentence in re.split(r"(?<=[.!?])\s+", text.strip()):
+        parts = sentence.split("...")
+        for i, part in enumerate(parts):
+            part = part.strip()
+            if not part:
+                continue
+            last = i == len(parts) - 1
+            if not last:
+                out.append((part + "...", 0.55))        # hesitation
+            elif len(part.split()) <= 2:
+                out.append((part, 0.42))                # names, short calls
+            else:
+                out.append((part, 0.32))
+    return out
+
+
+def silence(seconds, rate, width, channels):
+    return b"\x00" * int(seconds * rate) * width * channels
+
+
 def main():
+    import random
     import wave
     from piper import PiperVoice, SynthesisConfig
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", required=True)
     ap.add_argument("--speaker", type=int, default=None)
-    ap.add_argument("--length-scale", type=float, default=1.0)
+    ap.add_argument("--length-scale", type=float, default=1.08)
+    ap.add_argument("--noise-scale", type=float, default=0.75)
+    ap.add_argument("--noise-w", type=float, default=0.9)
     ap.add_argument("--only", default=None)
     ap.add_argument("--out", default=OUT)
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
     voice = PiperVoice.load(a.model, espeak_data_dir=short_espeak_dir())
-    cfg = SynthesisConfig(speaker_id=a.speaker, length_scale=a.length_scale)
     with open(LINES, encoding="utf-8") as f:
         rows = [l.rstrip("\n").split("\t", 1) for l in f if l.strip()]
     for line_id, text in rows:
         if a.only and line_id != a.only:
             continue
+        rnd = random.Random(line_id)
         with tempfile.TemporaryDirectory() as tmp:
+            frames = b""
+            params = None
+            for k, (phrase, gap) in enumerate(phrases(text)):
+                # Slight per-phrase variation in pace, like a tired operator.
+                cfg = SynthesisConfig(speaker_id=a.speaker,
+                                      length_scale=a.length_scale * rnd.uniform(0.96, 1.06),
+                                      noise_scale=a.noise_scale, noise_w_scale=a.noise_w)
+                part = os.path.join(tmp, "p%d.wav" % k)
+                with wave.open(part, "wb") as w:
+                    voice.synthesize_wav(phrase, w, syn_config=cfg)
+                with wave.open(part, "rb") as r:
+                    params = r.getparams()
+                    frames += r.readframes(r.getnframes())
+                frames += silence(gap * rnd.uniform(0.85, 1.2), params.framerate, params.sampwidth, params.nchannels)
             wav = os.path.join(tmp, "dry.wav")
             with wave.open(wav, "wb") as w:
-                voice.synthesize_wav(text, w, syn_config=cfg)
+                w.setparams(params)
+                w.writeframes(frames)
             mp3 = os.path.join(a.out, line_id + ".mp3")
             subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", wav, "-filter_complex", RADIO,
                             "-map", "[out]", "-ac", "1", "-c:a", "libmp3lame", "-q:a", "5", mp3], check=True)

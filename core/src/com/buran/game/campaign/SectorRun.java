@@ -41,8 +41,8 @@ public final class SectorRun {
     public enum Phase { BRIEFING, ACTIVE, EXTRACT, CLEAR }
 
     private static final float CARD_FADE = 0.4f;
-    /** Typing keeps pace with the voice (about 13 characters a second) and starts with it. */
-    private static final float TYPE_SPEED = 13f;
+    /** Typing keeps pace with the voice (about 10 characters a second, with pauses) and starts with it. */
+    private static final float TYPE_SPEED = 10.5f;
     private static final float VOICE_AT = 0.5f;
     private static final float TYPE_DELAY = VOICE_AT + 0.45f;
     private static final float BEACON_RADIUS = 260f;
@@ -96,9 +96,30 @@ public final class SectorRun {
             Buran.isLaser = true;
             Standing.getInstance().setLaserChargeLevel(Standing.getInstance().getMaxLaserChargeLevel());
         }
+        if (sector.goal == Sector.Goal.RESCUE) {
+            placeCrew();
+        }
         baseline = counter();
         if (Rules.DEBUG_FAST_GOAL) {
             baseline -= sector.target;
+        }
+    }
+
+    /**
+     * The crew to rescue is already out there when the sector opens: spread around the ship,
+     * a screen or so away, in different directions, so each one is a small trip (tips 9, 85).
+     */
+    private void placeCrew() {
+        AstronautEmitter e = (AstronautEmitter) ObjectPool.EMITTERS.get(Astronaut.class);
+        int n = Math.min(sector.target, sector.astronautMax);
+        float base = MathUtils.random(MathUtils.PI2);
+        float margin = 260f;
+        for (int i = 0; i < n; i++) {
+            float ang = base + i * MathUtils.PI2 / n + MathUtils.random(-0.4f, 0.4f);
+            float r = Rules.VIEW_HEIGHT * MathUtils.random(0.9f, 1.4f);
+            float x = MathUtils.clamp(Buran.position.x + MathUtils.cos(ang) * r, margin, Rules.SPACE_WIDTH - margin);
+            float y = MathUtils.clamp(Buran.position.y + MathUtils.sin(ang) * r, margin, Rules.SPACE_HEIGHT - margin);
+            e.emitAt(x, y);
         }
     }
 
@@ -258,6 +279,9 @@ public final class SectorRun {
         text(batch, small, "SECTOR " + sector.code() + "  " + sector.name, W / 2f, top - 100f, Theme.DIM, 1f, true);
         text(batch, font, line, W / 2f, top - 100f - small.getLineHeight() - 6f, c, 1f, true);
 
+        if (phase == Phase.ACTIVE && sector.goal == Sector.Goal.RESCUE) {
+            crewMarkers(batch, worldCamera, tx, Theme.font(32));
+        }
         if (phase == Phase.EXTRACT) {
             edgeMarker(batch, worldCamera, tx, Theme.font(32));
         }
@@ -313,6 +337,25 @@ public final class SectorRun {
             float blink = 0.55f + 0.45f * MathUtils.sin(time * 4f);
             layout.setText(font, "A  -  CONTINUE");
             text(batch, font, "A  -  CONTINUE", x + w - 40f - layout.width, y - h + 40f + layout.height, Theme.ACCENT, a * blink, false);
+        }
+    }
+
+    /** Crew drifting out of view: warm markers, the goal pulls the eye (tips 9, 13). */
+    private void crewMarkers(SpriteBatch batch, Camera cam, ThreatTextures tx, BitmapFont font) {
+        java.util.List<?> crew = ((AstronautEmitter) ObjectPool.EMITTERS.get(Astronaut.class)).getActiveList();
+        float pulse = 0.75f + 0.25f * MathUtils.sin(time * 3f);
+        for (int i = 0; i < crew.size(); i++) {
+            Astronaut a = (Astronaut) crew.get(i);
+            if (!a.isActive() || a.isTaken()) {
+                continue;
+            }
+            float dx = a.getPosition().x - cam.position.x;
+            float dy = a.getPosition().y - cam.position.y;
+            if (Math.abs(dx) < Rules.VIEW_WIDTH / 2f && Math.abs(dy) < Rules.VIEW_HEIGHT / 2f) {
+                continue;
+            }
+            com.buran.game.world.EdgeMarker.draw(batch, tx, font, tx.dot, dx, dy,
+                    a.getPosition().dst(Buran.position), WARM, 0.9f, pulse);
         }
     }
 

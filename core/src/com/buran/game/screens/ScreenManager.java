@@ -82,7 +82,12 @@ public class ScreenManager {
                     profiles.getActive().getPreferences().setLevel(3);
                     profiles.write();
                 }
-                Rules.setSpace(4 - profiles.getActive().getPreferences().getLevel());
+                com.buran.game.campaign.Sector sector = com.buran.game.campaign.Campaign.current();
+                if (sector != null) {
+                    Rules.setSpace(sector.space);
+                } else {
+                    Rules.setSpace(4 - profiles.getActive().getPreferences().getLevel());
+                }
                 //
                 break;
             case TEST:

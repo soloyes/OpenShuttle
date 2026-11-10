@@ -27,8 +27,7 @@ public final class Campaign {
 
     static {
         Sector s1 = new Sector(1, "SILENCE", Sector.Goal.RESCUE, 2,
-                "Buran-19, this is Baikonur... no. Nobody answers. Station debris all around. "
-                        + "Two transponders still beep nearby: Sasha, Lena. Fly close, the beam will take them.",
+                "Buran-19, this is... no one. Baikonur is silent. Two beacons are still calling, close by. Sasha. Lena. Bring them home.",
                 "LEFT STICK - FLY      THE BEAM TAKES CREW ABOARD");
         s1.corrosiveMax = 8;
         s1.corrosiveRespawn = 6f;
@@ -39,7 +38,9 @@ public final class Campaign {
         s1.asteroidMax = 12;
         s1.asteroidRespawn = 8f;
         s1.astronautMax = 2;
-        s1.shelters = 1;
+        s1.shelters = 0;
+        s1.space = 2f;
+        s1.blackhole = false;
         s1.asteroidMax = 8;
         s1.crateMax = 0;
         s1.storageMax = 0;
@@ -47,8 +48,7 @@ public final class Campaign {
         SECTORS.add(s1);
 
         Sector s2 = new Sector(2, "DEBRIS FIELD", Sector.Goal.SALVAGE, 12,
-                "The hull is holding. To get home we need metal and rock. The laser is charged: "
-                        + "point the nose at an asteroid, it burns, then pull the fragments in.",
+                "The hull is holding. But we need metal to get home. The laser is charged. Burn the rocks, then pull the pieces in.",
                 "THE LASER FIRES AHEAD AUTOMATICALLY      MINERAL RECHARGES IT");
         s2.corrosiveMax = 16;
         s2.corrosiveRespawn = 4f;
@@ -59,7 +59,9 @@ public final class Campaign {
         s2.asteroidMax = 22;
         s2.asteroidRespawn = 2.5f;
         s2.astronautMax = 1;
-        s2.shelters = 2;
+        s2.shelters = 1;
+        s2.space = 2.5f;
+        s2.blackhole = false;
         s2.crateMax = 1;
         s2.storageMax = 0;
         s2.fuelMax = 2;
@@ -67,8 +69,7 @@ public final class Campaign {
         SECTORS.add(s2);
 
         Sector s3 = new Sector(3, "STATIC", Sector.Goal.RESCUE, 3,
-                "Something hums out there and the radar flickers. Three more of ours are drifting "
-                        + "in this sector. If the discharge comes for you, let it close and hit the EMP.",
+                "Static on every channel. The radar is going blind. Three more of ours are out there. If the discharge comes for you, let it close. Then hit the pulse.",
                 "Y - EMP PULSE STOPS ELECTRIC ANOMALIES NEARBY");
         s3.corrosiveMax = 20;
         s3.corrosiveRespawn = 3f;
@@ -79,7 +80,9 @@ public final class Campaign {
         s3.asteroidMax = 14;
         s3.asteroidRespawn = 3.5f;
         s3.astronautMax = 3;
-        s3.shelters = 2;
+        s3.shelters = 1;
+        s3.space = 2.5f;
+        s3.blackhole = false;
         s3.crateMax = 2;
         s3.storageMax = 1;
         s3.fuelMax = 2;

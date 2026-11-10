@@ -32,6 +32,10 @@ public final class Sector {
     public float asteroidRespawn = 4f;
     public int astronautMax = 3;
     public int shelters = 2;
+    /** Size of the sector in screens: a room sized to its task, not an empty ocean. */
+    public float space = 3f;
+    /** The rift is a lesson of its own; earlier sectors do not have it. */
+    public boolean blackhole = true;
     /** Loose cargo: few things on the map, so the goal reads clearly (tip: one focus at a time). */
     public int crateMax = 4;
     public int storageMax = 3;
