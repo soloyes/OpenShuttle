@@ -238,11 +238,15 @@
         if (started || !ready) return;
         started = true;
         boot.classList.add("launch");
-        LaunchAudio.play();
-        Scene.launch(function () {
-            boot.classList.add("hidden");
-            LaunchAudio.restoreMusic();
-        });
+        // First the music fades out, then the engines spool up and the launch plays.
+        LaunchAudio.fadeOutMusic(900);
+        setTimeout(function () {
+            LaunchAudio.play();
+            Scene.launch(function () {
+                boot.classList.add("hidden");
+                LaunchAudio.restoreMusic();
+            });
+        }, 900);
         // The game ignores pad input until the button that dismissed this overlay is released.
         window.__gameStarted = true;
         var el = document.documentElement;
@@ -316,11 +320,28 @@
             lp.frequency.linearRampToValueAtTime(380, t + 2.0);
             var rg = c.createGain();
             rg.gain.setValueAtTime(0.0001, t);
-            rg.gain.exponentialRampToValueAtTime(0.9, t + 0.7);
+            rg.gain.exponentialRampToValueAtTime(0.25, t + 0.4);
+            rg.gain.exponentialRampToValueAtTime(0.9, t + 1.1);
             rg.gain.setValueAtTime(0.9, t + 1.9);
             rg.gain.exponentialRampToValueAtTime(0.0001, t + 3.1);
             rumble.connect(lp).connect(rg).connect(out);
             rumble.start(t);
+
+            // 1b) Turbine whine rising with the spool-up.
+            var whine = c.createOscillator();
+            whine.type = "sawtooth";
+            whine.frequency.setValueAtTime(90, t);
+            whine.frequency.exponentialRampToValueAtTime(520, t + 1.6);
+            var wlp = c.createBiquadFilter();
+            wlp.type = "lowpass";
+            wlp.frequency.value = 900;
+            var wg2 = c.createGain();
+            wg2.gain.setValueAtTime(0.0001, t);
+            wg2.gain.exponentialRampToValueAtTime(0.09, t + 1.0);
+            wg2.gain.exponentialRampToValueAtTime(0.0001, t + 2.3);
+            whine.connect(wlp).connect(wg2).connect(out);
+            whine.start(t);
+            whine.stop(t + 2.4);
 
             // 2) Whoosh: band-passed noise sweeping up as the shuttle tears past the camera.
             var whoosh = c.createBufferSource();
@@ -387,11 +408,12 @@
         }
 
         return {
+            fadeOutMusic: function (ms) {
+                fadeMusic(0.0, ms);
+            },
             play: function () {
                 var c = ctx();
                 if (!c) return;
-                // Duck the game music for the duration of the animation.
-                fadeMusic(0.12, 500);
                 var go = function () { schedule(c); };
                 if (c.state === "suspended") {
                     c.resume().then(go);
@@ -400,7 +422,7 @@
                 }
             },
             restoreMusic: function () {
-                fadeMusic(1, 1800);
+                fadeMusic(1, 2200);
             }
         };
     })();
@@ -577,9 +599,11 @@
                 g.drawImage(ship, -sw / 2, -sh / 2, sw, sh);
 
                 // Shield: steady while idle, flickers out on ignition.
-                var shOn = L < 0 ? 0.55 + 0.08 * Math.sin(t * 1.8) : (L < 0.5 && Math.random() < 0.5 ? 0.6 : 0) * (1 - ignite);
+                var idleShield = 0.55 + 0.08 * Math.sin(t * 1.8);
+                var shOn = L < 0 ? idleShield : idleShield * (1 - sm(L, 0.0, 0.7));
+                var shGrow = L < 0 ? 1 : 1 + 0.12 * sm(L, 0.0, 0.7);
                 if (shield.complete && shOn > 0) {
-                    var ss = sw * 1.75;
+                    var ss = sw * 1.75 * shGrow;
                     g.globalAlpha = shOn;
                     g.drawImage(shield, -ss / 2, -ss / 2 * shield.naturalHeight / shield.naturalWidth, ss, ss * shield.naturalHeight / shield.naturalWidth);
                     g.globalAlpha = 1;

@@ -11,12 +11,12 @@ import com.buran.game.ui.groups.GroupType;
 import com.buran.game.utils.Assets;
 
 /**
- * The main-menu composition: the shuttle alone in its shield, drifting, and far behind it a
+ * The main-menu composition: the shuttle drifting, reeling in a nearby astronaut with its tractor
+ * beam, and far behind it a
  * tumbling figure of a lost crew member. Replaces the portrait-era planet scene.
  */
 public class MenuHero extends Group {
     private final TextureRegion buran;
-    private final TextureRegion shield;
     private final TextureRegion astronaut;
     private float time;
     private final float baseX;
@@ -30,7 +30,6 @@ public class MenuHero extends Group {
         this.menu = menu;
         setName(GroupType.MENU_BACKGROUND.name());
         buran = Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_BURAN);
-        shield = Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_SHIELD);
         astronaut = Assets.getInstance().getAtlas().findRegion(PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT);
         // Landscape: right third. Portrait: between the title and the menu.
         baseX = Theme.portrait() ? Rules.WORLD_WIDTH * 0.55f : Rules.WORLD_WIDTH * 0.74f;
@@ -59,35 +58,105 @@ public class MenuHero extends Group {
         }
     }
 
+    private com.badlogic.gdx.graphics.Texture dot;
+
+    private com.badlogic.gdx.graphics.Texture dot() {
+        if (dot == null) {
+            int n = 32;
+            com.badlogic.gdx.graphics.Pixmap p = new com.badlogic.gdx.graphics.Pixmap(n, n, com.badlogic.gdx.graphics.Pixmap.Format.RGBA8888);
+            p.setBlending(com.badlogic.gdx.graphics.Pixmap.Blending.None);
+            for (int y = 0; y < n; y++) {
+                for (int x = 0; x < n; x++) {
+                    float dx = (x + 0.5f) / n * 2f - 1f;
+                    float dy = (y + 0.5f) / n * 2f - 1f;
+                    float d = MathUtils.clamp(1f - (float) Math.sqrt(dx * dx + dy * dy), 0f, 1f);
+                    p.setColor(1f, 1f, 1f, d * d);
+                    p.drawPixel(x, y);
+                }
+            }
+            dot = new com.badlogic.gdx.graphics.Texture(p);
+            dot.setFilter(com.badlogic.gdx.graphics.Texture.TextureFilter.Linear, com.badlogic.gdx.graphics.Texture.TextureFilter.Linear);
+            p.dispose();
+        }
+        return dot;
+    }
+
+    /** Rescue cycle: a nearby astronaut is reeled in by the tractor beam, then taken aboard. */
+    private static final float RESCUE_CYCLE = 9f;
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         Color old = batch.getColor().cpy();
         float a = parentAlpha * getColor().a * fade;
+        float aw = PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_WIDTH;
+        float ah = PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT;
 
-        // Distant, small and dim: someone out there.
+        // Far away, small and dim: someone still out there.
         float as = 0.45f;
         batch.setColor(0.75f, 0.8f, 0.9f, 0.55f * a);
-        batch.draw(astronaut,
-                astronautX, astronautY,
-                PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_WIDTH / 2f, PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT / 2f,
-                PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_WIDTH, PaintConstants.UI_MENU_BACKGROUND_ASTRONAUT_HEIGHT,
-                as, as, time * 9f);
+        batch.draw(astronaut, astronautX, astronautY, aw / 2f, ah / 2f, aw, ah, as, as, time * 9f);
 
         float scale = Theme.portrait() ? 1.45f : 2.1f;
         float bob = MathUtils.sin(time * 0.9f) * 22f;
         float tilt = MathUtils.sin(time * 0.45f) * 3f;
         float bw = PaintConstants.UI_MENU_BACKGROUND_BURAN_WIDTH;
         float bh = PaintConstants.UI_MENU_BACKGROUND_BURAN_HEIGHT;
-        float sw = PaintConstants.UI_MENU_BACKGROUND_SHIELD_WIDTH;
-        float sh = PaintConstants.UI_MENU_BACKGROUND_SHIELD_HEIGHT;
-        float pulse = 1f + 0.025f * MathUtils.sin(time * 2.2f);
+        float k = scale / 2.1f;
 
-        batch.setColor(1f, 1f, 1f, 0.8f * a);
-        batch.draw(shield, baseX - sw / 2f, baseY - sh / 2f + bob, sw / 2f, sh / 2f, sw, sh,
-                scale * pulse, scale * pulse, tilt);
+        // Nearby astronaut drifting in along the beam (the nose points lower left).
+        float c = time % RESCUE_CYCLE;
+        float pull = MathUtils.clamp(c / (RESCUE_CYCLE - 1.5f), 0f, 1f);
+        float ease = pull * pull * (3f - 2f * pull);
+        float emX = baseX - 150f * k;
+        float emY = baseY - 110f * k + bob;
+        float axp = emX + MathUtils.lerp(-430f, -110f, ease) * k;
+        float ayp = emY + MathUtils.lerp(-230f, -60f, ease) * k + MathUtils.sin(time * 1.3f) * 10f;
+        float taken = MathUtils.clamp((c - (RESCUE_CYCLE - 1.5f)) / 0.6f, 0f, 1f);
+        float appear = MathUtils.clamp(c / 0.8f, 0f, 1f);
+        float astroAlpha = a * appear * (1f - taken);
+        float astroScale = 0.9f * k * (1f - 0.5f * taken);
+
+        if (astroAlpha > 0.01f) {
+            // Beam: a soft cone of light with pulses running toward the ship.
+            com.badlogic.gdx.graphics.Texture d = dot();
+            batch.setBlendFunction(com.badlogic.gdx.graphics.GL20.GL_SRC_ALPHA, com.badlogic.gdx.graphics.GL20.GL_ONE);
+            int steps = 28;
+            for (int i = 0; i <= steps; i++) {
+                float u = i / (float) steps;
+                float x = MathUtils.lerp(emX, axp, u);
+                float y = MathUtils.lerp(emY, ayp, u);
+                float w = MathUtils.lerp(30f, 150f, u) * k;
+                batch.setColor(0.45f, 0.9f, 1f, 0.13f * astroAlpha);
+                batch.draw(d, x - w / 2f, y - w / 2f, w, w);
+            }
+            for (int pIdx = 0; pIdx < 4; pIdx++) {
+                float u = 1f - ((time * 0.7f + pIdx * 0.25f) % 1f);
+                float x = MathUtils.lerp(emX, axp, u);
+                float y = MathUtils.lerp(emY, ayp, u);
+                float w = MathUtils.lerp(24f, 90f, u) * k;
+                batch.setColor(0.6f, 0.95f, 1f, 0.55f * astroAlpha * (1f - u * 0.5f));
+                batch.draw(d, x - w / 2f, y - w / 2f, w, w);
+            }
+            batch.setColor(0.6f, 0.95f, 1f, 0.5f * astroAlpha);
+            batch.draw(d, emX - 26f * k, emY - 26f * k, 52f * k, 52f * k);
+            batch.setBlendFunction(com.badlogic.gdx.graphics.GL20.GL_SRC_ALPHA, com.badlogic.gdx.graphics.GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+            batch.setColor(1f, 1f, 1f, astroAlpha);
+            batch.draw(astronaut, axp - aw / 2f, ayp - ah / 2f, aw / 2f, ah / 2f, aw, ah, astroScale, astroScale,
+                    MathUtils.sin(time * 0.8f) * 25f);
+        }
+
+        // The shuttle itself, no shield in the menu.
         batch.setColor(1f, 1f, 1f, a);
-        batch.draw(buran, baseX - bw / 2f, baseY - bh / 2f + bob, bw / 2f, bh / 2f, bw, bh,
-                scale, scale, tilt);
+        batch.draw(buran, baseX - bw / 2f, baseY - bh / 2f + bob, bw / 2f, bh / 2f, bw, bh, scale, scale, tilt);
+        if (taken > 0f && taken < 1f) {
+            // Soft flash at the hatch as the astronaut is taken aboard.
+            batch.setBlendFunction(com.badlogic.gdx.graphics.GL20.GL_SRC_ALPHA, com.badlogic.gdx.graphics.GL20.GL_ONE);
+            float fw = 160f * k * (0.5f + taken);
+            batch.setColor(0.7f, 0.95f, 1f, 0.6f * (1f - taken) * a);
+            batch.draw(dot(), emX - fw / 2f, emY - fw / 2f, fw, fw);
+            batch.setBlendFunction(com.badlogic.gdx.graphics.GL20.GL_SRC_ALPHA, com.badlogic.gdx.graphics.GL20.GL_ONE_MINUS_SRC_ALPHA);
+        }
         batch.setColor(old);
     }
 }
