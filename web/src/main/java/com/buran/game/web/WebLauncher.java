@@ -27,7 +27,11 @@ public class WebLauncher {
     @JSBody(script = "return !!(window.Howler && Howler.ctx && Howler.ctx.state === 'running');")
     private static native boolean audioRunning();
 
+    @JSBody(script = "return location.search || '';")
+    private static native String query();
+
     public static void main(String[] args) {
+        com.buran.game.conf.Rules.DEBUG_START_AT_HOLE = query().contains("debug=hole");
         WebApplicationConfiguration config = new WebApplicationConfiguration("canvas");
         // 0 x 0 = follow the browser window size.
         config.width = 0;

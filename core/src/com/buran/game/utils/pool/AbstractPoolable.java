@@ -111,6 +111,8 @@ public abstract class AbstractPoolable implements Poolable {
         float dst = Blackhole.position.dst(position);
         if (dst <= Buffs.getBlackholeTakeRange()) {
             taken = true;
+            // Shed glowing matter into the accretion flow while being pulled in.
+            com.buran.game.bot.blackhole.BlackholeDebris.shed(position.x, position.y, color != null ? color : com.badlogic.gdx.graphics.Color.WHITE);
             atRayPoint = false;
             velocity.scl(0.5f);
             float scaleX = (dst / Buffs.getBlackholeTakeRange()) * saveScaleX;

@@ -21,6 +21,7 @@ public class PostProcessor implements Disposable {
     public static class Params {
         public boolean hole;
         public float holeX, holeY, holeRadius, holeSpin;
+        public float aspect = 16f / 9f;
         public boolean grey;
         public float flash;
         public float flashR = 1f, flashG = 1f, flashB = 1f;
@@ -139,6 +140,7 @@ public class PostProcessor implements Disposable {
         composite.setUniformf("u_center", p.holeX, p.holeY);
         composite.setUniformf("u_radius", p.holeRadius);
         composite.setUniformf("u_spin", p.holeSpin);
+        composite.setUniformf("u_aspect", p.aspect);
         composite.setUniformf("u_bloomStrength", p.bloom);
         composite.setUniformf("u_vignette", p.vignette);
         composite.setUniformf("u_grain", p.grain);
