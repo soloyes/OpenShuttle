@@ -3,6 +3,7 @@ package com.buran.game.web;
 import com.buran.game.AdsController;
 import com.buran.game.BuranGame;
 import com.buran.game.Share;
+import com.buran.game.effects.BoomBox;
 import com.buran.game.input.Gamepad;
 import com.buran.game.screens.LoadingScreen;
 import com.github.xpenatan.gdx.teavm.backends.web.WebApplication;
@@ -22,6 +23,9 @@ public class WebLauncher {
 
     @JSBody(script = "return !!window.__gameStarted;")
     private static native boolean pageStarted();
+
+    @JSBody(script = "return !!(window.Howler && Howler.ctx && Howler.ctx.state === 'running');")
+    private static native boolean audioRunning();
 
     public static void main(String[] args) {
         WebApplicationConfiguration config = new WebApplicationConfiguration("canvas");
@@ -53,10 +57,20 @@ public class WebLauncher {
         // "mobile" here means: derive the world size from the real canvas size.
         BuranGame game = new BuranGame(noAds, share, true, 0, 0) {
             private boolean announced;
+            private boolean started;
+            private boolean musicReplayed;
 
             @Override
             public void render() {
-                Gamepad.get().setEnabled(pageStarted());
+                boolean nowStarted = pageStarted();
+                Gamepad.get().setEnabled(nowStarted);
+                started = nowStarted;
+                // Music started before the first user gesture was swallowed by the browser.
+                // Replay it once the audio context is actually running (resume is async).
+                if (started && !musicReplayed && audioRunning()) {
+                    musicReplayed = true;
+                    BoomBox.replayLast();
+                }
                 super.render();
                 if (!announced && getScreen() != null && !(getScreen() instanceof LoadingScreen)) {
                     announced = true;

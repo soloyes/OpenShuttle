@@ -1,4 +1,12 @@
 <p align="center">
+  <a href="https://soloyes.github.io/OpenShuttle/"><img src="docs/classic-title.jpg" alt="Buran-19 classic title screen" width="100%"/></a>
+</p>
+
+<p align="center">
+  <b><a href="https://soloyes.github.io/OpenShuttle/">Play in the browser</a></b> &middot; Xbox (Edge), PC, phone
+</p>
+
+<p align="center">
   <img src="docs/banner-pixel-v4.gif" alt="Buran-19" width="100%"/>
 </p>
 

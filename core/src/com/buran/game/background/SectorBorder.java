@@ -1,56 +1,52 @@
 package com.buran.game.background;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Disposable;
 import com.buran.game.conf.Rules;
 import com.buran.game.player.Buran;
 
 /**
- * The edge of the playable sector, drawn as a dashed glowing line that fades in as the
- * shuttle approaches it. Leaving the sector costs hull and fuel and eventually a life, so the
- * player has to see the edge before it hurts.
+ * The edge of the playable sector: one continuous glowing outline (shader, distance to the
+ * rectangle) with marching dashes, fading in as the shuttle approaches. Leaving the sector
+ * costs hull and fuel and eventually a life, so the edge must be seen before it hurts.
  */
 public class SectorBorder implements Disposable {
-    private static final float DASH = 120f;
-    private static final float GAP = 60f;
-    private static final float THICKNESS = 22f;
-    private static final float GLOW = 220f;
-
-    private final Texture line;
-    private final Texture glow;
+    private final ShaderProgram shader;
+    private final Texture white;
     private final Color color = new Color(1f, 0.38f, 0.26f, 1f);
     private float time;
 
     public SectorBorder() {
-        Pixmap p = new Pixmap(4, 4, Pixmap.Format.RGBA8888);
+        ShaderProgram.pedantic = false;
+        shader = new ShaderProgram(Gdx.files.internal("shaders/space.vert").readString(),
+                Gdx.files.internal("shaders/border.frag").readString());
+        if (!shader.isCompiled()) {
+            Gdx.app.error("SectorBorder", shader.getLog());
+        }
+        Pixmap p = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         p.setColor(Color.WHITE);
         p.fill();
-        line = new Texture(p);
+        white = new Texture(p);
         p.dispose();
-
-        // Soft falloff strip (vertical gradient) for the glow around the line.
-        Pixmap g = new Pixmap(4, 64, Pixmap.Format.RGBA8888);
-        g.setBlending(Pixmap.Blending.None);
-        for (int y = 0; y < 64; y++) {
-            float d = Math.abs(y - 31.5f) / 31.5f;
-            float a = (1f - d) * (1f - d);
-            g.setColor(1f, 1f, 1f, a);
-            g.drawLine(0, y, 3, y);
-        }
-        glow = new Texture(g);
-        glow.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        g.dispose();
     }
 
     public void update(float dt) {
         time += dt;
     }
 
-    public void render(SpriteBatch batch) {
+    /** Draw inside the world pass (batch begun with the world camera). */
+    public void render(SpriteBatch batch, Camera camera) {
+        if (!shader.isCompiled()) {
+            return;
+        }
         float w = Rules.SPACE_WIDTH;
         float h = Rules.SPACE_HEIGHT;
         float px = Buran.position.x;
@@ -62,56 +58,31 @@ public class SectorBorder implements Disposable {
         if (alpha <= 0f) {
             return;
         }
-        float pulse = 0.85f + 0.15f * MathUtils.sin(time * 5f);
-        float a = alpha * pulse;
+        alpha *= 0.85f + 0.15f * MathUtils.sin(time * 5f);
 
-        Color old = batch.getColor().cpy();
-        // March the dashes so the edge feels alive.
-        float offset = (time * 120f) % (DASH + GAP);
-
-        batch.setColor(color.r, color.g, color.b, a * 0.55f);
-        batch.draw(glow, 0, -GLOW / 2, w, GLOW);
-        batch.draw(glow, 0, h - GLOW / 2, w, GLOW);
-        drawVerticalGlow(batch, -GLOW / 2, h);
-        drawVerticalGlow(batch, w - GLOW / 2, h);
-
-        batch.setColor(color.r, color.g, color.b, a);
-        dashedHorizontal(batch, 0, w, 0, offset);
-        dashedHorizontal(batch, 0, w, h, offset);
-        dashedVertical(batch, 0, h, 0, offset);
-        dashedVertical(batch, 0, h, w, offset);
-        batch.setColor(old);
-    }
-
-    private void drawVerticalGlow(SpriteBatch batch, float x, float h) {
-        // The gradient strip is vertical; rotate it 90 degrees for the left/right edges.
-        batch.draw(glow, x + GLOW / 2 - h / 2, h / 2 - GLOW / 2, h / 2, GLOW / 2, h, GLOW, 1f, 1f, 90f,
-                0, 0, 4, 64, false, false);
-    }
-
-    private void dashedHorizontal(SpriteBatch batch, float x0, float x1, float y, float offset) {
-        for (float x = x0 - offset; x < x1; x += DASH + GAP) {
-            float s = Math.max(x, x0);
-            float e = Math.min(x + DASH, x1);
-            if (e > s) {
-                batch.draw(line, s, y - THICKNESS / 2, e - s, THICKNESS);
-            }
-        }
-    }
-
-    private void dashedVertical(SpriteBatch batch, float y0, float y1, float x, float offset) {
-        for (float y = y0 - offset; y < y1; y += DASH + GAP) {
-            float s = Math.max(y, y0);
-            float e = Math.min(y + DASH, y1);
-            if (e > s) {
-                batch.draw(line, x - THICKNESS / 2, s, THICKNESS, e - s);
-            }
-        }
+        float vw = Rules.VIEW_WIDTH;
+        float vh = Rules.VIEW_HEIGHT;
+        batch.flush();
+        com.badlogic.gdx.graphics.glutils.ShaderProgram previous = batch.getShader();
+        batch.setShader(shader);
+        batch.setBlendFunction(GL20.GL_ONE, GL20.GL_ONE);
+        shader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        shader.setUniformf("u_camera", camera.position.x, camera.position.y);
+        shader.setUniformf("u_view", vw, vh);
+        shader.setUniformf("u_size", w, h);
+        shader.setUniformf("u_time", time);
+        shader.setUniformf("u_alpha", alpha);
+        shader.setUniformf("u_pixel", vh / Math.max(1, Gdx.graphics.getHeight()));
+        shader.setUniformf("u_color", color.r, color.g, color.b);
+        batch.draw(white, camera.position.x - vw / 2f, camera.position.y - vh / 2f, vw, vh);
+        batch.flush();
+        batch.setShader(previous);
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     }
 
     @Override
     public void dispose() {
-        line.dispose();
-        glow.dispose();
+        shader.dispose();
+        white.dispose();
     }
 }

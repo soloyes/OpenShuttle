@@ -64,15 +64,8 @@ public class HandPointer extends Group {
 
     /** On TV/PC the first-run hint is the control scheme, not a tapping hand. */
     private void drawControlsHint(Batch batch) {
-        String line1;
-        String line2;
-        if (Gamepad.get().hasController()) {
-            line1 = "LEFT STICK - FLY      A - USE ITEM      LB / RB - SWITCH ITEM";
-            line2 = "Y - EMP PULSE      MENU - PAUSE";
-        } else {
-            line1 = "ARROWS / WASD - FLY      SPACE - USE ITEM      Q / E - SWITCH ITEM";
-            line2 = "F - EMP PULSE      ESC - PAUSE";
-        }
+        String line1 = "LEFT STICK - FLY      A - USE ITEM      LB / RB - SWITCH ITEM";
+        String line2 = "Y - EMP PULSE      MENU - PAUSE";
         Color c = hintFont.getColor().cpy();
         hintFont.setColor(1, 1, 1, 0.55f + 0.45f * scale);
         hintLayout.setText(hintFont, line1);

@@ -65,7 +65,6 @@ import com.buran.game.player.Standing;
 import com.buran.game.player.navigation.Radar;
 import com.buran.game.ui.GameInfoSystem;
 import com.buran.game.ui.Joystick;
-import com.buran.game.ui.PlayerPointer;
 import com.buran.game.ui.groups.PauseGroup;
 import com.buran.game.ui.groups.configs.ConfigImageButton;
 import com.buran.game.ui.groups.configs.LeftGroup;
@@ -109,7 +108,6 @@ public class GameScreen extends BaseScreen {
     @Setter
     private GameInfoSystem gameInfoSystem;
     private Joystick joystick;
-    private PlayerPointer playerPointer;
     @Getter
     private Blackhole blackhole;
     private FrameBuffer fbo;
@@ -216,7 +214,6 @@ public class GameScreen extends BaseScreen {
         uiTopPanel = new UITopPanel();
 
         BoundCheck.avoidPosition(Blackhole.position, Buran.position, (int) Buffs.getBlackholeTakeRange() + 50, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
-        playerPointer = new PlayerPointer(player);
         Rules.StartLevel.values()[Profiles.getSettings().getLevel()].setGameLevel();
         if (Profiles.getSettings().getLevel() == 0) {
             astronautEmitter.setConsumablesMaxCount(Rules.CONSUMABLE_ASTRONAUT_MAX_COUNT * 2);
@@ -304,7 +301,7 @@ public class GameScreen extends BaseScreen {
         } else {
             background.render(batch);
         }
-        sectorBorder.render(batch);
+        sectorBorder.render(batch, camera);
         batch.end();
         //END
 
@@ -440,7 +437,6 @@ public class GameScreen extends BaseScreen {
         batch.begin();
         if (!Rules.GAME_OVER) {
             gameInfoSystem.render(batch);
-            playerPointer.render(batch);
         }
         batch.end();
 
@@ -480,7 +476,6 @@ public class GameScreen extends BaseScreen {
             }
 
             gameInfoSystem.update(dt);
-            playerPointer.update(dt);
             if (!Rules.GAME_OVER) {
                 if (!Rules.DEATH_MODE) {
                     boomBox.playRandomMusicEffects(dt);

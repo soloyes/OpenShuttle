@@ -92,7 +92,25 @@ public class BoomBox {
         return -1;
     }
 
+    private static String lastMusic;
+    private static String[] lastEffects = new String[0];
+
+    /**
+     * Restarts whatever music the current screen asked for last. Browsers keep audio muted
+     * until the first user gesture; music started before that is replayed once it is allowed.
+     */
+    public static void replayLast() {
+        if (lastMusic == null || !Assets.getInstance().getAssetManager().isLoaded(lastMusic, Music.class)) {
+            return;
+        }
+        BoomBox b = new BoomBox();
+        b.stopAllMusic();
+        b.stopAllMusicAndPlayThese(lastMusic, lastEffects);
+    }
+
     public void stopAllMusicAndPlayThese(String music, String... musicEffect) {
+        lastMusic = music;
+        lastEffects = musicEffect;
         Map<String, Float> musicWithVolumes = new HashMap<String, Float>();
         for (int i = 0; i < musicEffect.length; i++) {
             musicWithVolumes.put(musicEffect[i],
@@ -180,6 +198,8 @@ public class BoomBox {
     }
 
     public void stopAllMusicAndPlayThis(String music) {
+        lastMusic = music;
+        lastEffects = new String[0];
         if (!isPlaying(music)) {
             stopAllMusic();
             playMusicInLoop(music);
