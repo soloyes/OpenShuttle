@@ -80,6 +80,10 @@ public class BoomBox {
     }
 
     public long playSound(String sound) {
+        // A click can land right after a screen change cleared the assets; skip, don't crash.
+        if (!Assets.getInstance().getAssetManager().isLoaded(sound, Sound.class)) {
+            return -1;
+        }
         Sound tmp = Assets.getInstance()
                 .getAssetManager()
                 .get(sound, Sound.class);

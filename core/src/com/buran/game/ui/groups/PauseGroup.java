@@ -187,14 +187,13 @@ public class PauseGroup extends Group {
             playPauseBtn.getStyle().imageUp = pauseTexture;
             watched = true;
         }
-        configGroup.setVisible(pause);
-        leftGroup.setVisible(pause);
-        rightGroup.setVisible(pause);
-        buttonMenu.setVisible(pause);
-        buttonRestart.setVisible(pause);
-        if (!configGroup.isVisible()) {
-            commitGroup.setVisible(pause);
-        }
+        // The pause screen itself is drawn by ui.menu.GameMenu now.
+        configGroup.setVisible(false);
+        leftGroup.setVisible(false);
+        rightGroup.setVisible(false);
+        buttonMenu.setVisible(false);
+        buttonRestart.setVisible(false);
+        commitGroup.setVisible(false);
         boomBox.stopAllSound();
         boomBox.playSound(MSConstants.UI_PAUSE);
         Vibrator.vibrateUI(VConstants.UI_CLICK);
@@ -231,8 +230,8 @@ public class PauseGroup extends Group {
         configGroup.setVisible(false);
         leftGroup.setVisible(false);
         rightGroup.setVisible(false);
-        buttonMenu.setVisible(true);
-        buttonRestart.setVisible(true);
+        buttonMenu.setVisible(false);
+        buttonRestart.setVisible(false);
     }
 
     @Override
