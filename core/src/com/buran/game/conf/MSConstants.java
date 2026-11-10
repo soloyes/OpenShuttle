@@ -98,6 +98,7 @@ public final class MSConstants {
 
     //SONG/MUSIC
     public static final String MENU_SONG = SONG_FOLDER + "menu.mp3";
+    public static final String INTRO_SONG = SONG_FOLDER + "intro.mp3";
     public static final String PAUSE = SONG_FOLDER + "pause.mp3";
     public static final String DEATH_MODE = SONG_FOLDER + "deathmode.mp3";
     public static final String GAME_SONG = SONG_FOLDER + "game.mp3";

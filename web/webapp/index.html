@@ -237,7 +237,11 @@
     function begin() {
         if (started || !ready) return;
         started = true;
-        boot.classList.add("launch");
+        if (window.__introPending) {
+            // First run: the intro opens with the launch itself, so go straight to it.
+            boot.classList.add("hidden");
+        } else {
+            boot.classList.add("launch");
         // First the music fades out, then the engines spool up and the launch plays.
         LaunchAudio.fadeOutMusic(900);
         setTimeout(function () {
@@ -247,6 +251,7 @@
                 LaunchAudio.restoreMusic();
             });
         }, 900);
+        }
         // The game ignores pad input until the button that dismissed this overlay is released.
         window.__gameStarted = true;
         var el = document.documentElement;

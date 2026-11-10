@@ -44,6 +44,7 @@ public class Assets {
                 createStandardFont(128, "fonts/college.regular", "");
                 createStandardFont(175, "fonts/college.regular", "");
                 assetManager.load(MSConstants.MENU_SONG, Music.class);
+                assetManager.load(MSConstants.INTRO_SONG, Music.class);
                 assetManager.load(PaintConstants.GAME_PACK, TextureAtlas.class);
                 assetManager.load(PaintConstants.SKIN_FILE, Skin.class);
                 assetManager.load(MSConstants.UI_MENU, Sound.class);

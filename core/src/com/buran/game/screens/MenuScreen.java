@@ -42,18 +42,28 @@ public class MenuScreen extends BaseScreen {
         MainMenu.onIntro = this::playIntro;
         com.badlogic.gdx.Preferences prefs = com.badlogic.gdx.Gdx.app.getPreferences("buran19");
         if (!prefs.getBoolean("intro.seen", false)) {
+            com.buran.game.platform.Shell.introPending(true);
             playIntro();
         }
     }
 
-    /** The opening comic over the menu; back to the menu when it ends or is skipped. */
+    /**
+     * The opening comic, with its own score; the menu is hidden under it and comes back with
+     * the menu song when the intro ends or is skipped.
+     */
     private void playIntro() {
+        mainMenu.setVisible(false);
+        menuHero.setVisible(false);
         com.buran.game.ui.menu.Intro intro = new com.buran.game.ui.menu.Intro(() -> {
+            mainMenu.setVisible(true);
+            menuHero.setVisible(true);
             com.buran.game.ui.menu.MenuNav.set(mainMenu);
+            com.buran.game.platform.Shell.introPending(false);
+            boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);
             com.badlogic.gdx.Preferences p = com.badlogic.gdx.Gdx.app.getPreferences("buran19");
             p.putBoolean("intro.seen", true);
             p.flush();
-        });
+        }, () -> boomBox.stopAllMusicAndPlayThese(MSConstants.INTRO_SONG));
         stage.addActor(intro);
     }
 

@@ -68,8 +68,14 @@ public class Intro extends Actor implements MenuNav.Target {
     private float alpha;
     private final com.badlogic.gdx.math.Rectangle skipRect = new com.badlogic.gdx.math.Rectangle();
 
-    public Intro(Done done) {
+    /** Called once, when the intro actually starts (the page has shown the game). */
+    private final Runnable onStart;
+    private boolean begun;
+
+    public Intro(Done done, Runnable onStart) {
         this.done = done;
+        this.onStart = onStart;
+        this.alpha = 1f;
         caption = Theme.font(54);
         captionBig = Theme.font(72);
         hint = Theme.font(54);
@@ -122,7 +128,16 @@ public class Intro extends Actor implements MenuNav.Target {
     @Override
     public void act(float delta) {
         super.act(delta);
-        alpha = Math.min(1f, alpha + delta * 2f);
+        // Hold on black until the page around the game has gone (web boot screen).
+        if (!begun) {
+            if (!com.buran.game.platform.Shell.shown()) {
+                return;
+            }
+            begun = true;
+            if (onStart != null) {
+                onStart.run();
+            }
+        }
         if (ending) {
             endTime += delta;
             if (endTime > 1.2f) {

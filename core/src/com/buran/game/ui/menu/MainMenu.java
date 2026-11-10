@@ -202,6 +202,11 @@ public class MainMenu extends Group implements MenuNav.Target {
         home.add(new Row.Action("RESULTS", rowFont, () -> openPanel(Panel.RESULTS)));
         home.add(new Row.Action("CODEX", rowFont, () -> openPanel(Panel.CODEX)));
         home.add(new Row.Action("SETTINGS", rowFont, () -> openPanel(Panel.SETTINGS)));
+        home.add(new Row.Action("INTRO", rowFont, () -> {
+            if (onIntro != null) {
+                onIntro.run();
+            }
+        }));
         home.add(new Row.Action("ABOUT", rowFont, () -> openPanel(Panel.ABOUT)));
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
             home.add(new Row.Action("EXIT", rowFont, () -> Gdx.app.exit()));
@@ -547,12 +552,6 @@ public class MainMenu extends Group implements MenuNav.Target {
     public static Runnable onIntro;
 
     private void buildAbout() {
-        if (onIntro != null) {
-            panel.add(new Row.Action("WATCH INTRO", rowFont, () -> {
-                closePanel();
-                onIntro.run();
-            }));
-        }
         panel.add(new Row.Text("1991. The Buran program was never cancelled. It went quiet. "
                 + "Flight nineteen left for Object-19, a station parked around an anomaly no one could explain. "
                 + "The experiment failed. The station broke apart, the crew drifted into the field, and the "

@@ -30,11 +30,28 @@ public class WebLauncher {
     @JSBody(script = "return location.search || '';")
     private static native String query();
 
+    @JSBody(script = "var b = document.getElementById('boot'); return !b || b.classList.contains('hidden');")
+    private static native boolean bootHidden();
+
+    @JSBody(params = "p", script = "window.__introPending = p;")
+    private static native void setIntroPending(boolean p);
+
     public static void main(String[] args) {
         com.buran.game.conf.Rules.DEBUG_START_AT_HOLE = query().contains("debug=hole");
         com.buran.game.conf.Rules.DEBUG_FAST_GOAL = query().contains("debug=clear");
         com.buran.game.conf.Rules.DEBUG_UNLOCK = query().contains("unlock");
         com.buran.game.conf.Rules.DEBUG_THIRD = query().contains("third");
+        com.buran.game.platform.Shell.bridge = new com.buran.game.platform.Shell.Bridge() {
+            @Override
+            public boolean shown() {
+                return bootHidden();
+            }
+
+            @Override
+            public void introPending(boolean pending) {
+                setIntroPending(pending);
+            }
+        };
         WebApplicationConfiguration config = new WebApplicationConfiguration("canvas");
         // 0 x 0 = follow the browser window size.
         config.width = 0;
