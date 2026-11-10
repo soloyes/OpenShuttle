@@ -39,6 +39,22 @@ public class MenuScreen extends BaseScreen {
         menuHero = new MenuHero(mainMenu);
         stage.addActor(menuHero);
         stage.addActor(mainMenu);
+        MainMenu.onIntro = this::playIntro;
+        com.badlogic.gdx.Preferences prefs = com.badlogic.gdx.Gdx.app.getPreferences("buran19");
+        if (!prefs.getBoolean("intro.seen", false)) {
+            playIntro();
+        }
+    }
+
+    /** The opening comic over the menu; back to the menu when it ends or is skipped. */
+    private void playIntro() {
+        com.buran.game.ui.menu.Intro intro = new com.buran.game.ui.menu.Intro(() -> {
+            com.buran.game.ui.menu.MenuNav.set(mainMenu);
+            com.badlogic.gdx.Preferences p = com.badlogic.gdx.Gdx.app.getPreferences("buran19");
+            p.putBoolean("intro.seen", true);
+            p.flush();
+        });
+        stage.addActor(intro);
     }
 
     @Override

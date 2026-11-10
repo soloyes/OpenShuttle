@@ -9,6 +9,7 @@ squelch bursts at key-up and key-down.
 Usage:
   pip install piper-tts            (ffmpeg must be on PATH)
   python3 tools/vo/render_radio.py --model <dir>/en_US-joe-medium.onnx [--speaker N] [--only sector01]
+  Intro narration: --model en_US-norman-medium.onnx --only intro (intro12 is the pilot: joe)
 
 Voice models: https://huggingface.co/rhasspy/piper-voices (check MODEL_CARD licence;
 joe = CC0, norman = public domain, libritts_r = CC BY 4.0 -> credit "LibriTTS-R").
@@ -102,7 +103,7 @@ def main():
     with open(LINES, encoding="utf-8") as f:
         rows = [l.rstrip("\n").split("\t", 1) for l in f if l.strip()]
     for line_id, text in rows:
-        if a.only and line_id != a.only:
+        if a.only and not line_id.startswith(a.only):
             continue
         rnd = random.Random(line_id)
         with tempfile.TemporaryDirectory() as tmp:

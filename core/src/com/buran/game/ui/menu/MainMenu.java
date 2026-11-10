@@ -543,7 +543,16 @@ public class MainMenu extends Group implements MenuNav.Target {
         }
     }
 
+    /** Set by the menu screen: plays the intro again. */
+    public static Runnable onIntro;
+
     private void buildAbout() {
+        if (onIntro != null) {
+            panel.add(new Row.Action("WATCH INTRO", rowFont, () -> {
+                closePanel();
+                onIntro.run();
+            }));
+        }
         panel.add(new Row.Text("1991. The Buran program was never cancelled. It went quiet. "
                 + "Flight nineteen left for Object-19, a station parked around an anomaly no one could explain. "
                 + "The experiment failed. The station broke apart, the crew drifted into the field, and the "
