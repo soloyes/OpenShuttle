@@ -60,6 +60,7 @@ public class MainMenu extends Group implements MenuNav.Target {
 
     // Detail pane content (results / codex).
     private DetailedResultDAO detailResult;
+    private Codex codex;
     private String detailTitle;
     private Sticker detailSticker;
 
@@ -119,7 +120,7 @@ public class MainMenu extends Group implements MenuNav.Target {
         float ph = panelH() - head - 60f;
         if (hasDetail()) {
             if (Theme.portrait()) {
-                float listH = ph * 0.48f;
+                float listH = ph * 0.40f;
                 panel.setBox(px, py + ph - listH, pw, listH);
             } else {
                 panel.setBox(px, py, pw * 0.5f, ph);
@@ -340,20 +341,25 @@ public class MainMenu extends Group implements MenuNav.Target {
     }
 
     private void buildCodex() {
-        final List<Sticker> entries = new ArrayList<Sticker>();
-        List<String> seen = new ArrayList<String>();
-        for (Sticker s : Sticker.values()) {
-            String name = stickerName(s);
-            if (seen.contains(name)) {
-                continue;   // gold variants share the name of the plain item
+        if (codex == null) {
+            codex = new Codex();
+        }
+        final List<Codex.Entry> byRow = new ArrayList<Codex.Entry>();
+        String lastCategory = null;
+        for (Codex.Entry e : codex.entries()) {
+            String group = e.category.startsWith("ITEM") || e.category.equals("SYSTEM") ? "ITEMS"
+                    : e.category.equals("PHENOMENON") ? "THREATS" : e.category + (e.category.equals("CREW") ? "" : "S");
+            if (!group.equals(lastCategory)) {
+                lastCategory = group;
+                panel.add(new Row.Info("- " + group + " -", smallFont, null));
+                byRow.add(null);
             }
-            seen.add(name);
-            entries.add(s);
-            panel.add(new Row.Action(name, smallFont, null));
+            panel.add(new Row.Action(e.name, smallFont, null));
+            byRow.add(e);
         }
         panel.onFocus((row, index) -> {
-            if (index >= 0 && index < entries.size()) {
-                detailSticker = entries.get(index);
+            if (index >= 0 && index < byRow.size() && byRow.get(index) != null) {
+                codex.select(byRow.get(index));
             }
         });
         panel.add(new Row.Action("BACK", rowFont, this::closePanel));
@@ -451,6 +457,9 @@ public class MainMenu extends Group implements MenuNav.Target {
     @Override
     public void act(float delta) {
         super.act(delta);
+        if (codex != null) {
+            codex.update(delta);
+        }
         float target = open != Panel.NONE ? 1f : 0f;
         panelAlpha += (target - panelAlpha) * Math.min(1f, delta * 10f);
         home.getColor().a = open != Panel.NONE && !Theme.portrait() ? 0.45f : 1f;
@@ -495,7 +504,7 @@ public class MainMenu extends Group implements MenuNav.Target {
         if (Theme.portrait()) {
             x = px + 36f;
             w = pw - 72f;
-            y = py + ph * 0.48f;
+            y = py + ph * 0.40f;
         } else {
             x = px + pw * 0.5f + 60f;
             w = pw * 0.5f - 96f;
@@ -527,22 +536,9 @@ public class MainMenu extends Group implements MenuNav.Target {
                 drawText(batch, smallFont, l[1], x + w - layout.width, y, Theme.TEXT, a);
                 y -= 66f;
             }
-        } else if (open == Panel.CODEX && detailSticker != null) {
-            TextureRegion icon = stickers.getRegion(detailSticker);
-            float size = 180f;
-            y -= 20f;
-            if (icon != null) {
-                batch.setColor(1, 1, 1, a);
-                batch.draw(icon, x, y - size, size, size);
-                batch.setColor(Color.WHITE);
-            }
-            drawText(batch, headFont, stickerName(detailSticker), x + size + 40f, y - size / 2f + headFont.getCapHeight() / 2f,
-                    Theme.TEXT, a);
-            y -= size + 50f;
-            Color old = smallFont.getColor().cpy();
-            smallFont.setColor(Theme.DIM.r, Theme.DIM.g, Theme.DIM.b, a);
-            smallFont.draw(batch, stickerBody(detailSticker), x, y, w, Align.left, true);
-            smallFont.setColor(old);
+        } else if (open == Panel.CODEX && codex != null) {
+            float box = Theme.portrait() ? 190f : 330f;
+            codex.draw(batch, x, y - 10f, w, a, headFont, smallFont, box);
         }
     }
 

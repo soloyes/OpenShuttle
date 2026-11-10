@@ -43,6 +43,8 @@ gdxTeaVM {
             copy {
                 from file('webapp')
                 into layout.buildDirectory.dir(out)
+                // Cache-busting: every build loads its own app.js, not a stale cached one.
+                filter { line -> line.replace('__BUILD__', String.valueOf(System.currentTimeMillis())) }
             }
         }
     }
