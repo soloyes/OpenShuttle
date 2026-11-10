@@ -25,7 +25,7 @@ import com.buran.game.utils.StickerResolver;
  * summary) and the end-of-run report.
  */
 public class GameMenu extends Group implements MenuNav.Target {
-    private enum Mode { HIDDEN, PAUSE, REPORT }
+    private enum Mode { HIDDEN, PAUSE, REPORT, CLEAR }
 
     private final MenuList list = new MenuList();
     private final BoomBox boomBox = new BoomBox();
@@ -140,6 +140,29 @@ public class GameMenu extends Group implements MenuNav.Target {
         open();
     }
 
+    private com.buran.game.campaign.Sector clearedSector;
+
+    /** Sector clear: next sector or back to base. */
+    private void showClear(com.buran.game.campaign.SectorRun run) {
+        if (mode == Mode.CLEAR) {
+            return;
+        }
+        mode = Mode.CLEAR;
+        clearedSector = run.sector();
+        report = Standing.getInstance().getDetails();
+        list.clearRows();
+        final com.buran.game.campaign.Sector next = com.buran.game.campaign.Campaign.next(clearedSector);
+        if (next != null) {
+            list.add(new Row.Action("NEXT: SECTOR " + next.code(), rowFont, () -> {
+                com.buran.game.campaign.Campaign.start(next);
+                restart();
+            }));
+        }
+        list.add(new Row.Action("RETURN TO BASE", rowFont, this::quit));
+        list.onBack(this::quit);
+        open();
+    }
+
     /** Called once when the run ends. */
     public void showReport() {
         if (mode == Mode.REPORT) {
@@ -169,12 +192,14 @@ public class GameMenu extends Group implements MenuNav.Target {
 
     private void restart() {
         MenuNav.clear(this);
+        com.buran.game.campaign.Campaign.setRun(null);
         ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
         Restart.doRestart();
     }
 
     private void quit() {
         MenuNav.clear(this);
+        com.buran.game.campaign.Campaign.setRun(null);
         ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.MENU);
         Restart.doRestart();
     }
@@ -196,7 +221,10 @@ public class GameMenu extends Group implements MenuNav.Target {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (Rules.GAME_OVER) {
+        com.buran.game.campaign.SectorRun run = com.buran.game.campaign.Campaign.run();
+        if (run != null && run.isClear() && !Rules.GAME_OVER) {
+            showClear(run);
+        } else if (Rules.GAME_OVER) {
             showReport();
         } else if (PauseGroup.isPause()) {
             if (mode != Mode.PAUSE) {
@@ -207,7 +235,7 @@ public class GameMenu extends Group implements MenuNav.Target {
             hide();
         }
         float target = mode == Mode.HIDDEN ? 0f : 1f;
-        alpha += (target - alpha) * Math.min(1f, delta * (Rules.GAME_OVER ? 2f : 10f));
+        alpha += (target - alpha) * Math.min(1f, delta * (Rules.GAME_OVER || mode == Mode.CLEAR ? 2f : 10f));
     }
 
     @Override
@@ -219,9 +247,11 @@ public class GameMenu extends Group implements MenuNav.Target {
         // Other actors (the item carousel) leave the grey pause shader on the batch.
         batch.setShader(null);
         Theme.frame(batch, boxX(), boxY(), boxW(), boxH(), a);
-        String title = mode == Mode.REPORT ? "SIGNAL LOST" : "PAUSED";
-        draw(batch, headFont, title, boxX() + 66f, boxY() + boxH() - 50f, mode == Mode.REPORT ? Theme.ACCENT : Theme.TEXT, a);
-        String sub = mode == Mode.REPORT ? "FLIGHT REPORT" : "MISSION CONTROL: NO SIGNAL";
+        String title = mode == Mode.REPORT ? "SIGNAL LOST" : mode == Mode.CLEAR ? "SECTOR " + clearedSector.code() + " CLEAR" : "PAUSED";
+        draw(batch, headFont, title, boxX() + 66f, boxY() + boxH() - 50f,
+                mode == Mode.REPORT ? Theme.ACCENT : mode == Mode.CLEAR ? Theme.OK : Theme.TEXT, a);
+        String sub = mode == Mode.REPORT ? "FLIGHT REPORT" : mode == Mode.CLEAR ? clearedSector.name + "  -  CREW AND CARGO SECURED"
+                : "MISSION CONTROL: NO SIGNAL";
         draw(batch, smallFont, sub, boxX() + 66f, boxY() + boxH() - 50f - headFont.getLineHeight() + 6f, Theme.DIM, a);
         drawSummary(batch, a);
         super.draw(batch, parentAlpha * alpha);
@@ -247,7 +277,7 @@ public class GameMenu extends Group implements MenuNav.Target {
             Theme.rect(batch, px + pw * 0.5f + 20f, py, 3f, ph, Theme.FAINT, a);
         }
         Standing st = Standing.getInstance();
-        DetailedResultDAO d = mode == Mode.REPORT && report != null ? report : st.getDetails();
+        DetailedResultDAO d = (mode == Mode.REPORT || mode == Mode.CLEAR) && report != null ? report : st.getDetails();
         String[][] lines = {
                 {"SCORE", formatScore(d.getScore())},
                 {"STEP", st.getPlayingLevel() + " / 19"},

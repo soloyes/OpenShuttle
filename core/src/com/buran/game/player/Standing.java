@@ -147,6 +147,32 @@ public final class Standing {
         }
     }
 
+    /** Crew members taken aboard in this run (all professions). */
+    public int getAstronautsTotal() {
+        int n = 0;
+        if (astronauts != null) {
+            for (Integer v : astronauts.values()) {
+                n += v;
+            }
+        }
+        return n;
+    }
+
+    /** Asteroids burnt down to fragments in this run. */
+    public int getMinedTotal() {
+        int n = 0;
+        if (statistics != null) {
+            for (Map.Entry<AbstractPoolable.Type, Map<Integer, Integer>> e : statistics.entrySet()) {
+                if (e.getKey() == AbstractPoolable.Type.ASTEROID_METAL || e.getKey() == AbstractPoolable.Type.ASTEROID_MINERAL) {
+                    for (Integer v : e.getValue().values()) {
+                        n += v;
+                    }
+                }
+            }
+        }
+        return n;
+    }
+
     public void changeUsedItems(Sticker item) {
         if (usedItems.get(item) == null) {
             usedItems.put(item, 1);

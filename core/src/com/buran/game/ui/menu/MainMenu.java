@@ -40,7 +40,7 @@ public class MainMenu extends Group implements MenuNav.Target {
     private static final String[] LEVELS = {"EASY", "NORMAL", "HARD"};
     private static final String[] MONTHS = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
 
-    private enum Panel { NONE, PILOTS, RESULTS, CODEX, SETTINGS, ABOUT }
+    private enum Panel { NONE, PLAY, PILOTS, RESULTS, CODEX, SETTINGS, ABOUT }
 
     private final Profiles profiles;
     private final BoomBox boomBox = new BoomBox();
@@ -198,7 +198,7 @@ public class MainMenu extends Group implements MenuNav.Target {
 
     private void buildHome() {
         home.clearRows();
-        home.add(new Row.Action("PLAY", rowFont, this::play));
+        home.add(new Row.Action("PLAY", rowFont, () -> openPanel(Panel.PLAY)));
         pilotRow = home.add(new Row.Action("PILOT", rowFont, () -> openPanel(Panel.PILOTS)));
         home.add(new Row.Action("RESULTS", rowFont, () -> openPanel(Panel.RESULTS)));
         home.add(new Row.Action("CODEX", rowFont, () -> openPanel(Panel.CODEX)));
@@ -218,6 +218,34 @@ public class MainMenu extends Group implements MenuNav.Target {
     private ProfileDAO activePilot() {
         ProfileDAO p = profiles.getActive();
         return p != null && p.getType() == ProfileDAO.Type.PROFILE ? p : null;
+    }
+
+    /** Campaign sectors (locked beyond progress) and the endless arcade run. */
+    private void buildPlay() {
+        int unlocked = com.buran.game.campaign.Campaign.unlocked();
+        for (final com.buran.game.campaign.Sector sec : com.buran.game.campaign.Campaign.sectors()) {
+            final boolean open = sec.number <= unlocked;
+            Row.Action row = panel.add(new Row.Action("SECTOR " + sec.code() + "   " + sec.name, rowFont, () -> {
+                if (open) {
+                    com.buran.game.campaign.Campaign.start(sec);
+                    play();
+                } else {
+                    boomBox.playSound(MSConstants.UI_EMPTY_NAME);
+                }
+            }));
+            if (com.buran.game.campaign.Campaign.isDone(sec.number)) {
+                row.withValue("CLEAR", Theme.OK);
+            } else if (open) {
+                row.withValue(sec.goalText(), Theme.ACCENT);
+            } else {
+                row.withValue("LOCKED", Theme.FAINT);
+            }
+        }
+        panel.add(new Row.Info("SECTORS 04 - 19", smallFont, "SIGNAL LOST"));
+        panel.add(new Row.Action("ARCADE   -   ENDLESS", rowFont, () -> {
+            com.buran.game.campaign.Campaign.arcade();
+            play();
+        }));
     }
 
     private void play() {
@@ -241,6 +269,7 @@ public class MainMenu extends Group implements MenuNav.Target {
         panel.clearRows();
         panel.onFocus(null);
         switch (p) {
+            case PLAY: buildPlay(); break;
             case PILOTS: buildPilots(); break;
             case RESULTS: buildResults(); break;
             case CODEX: buildCodex(); break;
@@ -271,6 +300,7 @@ public class MainMenu extends Group implements MenuNav.Target {
 
     private String panelTitle() {
         switch (open) {
+            case PLAY: return "FLIGHT PLAN";
             case PILOTS: return "PILOTS";
             case RESULTS: return "FLIGHT LOG";
             case CODEX: return codexGroup == null ? "CODEX" : "CODEX / " + codexGroup.title();

@@ -46,6 +46,8 @@ public final class Rules {
     public static final float LANDSCAPE_VIEW_ZOOM = 0.6f;
     /** Testing aid (web: ?debug=hole): start the run next to the black hole. */
     public static boolean DEBUG_START_AT_HOLE = false;
+    /** Testing aid (web: ?debug=clear): sector goals count as met, the beacon is placed nearby. */
+    public static boolean DEBUG_FAST_GOAL = false;
     /** Title-safe inset for HUD on TVs (set from the world size at start). */
     public static int SAFE_X = 43;
     public static int SAFE_Y = 43;
@@ -336,6 +338,8 @@ public final class Rules {
     public static final float CONSUMABLE_SCAN_TIME = 30.0f;
     //60
     public static final int ANOMALIES_CORROSIVE_HUNT_TIME = 60;
+    /** Seconds between corrosive anomaly wake-ups for the current run (sectors tune it). */
+    public static float corrosiveHuntTime = ANOMALIES_CORROSIVE_HUNT_TIME;
     //3
     public static final int LAUNCH_ROCKETS_TIME = 3;
     //1500

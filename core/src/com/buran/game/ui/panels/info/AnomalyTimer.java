@@ -35,7 +35,7 @@ public class AnomalyTimer {
     private BitmapFont font44;
 
     public AnomalyTimer() {
-        this.counter = Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
+        this.counter = Rules.corrosiveHuntTime;
         this.width = PaintConstants.TIMER_WIDTH;
         this.height = PaintConstants.TIMER_HEIGHT;
         this.timerBackground = Assets.getInstance().getAtlas().findRegion(PaintConstants.TIMER_BACKGROUND);
@@ -75,9 +75,9 @@ public class AnomalyTimer {
         if (!Rules.DEATH_MODE) {
             counter -= dt;
         }
-        if (counter >= Rules.ANOMALIES_CORROSIVE_HUNT_TIME * 0.6f) {
+        if (counter >= Rules.corrosiveHuntTime * 0.6f) {
             color.set(Color.WHITE);
-        } else if (counter >= Rules.ANOMALIES_CORROSIVE_HUNT_TIME * 0.3f) {
+        } else if (counter >= Rules.corrosiveHuntTime * 0.3f) {
             color.set(1.0f, 0.8f, 0.3f, 1f);
         } else {
             color.set(1.0f, 0.2f, 0.0f, 1f);
@@ -86,7 +86,7 @@ public class AnomalyTimer {
         timerBox.setColor(color);
 
         if (counter <= 0.0f) {
-            counter = Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
+            counter = Rules.corrosiveHuntTime;
             CorrosiveAnomalyEmitter corrosiveAnomalyEmitter = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
             List<AbstractAnomaly> anomalies = corrosiveAnomalyEmitter.getActiveList();
             for (int i = 0; i < anomalies.size(); i++) {
@@ -95,7 +95,7 @@ public class AnomalyTimer {
                 }
             }
         }
-        angle = -360.0f * counter / Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
+        angle = -360.0f * counter / Rules.corrosiveHuntTime;
         if (!Rules.DEATH_MODE) {
             glyphLayout.setText(font44, TimeFormat.formatMS(counter));
         } else {

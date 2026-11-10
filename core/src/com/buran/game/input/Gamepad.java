@@ -415,7 +415,9 @@ public final class Gamepad {
     }
 
     private static boolean isFlight() {
-        return inGameScreen() && !PauseGroup.isPause() && !Rules.GAME_OVER && PauseGroup.isActive();
+        com.buran.game.campaign.SectorRun run = com.buran.game.campaign.Campaign.run();
+        return inGameScreen() && !PauseGroup.isPause() && !Rules.GAME_OVER && PauseGroup.isActive()
+                && (run == null || !run.isClear());
     }
 
     // ------------------------------------------------------------------ render

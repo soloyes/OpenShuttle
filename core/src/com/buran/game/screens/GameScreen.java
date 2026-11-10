@@ -16,6 +16,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.buran.game.background.Background;
 import com.buran.game.background.SectorBorder;
 import com.buran.game.world.Shelters;
+import com.buran.game.campaign.Campaign;
+import com.buran.game.campaign.SectorRun;
+import com.buran.game.ui.menu.Theme;
 import com.buran.game.world.ThreatOverlay;
 import com.buran.game.world.ThreatTextures;
 import com.buran.game.background.SpaceBackground;
@@ -254,6 +257,16 @@ public class GameScreen extends BaseScreen {
             threatTextures = new ThreatTextures();
         }
         threatOverlay = new ThreatOverlay(anomalyJoiner, threatTextures);
+        // Campaign sector: apply its threat table and goal; arcade keeps the classic rules.
+        Rules.corrosiveHuntTime = Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
+        if (Campaign.current() != null) {
+            sectorRun = new SectorRun(Campaign.current());
+            sectorRun.configure();
+            Shelters.create(Campaign.current().shelters);
+        } else {
+            sectorRun = null;
+        }
+        Campaign.setRun(sectorRun);
         storageEmitter.emit();
         this.profiles = new Profiles();
         this.nebulaRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.CIRCLE_GLOW);
@@ -331,6 +344,9 @@ public class GameScreen extends BaseScreen {
         }
         sectorBorder.render(batch, camera);
         Shelters.render(batch, threatTextures);
+        if (sectorRun != null) {
+            sectorRun.renderWorld(batch, threatTextures);
+        }
         batch.end();
         //END
 
@@ -441,6 +457,9 @@ public class GameScreen extends BaseScreen {
                 threatOverlay.renderEdges(batch, cameraHelper);
             }
             hud.render(batch);
+            if (sectorRun != null) {
+                sectorRun.renderHud(batch, cameraHelper, threatTextures, Theme.font(54), Theme.font(44));
+            }
             if (!PauseGroup.isPause() && !hud.usesCargoBay()) {
                 SelectorGroup.getInstance().render(batch);
             }
@@ -483,20 +502,24 @@ public class GameScreen extends BaseScreen {
     }
 
     public void update(float dt) {
+        boolean frozen = PauseGroup.isPause() || (sectorRun != null && sectorRun.isClear());
+        if (sectorRun != null && !frozen && !Rules.GAME_OVER) {
+            sectorRun.update(dt);
+        }
         if (Gamepad.get().isPulse()) {
             firePulseEffect();
         }
         sectorBorder.update(dt);
-        if (!PauseGroup.isPause()) {
+        if (!frozen) {
             Shelters.update(dt);
             threatOverlay.update(dt);
         }
         spaceBackground.update(dt);
-        if (!PauseGroup.isPause()) {
+        if (!frozen) {
             debris.update(dt);
         }
         cameraUpdate(dt);
-        if (!PauseGroup.isPause()) {
+        if (!frozen) {
             PrettySound.update(dt);
             background.update(dt);
             player.update(dt);
@@ -557,7 +580,7 @@ public class GameScreen extends BaseScreen {
             }
         }
         cameraUpdate(dt);
-        if (!PauseGroup.isPause() && !Rules.GAME_OVER) {
+        if (!frozen && !Rules.GAME_OVER) {
             Shake.getInstance().update(dt, camera);
             standing.update(dt);
             SelectorGroup.getInstance().update(dt);
@@ -573,6 +596,7 @@ public class GameScreen extends BaseScreen {
     private SectorBorder sectorBorder;
     private ThreatTextures threatTextures;
     private ThreatOverlay threatOverlay;
+    private SectorRun sectorRun;
     private GameMenu gameMenu;
     private boolean runReported;
     private SpaceBackground spaceBackground;

@@ -154,6 +154,7 @@ public abstract class Row extends Actor {
     public static class Action extends Row {
         private final Runnable run;
         private String value;
+        private Color valueColor = Theme.OK;
 
         public Action(String label, BitmapFont font, Runnable run) {
             super(label, font);
@@ -162,6 +163,12 @@ public abstract class Row extends Actor {
 
         public Action withValue(String value) {
             this.value = value;
+            return this;
+        }
+
+        public Action withValue(String value, Color color) {
+            this.value = value;
+            this.valueColor = color;
             return this;
         }
 
@@ -181,7 +188,7 @@ public abstract class Row extends Actor {
                 return;
             }
             Color old = font.getColor().cpy();
-            font.setColor(Theme.OK.r, Theme.OK.g, Theme.OK.b, alpha);
+            font.setColor(valueColor.r, valueColor.g, valueColor.b, alpha);
             layout.setText(font, value);
             font.draw(batch, value, getX() + getWidth() - 36f - layout.width, textY);
             font.setColor(old);
