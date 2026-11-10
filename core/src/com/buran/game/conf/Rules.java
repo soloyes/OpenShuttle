@@ -52,6 +52,8 @@ public final class Rules {
     public static boolean DEBUG_UNLOCK = false;
     /** Test builds: a sector starts a third of the way to its goal. */
     public static boolean DEBUG_THIRD = false;
+    /** Test builds: the crew card shows when a sector starts. */
+    public static boolean DEBUG_CARD = false;
     /** Title-safe inset for HUD on TVs (set from the world size at start). */
     public static int SAFE_X = 43;
     public static int SAFE_Y = 43;

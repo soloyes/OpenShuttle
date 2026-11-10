@@ -57,7 +57,56 @@ public class MenuSpace implements Disposable {
     }
 
     /** Draws the backdrop. Call outside batch.begin()/end(). */
+    /** Painted key art behind the menu (assets/ui/menu.jpg); the procedural sky if it is missing. */
+    private com.badlogic.gdx.graphics.Texture art;
+    private boolean artTried;
+
+    private com.badlogic.gdx.graphics.Texture art() {
+        if (!artTried) {
+            artTried = true;
+            com.badlogic.gdx.files.FileHandle f = com.badlogic.gdx.Gdx.files.internal("ui/menu.jpg");
+            if (f.exists()) {
+                art = new com.badlogic.gdx.graphics.Texture(f);
+                art.setFilter(com.badlogic.gdx.graphics.Texture.TextureFilter.Linear,
+                        com.badlogic.gdx.graphics.Texture.TextureFilter.Linear);
+            }
+        }
+        return art;
+    }
+
+    /** The key art, covering the screen, drifting very slowly (a held breath, not a pan). */
+    private void drawArt(SpriteBatch batch, com.badlogic.gdx.graphics.Texture t) {
+        float W = Rules.WORLD_WIDTH;
+        float H = Rules.WORLD_HEIGHT;
+        float zoom = 1.06f + 0.02f * MathUtils.sin(time * 0.05f);
+        float scale = Math.max(W / t.getWidth(), H / t.getHeight()) * zoom;
+        float w = t.getWidth() * scale;
+        float h = t.getHeight() * scale;
+        float x = (W - w) / 2f + (w - W) * 0.35f * MathUtils.sin(time * 0.03f);
+        float y = (H - h) / 2f + (h - H) * 0.3f * MathUtils.cos(time * 0.04f);
+        batch.setColor(1f, 1f, 1f, 1f);
+        batch.draw(t, x, y, w, h);
+        // The menu sits on the left: let that side sink into the dark.
+        int bands = 24;
+        float span = W * 0.5f;
+        for (int i = 0; i < bands; i++) {
+            float k = 1f - i / (float) bands;
+            com.buran.game.ui.menu.Theme.rect(batch, span * i / bands, 0, span / bands + 1f, H,
+                    com.badlogic.gdx.graphics.Color.BLACK, 0.55f * k * k);
+        }
+    }
+
     public void render(SpriteBatch batch) {
+        com.badlogic.gdx.graphics.Texture t = art();
+        if (t != null) {
+            ScreenManager.getInstance().getViewport().apply();
+            batch.setProjectionMatrix(ScreenManager.getInstance().getCamera().combined);
+            batch.begin();
+            drawArt(batch, t);
+            batch.draw(vignette, 0, 0, Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
+            batch.end();
+            return;
+        }
         if (space.isAvailable()) {
             space.prepare(batch, camera, Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
             ScreenManager.getInstance().getViewport().apply();
@@ -76,5 +125,8 @@ public class MenuSpace implements Disposable {
     public void dispose() {
         space.dispose();
         vignette.dispose();
+        if (art != null) {
+            art.dispose();
+        }
     }
 }

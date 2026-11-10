@@ -37,6 +37,9 @@ public class MenuScreen extends BaseScreen {
         space = new MenuSpace();
         mainMenu = new MainMenu();
         menuHero = new MenuHero(mainMenu);
+        // The painted key art has its own shuttle; the drawn one would compete with it.
+        menuHero.setVisible(!com.badlogic.gdx.Gdx.files.internal("ui/menu.jpg").exists());
+        heroWanted = menuHero.isVisible();
         stage.addActor(menuHero);
         stage.addActor(mainMenu);
         MainMenu.onIntro = this::playIntro;
@@ -53,13 +56,14 @@ public class MenuScreen extends BaseScreen {
      * the menu song when the intro ends or is skipped.
      */
     private static boolean introShown;
+    private boolean heroWanted;
 
     private void playIntro() {
         mainMenu.setVisible(false);
         menuHero.setVisible(false);
         com.buran.game.ui.menu.Intro intro = new com.buran.game.ui.menu.Intro(() -> {
             mainMenu.setVisible(true);
-            menuHero.setVisible(true);
+            menuHero.setVisible(heroWanted);
             com.buran.game.ui.menu.MenuNav.set(mainMenu);
             com.buran.game.platform.Shell.introPending(false);
             boomBox.stopAllMusicAndPlayThese(MSConstants.MENU_SONG);

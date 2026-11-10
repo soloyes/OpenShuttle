@@ -105,6 +105,9 @@ public final class SectorRun {
             placeCrew();
         }
         baseline = counter();
+        if (Rules.DEBUG_CARD) {
+            com.buran.game.ui.hud.CrewCard.show(com.buran.game.labelsticker.Sticker.MEDIC, "MEDIC", "HULL REPAIRED");
+        }
         if (Rules.DEBUG_FAST_GOAL) {
             baseline -= sector.target;
         } else if (Rules.DEBUG_THIRD) {

@@ -165,7 +165,7 @@ public class MainMenu extends Group implements MenuNav.Target {
 
     /** The home list sits in its own instrument ("FLIGHT DECK") under the title. */
     private float homeTop() {
-        return Rules.WORLD_HEIGHT * 0.56f;
+        return Rules.WORLD_HEIGHT * 0.595f;
     }
 
     private void layoutLists() {

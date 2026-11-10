@@ -464,6 +464,7 @@ public class GameScreen extends BaseScreen {
         if (!Rules.GAME_OVER) {
             if (!PauseGroup.isPause()) {
                 threatOverlay.renderEdges(batch, cameraHelper, Theme.font(32));
+                com.buran.game.ui.hud.CrewCard.render(batch, Theme.font(72), Theme.font(44));
             }
             hud.render(batch);
             if (sectorRun != null) {

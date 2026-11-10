@@ -65,7 +65,8 @@ public class LoadingScreen extends BaseScreen implements Screen {
     public void render(float delta) {
         super.render(delta);
         time += delta;
-        boolean done = Assets.getInstance().getAssetManager().update();
+        // Up to 50 ms of loading per frame, so a heavy backdrop does not slow the load.
+        boolean done = Assets.getInstance().getAssetManager().update(50);
         float progress = Assets.getInstance().getAssetManager().getProgress();
         progressShown += (progress - progressShown) * Math.min(1f, delta * 8f);
 

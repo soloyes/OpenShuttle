@@ -84,7 +84,8 @@ public class Astronaut extends AbstractConsumable {
                 gift = "COMMANDER ABOARD  -  ALL SYSTEMS +50%";
                 break;
         }
-        GameInfoSystem.setup(position.x, position.y + 110f, "[GREEN]" + gift + "[]", 3.0f, true);
+        int cut = gift.indexOf("  -  ");
+        com.buran.game.ui.hud.CrewCard.show(who, who.name(), cut > 0 ? gift.substring(cut + 5) : gift);
     }
 
     @Override
