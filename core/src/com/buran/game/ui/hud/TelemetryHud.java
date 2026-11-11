@@ -61,6 +61,26 @@ public class TelemetryHud {
     private static final Color CARGO = Color.valueOf("ffb547ff");
     private final BitmapFont small;
 
+    private static final Color EMP = Color.valueOf("5fd7ffff");
+
+    /**
+     * The EMP: its button, a recharge bar and a lamp. Dim when the shield cannot pay for a pulse.
+     */
+    private void empGauge(SpriteBatch batch, Standing st, float x, float cy, boolean blink) {
+        float charge = com.buran.game.input.Gamepad.get().pulseCharge();
+        boolean affordable = st.getLifeShield() >= st.getMaxLifeShield() * Rules.PULSE_SHIELD_COST;
+        boolean ready = charge >= 1f && affordable;
+        x += Theme.rich(batch, small, "{Y}", x, cy, HEAD, 1f);
+        textL(batch, small, "EMP", x, cy + small.getCapHeight() / 2f, ready ? Theme.TEXT : HEAD);
+        x += Theme.width(small, "EMP") + 22f;
+        float bw = 150f;
+        float bh = 18f;
+        Theme.rect(batch, x, cy - bh / 2f, bw, bh, Theme.TRACK, 1f);
+        Theme.rect(batch, x + 2f, cy - bh / 2f + 2f, (bw - 4f) * charge, bh - 4f, affordable ? EMP : HEAD, ready ? 0.95f : 0.45f);
+        x += bw + 20f;
+        Theme.lamp(batch, x, cy - 7f, EMP, ready, 1f);
+    }
+
     private static final Color[] RAM_COLORS = {
             Color.valueOf("c8a46eff"), Color.valueOf("6cc24aff"), Color.valueOf("f2c230ff"), Color.valueOf("e5533dff"),
     };
@@ -130,6 +150,8 @@ public class TelemetryHud {
         // ---- propulsion (mirror)
         float rx = x0 + 2f * sec + pad;
         Theme.hint(batch, small, com.buran.game.ui.menu.Hints.button("B", "ESC"), "PAUSE", rx, headY - small.getCapHeight() / 2f, HEAD, 1f);
+        empGauge(batch, st, rx + Theme.hintWidth(small, com.buran.game.ui.menu.Hints.button("B", "ESC"), "PAUSE") + 70f,
+                headY - small.getCapHeight() / 2f, blink);
         textR(batch, small, "PROPULSION", rx + lw, headY, HEAD);
         boolean fuelAlert = (st.isFuelAlertOutOfBounds() || st.isFuelAlertMagneticAnomaly() || st.getFuel() < st.getMaxFuel() * 0.2f) && blink;
         bar(batch, "FUEL", st.getFuel(), st.getMaxFuel(), FUEL, rx, headY - 58f, lw, fuelAlert, false);

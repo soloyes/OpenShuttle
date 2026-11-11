@@ -263,6 +263,8 @@ public class GameScreen extends BaseScreen {
         tutorialPrompts = new com.buran.game.ui.hud.TutorialPrompts();
         // Campaign sector: apply its threat table and goal; arcade keeps the classic rules.
         Rules.corrosiveHuntTime = Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
+        Rules.CONSUMABLE_CRATE_DANGER_PROBABILITY = 4;
+        Rules.CONSUMABLE_STORAGE_DANGER_PROBABILITY = 4;
         if (Campaign.current() != null) {
             sectorRun = new SectorRun(Campaign.current());
             sectorRun.configure();
@@ -884,7 +886,14 @@ public class GameScreen extends BaseScreen {
                     Standing st0 = Standing.getInstance();
                     float hp0 = st0.getHp();
                     float sh0 = st0.getLifeShield();
-                    st0.takeDamage(player.getShieldLevel().getLevel() + 1);
+                    // The ram shield takes the blow: half the damage, paid for with a quarter level.
+                    if (Buran.ramOn) {
+                        st0.takeDamage(0.5f);
+                        st0.changeRamPower(-0.25f);
+                        player.getRamShield().blink(1f);
+                    } else {
+                        st0.takeDamage(1f);
+                    }
                     // Say what the rock took, and teach the laser after the first hit.
                     int lostHp = Math.round(hp0 - st0.getHp());
                     int lostSh = Math.round(sh0 - st0.getLifeShield());

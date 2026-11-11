@@ -261,7 +261,8 @@ public class MainMenu extends Group implements MenuNav.Target {
                 row.withValue("LOCKED", Theme.FAINT);
             }
         }
-        panel.add(new Row.Info("SECTORS 04 - 19", smallFont, "SIGNAL LOST"));
+        int last = com.buran.game.campaign.Campaign.sectors().size();
+        panel.add(new Row.Info("SECTORS " + (last + 1 < 10 ? "0" : "") + (last + 1) + " - 19", smallFont, "SIGNAL LOST"));
         playRows.add(null);
         playRows.add(null);
         panel.add(new Row.Action("ARCADE   -   ENDLESS", rowFont, () -> {

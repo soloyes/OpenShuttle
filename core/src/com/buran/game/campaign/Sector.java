@@ -9,7 +9,9 @@ public final class Sector {
         /** Take N crew members aboard. */
         RESCUE,
         /** Burn and salvage N asteroids with the laser and tractor beam. */
-        SALVAGE
+        SALVAGE,
+        /** Take N crates or storages aboard. */
+        CARGO
     }
 
     public final int number;
@@ -44,6 +46,10 @@ public final class Sector {
     public boolean borderDamage = true;
     /** Start with a charged laser (the sector that teaches it). */
     public boolean startWithLaser;
+    /** Containers are sealed or burnt about one time in (odds + 1). */
+    public int dangerOdds = 4;
+    /** SCAN items in the bay at the start (the sector that teaches sealed cargo). */
+    public int startScans;
 
     Sector(int number, String name, Goal goal, int target, String briefing, String lesson) {
         this.number = number;
@@ -64,6 +70,8 @@ public final class Sector {
                 return "RESCUE CREW";
             case SALVAGE:
                 return "SALVAGE ASTEROIDS";
+            case CARGO:
+                return "RECOVER CARGO";
             default:
                 return "";
         }

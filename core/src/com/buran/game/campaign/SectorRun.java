@@ -101,6 +101,12 @@ public final class SectorRun {
             Buran.isLaser = true;
             Standing.getInstance().setLaserChargeLevel(Standing.getInstance().getMaxLaserChargeLevel());
         }
+        Rules.CONSUMABLE_CRATE_DANGER_PROBABILITY = sector.dangerOdds;
+        Rules.CONSUMABLE_STORAGE_DANGER_PROBABILITY = sector.dangerOdds;
+        if (sector.startScans > 0) {
+            com.buran.game.ui.groups.selector.SelectorGroup.getInstance()
+                    .addSelector(com.buran.game.labelsticker.Sticker.SCAN, sector.startScans);
+        }
         if (sector.goal == Sector.Goal.RESCUE) {
             placeCrew();
         }
@@ -130,13 +136,27 @@ public final class SectorRun {
         float margin = 260f;
         for (int i = 0; i < n; i++) {
             float ang = base + i * MathUtils.PI2 / n + MathUtils.random(-0.4f, 0.4f);
-            float r = Rules.VIEW_HEIGHT * MathUtils.random(0.6f, 0.85f);
-            float x = MathUtils.clamp(Buran.position.x + MathUtils.cos(ang) * r, margin, Rules.SPACE_WIDTH - margin);
-            float y = MathUtils.clamp(Buran.position.y + MathUtils.sin(ang) * r, margin, Rules.SPACE_HEIGHT - margin);
-            e.emitAt(x, y);
+            crewSpot(ang, MathUtils.random(0.6f, 0.85f));
+            e.emitAt(spot.x, spot.y);
         }
         // Only these people are out there: no one new drifts in after they are aboard.
         e.setConsumablesMaxCount(0);
+    }
+
+    private final com.badlogic.gdx.math.Vector2 spot = new com.badlogic.gdx.math.Vector2();
+
+    /**
+     * Where a crew member drifts: around the ship at a fraction of a screen, or, in a sector
+     * with the rift, just outside its capture ring (close enough to be urgent).
+     */
+    private void crewSpot(float ang, float k) {
+        float m = 260f;
+        boolean rift = sector.blackhole && com.buran.game.bot.blackhole.Blackhole.enabled;
+        com.badlogic.gdx.math.Vector2 c = rift ? com.buran.game.bot.blackhole.Blackhole.position : Buran.position;
+        float r = rift ? com.buran.game.conf.Buffs.getBlackholeTakeRange() * MathUtils.random(1.35f, 1.8f)
+                : Rules.VIEW_HEIGHT * k;
+        spot.set(MathUtils.clamp(c.x + MathUtils.cos(ang) * r, m, Rules.SPACE_WIDTH - m),
+                MathUtils.clamp(c.y + MathUtils.sin(ang) * r, m, Rules.SPACE_HEIGHT - m));
     }
 
     /** Removes whatever an emitter spawned at construction beyond the sector's cap. */
@@ -165,7 +185,14 @@ public final class SectorRun {
 
     private int counter() {
         Standing st = Standing.getInstance();
-        return sector.goal == Sector.Goal.RESCUE ? st.getAstronautsTotal() : st.getMinedTotal();
+        switch (sector.goal) {
+            case RESCUE:
+                return st.getAstronautsTotal();
+            case CARGO:
+                return Campaign.cargoTaken;
+            default:
+                return st.getMinedTotal();
+        }
     }
 
     public int progress() {
@@ -257,11 +284,8 @@ public final class SectorRun {
             }
         }
         if (progress + out < sector.target && !Rules.GAME_OVER) {
-            float ang = MathUtils.random(MathUtils.PI2);
-            float r = Rules.VIEW_HEIGHT * 0.8f;
-            float m = 260f;
-            e.emitAt(MathUtils.clamp(Buran.position.x + MathUtils.cos(ang) * r, m, Rules.SPACE_WIDTH - m),
-                    MathUtils.clamp(Buran.position.y + MathUtils.sin(ang) * r, m, Rules.SPACE_HEIGHT - m));
+            crewSpot(MathUtils.random(MathUtils.PI2), 0.8f);
+            e.emitAt(spot.x, spot.y);
             say("WE LOST ONE.  ANOTHER BEACON IS CALLING", 6f);
         }
     }

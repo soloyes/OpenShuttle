@@ -54,7 +54,58 @@ public final class Campaign {
         s3.astronautMax = 3;
         s3.space = 1.6f;
         SECTORS.add(s3);
+
+        // The rift: the crew drifts at its edge. Stay outside the ring; when something hunts
+        // you, a shelter hides you and mends the shield (tips 4, 15, 39).
+        Sector s4 = new Sector(4, "THE RIFT", Sector.Goal.RESCUE, 3,
+                "There it is. The rift. Three of ours are circling its edge, too close. Stay outside the ring: what goes in comes out broken. If something hunts you, the shelters will hide you.",
+                "STAY OUT OF THE RING      SHELTERS HIDE YOU AND MEND THE SHIELD");
+        empty(s4);
+        s4.blackhole = true;
+        s4.shelters = 2;
+        s4.astronautMax = 3;
+        s4.corrosiveMax = 3;
+        s4.corrosiveRespawn = 12f;
+        s4.corrosiveHuntTime = 25f;
+        s4.space = 2.2f;
+        SECTORS.add(s4);
+
+        // Sealed cargo: scan before you open; a burnt crate is a gamble (tips 57, 68).
+        Sector s5 = new Sector(5, "SEALED CARGO", Sector.Goal.CARGO, 6,
+                "The station's cargo is still drifting out here. Some crates are sealed, some are burnt. Scan before you open them. Six crates, and we can keep going.",
+                "{X} SCAN READS SEALED CRATES      BURNT ONES ARE A GAMBLE");
+        empty(s5);
+        s5.crateMax = 5;
+        s5.storageMax = 2;
+        s5.dangerOdds = 1;
+        s5.startScans = 2;
+        s5.corrosiveMax = 2;
+        s5.corrosiveRespawn = 15f;
+        s5.space = 2.0f;
+        SECTORS.add(s5);
+
+        // Echo: everything learned, at once, with nothing new (tip 28: apply it creatively).
+        Sector s6 = new Sector(6, "ECHO", Sector.Goal.RESCUE, 4,
+                "Four voices on the beacon now. And the whole field is awake. You know everything you need. Use it. Bring them home.",
+                "EVERYTHING AT ONCE      THE EDGE OF THE SECTOR HURTS AGAIN");
+        empty(s6);
+        s6.blackhole = true;
+        s6.shelters = 2;
+        s6.astronautMax = 4;
+        s6.corrosiveMax = 6;
+        s6.corrosiveRespawn = 6f;
+        s6.electricMax = 1;
+        s6.asteroidMax = 12;
+        s6.asteroidRespawn = 4f;
+        s6.crateMax = 2;
+        s6.fuelMax = 2;
+        s6.borderDamage = true;
+        s6.space = 2.6f;
+        SECTORS.add(s6);
     }
+
+    /** Containers taken aboard in this run (sector goal CARGO counts them). */
+    public static int cargoTaken;
 
     /** Nothing in the sector until the sector table adds it. */
     private static void empty(Sector s) {

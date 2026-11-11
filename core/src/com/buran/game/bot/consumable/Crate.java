@@ -49,6 +49,7 @@ public class Crate extends AbstractConsumable {
 
     @Override
     public void consumed() {
+        com.buran.game.campaign.Campaign.cargoTaken++;
         if (danger) {
             switch (labels.get(Label.Layer.LABEL).get(0).getSticker()) {
                 case PATTERN:

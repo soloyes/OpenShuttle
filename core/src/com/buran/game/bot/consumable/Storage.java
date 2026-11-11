@@ -66,6 +66,7 @@ public class Storage extends AbstractConsumable {
 
     @Override
     public void consumed() {
+        com.buran.game.campaign.Campaign.cargoTaken++;
         if (danger) {
             switch (dangerLabel.getSticker()) {
                 case PATTERN:
