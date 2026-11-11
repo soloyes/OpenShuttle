@@ -50,6 +50,9 @@ public class Crate extends AbstractConsumable {
     @Override
     public void consumed() {
         com.buran.game.campaign.Campaign.cargoTaken++;
+        if (com.buran.game.campaign.Campaign.cache == this) {
+            com.buran.game.campaign.Campaign.cacheFound();
+        }
         if (danger) {
             switch (labels.get(Label.Layer.LABEL).get(0).getSticker()) {
                 case PATTERN:
@@ -109,6 +112,14 @@ public class Crate extends AbstractConsumable {
         } else {
             this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_REGION);
         }
+    }
+
+    /** The sector's hidden cache: a golden crate with a safe repair kit and a station log inside. */
+    public void makeCache() {
+        golden = true;
+        danger = false;
+        labels.get(Label.Layer.LABEL).get(0).setSticker(Sticker.REPAIR);
+        this.texture = Assets.getInstance().getAtlas().findRegion(PaintConstants.CRATE_GOLD_REGION);
     }
 
     private void stickLabel() {

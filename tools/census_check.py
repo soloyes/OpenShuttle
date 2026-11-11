@@ -27,7 +27,7 @@ for log in sorted(glob.glob(f"{S}/census/s*.log"), key=lambda p: int(re.findall(
         "magnetic": I(c, "magnetic"),
         "rocks": ((I(c, "rocks") + 1) // 2) * 2,
         "crew": I(c, "crew"),
-        "crates": I(c, "crates"),
+        "crates": I(c, "crates") + 1,   # the hidden cache
         "storages": I(c, "storages") + (1 if c["sector"] == "2" else 0),
         "fuel": I(c, "fuel"),
         "volleys": 0,

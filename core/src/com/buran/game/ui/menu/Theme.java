@@ -195,6 +195,17 @@ public final class Theme {
         return t;
     }
 
+    /** A filled circle (map dots). */
+    public static void disc(Batch batch, float x, float y, float size, Color c, float alpha) {
+        if (disc == null) {
+            disc = circle(true);
+            ring = circle(false);
+        }
+        batch.setColor(c.r, c.g, c.b, c.a * alpha);
+        batch.draw(disc, x, y, size, size);
+        batch.setColor(Color.WHITE);
+    }
+
     /** Face-button colours of the pad, so A/B/X/Y read at a glance. */
     private static Color faceColor(String key) {
         switch (key) {

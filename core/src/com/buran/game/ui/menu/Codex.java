@@ -216,6 +216,19 @@ public class Codex {
                         + "Its field wears thin while you hide and switches off for a while when spent."));
         shelter.demo = this::demoShelter;
 
+        // ---------------------------------------------------------------- station logs
+        Group logs = group("STATION LOGS");
+        TextureRegion goldCrate = region(PaintConstants.CRATE_GOLD_REGION);
+        for (int i = 0; i < com.buran.game.campaign.Campaign.LOGS.length; i++) {
+            int n = i + 1;
+            boolean found = com.buran.game.campaign.Campaign.logFound(n);
+            String code = (n < 10 ? "0" : "") + n;
+            add(logs, new Entry("LOG " + code + (found ? "" : "  -  NOT FOUND"), found ? "OBJECT-19  -  STATION LOG" : "HIDDEN IN SECTOR " + code,
+                    new TextureRegion[]{goldCrate}, 0f,
+                    found ? com.buran.game.campaign.Campaign.LOGS[i]
+                            : "A golden crate drifts somewhere far from the beacons in sector " + code + ". Nothing marks it."));
+        }
+
         Group items = group("ITEMS");
         item(items, Sticker.FREEZE, "Every anomaly stops hunting for ten seconds.", this::demoFreeze);
         item(items, Sticker.DEGRADE, "All corrosive anomalies drop to the weakest level.", this::demoDegrade);

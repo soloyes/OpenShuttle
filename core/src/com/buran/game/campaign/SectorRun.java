@@ -112,6 +112,7 @@ public final class SectorRun {
         if (sector.goal == Sector.Goal.RESCUE) {
             placeCrew();
         }
+        placeCache();
         baseline = counter();
         if (Rules.DEBUG_CARD) {
             com.buran.game.ui.hud.CrewCard.show(com.buran.game.labelsticker.Sticker.MEDIC, "MEDIC", "HULL REPAIRED");
@@ -153,6 +154,28 @@ public final class SectorRun {
         // Only these people are out there: no one new drifts in after they are aboard.
         e.setConsumablesMaxCount(0);
     }
+
+    /**
+     * Each sector hides one golden crate in the corner farthest from the start, with no marker
+     * (tips 68, 88). Inside: a repair kit and a page of the station's log for the codex.
+     */
+    private void placeCache() {
+        Campaign.cache = null;
+        if (Campaign.logFound(sector.number)) {
+            return;
+        }
+        float m = 500f;
+        float x = Buran.position.x < Rules.SPACE_WIDTH / 2f ? Rules.SPACE_WIDTH - m : m;
+        float y = Buran.position.y < Rules.SPACE_HEIGHT / 2f ? Rules.SPACE_HEIGHT - m : m;
+        com.buran.game.bot.consumable.CrateEmitter ce =
+                (com.buran.game.bot.consumable.CrateEmitter) ObjectPool.EMITTERS.get(com.buran.game.bot.consumable.Crate.class);
+        com.buran.game.bot.consumable.Crate c = (com.buran.game.bot.consumable.Crate) ce.emitAt(x, y);
+        c.makeCache();
+        Campaign.cache = c;
+        cacheHint = 25f;
+    }
+
+    private float cacheHint;
 
     private final com.badlogic.gdx.math.Vector2 spot = new com.badlogic.gdx.math.Vector2();
 
@@ -294,6 +317,12 @@ public final class SectorRun {
         if (sector.escalate) {
             escalate(dt);
         }
+        if (cacheHint > 0f && Campaign.cache != null) {
+            cacheHint -= dt;
+            if (cacheHint <= 0f) {
+                say("SOMETHING GLINTS AT THE EDGE OF THE SECTOR", 6f);
+            }
+        }
         if (sector.boss > 0) {
             bossScript(dt);
         }
@@ -359,6 +388,11 @@ public final class SectorRun {
             say("THE STORM HAS A HEART  -  {Y} PULSE IT THREE TIMES", 9f);
         }
         com.buran.game.effects.Shake.getInstance().shakeCamera(0.6f, 40, 14);
+    }
+
+    /** The extraction beacon (valid once the goal is met). */
+    public com.badlogic.gdx.math.Vector2 beacon() {
+        return beacon;
     }
 
     /** The boss, for its name plate (null when there is none). */

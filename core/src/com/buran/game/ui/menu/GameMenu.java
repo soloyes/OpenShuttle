@@ -385,6 +385,9 @@ public class GameMenu extends Group implements MenuNav.Target {
                 {"EFFECTIVENESS", d.getEffectiveness() + " / 100"},
         };
         for (String[] l : lines) {
+            if (l[0].equals("STEP") && com.buran.game.campaign.Campaign.current() != null) {
+                continue;   // steps belong to the arcade
+            }
             line(batch, l[0], l[1], x, y, w, a);
             y -= 64f;
         }
@@ -403,6 +406,12 @@ public class GameMenu extends Group implements MenuNav.Target {
         }
         if (Theme.portrait()) {
             return;   // no room for the crew table on a phone
+        }
+        if (mode == Mode.PAUSE) {
+            // In flight the pause shows where everything is (tips 64-65).
+            float bottom = boxY() + FOOT + 40f;
+            drawMap(batch, x, bottom, w, y - 20f - bottom, a);
+            return;
         }
         y -= 10f;
         Theme.hairline(batch, x, y, w, a);
@@ -427,6 +436,95 @@ public class GameMenu extends Group implements MenuNav.Target {
             draw(batch, smallFont, value, x + w - layout.width, y, Theme.TEXT, a);
             y -= 70f;
         }
+    }
+
+    private static final Color WARM = Color.valueOf("ffb547ff");
+    private static final Color ICE = Color.valueOf("5fd7ffff");
+
+    /**
+     * The sector map: its edge, the ship and its heading, crew and cargo to collect, the beacon,
+     * the shelters, the rift and the boss; anomalies only while the radar works. The hidden
+     * cache is not on it.
+     */
+    private void drawMap(Batch batch, float x, float y, float w, float h, float a) {
+        draw(batch, labelFont, "SECTOR MAP", x, y + h, Theme.HEAD, a);
+        h -= 40f;
+        float sw = Rules.SPACE_WIDTH;
+        float sh = Rules.SPACE_HEIGHT;
+        float k = Math.min(w / sw, h / sh);
+        float mw = sw * k;
+        float mh = sh * k;
+        float mx = x + (w - mw) / 2f;
+        float my = y + (h - mh) / 2f;
+        Theme.rect(batch, mx, my, mw, mh, Theme.TRACK, 0.9f * a);
+        Theme.rect(batch, mx, my, mw, 2f, Theme.ACCENT, 0.6f * a);
+        Theme.rect(batch, mx, my + mh - 2f, mw, 2f, Theme.ACCENT, 0.6f * a);
+        Theme.rect(batch, mx, my, 2f, mh, Theme.ACCENT, 0.6f * a);
+        Theme.rect(batch, mx + mw - 2f, my, 2f, mh, Theme.ACCENT, 0.6f * a);
+        if (com.buran.game.bot.blackhole.Blackhole.enabled) {
+            float r = com.buran.game.conf.Buffs.getBlackholeTakeRange() * k;
+            dot(batch, mx, my, k, com.buran.game.bot.blackhole.Blackhole.position.x, com.buran.game.bot.blackhole.Blackhole.position.y,
+                    r * 2f, Theme.HEAD, 0.5f * a);
+            dot(batch, mx, my, k, com.buran.game.bot.blackhole.Blackhole.position.x, com.buran.game.bot.blackhole.Blackhole.position.y,
+                    r, Color.BLACK, a);
+        }
+        for (com.buran.game.world.Shelters.Shelter s : com.buran.game.world.Shelters.all()) {
+            dot(batch, mx, my, k, s.position.x, s.position.y, Math.max(14f, com.buran.game.world.Shelters.RADIUS * 2f * k),
+                    WARM, (s.online() ? 0.22f : 0.08f) * a);
+        }
+        if (com.buran.game.player.navigation.Radar.isActive) {
+            for (Class<?> c : new Class<?>[]{com.buran.game.bot.anomaly.CorrosiveAnomaly.class, com.buran.game.bot.anomaly.ElectricalAnomaly.class,
+                    com.buran.game.bot.anomaly.RadiationAnomaly.class, com.buran.game.bot.anomaly.MagneticAnomaly.class}) {
+                com.buran.game.utils.pool.ObjectPool<?> pool = com.buran.game.utils.pool.ObjectPool.EMITTERS.get(c);
+                if (pool == null) {
+                    continue;
+                }
+                for (Object o : pool.getActiveList()) {
+                    com.buran.game.utils.pool.AbstractPoolable p = (com.buran.game.utils.pool.AbstractPoolable) o;
+                    if (p.isActive() && !p.isTaken()) {
+                        dot(batch, mx, my, k, p.getPosition().x, p.getPosition().y, 10f, Theme.ACCENT, 0.7f * a);
+                    }
+                }
+            }
+        }
+        com.buran.game.campaign.SectorRun run = com.buran.game.campaign.Campaign.run();
+        boolean cargo = run != null && run.sector().goal == com.buran.game.campaign.Sector.Goal.CARGO;
+        for (Class<?> c : new Class<?>[]{com.buran.game.bot.consumable.Astronaut.class, com.buran.game.bot.consumable.Crate.class,
+                com.buran.game.bot.consumable.Storage.class}) {
+            if (c != com.buran.game.bot.consumable.Astronaut.class && !cargo) {
+                continue;
+            }
+            com.buran.game.utils.pool.ObjectPool<?> pool = com.buran.game.utils.pool.ObjectPool.EMITTERS.get(c);
+            if (pool == null) {
+                continue;
+            }
+            for (Object o : pool.getActiveList()) {
+                com.buran.game.utils.pool.AbstractPoolable p = (com.buran.game.utils.pool.AbstractPoolable) o;
+                if (p.isActive() && !p.isTaken() && o != com.buran.game.campaign.Campaign.cache) {
+                    dot(batch, mx, my, k, p.getPosition().x, p.getPosition().y, 16f, WARM, a);
+                }
+            }
+        }
+        if (run != null && run.boss() != null && run.boss().isActive()) {
+            dot(batch, mx, my, k, run.boss().getPosition().x, run.boss().getPosition().y, 26f, Theme.ACCENT, a);
+        }
+        if (run != null && (run.phase() == com.buran.game.campaign.SectorRun.Phase.EXTRACT)) {
+            float p = 0.6f + 0.4f * com.badlogic.gdx.math.MathUtils.sin(clock * 5f);
+            dot(batch, mx, my, k, run.beacon().x, run.beacon().y, 30f, WARM, p * a);
+        }
+        // The ship: a bright dot and a short line along its nose.
+        float sx = mx + com.buran.game.player.Buran.position.x * k;
+        float sy = my + com.buran.game.player.Buran.position.y * k;
+        float ang = com.buran.game.player.Buran.angle * com.badlogic.gdx.math.MathUtils.degreesToRadians;
+        for (int i = 1; i <= 6; i++) {
+            Theme.rect(batch, sx + com.badlogic.gdx.math.MathUtils.cos(ang) * i * 4f - 2f,
+                    sy + com.badlogic.gdx.math.MathUtils.sin(ang) * i * 4f - 2f, 4f, 4f, Theme.TEXT, a);
+        }
+        dot(batch, mx, my, k, com.buran.game.player.Buran.position.x, com.buran.game.player.Buran.position.y, 18f, Color.WHITE, a);
+    }
+
+    private void dot(Batch batch, float mx, float my, float k, float wx, float wy, float size, Color c, float a) {
+        Theme.disc(batch, mx + wx * k - size / 2f, my + wy * k - size / 2f, size, c, a);
     }
 
     private void line(Batch batch, String label, String value, float x, float y, float w, float a) {

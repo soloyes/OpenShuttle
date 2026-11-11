@@ -334,6 +334,50 @@ public final class Campaign {
                 : chapter == 3 ? "CHAPTER THREE  -  HOME" : "CHAPTER " + chapter;
     }
 
+    /** Station logs, one hidden in each sector (tips 60, 68, 88). */
+    public static final String[] LOGS = {
+            "Day one on Object-19. The light hums at night. Nobody sleeps well, and nobody says why.",
+            "We measured it again. It is not getting brighter. It is getting closer.",
+            "Lena paints the porthole frames blue so the station feels like home. Sasha says home is where the tea is.",
+            "The radio picks up voices from the light. Old broadcasts, 1961, 1975. The commander has forbidden us to listen.",
+            "The cargo bay is full of things nobody ordered. Crates with no manifest. Someone sealed them before we arrived.",
+            "The experiment is tomorrow. The commander wrote a letter to his daughter and gave it to me. 'In case.'",
+            "Something on the hull at night. The counters jump and the air tastes of metal.",
+            "Fuel lines frozen again. The magnets drink from the tanks like animals at a river.",
+            "They come in packs now. The old ones lead, the young ones follow. We learned to keep still.",
+            "We built the ram from scrap and station plating. It is ugly. It works.",
+            "The storm lasted nine hours. Two of the shelters held. We sang to keep awake.",
+            "The commander says he heard his own voice from the rift, calling his name. He is not afraid. That frightens me.",
+            "His crew drifted out the morning after. Their beacons still work. Batteries of the old kind, they never die.",
+            "Everything that breaks falls toward the light. The graveyard grows every day.",
+            "Someone is guarding the way. Not something. Someone.",
+            "The rift pulls harder at night. Or what we call night. The clocks stopped on the fourth day.",
+            "Radar dead. We fly by the stars and by the beacons. Strange: it is quieter like this.",
+            "Last log of the station. If you read this, you got further than we did. Do not stop at the edge.",
+            "The commander went in today. He said: it is 1991 inside, and the way home is open. We will see.",
+    };
+
+    /** The hidden cache crate of the sector being flown (null when none). */
+    public static Object cache;
+
+    /** The cache was opened: its log is kept and shows in the codex. */
+    public static void cacheFound() {
+        Sector s = current;
+        cache = null;
+        if (s == null) {
+            return;
+        }
+        Preferences p = prefs();
+        p.putBoolean("campaign.log." + s.number, true);
+        p.flush();
+        com.buran.game.ui.GameInfoSystem.setup(com.buran.game.player.Buran.position.x, com.buran.game.player.Buran.position.y,
+                "[GOLD]STATION LOG " + s.code() + " FOUND[]", 4.0f, true);
+    }
+
+    public static boolean logFound(int number) {
+        return prefs().getBoolean("campaign.log." + number, false);
+    }
+
     /** Containers taken aboard in this run (sector goal CARGO counts them). */
     public static int cargoTaken;
 
