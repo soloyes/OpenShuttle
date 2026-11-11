@@ -406,7 +406,7 @@ public class Buran extends AbstractBuran {
         checkSeries(dt);
         ramSwitchAge += dt;
         if (ramOn && !Rules.GAME_OVER) {
-            Standing.getInstance().changeRamPower(-Rules.RAM_DRAIN * dt);
+            Standing.getInstance().changeRamPower(-com.buran.game.campaign.Upgrades.ramDrain(Rules.RAM_DRAIN) * dt);
         }
         checkRamPower();
         checkZigZagEffect(dt);

@@ -301,7 +301,7 @@ public final class Gamepad {
             return;
         }
         pulse = true;
-        pulseCooldown = Rules.PULSE_COOLDOWN;
+        pulseCooldown = com.buran.game.campaign.Upgrades.empCooldown();
     }
 
     private boolean pulseDenied;
@@ -315,7 +315,7 @@ public final class Gamepad {
 
     /** 0 right after a pulse, 1 when the next one is ready. */
     public float pulseCharge() {
-        return 1f - com.badlogic.gdx.math.MathUtils.clamp(pulseCooldown / Rules.PULSE_COOLDOWN, 0f, 1f);
+        return 1f - com.badlogic.gdx.math.MathUtils.clamp(pulseCooldown / com.buran.game.campaign.Upgrades.empCooldown(), 0f, 1f);
     }
 
     /** True for the single frame an EMP pulse is fired. */

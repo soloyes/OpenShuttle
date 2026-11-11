@@ -403,6 +403,10 @@ public class GameMenu extends Group implements MenuNav.Target {
             if ((m & com.buran.game.campaign.Campaign.MEDAL_SWIFT) != 0) b.append("SWIFT");
             line(batch, "MEDALS", b.length() == 0 ? "-" : b.toString().trim(), x, y, w, a);
             y -= 64f;
+            if (run.newUpgrade() != null) {
+                line(batch, "UPGRADE", run.newUpgrade(), x, y, w, a);
+                y -= 64f;
+            }
         }
         if (Theme.portrait()) {
             return;   // no room for the crew table on a phone

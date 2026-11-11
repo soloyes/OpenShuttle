@@ -277,7 +277,10 @@ public final class SectorRun {
                     medals = (crewLost == 0 && sector.goal == Sector.Goal.RESCUE ? Campaign.MEDAL_SAFE : 0)
                             | (!hullHit ? Campaign.MEDAL_UNTOUCHED : 0)
                             | (flightTime <= Campaign.par(sector) ? Campaign.MEDAL_SWIFT : 0);
+                    int before = Upgrades.unlocked();
                     newBest = Campaign.record(sector, flightTime, medals);
+                    int after = Upgrades.unlocked();
+                    newUpgrade = after > before ? Upgrades.NAMES[after - 1] : null;
                     Campaign.complete(sector);
                     boomBox.stopAllSound();
                     boomBox.stopLoopingEffects();
@@ -405,6 +408,12 @@ public final class SectorRun {
     private boolean hullHit;
     private int medals;
     private boolean newBest;
+    private String newUpgrade;
+
+    /** The upgrade this clear unlocked, or null. */
+    public String newUpgrade() {
+        return newUpgrade;
+    }
 
     /** Time in flight, and whether the hull was ever hit (for the records). */
     private void track(float dt) {

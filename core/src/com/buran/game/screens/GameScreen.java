@@ -239,6 +239,7 @@ public class GameScreen extends BaseScreen {
             Buran.position.set(Blackhole.position.x + Buffs.getBlackholeTakeRange() * 0.9f, Blackhole.position.y);
         }
         Rules.StartLevel.values()[Profiles.getSettings().getLevel()].setGameLevel();
+        com.buran.game.campaign.Upgrades.apply();
         if (Profiles.getSettings().getLevel() == 0) {
             astronautEmitter.setConsumablesMaxCount(Rules.CONSUMABLE_ASTRONAUT_MAX_COUNT * 2);
         }

@@ -472,6 +472,16 @@ public class MainMenu extends Group implements MenuNav.Target {
         panel.add(new Row.Info("CAMPAIGN", smallFont, cleared + " / " + com.buran.game.campaign.Campaign.TOTAL
                 + " CLEAR      " + medals + " MEDALS"));
         resultRows.add(null);
+        // Upgrades earned with medals.
+        panel.add(new Row.Info("UPGRADES", smallFont, com.buran.game.campaign.Upgrades.unlocked() + " / "
+                + com.buran.game.campaign.Upgrades.NAMES.length));
+        resultRows.add(null);
+        for (int u = 0; u < com.buran.game.campaign.Upgrades.NAMES.length; u++) {
+            boolean got = com.buran.game.campaign.Upgrades.has(u);
+            panel.add(new Row.Info("   " + com.buran.game.campaign.Upgrades.NAMES[u], smallFont,
+                    got ? com.buran.game.campaign.Upgrades.WHAT[u] : com.buran.game.campaign.Upgrades.COST[u] + " MEDALS"));
+            resultRows.add(null);
+        }
         int chapter = 0;
         int unlocked = com.buran.game.campaign.Campaign.unlocked();
         for (com.buran.game.campaign.Sector sec : com.buran.game.campaign.Campaign.sectors()) {
