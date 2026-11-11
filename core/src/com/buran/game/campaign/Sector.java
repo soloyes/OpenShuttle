@@ -52,6 +52,8 @@ public final class Sector {
     public final java.util.LinkedHashMap<com.buran.game.labelsticker.Sticker, Integer> startItems = new java.util.LinkedHashMap<>();
     /** The field grows harder every 40 seconds (more hunters, faster respawn). */
     public boolean escalate;
+    /** Colour grade of the sector (multiplier on the final image): its own mood (VISION, tip 10). */
+    public float tintR = 1f, tintG = 1f, tintB = 1f;
     /** A boss halfway through: 0 none, 1 the Mother (corrosive), 2 the Storm Heart (electric). */
     public int boss;
     /** Halfway: one of ours or the fuel depot - the rift takes the other (tip 41). */

@@ -73,7 +73,8 @@ public class MenuScreen extends BaseScreen {
 
     private static com.buran.game.ui.menu.Intro.Script chapterEnd(int chapter) {
         return chapter == 1 ? com.buran.game.ui.menu.Intro.CHAPTER_ONE
-                : chapter == 2 ? com.buran.game.ui.menu.Intro.CHAPTER_TWO : com.buran.game.ui.menu.Intro.CHAPTER_THREE;
+                : chapter == 2 ? com.buran.game.ui.menu.Intro.CHAPTER_TWO
+                : com.buran.game.ui.menu.Intro.ending(com.buran.game.campaign.Campaign.endingVariant());
     }
 
     private void playIntro() {

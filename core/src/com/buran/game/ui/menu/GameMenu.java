@@ -158,6 +158,13 @@ public class GameMenu extends Group implements MenuNav.Target {
         }
         mode = Mode.CLEAR;
         clearedSector = run.sector();
+        // Between sectors, Earth: a fragment of 1991 on the radio, typed under the picture.
+        intercept = clearedSector.number <= com.buran.game.campaign.Campaign.INTERCEPTS.length
+                ? com.buran.game.campaign.Campaign.INTERCEPTS[clearedSector.number - 1] : null;
+        interceptAge = 0f;
+        if (intercept != null) {
+            com.buran.game.platform.Radio.play(String.format("earth%02d", clearedSector.number), 0.95f);
+        }
         report = Standing.getInstance().getDetails();
         list.clearRows();
         final com.buran.game.campaign.Sector next = com.buran.game.campaign.Campaign.next(clearedSector);
@@ -188,6 +195,8 @@ public class GameMenu extends Group implements MenuNav.Target {
 
     private static final java.util.Map<String, com.badlogic.gdx.graphics.Texture> ART = new java.util.HashMap<>();
     private float artAge;
+    private String intercept;
+    private float interceptAge;
 
     /** The picture for the end screens (ui/clear.jpg, ui/lost.jpg), loaded once, or null. */
     private com.badlogic.gdx.graphics.Texture art() {
@@ -245,7 +254,21 @@ public class GameMenu extends Group implements MenuNav.Target {
         batch.setColor(1f, 1f, 1f, a * in);
         batch.draw(t, x, y, w, h, (int) sx, (int) sy, (int) sw, (int) sh, false, false);
         batch.setColor(Color.WHITE);
+        if (mode == Mode.CLEAR && intercept != null && interceptAge > 1.2f) {
+            int n = MathUtils.clamp((int) ((interceptAge - 1.2f) * 30f), 0, intercept.length());
+            String shown = "EARTH, 1991:  " + intercept.substring(0, n);
+            float cw = w - 40f;
+            layoutI.setText(labelFont, "EARTH, 1991:  " + intercept, Theme.TEXT, cw - 40f, com.badlogic.gdx.utils.Align.left, true);
+            float ch = layoutI.height + 40f;
+            Theme.rect(batch, x + 20f, y + 20f, cw, ch, Theme.BODY_LO, 0.88f * a);
+            Color old = labelFont.getColor().cpy();
+            labelFont.setColor(Theme.TEXT.r, Theme.TEXT.g, Theme.TEXT.b, a);
+            labelFont.draw(batch, shown, x + 40f, y + 20f + ch - 20f, cw - 40f, com.badlogic.gdx.utils.Align.left, true);
+            labelFont.setColor(old);
+        }
     }
+
+    private final GlyphLayout layoutI = new GlyphLayout();
 
     private void open() {
         artAge = 0f;
@@ -296,6 +319,8 @@ public class GameMenu extends Group implements MenuNav.Target {
         super.act(delta);
         clock += delta;
         artAge += delta;
+        interceptAge += delta;
+        com.buran.game.platform.Radio.update();
         com.buran.game.campaign.SectorRun run = com.buran.game.campaign.Campaign.run();
         if (run != null && run.isClear() && !Rules.GAME_OVER) {
             showClear(run);

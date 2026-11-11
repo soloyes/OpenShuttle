@@ -165,9 +165,16 @@ public final class SectorRun {
         if (Campaign.logFound(sector.number)) {
             return;
         }
-        float m = 500f;
+        // The farthest corner; in a small sector that may still be on screen at the start, so
+        // tuck it to the very edge and never inside the opening view.
+        float m = 260f;
         float x = Buran.position.x < Rules.SPACE_WIDTH / 2f ? Rules.SPACE_WIDTH - m : m;
         float y = Buran.position.y < Rules.SPACE_HEIGHT / 2f ? Rules.SPACE_HEIGHT - m : m;
+        if (Math.abs(x - Buran.position.x) < Rules.VIEW_WIDTH * 0.6f && Math.abs(y - Buran.position.y) < Rules.VIEW_HEIGHT * 0.6f) {
+            // Still in view: put it straight behind the start, past the screen edge.
+            y = Buran.position.y < Rules.SPACE_HEIGHT / 2f ? Math.min(Rules.SPACE_HEIGHT - m, Buran.position.y + Rules.VIEW_HEIGHT * 0.65f)
+                    : Math.max(m, Buran.position.y - Rules.VIEW_HEIGHT * 0.65f);
+        }
         com.buran.game.bot.consumable.CrateEmitter ce =
                 (com.buran.game.bot.consumable.CrateEmitter) ObjectPool.EMITTERS.get(com.buran.game.bot.consumable.Crate.class);
         com.buran.game.bot.consumable.Crate c = (com.buran.game.bot.consumable.Crate) ce.emitAt(x, y);
@@ -317,6 +324,7 @@ public final class SectorRun {
                             | (flightTime <= Campaign.par(sector) ? Campaign.MEDAL_SWIFT : 0);
                     int before = Upgrades.unlocked();
                     newBest = Campaign.record(sector, flightTime, medals);
+                    Campaign.recordLost(sector, crewLost);
                     int after = Upgrades.unlocked();
                     newUpgrade = after > before ? Upgrades.NAMES[after - 1] : null;
                     Campaign.complete(sector);

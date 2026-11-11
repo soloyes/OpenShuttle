@@ -106,6 +106,18 @@ public final class Campaign {
 
         chapterTwo();
         chapterThree();
+        float[][] tints = {
+                {0.92f, 0.98f, 1.08f}, {1.08f, 1.0f, 0.88f}, {0.9f, 1.04f, 1.1f}, {1.1f, 1.0f, 0.86f},
+                {1.0f, 1.03f, 0.92f}, {1.02f, 0.94f, 1.1f}, {0.94f, 1.1f, 0.9f}, {1.05f, 0.92f, 1.08f},
+                {0.88f, 1.0f, 1.14f}, {1.1f, 0.96f, 0.86f}, {0.88f, 0.98f, 1.15f}, {1.08f, 0.9f, 1.0f},
+                {0.96f, 1.05f, 0.96f}, {1.04f, 0.98f, 0.88f}, {0.95f, 1.0f, 1.06f}, {1.12f, 0.95f, 0.85f},
+                {0.9f, 0.92f, 0.96f}, {1.12f, 0.9f, 0.92f}, {1.1f, 1.02f, 0.92f},
+        };
+        for (int i = 0; i < SECTORS.size() && i < tints.length; i++) {
+            SECTORS.get(i).tintR = tints[i][0];
+            SECTORS.get(i).tintG = tints[i][1];
+            SECTORS.get(i).tintB = tints[i][2];
+        }
     }
 
     /**
@@ -335,6 +347,32 @@ public final class Campaign {
                 : chapter == 3 ? "CHAPTER THREE  -  HOME" : "CHAPTER " + chapter;
     }
 
+    /**
+     * Earth, 1991, caught on the way between sectors (VISION: radio intercepts): the country
+     * that sent you, coming apart, one fragment after each cleared sector.
+     */
+    public static final String[] INTERCEPTS = {
+            "THIS IS RADIO MAYAK. MOSCOW TIME, TWENTY-ONE HOURS.",
+            "PRICES WILL RISE AGAIN FROM MONDAY. QUEUES OUTSIDE THE BAKERIES SINCE DAWN.",
+            "THE BALTIC REPUBLICS HAVE DECLARED...",
+            "MOSCOW. AUGUST NINETEENTH. TANKS ARE ON THE STREETS.",
+            "THE COMMITTEE HAS DECLARED A STATE OF EMERGENCY. SWAN LAKE ON EVERY CHANNEL.",
+            "CROWDS OUTSIDE THE WHITE HOUSE. THEY ARE BUILDING BARRICADES.",
+            "THE COUP HAS FAILED. THE COMMITTEE MEMBERS HAVE BEEN ARRESTED.",
+            "LENINGRAD WILL BE CALLED SAINT PETERSBURG AGAIN.",
+            "UKRAINE VOTES FOR INDEPENDENCE.",
+            "NO ONE KNOWS WHO PAYS THE COSMONAUTS NOW.",
+            "THE COSMONAUT ABOARD MIR IS STILL IN ORBIT. HIS RETURN HAS BEEN POSTPONED AGAIN.",
+            "THE TREATY IS SIGNED. THE UNION... NO LONGER EXISTS.",
+            "DECEMBER TWENTY-FIFTH. THE RED FLAG OVER THE KREMLIN HAS BEEN LOWERED.",
+            "A NEW FLAG. A NEW ANTHEM, SOON. A NEW COUNTRY.",
+            "BAIKONUR NOW STANDS IN ANOTHER STATE.",
+            "THE SPACE PROGRAM HAS NO BUDGET FOR NEXT YEAR.",
+            "MOSCOW TIME... MIDNIGHT.",
+            "IS ANYONE STILL LISTENING ON THIS FREQUENCY?",
+            "BAIKONUR CALLING BURAN-19. BAIKONUR CALLING BURAN-19.",
+    };
+
     /** Station logs, one hidden in each sector (tips 60, 68, 88). */
     public static final String[] LOGS = {
             "Day one on Object-19. The light hums at night. Nobody sleeps well, and nobody says why.",
@@ -373,6 +411,25 @@ public final class Campaign {
         p.flush();
         com.buran.game.ui.GameInfoSystem.setup(com.buran.game.player.Buran.position.x, com.buran.game.player.Buran.position.y,
                 "[GOLD]STATION LOG " + s.code() + " FOUND[]", 4.0f, true);
+    }
+
+    /** Crew lost in this sector's last clear (for the ending). */
+    public static void recordLost(Sector s, int lost) {
+        Preferences p = prefs();
+        p.putInteger("campaign.lost." + s.number, lost);
+        p.flush();
+    }
+
+    /** Which ending: 3 if one of ours was left for the fuel, 1 if no one was ever lost, else 2. */
+    public static int endingVariant() {
+        if ("fuel".equals(recall("choice16"))) {
+            return 3;
+        }
+        int lost = 0;
+        for (Sector s : SECTORS) {
+            lost += prefs().getInteger("campaign.lost." + s.number, 0);
+        }
+        return lost == 0 ? 1 : 2;
     }
 
     /** Remembers a decision the player made (choices with consequences). */

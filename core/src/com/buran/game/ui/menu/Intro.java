@@ -69,6 +69,8 @@ public class Intro extends Actor implements MenuNav.Target {
         final String[][] images;
         final String voice;
         final String skip;
+        /** Voice line per panel; null = the pattern with the panel number. */
+        String[] voices;
 
         public Script(String[] captions, int[][] layout, float[][] partAt, String[][] images, String voice, String skip) {
             this.captions = captions;
@@ -123,6 +125,31 @@ public class Intro extends Actor implements MenuNav.Target {
                     {"chapter2/p03.jpg", "intro/p11.jpg"},
             },
             "ch2_%02d", "SKIP");
+
+    /**
+     * The end, depending on how you flew it (VISION: the ending depends on whom you saved):
+     * 1 everyone came home, 2 some were lost, 3 one was left behind for the fuel. The extra panel
+     * comes before Baikonur answers.
+     */
+    public static Script ending(int variant) {
+        String[] lines = {
+                "EVERY ONE OF THEM CAME HOME.",
+                "NOT ALL OF US CAME HOME.  WE SAY THEIR NAMES.",
+                "AND SOMEWHERE OUT THERE, ONE OF OURS IS STILL WAITING.",
+        };
+        int v = Math.max(1, Math.min(3, variant));
+        String[] c = CHAPTER_THREE.captions;
+        Script s = new Script(
+                new String[]{c[0], c[1], c[2], lines[v - 1], c[3]},
+                new int[][]{{0, 0, 0, 2, 2}, {1, 0, 0, 2, 2}, {2, 0, 0, 2, 2}, {3, 0, 0, 2, 2}, {4, 0, 0, 2, 2}},
+                new float[][]{null, null, null, null, CHAPTER_THREE.partAt[3]},
+                new String[][]{CHAPTER_THREE.images[0], CHAPTER_THREE.images[1], CHAPTER_THREE.images[2],
+                        {"chapter3/p05.jpg", v == 1 ? "ui/clear.jpg" : v == 2 ? "intro/p10.jpg" : "ui/lost.jpg"},
+                        CHAPTER_THREE.images[3]},
+                "ch3_%02d", "SKIP");
+        s.voices = new String[]{"ch3_01", "ch3_02", "ch3_03", "ch3_v" + v, "ch3_04"};
+        return s;
+    }
 
     /** The end: into the light, Earth whole, and Baikonur answering at last. */
     public static final Script CHAPTER_THREE = new Script(
@@ -316,7 +343,7 @@ public class Intro extends Actor implements MenuNav.Target {
         pageFade = Math.min(1f, pageFade + delta / FADE);
         panelTime += delta;
         if (panelTime >= VOICE_AT && panelTime - delta < VOICE_AT) {
-            Radio.play(String.format(script.voice, current + 1), VOICE_VOLUME);
+            Radio.play(script.voices != null ? script.voices[current] : String.format(script.voice, current + 1), VOICE_VOLUME);
         }
         if (panelTime > VOICE_AT + 0.3f && !Radio.isPlaying() && voiceEnded < 0f) {
             voiceEnded = panelTime;

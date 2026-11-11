@@ -422,6 +422,13 @@ public class GameScreen extends BaseScreen {
             post.holeSpin = holeTime;
             post.aspect = (float) Rules.VIEW_WIDTH / Rules.VIEW_HEIGHT;
             post.grey = PauseGroup.isPause() || Rules.GAME_OVER;
+            if (sectorRun != null) {
+                post.tintR = sectorRun.sector().tintR;
+                post.tintG = sectorRun.sector().tintG;
+                post.tintB = sectorRun.sector().tintB;
+            } else {
+                post.tintR = post.tintG = post.tintB = 1f;
+            }
             // End of sector (clear or lost): the world softens behind the report.
             endBlur = ended() ? Math.min(1f, endBlur + dt / 0.8f) : 0f;
             post.blur = endBlur;
