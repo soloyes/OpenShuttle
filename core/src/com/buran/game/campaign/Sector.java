@@ -17,7 +17,7 @@ public final class Sector {
     public final int number;
     public final String name;
     public final Goal goal;
-    public final int target;
+    public int target;
     /** Radio briefing typed at the start. */
     public final String briefing;
     /** One-line hint for the mechanic this sector introduces (null = none). */
@@ -33,6 +33,8 @@ public final class Sector {
     public int asteroidMax = 50;
     public float asteroidRespawn = 4f;
     public int astronautMax = 3;
+    /** Seconds between new crew drifting in while the goal is not met. */
+    public float crewRespawn = 1.5f;
     public int shelters = 2;
     /** Size of the sector in screens: a room sized to its task, not an empty ocean. */
     public float space = 3f;

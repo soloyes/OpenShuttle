@@ -1,9 +1,9 @@
-sector01	Buran-19, this is... no one. Baikonur is silent. Two beacons are still calling, close by. Sasha. Lena. Bring them home.
+sector01	Buran-19, this is... no one. Baikonur is silent. But the beacons are still calling, everywhere around us. Sasha. Lena. All of them. Bring them home.
 sector02	The hull is holding. But we need metal to get home. The laser is charged. Burn the rocks, then pull the pieces in.
-sector03	Static on every channel. The radar is going blind. Three more of ours are out there. If the discharge comes for you, let it close. Then hit the pulse.
-sector04	There it is. The rift. Three of ours are circling its edge, too close. Stay outside the ring: what goes in comes out broken. If something hunts you, the shelters will hide you.
-sector05	The station's cargo is still drifting out here. Some crates are sealed, some are burnt. Scan before you open them. Six crates, and we can keep going.
-sector06	Four voices on the beacon now. And the whole field is awake. You know everything you need. Use it. Bring them home.
+sector03	Static on every channel. The radar is going blind. Our people are still out there. If the discharge comes for you, let it close. Then hit the pulse.
+sector04	There it is. The rift. Our people are circling its edge, too close. Stay outside the ring: what goes in comes out broken. If something hunts you, the shelters will hide you.
+sector05	The station's cargo is still drifting out here. Some crates are sealed, some are burnt. Scan before you open them. We need all of it to keep going.
+sector06	The whole crew is out there now. And the whole field is awake. You know everything you need. Use it. Bring them home.
 intro01	Baikonur. November, nineteen eighty-eight.
 intro02	Buran flew once. No one was aboard.
 intro03	Two orbits. A perfect landing.
@@ -27,14 +27,14 @@ arcade07	More of them now. The shelters will hide you... for a while.
 arcade11	The hull is singing. Something out there is getting stronger.
 arcade15	The rift is growing. Everything is falling toward it.
 arcade19	This is the collapse. Nothing holds now. Make it count.
-ch1_01	Twelve aboard. The cabin is full of breathing again.
+ch1_01	All aboard. The cabin is full of breathing again.
 ch1_02	But the rift is still open. And it is growing.
-sector07	Something is clinging to the hull. The counters are dropping. Radiation feeds on us while it holds on. The rockets will tear it off. Three more voices out here.
+sector07	Something is clinging to the hull. The counters are dropping. Radiation feeds on us while it holds on. The rockets will tear it off. More voices out here.
 sector08	The fuel is falling, and we are not burning it. Magnets. They latch on and drink. Keep the tanks full: canisters are drifting nearby.
 sector09	They are coming in packs now. Too many to outrun. The freeze charge stops all of them at once, for a while. Use it when they close in.
 sector10	Deep field. Rock and wreckage everywhere. Burn the metal and pull it in: it charges the ram. Then let the ram do the work.
-sector11	A storm of discharges. They will blind the radar and kill the laser. Pulse them away, then hide in a shelter to get your shield back. Four of ours are in the storm.
-sector12	The voice again. Come to the rift, it says. Five beacons around it. The field is collapsing, faster every minute. Do not wait.
+sector11	A storm of discharges. They will blind the radar and kill the laser. Pulse them away, then hide in a shelter to get your shield back. Our people are in the storm.
+sector12	The voice again. Come to the rift, it says. Beacons all around it. The field is collapsing, faster every minute. Do not wait.
 ch1_03a	Then, through the static...
 ch1_03b	a voice.
 ch1_03c	Not Baikonur.
@@ -50,13 +50,13 @@ ch3_03	Then... Earth. Blue, and whole.
 ch3_04a	Buran-19, this is Baikonur.
 ch3_04b	We hear you.
 ch3_04c	Welcome home.
-sector13	His crew is still out here. Their beacons are old, the signals weak. Radiation and magnets everywhere. Four to bring home.
-sector14	The station's graveyard. Everything that broke is drifting toward the rift. We need metal for the hull before we go in. Fifty pieces.
-sector15	The field is guarding the way. Discharges and packs, all around the cargo we need. Six crates. Take them and run.
-sector16	The tide is turning. The rift pulls harder every minute. Five more of ours on its edge. Be quick.
-sector17	The radar is dead. Nothing on the screen now. Only your eyes, and the beacons. Find four of them.
-sector18	This is the threshold. Everything the field has, it throws at us now. Six voices. The last ones.
-sector19	He is waiting at the edge of the rift. The last one. Bring him aboard, then follow the light home.
+sector13	His crew is still out here. Their beacons are old, the signals weak. Radiation and magnets everywhere. Bring them home.
+sector14	The station's graveyard. Everything that broke is drifting toward the rift. We need metal for the hull before we go in. All the metal we can hold.
+sector15	The field is guarding the way. Discharges and packs, all around the cargo we need. Take all of it and run.
+sector16	The tide is turning. The rift pulls harder every minute. More of ours on its edge. Be quick.
+sector17	The radar is dead. Nothing on the screen now. Only your eyes, and the beacons. Find them.
+sector18	This is the threshold. Everything the field has, it throws at us now. The last voices.
+sector19	The last of them are drifting at the edge of the rift. Bring them aboard, then follow the light home.
 earth01	This is Radio Mayak. Moscow time, twenty-one hours.
 earth02	Prices will rise again from Monday. Queues outside the bakeries since dawn.
 earth03	The Baltic republics have declared...

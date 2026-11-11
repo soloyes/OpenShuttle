@@ -95,7 +95,7 @@ public class Intro extends Actor implements MenuNav.Target {
     /** Chapter one ends: the crew aboard, the rift, and a voice that is not Baikonur. */
     public static final Script CHAPTER_ONE = new Script(
             new String[]{
-                    "TWELVE ABOARD.  THE CABIN IS FULL OF BREATHING AGAIN.",
+                    "ALL ABOARD.  THE CABIN IS FULL OF BREATHING AGAIN.",
                     "BUT THE RIFT IS STILL OPEN.  AND IT IS GROWING.",
                     "THEN, THROUGH THE STATIC...|A VOICE.|NOT BAIKONUR.",
                     "BURAN-19... WE SEE YOU.|COME TO THE RIFT.|END OF CHAPTER ONE",

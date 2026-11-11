@@ -144,16 +144,17 @@ public final class SectorRun {
     private void placeCrew() {
         AstronautEmitter e = (AstronautEmitter) ObjectPool.EMITTERS.get(Astronaut.class);
         trim(e, 0);
+        crewEmittedAtStart = AstronautEmitter.getEmitted();
         int n = Math.min(sector.target, sector.astronautMax);
         float base = MathUtils.random(MathUtils.PI2);
-        float margin = 260f;
         for (int i = 0; i < n; i++) {
             float ang = base + i * MathUtils.PI2 / n + MathUtils.random(-0.4f, 0.4f);
-            crewSpot(ang, MathUtils.random(0.6f, 0.85f));
+            crewSpot(ang, MathUtils.random(0.35f, 0.9f));
             e.emitAt(spot.x, spot.y);
         }
-        // Only these people are out there: no one new drifts in after they are aboard.
-        e.setConsumablesMaxCount(0);
+        // A field full of people: more keep drifting in until the goal is covered.
+        e.setConsumablesMaxCount(sector.astronautMax);
+        e.setRespawnTime(sector.crewRespawn);
     }
 
     /**
@@ -593,13 +594,22 @@ public final class SectorRun {
                 out++;
             }
         }
-        if (progress + out < sector.target && !Rules.GAME_OVER) {
+        // Keep the stream going until those out there cover what is still missing.
+        e.setConsumablesMaxCount(progress + out >= sector.target ? 0 : sector.astronautMax);
+        int lost = Math.max(0, AstronautEmitter.getEmitted() - crewEmittedAtStart - progress - out);
+        if (lost > crewLost) {
+            crewLost = lost;
+            if (crewLost == 1) {
+                alert("WE LOST ONE", 4f);
+            }
+        }
+        if (progress + out < sector.target && out == 0 && !Rules.GAME_OVER) {
             crewSpot(MathUtils.random(MathUtils.PI2), 0.8f);
-            e.emitAt(spot.x, spot.y);
-            alert("WE LOST ONE.  ANOTHER BEACON IS CALLING", 6f);
-            crewLost++;
+            e.emitAt(spot.x, spot.y);   // never leave the field empty
         }
     }
+
+    private int crewEmittedAtStart;
 
     /**
      * Sector 02: a third of the way in, a discharge burns the laser out. A storage drifts close by
@@ -877,22 +887,34 @@ public final class SectorRun {
     }
 
     /** Crew drifting out of view: warm markers, the goal pulls the eye (tips 9, 13). */
+    /**
+     * A field full of people needs no pins. Only when none is in view, one pin points to the
+     * nearest, so the ship is never lost.
+     */
     private void crewMarkers(SpriteBatch batch, Camera cam, ThreatTextures tx, BitmapFont font) {
         java.util.List<?> crew = ((AstronautEmitter) ObjectPool.EMITTERS.get(Astronaut.class)).getActiveList();
-        float pulse = 0.75f + 0.25f * MathUtils.sin(time * 3f);
+        Astronaut nearest = null;
+        float best = Float.MAX_VALUE;
         for (int i = 0; i < crew.size(); i++) {
             Astronaut a = (Astronaut) crew.get(i);
             if (!a.isActive() || a.isTaken()) {
                 continue;
             }
-            float dx = a.getPosition().x - cam.position.x;
-            float dy = a.getPosition().y - cam.position.y;
-            if (com.buran.game.world.EdgeMarker.inView(dx, dy, 0f)) {
-                continue;
+            if (com.buran.game.world.EdgeMarker.inView(a.getPosition().x - cam.position.x, a.getPosition().y - cam.position.y, 0f)) {
+                return;
             }
-            com.buran.game.world.EdgeMarker.draw(batch, tx, font, tx.disc, dx, dy,
-                    a.getPosition().dst(Buran.position), WARM, 0.9f, pulse);
+            float d = a.getPosition().dst2(Buran.position);
+            if (d < best) {
+                best = d;
+                nearest = a;
+            }
         }
+        if (nearest == null) {
+            return;
+        }
+        float pulse = 0.75f + 0.25f * MathUtils.sin(time * 3f);
+        com.buran.game.world.EdgeMarker.draw(batch, tx, font, tx.disc, nearest.getPosition().x - cam.position.x,
+                nearest.getPosition().y - cam.position.y, (float) Math.sqrt(best), WARM, 0.9f, pulse);
     }
 
     private void edgeMarker(SpriteBatch batch, Camera cam, ThreatTextures tx, BitmapFont font) {

@@ -29,7 +29,7 @@ public final class Campaign {
         // Each sector holds only what it teaches (tip 4): no extra threats, no loose cargo,
         // and a small room where the whole task fits in a glance or two (tip 85).
         Sector s1 = new Sector(1, "SILENCE", Sector.Goal.RESCUE, 2,
-                "Buran-19, this is... no one. Baikonur is silent. Two beacons are still calling, close by. Sasha. Lena. Bring them home.",
+                "Buran-19, this is... no one. Baikonur is silent. But the beacons are still calling, everywhere around us. Sasha. Lena. All of them. Bring them home.",
                 "{LS} FLY      THE BEAM TAKES CREW ABOARD");
         empty(s1);
         s1.astronautMax = 2;
@@ -47,7 +47,7 @@ public final class Campaign {
         SECTORS.add(s2);
 
         Sector s3 = new Sector(3, "STATIC", Sector.Goal.RESCUE, 3,
-                "Static on every channel. The radar is going blind. Three more of ours are out there. If the discharge comes for you, let it close. Then hit the pulse.",
+                "Static on every channel. The radar is going blind. Our people are still out there. If the discharge comes for you, let it close. Then hit the pulse.",
                 "{Y} EMP: BURNS DISCHARGES, THROWS THE REST BACK. COSTS SHIELD");
         empty(s3);
         s3.electricMax = 2;
@@ -58,7 +58,7 @@ public final class Campaign {
         // The rift: the crew drifts at its edge. Stay outside the ring; when something hunts
         // you, a shelter hides you and mends the shield (tips 4, 15, 39).
         Sector s4 = new Sector(4, "THE RIFT", Sector.Goal.RESCUE, 3,
-                "There it is. The rift. Three of ours are circling its edge, too close. Stay outside the ring: what goes in comes out broken. If something hunts you, the shelters will hide you.",
+                "There it is. The rift. Our people are circling its edge, too close. Stay outside the ring: what goes in comes out broken. If something hunts you, the shelters will hide you.",
                 "STAY OUT OF THE RING      SHELTERS HIDE YOU AND MEND THE SHIELD");
         empty(s4);
         s4.blackhole = true;
@@ -72,7 +72,7 @@ public final class Campaign {
 
         // Sealed cargo: scan before you open; a burnt crate is a gamble (tips 57, 68).
         Sector s5 = new Sector(5, "SEALED CARGO", Sector.Goal.CARGO, 6,
-                "The station's cargo is still drifting out here. Some crates are sealed, some are burnt. Scan before you open them. Six crates, and we can keep going.",
+                "The station's cargo is still drifting out here. Some crates are sealed, some are burnt. Scan before you open them. We need all of it to keep going.",
                 "{X} SCAN READS SEALED CRATES      BURNT ONES ARE A GAMBLE");
         empty(s5);
         s5.crateMax = 5;
@@ -86,7 +86,7 @@ public final class Campaign {
 
         // Echo: everything learned, at once, with nothing new (tip 28: apply it creatively).
         Sector s6 = new Sector(6, "ECHO", Sector.Goal.RESCUE, 4,
-                "Four voices on the beacon now. And the whole field is awake. You know everything you need. Use it. Bring them home.",
+                "The whole crew is out there now. And the whole field is awake. You know everything you need. Use it. Bring them home.",
                 "EVERYTHING AT ONCE      THE EDGE OF THE SECTOR HURTS AGAIN");
         empty(s6);
         s6.blackhole = true;
@@ -106,6 +106,7 @@ public final class Campaign {
 
         chapterTwo();
         chapterThree();
+        tune();
         float[][] tints = {
                 {0.92f, 0.98f, 1.08f}, {1.08f, 1.0f, 0.88f}, {0.9f, 1.04f, 1.1f}, {1.1f, 1.0f, 0.86f},
                 {1.0f, 1.03f, 0.92f}, {1.02f, 0.94f, 1.1f}, {0.94f, 1.1f, 0.9f}, {1.05f, 0.92f, 1.08f},
@@ -128,7 +129,7 @@ public final class Campaign {
         com.buran.game.labelsticker.Sticker ROCKETS = com.buran.game.labelsticker.Sticker.ROCKETS;
         com.buran.game.labelsticker.Sticker FREEZE = com.buran.game.labelsticker.Sticker.FREEZE;
         Sector s13 = new Sector(13, "ECHOES", Sector.Goal.RESCUE, 4,
-                "His crew is still out here. Their beacons are old, the signals weak. Radiation and magnets everywhere. Four to bring home.",
+                "His crew is still out here. Their beacons are old, the signals weak. Radiation and magnets everywhere. Bring them home.",
                 null);
         empty(s13);
         s13.chapter = 3;
@@ -142,7 +143,7 @@ public final class Campaign {
         SECTORS.add(s13);
 
         Sector s14 = new Sector(14, "GRAVEYARD", Sector.Goal.SALVAGE, 50,
-                "The station's graveyard. Everything that broke is drifting toward the rift. We need metal for the hull before we go in. Fifty pieces.",
+                "The station's graveyard. Everything that broke is drifting toward the rift. We need metal for the hull before we go in. All the metal we can hold.",
                 null);
         empty(s14);
         s14.chapter = 3;
@@ -158,7 +159,7 @@ public final class Campaign {
         SECTORS.add(s14);
 
         Sector s15 = new Sector(15, "WARDENS", Sector.Goal.CARGO, 6,
-                "The field is guarding the way. Discharges and packs, all around the cargo we need. Six crates. Take them and run.",
+                "The field is guarding the way. Discharges and packs, all around the cargo we need. Take all of it and run.",
                 null);
         empty(s15);
         s15.chapter = 3;
@@ -175,7 +176,7 @@ public final class Campaign {
         SECTORS.add(s15);
 
         Sector s16 = new Sector(16, "TIDE", Sector.Goal.RESCUE, 5,
-                "The tide is turning. The rift pulls harder every minute. Five more of ours on its edge. Be quick.",
+                "The tide is turning. The rift pulls harder every minute. More of ours on its edge. Be quick.",
                 null);
         empty(s16);
         s16.chapter = 3;
@@ -192,7 +193,7 @@ public final class Campaign {
         SECTORS.add(s16);
 
         Sector s17 = new Sector(17, "BLIND", Sector.Goal.RESCUE, 4,
-                "The radar is dead. Nothing on the screen now. Only your eyes, and the beacons. Find four of them.",
+                "The radar is dead. Nothing on the screen now. Only your eyes, and the beacons. Find them.",
                 "NO RADAR      FOLLOW THE BEACONS");
         empty(s17);
         s17.chapter = 3;
@@ -207,7 +208,7 @@ public final class Campaign {
         SECTORS.add(s17);
 
         Sector s18 = new Sector(18, "THRESHOLD", Sector.Goal.RESCUE, 6,
-                "This is the threshold. Everything the field has, it throws at us now. Six voices. The last ones.",
+                "This is the threshold. Everything the field has, it throws at us now. The last voices.",
                 null);
         empty(s18);
         s18.chapter = 3;
@@ -230,8 +231,8 @@ public final class Campaign {
         SECTORS.add(s18);
 
         Sector s19 = new Sector(19, "HOME", Sector.Goal.RESCUE, 1,
-                "He is waiting at the edge of the rift. The last one. Bring him aboard, then follow the light home.",
-                "THE LAST ONE      THEN INTO THE LIGHT");
+                "The last of them are drifting at the edge of the rift. Bring them aboard, then follow the light home.",
+                "THE LAST OF THEM      THEN INTO THE LIGHT");
         empty(s19);
         s19.chapter = 3;
         s19.blackhole = true;
@@ -256,7 +257,7 @@ public final class Campaign {
     private static void chapterTwo() {
         com.buran.game.labelsticker.Sticker ROCKETS = com.buran.game.labelsticker.Sticker.ROCKETS;
         Sector s7 = new Sector(7, "LEECH", Sector.Goal.RESCUE, 3,
-                "Something is clinging to the hull. The counters are dropping. Radiation feeds on us while it holds on. The rockets will tear it off. Three more voices out here.",
+                "Something is clinging to the hull. The counters are dropping. Radiation feeds on us while it holds on. The rockets will tear it off. More voices out here.",
                 "RADIATION CLINGS AND EATS YOUR SCORE      {X} ROCKETS TEAR IT OFF");
         empty(s7);
         s7.chapter = 2;
@@ -305,7 +306,7 @@ public final class Campaign {
         SECTORS.add(s10);
 
         Sector s11 = new Sector(11, "STORM", Sector.Goal.RESCUE, 4,
-                "A storm of discharges. They will blind the radar and kill the laser. Pulse them away, then hide in a shelter to get your shield back. Four of ours are in the storm.",
+                "A storm of discharges. They will blind the radar and kill the laser. Pulse them away, then hide in a shelter to get your shield back. Our people are in the storm.",
                 "{Y} EMP COSTS SHIELD      SHELTERS GIVE IT BACK");
         empty(s11);
         s11.chapter = 2;
@@ -317,7 +318,7 @@ public final class Campaign {
         SECTORS.add(s11);
 
         Sector s12 = new Sector(12, "THE VOICE", Sector.Goal.RESCUE, 5,
-                "The voice again. Come to the rift, it says. Five beacons around it. The field is collapsing, faster every minute. Do not wait.",
+                "The voice again. Come to the rift, it says. Beacons all around it. The field is collapsing, faster every minute. Do not wait.",
                 "IT GETS WORSE EVERY MINUTE      DON'T WAIT");
         empty(s12);
         s12.chapter = 2;
@@ -339,6 +340,57 @@ public final class Campaign {
         s12.startItems.put(ROCKETS, 2);
         s12.startItems.put(com.buran.game.labelsticker.Sticker.FREEZE, 1);
         SECTORS.add(s12);
+    }
+
+    /**
+     * The real numbers: a small field packed with what the sector is about, and goals of dozens
+     * (an arcade about density, not a walk). Columns: target, crew on the field at once, crew
+     * respawn s, corrosive, electric, radiation, magnetic, rocks, crates, storages, fuel, space.
+     */
+    private static void tune() {
+        float[][] t = {
+                {30, 8, 1.2f, 0, 0, 0, 0, 0, 0, 0, 0, 1.2f},          // 01 SILENCE: crew everywhere
+                {120, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 1.2f},          // 02 DEBRIS FIELD
+                {30, 8, 1.4f, 0, 4, 0, 0, 0, 0, 0, 0, 1.2f},          // 03 STATIC
+                {35, 8, 1.4f, 12, 0, 0, 0, 0, 0, 0, 0, 1.3f},         // 04 THE RIFT
+                {25, 0, 0, 6, 0, 0, 0, 0, 10, 5, 0, 1.2f},            // 05 SEALED CARGO
+                {40, 10, 1.3f, 10, 2, 0, 0, 12, 0, 0, 2, 1.4f},       // 06 ECHO + the Mother
+                {40, 10, 1.3f, 0, 0, 5, 0, 0, 0, 0, 0, 1.3f},         // 07 LEECH
+                {40, 10, 1.3f, 0, 0, 0, 5, 0, 0, 0, 4, 1.3f},         // 08 DRAIN
+                {40, 10, 1.3f, 25, 0, 0, 0, 0, 0, 0, 0, 1.4f},        // 09 COLD
+                {150, 0, 0, 12, 0, 0, 0, 28, 0, 0, 0, 1.3f},          // 10 DEEP FIELD
+                {45, 10, 1.3f, 0, 6, 0, 0, 10, 0, 0, 0, 1.4f},        // 11 STORM
+                {50, 12, 1.2f, 15, 3, 2, 2, 15, 3, 0, 3, 1.5f},       // 12 THE VOICE + Storm Heart
+                {50, 12, 1.2f, 0, 0, 5, 5, 0, 0, 0, 4, 1.4f},         // 13 ECHOES
+                {200, 0, 0, 12, 0, 0, 0, 32, 0, 0, 0, 1.4f},          // 14 GRAVEYARD
+                {35, 0, 0, 20, 5, 0, 0, 0, 10, 6, 0, 1.4f},           // 15 WARDENS
+                {55, 12, 1.2f, 15, 0, 0, 0, 15, 0, 0, 0, 1.5f},       // 16 TIDE
+                {50, 12, 1.2f, 18, 3, 0, 0, 15, 0, 0, 0, 1.4f},       // 17 BLIND
+                {60, 14, 1.1f, 25, 5, 3, 3, 20, 3, 0, 3, 1.5f},       // 18 THRESHOLD
+                {60, 14, 1.1f, 30, 5, 0, 0, 15, 0, 0, 0, 1.5f},       // 19 HOME
+        };
+        for (int i = 0; i < SECTORS.size() && i < t.length; i++) {
+            Sector s = SECTORS.get(i);
+            float[] r = t[i];
+            s.target = (int) r[0];
+            s.astronautMax = (int) r[1];
+            s.crewRespawn = r[2];
+            s.corrosiveMax = (int) r[3];
+            s.electricMax = (int) r[4];
+            s.radiationMax = (int) r[5];
+            s.magneticMax = (int) r[6];
+            s.asteroidMax = (int) r[7];
+            s.crateMax = (int) r[8];
+            s.storageMax = (int) r[9];
+            s.fuelMax = (int) r[10];
+            s.space = r[11];
+            if (s.corrosiveMax > 0) {
+                s.corrosiveRespawn = Math.min(s.corrosiveRespawn, 2f);
+            }
+            if (s.asteroidMax > 0) {
+                s.asteroidRespawn = Math.min(s.asteroidRespawn, 1.2f);
+            }
+        }
     }
 
     /** Chapter titles for the flight plan. */
@@ -528,9 +580,9 @@ public final class Campaign {
     /** Done within the par time. */
     public static final int MEDAL_SWIFT = 4;
 
-    /** Par time: about half a minute per crew member or crate, a few seconds per rock. */
+    /** Par time for a dense field: about seven seconds per person or crate, two per rock. */
     public static float par(Sector s) {
-        return s.goal == Sector.Goal.SALVAGE ? s.target * 3.5f : 25f + s.target * 25f;
+        return s.goal == Sector.Goal.SALVAGE ? 20f + s.target * 2f : 30f + s.target * 7f;
     }
 
     /** Saves the run; true if it is the best time for the sector. Medals add up over runs. */
