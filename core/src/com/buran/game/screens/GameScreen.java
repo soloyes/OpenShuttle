@@ -267,6 +267,7 @@ public class GameScreen extends BaseScreen {
         Rules.CONSUMABLE_CRATE_DANGER_PROBABILITY = 4;
         Rules.CONSUMABLE_STORAGE_DANGER_PROBABILITY = 4;
         hurtBy.clear();
+        com.buran.game.ui.hud.ActiveEffects.clear();
         if (Campaign.current() != null) {
             sectorRun = new SectorRun(Campaign.current());
             sectorRun.configure();
@@ -653,6 +654,9 @@ public class GameScreen extends BaseScreen {
         }
         if (Rules.DEBUG_CENSUS) {
             census(dt);
+        }
+        if (!frozen && !Rules.GAME_OVER) {
+            com.buran.game.ui.hud.ActiveEffects.update(dt);
         }
         sectorBorder.update(dt);
         if (!frozen) {

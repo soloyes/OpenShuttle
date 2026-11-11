@@ -57,6 +57,8 @@ public enum Sticker {
                 Sticker.abstractAnomalyFeed(((MagneticAnomalyEmitter) ObjectPool.EMITTERS.get(MagneticAnomaly.class)).getActiveList());
                 Sticker.abstractAnomalyFeed(((ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class)).getActiveList());
                 CircleRenderer.freeze = true;
+                com.buran.game.ui.hud.ActiveEffects.start("FREEZE", Rules.ANOMALIES_CORROSIVE_HUNGRY_TIME,
+                        com.buran.game.ui.hud.ActiveEffects.ICE);
                 GameInfoSystem.setup(
                         position.x, position.y,
                         "[GREEN]" + GameInfoSystem.Preset.FREEZE + "[] " + (int) Rules.ANOMALIES_CORROSIVE_HUNGRY_TIME,
@@ -205,6 +207,8 @@ public enum Sticker {
                     list.get(i).setShielded(true);
                 }
                 Standing.getInstance().setRamPower(Standing.getInstance().getRamMaxPower());
+                com.buran.game.ui.hud.ActiveEffects.start("CARGO SHIELD", Rules.CONSUMABLE_SHIELD_TIME,
+                        com.buran.game.ui.hud.ActiveEffects.WARM);
                 GameInfoSystem.setup(
                         position.x, position.y,
                         "[GREEN]" + GameInfoSystem.Preset.SHIELD + "[] " + (int) Rules.CONSUMABLE_SHIELD_TIME,
@@ -331,6 +335,8 @@ public enum Sticker {
                         list.get(i).setScanned(true);
                     }
                 }
+                com.buran.game.ui.hud.ActiveEffects.start("SCAN", Rules.CONSUMABLE_SCAN_TIME,
+                        com.buran.game.ui.hud.ActiveEffects.SCAN);
                 GameInfoSystem.setup(
                         position.x, position.y,
                         "[GREEN]" + GameInfoSystem.Preset.SCAN + "[] " + (int) Rules.CONSUMABLE_SCAN_TIME,

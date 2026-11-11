@@ -394,6 +394,7 @@ public class TelemetryHud {
             ga = 1f;
             boolean blinkC = ((int) (time * 4f)) % 2 == 0;
             console(batch, st, blinkC);
+            ActiveEffects.render(batch, small, Rules.WORLD_WIDTH / 2f, Rules.SAFE_Y + CONSOLE_H + 24f);
             lives(batch, st);
             shelterStatus(batch, blinkC);
             return;

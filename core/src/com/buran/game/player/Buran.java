@@ -48,6 +48,26 @@ public class Buran extends AbstractBuran {
      * is rammed and everything is caught safely.
      */
     public static boolean ramOn;
+    private static com.badlogic.gdx.graphics.Texture halo;
+
+    private static com.badlogic.gdx.graphics.Texture haloTexture() {
+        int n = 128;
+        com.badlogic.gdx.graphics.Pixmap p = new com.badlogic.gdx.graphics.Pixmap(n, n, com.badlogic.gdx.graphics.Pixmap.Format.RGBA8888);
+        p.setBlending(com.badlogic.gdx.graphics.Pixmap.Blending.None);
+        for (int y = 0; y < n; y++) {
+            for (int x = 0; x < n; x++) {
+                float dx = (x + 0.5f) / n * 2f - 1f;
+                float dy = (y + 0.5f) / n * 2f - 1f;
+                float k = Math.max(0f, 1f - (float) Math.sqrt(dx * dx + dy * dy));
+                p.setColor(1f, 1f, 1f, k * k);
+                p.drawPixel(x, y);
+            }
+        }
+        com.badlogic.gdx.graphics.Texture t = new com.badlogic.gdx.graphics.Texture(p);
+        t.setFilter(com.badlogic.gdx.graphics.Texture.TextureFilter.Linear, com.badlogic.gdx.graphics.Texture.TextureFilter.Linear);
+        p.dispose();
+        return t;
+    }
     /** Seconds since the ram shield was last switched (for the flash), and whether it was denied. */
     public static float ramSwitchAge = 99f;
     public static boolean ramDenied;
@@ -292,6 +312,21 @@ public class Buran extends AbstractBuran {
         }
         if (Rules.GAME_OVER) {
             tmpColor.a = 0.3f;
+        }
+        if (!Rules.GAME_OVER && !isTaken) {
+            // Read the ship over any nebula (tips 46-49): a soft cool halo and a dark rim behind it.
+            float cr = tmpColor.r, cg = tmpColor.g, cb = tmpColor.b, ca = tmpColor.a;
+            if (halo == null) {
+                halo = haloTexture();
+            }
+            float hs = Math.max(width, height) * 1.9f;
+            batch.setColor(0.75f, 0.85f, 1f, 0.16f);
+            batch.draw(halo, position.x - hs / 2f, position.y - hs / 2f, hs, hs);
+            batch.setColor(0f, 0f, 0.02f, 0.55f);
+            batch.draw(textureRegion[0], position.x - width / 2, position.y - height / 2, width / 2, height / 2,
+                    width, height, scaleX * 1.07f, scaleY * 1.07f, angle);
+            tmpColor.set(cr, cg, cb, ca);
+            batch.setColor(cr, cg, cb, ca);
         }
         float dis = isTaken ? dissolveAmount() : rematerialize / REMATERIALIZE_TIME;
         batch.setColor(tmpColor);
