@@ -73,7 +73,7 @@ labels, no frame, no white border.
 ## 2. Кодекс (квадрат, 1:1)
 
 Один объект по центру на чёрном фоне. Не пиши в запросе «scientific illustration», иначе
-выйдет плакат с подписями и врезками (неудачные попытки лежат в `art/ui/raw/rejected/`).
+выйдет плакат с подписями и врезками.
 
 ### `codex_electric.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
 
@@ -127,38 +127,28 @@ no insets, no annotations, no frame, no white border.
 
 ---
 
-## 3. Слои стартового экрана (чтобы «Буран» покачивался)
+## 3. Шаттл для стартового экрана (отдельным спрайтом)
 
-Нужно две картинки, обе делаются **правкой** готового фона меню. В новом чате приложи
-[art/ui/raw/menu.jpg](../../art/ui/raw/menu.jpg) (не образец из интро, а сам фон меню).
-Совмещу и вырежу фон сам. Главное, чтобы кадр не сдвинулся и не поменял размер.
+Фон без шаттла уже есть (`art/ui/raw/layers/menu_clean.jpg`). Нужен сам «Буран» один, без
+станции: игра поставит его поверх фона и будет покачивать. В новом чате приложи
+[art/ui/raw/layers/menu_shuttle_green.jpg](../../art/ui/raw/layers/menu_shuttle_green.jpg).
 
-### `menu_clean.jpg` — фон без шаттла (реф: menu.jpg)
-
-```
-Edit the attached image. Remove the white space shuttle completely and fill the place where it
-was with the same dark starry space and faint dust, matching the surroundings. Where the shuttle
-covered the end of the ring station, continue the ring naturally. Keep everything else exactly
-as it is: same framing, same size, same position of the station and the glowing sphere, same
-colours, same stars. Do not add anything. No text, no frame.
-```
-
-### `menu_shuttle.jpg` — только шаттл на зелёном (реф: menu.jpg)
+### `menu_shuttle.jpg` (реф: menu_shuttle_green.jpg)
 
 ```
-Edit the attached image. Keep only the white space shuttle, exactly as it is drawn: same size,
-same position in the frame, same angle, same outlines and details. Replace everything else
-(space, stars, the ring station, the glowing sphere, the dust) with a flat solid pure green
-background #00FF00, no gradient, no shadow, no glow. The shuttle must not touch or overlap
-anything green-coloured. No text, no frame.
+Edit the attached image. Remove the ring space station completely, including every part of it
+that is behind or touching the shuttle. Keep only the white space shuttle, exactly as it is
+drawn, whole: nose, both wings, the tail fin, the engines. Everything except the shuttle must be
+flat solid pure green #00FF00, no gradient, no shadow, no glow, no white border. No text.
 ```
 
-Если в `menu_shuttle` на шаттле появилась зелень по краям или фон не ровно зелёный,
-перегенерируй. Сохрани обе в `art/ui/raw/`.
+Если от кольца что-то осталось или шаттл обрезан, перегенерируй. Сохрани в `art/ui/raw/layers/`.
 
 ---
 
 ## Уже готово (в игре)
 
 `menu.jpg`, `crew_commander / medic / scientist / mechanic / military.jpg`, `clear.jpg`,
-`lost.jpg`.
+`lost.jpg`, `sector01–04.jpg`, `codex_corrosive / electric / magnetic / rift.jpg`.
+
+Ещё нужен `codex_radiation.jpg` (раздел 2).

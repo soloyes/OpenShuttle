@@ -41,6 +41,8 @@ public class Codex {
         String[] variantNames;
         Demo demo;
         boolean spin;
+        /** Painted plate (assets/ui/...), scanned in instead of the sprite when present. */
+        String plate;
 
         Entry(String name, String category, TextureRegion[] frames, float fps, String text) {
             this.name = name;
@@ -118,6 +120,7 @@ public class Codex {
                         + "They drift until the anomaly timer wakes them, then they hunt. Ram one with a shield "
                         + "stronger than its colour, burn it, or steer an asteroid into it."));
         c.variants = CORROSIVE;
+        c.plate = "ui/codex_corrosive.jpg";
         c.variantNames = new String[]{"LEVEL 1  -  TAN", "LEVEL 2  -  GREEN", "LEVEL 3  -  YELLOW", "LEVEL 4  -  RED"};
         add(threats, new Entry("ELECTRIC ANOMALY", "THREAT",
                 sheet(PaintConstants.ANOMALY_ELECTRIC_REGION, 4, 4, PaintConstants.ANOMALY_ELECTRIC_FRAMES), 16f,
@@ -142,6 +145,16 @@ public class Codex {
                 "The rift at the heart of Object-19. Anything inside the capture ring spirals in and crumbles. "
                         + "Survive the fall and it throws you out elsewhere in the sector with a damaged hull."));
         hole.spin = true;
+        hole.plate = "ui/codex_rift.jpg";
+        for (Entry e : threats.entries()) {
+            if (e.name.equals("ELECTRIC ANOMALY")) {
+                e.plate = "ui/codex_electric.jpg";
+            } else if (e.name.equals("RADIATION ANOMALY")) {
+                e.plate = "ui/codex_radiation.jpg";
+            } else if (e.name.equals("MAGNETIC ANOMALY")) {
+                e.plate = "ui/codex_magnetic.jpg";
+            }
+        }
 
         // ---------------------------------------------------------------- crew
         Group crew = group("CREW");
@@ -210,6 +223,7 @@ public class Codex {
                 text + " Fly close and the tractor beam takes them aboard. Once your shield glows, catch them "
                         + "from the side: a head-on hit kills."));
         e.badge = icons.getRegion(s);
+        e.plate = "ui/crew_" + name.toLowerCase() + ".jpg";
     }
 
     private void item(Group g, Sticker s, String text, Demo demo) {
@@ -349,11 +363,55 @@ public class Codex {
         return ((int) (sel / CYCLE)) % e.variants.length;
     }
 
+    /** The painted plate: dim blue below the scan line, in full colour above; the sprite as an icon. */
+    private void drawPlate(Batch batch, Entry e, Texture t, float bx, float by, float box, float alpha, float f) {
+        float in = 8f;
+        float x = bx + in;
+        float y = by + in;
+        float s = box - 2f * in;
+        int th = t.getHeight();
+        int side = Math.min(t.getWidth(), th);
+        int sx = (t.getWidth() - side) / 2;
+        int sy = (th - side) / 2;
+        batch.setColor(0.25f, 0.45f, 0.7f, 0.35f * alpha);
+        batch.draw(t, x, y, s, s, sx, sy, side, side, false, false);
+        if (f > 0f) {
+            int rh = Math.max(1, (int) (side * f));
+            float h = s * rh / side;
+            batch.setColor(1f, 1f, 1f, alpha);
+            batch.draw(t, x, y + s - h, s, h, sx, sy, side, rh, false, false);
+        }
+        if (f >= 1f) {
+            TextureRegion frame = e.frames[e.fps > 0 ? ((int) (time * e.fps)) % e.frames.length : 0];
+            TextureRegion icon = e.badge != null ? e.badge : frame;
+            if (icon != null) {
+                float is = box * 0.2f;
+                Color tint = e.variants != null && e.badge == null ? e.variants[variantIndex(e)] : Color.WHITE;
+                Theme.rect(batch, bx + box - is - 22f, by + 14f, is + 8f, is + 8f, Theme.BODY_LO, 0.8f * alpha);
+                batch.setColor(tint.r, tint.g, tint.b, alpha);
+                batch.draw(icon, bx + box - is - 18f, by + 18f, is, is);
+            }
+        }
+        batch.setColor(Color.WHITE);
+        if (f < 1f) {
+            float ly = by + box * (1f - f);
+            Theme.rect(batch, bx, ly - 2f, box, 4f, BLUE, alpha);
+            for (int i = 1; i < 6; i++) {
+                Theme.rect(batch, bx, ly + i * 6f, box, 6f, BLUE, alpha * 0.12f * (6 - i) / 6f);
+            }
+        }
+    }
+
     /** Blueprint below the scan line, the real object above it. */
     private void drawScan(Batch batch, Entry e, float bx, float by, float box, float alpha) {
         float phase = sel % CYCLE;
         float f = MathUtils.clamp(phase / SCAN_TIME, 0f, 1f);
         f = f * f * (3f - 2f * f);
+        Texture plateTex = e.plate == null ? null : Art.get(e.plate);
+        if (plateTex != null) {
+            drawPlate(batch, e, plateTex, bx, by, box, alpha, f);
+            return;
+        }
         TextureRegion frame = e.frames[e.fps > 0 ? ((int) (time * e.fps)) % e.frames.length : 0];
         if (frame == null) {
             return;

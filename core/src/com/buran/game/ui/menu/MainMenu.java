@@ -155,8 +155,11 @@ public class MainMenu extends Group implements MenuNav.Target {
     }
 
     private boolean hasDetail() {
-        return open == Panel.RESULTS || open == Panel.CODEX;
+        return open == Panel.RESULTS || open == Panel.CODEX || (open == Panel.PLAY && !Theme.portrait());
     }
+
+    /** Flight plan rows -> their sector (null for the arcade and info rows). */
+    private final java.util.List<com.buran.game.campaign.Sector> playRows = new java.util.ArrayList<>();
 
     /** Footer hint baseline. */
     private float footTextY() {
@@ -227,8 +230,10 @@ public class MainMenu extends Group implements MenuNav.Target {
     /** Campaign sectors (locked beyond progress) and the endless arcade run. */
     private void buildPlay() {
         int unlocked = com.buran.game.campaign.Campaign.unlocked();
+        playRows.clear();
         for (final com.buran.game.campaign.Sector sec : com.buran.game.campaign.Campaign.sectors()) {
             final boolean open = sec.number <= unlocked;
+            playRows.add(sec);
             Row.Action row = panel.add(new Row.Action("SECTOR " + sec.code() + "   " + sec.name, rowFont, () -> {
                 if (open) {
                     com.buran.game.campaign.Campaign.start(sec);
@@ -239,13 +244,15 @@ public class MainMenu extends Group implements MenuNav.Target {
             }));
             if (com.buran.game.campaign.Campaign.isDone(sec.number)) {
                 row.withValue("CLEAR", Theme.OK);
-            } else if (open) {
-                row.withValue(sec.goalText(), Theme.ACCENT);
-            } else {
+            } else if (open && Theme.portrait()) {
+                row.withValue(sec.goalText(), Theme.ACCENT);   // landscape: the goal is on the card
+            } else if (!open) {
                 row.withValue("LOCKED", Theme.FAINT);
             }
         }
         panel.add(new Row.Info("SECTORS 04 - 19", smallFont, "SIGNAL LOST"));
+        playRows.add(null);
+        playRows.add(null);
         panel.add(new Row.Action("ARCADE   -   ENDLESS", rowFont, () -> {
             com.buran.game.campaign.Campaign.arcade();
             play();
@@ -730,7 +737,9 @@ public class MainMenu extends Group implements MenuNav.Target {
         Theme.rect(batch, Theme.portrait() ? px : px + pw * listShare() + 20f, Theme.portrait() ? y + 24f : py,
                 Theme.portrait() ? pw : 2f, Theme.portrait() ? 2f : ph, Theme.EDGE, a);
 
-        if (open == Panel.RESULTS && detailResult != null) {
+        if (open == Panel.PLAY) {
+            drawSectorCard(batch, x, y, w, a);
+        } else if (open == Panel.RESULTS && detailResult != null) {
             DetailedResultDAO d = detailResult;
             y -= 20f;
             drawText(batch, smallFont, detailTitle, x, y, Theme.TEXT, a);
@@ -758,6 +767,43 @@ public class MainMenu extends Group implements MenuNav.Target {
             float box = Theme.portrait() ? Math.min(w * 0.62f, ph * 0.36f) : Math.min(w * 0.62f, ph * 0.56f);
             codex.draw(batch, x, y - 10f, w, a, headFont, smallFont, box);
         }
+    }
+
+    private int cardIndex = -1;
+    private float cardAge;
+
+    /** Flight plan: the focused sector's painted card, its name and goal. */
+    private void drawSectorCard(Batch batch, float x, float top, float w, float a) {
+        int i = panel.focusIndex();
+        if (i != cardIndex) {
+            cardIndex = i;
+            cardAge = 0f;
+        }
+        cardAge += Gdx.graphics.getDeltaTime();
+        com.buran.game.campaign.Sector sec = i >= 0 && i < playRows.size() ? playRows.get(i) : null;
+        if (sec == null) {
+            return;
+        }
+        boolean locked = sec.number > com.buran.game.campaign.Campaign.unlocked();
+        float in = com.badlogic.gdx.math.Interpolation.smooth.apply(Math.min(1f, cardAge / 0.35f));
+        float y = top - 20f;
+        com.badlogic.gdx.graphics.Texture t = Art.sector(sec.number);
+        if (t != null) {
+            float h = w * 9f / 16f;
+            float zoom = 1.02f + 0.05f * Math.min(1f, cardAge / 12f);
+            Theme.rect(batch, x - 3f, y - h - 3f, w + 6f, h + 6f, Theme.EDGE, a);
+            float k = locked ? 0.3f : 1f;
+            Art.cover(batch, t, x, y - h, w, h, zoom, 0.5f, k, k, k * 1.1f, a * in);
+            y -= h + 70f;
+        }
+        drawText(batch, labelFont, "SECTOR " + sec.code(), x, y, Theme.HEAD, a * in);
+        y -= 60f;
+        drawText(batch, headFont, sec.name, x, y, locked ? Theme.FAINT : Theme.TEXT, a * in);
+        y -= headFont.getLineHeight() + 6f;
+        String state = com.buran.game.campaign.Campaign.isDone(sec.number) ? "CLEAR"
+                : locked ? "LOCKED" : sec.goalText();
+        Color c = com.buran.game.campaign.Campaign.isDone(sec.number) ? Theme.OK : locked ? Theme.FAINT : Theme.ACCENT;
+        drawText(batch, smallFont, state, x, y, c, a * in);
     }
 
     private void drawText(Batch batch, BitmapFont font, String text, float x, float y, Color c, float a) {

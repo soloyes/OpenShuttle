@@ -3,8 +3,7 @@
 Renders the radio voice lines (sector briefings) to assets/sound/radio/<id>.mp3.
 
 Text -> Piper TTS (open voice, commercial-safe licence) -> radio chain in ffmpeg:
-band-limited to a transmitter, compressed, soft-clipped, a static bed under the voice and
-squelch bursts at key-up and key-down.
+band-limited to a transmitter, compressed, soft-clipped, a faint static bed under the voice.
 
 Usage:
   pip install piper-tts            (ffmpeg must be on PATH)
@@ -28,18 +27,12 @@ RADIO = (
     "[0:a]aresample=44100,highpass=f=320,lowpass=f=3300,"
     "acompressor=threshold=-22dB:ratio=6:attack=4:release=90:makeup=4,"
     "asoftclip=type=tanh:threshold=0.6,volume=0.9,"
-    "adelay=420|420,apad=pad_dur=0.5[v];"
-    # Static bed for the whole transmission, with slow flutter.
+    "adelay=80|80,apad=pad_dur=0.12[v];"
+    # A faint static bed under the voice only (no squelch bursts, no hiss before or after).
     "anoisesrc=color=pink:amplitude=0.05:sample_rate=44100,highpass=f=500,lowpass=f=4200,"
     "tremolo=f=7:d=0.5[n];"
-    # Squelch: short bright noise bursts at key-up and key-down.
-    "anoisesrc=color=white:amplitude=0.35:sample_rate=44100:duration=0.14,highpass=f=1200,"
-    "afade=t=out:st=0.02:d=0.12[s1];"
-    "[v][n]amix=inputs=2:duration=first:weights=1 0.55:normalize=0[vn];"
-    "[s1][vn]concat=n=2:v=0:a=1[pre];"
-    "anoisesrc=color=white:amplitude=0.3:sample_rate=44100:duration=0.18,highpass=f=1000,"
-    "afade=t=out:st=0.0:d=0.18[s2];"
-    "[pre][s2]concat=n=2:v=0:a=1,afade=t=in:d=0.01,alimiter=limit=0.9[out]"
+    "[v][n]amix=inputs=2:duration=first:weights=1 0.55:normalize=0,"
+    "afade=t=in:d=0.06,areverse,afade=t=in:d=0.12,areverse,alimiter=limit=0.9[out]"
 )
 
 

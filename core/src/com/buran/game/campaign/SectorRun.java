@@ -450,42 +450,53 @@ public final class SectorRun {
     private void renderBriefing(SpriteBatch batch, BitmapFont font, float a) {
         float W = Rules.WORLD_WIDTH;
         float H = Rules.WORLD_HEIGHT;
-        float w = Math.min(W * 0.62f, 1700f);
+        com.badlogic.gdx.graphics.Texture card = com.buran.game.ui.menu.Art.sector(sector.number);
+        float w = Math.min(W * (card != null ? 0.72f : 0.62f), card != null ? 2100f : 1700f);
         float x = (W - w) / 2f;
         float y = H * 0.30f;
+        // The sector's painted card on the left of the radio panel, the message to its right.
+        float cardW = card != null ? 560f : 0f;
+        float cardH = cardW * 9f / 16f;
+        float tx = x + 40f + (card != null ? cardW + 40f : 0f);
+        float tw = w - (tx - x) - 40f;
         int n = phase == Phase.BRIEFING ? typed() : sector.briefing.length();
         boolean ready;
         float h;
         if (subtitles) {
             String shown = sector.briefing.substring(0, n) + ((((int) (time * 2.5f)) % 2 == 0 || n < sector.briefing.length()) ? "_" : "");
-            layout.setText(font, sector.briefing, Theme.DIM, w - 80f, Align.left, true);
-            h = layout.height + 240f;
+            layout.setText(font, sector.briefing, Theme.DIM, tw, Align.left, true);
+            h = Math.max(layout.height + 240f, cardH + 80f);
             y = Math.max(y, com.buran.game.world.EdgeMarker.bottomEdge() + h + 130f);
             Theme.frame(batch, x, y - h, w, h, a);
             Color old = font.getColor().cpy();
             font.setColor(Theme.TEXT.r, Theme.TEXT.g, Theme.TEXT.b, a);
-            font.draw(batch, shown, x + 40f, y - 30f - font.getLineHeight() * 1.5f, w - 80f, Align.left, true);
+            font.draw(batch, shown, tx, y - 30f - font.getLineHeight() * 1.5f, tw, Align.left, true);
             font.setColor(old);
             ready = n >= sector.briefing.length();
         } else {
             // No text: a live signal meter while the voice is on the air.
-            h = 300f;
+            h = Math.max(300f, cardH + 80f);
             y = Math.max(y, com.buran.game.world.EdgeMarker.bottomEdge() + h + 130f);
             Theme.frame(batch, x, y - h, w, h, a);
             boolean onAir = com.buran.game.platform.Radio.isPlaying();
             int bars = 48;
-            float bw = (w - 80f) / bars;
+            float bw = tw / bars;
             float mid = y - h / 2f - 20f;
             for (int i = 0; i < bars; i++) {
                 float level = onAir
                         ? 0.15f + 0.85f * Math.abs(MathUtils.sin(time * 11f + i * 0.7f) * MathUtils.sin(time * 3.3f + i * 0.23f))
                         : 0.04f;
                 float bh = 8f + 110f * level;
-                Theme.rect(batch, x + 40f + i * bw + bw * 0.2f, mid - bh / 2f, bw * 0.6f, bh, Theme.ACCENT, a * (onAir ? 0.8f : 0.3f));
+                Theme.rect(batch, tx + i * bw + bw * 0.2f, mid - bh / 2f, bw * 0.6f, bh, Theme.ACCENT, a * (onAir ? 0.8f : 0.3f));
             }
             ready = phaseTime > 1.2f;
         }
-        text(batch, font, "RADIO  -  SECTOR " + sector.code(), x + 40f, y - 30f, Theme.ACCENT, a, false);
+        if (card != null) {
+            float zoom = 1.02f + 0.05f * MathUtils.clamp(time / 20f, 0f, 1f);
+            Theme.rect(batch, x + 37f, y - 40f - cardH - 3f, cardW + 6f, cardH + 6f, Theme.EDGE, a);
+            com.buran.game.ui.menu.Art.cover(batch, card, x + 40f, y - 40f - cardH, cardW, cardH, zoom, 0.5f, 1f, 1f, 1f, a);
+        }
+        text(batch, font, "RADIO  -  SECTOR " + sector.code(), tx, y - 30f, Theme.ACCENT, a, false);
         if (sector.lesson != null) {
             text(batch, font, sector.lesson, W / 2f, y - h - 50f, Theme.OK, a, true);
         }
