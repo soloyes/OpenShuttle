@@ -49,6 +49,11 @@ public class GameInfoSystem {
         if (text == null || muted(text)) {
             return;
         }
+        // In a campaign sector score means nothing: only what changes the ship or the goal floats up
+        // (hull and shield lost, items, finds), never points.
+        if (com.buran.game.campaign.Campaign.current() != null && !campaignWorthy(text)) {
+            return;
+        }
         for (int i = 0; i < elements.length; i++) {
             float dy;
             if (MathUtils.random(0, 1) == 0) {
@@ -61,6 +66,12 @@ public class GameInfoSystem {
                 break;
             }
         }
+    }
+
+    private static boolean campaignWorthy(String text) {
+        String t = text.toUpperCase();
+        return t.contains("HULL") || t.contains("SHIELD") || t.contains("LOG") || t.contains("CREW LOST")
+                || (t.contains("+") && !t.contains("SCORE") && !t.matches(".*\\+\\s*\\d.*"));
     }
 
     public static void setup(float x, float y, String text, float scale, boolean colored) {

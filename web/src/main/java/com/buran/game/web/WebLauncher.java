@@ -46,6 +46,9 @@ public class WebLauncher {
         com.buran.game.conf.Rules.DEBUG_GOD = query().contains("god");
         com.buran.game.conf.Rules.DEBUG_CENSUS = query().contains("census");
         com.buran.game.conf.Rules.DEBUG_BOSS = query().contains("boss");
+        com.buran.game.conf.Rules.DEBUG_BOT = query().contains("bot");
+        java.util.regex.Matcher sp = java.util.regex.Pattern.compile("speed=(\\d+)").matcher(query());
+        com.buran.game.conf.Rules.DEBUG_SPEED = sp.find() ? Math.max(1, Math.min(8, Integer.parseInt(sp.group(1)))) : 1;
         java.util.regex.Matcher sm = java.util.regex.Pattern.compile("sector=(\\d+)").matcher(query());
         com.buran.game.conf.Rules.DEBUG_SECTOR = sm.find() ? Integer.parseInt(sm.group(1)) : 0;
         com.buran.game.conf.Rules.DEBUG_CHAPTER = query().contains("chapter=3") ? 3 : query().contains("chapter=2") ? 2

@@ -87,7 +87,7 @@ public final class Campaign {
         // Echo: everything learned, at once, with nothing new (tip 28: apply it creatively).
         Sector s6 = new Sector(6, "ECHO", Sector.Goal.RESCUE, 4,
                 "The whole crew is out there now. And the whole field is awake. You know everything you need. Use it. Bring them home.",
-                "EVERYTHING AT ONCE      THE EDGE OF THE SECTOR HURTS AGAIN");
+                "THE EDGE OF THE SECTOR HURTS AGAIN      SHELTERS HIDE YOU");
         empty(s6);
         s6.blackhole = true;
         s6.shelters = 2;
@@ -318,8 +318,8 @@ public final class Campaign {
         SECTORS.add(s11);
 
         Sector s12 = new Sector(12, "THE VOICE", Sector.Goal.RESCUE, 5,
-                "The voice again. Come to the rift, it says. Beacons all around it. The field is collapsing, faster every minute. Do not wait.",
-                "IT GETS WORSE EVERY MINUTE      DON'T WAIT");
+                "The voice again. Come to the rift, it says. Beacons all around it. Something in the storm is waiting for us.",
+                "KEEP SHIELD FOR THE PULSE      SHELTERS GIVE IT BACK");
         empty(s12);
         s12.chapter = 2;
         s12.blackhole = true;
@@ -334,7 +334,6 @@ public final class Campaign {
         s12.crateMax = 2;
         s12.fuelMax = 2;
         s12.borderDamage = true;
-        s12.escalate = true;
         s12.boss = 2;
         s12.space = 2.6f;
         s12.startItems.put(ROCKETS, 2);
@@ -354,13 +353,13 @@ public final class Campaign {
                 {30, 8, 1.4f, 0, 4, 0, 0, 0, 0, 0, 0, 1.2f},          // 03 STATIC
                 {35, 8, 1.4f, 12, 0, 0, 0, 0, 0, 0, 0, 1.3f},         // 04 THE RIFT
                 {25, 0, 0, 6, 0, 0, 0, 0, 10, 5, 0, 1.2f},            // 05 SEALED CARGO
-                {40, 10, 1.3f, 10, 2, 0, 0, 12, 0, 0, 2, 1.4f},       // 06 ECHO + the Mother
+                {40, 10, 1.3f, 0, 0, 0, 0, 0, 0, 0, 0, 1.4f},         // 06 ECHO: crew, the rift and the Mother only
                 {40, 10, 1.3f, 0, 0, 5, 0, 0, 0, 0, 0, 1.3f},         // 07 LEECH
                 {40, 10, 1.3f, 0, 0, 0, 5, 0, 0, 0, 4, 1.3f},         // 08 DRAIN
                 {40, 10, 1.3f, 25, 0, 0, 0, 0, 0, 0, 0, 1.4f},        // 09 COLD
                 {150, 0, 0, 12, 0, 0, 0, 28, 0, 0, 0, 1.3f},          // 10 DEEP FIELD
                 {45, 10, 1.3f, 0, 6, 0, 0, 10, 0, 0, 0, 1.4f},        // 11 STORM
-                {50, 12, 1.2f, 15, 3, 2, 2, 15, 3, 0, 3, 1.5f},       // 12 THE VOICE + Storm Heart
+                {50, 12, 1.2f, 0, 0, 0, 0, 0, 0, 0, 0, 1.5f},         // 12 THE VOICE: crew, the rift and the Storm Heart only
                 {50, 12, 1.2f, 0, 0, 5, 5, 0, 0, 0, 4, 1.4f},         // 13 ECHOES
                 {200, 0, 0, 12, 0, 0, 0, 32, 0, 0, 0, 1.4f},          // 14 GRAVEYARD
                 {35, 0, 0, 20, 5, 0, 0, 0, 10, 6, 0, 1.4f},           // 15 WARDENS

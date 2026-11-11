@@ -142,7 +142,16 @@ public class TelemetryHud {
         float lx = x0 + pad;
         textL(batch, small, "LIFE SUPPORT", lx, headY, HEAD);
         Color scoreColor = st.isScoreAlertRadiationAnomaly() && blink ? ALERT : HEAD;
-        textR(batch, small, "SCORE  " + formatScore(st.getScoreView()), lx + lw, headY, scoreColor);
+        com.buran.game.campaign.SectorRun runT = com.buran.game.campaign.Campaign.run();
+        if (runT != null) {
+            // Campaign: the clock against par instead of points.
+            float t = runT.flightTime();
+            float par = com.buran.game.campaign.Campaign.par(runT.sector());
+            textR(batch, small, "TIME  " + com.buran.game.campaign.Campaign.formatTime(t) + "  /  "
+                    + com.buran.game.campaign.Campaign.formatTime(par), lx + lw, headY, t > par ? HEAD : Theme.TEXT);
+        } else {
+            textR(batch, small, "SCORE  " + formatScore(st.getScoreView()), lx + lw, headY, scoreColor);
+        }
         ramGauge(batch, st, lx + Theme.width(small, "LIFE SUPPORT") + 70f, headY - small.getCapHeight() / 2f, blink);
         bar(batch, "SHIELD", st.getLifeShield(), st.getMaxLifeShield(), SHIELD, lx, headY - 58f, lw, false, false);
         bar(batch, "HULL", st.getHp(), st.getMaxHp(), HULL, lx, headY - 158f, lw, st.isHpAlert() && blink, false);

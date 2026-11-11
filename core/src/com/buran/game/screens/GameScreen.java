@@ -268,6 +268,8 @@ public class GameScreen extends BaseScreen {
         Rules.CONSUMABLE_CRATE_DANGER_PROBABILITY = 4;
         Rules.CONSUMABLE_STORAGE_DANGER_PROBABILITY = 4;
         hurtBy.clear();
+        com.buran.game.debug.Bot.reset();
+        com.buran.game.ui.hud.CrewCard.resetSeen();
         com.buran.game.ui.hud.ActiveEffects.clear();
         com.buran.game.ui.hud.Comms.clear();
         if (Campaign.current() != null) {
@@ -341,7 +343,12 @@ public class GameScreen extends BaseScreen {
         //FBO BEGIN
         fbo.begin();
         super.render(dt);
-        update(dt);
+        for (int step = 0; step < Rules.DEBUG_SPEED; step++) {
+            update(dt);
+        }
+        if (Rules.DEBUG_BOT) {
+            com.buran.game.debug.Bot.report(sectorRun != null && sectorRun.isClear(), Rules.GAME_OVER);
+        }
         batch.setProjectionMatrix(camera.combined);
         if (PauseGroup.isPause() || Rules.GAME_OVER) {
             batch.setShader(ShaderManager.PAUSE.getProgram());

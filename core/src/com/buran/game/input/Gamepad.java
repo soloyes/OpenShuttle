@@ -135,6 +135,9 @@ public final class Gamepad {
             com.buran.game.campaign.SectorRun run = com.buran.game.campaign.Campaign.run();
             if (run != null && run.isBriefing()) {
                 steering = false;
+                if (Rules.DEBUG_BOT) {
+                    run.advance();
+                }
                 if (pressed(Action.A)) {
                     run.advance();
                 }
@@ -144,6 +147,11 @@ public final class Gamepad {
                 return;
             }
             updateFlight(lx, ly, rx, ry);
+            if (Rules.DEBUG_BOT) {
+                twin = false;
+                com.buran.game.debug.Bot.drive(dt, steer);
+                steering = steer.len2() > 0f;
+            }
             // A switches the ram shield; X (or RT) uses the selected item.
             if (pressed(Action.A)) {
                 com.buran.game.player.Buran.toggleRam();
@@ -305,6 +313,11 @@ public final class Gamepad {
     }
 
     private boolean pulseDenied;
+
+    /** The autopilot fires the EMP the same way the player does. */
+    public void botPulse() {
+        firePulse();
+    }
 
     /** True once after Y was pressed without enough shield for the EMP (then resets). */
     public boolean takePulseDenied() {

@@ -60,6 +60,10 @@ public final class Rules {
     public static int DEBUG_SECTOR = 0;
     /** ?boss: the sector's boss wakes at once. */
     public static boolean DEBUG_BOSS = false;
+    /** ?bot: the autopilot flies and logs (difficulty measurements). */
+    public static boolean DEBUG_BOT = false;
+    /** ?speed=N: the game logic runs N times per frame (faster automated runs). */
+    public static int DEBUG_SPEED = 1;
     /** Test builds: every campaign sector can be started. */
     public static boolean DEBUG_UNLOCK = false;
     /** Test builds: a sector starts a third of the way to its goal. */

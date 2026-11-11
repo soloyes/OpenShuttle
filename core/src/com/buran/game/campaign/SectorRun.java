@@ -478,7 +478,7 @@ public final class SectorRun {
         if (sector.boss == 1) {
             bossChild += dt;
             CorrosiveAnomalyEmitter c = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
-            if (bossChild > 9f && c.getActiveList().size() < sector.corrosiveMax + 3) {
+            if (bossChild > 7f && c.getActiveList().size() < 6) {
                 bossChild = 0f;
                 com.buran.game.bot.anomaly.AbstractAnomaly a = c.emitAt(boss.getPosition().x + MathUtils.random(-200f, 200f),
                         boss.getPosition().y + MathUtils.random(-200f, 200f));

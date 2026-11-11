@@ -34,7 +34,18 @@ public final class CrewCard {
     }
 
     /** gift: "HULL REPAIRED" etc. */
+    private static final java.util.Set<Sticker> SEEN = new java.util.HashSet<>();
+
+    /** A new sector: every profession gets its card once again. */
+    public static void resetSeen() {
+        SEEN.clear();
+    }
+
     public static void show(Sticker crew, String roleName, String giftText) {
+        // Dozens come aboard in a sector: the card introduces each profession once, then stays quiet.
+        if (com.buran.game.campaign.Campaign.current() != null && !SEEN.add(crew)) {
+            return;
+        }
         who = crew;
         role = roleName;
         gift = giftText;

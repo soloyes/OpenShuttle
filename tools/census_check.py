@@ -21,7 +21,7 @@ for log in sorted(glob.glob(f"{S}/census/s*.log"), key=lambda p: int(re.findall(
     esc = c["escalate"] == "true"
     limits = {
         # Bosses: the Mother (06) and her brood of up to three, the Storm Heart (12).
-        "corrosive": I(c, "corrosive") + (10 if esc else 0) + (4 if c["sector"] == "6" else 0),
+        "corrosive": I(c, "corrosive") + (10 if esc else 0) + (6 if c["sector"] == "6" else 0),
         "electric": max(I(c, "electric"), 3 if esc else 0) + (1 if c["sector"] in ("2", "12") else 0),
         "radiation": I(c, "radiation"),
         "magnetic": I(c, "magnetic"),
