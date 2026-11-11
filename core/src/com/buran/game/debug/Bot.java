@@ -44,6 +44,8 @@ public final class Bot {
     private static int deaths;
     private static boolean reported;
     private static String lastGoal = "";
+    private static float reaction;
+    private static final Vector2 seen = new Vector2();
 
     private Bot() {
     }
@@ -93,8 +95,15 @@ public final class Bot {
         float dist = goal.dst(Buran.position);
         float speed = MathUtils.clamp((dist - stopAt) * 1.4f, 0f, 1100f);
         desired.set(goal).sub(Buran.position).nor().scl(speed);
-        avoid();
-        desired.add(away);
+        // Human-ish: the picture of threats is refreshed with a delay, and they are noticed late.
+        reaction -= dt;
+        if (reaction <= 0f) {
+            reaction = 0.35f;
+            avoid();
+            seen.set(away);
+        }
+        desired.add(seen);
+        desired.rotateDeg(MathUtils.random(-8f, 8f));
         // Steer the velocity towards the desired one: the stick points at the correction.
         tmp.set(desired).sub(Buran.velocity);
         float power = MathUtils.clamp(tmp.len() / 500f, 0f, 1f);
@@ -119,7 +128,7 @@ public final class Bot {
                 if (!a.isActive() || a.isTaken()) {
                     continue;
                 }
-                float r = a.bossHp > 0 ? 1300f : 650f;
+                float r = a.bossHp > 0 ? 900f : 380f;
                 float d = a.getPosition().dst(Buran.position);
                 if (d < r) {
                     tmp.set(Buran.position).sub(a.getPosition()).nor().scl(900f * (1f - d / r));

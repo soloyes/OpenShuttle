@@ -348,25 +348,25 @@ public final class Campaign {
      */
     private static void tune() {
         float[][] t = {
-                {30, 8, 1.2f, 0, 0, 0, 0, 0, 0, 0, 0, 1.2f},          // 01 SILENCE: crew everywhere
-                {120, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 1.2f},          // 02 DEBRIS FIELD
-                {30, 8, 1.4f, 0, 4, 0, 0, 0, 0, 0, 0, 1.2f},          // 03 STATIC
-                {35, 8, 1.4f, 12, 0, 0, 0, 0, 0, 0, 0, 1.3f},         // 04 THE RIFT
-                {25, 0, 0, 6, 0, 0, 0, 0, 10, 5, 0, 1.2f},            // 05 SEALED CARGO
-                {40, 10, 1.3f, 0, 0, 0, 0, 0, 0, 0, 0, 1.4f},         // 06 ECHO: crew, the rift and the Mother only
-                {40, 10, 1.3f, 0, 0, 5, 0, 0, 0, 0, 0, 1.3f},         // 07 LEECH
-                {40, 10, 1.3f, 0, 0, 0, 5, 0, 0, 0, 4, 1.3f},         // 08 DRAIN
-                {40, 10, 1.3f, 25, 0, 0, 0, 0, 0, 0, 0, 1.4f},        // 09 COLD
-                {150, 0, 0, 12, 0, 0, 0, 28, 0, 0, 0, 1.3f},          // 10 DEEP FIELD
-                {45, 10, 1.3f, 0, 6, 0, 0, 10, 0, 0, 0, 1.4f},        // 11 STORM
-                {50, 12, 1.2f, 0, 0, 0, 0, 0, 0, 0, 0, 1.5f},         // 12 THE VOICE: crew, the rift and the Storm Heart only
-                {50, 12, 1.2f, 0, 0, 5, 5, 0, 0, 0, 4, 1.4f},         // 13 ECHOES
-                {200, 0, 0, 12, 0, 0, 0, 32, 0, 0, 0, 1.4f},          // 14 GRAVEYARD
-                {35, 0, 0, 20, 5, 0, 0, 0, 10, 6, 0, 1.4f},           // 15 WARDENS
-                {55, 12, 1.2f, 15, 0, 0, 0, 15, 0, 0, 0, 1.5f},       // 16 TIDE
-                {50, 12, 1.2f, 18, 3, 0, 0, 15, 0, 0, 0, 1.4f},       // 17 BLIND
-                {60, 14, 1.1f, 25, 5, 3, 3, 20, 3, 0, 3, 1.5f},       // 18 THRESHOLD
-                {60, 14, 1.1f, 30, 5, 0, 0, 15, 0, 0, 0, 1.5f},       // 19 HOME
+                {60, 8, 1.2f, 0, 0, 0, 0, 0, 0, 0, 0, 1.2f},          // 01 SILENCE: crew everywhere
+                {240, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 1.2f},          // 02 DEBRIS FIELD
+                {60, 8, 1.4f, 0, 4, 0, 0, 0, 0, 0, 0, 1.2f},          // 03 STATIC
+                {60, 8, 1.4f, 16, 0, 0, 0, 0, 0, 0, 0, 1.3f},         // 04 THE RIFT
+                {45, 0, 0, 6, 0, 0, 0, 0, 10, 5, 0, 1.2f},            // 05 SEALED CARGO
+                {70, 10, 1.3f, 0, 0, 0, 0, 0, 0, 0, 0, 1.4f},         // 06 ECHO: crew, the rift and the Mother only
+                {65, 10, 1.3f, 0, 0, 5, 0, 0, 0, 0, 0, 1.3f},         // 07 LEECH
+                {65, 10, 1.3f, 0, 0, 0, 5, 0, 0, 0, 4, 1.3f},         // 08 DRAIN
+                {65, 10, 1.3f, 25, 0, 0, 0, 0, 0, 0, 0, 1.4f},        // 09 COLD
+                {220, 0, 0, 12, 0, 0, 0, 28, 0, 0, 0, 1.3f},          // 10 DEEP FIELD
+                {70, 10, 1.3f, 0, 6, 0, 0, 10, 0, 0, 0, 1.4f},        // 11 STORM
+                {75, 12, 1.2f, 0, 3, 0, 0, 0, 0, 0, 0, 1.5f},         // 12 THE VOICE: crew, the rift, a storm and its Heart
+                {70, 12, 1.2f, 0, 0, 5, 5, 0, 0, 0, 4, 1.4f},         // 13 ECHOES
+                {260, 0, 0, 12, 0, 0, 0, 32, 0, 0, 0, 1.4f},          // 14 GRAVEYARD
+                {50, 0, 0, 20, 5, 0, 0, 0, 10, 6, 0, 1.4f},           // 15 WARDENS
+                {70, 12, 1.2f, 20, 0, 0, 0, 15, 0, 0, 0, 1.5f},       // 16 TIDE
+                {70, 12, 1.2f, 18, 3, 0, 0, 15, 0, 0, 0, 1.4f},       // 17 BLIND
+                {70, 14, 1.1f, 22, 5, 3, 3, 20, 3, 0, 3, 1.5f},       // 18 THRESHOLD
+                {75, 14, 1.1f, 30, 5, 0, 0, 15, 0, 0, 0, 1.5f},       // 19 HOME
         };
         for (int i = 0; i < SECTORS.size() && i < t.length; i++) {
             Sector s = SECTORS.get(i);
@@ -386,6 +386,8 @@ public final class Campaign {
             if (s.corrosiveMax > 0) {
                 s.corrosiveRespawn = Math.min(s.corrosiveRespawn, 2f);
             }
+            // Hunters wake fast: the bot showed that with the old minute of sleep nothing ever hunted.
+            s.corrosiveHuntTime = s.chapter == 1 ? 12f : s.chapter == 2 ? 8f : 5f;
             if (s.asteroidMax > 0) {
                 s.asteroidRespawn = Math.min(s.asteroidRespawn, 1.2f);
             }
