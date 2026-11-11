@@ -58,6 +58,8 @@ public final class Rules {
     public static boolean DEBUG_CENSUS = false;
     /** ?sector=N: skip the intro and the menu and fly sector N (automated checks). */
     public static int DEBUG_SECTOR = 0;
+    /** ?boss: the sector's boss wakes at once. */
+    public static boolean DEBUG_BOSS = false;
     /** Test builds: every campaign sector can be started. */
     public static boolean DEBUG_UNLOCK = false;
     /** Test builds: a sector starts a third of the way to its goal. */

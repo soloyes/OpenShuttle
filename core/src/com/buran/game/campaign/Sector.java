@@ -52,6 +52,8 @@ public final class Sector {
     public final java.util.LinkedHashMap<com.buran.game.labelsticker.Sticker, Integer> startItems = new java.util.LinkedHashMap<>();
     /** The field grows harder every 40 seconds (more hunters, faster respawn). */
     public boolean escalate;
+    /** A boss halfway through: 0 none, 1 the Mother (corrosive), 2 the Storm Heart (electric). */
+    public int boss;
     /** The radar is dead for the whole sector (flying by eye). */
     public boolean noRadar;
     /** The extraction beacon sits at the edge of the rift (the way home). */

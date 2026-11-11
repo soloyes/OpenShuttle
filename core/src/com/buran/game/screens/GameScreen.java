@@ -904,7 +904,11 @@ public class GameScreen extends BaseScreen {
             if (anomaly.isTaken()) {
                 continue;
             }
-            if (Buran.position.dst(anomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 && anomaly.isBorn()) {
+            if (Buran.position.dst(anomaly.getPosition()) <= PaintConstants.ANOMALY_CORROSIVE_WIDTH / 2 * (anomaly.bossHp > 0 ? 2.4f : 1f) && anomaly.isBorn()) {
+                if (anomaly.bossHp > 0) {
+                    bossContact(anomaly);
+                    continue;
+                }
                 if (anomaly.getLevel() < player.getPushPower() || Buran.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                     if (Buran.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY) {
                         boomBox.playSound(MSConstants.BURST_CORROSIVE_ANOMALY);
@@ -943,7 +947,11 @@ public class GameScreen extends BaseScreen {
                 continue;
             }
             collideWithRocket(anomaly);
-            if (Buran.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 && anomaly.isBorn()) {
+            if (Buran.position.dst(anomaly.getPosition()) < PaintConstants.ANOMALY_ELECTRIC_WIDTH / 2 * (anomaly.bossHp > 0 ? 2.4f : 1f) && anomaly.isBorn()) {
+                if (anomaly.bossHp > 0) {
+                    bossContact(anomaly);
+                    continue;
+                }
                 anomaly.setHungry(false);
                 damageToPlayer(anomaly);
                 Vibrator.vibrateGame(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY, anomaly.getLevel());
@@ -1185,6 +1193,34 @@ public class GameScreen extends BaseScreen {
         }
     }
 
+    /**
+     * Touching a boss: a boosted ram (the Mother only) takes one of its three hit points; anything
+     * else hurts the ship. Either way both are thrown apart, and the boss is briefly untouchable.
+     */
+    private void bossContact(AbstractAnomaly boss) {
+        if (boss.bossCooldown > 0f) {
+            return;
+        }
+        boss.bossCooldown = 1f;
+        boolean strong = boss instanceof CorrosiveAnomaly && Buran.velocity.len() >= Rules.PLAYER_TURBO_THRESHOLD_VELOCITY;
+        tmp1V2.set(Buran.position).sub(boss.getPosition()).nor();
+        if (strong) {
+            boss.bossHp--;
+            boomBox.playSound(MSConstants.BURST_CORROSIVE_ANOMALY);
+            Juice.flash(0.3f, 1f, 0.7f, 0.3f);
+            Shake.getInstance().shakeCamera(0.4f, 30, 12);
+            if (boss.bossHp <= 0) {
+                boss.destroyWithEffect();
+                player.killPlusPlus(boss);
+                return;
+            }
+        } else {
+            damageToPlayer(boss);
+        }
+        Buran.velocity.set(tmp1V2).scl(700f);
+        boss.knock.set(tmp1V2).scl(-500f);
+    }
+
     private void damageToAnomaly(AbstractAnomaly abstractAnomaly) {
         abstractAnomaly.destroyWithEffect();
         player.getRamShield().blink(1.0f);
@@ -1248,6 +1284,14 @@ public class GameScreen extends BaseScreen {
         for (int i = electricalAnomalyEmitter.getActiveList().size() - 1; i >= 0; i--) {
             AbstractAnomaly a = electricalAnomalyEmitter.getActiveList().get(i);
             if (a.isBorn() && !a.isTaken() && a.isActive() && a.getPosition().dst2(Buran.position) <= r2) {
+                if (a.bossHp > 1) {
+                    // The Storm Heart takes a pulse as one hit of three.
+                    a.bossHp--;
+                    a.bossCooldown = 0.6f;
+                    a.knock.set(a.getPosition()).sub(Buran.position).nor().scl(Rules.PULSE_PUSH);
+                    killed = true;
+                    continue;
+                }
                 a.destroyWithEffect();
                 player.killPlusPlus(a);
                 killed = true;

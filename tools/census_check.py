@@ -20,8 +20,9 @@ for log in sorted(glob.glob(f"{S}/census/s*.log"), key=lambda p: int(re.findall(
     I = lambda d, k: int(d[k])
     esc = c["escalate"] == "true"
     limits = {
-        "corrosive": I(c, "corrosive") + (10 if esc else 0),
-        "electric": max(I(c, "electric"), 3 if esc else 0) + (1 if c["sector"] == "2" else 0),
+        # Bosses: the Mother (06) and her brood of up to three, the Storm Heart (12).
+        "corrosive": I(c, "corrosive") + (10 if esc else 0) + (4 if c["sector"] == "6" else 0),
+        "electric": max(I(c, "electric"), 3 if esc else 0) + (1 if c["sector"] in ("2", "12") else 0),
         "radiation": I(c, "radiation"),
         "magnetic": I(c, "magnetic"),
         "rocks": ((I(c, "rocks") + 1) // 2) * 2,

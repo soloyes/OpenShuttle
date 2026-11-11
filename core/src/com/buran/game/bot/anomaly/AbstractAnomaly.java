@@ -43,6 +43,16 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
     public int temper = -1;
     /** A lurker has made its lunge. */
     public boolean lunged;
+    /** Boss hit points (0 = not a boss): rockets, boosted rams or EMP take one each (tip 8). */
+    public int bossHp;
+    /** Seconds before a boss can be hit again. */
+    public float bossCooldown;
+
+    /** Turns this anomaly into a boss of the given strength. */
+    public void makeBoss(int hp, int level) {
+        bossHp = hp;
+        this.level = level;
+    }
 
     @Override
     public Vector2 getPosition() {

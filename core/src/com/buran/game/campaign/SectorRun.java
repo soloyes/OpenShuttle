@@ -294,6 +294,76 @@ public final class SectorRun {
         if (sector.escalate) {
             escalate(dt);
         }
+        if (sector.boss > 0) {
+            bossScript(dt);
+        }
+    }
+
+    private com.buran.game.bot.anomaly.AbstractAnomaly boss;
+    private boolean bossDone;
+    private float bossChild;
+
+    /**
+     * The chapter's boss wakes halfway through the goal, announced on the radio first (tips 8,
+     * 69). The Mother throws out small hunters now and then; three rockets or three boosted rams
+     * break her. The Storm Heart takes three EMP pulses. Beating it is not the goal - surviving is.
+     */
+    private void bossScript(float dt) {
+        if (bossDone) {
+            return;
+        }
+        if (boss == null) {
+            if (progress * 2 >= sector.target || Rules.DEBUG_BOSS) {
+                spawnBoss();
+            }
+            return;
+        }
+        if (!boss.isActive()) {
+            bossDone = true;
+            boss = null;
+            say("IT'S GONE.  KEEP GOING", 6f);
+            com.buran.game.effects.Juice.flash(0.4f, 1f, 0.9f, 0.7f);
+            boomBox.playSound(MSConstants.LEVEL_UP);
+            return;
+        }
+        boss.bossCooldown = Math.max(0f, boss.bossCooldown - dt);
+        if (sector.boss == 1) {
+            bossChild += dt;
+            CorrosiveAnomalyEmitter c = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
+            if (bossChild > 9f && c.getActiveList().size() < sector.corrosiveMax + 3) {
+                bossChild = 0f;
+                com.buran.game.bot.anomaly.AbstractAnomaly a = c.emitAt(boss.getPosition().x + MathUtils.random(-200f, 200f),
+                        boss.getPosition().y + MathUtils.random(-200f, 200f));
+                a.makeBoss(0, 0);
+            }
+        }
+    }
+
+    private void spawnBoss() {
+        float ang = MathUtils.random(MathUtils.PI2);
+        float r = Rules.VIEW_HEIGHT * 1.1f;
+        float m = 600f;
+        float x = MathUtils.clamp(Buran.position.x + MathUtils.cos(ang) * r, m, Rules.SPACE_WIDTH - m);
+        float y = MathUtils.clamp(Buran.position.y + MathUtils.sin(ang) * r, m, Rules.SPACE_HEIGHT - m);
+        if (sector.boss == 1) {
+            boss = ((CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class)).emitAt(x, y);
+            boss.makeBoss(3, 3);
+            com.buran.game.ui.groups.selector.SelectorGroup.getInstance()
+                    .addSelector(com.buran.game.labelsticker.Sticker.BOOST, 3);
+            say("SOMETHING BIG IS WAKING UP  -  ROCKETS OR A BOOSTED RAM BREAK IT", 9f);
+        } else {
+            boss = ((ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class)).emitAt(x, y);
+            boss.makeBoss(3, boss.getLevel());
+            boss.setScaleX(2.6f);
+            boss.setScaleY(2.6f);
+            say("THE STORM HAS A HEART  -  {Y} PULSE IT THREE TIMES", 9f);
+        }
+        com.buran.game.effects.Shake.getInstance().shakeCamera(0.6f, 40, 14);
+    }
+
+    /** The boss, for its name plate (null when there is none). */
+    public com.buran.game.bot.anomaly.AbstractAnomaly boss() {
+        return boss;
     }
 
     private float flightTime;
@@ -497,6 +567,17 @@ public final class SectorRun {
     // ------------------------------------------------------------------ world pass
 
     public void renderWorld(SpriteBatch batch, ThreatTextures tx) {
+        if (boss != null && boss.isActive()) {
+            // The boss's name and its three hit points, above it.
+            BitmapFont f = Theme.font(54);
+            String name = sector.boss == 1 ? "THE MOTHER" : "THE STORM HEART";
+            float bx = boss.getPosition().x;
+            float by = boss.getPosition().y + 330f;
+            text(batch, f, name, bx, by, Theme.ACCENT, 0.9f, true);
+            for (int i = 0; i < 3; i++) {
+                Theme.rect(batch, bx - 105f + i * 75f, by - 80f, 60f, 16f, i < boss.bossHp ? Theme.ACCENT : Theme.TRACK, 0.9f);
+            }
+        }
         if (phase != Phase.EXTRACT && phase != Phase.CLEAR) {
             return;
         }
@@ -558,6 +639,16 @@ public final class SectorRun {
         }
         if (phase == Phase.EXTRACT) {
             edgeMarker(batch, worldCamera, tx, Theme.font(32));
+        }
+        if (boss != null && boss.isActive()) {
+            // Where the boss is when it is off screen: a red pin, always (tips 53, 69).
+            float dx = boss.getPosition().x - worldCamera.position.x;
+            float dy = boss.getPosition().y - worldCamera.position.y;
+            if (!com.buran.game.world.EdgeMarker.inView(dx, dy, 0f)) {
+                float pulse = 0.7f + 0.3f * MathUtils.sin(time * 6f);
+                com.buran.game.world.EdgeMarker.draw(batch, tx, Theme.font(32), tx.diamond, dx, dy,
+                        boss.getPosition().dst(Buran.position), Theme.ACCENT, 1f, pulse);
+            }
         }
         if (phase == Phase.BRIEFING) {
             renderBriefing(batch, small, MathUtils.clamp(phaseTime / 0.5f, 0f, 1f));

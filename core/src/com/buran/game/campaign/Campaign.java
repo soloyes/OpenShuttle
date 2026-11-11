@@ -101,6 +101,7 @@ public final class Campaign {
         s6.fuelMax = 2;
         s6.borderDamage = true;
         s6.space = 2.6f;
+        s6.boss = 1;
         SECTORS.add(s6);
 
         chapterTwo();
@@ -320,6 +321,7 @@ public final class Campaign {
         s12.fuelMax = 2;
         s12.borderDamage = true;
         s12.escalate = true;
+        s12.boss = 2;
         s12.space = 2.6f;
         s12.startItems.put(ROCKETS, 2);
         s12.startItems.put(com.buran.game.labelsticker.Sticker.FREEZE, 1);

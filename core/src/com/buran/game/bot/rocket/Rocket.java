@@ -67,7 +67,16 @@ public class Rocket extends AbstractPoolable {
     public void checkCollision() {
         if (position.dst(targetAnomaly.getPosition()) <= PaintConstants.ROCKET_WIDTH && targetAnomaly.isActive()) {
             destroy();
-            targetAnomaly.destroyWithEffect();
+            if (targetAnomaly.bossHp > 1) {
+                // A boss takes a rocket as one hit of three.
+                if (targetAnomaly.bossCooldown <= 0f) {
+                    targetAnomaly.bossHp--;
+                    targetAnomaly.bossCooldown = 0.6f;
+                    com.buran.game.effects.Juice.flash(0.2f, 1f, 0.6f, 0.3f);
+                }
+            } else {
+                targetAnomaly.destroyWithEffect();
+            }
         }
     }
 

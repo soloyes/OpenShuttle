@@ -68,6 +68,8 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     public void init(float x, float y) {
         this.temper = -1;
         this.lunged = false;
+        this.bossHp = 0;
+        this.bossCooldown = 0f;
         this.touched = false;
         this.hungryTimer = 0;
         this.slimTimer = 0;
@@ -146,7 +148,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 }
             }
 
-            if (activated) {
+            if (activated && bossHp == 0) {
                 slimTimer += dt;
             }
             if (slimTimer > slim) {
@@ -190,9 +192,10 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 if (!born) {
                     scaleX = scaleY += dt;
                     saveScaleX = saveScaleY += dt;
-                    if (scaleX >= 1 + level * 0.15f) {
-                        scaleX = saveScaleX = 1 + level * 0.15f;
-                        scaleY = saveScaleY = 1 + level * 0.15f;
+                    float cap = bossHp > 0 ? 2.6f : 1 + level * 0.15f;
+                    if (scaleX >= cap) {
+                        scaleX = saveScaleX = cap;
+                        scaleY = saveScaleY = cap;
                         born = true;
                     }
                 } else {
@@ -228,6 +231,9 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     }
 
     public void takeDamage(int dmg) {
+        if (bossHp > 0) {
+            return;   // a boss only loses its hit points
+        }
         level -= dmg;
     }
 

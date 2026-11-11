@@ -60,6 +60,8 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         this.spreeColor.set(Color.PURPLE.r, Color.PURPLE.g, Color.PURPLE.b, 1.0f);
         this.color.a = 0.0f;
+        this.bossHp = 0;
+        this.bossCooldown = 0f;
         this.scaleX = this.saveScaleX = 1.0f;
         this.scaleY = this.saveScaleY = 1.0f;
         this.taken = false;
@@ -106,7 +108,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         scaleAndBorn(dt);
 
         if (born) {
-            if (!Rules.GAME_OVER && (Gdx.input.isTouched() || Gamepad.pulseHits(position))) {
+            if (bossHp == 0 && !Rules.GAME_OVER && (Gdx.input.isTouched() || Gamepad.pulseHits(position))) {
                 tmp.set(Gdx.input.getX(), Gdx.input.getY());
                 ScreenManager.getInstance().getViewport().unproject(tmp);
                 if (Gamepad.pulseHits(position) || (Gdx.input.isTouched() && tmp.dst(position) < PaintConstants.ANOMALY_ELECTRIC_WIDTH)) {

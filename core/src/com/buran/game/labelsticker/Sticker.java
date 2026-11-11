@@ -276,7 +276,9 @@ public enum Sticker {
                 for (int i = 0; i < anomalies.size(); i++) {
                     if (anomalies.get(i).getPosition().dst(Buran.position) <= Rules.VIEW_WIDTH) {
                         if (!anomalies.get(i).isTaken()) {
-                            anomalies.get(i).setMarkedToBoom(true);
+                            if (anomalies.get(i).bossHp == 0) {
+                                anomalies.get(i).setMarkedToBoom(true);
+                            }
                             count++;
                         }
                     }
@@ -766,7 +768,9 @@ public enum Sticker {
                 for (int i = 0; i < anomalies.size(); i++) {
                     AbstractAnomaly anomaly = anomalies.get(i);
                     if (anomaly.getLevel() == level && !anomaly.isTaken()) {
-                        anomaly.setMarkedToBoom(true);
+                        if (anomaly.bossHp == 0) {
+                            anomaly.setMarkedToBoom(true);
+                        }
                     }
                 }
                 GameInfoSystem.setup(
