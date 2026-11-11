@@ -177,7 +177,7 @@ public class Codex {
         add(cargo, new Entry("STORAGE", "CARGO", new TextureRegion[]{region(PaintConstants.STORAGE_REGION)}, 0f,
                 "A heavy container with one or two items, including laser charge, radar and rockets."));
         add(cargo, new Entry("FUEL TANK", "CARGO", new TextureRegion[]{region(PaintConstants.FUEL_REGION)}, 0f,
-                "Refuels the shuttle. A gold tank fills it to the brim. Breaking one hurts the hull."));
+                "Refuels the Buran. A gold tank fills it to the brim. Breaking one hurts the hull."));
 
         // ---------------------------------------------------------------- markings
         Group marks = group("MARKINGS");

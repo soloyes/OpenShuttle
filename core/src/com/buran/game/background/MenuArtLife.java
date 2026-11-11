@@ -126,8 +126,8 @@ class MenuArtLife implements Disposable {
 
     void update(float dt) {
         time += dt;
-        // The shuttle floats: a slow rise and fall, a little drift and roll (image pixels, degrees).
-        // Without a separate shuttle layer it stays where it is painted.
+        // The Buran floats: a slow rise and fall, a little drift and roll (image pixels, degrees).
+        // Without a separate Buran layer it stays where it is painted.
         if (shuttle != null) {
             bobY = 4.5f * MathUtils.sin(time * MathUtils.PI2 / 6f);
             bobX = 1.5f * MathUtils.sin(time * MathUtils.PI2 / 9f + 0.7f);
@@ -189,7 +189,7 @@ class MenuArtLife implements Disposable {
             float a = 0.1f + 0.5f * Math.max(0f, t) * Math.max(0f, t);
             spot(batch, dot, x, y, w, h, STARS[i][0], STARS[i][1], 26f * k, 0.85f, 0.9f, 1f, a);
         }
-        // The shuttle, floating, in front of the dust and the wave.
+        // The Buran, floating, in front of the dust and the wave.
         if (shuttle != null) {
             batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
             batch.setColor(1f, 1f, 1f, 1f);
@@ -224,7 +224,7 @@ class MenuArtLife implements Disposable {
         batch.setColor(1f, 1f, 1f, 1f);
     }
 
-    /** Where an image point of the shuttle is on screen now (it bobs and rolls). Result in tmp. */
+    /** Where an image point of the Buran is on screen now (it bobs and rolls). Result in tmp. */
     private void ship(float[] p, float x, float y, float w, float h, float k) {
         float cx = px(x, w, SHIP_CX);
         float cy = py(y, h, SHIP_CY);

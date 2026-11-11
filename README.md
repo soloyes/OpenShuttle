@@ -16,7 +16,7 @@
   <img src="https://img.shields.io/badge/platforms-Web%20%C2%B7%20Xbox%20Edge%20%C2%B7%20Desktop-6a5cff?style=flat-square" alt="Platforms"/>
 </p>
 
-Buran-19 is an indie 2D space arcade. You fly the Buran shuttle through open space, rescue stranded astronauts
+Buran-19 is an indie 2D space arcade. You fly the Buran through open space, rescue stranded astronauts
 and stay alive as long as the fuel lasts.
 
 ![Gameplay](tools/google/feature.jpg)
@@ -28,7 +28,7 @@ each bring their own bonus. Crates, fuel boxes and storages refill fuel, shields
 
 Space is full of things that want you dead: metal and mineral asteroids, black holes and four kinds of anomalies
 (corrosive, electrical, magnetic, radiation). The laser burns asteroids, and a burned asteroid splits into fragments.
-Rockets launch from the shuttle and home in on anomalies. You also have shields, freeze, scan and radar,
+Rockets launch from the Buran and home in on anomalies. You also have shields, freeze, scan and radar,
 and chain kills count as killing sprees.
 
 The game keeps several player profiles, has difficulty levels and stores a detailed score history.
@@ -58,7 +58,7 @@ The game runs in the browser, so on Xbox it is played in Microsoft Edge. No Dev 
 
 | Control | In flight | In menus, pause, game over |
 |---|---|---|
-| Left stick | Steer the shuttle (deflection = thrust) | Move the cursor |
+| Left stick | Steer the Buran (deflection = thrust) | Move the cursor |
 | A | Use the selected item | Click under the cursor (hold to drag sliders/lists) |
 | X / RT | Use the selected item | |
 | LB / RB, D-pad | Previous / next item | D-pad moves the cursor |
@@ -97,7 +97,7 @@ Pages must be enabled once in the repository settings: Settings, Pages, Source: 
 
 | Module | Contents |
 |---|---|
-| `core` | All game logic: shuttle, bots (asteroids, rockets, anomalies, black hole, consumables), effects, UI, screens, gamepad input |
+| `core` | All game logic: the Buran, bots (asteroids, rockets, anomalies, black hole, consumables), effects, UI, screens, gamepad input |
 | `assets` | Sprites, sounds, music, shaders, pre-rendered fonts |
 | `web` | TeaVM web launcher and the Xbox-friendly entry page |
 | `desktop` | LWJGL3 desktop launcher and the font baking tool |

@@ -81,7 +81,7 @@ public class BlackholeDebris implements Disposable {
 
     /**
      * One coarse grain of a dissolving object at its exact position, own colour, no tint.
-     * Used for the shuttle breaking up so its sand is recognisably the shuttle's.
+     * Used for the Buran breaking up so its sand is recognisably the Buran's.
      */
     public static void grain(float x, float y, float red, float green, float blue, float size) {
         BlackholeDebris d = instance;

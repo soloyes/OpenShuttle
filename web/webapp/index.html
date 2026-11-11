@@ -289,7 +289,7 @@
 
     /*
      * Launch sound, synthesised with Web Audio: engine ignition rumble, a rising whoosh as the
-     * shuttle passes the camera, a deep thud on the flash and a fading tail. The game music is
+     * Buran passes the camera, a deep thud on the flash and a fading tail. The game music is
      * ducked for the animation and brought back as the menu appears.
      */
     var LaunchAudio = (function () {
@@ -508,8 +508,8 @@
     })();
 
     /*
-     * Title scene: a still, breathing picture (the shuttle in its shield, the rift behind it,
-     * debris drifting in) that comes alive when the player starts: engines ignite, the shuttle
+     * Title scene: a still, breathing picture (the Buran in its shield, the rift behind it,
+     * debris drifting in) that comes alive when the player starts: engines ignite, the Buran
      * tears past the camera, stars stretch, white flash, fade to black, then the menu.
      */
     var Scene = (function () {
@@ -646,7 +646,7 @@
                 g.restore();
             }
 
-            // The shuttle: hanging still, then lighting up and tearing past the camera.
+            // The Buran: hanging still, then lighting up and tearing past the camera.
             if (ship.complete && ship.naturalWidth) {
                 var baseW = u * 0.42;
                 var sw = baseW * (1 + fly * fly * 6);

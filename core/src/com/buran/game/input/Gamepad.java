@@ -23,7 +23,7 @@ import com.buran.game.ui.groups.selector.SelectorGroup;
  * The game was built for touch. Instead of rewriting every scene2d screen, this class
  * works in two modes:
  * <ul>
- *     <li><b>Flight</b> (game running, not paused): the left stick steers the shuttle, the
+ *     <li><b>Flight</b> (game running, not paused): the left stick steers the Buran, the
  *     item carousel and pause get dedicated buttons.</li>
  *     <li><b>Menu</b> (menus, pause, game over): the stick moves an on-screen cursor and
  *     A sends a real touch to the current input processor, so every existing button,
@@ -254,7 +254,7 @@ public final class Gamepad {
         return controller != null;
     }
 
-    /** True while the left stick (or arrow keys) asks the shuttle to fly somewhere. */
+    /** True while the left stick (or arrow keys) asks the Buran to fly somewhere. */
     public boolean isSteering() {
         return steering;
     }

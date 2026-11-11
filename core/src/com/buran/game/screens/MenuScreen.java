@@ -8,7 +8,7 @@ import com.buran.game.ui.menu.MainMenu;
 import com.buran.game.ui.menu.MenuHero;
 
 /**
- * Main menu screen: drifting nebula, the shuttle hero and the telemetry-style menu.
+ * Main menu screen: drifting nebula, the Buran hero and the telemetry-style menu.
  *
  * @author soloyes on 3/24/18.
  */
@@ -37,7 +37,7 @@ public class MenuScreen extends BaseScreen {
         space = new MenuSpace();
         mainMenu = new MainMenu();
         menuHero = new MenuHero(mainMenu);
-        // The painted key art has its own shuttle; the drawn one would compete with it.
+        // The painted key art has its own Buran; the drawn one would compete with it.
         menuHero.setVisible(!com.badlogic.gdx.Gdx.files.internal("ui/menu.jpg").exists());
         heroWanted = menuHero.isVisible();
         stage.addActor(menuHero);

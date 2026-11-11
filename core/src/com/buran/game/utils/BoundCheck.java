@@ -79,7 +79,7 @@ public class BoundCheck {
     private final Vector2 overshoot = new Vector2();
 
     /**
-     * Soft wall: past the border a spring pulls the shuttle back and outward speed is damped,
+     * Soft wall: past the border a spring pulls the Buran back and outward speed is damped,
      * so the ship cannot drift far out and the border always stays in view.
      */
     private void pushBack(float dt) {

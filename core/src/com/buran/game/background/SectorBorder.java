@@ -15,7 +15,7 @@ import com.buran.game.player.Buran;
 
 /**
  * The edge of the playable sector: one continuous glowing outline (shader, distance to the
- * rectangle) with marching dashes, fading in as the shuttle approaches. Leaving the sector
+ * rectangle) with marching dashes, fading in as the Buran approaches. Leaving the sector
  * costs hull and fuel and eventually a life, so the edge must be seen before it hurts.
  */
 public class SectorBorder implements Disposable {

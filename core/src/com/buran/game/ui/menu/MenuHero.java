@@ -11,7 +11,7 @@ import com.buran.game.ui.groups.GroupType;
 import com.buran.game.utils.Assets;
 
 /**
- * The main-menu composition: the shuttle drifting, reeling in a nearby astronaut with its tractor
+ * The main-menu composition: the Buran drifting, reeling in a nearby astronaut with its tractor
  * beam, and far behind it a
  * tumbling figure of a lost crew member. Replaces the portrait-era planet scene.
  */
@@ -147,7 +147,7 @@ public class MenuHero extends Group {
                     MathUtils.sin(time * 0.8f) * 25f);
         }
 
-        // The shuttle itself, no shield in the menu.
+        // The Buran itself, no shield in the menu.
         batch.setColor(1f, 1f, 1f, a);
         batch.draw(buran, baseX - bw / 2f, baseY - bh / 2f + bob, bw / 2f, bh / 2f, bw, bh, scale, scale, tilt);
         if (taken > 0f && taken < 1f) {
