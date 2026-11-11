@@ -21,7 +21,7 @@ class MenuArtLife implements Disposable {
     private static final float IH = 1037f;
     private static final float CX = 1335f;
     private static final float CY = 442f;
-    private static final float CORE_R = 160f;   // half the size of ui/menu_core.png
+    private static final float CORE_R = 161f;   // half the size of ui/menu_core.png
 
     private static final float[][] WINDOWS = {
             {1467, 173}, {1486, 183}, {1535, 224}, {1112, 248}, {1566, 259}, {1617, 366},
@@ -32,20 +32,22 @@ class MenuArtLife implements Disposable {
             {233, 597}, {956, 629}, {862, 723}, {822, 745}, {242, 882}, {149, 914}, {1374, 926},
             {1106, 979}, {728, 991},
     };
-    /** Buran: near wingtip (red), far wingtip (green), top of the fin (white strobe). */
-    private static final float[] PORT = {1538, 791};
-    private static final float[] STARBOARD = {1813, 677};
-    private static final float[] FIN = {1767, 578};
-    private static final float[][] NOZZLES = {{1708, 741}, {1742, 727}, {1750, 688}};
-    /** The cut-out shuttle (ui/menu_shuttle.png) and the painted-out space under it. */
-    private static final float BOX_L = 1440f, BOX_T = 550f, BOX_R = 1860f, BOX_B = 830f;
-    private static final float PIVOT_X = 1640f, PIVOT_Y = 690f;
+    /**
+     * The Buran sprite (ui/menu_shuttle.png, 603 x 402): where its centre sits on the art and how
+     * wide it is there, in image pixels. Lights are in sprite pixels: near wingtip (red), far
+     * wingtip (green), top of the fin (white strobe), the engine bells.
+     */
+    private static final float SHIP_CX = 1615f, SHIP_CY = 705f, SHIP_W = 405f;
+    private static final float SPRITE_W = 603f, SPRITE_H = 402f;
+    private static final float[] PORT = {118, 350};
+    private static final float[] STARBOARD = {592, 180};
+    private static final float[] FIN = {500, 16};
+    private static final float[][] NOZZLES = {{395, 212}, {440, 222}, {475, 260}, {420, 290}};
 
     private static final int DUST = 46;
 
     private final TextureRegion core;
     private final Texture shuttle;
-    private final Texture patch;
     private final com.badlogic.gdx.math.Vector2 tmp = new com.badlogic.gdx.math.Vector2();
     private float bobX, bobY, bobRot;
     private final Texture dot;
@@ -67,7 +69,6 @@ class MenuArtLife implements Disposable {
             core = null;
         }
         shuttle = load("ui/menu_shuttle.png");
-        patch = shuttle == null ? null : load("ui/menu_patch.png");
         dot = radial(64, false);
         ring = radial(256, true);
         for (int i = 0; i < phase.length; i++) {
@@ -154,10 +155,6 @@ class MenuArtLife implements Disposable {
             batch.draw(core, px(x, w, CX) - size / 2f, py(y, h, CY) - size / 2f, size / 2f, size / 2f,
                     size, size, s, s, time * 4f);
         }
-        if (patch != null) {
-            batch.setColor(1f, 1f, 1f, 1f);
-            batch.draw(patch, px(x, w, BOX_L), py(y, h, BOX_B), (BOX_R - BOX_L) * k, (BOX_B - BOX_T) * k);
-        }
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
         // Core glow, pulsing.
         float glow = 0.16f + 0.07f * MathUtils.sin(time * 0.8f) + 0.03f * MathUtils.sin(time * 2.3f);
@@ -196,11 +193,12 @@ class MenuArtLife implements Disposable {
         if (shuttle != null) {
             batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
             batch.setColor(1f, 1f, 1f, 1f);
-            float bx = px(x, w, BOX_L) + bobX * k;
-            float by = py(y, h, BOX_B) + bobY * k;
-            float bw = (BOX_R - BOX_L) * k;
-            float bh = (BOX_B - BOX_T) * k;
-            batch.draw(shuttle, bx, by, (PIVOT_X - BOX_L) * k, (BOX_B - PIVOT_Y) * k, bw, bh, 1f, 1f, bobRot,
+            float sw = SHIP_W * k;
+            float sh = sw * SPRITE_H / SPRITE_W;
+            float bx = px(x, w, SHIP_CX) - sw / 2f + bobX * k;
+            float by = py(y, h, SHIP_CY) - sh / 2f + bobY * k;
+            batch.setColor(0.86f, 0.88f, 0.92f, 1f);   // sit in the scene's muted light
+            batch.draw(shuttle, bx, by, sw / 2f, sh / 2f, sw, sh, 1f, 1f, bobRot,
                     0, 0, shuttle.getWidth(), shuttle.getHeight(), false, false);
             batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
         }
@@ -228,9 +226,12 @@ class MenuArtLife implements Disposable {
 
     /** Where an image point of the shuttle is on screen now (it bobs and rolls). Result in tmp. */
     private void ship(float[] p, float x, float y, float w, float h, float k) {
-        float cx = px(x, w, PIVOT_X);
-        float cy = py(y, h, PIVOT_Y);
-        tmp.set(px(x, w, p[0]) - cx, py(y, h, p[1]) - cy).rotateDeg(bobRot);
+        float cx = px(x, w, SHIP_CX);
+        float cy = py(y, h, SHIP_CY);
+        float s = SHIP_W / SPRITE_W;
+        float ix = SHIP_CX + (p[0] - SPRITE_W / 2f) * s;
+        float iy = SHIP_CY + (p[1] - SPRITE_H / 2f) * s;
+        tmp.set(px(x, w, ix) - cx, py(y, h, iy) - cy).rotateDeg(bobRot);
         tmp.add(cx + bobX * k, cy + bobY * k);
     }
 
@@ -278,9 +279,6 @@ class MenuArtLife implements Disposable {
         ring.dispose();
         if (shuttle != null) {
             shuttle.dispose();
-        }
-        if (patch != null) {
-            patch.dispose();
         }
     }
 }
