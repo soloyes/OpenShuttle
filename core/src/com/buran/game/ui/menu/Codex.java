@@ -323,8 +323,12 @@ public class Codex {
             return;
         }
         Entry e = current;
-        float bx = x + (w - box) / 2f;
+        // With a painted plate, the plate goes left and the in-game look gets the right side.
+        boolean plated = e.demo == null && e.plate != null && Art.get(e.plate) != null && !Theme.portrait();
+        float bx = plated ? x : x + (w - box) / 2f;
         float by = top - box;
+        paneRight = x + w;
+        labelFont = textFont;
         Theme.rect(batch, bx, by, box, box, Theme.PANEL, alpha);
         for (int i = 1; i < 12; i++) {
             Theme.rect(batch, bx, by + box * i / 12f, box, 1.5f, Theme.LINE, 0.05f * alpha);
@@ -371,6 +375,35 @@ public class Codex {
         return ((int) (sel / CYCLE)) % e.variants.length;
     }
 
+    private float paneRight;
+    private BitmapFont labelFont;
+
+    /**
+     * Beside the painted plate, on the plain panel: the object as it looks in the game (animated,
+     * crew as astronauts), in a small bracketed frame labelled IN GAME.
+     */
+    private void specimen(Batch batch, Entry e, float left, float by, float box, float alpha) {
+        TextureRegion icon = e.frames[e.fps > 0 ? ((int) (time * e.fps)) % e.frames.length : 0];
+        float space = paneRight - left;
+        float s = Math.min(box * 0.46f, space - 80f);
+        if (icon == null || s < 80f) {
+            return;
+        }
+        float sx = left + (space - s) / 2f;
+        float sy = by;
+        brackets(batch, sx, sy, s, alpha * 0.8f);
+        if (labelFont != null) {
+            String l = "IN GAME";
+            text(batch, labelFont, l, sx + s / 2f - Theme.width(labelFont, l) / 2f, sy + s + 44f, Theme.HEAD, alpha);
+        }
+        float is = s * 0.78f;
+        Color tint = e.variants != null ? e.variants[variantIndex(e)] : Color.WHITE;
+        float rot = e.spin ? time * 25f : 0f;
+        batch.setColor(tint.r, tint.g, tint.b, alpha);
+        batch.draw(icon, sx + (s - is) / 2f, sy + (s - is) / 2f, is / 2f, is / 2f, is, is, 1f, 1f, rot);
+        batch.setColor(Color.WHITE);
+    }
+
     /** The painted plate: dim blue below the scan line, in full colour above; the sprite as an icon. */
     private void drawPlate(Batch batch, Entry e, Texture t, float bx, float by, float box, float alpha, float f) {
         float in = 8f;
@@ -389,18 +422,7 @@ public class Codex {
             batch.setColor(1f, 1f, 1f, alpha);
             batch.draw(t, x, y + s - h, s, h, sx, sy, side, rh, false, false);
         }
-        if (f >= 1f) {
-            // The game sprite itself (animated, on its own alpha), no backing box; crew shows the
-            // astronaut, not the profession badge.
-            TextureRegion icon = e.frames[e.fps > 0 ? ((int) (time * e.fps)) % e.frames.length : 0];
-            if (icon != null) {
-                float is = box * 0.24f;
-                Color tint = e.variants != null ? e.variants[variantIndex(e)] : Color.WHITE;
-                float rot = e.spin ? time * 25f : 0f;
-                batch.setColor(tint.r, tint.g, tint.b, alpha);
-                batch.draw(icon, bx + box - is - 16f, by + 16f, is / 2f, is / 2f, is, is, 1f, 1f, rot);
-            }
-        }
+        specimen(batch, e, bx + box, by, box, alpha);
         batch.setColor(Color.WHITE);
         if (f < 1f) {
             float ly = by + box * (1f - f);
