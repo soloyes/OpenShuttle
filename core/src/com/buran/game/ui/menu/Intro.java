@@ -21,7 +21,7 @@ public class Intro extends Actor implements MenuNav.Target {
         void done();
     }
 
-    private static final String[] CAPTION = {
+    private static final String[] INTRO_CAPTION = {
             "BAIKONUR.  15 NOVEMBER 1988",
             "BURAN FLEW ONCE.  NO ONE WAS ABOARD.",
             "TWO ORBITS.  A PERFECT LANDING.",
@@ -38,7 +38,7 @@ public class Intro extends Actor implements MenuNav.Target {
     };
 
     /** Per panel: page, column, row, column span, row span on a 2x2 page grid. */
-    private static final int[][] LAYOUT = {
+    private static final int[][] INTRO_LAYOUT = {
             {0, 0, 0, 1, 1}, {0, 1, 0, 1, 1}, {0, 0, 1, 1, 1}, {0, 1, 1, 1, 1},
             {1, 0, 0, 2, 1}, {1, 0, 1, 1, 1}, {1, 1, 1, 1, 1},
             {2, 0, 0, 1, 1}, {2, 1, 0, 1, 1}, {2, 0, 1, 1, 1}, {2, 1, 1, 1, 1},
@@ -50,12 +50,63 @@ public class Intro extends Actor implements MenuNav.Target {
      * Captions split by '|' appear part by part, in step with the voice: when each part starts,
      * in seconds after the line begins (matches the pauses in intro12.mp3 and intro13.mp3).
      */
-    private static final float[][] PART_AT = new float[13][];
+    private static final float[][] INTRO_PART_AT = new float[13][];
 
     static {
-        PART_AT[11] = new float[]{0f, 4.78f, 7.82f};
-        PART_AT[12] = new float[]{0f, 3.14f, 6.06f};
+        INTRO_PART_AT[11] = new float[]{0f, 4.78f, 7.82f};
+        INTRO_PART_AT[12] = new float[]{0f, 3.14f, 6.06f};
     }
+
+    /**
+     * What a comic scene shows: captions ('|' splits parts timed by partAt), the page layout,
+     * the pictures (the first path that exists for each panel), the voice line ids and the
+     * label of the skip plate. The opening and the chapter endings use the same player.
+     */
+    public static final class Script {
+        final String[] captions;
+        final int[][] layout;
+        final float[][] partAt;
+        final String[][] images;
+        final String voice;
+        final String skip;
+
+        public Script(String[] captions, int[][] layout, float[][] partAt, String[][] images, String voice, String skip) {
+            this.captions = captions;
+            this.layout = layout;
+            this.partAt = partAt;
+            this.images = images;
+            this.voice = voice;
+            this.skip = skip;
+        }
+    }
+
+    private static String[][] introImages() {
+        String[][] im = new String[13][];
+        for (int i = 0; i < 13; i++) {
+            im[i] = new String[]{String.format("intro/p%02d.jpg", i + 1)};
+        }
+        return im;
+    }
+
+    public static final Script INTRO = new Script(INTRO_CAPTION, INTRO_LAYOUT, INTRO_PART_AT, introImages(), "intro%02d", "SKIP INTRO");
+
+    /** Chapter one ends: the crew aboard, the rift, and a voice that is not Baikonur. */
+    public static final Script CHAPTER_ONE = new Script(
+            new String[]{
+                    "TWELVE ABOARD.  THE CABIN IS FULL OF BREATHING AGAIN.",
+                    "BUT THE RIFT IS STILL OPEN.  AND IT IS GROWING.",
+                    "THEN, THROUGH THE STATIC...|A VOICE.|NOT BAIKONUR.",
+                    "BURAN-19... WE SEE YOU.|COME TO THE RIFT.|END OF CHAPTER ONE",
+            },
+            new int[][]{{0, 0, 0, 2, 2}, {1, 0, 0, 2, 2}, {2, 0, 0, 2, 2}, {3, 0, 0, 2, 2}},
+            new float[][]{null, null, {0f, 3.64f, 6.52f}, {0f, 4.28f, 6.8f}},
+            new String[][]{
+                    {"chapter1/p01.jpg", "ui/clear.jpg"},
+                    {"chapter1/p02.jpg", "ui/sector04.jpg", "intro/p11.jpg"},
+                    {"chapter1/p03.jpg", "intro/p12.jpg"},
+                    {"chapter1/p04.jpg", "intro/p13.jpg"},
+            },
+            "ch1_%02d", "SKIP");
 
     /** The intro has its own mix, outside the settings: the score under, the voice on top. */
     private static final float MUSIC_VOLUME = 0.5f;
@@ -67,8 +118,12 @@ public class Intro extends Actor implements MenuNav.Target {
     private static final float AFTER_VOICE = 1.0f;
     private static final float TYPE_SPEED = 32f;
 
-    private final Texture[] tex = new Texture[CAPTION.length];
-    private final float[] age = new float[CAPTION.length];
+    private final Script script;
+    private final String[] CAPTION;
+    private final int[][] LAYOUT;
+    private final float[][] PART_AT;
+    private final Texture[] tex;
+    private final float[] age;
     private final BitmapFont caption;
     private final BitmapFont captionBig;
     private final BitmapFont hint;
@@ -89,6 +144,16 @@ public class Intro extends Actor implements MenuNav.Target {
     private com.badlogic.gdx.audio.Music music;
 
     public Intro(Done done, Runnable onStart) {
+        this(INTRO, done, onStart);
+    }
+
+    public Intro(Script script, Done done, Runnable onStart) {
+        this.script = script;
+        this.CAPTION = script.captions;
+        this.LAYOUT = script.layout;
+        this.PART_AT = script.partAt;
+        this.tex = new Texture[CAPTION.length];
+        this.age = new float[CAPTION.length];
         this.done = done;
         this.onStart = onStart;
         this.alpha = 1f;
@@ -96,7 +161,14 @@ public class Intro extends Actor implements MenuNav.Target {
         captionBig = Theme.font(72);
         hint = Theme.font(54);
         for (int i = 0; i < tex.length; i++) {
-            tex[i] = new Texture(Gdx.files.internal(String.format("intro/p%02d.jpg", i + 1)));
+            String path = script.images[i][script.images[i].length - 1];
+            for (String c : script.images[i]) {
+                if (Gdx.files.internal(c).exists()) {
+                    path = c;
+                    break;
+                }
+            }
+            tex[i] = new Texture(Gdx.files.internal(path));
             tex[i].setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         }
         setBounds(0, 0, Rules.WORLD_WIDTH, Rules.WORLD_HEIGHT);
@@ -210,7 +282,7 @@ public class Intro extends Actor implements MenuNav.Target {
         pageFade = Math.min(1f, pageFade + delta / FADE);
         panelTime += delta;
         if (panelTime >= VOICE_AT && panelTime - delta < VOICE_AT) {
-            Radio.play(String.format("intro%02d", current + 1), VOICE_VOLUME);
+            Radio.play(String.format(script.voice, current + 1), VOICE_VOLUME);
         }
         if (panelTime > VOICE_AT + 0.3f && !Radio.isPlaying() && voiceEnded < 0f) {
             voiceEnded = panelTime;
@@ -267,7 +339,7 @@ public class Intro extends Actor implements MenuNav.Target {
         // Controls: a SKIP plate in the corner (B, ESC, a click or a tap), NEXT beside it.
         float ha = alpha * out;
         String sk = Hints.button("B", "ESC");
-        float sw = Theme.hintWidth(hint, sk, "SKIP INTRO");
+        float sw = Theme.hintWidth(hint, sk, script.skip);
         float kh = Theme.keyHeight(hint);
         float pw = sw + kh;
         float ph = kh * 1.6f;
@@ -276,7 +348,7 @@ public class Intro extends Actor implements MenuNav.Target {
         skipRect.set(px, py, pw, ph);
         Theme.rect(batch, px - 2f, py - 2f, pw + 4f, ph + 4f, Theme.EDGE, 0.9f * ha);
         Theme.rect(batch, px, py, pw, ph, Theme.BODY_LO, 0.85f * ha);
-        Theme.hint(batch, hint, sk, "SKIP INTRO", px + kh / 2f, py + ph / 2f, Theme.TEXT, ha);
+        Theme.hint(batch, hint, sk, script.skip, px + kh / 2f, py + ph / 2f, Theme.TEXT, ha);
         String nk = Hints.button("A", "ENTER");
         float nw = Theme.hintWidth(hint, nk, "NEXT");
         Theme.hint(batch, hint, nk, "NEXT", px - 60f - nw, py + ph / 2f, Theme.DIM, 0.8f * ha);

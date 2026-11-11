@@ -388,6 +388,19 @@ public class GameMenu extends Group implements MenuNav.Target {
             line(batch, l[0], l[1], x, y, w, a);
             y -= 64f;
         }
+        com.buran.game.campaign.SectorRun run = com.buran.game.campaign.Campaign.run();
+        if (mode == Mode.CLEAR && run != null) {
+            line(batch, "TIME", com.buran.game.campaign.Campaign.formatTime(run.flightTime())
+                    + (run.isNewBest() ? "   NEW BEST" : ""), x, y, w, a);
+            y -= 64f;
+            int m = run.medals();
+            StringBuilder b = new StringBuilder();
+            if ((m & com.buran.game.campaign.Campaign.MEDAL_SAFE) != 0) b.append("NO LOSSES   ");
+            if ((m & com.buran.game.campaign.Campaign.MEDAL_UNTOUCHED) != 0) b.append("UNTOUCHED   ");
+            if ((m & com.buran.game.campaign.Campaign.MEDAL_SWIFT) != 0) b.append("SWIFT");
+            line(batch, "MEDALS", b.length() == 0 ? "-" : b.toString().trim(), x, y, w, a);
+            y -= 64f;
+        }
         if (Theme.portrait()) {
             return;   // no room for the crew table on a phone
         }

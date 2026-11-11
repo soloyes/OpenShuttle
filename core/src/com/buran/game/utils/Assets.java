@@ -88,6 +88,10 @@ public class Assets {
                 assetManager.load(MSConstants.LASER, Music.class);
                 assetManager.load(MSConstants.UI_MENU, Sound.class);
                 assetManager.load(MSConstants.UI_EMPTY_NAME, Sound.class);
+                assetManager.load(MSConstants.RAM_ON, Sound.class);
+                assetManager.load(MSConstants.RAM_OFF, Sound.class);
+                assetManager.load(MSConstants.RAM_DENIED, Sound.class);
+                assetManager.load(MSConstants.EMP, Sound.class);
                 assetManager.load(MSConstants.UI_PAUSE, Sound.class);
                 assetManager.load(MSConstants.UI_LEFT_RIGHT, Sound.class);
                 assetManager.load(MSConstants.UI_SWITCH, Sound.class);

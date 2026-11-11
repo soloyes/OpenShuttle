@@ -184,6 +184,109 @@ No text, no letters, no numbers, no labels, no diagrams, no insets, no frame, no
 
 ---
 
+## 5. Финал первой главы (широкие, 16:9)
+
+Сохраняй в `art/chapter1/raw/` как `p01.jpg` … `p04.jpg`. Пока их нет, в финале стоят старые картинки.
+
+### `p01.jpg` — реф [p06.jpg](../../art/intro/raw/p06.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. Inside the cramped dark cabin of the shuttle, many cosmonauts in white Soviet spacesuits
+sitting shoulder to shoulder, tired, some asleep, one smiling weakly, a small amber lamp,
+breath fogging in the cold air, Earth not visible. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `p02.jpg` — реф [p11.jpg](../../art/intro/raw/p11.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. The rift: a spinning black hole with a disc of sand-like debris, bigger and wilder than
+before, the tiny white shuttle far away at the edge of the frame, looking small. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `p03.jpg` — реф [p12.jpg](../../art/intro/raw/p12.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. Close-up of an old analog radio panel in the shuttle cockpit, a glowing amber frequency
+dial, a needle trembling, a gloved hand on the knob, static and faint green light. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `p04.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. Deep inside the rift, a faint cold light shaped almost like a human silhouette, far away,
+watching, the edge of the black hole around it, eerie and quiet. No text, no letters, no labels, no frame,
+no white border.
+```
+
+---
+
+## 6. Карточки секторов второй главы (широкие, 16:9)
+
+Сохраняй в `art/ui/raw/` как `sector07.jpg` … `sector12.jpg`.
+
+### `sector07.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. A sickly green glowing radiation cloud clinging to the white hull of a shuttle like a leech,
+green light spreading over the panels, dark space around. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `sector08.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. Violet magnetic field lines latched onto a shuttle's fuel tanks, thin streams of fuel
+vapour being pulled away into a violet swirl, dark space. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `sector09.jpg` — реф [p10.jpg](../../art/intro/raw/p10.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. A pack of brownish acid clouds closing in on a small shuttle from all sides, frozen
+mid-motion in a pale blue frost wave, ice crystals in space. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `sector10.jpg` — реф [p09.jpg](../../art/intro/raw/p09.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. A dense deep field of rocks and twisted station wreckage, a small shuttle with a glowing
+amber shield in front of it smashing through a rock, sparks and fragments. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `sector11.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. A storm of pale-blue electric discharges filling dark space like lightning between clouds,
+a small domed shelter glowing amber in the middle, a shuttle racing toward it. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `sector12.jpg` — реф [p11.jpg](../../art/intro/raw/p11.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. The rift collapsing: the black hole huge and violent, debris and anomalies of every colour
+spiralling in, five tiny beacon lights around its edge, a small shuttle diving toward them. No text, no letters, no labels, no frame,
+no white border.
+```
+
+---
+
 ## Уже готово (в игре)
 
 `menu.jpg`, `crew_commander / medic / scientist / mechanic / military.jpg`, `clear.jpg`,

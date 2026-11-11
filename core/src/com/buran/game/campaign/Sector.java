@@ -48,8 +48,12 @@ public final class Sector {
     public boolean startWithLaser;
     /** Containers are sealed or burnt about one time in (odds + 1). */
     public int dangerOdds = 4;
-    /** SCAN items in the bay at the start (the sector that teaches sealed cargo). */
-    public int startScans;
+    /** Items in the bay at the start (the sector that teaches them). */
+    public final java.util.LinkedHashMap<com.buran.game.labelsticker.Sticker, Integer> startItems = new java.util.LinkedHashMap<>();
+    /** The field grows harder every 40 seconds (more hunters, faster respawn). */
+    public boolean escalate;
+    /** Chapter this sector belongs to (headers on the flight plan). */
+    public int chapter = 1;
 
     Sector(int number, String name, Goal goal, int target, String briefing, String lesson) {
         this.number = number;

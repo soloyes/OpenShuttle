@@ -242,8 +242,14 @@ public class MainMenu extends Group implements MenuNav.Target {
     private void buildPlay() {
         int unlocked = com.buran.game.campaign.Campaign.unlocked();
         playRows.clear();
+        int chapter = 0;
         for (final com.buran.game.campaign.Sector sec : com.buran.game.campaign.Campaign.sectors()) {
             final boolean open = sec.number <= unlocked;
+            if (sec.chapter != chapter) {
+                chapter = sec.chapter;
+                panel.add(new Row.Info(com.buran.game.campaign.Campaign.chapterTitle(chapter), smallFont, null));
+                playRows.add(null);
+            }
             playRows.add(sec);
             Row.Action row = panel.add(new Row.Action("SECTOR " + sec.code() + "   " + sec.name, rowFont, () -> {
                 if (open) {
@@ -824,6 +830,29 @@ public class MainMenu extends Group implements MenuNav.Target {
                 : locked ? "LOCKED" : sec.goalText();
         Color c = com.buran.game.campaign.Campaign.isDone(sec.number) ? Theme.OK : locked ? Theme.FAINT : Theme.ACCENT;
         drawText(batch, smallFont, state, x, y, c, a * in);
+        if (locked) {
+            return;
+        }
+        // Records: best time and the three medals, lit when earned.
+        y -= 80f;
+        float best = com.buran.game.campaign.Campaign.best(sec.number);
+        drawText(batch, labelFont, "BEST  " + (best > 0f ? com.buran.game.campaign.Campaign.formatTime(best) : "--:--")
+                + "      PAR  " + com.buran.game.campaign.Campaign.formatTime(com.buran.game.campaign.Campaign.par(sec)), x, y, Theme.HEAD, a * in);
+        y -= 56f;
+        int m = com.buran.game.campaign.Campaign.medals(sec.number);
+        float mx = x;
+        String[] names = {"NO LOSSES", "UNTOUCHED", "SWIFT"};
+        int[] bits = {com.buran.game.campaign.Campaign.MEDAL_SAFE, com.buran.game.campaign.Campaign.MEDAL_UNTOUCHED,
+                com.buran.game.campaign.Campaign.MEDAL_SWIFT};
+        for (int k = 0; k < 3; k++) {
+            if (k == 0 && sec.goal != com.buran.game.campaign.Sector.Goal.RESCUE) {
+                continue;
+            }
+            boolean got = (m & bits[k]) != 0;
+            Theme.lamp(batch, mx, y - 18f, Theme.AMBER, got, a * in);
+            drawText(batch, labelFont, names[k], mx + 30f, y, got ? Theme.TEXT : Theme.FAINT, a * in);
+            mx += 30f + Theme.width(labelFont, names[k]) + 50f;
+        }
     }
 
     /** The endless run: the station picture and what waits at the end. */

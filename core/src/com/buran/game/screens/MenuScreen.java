@@ -47,7 +47,13 @@ public class MenuScreen extends BaseScreen {
         if (!introShown) {
             introShown = true;
             com.buran.game.platform.Shell.introPending(true);
-            playIntro();
+            if (com.buran.game.conf.Rules.DEBUG_CHAPTER) {
+                playComic(com.buran.game.ui.menu.Intro.CHAPTER_ONE);
+            } else {
+                playIntro();
+            }
+        } else if (com.buran.game.campaign.Campaign.takeChapterEnd() == 1) {
+            playComic(com.buran.game.ui.menu.Intro.CHAPTER_ONE);
         }
     }
 
@@ -59,9 +65,13 @@ public class MenuScreen extends BaseScreen {
     private boolean heroWanted;
 
     private void playIntro() {
+        playComic(com.buran.game.ui.menu.Intro.INTRO);
+    }
+
+    private void playComic(com.buran.game.ui.menu.Intro.Script script) {
         mainMenu.setVisible(false);
         menuHero.setVisible(false);
-        com.buran.game.ui.menu.Intro intro = new com.buran.game.ui.menu.Intro(() -> {
+        com.buran.game.ui.menu.Intro intro = new com.buran.game.ui.menu.Intro(script, () -> {
             mainMenu.setVisible(true);
             menuHero.setVisible(heroWanted);
             com.buran.game.ui.menu.MenuNav.set(mainMenu);

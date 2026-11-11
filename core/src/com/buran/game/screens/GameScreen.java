@@ -1089,7 +1089,7 @@ public class GameScreen extends BaseScreen {
 
     /** Expanding cyan ring for the EMP pulse. */
     private void firePulseEffect() {
-        boomBox.playSound(MSConstants.GET_SCANNER);
+        boomBox.playSound(MSConstants.EMP);
         Shake.getInstance().shakeCamera(0.25f, 35, 12);
         float duration = 0.45f;
         float speed = Rules.PULSE_RANGE / duration;

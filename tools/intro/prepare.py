@@ -40,15 +40,20 @@ def trim(im):
 
 
 def main():
-    os.makedirs(DST, exist_ok=True)
-    for f in sorted(glob.glob(os.path.join(SRC, "p*.*"))):
-        name = os.path.splitext(os.path.basename(f))[0]
+    # Any comic: python3 tools/intro/prepare.py [intro|chapter1] -> art/<name>/raw -> assets/<name>
+    import sys
+    name = sys.argv[1] if len(sys.argv) > 1 else "intro"
+    src = os.path.join(ROOT, "art", name, "raw")
+    dst = os.path.join(ROOT, "assets", name)
+    os.makedirs(dst, exist_ok=True)
+    for f in sorted(glob.glob(os.path.join(src, "p*.*"))):
+        name_ = os.path.splitext(os.path.basename(f))[0]
         im = trim(Image.open(f).convert("RGB"))
         h = round(im.height * WIDTH / im.width)
         im = im.resize((WIDTH, h), Image.LANCZOS)
-        out = os.path.join(DST, name + ".jpg")
+        out = os.path.join(dst, name_ + ".jpg")
         im.save(out, "JPEG", quality=82, optimize=True, progressive=False)
-        print(name, im.size, os.path.getsize(out) // 1024, "KB")
+        print(name_, im.size, os.path.getsize(out) // 1024, "KB")
 
 
 if __name__ == "__main__":

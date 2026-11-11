@@ -50,6 +50,8 @@ public final class Rules {
     public static boolean DEBUG_FAST_GOAL = false;
     /** ?ram: the ram shield starts charged to level 3 (for trying it out). */
     public static boolean DEBUG_RAM = false;
+    /** ?chapter: the chapter one ending plays instead of the intro. */
+    public static boolean DEBUG_CHAPTER = false;
     /** Test builds: every campaign sector can be started. */
     public static boolean DEBUG_UNLOCK = false;
     /** Test builds: a sector starts a third of the way to its goal. */

@@ -78,7 +78,7 @@ public final class Campaign {
         s5.crateMax = 5;
         s5.storageMax = 2;
         s5.dangerOdds = 1;
-        s5.startScans = 2;
+        s5.startItems.put(com.buran.game.labelsticker.Sticker.SCAN, 2);
         s5.corrosiveMax = 2;
         s5.corrosiveRespawn = 15f;
         s5.space = 2.0f;
@@ -102,6 +102,104 @@ public final class Campaign {
         s6.borderDamage = true;
         s6.space = 2.6f;
         SECTORS.add(s6);
+
+        chapterTwo();
+    }
+
+    /**
+     * Chapter two: the voice from the rift. One new threat or tool per sector, then everything
+     * again under a collapsing field (tips 4, 28, 37).
+     */
+    private static void chapterTwo() {
+        com.buran.game.labelsticker.Sticker ROCKETS = com.buran.game.labelsticker.Sticker.ROCKETS;
+        Sector s7 = new Sector(7, "LEECH", Sector.Goal.RESCUE, 3,
+                "Something is clinging to the hull. The counters are dropping. Radiation feeds on us while it holds on. The rockets will tear it off. Three more voices out here.",
+                "RADIATION CLINGS AND EATS YOUR SCORE      {X} ROCKETS TEAR IT OFF");
+        empty(s7);
+        s7.chapter = 2;
+        s7.radiationMax = 2;
+        s7.astronautMax = 3;
+        s7.startItems.put(ROCKETS, 3);
+        s7.space = 1.8f;
+        SECTORS.add(s7);
+
+        Sector s8 = new Sector(8, "DRAIN", Sector.Goal.RESCUE, 3,
+                "The fuel is falling, and we are not burning it. Magnets. They latch on and drink. Keep the tanks full: canisters are drifting nearby.",
+                "MAGNETS DRAIN THE TANKS      CANISTERS REFILL THEM");
+        empty(s8);
+        s8.chapter = 2;
+        s8.magneticMax = 2;
+        s8.fuelMax = 3;
+        s8.astronautMax = 3;
+        s8.startItems.put(ROCKETS, 2);
+        s8.space = 2.0f;
+        SECTORS.add(s8);
+
+        Sector s9 = new Sector(9, "COLD", Sector.Goal.RESCUE, 3,
+                "They are coming in packs now. Too many to outrun. The freeze charge stops all of them at once, for a while. Use it when they close in.",
+                "{X} FREEZE STOPS EVERY HUNTER AT ONCE");
+        empty(s9);
+        s9.chapter = 2;
+        s9.corrosiveMax = 10;
+        s9.corrosiveRespawn = 3f;
+        s9.corrosiveHuntTime = 15f;
+        s9.astronautMax = 3;
+        s9.startItems.put(com.buran.game.labelsticker.Sticker.FREEZE, 3);
+        s9.space = 2.0f;
+        SECTORS.add(s9);
+
+        Sector s10 = new Sector(10, "DEEP FIELD", Sector.Goal.SALVAGE, 40,
+                "Deep field. Rock and wreckage everywhere. Burn the metal and pull it in: it charges the ram. Then let the ram do the work.",
+                "{A} RAM SHIELD BREAKS WHAT IT OUTRANKS      METAL CHARGES IT");
+        empty(s10);
+        s10.chapter = 2;
+        s10.asteroidMax = 14;
+        s10.asteroidRespawn = 2.5f;
+        s10.corrosiveMax = 4;
+        s10.corrosiveRespawn = 8f;
+        s10.startWithLaser = true;
+        s10.space = 2.0f;
+        SECTORS.add(s10);
+
+        Sector s11 = new Sector(11, "STORM", Sector.Goal.RESCUE, 4,
+                "A storm of discharges. They will blind the radar and kill the laser. Pulse them away, then hide in a shelter to get your shield back. Four of ours are in the storm.",
+                "{Y} EMP COSTS SHIELD      SHELTERS GIVE IT BACK");
+        empty(s11);
+        s11.chapter = 2;
+        s11.electricMax = 3;
+        s11.shelters = 2;
+        s11.astronautMax = 4;
+        s11.asteroidMax = 6;
+        s11.space = 2.2f;
+        SECTORS.add(s11);
+
+        Sector s12 = new Sector(12, "THE VOICE", Sector.Goal.RESCUE, 5,
+                "The voice again. Come to the rift, it says. Five beacons around it. The field is collapsing, faster every minute. Do not wait.",
+                "IT GETS WORSE EVERY MINUTE      DON'T WAIT");
+        empty(s12);
+        s12.chapter = 2;
+        s12.blackhole = true;
+        s12.shelters = 2;
+        s12.astronautMax = 5;
+        s12.corrosiveMax = 4;
+        s12.corrosiveRespawn = 6f;
+        s12.electricMax = 1;
+        s12.radiationMax = 1;
+        s12.magneticMax = 1;
+        s12.asteroidMax = 10;
+        s12.crateMax = 2;
+        s12.fuelMax = 2;
+        s12.borderDamage = true;
+        s12.escalate = true;
+        s12.space = 2.6f;
+        s12.startItems.put(ROCKETS, 2);
+        s12.startItems.put(com.buran.game.labelsticker.Sticker.FREEZE, 1);
+        SECTORS.add(s12);
+    }
+
+    /** Chapter titles for the flight plan. */
+    public static String chapterTitle(int chapter) {
+        return chapter == 1 ? "CHAPTER ONE  -  SILENCE" : chapter == 2 ? "CHAPTER TWO  -  THE VOICE" : "CHAPTER " + chapter;
     }
 
     /** Containers taken aboard in this run (sector goal CARGO counts them). */
@@ -164,11 +262,67 @@ public final class Campaign {
 
     public static void complete(Sector s) {
         Preferences p = prefs();
+        // The last sector of a chapter, cleared for the first time: its ending plays next.
+        if (!isDone(s.number) && (next(s) == null || next(s).chapter != s.chapter)) {
+            p.putInteger("campaign.chapterEnd", s.chapter);
+        }
         if (s.number + 1 > unlocked()) {
             p.putInteger("campaign.unlocked", Math.min(TOTAL, s.number + 1));
         }
         p.putBoolean("campaign.done." + s.number, true);
         p.flush();
+    }
+
+    // ------------------------------------------------------------------ records
+
+    /** No crew lost (rescue sectors). */
+    public static final int MEDAL_SAFE = 1;
+    /** The hull was never hit. */
+    public static final int MEDAL_UNTOUCHED = 2;
+    /** Done within the par time. */
+    public static final int MEDAL_SWIFT = 4;
+
+    /** Par time: about half a minute per crew member or crate, a few seconds per rock. */
+    public static float par(Sector s) {
+        return s.goal == Sector.Goal.SALVAGE ? s.target * 3.5f : 25f + s.target * 25f;
+    }
+
+    /** Saves the run; true if it is the best time for the sector. Medals add up over runs. */
+    public static boolean record(Sector s, float seconds, int medals) {
+        Preferences p = prefs();
+        float best = best(s.number);
+        boolean better = best <= 0f || seconds < best;
+        if (better) {
+            p.putFloat("campaign.best." + s.number, seconds);
+        }
+        p.putInteger("campaign.medals." + s.number, medals(s.number) | medals);
+        p.flush();
+        return better;
+    }
+
+    /** Best time in seconds, 0 if never cleared. */
+    public static float best(int number) {
+        return prefs().getFloat("campaign.best." + number, 0f);
+    }
+
+    public static int medals(int number) {
+        return prefs().getInteger("campaign.medals." + number, 0);
+    }
+
+    public static String formatTime(float seconds) {
+        int t = Math.round(seconds);
+        return t / 60 + ":" + (t % 60 < 10 ? "0" : "") + t % 60;
+    }
+
+    /** The chapter whose ending is waiting to be shown (0 = none); clears it. */
+    public static int takeChapterEnd() {
+        Preferences p = prefs();
+        int c = p.getInteger("campaign.chapterEnd", 0);
+        if (c != 0) {
+            p.putInteger("campaign.chapterEnd", 0);
+            p.flush();
+        }
+        return c;
     }
 
     public static boolean isDone(int number) {

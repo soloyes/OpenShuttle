@@ -103,9 +103,8 @@ public final class SectorRun {
         }
         Rules.CONSUMABLE_CRATE_DANGER_PROBABILITY = sector.dangerOdds;
         Rules.CONSUMABLE_STORAGE_DANGER_PROBABILITY = sector.dangerOdds;
-        if (sector.startScans > 0) {
-            com.buran.game.ui.groups.selector.SelectorGroup.getInstance()
-                    .addSelector(com.buran.game.labelsticker.Sticker.SCAN, sector.startScans);
+        for (java.util.Map.Entry<com.buran.game.labelsticker.Sticker, Integer> it : sector.startItems.entrySet()) {
+            com.buran.game.ui.groups.selector.SelectorGroup.getInstance().addSelector(it.getKey(), it.getValue());
         }
         if (sector.goal == Sector.Goal.RESCUE) {
             placeCrew();
@@ -215,6 +214,7 @@ public final class SectorRun {
                 }
                 break;
             case ACTIVE:
+                track(dt);
                 progress = counter() - baseline;
                 script(dt);
                 if (progress >= sector.target) {
@@ -222,8 +222,13 @@ public final class SectorRun {
                 }
                 break;
             case EXTRACT:
+                track(dt);
                 if (!Rules.GAME_OVER && Buran.position.dst(beacon) < BEACON_RADIUS) {
                     setPhase(Phase.CLEAR);
+                    medals = (crewLost == 0 && sector.goal == Sector.Goal.RESCUE ? Campaign.MEDAL_SAFE : 0)
+                            | (!hullHit ? Campaign.MEDAL_UNTOUCHED : 0)
+                            | (flightTime <= Campaign.par(sector) ? Campaign.MEDAL_SWIFT : 0);
+                    newBest = Campaign.record(sector, flightTime, medals);
                     Campaign.complete(sector);
                     boomBox.stopAllSound();
                     boomBox.stopLoopingEffects();
@@ -260,6 +265,57 @@ public final class SectorRun {
         if (sector.number == 2) {
             laserScript(dt);
         }
+        if (sector.escalate) {
+            escalate(dt);
+        }
+    }
+
+    private float flightTime;
+    private int crewLost;
+    private boolean hullHit;
+    private int medals;
+    private boolean newBest;
+
+    /** Time in flight, and whether the hull was ever hit (for the records). */
+    private void track(float dt) {
+        flightTime += dt;
+        Standing st = Standing.getInstance();
+        if (st.getHp() < st.getMaxHp() - 0.01f) {
+            hullHit = true;
+        }
+    }
+
+    public float flightTime() {
+        return flightTime;
+    }
+
+    public int medals() {
+        return medals;
+    }
+
+    public boolean isNewBest() {
+        return newBest;
+    }
+
+    private float escalateTimer;
+    private int escalateLevel;
+
+    /** The collapsing field: every 40 s more hunters, faster respawn, one more discharge. */
+    private void escalate(float dt) {
+        escalateTimer += dt;
+        if (escalateTimer < 40f || escalateLevel >= 5) {
+            return;
+        }
+        escalateTimer = 0f;
+        escalateLevel++;
+        CorrosiveAnomalyEmitter c = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
+        c.setAnomaliesMaxCount(sector.corrosiveMax + escalateLevel * 2);
+        c.setRespawnTime(Math.max(1.5f, sector.corrosiveRespawn * (1f - 0.15f * escalateLevel)));
+        if (escalateLevel % 2 == 0) {
+            ((ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class))
+                    .setAnomaliesMaxCount(Math.min(3, sector.electricMax + escalateLevel / 2));
+        }
+        say("THE FIELD IS COLLAPSING  -  IT GROWS STRONGER", 5f);
     }
 
     /**
@@ -287,6 +343,7 @@ public final class SectorRun {
             crewSpot(MathUtils.random(MathUtils.PI2), 0.8f);
             e.emitAt(spot.x, spot.y);
             say("WE LOST ONE.  ANOTHER BEACON IS CALLING", 6f);
+            crewLost++;
         }
     }
 

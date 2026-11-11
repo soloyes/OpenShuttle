@@ -43,6 +43,7 @@ public class WebLauncher {
         com.buran.game.conf.Rules.DEBUG_THIRD = query().contains("third");
         com.buran.game.conf.Rules.DEBUG_CARD = query().contains("card");
         com.buran.game.conf.Rules.DEBUG_RAM = query().contains("ram");
+        com.buran.game.conf.Rules.DEBUG_CHAPTER = query().contains("chapter");
         com.buran.game.platform.Shell.bridge = new com.buran.game.platform.Shell.Bridge() {
             @Override
             public boolean shown() {

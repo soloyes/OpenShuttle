@@ -25,7 +25,12 @@ rng = np.random.default_rng(19)
 SPEC = {
     "intro12": [("intro12a", ("static", 1.5)), ("intro12b", ("static", 2.0)), ("intro12c", ("static", 1.2))],
     "intro13": [("intro13a", ("silence", 1.5)), ("intro13b", ("silence", 1.6)), ("intro13c", ("silence", 0.4))],
+    "ch1_03": [("ch1_03a", ("silence", 1.4)), ("ch1_03b", ("static", 1.6)), ("ch1_03c", ("silence", 0.6))],
+    "ch1_04": [("ch1_04a", ("static", 1.8)), ("ch1_04b", ("static", 2.4))],
 }
+
+if len(sys.argv) > 2:
+    SPEC = {k: v for k, v in SPEC.items() if k.startswith(sys.argv[2])}
 
 
 def read_wav(path):

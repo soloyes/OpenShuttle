@@ -117,6 +117,7 @@ public class Buran extends AbstractBuran {
         if (ramOn && Standing.getInstance().getRamPower() < 1f) {
             ramOn = false;   // ran dry
             ramSwitchAge = 0f;
+            new com.buran.game.effects.BoomBox().playSound(com.buran.game.conf.MSConstants.RAM_OFF);
         }
         shieldLevel = ramOn ? PlayerInteractionLevels.getFromLevel((int) (Standing.getInstance().getRamPower()))
                 : PlayerInteractionLevels.NONE;
@@ -127,13 +128,13 @@ public class Buran extends AbstractBuran {
         ramSwitchAge = 0f;
         if (!ramOn && Standing.getInstance().getRamPower() < 1f) {
             ramDenied = true;
-            new com.buran.game.effects.BoomBox().playSound(com.buran.game.conf.MSConstants.UI_EMPTY_NAME);
+            new com.buran.game.effects.BoomBox().playSound(com.buran.game.conf.MSConstants.RAM_DENIED);
             return;
         }
         ramDenied = false;
         ramOn = !ramOn;
-        new com.buran.game.effects.BoomBox().playSound(ramOn ? com.buran.game.conf.MSConstants.UP
-                : com.buran.game.conf.MSConstants.UI_MENU);
+        new com.buran.game.effects.BoomBox().playSound(ramOn ? com.buran.game.conf.MSConstants.RAM_ON
+                : com.buran.game.conf.MSConstants.RAM_OFF);
     }
 
     /** Ram power that counts now: the charge when the shield is on, nothing when off. */

@@ -73,6 +73,7 @@ public class TutorialPrompts {
             say("RAM SHIELD EMPTY  -  PULL IN METAL TO CHARGE IT");
         }
         if (Gamepad.get().takePulseDenied()) {
+            new com.buran.game.effects.BoomBox().playSound(com.buran.game.conf.MSConstants.RAM_DENIED);
             say("EMP NEEDS SHIELD  -  WAIT FOR IT TO RECHARGE");
         }
         sayTime = Math.max(0f, sayTime - dt);

@@ -69,6 +69,10 @@ public final class MSConstants {
     public static final String NEW_ASTRONAUT = GAME + "new_astronaut.mp3";
     public static final String LOW_LIFE_WARNING = GAME + "low_life_warning.mp3";
     public static final String UP = GAME + "up.mp3";
+    public static final String RAM_ON = GAME + "ram_on.mp3";
+    public static final String RAM_OFF = GAME + "ram_off.mp3";
+    public static final String RAM_DENIED = GAME + "ram_denied.mp3";
+    public static final String EMP = GAME + "emp.mp3";
     public static final String LEVEL_UP = GAME + "level_up.mp3";
     public static final String DOWN = GAME + "down.mp3";
     public static final String OUT_OF_SCREEN = GAME + "out_of_screen.mp3";
