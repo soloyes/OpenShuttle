@@ -400,6 +400,7 @@ public final class Campaign {
             p.putInteger("campaign.unlocked", Math.min(TOTAL, s.number + 1));
         }
         p.putBoolean("campaign.done." + s.number, true);
+        p.putInteger("campaign.fails." + s.number, 0);
         p.flush();
     }
 
@@ -442,6 +443,18 @@ public final class Campaign {
     public static String formatTime(float seconds) {
         int t = Math.round(seconds);
         return t / 60 + ":" + (t % 60 < 10 ? "0" : "") + t % 60;
+    }
+
+    /** A run of this sector ended in failure (for the quiet difficulty easing, tip 21). */
+    public static void failed(Sector s) {
+        Preferences p = prefs();
+        p.putInteger("campaign.fails." + s.number, Math.min(3, fails(s.number) + 1));
+        p.flush();
+    }
+
+    /** Failures in a row in this sector, 0..3; cleared when it is cleared. */
+    public static int fails(int number) {
+        return prefs().getInteger("campaign.fails." + number, 0);
     }
 
     /** The chapter whose ending is waiting to be shown (0 = none); clears it. */

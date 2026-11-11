@@ -148,8 +148,18 @@ public final class Gamepad {
             if (pressed(Action.A)) {
                 com.buran.game.player.Buran.toggleRam();
             }
+            // X a moment before the item is ready still counts (tip 45: input buffer).
             if (pressed(Action.USE_ALT)) {
-                SelectorGroup.getInstance().useSelected();
+                useBuffer = 0.35f;
+            }
+            if (useBuffer > 0f) {
+                com.buran.game.ui.groups.selector.Selector c = SelectorGroup.getInstance().getCenter();
+                if (c != null && c.isActive()) {
+                    SelectorGroup.getInstance().useSelected();
+                    useBuffer = 0f;
+                } else {
+                    useBuffer -= dt;
+                }
             }
             if (pressed(Action.PREV) || pressed(Action.UP) || pressed(Action.LEFT)) {
                 SelectorGroup.getInstance().selectPrevious();
@@ -256,6 +266,7 @@ public final class Gamepad {
         steering = steer.len2() > 0;
     }
 
+    private float useBuffer;
     private boolean twin;
     private float throttle;
     private float turn;

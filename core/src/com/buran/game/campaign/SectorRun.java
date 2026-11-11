@@ -78,9 +78,9 @@ public final class SectorRun {
     public void configure() {
         Rules.corrosiveHuntTime = sector.corrosiveHuntTime;
         CorrosiveAnomalyEmitter c = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
-        c.setAnomaliesMaxCount(sector.corrosiveMax);
-        c.setRespawnTime(sector.corrosiveRespawn);
-        trim(c, sector.corrosiveMax);
+        c.setAnomaliesMaxCount(corrosiveCap());
+        c.setRespawnTime(sector.corrosiveRespawn * (1f + 0.3f * Campaign.fails(sector.number)));
+        trim(c, corrosiveCap());
         ((ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class)).setAnomaliesMaxCount(sector.electricMax);
         trim(ObjectPool.EMITTERS.get(ElectricalAnomaly.class), sector.electricMax);
         ((RadiationAnomalyEmitter) ObjectPool.EMITTERS.get(RadiationAnomaly.class)).setAnomaliesMaxCount(sector.radiationMax);
@@ -168,6 +168,17 @@ public final class SectorRun {
                 : Rules.VIEW_HEIGHT * k;
         spot.set(MathUtils.clamp(c.x + MathUtils.cos(ang) * r, m, Rules.SPACE_WIDTH - m),
                 MathUtils.clamp(c.y + MathUtils.sin(ang) * r, m, Rules.SPACE_HEIGHT - m));
+    }
+
+    /**
+     * Hunters in this sector: fewer after failures here (a fifth less per failure, up to three),
+     * never said out loud (tip 21). The lesson's own threats stay as they are.
+     */
+    private int corrosiveCap() {
+        if (sector.corrosiveMax == 0) {
+            return 0;
+        }
+        return Math.max(1, Math.round(sector.corrosiveMax * (1f - 0.2f * Campaign.fails(sector.number))));
     }
 
     /** Removes whatever an emitter spawned at construction beyond the sector's cap. */
@@ -324,7 +335,7 @@ public final class SectorRun {
         escalateTimer = 0f;
         escalateLevel++;
         CorrosiveAnomalyEmitter c = (CorrosiveAnomalyEmitter) ObjectPool.EMITTERS.get(CorrosiveAnomaly.class);
-        c.setAnomaliesMaxCount(sector.corrosiveMax + escalateLevel * 2);
+        c.setAnomaliesMaxCount(corrosiveCap() + escalateLevel * 2);
         c.setRespawnTime(Math.max(1.5f, sector.corrosiveRespawn * (1f - 0.15f * escalateLevel)));
         if (escalateLevel % 2 == 0) {
             ((ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class))

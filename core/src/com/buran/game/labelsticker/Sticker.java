@@ -723,9 +723,14 @@ public enum Sticker {
      * that the sector does not have. Half the time one item from the sector's loot, half the time
      * the burnt cargo hurts the hull.
      */
+    private static boolean gambleLostLast;
+
     private static void campaignGamble(AbstractConsumable consumable) {
         com.buran.game.campaign.Sector sector = com.buran.game.campaign.Campaign.current();
-        if (MathUtils.randomBoolean()) {
+        // Never two bad ones in a row (tip 32: randomness must not feel rigged).
+        boolean good = gambleLostLast || MathUtils.randomBoolean();
+        gambleLostLast = !good;
+        if (good) {
             java.util.List<Sticker> loot = sector.loot();
             Sticker s = loot.get(MathUtils.random(loot.size() - 1));
             SelectorGroup.getInstance().addSelector(s, consumable.isGolden() ? 2 : 1);

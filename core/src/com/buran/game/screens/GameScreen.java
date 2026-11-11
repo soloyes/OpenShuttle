@@ -266,6 +266,7 @@ public class GameScreen extends BaseScreen {
         Rules.corrosiveHuntTime = Rules.ANOMALIES_CORROSIVE_HUNT_TIME;
         Rules.CONSUMABLE_CRATE_DANGER_PROBABILITY = 4;
         Rules.CONSUMABLE_STORAGE_DANGER_PROBABILITY = 4;
+        hurtBy.clear();
         if (Campaign.current() != null) {
             sectorRun = new SectorRun(Campaign.current());
             sectorRun.configure();
@@ -474,6 +475,7 @@ public class GameScreen extends BaseScreen {
                 threatOverlay.renderEdges(batch, cameraHelper, Theme.font(32));
                 com.buran.game.ui.hud.CrewCard.render(batch, Theme.font(72), Theme.font(44));
             }
+            lowHull(batch, Gdx.graphics.getDeltaTime());
             hud.render(batch);
             if (sectorRun != null) {
                 sectorRun.renderHud(batch, cameraHelper, threatTextures, Theme.font(54), Theme.font(44));
@@ -500,6 +502,9 @@ public class GameScreen extends BaseScreen {
             if (!runReported) {
                 // Record the run once; the report itself is drawn by GameMenu.
                 runReported = true;
+                if (sectorRun != null && !sectorRun.isClear()) {
+                    Campaign.failed(sectorRun.sector());
+                }
                 boomBox.stopAllMusicAndPlayThis(MSConstants.GAME_OVER);
                 profiles.dispose();
                 if (Rules.ADS_ENABLED) {
@@ -522,7 +527,37 @@ public class GameScreen extends BaseScreen {
     }
 
     private float endBlur;
+    private final java.util.Set<Class<?>> hurtBy = new java.util.HashSet<>();
     private float censusTime;
+    private float lowHullTime;
+
+    /**
+     * The last of the hull: the screen edges breathe red, faster the closer to the end (tip 35).
+     */
+    private void lowHull(SpriteBatch batch, float dt) {
+        Standing st = Standing.getInstance();
+        float k = st.getHp() / Math.max(1f, st.getMaxHp());
+        if (k >= 0.3f || PauseGroup.isPause()) {
+            lowHullTime = 0f;
+            return;
+        }
+        lowHullTime += dt * (2f + (0.3f - k) * 12f);
+        float pulse = 0.5f + 0.5f * MathUtils.sin(lowHullTime * MathUtils.PI);
+        float a = (0.12f + 0.18f * (0.3f - k) / 0.3f) * pulse;
+        float W = Rules.WORLD_WIDTH;
+        float H = Rules.WORLD_HEIGHT;
+        int bands = 12;
+        float depth = H * 0.12f;
+        for (int i = 0; i < bands; i++) {
+            float f = 1f - i / (float) bands;
+            float t = depth / bands;
+            Color red = Theme.ACCENT;
+            Theme.rect(batch, 0, i * t, W, t, red, a * f * f);
+            Theme.rect(batch, 0, H - (i + 1) * t, W, t, red, a * f * f);
+            Theme.rect(batch, i * t, 0, t, H, red, a * f * f);
+            Theme.rect(batch, W - (i + 1) * t, 0, t, H, red, a * f * f);
+        }
+    }
 
     /** One line of what is in the sector: live objects per kind, whole rocks apart from fragments. */
     private void census(float dt) {
@@ -1134,7 +1169,9 @@ public class GameScreen extends BaseScreen {
         }
 
         if (player.addZigZag(0.5f * anomaly.getLevel() + 0.2f)) {
-            Standing.getInstance().takeDamage(anomaly.getLevel() + 1);
+            // The first touch of each kind in a sector costs half: you meet it, you learn it (tip 33).
+            boolean first = sectorRun != null && hurtBy.add(anomaly.getClass());
+            Standing.getInstance().takeDamage((anomaly.getLevel() + 1) * (first ? 0.5f : 1f));
             GameInfoSystem.setup(
                     Buran.position.x,
                     Buran.position.y,
