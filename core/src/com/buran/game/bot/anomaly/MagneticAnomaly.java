@@ -172,7 +172,7 @@ public class MagneticAnomaly extends AbstractAnomaly {
                 }
             } else {
                 destroyWithEffect();
-                boomBox.playSound(MSConstants.DESTROY_MAGNETIC_ANOMALY);
+                boomBox.playSoundAt(MSConstants.DESTROY_MAGNETIC_ANOMALY, position.x, position.y);
             }
         } else {
             born = true;

@@ -168,7 +168,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
                 }
             } else {
                 destroyWithEffect();
-                boomBox.playSound(MSConstants.DESTROY_RADIATION_ANOMALY);
+                boomBox.playSoundAt(MSConstants.DESTROY_RADIATION_ANOMALY, position.x, position.y);
             }
         } else {
             born = true;

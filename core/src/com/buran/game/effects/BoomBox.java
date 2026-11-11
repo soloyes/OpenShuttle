@@ -96,6 +96,30 @@ public class BoomBox {
         return -1;
     }
 
+    /**
+     * A sound from a place in the sector (tip 63): panned by where it is left or right of the
+     * ship, and quieter the farther away it is.
+     */
+    public long playSoundAt(String sound, float x, float y) {
+        if (!Assets.getInstance().getAssetManager().isLoaded(sound, Sound.class)) {
+            return -1;
+        }
+        Sound tmp = Assets.getInstance().getAssetManager().get(sound, Sound.class);
+        if (!soundIdList.contains(tmp, true)) {
+            soundIdList.add(tmp);
+        }
+        if (!Profiles.getSettings().isEffects()) {
+            return -1;
+        }
+        float dx = x - com.buran.game.player.Buran.position.x;
+        float dy = y - com.buran.game.player.Buran.position.y;
+        float d = (float) Math.sqrt(dx * dx + dy * dy);
+        float far = com.buran.game.conf.Rules.VIEW_WIDTH * 1.2f;
+        float vol = Math.max(0.2f, 1f - d / far);
+        float pan = Math.max(-1f, Math.min(1f, dx / (com.buran.game.conf.Rules.VIEW_WIDTH * 0.6f)));
+        return tmp.play(Profiles.getSettings().overallEffectsVolume() * vol, 1f, pan);
+    }
+
     private static String lastMusic;
     private static String[] lastEffects = new String[0];
 

@@ -26,10 +26,10 @@ for log in sorted(glob.glob(f"{S}/census/s*.log"), key=lambda p: int(re.findall(
         "radiation": I(c, "radiation"),
         "magnetic": I(c, "magnetic"),
         "rocks": ((I(c, "rocks") + 1) // 2) * 2,
-        "crew": I(c, "crew"),
+        "crew": I(c, "crew") + (1 if c["sector"] == "16" else 0),   # 16: the choice
         "crates": I(c, "crates") + 1,   # the hidden cache
         "storages": I(c, "storages") + (1 if c["sector"] == "2" else 0),
-        "fuel": I(c, "fuel"),
+        "fuel": I(c, "fuel") + (1 if c["sector"] == "16" else 0),
         "volleys": 0,
         "step": 0,
     }

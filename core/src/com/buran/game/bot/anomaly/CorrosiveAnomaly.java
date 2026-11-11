@@ -172,7 +172,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 if (boomTimer >= boomDelay) {
                     destroy();
                     showSprayBoom();
-                    boomBox.playSound(MSConstants.SPLASH_ANOMALY);
+                    boomBox.playSoundAt(MSConstants.SPLASH_ANOMALY, position.x, position.y);
                     Vibrator.vibrateGame(VConstants.PLAYER_ANOMALY_CORROSIVE_DESTROY);
                     int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.COMMANDER.getCoefficient());
                     Standing.getInstance().changeScore(score, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
@@ -219,7 +219,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
                 }
             } else {
                 destroy();
-                boomBox.playSound(MSConstants.DESTROY_CORROSIVE_ANOMALY);
+                boomBox.playSoundAt(MSConstants.DESTROY_CORROSIVE_ANOMALY, position.x, position.y);
                 Standing.getInstance().addToStatistics(this.type, this.level);
                 int score = (int) (Rules.ANOMALIES_BASE_SCORE_ADD * Sticker.COMMANDER.getCoefficient());
                 Standing.getInstance().changeScore(score, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);

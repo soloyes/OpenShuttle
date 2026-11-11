@@ -146,7 +146,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
                 }
             } else {
                 destroyWithEffect();
-                boomBox.playSound(MSConstants.DESTROY_ELECTRIC_ANOMALY);
+                boomBox.playSoundAt(MSConstants.DESTROY_ELECTRIC_ANOMALY, position.x, position.y);
                 showSprayBoom();
             }
         } else {

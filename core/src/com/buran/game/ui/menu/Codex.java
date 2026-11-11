@@ -232,7 +232,7 @@ public class Codex {
         Group items = group("ITEMS");
         item(items, Sticker.FREEZE, "Every anomaly stops hunting for ten seconds.", this::demoFreeze);
         item(items, Sticker.DEGRADE, "All corrosive anomalies drop to the weakest level.", this::demoDegrade);
-        item(items, Sticker.BOOST, "Triples engine speed for a moment. At that speed rocks and corrosive anomalies break on the hull. Electric ones do not: they hurt.", this::demoBoost);
+        item(items, Sticker.BOOST, "Triples engine speed for a moment. At that speed corrosive anomalies break on the hull. Rocks shatter but still hurt, and electric ones hurt too.", this::demoBoost);
         item(items, Sticker.REPAIR, "Restores hull. Stronger with medics aboard.", this::demoRepair);
         item(items, Sticker.SHIELD, "Shields every container from asteroids and fills the ram shield.", this::demoShield);
         item(items, Sticker.TRASH, "Points the moment you take it. Three seconds later the spot where you took it bursts into a volley of rocks: be far away.", this::demoTrash);

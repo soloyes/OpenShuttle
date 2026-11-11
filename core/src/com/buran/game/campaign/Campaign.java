@@ -174,6 +174,7 @@ public final class Campaign {
         s16.corrosiveRespawn = 6f;
         s16.asteroidMax = 8;
         s16.escalate = true;
+        s16.choice = true;
         s16.borderDamage = true;
         s16.space = 2.4f;
         SECTORS.add(s16);
@@ -280,7 +281,7 @@ public final class Campaign {
 
         Sector s10 = new Sector(10, "DEEP FIELD", Sector.Goal.SALVAGE, 40,
                 "Deep field. Rock and wreckage everywhere. Burn the metal and pull it in: it charges the ram. Then let the ram do the work.",
-                "{A} RAM SHIELD BREAKS WHAT IT OUTRANKS      METAL CHARGES IT");
+                "{A} RAM SHIELD BREAKS ANOMALIES BELOW ITS LEVEL      METAL CHARGES IT");
         empty(s10);
         s10.chapter = 2;
         s10.asteroidMax = 14;
@@ -372,6 +373,17 @@ public final class Campaign {
         p.flush();
         com.buran.game.ui.GameInfoSystem.setup(com.buran.game.player.Buran.position.x, com.buran.game.player.Buran.position.y,
                 "[GOLD]STATION LOG " + s.code() + " FOUND[]", 4.0f, true);
+    }
+
+    /** Remembers a decision the player made (choices with consequences). */
+    public static void remember(String key, String value) {
+        Preferences p = prefs();
+        p.putString("campaign." + key, value);
+        p.flush();
+    }
+
+    public static String recall(String key) {
+        return prefs().getString("campaign." + key, "");
     }
 
     public static boolean logFound(int number) {

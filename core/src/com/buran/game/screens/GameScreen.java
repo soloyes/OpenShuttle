@@ -269,6 +269,7 @@ public class GameScreen extends BaseScreen {
         Rules.CONSUMABLE_STORAGE_DANGER_PROBABILITY = 4;
         hurtBy.clear();
         com.buran.game.ui.hud.ActiveEffects.clear();
+        com.buran.game.ui.hud.Comms.clear();
         if (Campaign.current() != null) {
             sectorRun = new SectorRun(Campaign.current());
             sectorRun.configure();
@@ -389,6 +390,7 @@ public class GameScreen extends BaseScreen {
         radiationAnomalyEmitter.render(batch);
         magneticAnomalyEmitter.render(batch);
         threatOverlay.renderWorld(batch, Theme.font(44));
+        com.buran.game.ui.hud.TutorialPrompts.cameraY = camera.position.y;
         tutorialPrompts.render(batch, Theme.font(44), threatTextures);
         rocketLauncher.render(batch);
         asteroidLaunchEmitter.render(batch);
@@ -472,7 +474,8 @@ public class GameScreen extends BaseScreen {
             UIRightPanel.getInstance().render(batch);
         }
 
-        if (!ended()) {
+        // On pause and at the end only the menu is on screen: no console, no buffs, no prompts.
+        if (!ended() && !PauseGroup.isPause()) {
             if (!PauseGroup.isPause()) {
                 threatOverlay.renderEdges(batch, cameraHelper, Theme.font(32));
                 com.buran.game.ui.hud.CrewCard.render(batch, Theme.font(72), Theme.font(44));
@@ -691,6 +694,9 @@ public class GameScreen extends BaseScreen {
         }
         if (Rules.DEBUG_CENSUS) {
             census(dt);
+        }
+        if (!PauseGroup.isPause()) {
+            com.buran.game.ui.hud.Comms.update(dt);
         }
         if (!frozen && !Rules.GAME_OVER) {
             com.buran.game.ui.hud.ActiveEffects.update(dt);

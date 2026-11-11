@@ -27,12 +27,28 @@ public class TutorialPrompts {
     private static int ramCount;
 
     /** A whole rock hit the ship. */
+    /**
+     * A rock hit: say what rocks are, in words that agree with the rest of the game. The ram
+     * shield breaks anomalies, not rocks; the laser is for rocks.
+     */
     public static void rammed() {
         ramCount++;
-        if (ramCount <= 3) {
-            ramLesson = 5f;
+        if (ramCount > 3) {
+            return;
         }
+        String line;
+        if (Buran.ramOn) {
+            line = "THE RAM SHIELD SOFTENS ROCKS, IT DOES NOT BREAK THEM";
+        } else if (Buran.isLaser) {
+            line = "ROCKS HURT  -  LET THE LASER BURN THEM: KEEP THEM IN THE RED RING";
+        } else {
+            line = "ROCKS HURT  -  GO AROUND THEM";
+        }
+        Comms.say(line, 5f, Comms.TIP);
     }
+
+    /** The EMP hint asks for the prompt slot (set every frame while an electric one is near). */
+    public static float empRequest;
 
     public TutorialPrompts() {
         ramLesson = 0f;
@@ -46,9 +62,11 @@ public class TutorialPrompts {
     private float sayTime;
 
     private void say(String line) {
-        said = line;
-        sayTime = 2.5f;
+        Comms.say(line, 3f, Comms.TIP);
     }
+
+    /** World y of the camera centre (prompts stay clear of the console). */
+    public static float cameraY;
 
     public void update(float dt) {
         time += dt;
@@ -101,33 +119,23 @@ public class TutorialPrompts {
             batch.draw(tx.ring, x - r, y + 280f - r, r * 2f, r * 2f);
             batch.setColor(com.badlogic.gdx.graphics.Color.WHITE);
         }
-        if (ramLesson > 0f) {
-            float a = Math.min(1f, ramLesson) * Math.min(1f, (5f - ramLesson) * 4f);
-            String line = Buran.isLaser ? "DON'T RAM  -  HOLD THE ROCK IN THE RED RING, THE LASER BURNS IT"
-                    : "ROCKS HURT  -  GO AROUND THEM";
-            Prompt.text(batch, font, line, x, Buran.position.y + 300f, a);
-        }
-        if (shown[0] > 0f) {
-            Prompt.draw(batch, font, Hints.button("LS", "ARROWS"), "FLY", x, y, shown[0] * pulse);
-            y -= 130f;
-        }
+        // One button prompt at a time, the one that matters most right now; never over the console.
+        float lowest = cameraY - Rules.VIEW_HEIGHT / 2f + Rules.VIEW_HEIGHT * 0.3f;
+        y = Math.max(y, lowest);
         Selector c = SelectorGroup.getInstance().getCenter();
-        if (shown[1] > 0f && c != null) {
+        if (empRequest > 0f) {
+            Prompt.draw(batch, font, Hints.button("Y", "F"), "EMP", x, y, empRequest * pulse);
+        } else if (shown[0] > 0f) {
+            Prompt.draw(batch, font, Hints.button("LS", "ARROWS"), "FLY", x, y, shown[0] * pulse);
+        } else if (shown[3] > 0f) {
+            Prompt.draw(batch, font, Hints.button("A", "SPACE"), "RAM SHIELD", x, y, shown[3] * pulse);
+        } else if (shown[1] > 0f && c != null) {
             Prompt.draw(batch, font, Hints.button("X", "X"), "USE " + c.getSticker().name(), x, y, shown[1] * pulse);
-            y -= 130f;
-        }
-        if (shown[2] > 0f) {
+        } else if (shown[2] > 0f) {
             String[] keys = Hints.pad() ? new String[]{"LB", "RB"} : new String[]{"Q", "E"};
             Prompt.draw(batch, font, keys, "SWITCH ITEM", x, y, shown[2] * pulse);
-            y -= 130f;
         }
-        if (shown[3] > 0f) {
-            Prompt.draw(batch, font, Hints.button("A", "SPACE"), "RAM SHIELD", x, y, shown[3] * pulse);
-            y -= 130f;
-        }
-        if (sayTime > 0f && said != null) {
-            Prompt.text(batch, font, said, x, y, Math.min(1f, sayTime));
-        }
+        empRequest = 0f;
     }
 
     private static boolean rockNear() {

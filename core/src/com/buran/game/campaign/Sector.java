@@ -54,6 +54,8 @@ public final class Sector {
     public boolean escalate;
     /** A boss halfway through: 0 none, 1 the Mother (corrosive), 2 the Storm Heart (electric). */
     public int boss;
+    /** Halfway: one of ours or the fuel depot - the rift takes the other (tip 41). */
+    public boolean choice;
     /** The radar is dead for the whole sector (flying by eye). */
     public boolean noRadar;
     /** The extraction beacon sits at the edge of the rift (the way home). */

@@ -165,8 +165,7 @@ public final class ThreatOverlay {
         }
         // Until the pulse is fired once, the button is shown big above the ship.
         if (font != null && !empUsed) {
-            String k = com.buran.game.ui.menu.Hints.button("Y", "F");
-            com.buran.game.ui.hud.Prompt.draw(batch, font, k, "EMP", x, y + 260f, empHint * pulse);
+            com.buran.game.ui.hud.TutorialPrompts.empRequest = empHint;
         }
         batch.setColor(Color.WHITE);
     }

@@ -360,6 +360,11 @@ public class Buran extends AbstractBuran {
 
     public static void respawn() {
         Buran.position.set(Rules.SPACE_WIDTH / 2, Rules.SPACE_HEIGHT / 2);
+        // Never come back inside the rift's pull (small sectors can have it near the centre).
+        if (com.buran.game.bot.blackhole.Blackhole.enabled && com.buran.game.bot.blackhole.Blackhole.position != null) {
+            BoundCheck.avoidPosition(com.buran.game.bot.blackhole.Blackhole.position, Buran.position,
+                    (int) com.buran.game.conf.Buffs.getBlackholeTakeRange() * 2, 0, Rules.SPACE_WIDTH, 0, Rules.SPACE_HEIGHT);
+        }
         Buran.velocity.set(0.0f, 0.0f);
         Radar.isActive = false;
         CircleRenderer.scan = false;

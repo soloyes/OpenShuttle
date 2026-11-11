@@ -43,6 +43,7 @@ public final class ArcadeRadio {
                     last = i;
                     line = LINES[i];
                     lineTime = SHOW;
+                    com.buran.game.ui.hud.Comms.say(line, SHOW, com.buran.game.ui.hud.Comms.STORY);
                     Radio.play(String.format("arcade%02d", STEPS[i]));
                 }
                 break;
@@ -52,10 +53,9 @@ public final class ArcadeRadio {
     }
 
     public void render(Batch batch, BitmapFont font) {
-        if (line == null || lineTime <= 0f || Rules.GAME_OVER) {
+        if (Rules.GAME_OVER) {
             return;
         }
-        float a = Math.min(1f, lineTime) * Math.min(1f, (SHOW - lineTime) * 2f);
-        com.buran.game.ui.hud.Prompt.text(batch, font, line, Rules.WORLD_WIDTH / 2f, Rules.WORLD_HEIGHT - 300f, a);
+        com.buran.game.ui.hud.Comms.render(batch, font, Rules.WORLD_WIDTH / 2f, Rules.WORLD_HEIGHT - 300f);
     }
 }

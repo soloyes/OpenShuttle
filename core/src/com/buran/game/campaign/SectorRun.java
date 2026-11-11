@@ -113,6 +113,7 @@ public final class SectorRun {
             placeCrew();
         }
         placeCache();
+        layout();
         baseline = counter();
         if (Rules.DEBUG_CARD) {
             com.buran.game.ui.hud.CrewCard.show(com.buran.game.labelsticker.Sticker.MEDIC, "MEDIC", "HULL REPAIRED");
@@ -176,6 +177,43 @@ public final class SectorRun {
     }
 
     private float cacheHint;
+
+    /**
+     * Designed pieces instead of raw scatter at the start (tip 85): rocks form a belt across the
+     * way in salvage sectors; thick hunter sectors open with two nests far from the ship.
+     */
+    private void layout() {
+        float m = 400f;
+        if (sector.goal == Sector.Goal.SALVAGE) {
+            float base = MathUtils.random(MathUtils.PI2);
+            float cx = Buran.position.x + MathUtils.cos(base) * Rules.VIEW_HEIGHT * 1.4f;
+            float cy = Buran.position.y + MathUtils.sin(base) * Rules.VIEW_HEIGHT * 1.4f;
+            float radius = Rules.VIEW_HEIGHT * 1.1f;
+            for (Class<?> k : new Class<?>[]{MetalAsteroid.class, MineralAsteroid.class}) {
+                java.util.List<?> list = ObjectPool.EMITTERS.get(k).getActiveList();
+                for (int i = 0; i < list.size(); i++) {
+                    com.buran.game.bot.asteroids.AbstractAsteroid a = (com.buran.game.bot.asteroids.AbstractAsteroid) list.get(i);
+                    float t = base + MathUtils.PI + MathUtils.random(-1.1f, 1.1f);
+                    float r = radius + MathUtils.random(-160f, 160f);
+                    a.getPosition().set(MathUtils.clamp(cx + MathUtils.cos(t) * r, m, Rules.SPACE_WIDTH - m),
+                            MathUtils.clamp(cy + MathUtils.sin(t) * r, m, Rules.SPACE_HEIGHT - m));
+                    a.getVelocity().set(-MathUtils.sin(t), MathUtils.cos(t)).scl(MathUtils.random(15f, 40f));
+                }
+            }
+        }
+        if (sector.corrosiveMax >= 8) {
+            java.util.List<?> list = ObjectPool.EMITTERS.get(CorrosiveAnomaly.class).getActiveList();
+            float base = MathUtils.random(MathUtils.PI2);
+            for (int i = 0; i < list.size(); i++) {
+                com.buran.game.bot.anomaly.AbstractAnomaly a = (com.buran.game.bot.anomaly.AbstractAnomaly) list.get(i);
+                float t = base + (i % 2) * MathUtils.PI * 0.9f;
+                float d = Rules.VIEW_HEIGHT * 1.3f;
+                a.getPosition().set(
+                        MathUtils.clamp(Buran.position.x + MathUtils.cos(t) * d + MathUtils.random(-300f, 300f), m, Rules.SPACE_WIDTH - m),
+                        MathUtils.clamp(Buran.position.y + MathUtils.sin(t) * d + MathUtils.random(-300f, 300f), m, Rules.SPACE_HEIGHT - m));
+            }
+        }
+    }
 
     private final com.badlogic.gdx.math.Vector2 spot = new com.badlogic.gdx.math.Vector2();
 
@@ -305,8 +343,11 @@ public final class SectorRun {
     private com.buran.game.bot.consumable.AbstractConsumable laserBox;
 
     private void say(String line, float seconds) {
-        notice = line;
-        noticeTime = seconds;
+        com.buran.game.ui.hud.Comms.say(line, seconds, com.buran.game.ui.hud.Comms.STORY);
+    }
+
+    private void alert(String line, float seconds) {
+        com.buran.game.ui.hud.Comms.say(line, seconds, com.buran.game.ui.hud.Comms.ALERT);
     }
 
     private void script(float dt) {
@@ -328,6 +369,72 @@ public final class SectorRun {
         }
         if (sector.boss > 0) {
             bossScript(dt);
+        }
+        if (sector.choice) {
+            choiceScript(dt);
+        }
+    }
+
+    private com.buran.game.bot.consumable.AbstractConsumable choiceCrew;
+    private com.buran.game.bot.consumable.AbstractConsumable choiceFuel;
+    private int choiceStage;
+    private float choiceTime;
+
+    /**
+     * A choice with a cost (tip 41): halfway through, a crew member and the station's fuel depot
+     * drift on opposite sides of the rift. Whichever you take first is yours; the rift takes the
+     * other. Wait too long and it takes both. Fuel fills the tanks; the crew counts toward home.
+     */
+    private void choiceScript(float dt) {
+        if (choiceStage == 0) {
+            if (progress * 2 < sector.target || !Blackhole.enabled) {
+                return;
+            }
+            choiceStage = 1;
+            float ang = MathUtils.random(MathUtils.PI2);
+            float r = Buffs.getBlackholeTakeRange() * 1.5f;
+            choiceCrew = ((AstronautEmitter) ObjectPool.EMITTERS.get(Astronaut.class)).emitAt(
+                    Blackhole.position.x + MathUtils.cos(ang) * r, Blackhole.position.y + MathUtils.sin(ang) * r);
+            choiceFuel = ((com.buran.game.bot.consumable.AbstractConsumableEmitter) ObjectPool.EMITTERS.get(
+                    com.buran.game.bot.consumable.fuel.Fuel.class)).emitAt(
+                    Blackhole.position.x - MathUtils.cos(ang) * r, Blackhole.position.y - MathUtils.sin(ang) * r);
+            alert("TWO SIGNALS: ONE OF OURS, AND THE STATION'S FUEL DEPOT.  THE RIFT TAKES THE OTHER", 10f);
+            return;
+        }
+        if (choiceStage != 1) {
+            return;
+        }
+        choiceTime += dt;
+        boolean crewGone = !choiceCrew.isActive() || choiceCrew.isTaken();
+        boolean fuelGone = !choiceFuel.isActive() || choiceFuel.isTaken();
+        boolean crewTaken = crewGone && choiceCrew.getPosition().dst(Buran.position) < 500f;
+        boolean fuelTaken = fuelGone && choiceFuel.getPosition().dst(Buran.position) < 500f;
+        if (crewTaken || fuelTaken || choiceTime > 40f || (crewGone && fuelGone)) {
+            choiceStage = 2;
+            if (fuelTaken && !crewTaken) {
+                Standing st = Standing.getInstance();
+                st.setFuel(st.getMaxFuel());
+                if (choiceCrew.isActive()) {
+                    choiceCrew.destroyWithEffect();
+                }
+                say("TANKS FULL.  WE LEFT HIM BEHIND", 8f);
+                Campaign.remember("choice16", "fuel");
+            } else if (crewTaken) {
+                if (choiceFuel.isActive()) {
+                    choiceFuel.destroyWithEffect();
+                }
+                say("HE IS ABOARD.  THE DEPOT IS GONE", 8f);
+                Campaign.remember("choice16", "crew");
+            } else {
+                if (choiceCrew.isActive()) {
+                    choiceCrew.destroyWithEffect();
+                }
+                if (choiceFuel.isActive()) {
+                    choiceFuel.destroyWithEffect();
+                }
+                say("THE RIFT TOOK BOTH", 8f);
+                Campaign.remember("choice16", "none");
+            }
         }
     }
 
@@ -382,13 +489,13 @@ public final class SectorRun {
             boss.makeBoss(3, 3);
             com.buran.game.ui.groups.selector.SelectorGroup.getInstance()
                     .addSelector(com.buran.game.labelsticker.Sticker.BOOST, 3);
-            say("SOMETHING BIG IS WAKING UP  -  ROCKETS OR A BOOSTED RAM BREAK IT", 9f);
+            alert("SOMETHING BIG IS WAKING UP  -  ROCKETS, OR HIT IT AT BOOST SPEED", 9f);
         } else {
             boss = ((ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class)).emitAt(x, y);
             boss.makeBoss(3, boss.getLevel());
             boss.setScaleX(2.6f);
             boss.setScaleY(2.6f);
-            say("THE STORM HAS A HEART  -  {Y} PULSE IT THREE TIMES", 9f);
+            alert("THE STORM HAS A HEART  -  {Y} PULSE IT THREE TIMES", 9f);
         }
         com.buran.game.effects.Shake.getInstance().shakeCamera(0.6f, 40, 14);
     }
@@ -454,7 +561,7 @@ public final class SectorRun {
             ((ElectricalAnomalyEmitter) ObjectPool.EMITTERS.get(ElectricalAnomaly.class))
                     .setAnomaliesMaxCount(Math.min(3, sector.electricMax + escalateLevel / 2));
         }
-        say("THE FIELD IS COLLAPSING  -  IT GROWS STRONGER", 5f);
+        alert("THE FIELD IS COLLAPSING  -  IT GROWS STRONGER", 5f);
     }
 
     /**
@@ -481,7 +588,7 @@ public final class SectorRun {
         if (progress + out < sector.target && !Rules.GAME_OVER) {
             crewSpot(MathUtils.random(MathUtils.PI2), 0.8f);
             e.emitAt(spot.x, spot.y);
-            say("WE LOST ONE.  ANOTHER BEACON IS CALLING", 6f);
+            alert("WE LOST ONE.  ANOTHER BEACON IS CALLING", 6f);
             crewLost++;
         }
     }
@@ -502,7 +609,7 @@ public final class SectorRun {
                                     MathUtils.clamp(Buran.position.y + MathUtils.sin(ang) * r, m, Rules.SPACE_HEIGHT - m));
                     laserStage = 1;
                     laserTimer = 0f;
-                    say("DISCHARGE ON THE SCOPE  -  IT IS COMING FOR US", 5f);
+                    alert("DISCHARGE ON THE SCOPE  -  IT IS COMING FOR US", 5f);
                 }
                 break;
             case 1:
@@ -512,7 +619,7 @@ public final class SectorRun {
                     placeLaserBox();
                     com.buran.game.player.navigation.Radar.isActive = true;
                     laserStage = 2;
-                    say("THE DISCHARGE BURNED OUR LASER.  A STORAGE IS DRIFTING NEARBY  -  A NEW ONE IS INSIDE", 9f);
+                    alert("THE DISCHARGE BURNED OUR LASER.  A STORAGE IS DRIFTING NEARBY  -  A NEW ONE IS INSIDE", 9f);
                 } else if (laserTimer > 30f) {
                     removeDischarge();
                     laserStage = 3;
@@ -663,10 +770,8 @@ public final class SectorRun {
         }
         text(batch, small, "SECTOR " + sector.code() + "  " + sector.name, W / 2f, top - 100f, Theme.DIM, 1f, true);
         text(batch, font, line, W / 2f, top - 100f - small.getLineHeight() - 6f, c, 1f, true);
-        if (notice != null && noticeTime > 0f && phase == Phase.ACTIVE) {
-            float a = Math.min(1f, noticeTime) * Math.min(1f, (phaseTime) * 2f);
-            com.buran.game.ui.hud.Prompt.text(batch, small, notice, W / 2f,
-                    top - 100f - small.getLineHeight() - font.getLineHeight() - 70f, a);
+        if (phase == Phase.ACTIVE || phase == Phase.EXTRACT) {
+            com.buran.game.ui.hud.Comms.render(batch, small, W / 2f, top - 100f - small.getLineHeight() - font.getLineHeight() - 70f);
         }
         if (laserStage == 2 && laserBox != null && laserBox.isActive() && !laserBox.isTaken()) {
             float dx = laserBox.getPosition().x - worldCamera.position.x;
