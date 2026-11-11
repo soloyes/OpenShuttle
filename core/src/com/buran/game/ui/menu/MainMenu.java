@@ -264,6 +264,7 @@ public class MainMenu extends Group implements MenuNav.Target {
         int last = com.buran.game.campaign.Campaign.sectors().size();
         panel.add(new Row.Info("SECTORS " + (last + 1 < 10 ? "0" : "") + (last + 1) + " - 19", smallFont, "SIGNAL LOST"));
         playRows.add(null);
+        arcadeRow = playRows.size();
         playRows.add(null);
         panel.add(new Row.Action("ARCADE   -   ENDLESS", rowFont, () -> {
             com.buran.game.campaign.Campaign.arcade();
@@ -784,6 +785,7 @@ public class MainMenu extends Group implements MenuNav.Target {
     }
 
     private int cardIndex = -1;
+    private int arcadeRow = -1;
     private float cardAge;
 
     /** Flight plan: the focused sector's painted card, its name and goal. */
@@ -795,6 +797,10 @@ public class MainMenu extends Group implements MenuNav.Target {
         }
         cardAge += Gdx.graphics.getDeltaTime();
         com.buran.game.campaign.Sector sec = i >= 0 && i < playRows.size() ? playRows.get(i) : null;
+        if (sec == null && i == arcadeRow) {
+            drawArcadeCard(batch, x, top, w, a);
+            return;
+        }
         if (sec == null) {
             return;
         }
@@ -818,6 +824,25 @@ public class MainMenu extends Group implements MenuNav.Target {
                 : locked ? "LOCKED" : sec.goalText();
         Color c = com.buran.game.campaign.Campaign.isDone(sec.number) ? Theme.OK : locked ? Theme.FAINT : Theme.ACCENT;
         drawText(batch, smallFont, state, x, y, c, a * in);
+    }
+
+    /** The endless run: the station picture and what waits at the end. */
+    private void drawArcadeCard(Batch batch, float x, float top, float w, float a) {
+        float in = com.badlogic.gdx.math.Interpolation.smooth.apply(Math.min(1f, cardAge / 0.35f));
+        float y = top - 20f;
+        com.badlogic.gdx.graphics.Texture t = Art.get("ui/menu.jpg");
+        if (t != null) {
+            float h = w * 9f / 16f;
+            float zoom = 1.6f + 0.05f * Math.min(1f, cardAge / 12f);
+            Theme.rect(batch, x - 3f, y - h - 3f, w + 6f, h + 6f, Theme.EDGE, a);
+            Art.cover(batch, t, x, y - h, w, h, zoom, 0.7f, 1f, 1f, 1f, a * in);
+            y -= h + 70f;
+        }
+        drawText(batch, labelFont, "ENDLESS", x, y, Theme.HEAD, a * in);
+        y -= 60f;
+        drawText(batch, headFont, "ARCADE", x, y, Theme.TEXT, a * in);
+        y -= headFont.getLineHeight() + 6f;
+        drawText(batch, smallFont, "19 STEPS TO THE COLLAPSE", x, y, Theme.ACCENT, a * in);
     }
 
     private void drawText(Batch batch, BitmapFont font, String text, float x, float y, Color c, float a) {

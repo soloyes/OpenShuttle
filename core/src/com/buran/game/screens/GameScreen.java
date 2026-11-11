@@ -134,6 +134,7 @@ public class GameScreen extends BaseScreen {
     private ListOfListsJoiner<AbstractConsumable> consumableJoiner;
     private ListOfListsJoiner<AbstractAsteroid> asteroidsJoiner;
     private ListOfListsJoiner<AbstractAnomaly> anomalyJoiner;
+    private com.buran.game.campaign.ArcadeRadio arcadeRadio;
     @Getter
     private UITopPanel uiTopPanel;
     private TelemetryHud hud;
@@ -269,8 +270,10 @@ public class GameScreen extends BaseScreen {
             sectorRun = new SectorRun(Campaign.current());
             sectorRun.configure();
             Shelters.create(Campaign.current().shelters);
+            arcadeRadio = null;
         } else {
             sectorRun = null;
+            arcadeRadio = new com.buran.game.campaign.ArcadeRadio();
         }
         Campaign.setRun(sectorRun);
         storageEmitter.emit();
@@ -474,6 +477,8 @@ public class GameScreen extends BaseScreen {
             hud.render(batch);
             if (sectorRun != null) {
                 sectorRun.renderHud(batch, cameraHelper, threatTextures, Theme.font(54), Theme.font(44));
+            } else if (arcadeRadio != null) {
+                arcadeRadio.render(batch, Theme.font(44));
             }
             if (!PauseGroup.isPause() && !hud.usesCargoBay()) {
                 SelectorGroup.getInstance().render(batch);
@@ -529,6 +534,8 @@ public class GameScreen extends BaseScreen {
         com.buran.game.platform.Radio.update();
         if (sectorRun != null && !held && !Rules.GAME_OVER) {
             sectorRun.update(dt);
+        } else if (arcadeRadio != null && !held) {
+            arcadeRadio.update(dt);
         }
         // The briefing holds the world still too, so nothing happens while the radio talks.
         boolean frozen = held || (sectorRun != null && sectorRun.isBriefing());
