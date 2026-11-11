@@ -530,6 +530,42 @@ public class GameScreen extends BaseScreen {
     private float endBlur;
     private final java.util.Set<Class<?>> hurtBy = new java.util.HashSet<>();
     private float censusTime;
+    private float packTime;
+    private float sincePulse = 99f;
+
+    /**
+     * Packs (tip 71): where the field is thick with hunters, one that wakes calls the sleepers
+     * near it. Not under FREEZE, and not for a while after an EMP.
+     */
+    private void pack(float dt) {
+        sincePulse += dt;
+        if (Gamepad.get().isPulse()) {
+            sincePulse = 0f;
+        }
+        packTime += dt;
+        if (packTime < 0.5f) {
+            return;
+        }
+        packTime = 0f;
+        boolean thick = sectorRun == null || sectorRun.sector().corrosiveMax >= 8;
+        if (!thick || CircleRenderer.freeze || sincePulse < 6f) {
+            return;
+        }
+        java.util.List<AbstractAnomaly> list = corrosiveAnomalyEmitter.getActiveList();
+        float r2 = 900f * 900f;
+        for (int i = 0; i < list.size(); i++) {
+            AbstractAnomaly a = list.get(i);
+            if (!a.isActive() || !a.isHungry() || a.isTaken()) {
+                continue;
+            }
+            for (int j = 0; j < list.size(); j++) {
+                AbstractAnomaly b = list.get(j);
+                if (b != a && b.isActive() && !b.isHungry() && !b.isTaken() && b.getPosition().dst2(a.getPosition()) < r2) {
+                    b.setHungry(true);
+                }
+            }
+        }
+    }
     private float lowHullTime;
 
     /**
@@ -657,6 +693,7 @@ public class GameScreen extends BaseScreen {
         }
         if (!frozen && !Rules.GAME_OVER) {
             com.buran.game.ui.hud.ActiveEffects.update(dt);
+            pack(dt);
         }
         sectorBorder.update(dt);
         if (!frozen) {

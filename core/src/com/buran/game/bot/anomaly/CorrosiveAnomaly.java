@@ -66,6 +66,8 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
 
     @Override
     public void init(float x, float y) {
+        this.temper = -1;
+        this.lunged = false;
         this.touched = false;
         this.hungryTimer = 0;
         this.slimTimer = 0;

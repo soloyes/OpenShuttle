@@ -73,9 +73,12 @@ public class MoveProcessor {
             } else if (abstractAnomaly.isHungry() && abstractAnomaly.isActivated()) {
                 abstractAnomaly.getPosition().mulAdd(abstractAnomaly.getVelocity(), dt);
                 float dst = Buran.position.dst(abstractAnomaly.getPosition());
-                if (abstractAnomaly.getLevel() + 1 != com.buran.game.player.Buran.ramLevel()) {
+                if (abstractAnomaly instanceof com.buran.game.bot.anomaly.CorrosiveAnomaly && temper(abstractAnomaly, dst, dt)) {
+                    // its temperament moved it this frame
+                } else if (abstractAnomaly.getLevel() + 1 != com.buran.game.player.Buran.ramLevel()) {
                     if (dst < 2400.0f + 200 * abstractAnomaly.getLevel()) {
-                        tmp1V2.set(Buran.position)
+                        target(abstractAnomaly);
+                        tmp1V2.set(aim)
                                 .sub(abstractAnomaly.getPosition())
                                 .nor()
                                 .scl(abstractAnomaly.getV());
@@ -106,6 +109,44 @@ public class MoveProcessor {
             angle += dt;
         }
         update(abstractAnomaly);
+    }
+
+    private static final int HUNTER = 0;
+    private static final int FLANKER = 1;
+    private static final int LURKER = 2;
+    private final Vector2 aim = new Vector2();
+
+    /** Where this one steers: the ship, or for a flanker, where the ship will be in a second. */
+    private void target(AbstractAnomaly a) {
+        aim.set(Buran.position);
+        if (a.temper == FLANKER) {
+            aim.mulAdd(Buran.velocity, 0.9f);
+        }
+    }
+
+    /**
+     * Corrosive temperaments (tip 71): half hunt straight, a quarter cut you off, a quarter lie
+     * in wait - still, trembling when you come close (the tell, tip 53), then one hard lunge.
+     * Returns true when it handled the movement itself.
+     */
+    private boolean temper(AbstractAnomaly a, float dst, float dt) {
+        if (a.temper < 0) {
+            float r = MathUtils.random();
+            a.temper = r < 0.5f ? HUNTER : r < 0.75f ? FLANKER : LURKER;
+        }
+        if (a.temper != LURKER || a.lunged) {
+            return false;
+        }
+        a.getVelocity().scl(Math.max(0f, 1f - 2f * dt));
+        if (dst < 950f) {
+            a.getPosition().add(MathUtils.random(-5f, 5f), MathUtils.random(-5f, 5f));
+        }
+        if (dst < 620f) {
+            a.lunged = true;
+            tmp1V2.set(Buran.position).sub(a.getPosition()).nor().scl(950f);
+            a.getVelocity().set(tmp1V2);
+        }
+        return true;
     }
 
     public void update(AbstractAsteroid asteroid, float dt) {

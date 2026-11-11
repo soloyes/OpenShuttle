@@ -39,6 +39,10 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
     protected ParticleEmitter particleEmitter;
     /** Outward shove from an EMP pulse (world units / s), fading out. */
     public final Vector2 knock = new Vector2();
+    /** Corrosive temperament (tip 71): 0 hunter, 1 flanker, 2 lurker; -1 = not chosen yet. */
+    public int temper = -1;
+    /** A lurker has made its lunge. */
+    public boolean lunged;
 
     @Override
     public Vector2 getPosition() {
