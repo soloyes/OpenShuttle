@@ -127,6 +127,37 @@ no insets, no annotations, no frame, no white border.
 
 ---
 
+## 3. Слои стартового экрана (чтобы «Буран» покачивался)
+
+Нужно две картинки, обе делаются **правкой** готового фона меню. В новом чате приложи
+[art/ui/raw/menu.jpg](../../art/ui/raw/menu.jpg) (не образец из интро, а сам фон меню).
+Совмещу и вырежу фон сам. Главное, чтобы кадр не сдвинулся и не поменял размер.
+
+### `menu_clean.jpg` — фон без шаттла (реф: menu.jpg)
+
+```
+Edit the attached image. Remove the white space shuttle completely and fill the place where it
+was with the same dark starry space and faint dust, matching the surroundings. Where the shuttle
+covered the end of the ring station, continue the ring naturally. Keep everything else exactly
+as it is: same framing, same size, same position of the station and the glowing sphere, same
+colours, same stars. Do not add anything. No text, no frame.
+```
+
+### `menu_shuttle.jpg` — только шаттл на зелёном (реф: menu.jpg)
+
+```
+Edit the attached image. Keep only the white space shuttle, exactly as it is drawn: same size,
+same position in the frame, same angle, same outlines and details. Replace everything else
+(space, stars, the ring station, the glowing sphere, the dust) with a flat solid pure green
+background #00FF00, no gradient, no shadow, no glow. The shuttle must not touch or overlap
+anything green-coloured. No text, no frame.
+```
+
+Если в `menu_shuttle` на шаттле появилась зелень по краям или фон не ровно зелёный,
+перегенерируй. Сохрани обе в `art/ui/raw/`.
+
+---
+
 ## Уже готово (в игре)
 
 `menu.jpg`, `crew_commander / medic / scientist / mechanic / military.jpg`, `clear.jpg`,

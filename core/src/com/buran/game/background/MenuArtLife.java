@@ -126,9 +126,12 @@ class MenuArtLife implements Disposable {
     void update(float dt) {
         time += dt;
         // The shuttle floats: a slow rise and fall, a little drift and roll (image pixels, degrees).
-        bobY = 4.5f * MathUtils.sin(time * MathUtils.PI2 / 6f);
-        bobX = 1.5f * MathUtils.sin(time * MathUtils.PI2 / 9f + 0.7f);
-        bobRot = 0.7f * MathUtils.sin(time * MathUtils.PI2 / 7.5f + 1.3f);
+        // Without a separate shuttle layer it stays where it is painted.
+        if (shuttle != null) {
+            bobY = 4.5f * MathUtils.sin(time * MathUtils.PI2 / 6f);
+            bobX = 1.5f * MathUtils.sin(time * MathUtils.PI2 / 9f + 0.7f);
+            bobRot = 0.7f * MathUtils.sin(time * MathUtils.PI2 / 7.5f + 1.3f);
+        }
         for (int i = 0; i < DUST; i++) {
             // Spiral in: faster closer to the core, gone at its edge.
             float r = dustR[i];
