@@ -32,15 +32,22 @@ class MenuArtLife implements Disposable {
             {233, 597}, {956, 629}, {862, 723}, {822, 745}, {242, 882}, {149, 914}, {1374, 926},
             {1106, 979}, {728, 991},
     };
-    /** Buran: port wingtip (red), starboard wingtip (green), top of the fin (white strobe). */
-    private static final float[] PORT = {1538, 796};
-    private static final float[] STARBOARD = {1818, 677};
-    private static final float[] FIN = {1764, 574};
-    private static final float[][] NOZZLES = {{1722, 700}, {1748, 733}, {1713, 742}};
+    /** Buran: near wingtip (red), far wingtip (green), top of the fin (white strobe). */
+    private static final float[] PORT = {1538, 791};
+    private static final float[] STARBOARD = {1813, 677};
+    private static final float[] FIN = {1767, 578};
+    private static final float[][] NOZZLES = {{1708, 741}, {1742, 727}, {1750, 688}};
+    /** The cut-out shuttle (ui/menu_shuttle.png) and the painted-out space under it. */
+    private static final float BOX_L = 1440f, BOX_T = 550f, BOX_R = 1860f, BOX_B = 830f;
+    private static final float PIVOT_X = 1640f, PIVOT_Y = 690f;
 
     private static final int DUST = 46;
 
     private final TextureRegion core;
+    private final Texture shuttle;
+    private final Texture patch;
+    private final com.badlogic.gdx.math.Vector2 tmp = new com.badlogic.gdx.math.Vector2();
+    private float bobX, bobY, bobRot;
     private final Texture dot;
     private final Texture ring;
     private final float[] phase = new float[64];
@@ -59,6 +66,8 @@ class MenuArtLife implements Disposable {
         } else {
             core = null;
         }
+        shuttle = load("ui/menu_shuttle.png");
+        patch = shuttle == null ? null : load("ui/menu_patch.png");
         dot = radial(64, false);
         ring = radial(256, true);
         for (int i = 0; i < phase.length; i++) {
@@ -68,6 +77,16 @@ class MenuArtLife implements Disposable {
         for (int i = 0; i < DUST; i++) {
             spawnDust(i, MathUtils.random(140f, 560f));
         }
+    }
+
+    private static Texture load(String path) {
+        FileHandle f = Gdx.files.internal(path);
+        if (!f.exists()) {
+            return null;
+        }
+        Texture t = new Texture(f);
+        t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        return t;
     }
 
     /** A soft round spot, or a soft thin ring (for the wave). */
@@ -106,6 +125,10 @@ class MenuArtLife implements Disposable {
 
     void update(float dt) {
         time += dt;
+        // The shuttle floats: a slow rise and fall, a little drift and roll (image pixels, degrees).
+        bobY = 4.5f * MathUtils.sin(time * MathUtils.PI2 / 6f);
+        bobX = 1.5f * MathUtils.sin(time * MathUtils.PI2 / 9f + 0.7f);
+        bobRot = 0.7f * MathUtils.sin(time * MathUtils.PI2 / 7.5f + 1.3f);
         for (int i = 0; i < DUST; i++) {
             // Spiral in: faster closer to the core, gone at its edge.
             float r = dustR[i];
@@ -127,6 +150,10 @@ class MenuArtLife implements Disposable {
             batch.setColor(1f, 1f, 1f, 1f);
             batch.draw(core, px(x, w, CX) - size / 2f, py(y, h, CY) - size / 2f, size / 2f, size / 2f,
                     size, size, s, s, time * 4f);
+        }
+        if (patch != null) {
+            batch.setColor(1f, 1f, 1f, 1f);
+            batch.draw(patch, px(x, w, BOX_L), py(y, h, BOX_B), (BOX_R - BOX_L) * k, (BOX_B - BOX_T) * k);
         }
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
         // Core glow, pulsing.
@@ -162,25 +189,64 @@ class MenuArtLife implements Disposable {
             float a = 0.1f + 0.5f * Math.max(0f, t) * Math.max(0f, t);
             spot(batch, dot, x, y, w, h, STARS[i][0], STARS[i][1], 26f * k, 0.85f, 0.9f, 1f, a);
         }
-        // Buran: nav lights, a fin strobe, the engines idling warm.
+        // The shuttle, floating, in front of the dust and the wave.
+        if (shuttle != null) {
+            batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            batch.setColor(1f, 1f, 1f, 1f);
+            float bx = px(x, w, BOX_L) + bobX * k;
+            float by = py(y, h, BOX_B) + bobY * k;
+            float bw = (BOX_R - BOX_L) * k;
+            float bh = (BOX_B - BOX_T) * k;
+            batch.draw(shuttle, bx, by, (PIVOT_X - BOX_L) * k, (BOX_B - PIVOT_Y) * k, bw, bh, 1f, 1f, bobRot,
+                    0, 0, shuttle.getWidth(), shuttle.getHeight(), false, false);
+            batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
+        }
+        // Buran: nav lights (a sharp point and a small halo), a fin strobe, the engines idling warm.
         float blink = time % 1.6f;
-        if (blink < 0.14f) {
-            spot(batch, dot, x, y, w, h, PORT[0], PORT[1], 70f * k, 1f, 0.2f, 0.15f, 0.9f);
+        if (blink < 0.18f) {
+            light(batch, x, y, w, h, k, PORT, 1f, 0.25f, 0.2f);
         }
         float blink2 = (time + 0.8f) % 1.6f;
-        if (blink2 < 0.14f) {
-            spot(batch, dot, x, y, w, h, STARBOARD[0], STARBOARD[1], 70f * k, 0.3f, 1f, 0.45f, 0.9f);
+        if (blink2 < 0.18f) {
+            light(batch, x, y, w, h, k, STARBOARD, 0.35f, 1f, 0.5f);
         }
         float strobe = time % 2.4f;
-        if (strobe < 0.06f || (strobe > 0.18f && strobe < 0.24f)) {
-            spot(batch, dot, x, y, w, h, FIN[0], FIN[1], 90f * k, 1f, 1f, 1f, 0.95f);
+        if (strobe < 0.07f || (strobe > 0.19f && strobe < 0.26f)) {
+            light(batch, x, y, w, h, k, FIN, 1f, 1f, 1f);
         }
         for (int i = 0; i < NOZZLES.length; i++) {
-            float a = 0.22f + 0.06f * MathUtils.sin(time * 9f + phase[40 + i]) + 0.04f * MathUtils.sin(time * 23f + i);
-            spot(batch, dot, x, y, w, h, NOZZLES[i][0], NOZZLES[i][1], 60f * k, 1f, 0.6f, 0.3f, a);
+            float a = 0.2f + 0.06f * MathUtils.sin(time * 9f + phase[40 + i]) + 0.04f * MathUtils.sin(time * 23f + i);
+            ship(NOZZLES[i], x, y, w, h, k);
+            spot(batch, dot, tmp.x, tmp.y, 44f * k, 1f, 0.6f, 0.3f, a);
         }
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         batch.setColor(1f, 1f, 1f, 1f);
+    }
+
+    /** Where an image point of the shuttle is on screen now (it bobs and rolls). Result in tmp. */
+    private void ship(float[] p, float x, float y, float w, float h, float k) {
+        float cx = px(x, w, PIVOT_X);
+        float cy = py(y, h, PIVOT_Y);
+        tmp.set(px(x, w, p[0]) - cx, py(y, h, p[1]) - cy).rotateDeg(bobRot);
+        tmp.add(cx + bobX * k, cy + bobY * k);
+    }
+
+    private void light(SpriteBatch batch, float x, float y, float w, float h, float k, float[] p,
+                       float r, float g, float b) {
+        ship(p, x, y, w, h, k);
+        spot(batch, dot, tmp.x, tmp.y, 64f * k, r, g, b, 0.5f);
+        spot(batch, dot, tmp.x, tmp.y, 18f * k, 1f, 1f, 1f, 0.95f);
+        spot(batch, dot, tmp.x, tmp.y, 26f * k, r, g, b, 0.9f);
+    }
+
+    /** A spot at a screen point. */
+    private static void spot(SpriteBatch batch, Texture t, float sx, float sy, float size,
+                             float r, float g, float b, float a) {
+        if (a <= 0.005f) {
+            return;
+        }
+        batch.setColor(r, g, b, a);
+        batch.draw(t, sx - size / 2f, sy - size / 2f, size, size);
     }
 
     private static float px(float x, float w, float ix) {
@@ -207,5 +273,11 @@ class MenuArtLife implements Disposable {
         }
         dot.dispose();
         ring.dispose();
+        if (shuttle != null) {
+            shuttle.dispose();
+        }
+        if (patch != null) {
+            patch.dispose();
+        }
     }
 }
