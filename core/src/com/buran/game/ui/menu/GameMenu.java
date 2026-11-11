@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.buran.game.conf.MSConstants;
@@ -81,6 +82,9 @@ public class GameMenu extends Group implements MenuNav.Target {
         float ph = boxH() - HEAD - FOOT - 34f;
         if (Theme.portrait()) {
             list.setBox(px, py, pw, ph * 0.58f);
+        } else if (art() != null) {
+            // End screens: the picture on top of the left column, the choices under it.
+            list.setBox(px, py, pw * 0.5f, Math.min(ph, list.contentHeight() + 10f));
         } else {
             list.setBox(px, py, pw * 0.5f, ph);
         }
@@ -182,7 +186,69 @@ public class GameMenu extends Group implements MenuNav.Target {
         open();
     }
 
+    private static final java.util.Map<String, com.badlogic.gdx.graphics.Texture> ART = new java.util.HashMap<>();
+    private float artAge;
+
+    /** The picture for the end screens (ui/clear.jpg, ui/lost.jpg), loaded once, or null. */
+    private com.badlogic.gdx.graphics.Texture art() {
+        if (Theme.portrait() || (mode != Mode.CLEAR && mode != Mode.REPORT)) {
+            return null;
+        }
+        String path = mode == Mode.CLEAR ? "ui/clear.jpg" : "ui/lost.jpg";
+        if (!ART.containsKey(path)) {
+            com.badlogic.gdx.files.FileHandle f = com.badlogic.gdx.Gdx.files.internal(path);
+            com.badlogic.gdx.graphics.Texture t = null;
+            if (f.exists()) {
+                t = new com.badlogic.gdx.graphics.Texture(f);
+                t.setFilter(com.badlogic.gdx.graphics.Texture.TextureFilter.Linear,
+                        com.badlogic.gdx.graphics.Texture.TextureFilter.Linear);
+            }
+            ART.put(path, t);
+        }
+        return ART.get(path);
+    }
+
+    /** The picture in the left column above the choices: framed, fading in, slowly pushing in. */
+    private void drawArt(Batch batch, float a) {
+        com.badlogic.gdx.graphics.Texture t = art();
+        if (t == null) {
+            return;
+        }
+        float px = boxX() + 30f;
+        float pw = boxW() - 60f;
+        float py = boxY() + FOOT + 14f;
+        float ph = boxH() - HEAD - FOOT - 34f;
+        float x = px + 36f;
+        float w = pw * 0.5f - 36f;
+        float y0 = py + list.contentHeight() + 40f;
+        float top = py + ph;
+        float h = Math.min(w * 0.72f, top - y0);
+        if (h < 120f) {
+            return;
+        }
+        float y = top - h;
+        float in = com.badlogic.gdx.math.Interpolation.smooth.apply(Math.min(1f, artAge / 1.2f));
+        float zoom = 1.02f + 0.06f * Math.min(1f, artAge / 20f);
+        float sw = t.getWidth();
+        float sh = sw * h / w;
+        if (sh > t.getHeight()) {
+            sh = t.getHeight();
+            sw = sh * w / h;
+        }
+        sw /= zoom;
+        sh /= zoom;
+        // Keep the subject in view: the two cosmonauts sit right of centre in the clear picture.
+        float focus = mode == Mode.CLEAR ? 0.62f : 0.5f;
+        float sx = MathUtils.clamp(t.getWidth() * focus - sw / 2f, 0f, t.getWidth() - sw);
+        float sy = (t.getHeight() - sh) / 2f;
+        Theme.rect(batch, x - 3f, y - 3f, w + 6f, h + 6f, Theme.EDGE, a * in);
+        batch.setColor(1f, 1f, 1f, a * in);
+        batch.draw(t, x, y, w, h, (int) sx, (int) sy, (int) sw, (int) sh, false, false);
+        batch.setColor(Color.WHITE);
+    }
+
     private void open() {
+        artAge = 0f;
         layoutList();
         list.setVisible(true);
         list.focusFirst();
@@ -229,6 +295,7 @@ public class GameMenu extends Group implements MenuNav.Target {
     public void act(float delta) {
         super.act(delta);
         clock += delta;
+        artAge += delta;
         com.buran.game.campaign.SectorRun run = com.buran.game.campaign.Campaign.run();
         if (run != null && run.isClear() && !Rules.GAME_OVER) {
             showClear(run);
@@ -282,6 +349,7 @@ public class GameMenu extends Group implements MenuNav.Target {
                 : "MISSION CONTROL: NO SIGNAL";
         draw(batch, smallFont, sub, boxX() + 66f, boxY() + boxH() - 50f - headFont.getLineHeight() + 6f, Theme.DIM, a);
         drawSummary(batch, a);
+        drawArt(batch, a);
         super.draw(batch, parentAlpha * alpha);
     }
 

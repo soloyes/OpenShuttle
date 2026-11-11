@@ -412,6 +412,9 @@ public class GameScreen extends BaseScreen {
             post.holeSpin = holeTime;
             post.aspect = (float) Rules.VIEW_WIDTH / Rules.VIEW_HEIGHT;
             post.grey = PauseGroup.isPause() || Rules.GAME_OVER;
+            // End of sector (clear or lost): the world softens behind the report.
+            endBlur = ended() ? Math.min(1f, endBlur + dt / 0.8f) : 0f;
+            post.blur = endBlur;
             post.flash = Math.max(0f, flash);
             post.flashR = flashColor.r;
             post.flashG = flashColor.g;
@@ -456,12 +459,12 @@ public class GameScreen extends BaseScreen {
         }
 
         //BEGIN
-        if (!PauseGroup.isPause() && !Rules.GAME_OVER) {
+        if (!PauseGroup.isPause() && !ended()) {
             UILeftPanel.getInstance().render(batch);
             UIRightPanel.getInstance().render(batch);
         }
 
-        if (!Rules.GAME_OVER) {
+        if (!ended()) {
             if (!PauseGroup.isPause()) {
                 threatOverlay.renderEdges(batch, cameraHelper, Theme.font(32));
                 com.buran.game.ui.hud.CrewCard.render(batch, Theme.font(72), Theme.font(44));
@@ -475,7 +478,7 @@ public class GameScreen extends BaseScreen {
             }
         }
 
-        if (!PauseGroup.isPause()) {
+        if (!PauseGroup.isPause() && !ended()) {
             joystick.render(batch);
         }
 
@@ -502,13 +505,20 @@ public class GameScreen extends BaseScreen {
         batch.setProjectionMatrix(cameraHelper.combined);
         //BEGIN
         batch.begin();
-        if (!Rules.GAME_OVER) {
+        if (!ended()) {
             gameInfoSystem.render(batch);
         }
         batch.end();
 
         batch.setShader(null);
         stage.draw();
+    }
+
+    private float endBlur;
+
+    /** The sector is over (cleared or lost): only the report is on screen. */
+    private boolean ended() {
+        return Rules.GAME_OVER || (sectorRun != null && sectorRun.isClear());
     }
 
     public void update(float dt) {

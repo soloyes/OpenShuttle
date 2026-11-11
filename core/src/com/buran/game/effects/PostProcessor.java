@@ -30,6 +30,8 @@ public class PostProcessor implements Disposable {
         public float threshold = 0.78f;
         public float vignette = 0.55f;
         public float grain = 0.022f;
+        /** 0..1: a soft blur over the whole scene (end-of-sector screens). */
+        public float blur;
     }
 
     private final ShaderProgram bright;
@@ -70,15 +72,24 @@ public class PostProcessor implements Disposable {
         if (a != null) {
             a.dispose();
             b.dispose();
+            c.dispose();
+            d.dispose();
         }
         a = new FrameBuffer(Pixmap.Format.RGBA8888, bw, bh, false);
         b = new FrameBuffer(Pixmap.Format.RGBA8888, bw, bh, false);
-        for (FrameBuffer f : new FrameBuffer[]{a, b}) {
+        c = new FrameBuffer(Pixmap.Format.RGBA8888, bw, bh, false);
+        d = new FrameBuffer(Pixmap.Format.RGBA8888, bw, bh, false);
+        for (FrameBuffer f : new FrameBuffer[]{a, b, c, d}) {
             f.getColorBufferTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         }
         aRegion = flipped(a.getColorBufferTexture());
         bRegion = flipped(b.getColorBufferTexture());
+        cRegion = flipped(c.getColorBufferTexture());
+        dRegion = flipped(d.getColorBufferTexture());
     }
+
+    private FrameBuffer c, d;
+    private TextureRegion cRegion, dRegion;
 
     private static TextureRegion flipped(Texture t) {
         TextureRegion r = new TextureRegion(t);
@@ -94,7 +105,7 @@ public class PostProcessor implements Disposable {
         batch.disableBlending();
         batch.begin();
         if (shader == blur) {
-            boolean horizontal = target == b;
+            boolean horizontal = target == b || target == d;
             blur.setUniformf("u_dir", horizontal ? 1f / target.getWidth() : 0f, horizontal ? 0f : 1f / target.getHeight());
         } else if (shader == bright) {
             bright.setUniformf("u_threshold", currentThreshold);
@@ -124,6 +135,14 @@ public class PostProcessor implements Disposable {
         pass(batch, a, bRegion, blur);   // vertical back into a
         pass(batch, b, aRegion, blur);   // second, wider round
         pass(batch, a, bRegion, blur);
+        if (p.blur > 0.001f) {
+            // The whole scene, softened: copy down, then two blur rounds.
+            pass(batch, c, scene, null);
+            pass(batch, d, cRegion, blur);
+            pass(batch, c, dRegion, blur);
+            pass(batch, d, cRegion, blur);
+            pass(batch, c, dRegion, blur);
+        }
     }
 
     /** Draws the finished scene with the batch's current projection (world/UI camera). */
@@ -153,6 +172,13 @@ public class PostProcessor implements Disposable {
         batch.end();
         batch.enableBlending();
         batch.setShader(null);
+        if (p.blur > 0.001f) {
+            batch.begin();
+            batch.setColor(1f, 1f, 1f, Math.min(1f, p.blur) * 0.85f);
+            batch.draw(cRegion, x, y, w, h);
+            batch.setColor(1f, 1f, 1f, 1f);
+            batch.end();
+        }
     }
 
     @Override
@@ -163,6 +189,8 @@ public class PostProcessor implements Disposable {
         if (a != null) {
             a.dispose();
             b.dispose();
+            c.dispose();
+            d.dispose();
         }
     }
 }

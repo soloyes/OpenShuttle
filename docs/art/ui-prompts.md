@@ -41,15 +41,19 @@ Helmet and visor, face mostly hidden or in shadow, shoulder patch with a simple 
 | `crew_mechanic.png` | portrait of a Soviet cosmonaut mechanic in a scuffed white spacesuit, a wrench clipped to the suit, frost on the visor |
 | `crew_military.png` | portrait of a Soviet military cosmonaut in a darker spacesuit, stern posture, visor down, a red star shape on the patch |
 
-## 4. Codex plates (1:1) — dark scientific illustration on black
+## 4. Codex plates (1:1) — one object alone on black
+
+The words "scientific illustration" make Nano Banana draw a labelled poster with insets and
+captions (first tries are in `art/ui/raw/rejected/`). Ask for a single painted object instead,
+and repeat the ban on text at the end.
 
 | File | Prompt (add the style anchor at the end) |
 |---|---|
-| `codex_corrosive.png` | a drifting cloud of brownish acid dust in dark space, eating into a small metal panel, scientific illustration on black |
-| `codex_electric.png` | a pale blue ball of crackling electric discharge in dark space, thin arcs, scientific illustration on black |
-| `codex_radiation.png` | a sickly green glowing cloud with a faint shimmer, radiation in dark space, scientific illustration on black |
-| `codex_magnetic.png` | a violet swirl of magnetic field lines bending small metal debris around it in dark space, scientific illustration on black |
-| `codex_rift.png` | a small black hole with an accretion disc of sand and debris, light bending around it, scientific illustration on black |
+| `codex_corrosive.png` | a drifting cloud of brownish acid dust in dark space, eating into a small metal panel, one single object centred on plain black, no labels, no diagrams, no insets, no annotations, no captions |
+| `codex_electric.png` | a pale blue ball of crackling electric discharge in dark space, thin arcs, one single object centred on plain black, no labels, no diagrams, no insets, no annotations, no captions |
+| `codex_radiation.png` | a sickly green glowing cloud with a faint shimmer, radiation in dark space, one single object centred on plain black, no labels, no diagrams, no insets, no annotations, no captions |
+| `codex_magnetic.png` | a violet swirl of magnetic field lines bending small metal debris around it in dark space, one single object centred on plain black, no labels, no diagrams, no insets, no annotations, no captions |
+| `codex_rift.png` | a small black hole with an accretion disc of sand and debris, light bending around it, one single object centred on plain black, no labels, no diagrams, no insets, no annotations, no captions |
 
 ## 5. Endings / clear (16:9)
 
