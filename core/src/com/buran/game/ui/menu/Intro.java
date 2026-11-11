@@ -29,12 +29,12 @@ public class Intro extends Actor implements MenuNav.Target {
             "1991",
             "ONE MAN STAYED IN ORBIT WHILE THE COUNTRY BELOW HIM DISAPPEARED.",
             "BUT THE PROGRAM WENT ON.  IN SECRET.",
-            "FLIGHT 19.  OBJECT-19.  A LIGHT NO ONE COULD EXPLAIN.",
+            "A LIGHT IN ORBIT NO ONE COULD EXPLAIN.  THEY NAMED IT OBJECT-19 AND SENT BURAN TO IT.",
             "THE EXPERIMENT FAILED.",
             "THE CREW WAS SCATTERED ACROSS THE FIELD.",
             "AND AT THE CENTRE, THE RIFT OPENED.",
-            "BAIKONUR, THIS IS BURAN-19.  BAIKONUR... DO YOU COPY?",
-            "NO ONE ANSWERS.  BRING THEM HOME.  BUT WHERE IS HOME?",
+            "BAIKONUR, THIS IS BURAN-19.|BAIKONUR...|DO YOU COPY?",
+            "NO ONE ANSWERS.|BRING THEM HOME.|BUT WHERE IS HOME?",
     };
 
     /** Per panel: page, column, row, column span, row span on a 2x2 page grid. */
@@ -45,6 +45,21 @@ public class Intro extends Actor implements MenuNav.Target {
             {3, 0, 0, 2, 2},
             {4, 0, 0, 2, 2},
     };
+
+    /**
+     * Captions split by '|' appear part by part, in step with the voice: when each part starts,
+     * in seconds after the line begins (matches the pauses in intro12.mp3 and intro13.mp3).
+     */
+    private static final float[][] PART_AT = new float[13][];
+
+    static {
+        PART_AT[11] = new float[]{0f, 4.78f, 7.82f};
+        PART_AT[12] = new float[]{0f, 3.14f, 6.06f};
+    }
+
+    /** The intro has its own mix, outside the settings: the score under, the voice on top. */
+    private static final float MUSIC_VOLUME = 0.5f;
+    private static final float VOICE_VOLUME = 1f;
 
     private static final float FADE = 0.7f;
     private static final float VOICE_AT = 0.45f;
@@ -71,6 +86,7 @@ public class Intro extends Actor implements MenuNav.Target {
     /** Called once, when the intro actually starts (the page has shown the game). */
     private final Runnable onStart;
     private boolean begun;
+    private com.badlogic.gdx.audio.Music music;
 
     public Intro(Done done, Runnable onStart) {
         this.done = done;
@@ -137,10 +153,27 @@ public class Intro extends Actor implements MenuNav.Target {
             if (onStart != null) {
                 onStart.run();
             }
+            com.badlogic.gdx.assets.AssetManager am = com.buran.game.utils.Assets.getInstance().getAssetManager();
+            if (am.isLoaded(com.buran.game.conf.MSConstants.INTRO_SONG)) {
+                music = am.get(com.buran.game.conf.MSConstants.INTRO_SONG, com.badlogic.gdx.audio.Music.class);
+                music.setLooping(false);
+                music.setVolume(MUSIC_VOLUME);
+                if (!music.isPlaying()) {
+                    music.play();
+                }
+            }
+        }
+        if (music != null) {
+            // Its own steady level: not the music slider, not ducked under the voice.
+            music.setLooping(false);
+            music.setVolume(MUSIC_VOLUME * (ending ? MathUtils.clamp(1f - endTime / 1.2f, 0f, 1f) : 1f));
         }
         if (ending) {
             endTime += delta;
             if (endTime > 1.2f) {
+                if (music != null) {
+                    music.stop();
+                }
                 dispose();
                 remove();
                 MenuNav.clear(this);
@@ -177,7 +210,7 @@ public class Intro extends Actor implements MenuNav.Target {
         pageFade = Math.min(1f, pageFade + delta / FADE);
         panelTime += delta;
         if (panelTime >= VOICE_AT && panelTime - delta < VOICE_AT) {
-            Radio.play(String.format("intro%02d", current + 1));
+            Radio.play(String.format("intro%02d", current + 1), VOICE_VOLUME);
         }
         if (panelTime > VOICE_AT + 0.3f && !Radio.isPlaying() && voiceEnded < 0f) {
             voiceEnded = panelTime;
@@ -275,22 +308,50 @@ public class Intro extends Actor implements MenuNav.Target {
         batch.setColor(Color.WHITE);
     }
 
-    /** The caption in a dark plate at the panel's lower left, typed in. */
+    private final com.badlogic.gdx.graphics.g2d.GlyphLayout layout = new com.badlogic.gdx.graphics.g2d.GlyphLayout();
+
+    /** What of the caption is on screen now: parts that have started, the newest one typed in. */
+    private String shownCaption(int i) {
+        float t = panelTime - 0.3f;
+        float[] at = PART_AT[i];
+        if (at == null) {
+            String all = CAPTION[i].replace("|", "  ");
+            return all.substring(0, MathUtils.clamp((int) (t * TYPE_SPEED), 0, all.length()));
+        }
+        String[] parts = CAPTION[i].split("\\|");
+        StringBuilder b = new StringBuilder();
+        for (int k = 0; k < parts.length; k++) {
+            float start = k == 0 ? 0f : VOICE_AT + at[Math.min(k, at.length - 1)];
+            if (t < start) {
+                break;
+            }
+            if (k > 0) {
+                b.append("  ");
+            }
+            b.append(parts[k], 0, MathUtils.clamp((int) ((t - start) * TYPE_SPEED), 0, parts[k].length()));
+        }
+        return b.toString();
+    }
+
+    /** The caption in a dark plate at the panel's lower left, typed in, wrapped to the panel. */
     private void captionPlate(Batch batch, BitmapFont font, String text, float x, float y, float w, float a) {
-        int n = MathUtils.clamp((int) ((panelTime - 0.3f) * TYPE_SPEED), 0, text.length());
-        if (n <= 0 || a <= 0.01f) {
+        String shown = shownCaption(current);
+        if (shown.isEmpty() || a <= 0.01f) {
             return;
         }
-        String shown = text.substring(0, n);
-        float full = Theme.width(font, text);
-        float maxW = w - 120f;
-        float tw = Math.min(full, maxW);
-        float ph = font.getCapHeight() * 2.6f;
+        String full = text.replace("|", "  ");
+        float maxW = w - 144f;
+        layout.setText(font, full, Theme.TEXT, maxW, com.badlogic.gdx.utils.Align.left, true);
+        float tw = Math.min(layout.width, maxW);
+        float ph = font.getCapHeight() * 1.6f + layout.height;
         float px = x + 40f;
         float py = y + 40f;
         Theme.rect(batch, px - 2f, py - 2f, tw + 64f + 4f, ph + 4f, Theme.EDGE, a * 0.9f);
         Theme.rect(batch, px, py, tw + 64f, ph, Theme.BODY_LO, a * 0.9f);
-        Theme.text(batch, font, shown, px + 32f, py + ph / 2f + font.getCapHeight() / 2f, Theme.TEXT, a);
+        Color old = font.getColor().cpy();
+        font.setColor(Theme.TEXT.r, Theme.TEXT.g, Theme.TEXT.b, a);
+        font.draw(batch, shown, px + 32f, py + ph - font.getCapHeight() * 0.8f, tw, com.badlogic.gdx.utils.Align.left, true);
+        font.setColor(old);
     }
 
     private void dispose() {

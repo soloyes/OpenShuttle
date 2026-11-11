@@ -249,7 +249,7 @@ public class BoomBox {
         for (int i = 0; i < musicArray.size; i++) {
             // Only songs follow the music slider; looping effects (hum, laser, roar) are effects.
             String name = Assets.getInstance().getAssetManager().getAssetFileName(musicArray.get(i));
-            if (name != null && name.startsWith(MSConstants.SONG_FOLDER)) {
+            if (name != null && name.startsWith(MSConstants.SONG_FOLDER) && !name.equals(MSConstants.INTRO_SONG)) {
                 musicArray.get(i).setVolume(volume);
             }
         }

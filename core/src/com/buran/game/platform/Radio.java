@@ -19,14 +19,24 @@ public final class Radio {
     /** Web audio starts asynchronously: the line counts as running only once heard playing. */
     private static boolean started;
     private static long openedAt;
+    private static boolean fixed;
 
     private Radio() {
     }
 
     public static void play(String id) {
+        play(id, -1f);
+    }
+
+    /**
+     * A line at a fixed volume (0..1), outside the settings and without ducking the songs: the
+     * intro has its own mix. A negative volume means the usual radio behaviour.
+     */
+    public static void play(String id, float volume) {
         stop();
         SettingsDAO s = Profiles.getSettings();
-        if (!s.isEffects()) {
+        fixed = volume >= 0f;
+        if (!fixed && !s.isEffects()) {
             return;
         }
         FileHandle f = Gdx.files.internal("sound/radio/" + id + ".mp3");
@@ -40,7 +50,7 @@ public final class Radio {
             current = null;
             return;
         }
-        current.setVolume(Math.max(0.4f, Math.min(1f, s.overallEffectsVolume() * 1.8f)));
+        current.setVolume(fixed ? volume : Math.max(0.4f, Math.min(1f, s.overallEffectsVolume() * 1.8f)));
         current.play();
         paused = false;
         started = false;
@@ -89,6 +99,9 @@ public final class Radio {
     }
 
     private static void duck(boolean on) {
+        if (fixed) {
+            return;
+        }
         SettingsDAO s = Profiles.getSettings();
         if (s.isMusic()) {
             new BoomBox().setAllMusicVolume(s.overallMusicVolume() * (on ? DUCK : 1f));

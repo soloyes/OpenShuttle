@@ -42,11 +42,12 @@ def main():
     ap.add_argument("--cfg", type=float, default=0.4)
     ap.add_argument("--out", default=OUT)
     ap.add_argument("--dry", action="store_true", help="also keep the unfiltered wav")
+    ap.add_argument("--lines", default=LINES, help="tsv of id<TAB>text (default: lines.tsv)")
     a = ap.parse_args()
     device = "mps" if torch.backends.mps.is_available() else "cpu"
     model = ChatterboxTTS.from_pretrained(device=device)
     os.makedirs(a.out, exist_ok=True)
-    with open(LINES, encoding="utf-8") as f:
+    with open(a.lines, encoding="utf-8") as f:
         rows = [l.rstrip("\n").split("\t", 1) for l in f if l.strip()]
     for line_id, text in rows:
         if a.only and not line_id.startswith(a.only):

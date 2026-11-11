@@ -630,7 +630,7 @@ public class MainMenu extends Group implements MenuNav.Target {
         float mx = Theme.marginX();
         float titleY = portrait ? Rules.WORLD_HEIGHT * 0.90f : Rules.WORLD_HEIGHT * 0.80f;
         if (!(portrait && open != Panel.NONE)) {
-            drawText(batch, labelFont, "ORBITAL SHIP 11F35  -  FLIGHT 19", mx + 6, titleY + 44f, Theme.HEAD, parentAlpha);
+            drawText(batch, labelFont, "ORBITAL SHIP 11F35  -  OBJECT-19 MISSION", mx + 6, titleY + 44f, Theme.HEAD, parentAlpha);
             drawText(batch, titleFont, "BURAN-19", mx, titleY, Theme.TEXT, parentAlpha);
             drawText(batch, subFont, "THE LAST FLIGHT  -  1991", mx + 6, titleY - titleFont.getLineHeight() + 10,
                     Theme.DIM, parentAlpha);
