@@ -50,6 +50,9 @@ public class MenuSpace implements Disposable {
     public void update(float dt) {
         time += dt;
         space.update(dt);
+        if (life != null) {
+            life.update(dt);
+        }
         // A slow, slightly curving drift.
         camera.position.x += (38f + 10f * MathUtils.sin(time * 0.05f)) * dt;
         camera.position.y += (14f + 8f * MathUtils.cos(time * 0.04f)) * dt;
@@ -60,6 +63,7 @@ public class MenuSpace implements Disposable {
     /** Painted key art behind the menu (assets/ui/menu.jpg); the procedural sky if it is missing. */
     private com.badlogic.gdx.graphics.Texture art;
     private boolean artTried;
+    private MenuArtLife life;
 
     private com.badlogic.gdx.graphics.Texture art() {
         if (!artTried) {
@@ -69,6 +73,7 @@ public class MenuSpace implements Disposable {
                 art = new com.badlogic.gdx.graphics.Texture(f);
                 art.setFilter(com.badlogic.gdx.graphics.Texture.TextureFilter.Linear,
                         com.badlogic.gdx.graphics.Texture.TextureFilter.Linear);
+                life = new MenuArtLife();
             }
         }
         return art;
@@ -86,6 +91,9 @@ public class MenuSpace implements Disposable {
         float y = (H - h) / 2f + (h - H) * 0.3f * MathUtils.cos(time * 0.04f);
         batch.setColor(1f, 1f, 1f, 1f);
         batch.draw(t, x, y, w, h);
+        if (life != null) {
+            life.draw(batch, x, y, w, h);
+        }
         // The menu sits on the left: let that side sink into the dark.
         int bands = 24;
         float span = W * 0.5f;
@@ -127,6 +135,9 @@ public class MenuSpace implements Disposable {
         vignette.dispose();
         if (art != null) {
             art.dispose();
+        }
+        if (life != null) {
+            life.dispose();
         }
     }
 }
