@@ -61,6 +61,44 @@ public class TelemetryHud {
     private static final Color CARGO = Color.valueOf("ffb547ff");
     private final BitmapFont small;
 
+    private static final Color[] RAM_COLORS = {
+            Color.valueOf("c8a46eff"), Color.valueOf("6cc24aff"), Color.valueOf("f2c230ff"), Color.valueOf("e5533dff"),
+    };
+
+    /**
+     * The ram shield: its button, four charge segments in the level colours (tan, green,
+     * yellow, red) and a lamp that says whether it is on.
+     */
+    private void ramGauge(SpriteBatch batch, Standing st, float x, float cy, boolean blink) {
+        float ram = st.getRamPower();
+        boolean on = Buran.ramOn;
+        float age = Buran.ramSwitchAge;
+        boolean denied = Buran.ramDenied && age < 0.6f;
+        x += Theme.rich(batch, small, "{A}", x, cy, HEAD, 1f);
+        Color lc = on ? Theme.TEXT : HEAD;
+        textL(batch, small, "RAM", x, cy + small.getCapHeight() / 2f, denied && blink ? ALERT : lc);
+        x += Theme.width(small, "RAM") + 22f;
+        float sw = 44f;
+        float sh = 18f;
+        for (int i = 0; i < 4; i++) {
+            float fill = com.badlogic.gdx.math.MathUtils.clamp(ram - i, 0f, 1f);
+            Color c = RAM_COLORS[i];
+            Theme.rect(batch, x, cy - sh / 2f, sw, sh, Theme.TRACK, 1f);
+            if (fill > 0f) {
+                float a = on ? 0.95f : 0.45f;
+                if (on && age < 0.4f) {
+                    a = 1f;
+                }
+                Theme.rect(batch, x + 2f, cy - sh / 2f + 2f, (sw - 4f) * fill, sh - 4f, c, a);
+            }
+            x += sw + 6f;
+        }
+        x += 14f;
+        Color lamp = on ? RAM_COLORS[Math.max(0, Math.min(3, (int) ram - 1))] : HEAD;
+        Theme.lamp(batch, x, cy - 7f, lamp, on, 1f);
+        textL(batch, small, on ? "ON" : "OFF", x + 30f, cy + small.getCapHeight() / 2f, on ? Theme.TEXT : HEAD);
+    }
+
     /**
      * One physical instrument panel along the bottom: life support | cargo drum | propulsion.
      * The step progress runs along its top edge. Always present, like a real console;
@@ -85,6 +123,7 @@ public class TelemetryHud {
         textL(batch, small, "LIFE SUPPORT", lx, headY, HEAD);
         Color scoreColor = st.isScoreAlertRadiationAnomaly() && blink ? ALERT : HEAD;
         textR(batch, small, "SCORE  " + formatScore(st.getScoreView()), lx + lw, headY, scoreColor);
+        ramGauge(batch, st, lx + Theme.width(small, "LIFE SUPPORT") + 70f, headY - small.getCapHeight() / 2f, blink);
         bar(batch, "SHIELD", st.getLifeShield(), st.getMaxLifeShield(), SHIELD, lx, headY - 58f, lw, false, false);
         bar(batch, "HULL", st.getHp(), st.getMaxHp(), HULL, lx, headY - 158f, lw, st.isHpAlert() && blink, false);
 
@@ -148,7 +187,7 @@ public class TelemetryHud {
         } else {
             textR(batch, small, "x" + cur.getCount(), cx + big / 2f - 10f, by + small.getLineHeight() - 2f, Theme.TEXT);
             if (cur.isActive()) {
-                String k = com.buran.game.ui.menu.Hints.button("A", "SPACE");
+                String k = com.buran.game.ui.menu.Hints.button("X", "X");
                 String n = cur.getSticker().name();
                 Theme.hint(batch, small, k, n, cx - Theme.hintWidth(small, k, n) / 2f, keyCy, CARGO, 1f);
             } else {
@@ -405,9 +444,8 @@ public class TelemetryHud {
         if (usesCargoBay()) {
             cargoBay(batch);
             // Where the way out is: bottom right, quiet.
-            String hint = com.buran.game.input.Gamepad.get().hasController() ? "B  -  PAUSE" : "ESC  -  PAUSE";
-            layout.setText(label, hint);
-            text(batch, label, hint, W - Rules.SAFE_X - layout.width, Rules.SAFE_Y + label.getCapHeight(), Theme.FAINT, 1f);
+            String hint = "{B} PAUSE";
+            Theme.rich(batch, label, hint, W - Rules.SAFE_X - Theme.richWidth(label, hint), Rules.SAFE_Y + label.getCapHeight() / 2f, Theme.FAINT, 1f);
         }
 
         shelterStatus(batch, blink);
@@ -516,9 +554,14 @@ public class TelemetryHud {
         String name = cur.getSticker().name();
         text(batch, label, name, x, y + size + label.getLineHeight() + 10f, Theme.TEXT, 1f);
         float hx = x + size + 30f;
-        text(batch, label, cur.isActive() ? "A  USE" : "RECHARGING", hx, y + size - 20f, cur.isActive() ? Theme.OK : Theme.FAINT, 1f);
+        float cy0 = y + size - 20f - label.getCapHeight() / 2f;
+        if (cur.isActive()) {
+            Theme.rich(batch, label, "{X} USE", hx, cy0, Theme.OK, 1f);
+        } else {
+            text(batch, label, "RECHARGING", hx, y + size - 20f, Theme.FAINT, 1f);
+        }
         if (sg.getSelectorCount() > 1) {
-            text(batch, label, "LB / RB  SWITCH", hx, y + size - 20f - label.getLineHeight() - 10f, Theme.DIM, 1f);
+            Theme.rich(batch, label, "{LB} {RB} SWITCH", hx, cy0 - label.getLineHeight() - 30f, Theme.DIM, 1f);
         }
     }
 

@@ -146,6 +146,44 @@ flat solid pure green #00FF00, no gradient, no shadow, no glow, no white border.
 
 ---
 
+## 4. Кодекс: груз (квадрат, 1:1)
+
+Так же, как раздел 2: новый чат, реф [p08.jpg](../../art/intro/raw/p08.jpg), промпт целиком.
+
+### `codex_crate.jpg`
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Square 1:1 image. One single small Soviet metal cargo crate drifting in
+space, olive-grey painted steel, rivets, scuffed edges, a stencil-free blank lid, a little frost,
+one amber light glint, centred on plain black space. Only this one object. No station, no
+shuttle, no Earth. No text, no letters, no numbers, no labels, no diagrams, no insets, no frame,
+no white border.
+```
+
+### `codex_storage.jpg`
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Square 1:1 image. One single large cylindrical Soviet storage module
+drifting in space, ribbed metal shell, a round hatch on its side, small handles, soft amber
+light from a seam, centred on plain black space. Only this one object. No station, no shuttle,
+no Earth. No text, no letters, no numbers, no labels, no diagrams, no insets, no frame, no white
+border.
+```
+
+### `codex_fuel.jpg`
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Square 1:1 image. One single spherical Soviet fuel tank drifting in
+space, white insulated skin with dark seams, two valves and a short torn pipe, a faint vapour
+trail, centred on plain black space. Only this one object. No station, no shuttle, no Earth.
+No text, no letters, no numbers, no labels, no diagrams, no insets, no frame, no white border.
+```
+
+---
+
 ## Уже готово (в игре)
 
 `menu.jpg`, `crew_commander / medic / scientist / mechanic / military.jpg`, `clear.jpg`,

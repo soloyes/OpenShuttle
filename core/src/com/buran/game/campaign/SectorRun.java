@@ -108,6 +108,9 @@ public final class SectorRun {
         if (Rules.DEBUG_CARD) {
             com.buran.game.ui.hud.CrewCard.show(com.buran.game.labelsticker.Sticker.MEDIC, "MEDIC", "HULL REPAIRED");
         }
+        if (Rules.DEBUG_RAM) {
+            Standing.getInstance().changeRamPower(3.2f - Standing.getInstance().getRamPower());
+        }
         if (Rules.DEBUG_FAST_GOAL) {
             baseline -= sector.target;
         } else if (Rules.DEBUG_THIRD) {
@@ -241,7 +244,9 @@ public final class SectorRun {
             crewStage = 1;
             Standing st = Standing.getInstance();
             st.changeRamPower(2.5f - st.getRamPower());
-            say("HULL SHIELD CHARGED  -  THE NOSE AND TAIL WILL KILL THEM NOW. TAKE THEM IN OVER THE WINGS", 9f);
+            com.buran.game.player.Buran.ramOn = true;
+            com.buran.game.player.Buran.ramSwitchAge = 0f;
+            say("RAM SHIELD ON  -  NOSE AND TAIL KILL NOW. TAKE THEM OVER THE WINGS, OR {A} SWITCH IT OFF", 10f);
         }
         AstronautEmitter e = (AstronautEmitter) ObjectPool.EMITTERS.get(Astronaut.class);
         int out = 0;
@@ -498,7 +503,8 @@ public final class SectorRun {
         }
         text(batch, font, "RADIO  -  SECTOR " + sector.code(), tx, y - 30f, Theme.ACCENT, a, false);
         if (sector.lesson != null) {
-            text(batch, font, sector.lesson, W / 2f, y - h - 50f, Theme.OK, a, true);
+            float lw = Theme.richWidth(font, sector.lesson);
+            Theme.rich(batch, font, sector.lesson, W / 2f - lw / 2f, y - h - 50f - font.getCapHeight() / 2f, Theme.OK, a);
         }
         // Continue prompt once the message is fully on screen.
         if (ready) {

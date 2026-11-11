@@ -35,51 +35,67 @@ public class RamShield {
         this.scaleX = this.scaleY = 1.0f;
     }
 
+    private float time;
+
     public void blink(float alpha) {
-        float ramPower = Standing.getInstance().getRamPower();
-        if (ramPower <= PlayerInteractionLevels.TAN.getLevel()) {
-            this.alpha = 0.0f;
-        } else {
-            this.alpha = alpha;
+        if (!Buran.ramOn) {
+            return;
         }
+        this.alpha = Math.max(this.alpha, alpha);
     }
 
+    /**
+     * On: glows in the level's colour and breathes. Switching on: a bright flash that settles
+     * onto the hull. Switching off: the field swells and dissolves.
+     */
     public void render(SpriteBatch batch) {
-        tmpColor.a = alpha;
+        float age = Buran.ramSwitchAge;
+        float scale = 1f;
+        float a;
+        if (Buran.ramOn) {
+            float breathe = 0.36f + 0.12f * (float) Math.sin(time * 4f);
+            a = Math.max(breathe, alpha);
+            scale = 1f + 0.03f * (float) Math.sin(time * 2.2f);
+            if (age < 0.4f) {
+                float k = age / 0.4f;
+                a = Math.max(a, 1f - k * 0.6f);
+                scale = 1.3f - 0.3f * k;
+            }
+        } else if (age < 0.45f) {
+            float k = age / 0.45f;
+            a = 0.6f * (1f - k);
+            scale = 1f + 0.35f * k;
+        } else {
+            return;
+        }
+        if (Buran.ramDenied && age < 0.5f) {
+            tmpColor.set(0.6f, 0.6f, 0.65f, 1f);
+        }
+        tmpColor.a = a;
         batch.setColor(tmpColor);
         batch.draw(
                 texture,
                 Buran.position.x - width / 2, Buran.position.y - height / 2,
                 width / 2, height / 2,
                 width, height,
-                scaleX, scaleY,
+                scaleX * scale, scaleY * scale,
                 Buran.angle
         );
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     public void update(float dt) {
-        fromAlpha += dt;
-        if (fromAlpha >= 0.2f) {
-            fromAlpha = 0.2f;
-        }
-
+        time += dt;
         float ramPower = Standing.getInstance().getRamPower();
-        if (ramPower < PlayerInteractionLevels.TAN.getLevel()) {
-            fromAlpha = 0.0f;
-        } else if (ramPower >= PlayerInteractionLevels.RED.getLevel()) {
+        if (ramPower >= PlayerInteractionLevels.RED.getLevel()) {
             tmpColor.set(Color.RED);
         } else if (ramPower >= PlayerInteractionLevels.YELLOW.getLevel()) {
             tmpColor.set(Color.YELLOW);
         } else if (ramPower >= PlayerInteractionLevels.GREEN.getLevel()) {
             tmpColor.set(Color.GREEN);
-        } else if (ramPower >= PlayerInteractionLevels.TAN.getLevel()) {
+        } else {
             tmpColor.set(Color.TAN);
         }
-
-        alpha -= dt;
-        if (alpha <= fromAlpha) {
-            alpha = fromAlpha;
-        }
+        alpha = Math.max(0f, alpha - dt * 1.5f);
     }
 }

@@ -20,7 +20,7 @@ import com.buran.game.ui.menu.Hints;
 public class TutorialPrompts {
     private float time;
     private boolean steered;
-    private final float[] shown = new float[3];
+    private final float[] shown = new float[4];
 
     /** Seconds left of the "don't ram, burn it" lesson after a rock hit the hull. */
     private static float ramLesson;
@@ -41,6 +41,15 @@ public class TutorialPrompts {
         SelectorGroup.switchedOnce = false;
     }
 
+    private static boolean ramTried;
+    private String said;
+    private float sayTime;
+
+    private void say(String line) {
+        said = line;
+        sayTime = 2.5f;
+    }
+
     public void update(float dt) {
         time += dt;
         ramLesson = Math.max(0f, ramLesson - dt);
@@ -54,8 +63,21 @@ public class TutorialPrompts {
         boolean fly = live && run != null && run.sector().number == 1 && !steered;
         boolean use = live && c != null && c.isActive() && !SelectorGroup.usedOnce;
         boolean sw = live && sg.getSelectorCount() >= 2 && SelectorGroup.usedOnce && !SelectorGroup.switchedOnce;
-        boolean[] want = {fly, use, sw};
-        for (int i = 0; i < 3; i++) {
+        // The ram shield: offered once there is charge for it and it has never been switched.
+        boolean ram = live && !Buran.ramOn && !ramTried
+                && com.buran.game.player.Standing.getInstance().getRamPower() >= 1f;
+        if (Buran.ramSwitchAge < 0.05f && !Buran.ramDenied) {
+            ramTried = true;
+        }
+        if (Buran.ramDenied && Buran.ramSwitchAge < 0.05f) {
+            say("RAM SHIELD EMPTY  -  PULL IN METAL TO CHARGE IT");
+        }
+        if (Gamepad.get().takePulseDenied()) {
+            say("EMP NEEDS SHIELD  -  WAIT FOR IT TO RECHARGE");
+        }
+        sayTime = Math.max(0f, sayTime - dt);
+        boolean[] want = {fly, use, sw, ram};
+        for (int i = 0; i < want.length; i++) {
             shown[i] = MathUtils.clamp(shown[i] + (want[i] ? dt * 4f : -dt * 4f), 0f, 1f);
         }
     }
@@ -90,12 +112,20 @@ public class TutorialPrompts {
         }
         Selector c = SelectorGroup.getInstance().getCenter();
         if (shown[1] > 0f && c != null) {
-            Prompt.draw(batch, font, Hints.button("A", "SPACE"), "USE " + c.getSticker().name(), x, y, shown[1] * pulse);
+            Prompt.draw(batch, font, Hints.button("X", "X"), "USE " + c.getSticker().name(), x, y, shown[1] * pulse);
             y -= 130f;
         }
         if (shown[2] > 0f) {
             String[] keys = Hints.pad() ? new String[]{"LB", "RB"} : new String[]{"Q", "E"};
             Prompt.draw(batch, font, keys, "SWITCH ITEM", x, y, shown[2] * pulse);
+            y -= 130f;
+        }
+        if (shown[3] > 0f) {
+            Prompt.draw(batch, font, Hints.button("A", "SPACE"), "RAM SHIELD", x, y, shown[3] * pulse);
+            y -= 130f;
+        }
+        if (sayTime > 0f && said != null) {
+            Prompt.text(batch, font, said, x, y, Math.min(1f, sayTime));
         }
     }
 

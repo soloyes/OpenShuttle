@@ -557,6 +557,15 @@ public final class Standing {
         maxHp += Rules.INCREMENT_OF_SINGLE_BAR * Sticker.MEDIC.getCoefficient();
     }
 
+    /** Spends part of the life shield (the EMP pulse); false and nothing spent if there is not enough. */
+    public boolean spendLifeShield(float amount) {
+        if (lifeShield < amount) {
+            return false;
+        }
+        lifeShield -= amount;
+        return true;
+    }
+
     public void incrementMaxLifeShield() {
         maxLifeShield += Rules.INCREMENT_OF_SINGLE_BAR * Sticker.MECHANIC.getCoefficient();
     }

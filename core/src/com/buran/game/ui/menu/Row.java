@@ -361,7 +361,12 @@ public abstract class Row extends Actor {
             float textY = getY() + getHeight() / 2f + font.getCapHeight() / 2f;
             Color old = font.getColor().cpy();
             font.setColor(Theme.HEAD.r, Theme.HEAD.g, Theme.HEAD.b, a);
-            font.draw(batch, label, getX() + 36f, textY);
+            if (label.indexOf('{') >= 0) {
+                // A control row: button glyphs instead of their names.
+                Theme.rich(batch, font, label, getX() + 36f, getY() + getHeight() / 2f, Theme.HEAD, a);
+            } else {
+                font.draw(batch, label, getX() + 36f, textY);
+            }
             if (value != null) {
                 font.setColor(Theme.TEXT.r, Theme.TEXT.g, Theme.TEXT.b, a);
                 layout.setText(font, value);

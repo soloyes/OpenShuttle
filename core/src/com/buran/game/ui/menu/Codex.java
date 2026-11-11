@@ -77,7 +77,7 @@ public class Codex {
     private static final float TYPE_SPEED = 55f;
     private static final float SCAN_TIME = 1.6f;
     private static final float CYCLE = 4.5f;
-    private static final float DEMO_PERIOD = 5f;
+    private static final float DEMO_PERIOD = 6f;
     private static final Color BLUE = Color.valueOf("5fd7ffff");
     private static final Color[] CORROSIVE = {Color.TAN, Color.GREEN, Color.YELLOW, Color.RED};
 
@@ -98,6 +98,7 @@ public class Codex {
     private final TextureRegion crate;
     private final TextureRegion shieldCrate;
     private final TextureRegion question;
+    private final TextureRegion electric;
 
     public Codex() {
         TextureRegion[] astronaut = Regions.split(region(PaintConstants.ASTRONAUT_REGION), 1, 5, 5);
@@ -112,6 +113,7 @@ public class Codex {
         crate = region(PaintConstants.CRATE_REGION);
         shieldCrate = region(PaintConstants.SHIELD_CRATE_REGION);
         question = icons.getRegion(Sticker.PATTERN);
+        electric = sheet(PaintConstants.ANOMALY_ELECTRIC_REGION, 4, 4, PaintConstants.ANOMALY_ELECTRIC_FRAMES)[0];
 
         // ---------------------------------------------------------------- threats
         Group threats = group("THREATS");
@@ -125,7 +127,7 @@ public class Codex {
         add(threats, new Entry("ELECTRIC ANOMALY", "THREAT",
                 sheet(PaintConstants.ANOMALY_ELECTRIC_REGION, 4, 4, PaintConstants.ANOMALY_ELECTRIC_FRAMES), 16f,
                 "A fast discharge that never fades on its own. It hunts at high speed and knocks out radar and "
-                        + "laser. Let it come close and fire the EMP pulse (Y), or send rockets after it."));
+                        + "laser. Let it come close and fire the EMP pulse, or send rockets after it."));
         add(threats, new Entry("RADIATION ANOMALY", "THREAT",
                 sheet(PaintConstants.ANOMALY_RADIATION_REGION, 4, 4, PaintConstants.ANOMALY_RADIATION_FRAMES), 14f,
                 "Sticks to the hull and feeds on your score while it holds on. Burns out after two minutes. "
@@ -179,6 +181,11 @@ public class Codex {
         add(cargo, new Entry("FUEL TANK", "CARGO", new TextureRegion[]{region(PaintConstants.FUEL_REGION)}, 0f,
                 "Refuels the Buran. A gold tank fills it to the brim. Breaking one hurts the hull."));
 
+        for (Entry e : cargo.entries()) {
+            e.plate = e.name.equals("CRATE") ? "ui/codex_crate.jpg"
+                    : e.name.equals("STORAGE") ? "ui/codex_storage.jpg" : "ui/codex_fuel.jpg";
+        }
+
         // ---------------------------------------------------------------- markings
         Group marks = group("MARKINGS");
         Entry sealed = add(marks, new Entry("SEALED", "MARKING ON CRATES AND STORAGES", new TextureRegion[]{crate}, 0f,
@@ -194,10 +201,10 @@ public class Codex {
         Group items = group("ITEMS");
         item(items, Sticker.FREEZE, "Every anomaly stops hunting for ten seconds.", this::demoFreeze);
         item(items, Sticker.DEGRADE, "All corrosive anomalies drop to the weakest level.", this::demoDegrade);
-        item(items, Sticker.BOOST, "Triples engine speed for a moment. Above ramming speed whatever you hit breaks.", this::demoBoost);
+        item(items, Sticker.BOOST, "Triples engine speed for a moment. At that speed rocks and corrosive anomalies break on the hull. Electric ones do not: they hurt.", this::demoBoost);
         item(items, Sticker.REPAIR, "Restores hull. Stronger with medics aboard.", this::demoRepair);
         item(items, Sticker.SHIELD, "Shields every container from asteroids and fills the ram shield.", this::demoShield);
-        item(items, Sticker.TRASH, "Points, and a volley of asteroids launched around the ship.", this::demoTrash);
+        item(items, Sticker.TRASH, "Points the moment you take it. Three seconds later the spot where you took it bursts into a volley of rocks: be far away.", this::demoTrash);
         item(items, Sticker.SPLASH, "A shockwave that pops corrosive anomalies across the screen.", this::demoSplash);
         item(items, Sticker.SCAN, "Reveals what sealed boxes hold for thirty seconds.", this::demoScan);
         item(items, Sticker.ROCKETS, "Charges for three seconds, then launches one homing rocket per anomaly in range.", this::demoRockets);
@@ -220,15 +227,16 @@ public class Codex {
 
     private void crew(Group g, String name, TextureRegion frame, Sticker s, String text) {
         Entry e = add(g, new Entry(name, "CREW", new TextureRegion[]{frame}, 0f,
-                text + " Fly close and the tractor beam takes them aboard. Once your shield glows, catch them "
-                        + "from the side: a head-on hit kills."));
+                text + " Fly close and the tractor beam takes them aboard. With the ram shield on, catch them "
+                        + "over the wings: the nose and tail kill. Switch it off and they come in safely."));
         e.badge = icons.getRegion(s);
         e.plate = "ui/crew_" + name.toLowerCase() + ".jpg";
     }
 
     private void item(Group g, Sticker s, String text, Demo demo) {
-        boolean automatic = s == Sticker.LASER || s == Sticker.RADAR;
-        Entry e = add(g, new Entry(s.name(), automatic ? "SYSTEM" : "ITEM  -  USE WITH A",
+        boolean system = s == Sticker.LASER || s == Sticker.RADAR;
+        boolean onPickup = !Sticker.SELECTABLE.contains(s);
+        Entry e = add(g, new Entry(s.name(), system ? "SYSTEM" : onPickup ? "WORKS THE MOMENT YOU PICK IT UP" : "ITEM  -  USE WITH {X}",
                 new TextureRegion[]{icons.getRegion(s)}, 0f, text));
         e.demo = demo;
     }
@@ -338,7 +346,7 @@ public class Codex {
         if (e.variants != null) {
             cat = e.variantNames[variantIndex(e)];
         }
-        text(batch, textFont, cat, x, ty, e.variants != null ? e.variants[variantIndex(e)] : Theme.ACCENT, alpha);
+        Theme.rich(batch, textFont, cat, x, ty - textFont.getCapHeight() / 2f, e.variants != null ? e.variants[variantIndex(e)] : Theme.ACCENT, alpha);
         if (e.variants != null) {
             float sw = 36f;
             float sx = x + w - e.variants.length * (sw + 12f);
@@ -382,14 +390,15 @@ public class Codex {
             batch.draw(t, x, y + s - h, s, h, sx, sy, side, rh, false, false);
         }
         if (f >= 1f) {
-            TextureRegion frame = e.frames[e.fps > 0 ? ((int) (time * e.fps)) % e.frames.length : 0];
-            TextureRegion icon = e.badge != null ? e.badge : frame;
+            // The game sprite itself (animated, on its own alpha), no backing box; crew shows the
+            // astronaut, not the profession badge.
+            TextureRegion icon = e.frames[e.fps > 0 ? ((int) (time * e.fps)) % e.frames.length : 0];
             if (icon != null) {
-                float is = box * 0.2f;
-                Color tint = e.variants != null && e.badge == null ? e.variants[variantIndex(e)] : Color.WHITE;
-                Theme.rect(batch, bx + box - is - 22f, by + 14f, is + 8f, is + 8f, Theme.BODY_LO, 0.8f * alpha);
+                float is = box * 0.24f;
+                Color tint = e.variants != null ? e.variants[variantIndex(e)] : Color.WHITE;
+                float rot = e.spin ? time * 25f : 0f;
                 batch.setColor(tint.r, tint.g, tint.b, alpha);
-                batch.draw(icon, bx + box - is - 18f, by + 18f, is, is);
+                batch.draw(icon, bx + box - is - 16f, by + 16f, is / 2f, is / 2f, is, is, 1f, 1f, rot);
             }
         }
         batch.setColor(Color.WHITE);
@@ -549,29 +558,62 @@ public class Codex {
         }
     }
 
+    /**
+     * Boost: a dash that breaks what it hits - a rock, a corrosive anomaly - but not an electric
+     * one: that one stops the ship cold and hurts it.
+     */
     private void demoBoost(Batch b, float cx, float cy, float r, float t, float a) {
-        float go = 1.5f;
+        float go = 1.2f;
+        float rockX = cx - r * 0.3f;
+        float corrX = cx + r * 0.1f;
+        float elecX = cx + r * 0.5f;
+        float hit = go + 0.75f;
         float x;
         if (t < go) {
-            x = cx - r * 0.75f + r * 0.2f * t / go;
+            x = cx - r * 0.85f + r * 0.15f * t / go;
+        } else if (t < hit) {
+            x = MathUtils.lerp(cx - r * 0.7f, elecX - r * 0.2f, (t - go) / (hit - go));
         } else {
-            x = cx - r * 0.55f + r * 1.4f * sm(t, go, go + 0.8f);
+            // Bounced back off the discharge, drifting to a stop.
+            x = elecX - r * 0.2f - r * 0.25f * sm(t, hit, hit + 0.8f);
         }
-        if (t > go && t < go + 1f) {
+        float rockAt = go + 0.75f * (rockX - (cx - r * 0.7f)) / (elecX - r * 0.2f - (cx - r * 0.7f));
+        float corrAt = go + 0.75f * (corrX - (cx - r * 0.7f)) / (elecX - r * 0.2f - (cx - r * 0.7f));
+        if (t > go && t < hit) {
             for (int i = 1; i < 8; i++) {
                 glowDot(b, x - i * r * 0.08f, cy, r * 0.14f, Color.ORANGE, a * 0.5f * (8 - i) / 8f);
             }
         }
-        sprite(b, asteroid, cx + r * 0.45f, cy, r * 0.3f, time * 20f, Color.WHITE, a * (t > go + 0.55f ? 0f : 1f));
-        if (t > go + 0.55f && t < go + 1.4f) {
-            float k = sm(t, go + 0.55f, go + 1.4f);
-            for (int i = 0; i < 6; i++) {
-                float ang = i * MathUtils.PI2 / 6f;
-                glowDot(b, cx + r * 0.45f + MathUtils.cos(ang) * r * 0.4f * k, cy + MathUtils.sin(ang) * r * 0.4f * k,
-                        r * 0.08f, Color.LIGHT_GRAY, a * (1f - k));
-            }
+        if (t < rockAt) {
+            sprite(b, asteroid, rockX, cy, r * 0.26f, time * 20f, Color.WHITE, a);
+        } else {
+            burst(b, rockX, cy, r, sm(t, rockAt, rockAt + 0.7f), Color.LIGHT_GRAY, a);
         }
-        shipAt(b, Math.min(x, cx + r * 0.85f), cy, r, -90f, a);
+        if (t < corrAt) {
+            sprite(b, anomaly, corrX, cy, r * 0.26f, time * 90f, Color.GREEN, a);
+        } else {
+            burst(b, corrX, cy, r, sm(t, corrAt, corrAt + 0.7f), Color.GREEN, a);
+        }
+        float flick = 0.8f + 0.2f * MathUtils.sin(time * 40f);
+        sprite(b, electric, elecX, cy, r * 0.3f, time * 60f, Color.WHITE, a * flick);
+        if (t > hit && t < hit + 0.6f) {
+            float k = sm(t, hit, hit + 0.6f);
+            ringAt(b, x, cy, r * (0.15f + 0.25f * k), Color.RED, a * (1f - k));
+            glowDot(b, x, cy, r * 0.5f, Color.RED, a * 0.5f * (1f - k));
+        }
+        shipAt(b, x, cy, r, 0f, a);
+    }
+
+    /** Shards flying apart from a broken object (k: 0..1). */
+    private void burst(Batch b, float x, float y, float r, float k, Color c, float a) {
+        if (k >= 1f) {
+            return;
+        }
+        for (int i = 0; i < 6; i++) {
+            float ang = i * MathUtils.PI2 / 6f + 0.3f;
+            glowDot(b, x + MathUtils.cos(ang) * r * 0.32f * k, y + MathUtils.sin(ang) * r * 0.32f * k,
+                    r * 0.08f, c, a * (1f - k));
+        }
     }
 
     private void demoRepair(Batch b, float cx, float cy, float r, float t, float a) {
@@ -615,17 +657,70 @@ public class Codex {
         }
     }
 
+    /**
+     * Trash: the ship picks up the container and flies on; where it was taken a countdown ticks,
+     * then a volley of rocks bursts out - and one of them catches the ship.
+     */
     private void demoTrash(Batch b, float cx, float cy, float r, float t, float a) {
-        shipAt(b, cx, cy, r, time * 10f, a);
-        float go = 1.3f;
-        if (t > go) {
-            float k = sm(t, go, go + 2.2f);
-            for (int i = 0; i < 8; i++) {
-                float ang = i * MathUtils.PI2 / 8f + 0.2f;
-                sprite(b, asteroid, cx + MathUtils.cos(ang) * r * 0.95f * k, cy + MathUtils.sin(ang) * r * 0.95f * k,
-                        r * 0.2f, time * 40f, Color.WHITE, a * (1f - sm(t, go + 2f, go + 2.6f)));
+        float pick = 1.1f;
+        float boom = 3.4f;
+        float px = cx - r * 0.15f;
+        float py = cy - r * 0.15f;
+        // The ship: in from the left to the container, then away up and to the right.
+        float sx;
+        float sy;
+        float rot;
+        if (t < pick) {
+            float k = sm(t, 0f, pick);
+            sx = MathUtils.lerp(cx - r * 0.85f, px, k);
+            sy = py;
+            rot = 0f;
+        } else {
+            float k = sm(t, pick, boom + 0.4f);
+            sx = MathUtils.lerp(px, cx + r * 0.5f, k);
+            sy = MathUtils.lerp(py, cy + r * 0.45f, k);
+            rot = 40f * sm(t, pick, pick + 0.5f);
+        }
+        if (t < pick) {
+            sprite(b, crate, px + r * 0.12f, py, r * 0.22f, 0f, Color.WHITE, a);
+        } else if (t < pick + 0.3f) {
+            glowDot(b, px, py, r * 0.4f, Color.WHITE, a * (1f - sm(t, pick, pick + 0.3f)));
+        }
+        // Countdown: three beats at the pickup point, white, yellow, red.
+        if (t > pick + 0.3f && t < boom) {
+            float beat = (t - pick - 0.3f) / ((boom - pick - 0.3f) / 3f);
+            int n = Math.min(2, (int) beat);
+            float f = beat - (int) beat;
+            Color c = n == 0 ? Color.WHITE : n == 1 ? Color.YELLOW : Color.RED;
+            ringAt(b, px, py, r * (0.18f - 0.1f * f), c, a * (1f - f));
+            glowDot(b, px, py, r * 0.12f, c, a * 0.8f);
+        }
+        // The volley: seven rocks outward; the eighth goes for the ship.
+        float hitAt = boom + 0.55f;
+        if (t > boom) {
+            float k = sm(t, boom, boom + 1.6f);
+            float fade = 1f - sm(t, boom + 1.6f, boom + 2.2f);
+            for (int i = 0; i < 7; i++) {
+                float ang = i * MathUtils.PI2 / 7f + 2.1f;
+                sprite(b, asteroid, px + MathUtils.cos(ang) * r * 0.85f * k, py + MathUtils.sin(ang) * r * 0.85f * k,
+                        r * 0.16f, time * 40f, Color.WHITE, a * fade);
+            }
+            if (t < hitAt) {
+                float q = (t - boom) / (hitAt - boom);
+                sprite(b, asteroid, MathUtils.lerp(px, sx, q), MathUtils.lerp(py, sy, q), r * 0.18f, time * 60f,
+                        Color.WHITE, a);
+            }
+            if (t < boom + 0.3f) {
+                glowDot(b, px, py, r * 0.6f, Color.ORANGE, a * (1f - sm(t, boom, boom + 0.3f)));
             }
         }
+        if (t > hitAt && t < hitAt + 0.6f) {
+            float k = sm(t, hitAt, hitAt + 0.6f);
+            ringAt(b, sx, sy, r * (0.15f + 0.25f * k), Color.RED, a * (1f - k));
+            glowDot(b, sx, sy, r * 0.5f, Color.RED, a * 0.5f * (1f - k));
+            sx += MathUtils.sin(time * 70f) * r * 0.02f * (1f - k);
+        }
+        shipAt(b, sx, sy, r, rot, a);
     }
 
     private void demoSplash(Batch b, float cx, float cy, float r, float t, float a) {

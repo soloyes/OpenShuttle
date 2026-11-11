@@ -73,7 +73,7 @@ public class MoveProcessor {
             } else if (abstractAnomaly.isHungry() && abstractAnomaly.isActivated()) {
                 abstractAnomaly.getPosition().mulAdd(abstractAnomaly.getVelocity(), dt);
                 float dst = Buran.position.dst(abstractAnomaly.getPosition());
-                if (abstractAnomaly.getLevel() + 1 != (int) Standing.getInstance().getRamPower()) {
+                if (abstractAnomaly.getLevel() + 1 != com.buran.game.player.Buran.ramLevel()) {
                     if (dst < 2400.0f + 200 * abstractAnomaly.getLevel()) {
                         tmp1V2.set(Buran.position)
                                 .sub(abstractAnomaly.getPosition())

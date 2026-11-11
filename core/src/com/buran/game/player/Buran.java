@@ -42,6 +42,15 @@ import lombok.Setter;
 
 public class Buran extends AbstractBuran {
     public static boolean isLaser;
+    /**
+     * The ram shield is switched by the player (A). Charged by metal fragments; while on it
+     * slowly drains, breaks what it outranks and lets crew in only over the wings. Off, nothing
+     * is rammed and everything is caught safely.
+     */
+    public static boolean ramOn;
+    /** Seconds since the ram shield was last switched (for the flash), and whether it was denied. */
+    public static float ramSwitchAge = 99f;
+    public static boolean ramDenied;
     private static LinkedList<Integer> shadowsCoordinates;
     private static int F = 2 * (int) (Rules.PLAYER_TURBO_THRESHOLD_VELOCITY - Buffs.getPlayerEnginePower());
     private BoundCheck boundCheck;
@@ -105,7 +114,31 @@ public class Buran extends AbstractBuran {
     }
 
     private void checkRamPower() {
-        shieldLevel = PlayerInteractionLevels.getFromLevel((int) (Standing.getInstance().getRamPower()));
+        if (ramOn && Standing.getInstance().getRamPower() < 1f) {
+            ramOn = false;   // ran dry
+            ramSwitchAge = 0f;
+        }
+        shieldLevel = ramOn ? PlayerInteractionLevels.getFromLevel((int) (Standing.getInstance().getRamPower()))
+                : PlayerInteractionLevels.NONE;
+    }
+
+    /** A: switches the ram shield; it will not come on without at least one level of charge. */
+    public static void toggleRam() {
+        ramSwitchAge = 0f;
+        if (!ramOn && Standing.getInstance().getRamPower() < 1f) {
+            ramDenied = true;
+            new com.buran.game.effects.BoomBox().playSound(com.buran.game.conf.MSConstants.UI_EMPTY_NAME);
+            return;
+        }
+        ramDenied = false;
+        ramOn = !ramOn;
+        new com.buran.game.effects.BoomBox().playSound(ramOn ? com.buran.game.conf.MSConstants.UP
+                : com.buran.game.conf.MSConstants.UI_MENU);
+    }
+
+    /** Ram power that counts now: the charge when the shield is on, nothing when off. */
+    public static int ramLevel() {
+        return ramOn ? (int) Standing.getInstance().getRamPower() : 0;
     }
 
     public boolean addZigZag(float amount) {
@@ -295,6 +328,7 @@ public class Buran extends AbstractBuran {
         Radar.isActive = false;
         CircleRenderer.scan = false;
         Standing.getInstance().setRamPower(0.0f);
+        ramOn = false;
     }
 
     public void showTakeRangeField(float dt, boolean anyAtHarvestPoint) {
@@ -334,6 +368,10 @@ public class Buran extends AbstractBuran {
         }
         makeShadow(dt);
         checkSeries(dt);
+        ramSwitchAge += dt;
+        if (ramOn && !Rules.GAME_OVER) {
+            Standing.getInstance().changeRamPower(-Rules.RAM_DRAIN * dt);
+        }
         checkRamPower();
         checkZigZagEffect(dt);
         angle = BuranMath.checkAngleBetween0And360(angle);
@@ -351,7 +389,9 @@ public class Buran extends AbstractBuran {
         }
 
         if (!isTaken) {
-            if (Gamepad.get().isSteering()) {
+            if (Gamepad.get().isTwin()) {
+                moveTwin(dt);
+            } else if (Gamepad.get().isSteering()) {
                 move(dt, Gamepad.get().getSteerAngle());
             } else if (joystick.isActive()) {
                 float angleToTarget = joystick.getAngle();
@@ -476,6 +516,21 @@ public class Buran extends AbstractBuran {
         );
     }
 
+    /** Both sticks: the right one turns the nose, the left one is throttle (up) or brake (down). */
+    private void moveTwin(float dt) {
+        if (zigzagEffect < 0.05f) {
+            angle += Gamepad.get().getTurn() * radialSpeed * dt;
+        }
+        float throttle = Gamepad.get().getThrottle();
+        if (throttle > 0f) {
+            float acceleration = throttle * enginePower;
+            velocity.add(acceleration * (float) Math.cos(Math.toRadians(angle)) * dt,
+                    acceleration * (float) Math.sin(Math.toRadians(angle)) * dt);
+        } else if (throttle < 0f) {
+            velocity.scl(Math.max(0f, 1f + throttle * 1.6f * dt));
+        }
+    }
+
     private void startEngine(float dt) {
         /*FPS hack*/
         int j = (int) (60 * dt / 2);
@@ -504,6 +559,6 @@ public class Buran extends AbstractBuran {
     }
 
     public int getPushPower() {
-        return (int) Standing.getInstance().getRamPower();
+        return ramLevel();
     }
 }

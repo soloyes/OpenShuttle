@@ -48,6 +48,8 @@ public final class Rules {
     public static boolean DEBUG_START_AT_HOLE = false;
     /** Testing aid (web: ?debug=clear): sector goals count as met, the beacon is placed nearby. */
     public static boolean DEBUG_FAST_GOAL = false;
+    /** ?ram: the ram shield starts charged to level 3 (for trying it out). */
+    public static boolean DEBUG_RAM = false;
     /** Test builds: every campaign sector can be started. */
     public static boolean DEBUG_UNLOCK = false;
     /** Test builds: a sector starts a third of the way to its goal. */
@@ -69,7 +71,13 @@ public final class Rules {
     }
     /** EMP pulse (gamepad Y / keyboard F): replaces tapping an anomaly on touch screens. */
     public static final float PULSE_RANGE = 700.0f;
-    public static final float PULSE_COOLDOWN = 2.0f;
+    public static final float PULSE_COOLDOWN = 8.0f;
+    /** Share of the maximum life shield one pulse costs. */
+    public static final float PULSE_SHIELD_COST = 0.35f;
+    /** How hard a pulse throws other anomalies back (speed added, world units / s). */
+    public static final float PULSE_PUSH = 1400.0f;
+    /** Ram shield charge spent per second while it is switched on. */
+    public static final float RAM_DRAIN = 0.02f;
     /** Camera: seconds of velocity to look ahead, cap as a share of the view, follow stiffness. */
     public static final float CAMERA_LOOK_AHEAD_TIME = 0.35f;
     public static final float CAMERA_LOOK_AHEAD_MAX = 0.22f;

@@ -46,12 +46,12 @@ public final class Prompt {
             return;
         }
         float kh = Theme.keyHeight(font);
-        float w = Theme.width(font, line);
+        float w = Theme.richWidth(font, line);
         float padX = kh * 0.5f;
         float ph = kh * 1.5f;
         float x = cx - w / 2f;
         Theme.rect(batch, x - padX - 2f, cy - ph / 2f - 2f, w + 2f * padX + 4f, ph + 4f, Theme.EDGE, alpha * 0.9f);
         Theme.rect(batch, x - padX, cy - ph / 2f, w + 2f * padX, ph, Theme.BODY_LO, alpha * 0.88f);
-        Theme.text(batch, font, line, x, cy + font.getCapHeight() / 2f, Theme.TEXT, alpha);
+        Theme.rich(batch, font, line, x, cy, Theme.TEXT, alpha);
     }
 }

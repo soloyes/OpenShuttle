@@ -37,6 +37,8 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
     @Getter
     protected TextureRegion atRocketRegion;
     protected ParticleEmitter particleEmitter;
+    /** Outward shove from an EMP pulse (world units / s), fading out. */
+    public final Vector2 knock = new Vector2();
 
     @Override
     public Vector2 getPosition() {

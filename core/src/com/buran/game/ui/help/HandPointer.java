@@ -68,15 +68,16 @@ public class HandPointer extends Group {
                 || com.buran.game.campaign.Campaign.current() != null) {
             return;
         }
-        String line1 = "LEFT STICK - FLY      A - USE ITEM      LB / RB - SWITCH ITEM";
-        String line2 = "Y - EMP PULSE      MENU - PAUSE";
-        Color c = hintFont.getColor().cpy();
-        hintFont.setColor(1, 1, 1, 0.55f + 0.45f * scale);
-        hintLayout.setText(hintFont, line1);
-        hintFont.draw(batch, hintLayout, (Rules.WORLD_WIDTH - hintLayout.width) / 2, Rules.WORLD_HEIGHT / 3f);
-        hintLayout.setText(hintFont, line2);
-        hintFont.draw(batch, hintLayout, (Rules.WORLD_WIDTH - hintLayout.width) / 2, Rules.WORLD_HEIGHT / 3f - 80);
-        hintFont.setColor(c);
+        String line1 = "{LS} FLY      {X} USE ITEM      {LB} {RB} SWITCH ITEM";
+        String line2 = "{A} RAM SHIELD      {Y} EMP      {MENU} PAUSE";
+        float a = 0.55f + 0.45f * scale;
+        float y = Rules.WORLD_HEIGHT / 3f;
+        for (String line : new String[]{line1, line2}) {
+            float w = com.buran.game.ui.menu.Theme.richWidth(hintFont, line);
+            com.buran.game.ui.menu.Theme.rich(batch, hintFont, line, (Rules.WORLD_WIDTH - w) / 2f, y,
+                    com.buran.game.ui.menu.Theme.TEXT, a);
+            y -= 100f;
+        }
     }
 
     @Override

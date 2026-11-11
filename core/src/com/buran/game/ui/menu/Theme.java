@@ -216,13 +216,34 @@ public final class Theme {
         return font.getCapHeight() * 1.9f;
     }
 
+    /** Pad glyph shapes besides the face buttons (Xbox layout). */
+    private static boolean bumper(String key) {
+        return key.equals("LB") || key.equals("RB") || key.equals("LT") || key.equals("RT");
+    }
+
+    private static boolean round(String key) {
+        return key.equals("LS") || key.equals("RS") || key.equals("D-PAD") || key.equals("MENU");
+    }
+
     /** Width of a key glyph. */
     public static float keyWidth(BitmapFont font, String key) {
         float h = keyHeight(font);
-        if (faceColor(key) != null) {
+        if (faceColor(key) != null || round(key)) {
             return h;
         }
+        if (bumper(key)) {
+            return Math.max(h * 1.7f, width(font, key) + h * 1.0f);
+        }
         return Math.max(h * 1.3f, width(font, key) + h * 0.8f);
+    }
+
+    /** A rounded bar (bumper / trigger shape): two disc ends and a middle. */
+    private static void pill(Batch batch, float x, float y, float w, float h, Color c, float alpha) {
+        batch.setColor(c.r, c.g, c.b, alpha);
+        batch.draw(disc, x, y, h, h);
+        batch.draw(disc, x + w - h, y, h, h);
+        batch.draw(pixel(), x + h / 2f, y, w - h, h);
+        batch.setColor(Color.WHITE);
     }
 
     /**
@@ -239,6 +260,43 @@ public final class Theme {
         float w = keyWidth(font, key);
         Color face = faceColor(key);
         float ty = cy + font.getCapHeight() / 2f;
+        if (bumper(key)) {
+            // Bumper / trigger: a rounded bar with a light rim, the label inside.
+            pill(batch, x, cy - h / 2f, w, h, HEAD, alpha);
+            pill(batch, x + 3f, cy - h / 2f + 3f, w - 6f, h - 6f, BODY_LO, alpha);
+            text(batch, font, key, x + w / 2f - width(font, key) / 2f, ty, TEXT, alpha);
+            return w;
+        }
+        if (round(key)) {
+            batch.setColor(BODY_LO.r, BODY_LO.g, BODY_LO.b, alpha);
+            batch.draw(disc, x, cy - h / 2f, h, h);
+            batch.setColor(HEAD.r, HEAD.g, HEAD.b, alpha);
+            batch.draw(ring, x, cy - h / 2f, h, h);
+            float cx = x + h / 2f;
+            if (key.equals("D-PAD")) {
+                // A cross.
+                float t = h * 0.22f;
+                float l = h * 0.62f;
+                rect(batch, cx - l / 2f, cy - t / 2f, l, t, TEXT, alpha);
+                rect(batch, cx - t / 2f, cy - l / 2f, t, l, TEXT, alpha);
+            } else if (key.equals("MENU")) {
+                // Three lines.
+                float l = h * 0.42f;
+                float t = Math.max(2f, h * 0.07f);
+                for (int i = -1; i <= 1; i++) {
+                    rect(batch, cx - l / 2f, cy + i * h * 0.14f - t / 2f, l, t, TEXT, alpha);
+                }
+            } else {
+                // A stick: an inner cap and its letter.
+                batch.setColor(HEAD.r, HEAD.g, HEAD.b, alpha);
+                batch.draw(ring, cx - h * 0.3f, cy - h * 0.3f, h * 0.6f, h * 0.6f);
+                batch.setColor(Color.WHITE);
+                String l = key.substring(0, 1);
+                text(batch, font, l, cx - width(font, l) / 2f, ty, TEXT, alpha);
+            }
+            batch.setColor(Color.WHITE);
+            return w;
+        }
         if (face != null) {
             batch.setColor(BODY_LO.r, BODY_LO.g, BODY_LO.b, alpha);
             batch.draw(disc, x, cy - h / 2f, h, h);
@@ -265,6 +323,72 @@ public final class Theme {
 
     public static float hintWidth(BitmapFont font, String key, String action) {
         return keyWidth(font, key) + keyHeight(font) * 0.4f + width(font, action);
+    }
+
+    // ------------------------------------------------------------------ text with buttons
+
+    /**
+     * The glyph for a control token in text ("{A}", "{LS}", "{Y}"...): the pad button with a
+     * pad connected, the keyboard key otherwise. Unknown tokens are shown as written.
+     */
+    public static String control(String token) {
+        switch (token) {
+            case "A": return Hints.button("A", "SPACE");
+            case "B": return Hints.button("B", "ESC");
+            case "X": return Hints.button("X", "X");
+            case "Y": return Hints.button("Y", "F");
+            case "LB": return Hints.button("LB", "Q");
+            case "RB": return Hints.button("RB", "E");
+            case "RT": return Hints.button("RT", "X");
+            case "LS": return Hints.button("LS", "ARROWS");
+            case "RS": return Hints.button("RS", "ARROWS");
+            case "MENU": return Hints.button("MENU", "ESC");
+            case "DPAD": return Hints.button("D-PAD", "ARROWS");
+            default: return token;
+        }
+    }
+
+    /** Width of a line with {TOKEN} buttons in it. */
+    public static float richWidth(BitmapFont font, String line) {
+        float w = 0f;
+        float gap = keyHeight(font) * 0.3f;
+        int i = 0;
+        while (i < line.length()) {
+            int open = line.indexOf('{', i);
+            int close = open < 0 ? -1 : line.indexOf('}', open);
+            if (open < 0 || close < 0) {
+                w += width(font, line.substring(i));
+                break;
+            }
+            w += width(font, line.substring(i, open));
+            w += keyWidth(font, control(line.substring(open + 1, close))) + gap;
+            i = close + 1;
+        }
+        return w;
+    }
+
+    /** Draws a line with {TOKEN} buttons as glyphs; {@code cy} is the vertical centre. */
+    public static float rich(Batch batch, BitmapFont font, String line, float x, float cy, Color c, float alpha) {
+        float start = x;
+        float gap = keyHeight(font) * 0.3f;
+        float ty = cy + font.getCapHeight() / 2f;
+        int i = 0;
+        while (i < line.length()) {
+            int open = line.indexOf('{', i);
+            int close = open < 0 ? -1 : line.indexOf('}', open);
+            if (open < 0 || close < 0) {
+                String rest = line.substring(i);
+                text(batch, font, rest, x, ty, c, alpha);
+                x += width(font, rest);
+                break;
+            }
+            String before = line.substring(i, open);
+            text(batch, font, before, x, ty, c, alpha);
+            x += width(font, before);
+            x += key(batch, font, control(line.substring(open + 1, close)), x, cy, alpha) + gap;
+            i = close + 1;
+        }
+        return x - start;
     }
 
     private static final com.badlogic.gdx.graphics.g2d.GlyphLayout GLYPHS = new com.badlogic.gdx.graphics.g2d.GlyphLayout();

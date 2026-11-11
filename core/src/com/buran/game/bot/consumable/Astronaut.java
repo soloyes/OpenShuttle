@@ -51,7 +51,7 @@ public class Astronaut extends AbstractConsumable {
     public void consumed() {
         int score = Rules.CONSUMABLE_ASTRONAUT_BASE_SCORE_ADD +
                 multiplier * Rules.CONSUMABLE_ASTRONAUT_RANGE_SCORE_ADD +
-                (int) Standing.getInstance().getRamPower() * Rules.CONSUMABLE_ASTRONAUT_BONUS_SCORE_ADD;
+                com.buran.game.player.Buran.ramLevel() * Rules.CONSUMABLE_ASTRONAUT_BONUS_SCORE_ADD;
         score = (int) (score * Sticker.COMMANDER.getCoefficient());
         Standing.getInstance().changeScore(score, position, GameInfoSystem.Preset.SCORE + "[GREEN] +" + score + "[]", 3.0f, true);
         boomBox.playSound(MSConstants.GET_ASTRONAUT);

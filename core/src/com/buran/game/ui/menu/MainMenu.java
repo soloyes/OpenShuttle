@@ -138,15 +138,26 @@ public class MainMenu extends Group implements MenuNav.Target {
     }
 
     private float panelW() {
-        return Theme.portrait() ? Rules.WORLD_WIDTH * 0.90f : Rules.WORLD_WIDTH * 0.58f;
+        // Landscape: the right edge mirrors the left edge of the flight deck (one grid).
+        return Theme.portrait() ? Rules.WORLD_WIDTH * 0.90f : Rules.WORLD_WIDTH - edge() - panelX();
     }
 
+    /** Outer left edge of the layout (flight deck frame); the right edge mirrors it. */
+    private static float edge() {
+        return Theme.marginX() - 66f;
+    }
+
+    /** Landscape: bottom on the flight deck's bottom, top on the title's top line (one grid). */
     private float panelY() {
-        return Theme.portrait() ? Rules.WORLD_HEIGHT * 0.06f : Rules.WORLD_HEIGHT * 0.09f;
+        return Theme.portrait() ? Rules.WORLD_HEIGHT * 0.06f : homeTop() - home.contentHeight() - 30f;
     }
 
     private float panelH() {
-        return Theme.portrait() ? Rules.WORLD_HEIGHT * 0.86f : Rules.WORLD_HEIGHT * 0.78f;
+        if (Theme.portrait()) {
+            return Rules.WORLD_HEIGHT * 0.86f;
+        }
+        float titleTop = Rules.WORLD_HEIGHT * 0.80f + 44f + labelFont.getCapHeight();
+        return titleTop - panelY();
     }
 
     /** Share of the panel width taken by the list when a detail pane is shown. */
@@ -560,15 +571,17 @@ public class MainMenu extends Group implements MenuNav.Target {
 
     private void buildAbout() {
         panel.add(new Row.Text("1991. The Buran program was never cancelled. It went quiet. "
-                + "Flight nineteen left for Object-19, a station parked around an anomaly no one could explain. "
+                + "Buran was sent to Object-19: a light in orbit no one could explain, and the station built around it. "
                 + "The experiment failed. The station broke apart, the crew drifted into the field, and the "
                 + "rift opened in the middle of it all. Mission control stopped answering. The country that "
                 + "sent you is gone. Bring your people home.", smallFont));
-        panel.add(new Row.Info("LEFT STICK", smallFont, "FLY"));
-        panel.add(new Row.Info("A / RT", smallFont, "USE ITEM"));
-        panel.add(new Row.Info("LB / RB", smallFont, "SWITCH ITEM"));
-        panel.add(new Row.Info("Y", smallFont, "EMP PULSE"));
-        panel.add(new Row.Info("MENU", smallFont, "PAUSE"));
+        panel.add(new Row.Info("{LS} OR {RS}", smallFont, "FLY WHERE THE STICK POINTS"));
+        panel.add(new Row.Info("{LS} + {RS}", smallFont, "BOTH: THROTTLE AND TURN"));
+        panel.add(new Row.Info("{A}", smallFont, "RAM SHIELD ON / OFF"));
+        panel.add(new Row.Info("{X} {RT}", smallFont, "USE ITEM"));
+        panel.add(new Row.Info("{LB} {RB}", smallFont, "SWITCH ITEM"));
+        panel.add(new Row.Info("{Y}", smallFont, "EMP PULSE  -  COSTS SHIELD"));
+        panel.add(new Row.Info("{MENU}", smallFont, "PAUSE"));
         panel.add(new Row.Text("Made by Vitaly Solovev with FlameXander, Pavel Guryanov and htfdream. "
                 + "github.com/soloyes/OpenShuttle", smallFont));
     }
@@ -630,9 +643,9 @@ public class MainMenu extends Group implements MenuNav.Target {
         float mx = Theme.marginX();
         float titleY = portrait ? Rules.WORLD_HEIGHT * 0.90f : Rules.WORLD_HEIGHT * 0.80f;
         if (!(portrait && open != Panel.NONE)) {
-            drawText(batch, labelFont, "ORBITAL SHIP 11F35  -  OBJECT-19 MISSION", mx + 6, titleY + 44f, Theme.HEAD, parentAlpha);
+            drawText(batch, labelFont, "ORBITAL SHIP 11F35  -  OBJECT-19 MISSION", mx + 2, titleY + 44f, Theme.HEAD, parentAlpha);
             drawText(batch, titleFont, "BURAN-19", mx, titleY, Theme.TEXT, parentAlpha);
-            drawText(batch, subFont, "THE LAST FLIGHT  -  1991", mx + 6, titleY - titleFont.getLineHeight() + 10,
+            drawText(batch, subFont, "THE LAST FLIGHT  -  1991", mx + 2, titleY - titleFont.getLineHeight() + 10,
                     Theme.DIM, parentAlpha);
         }
         if (!portrait) {
@@ -692,9 +705,9 @@ public class MainMenu extends Group implements MenuNav.Target {
      * mission elapsed time. Quiet, but alive: the lamp blinks and the clock runs.
      */
     private void drawStatusStrip(Batch batch, float a) {
-        float x = Rules.SAFE_X;
+        float x = edge();
         float y = Rules.SAFE_Y;
-        float w = Rules.WORLD_WIDTH - 2f * Rules.SAFE_X;
+        float w = Rules.WORLD_WIDTH - 2f * edge();
         float h = 76f;
         Theme.panel(batch, x, y, w, h, a);
         float ty = y + h / 2f + labelFont.getCapHeight() / 2f;

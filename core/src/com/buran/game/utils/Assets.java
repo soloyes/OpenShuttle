@@ -87,6 +87,7 @@ public class Assets {
                 assetManager.load(MSConstants.CHARGING_ROCKETS, Music.class);
                 assetManager.load(MSConstants.LASER, Music.class);
                 assetManager.load(MSConstants.UI_MENU, Sound.class);
+                assetManager.load(MSConstants.UI_EMPTY_NAME, Sound.class);
                 assetManager.load(MSConstants.UI_PAUSE, Sound.class);
                 assetManager.load(MSConstants.UI_LEFT_RIGHT, Sound.class);
                 assetManager.load(MSConstants.UI_SWITCH, Sound.class);

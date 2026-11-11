@@ -30,7 +30,7 @@ public final class Campaign {
         // and a small room where the whole task fits in a glance or two (tip 85).
         Sector s1 = new Sector(1, "SILENCE", Sector.Goal.RESCUE, 2,
                 "Buran-19, this is... no one. Baikonur is silent. Two beacons are still calling, close by. Sasha. Lena. Bring them home.",
-                "LEFT STICK - FLY      THE BEAM TAKES CREW ABOARD");
+                "{LS} FLY      THE BEAM TAKES CREW ABOARD");
         empty(s1);
         s1.astronautMax = 2;
         s1.space = 1.4f;
@@ -48,7 +48,7 @@ public final class Campaign {
 
         Sector s3 = new Sector(3, "STATIC", Sector.Goal.RESCUE, 3,
                 "Static on every channel. The radar is going blind. Three more of ours are out there. If the discharge comes for you, let it close. Then hit the pulse.",
-                "Y - EMP PULSE STOPS ELECTRIC ANOMALIES NEARBY");
+                "{Y} EMP: BURNS DISCHARGES, THROWS THE REST BACK. COSTS SHIELD");
         empty(s3);
         s3.electricMax = 2;
         s3.astronautMax = 3;

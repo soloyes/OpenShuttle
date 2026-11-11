@@ -396,17 +396,22 @@ public class GameMenu extends Group implements MenuNav.Target {
         y -= 30f;
         draw(batch, labelFont, "CREW ABOARD", x, y, Theme.HEAD, a);
         y -= 56f;
-        float icon = 64f;
+        // Icon column, name column, count and bonus right-aligned: each row centred on one line.
+        float icon = 56f;
+        float cap = smallFont.getCapHeight();
         for (Sticker crew : Sticker.ASTRONAUTS) {
             Integer n = st.getAstronauts() == null ? null : st.getAstronauts().get(crew);
             TextureRegion r = stickers.getRegion(crew);
+            float mid = y - cap / 2f;
             if (r != null) {
                 batch.setColor(1, 1, 1, a);
-                batch.draw(r, x, y - icon + 14f, icon, icon);
+                batch.draw(r, x, mid - icon / 2f, icon, icon);
                 batch.setColor(Color.WHITE);
             }
-            String name = crew.name();
-            line(batch, "   " + name, (n == null ? 0 : n) + "   x" + round1(crew.getCoefficient()), x + icon - 20f, y, w - icon + 20f, a);
+            draw(batch, smallFont, crew.name(), x + icon + 24f, y, Theme.DIM, a);
+            String value = (n == null ? 0 : n) + "   x" + round1(crew.getCoefficient());
+            layout.setText(smallFont, value);
+            draw(batch, smallFont, value, x + w - layout.width, y, Theme.TEXT, a);
             y -= 70f;
         }
     }

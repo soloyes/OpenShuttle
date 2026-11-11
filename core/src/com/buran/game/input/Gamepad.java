@@ -115,11 +115,12 @@ public final class Gamepad {
             return;
         }
 
-        float lx = 0, ly = 0, ry = 0;
+        float lx = 0, ly = 0, rx = 0, ry = 0;
         if (controller != null) {
             ControllerMapping m = controller.getMapping();
             lx = axis(m.axisLeftX);
             ly = axis(m.axisLeftY);
+            rx = axis(m.axisRightX);
             ry = axis(m.axisRightY);
         }
 
@@ -127,9 +128,8 @@ public final class Gamepad {
         pulseCooldown = Math.max(0, pulseCooldown - dt);
         if (isFlight()) {
             cursorVisible = false;
-            if (pressed(Action.PULSE) && pulseCooldown <= 0) {
-                pulse = true;
-                pulseCooldown = Rules.PULSE_COOLDOWN;
+            if (pressed(Action.PULSE)) {
+                firePulse();
             }
             releaseCursor();
             com.buran.game.campaign.SectorRun run = com.buran.game.campaign.Campaign.run();
@@ -143,8 +143,12 @@ public final class Gamepad {
                 }
                 return;
             }
-            updateFlight(lx, ly);
-            if (pressed(Action.A) || pressed(Action.USE_ALT)) {
+            updateFlight(lx, ly, rx, ry);
+            // A switches the ram shield; X (or RT) uses the selected item.
+            if (pressed(Action.A)) {
+                com.buran.game.player.Buran.toggleRam();
+            }
+            if (pressed(Action.USE_ALT)) {
                 SelectorGroup.getInstance().useSelected();
             }
             if (pressed(Action.PREV) || pressed(Action.UP) || pressed(Action.LEFT)) {
@@ -191,7 +195,8 @@ public final class Gamepad {
         now[Action.RIGHT.ordinal()] = btn(c, m == null ? -1 : m.buttonDpadRight);
         // Right trigger also fires the selected item; on the standard mapping it is button 7.
         now[Action.PULSE.ordinal()] = btn(c, m == null ? -1 : m.buttonY) || key(Input.Keys.F);
-        now[Action.USE_ALT.ordinal()] = btn(c, m == null ? -1 : m.buttonR2) || btn(c, m == null ? -1 : m.buttonX);
+        now[Action.USE_ALT.ordinal()] = btn(c, m == null ? -1 : m.buttonR2) || btn(c, m == null ? -1 : m.buttonX)
+                || key(Input.Keys.X);
     }
 
     private static boolean btn(Controller c, int code) {
@@ -220,9 +225,26 @@ public final class Gamepad {
 
     // ------------------------------------------------------------------ flight
 
-    private void updateFlight(float lx, float ly) {
+    /**
+     * Either stick alone: point where to fly (deflection = thrust). Both sticks together: the
+     * left one is throttle (up) and brake (down), the right one turns the ship.
+     */
+    private void updateFlight(float lx, float ly, float rx, float ry) {
+        boolean left = lx != 0 || ly != 0;
+        boolean right = rx != 0 || ry != 0;
+        twin = left && right;
+        if (twin) {
+            throttle = -ly;
+            turn = -rx;
+            steering = true;
+            return;
+        }
         // Stick Y points down; world Y points up.
-        steer.set(lx, -ly);
+        if (right) {
+            steer.set(rx, -ry);
+        } else {
+            steer.set(lx, -ly);
+        }
         float kx = 0, ky = 0;
         if (key(Input.Keys.LEFT) || key(Input.Keys.A)) kx -= 1;
         if (key(Input.Keys.RIGHT) || key(Input.Keys.D)) kx += 1;
@@ -232,6 +254,52 @@ public final class Gamepad {
             steer.set(kx, ky).nor();
         }
         steering = steer.len2() > 0;
+    }
+
+    private boolean twin;
+    private float throttle;
+    private float turn;
+
+    /** Both sticks in use: throttle and turn instead of a heading. */
+    public boolean isTwin() {
+        return twin && steering;
+    }
+
+    /** Twin-stick throttle, -1 (brake) .. 1 (full ahead). */
+    public float getThrottle() {
+        return throttle;
+    }
+
+    /** Twin-stick turn, -1 (clockwise) .. 1 (counter-clockwise). */
+    public float getTurn() {
+        return turn;
+    }
+
+    /**
+     * The EMP: costs part of the life shield and needs to recharge. Without enough shield it
+     * does not fire (a dry click instead).
+     */
+    private void firePulse() {
+        if (pulseCooldown > 0) {
+            return;
+        }
+        com.buran.game.player.Standing st = com.buran.game.player.Standing.getInstance();
+        float cost = st.getMaxLifeShield() * Rules.PULSE_SHIELD_COST;
+        if (!st.spendLifeShield(cost)) {
+            pulseDenied = true;
+            return;
+        }
+        pulse = true;
+        pulseCooldown = Rules.PULSE_COOLDOWN;
+    }
+
+    private boolean pulseDenied;
+
+    /** True once after Y was pressed without enough shield for the EMP (then resets). */
+    public boolean takePulseDenied() {
+        boolean d = pulseDenied;
+        pulseDenied = false;
+        return d;
     }
 
     /** 0 right after a pulse, 1 when the next one is ready. */
@@ -266,6 +334,9 @@ public final class Gamepad {
 
     /** Thrust 0..1 from stick deflection. */
     public float getSteerPower() {
+        if (isTwin()) {
+            return Math.max(0f, throttle);
+        }
         return Math.min(1f, steer.len());
     }
 

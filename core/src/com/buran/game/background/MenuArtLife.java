@@ -37,7 +37,7 @@ class MenuArtLife implements Disposable {
      * wide it is there, in image pixels. Lights are in sprite pixels: near wingtip (red), far
      * wingtip (green), top of the fin (white strobe), the engine bells.
      */
-    private static final float SHIP_CX = 1615f, SHIP_CY = 705f, SHIP_W = 405f;
+    private static final float SHIP_CX = 1575f, SHIP_CY = 712f, SHIP_W = 405f;
     private static final float SPRITE_W = 603f, SPRITE_H = 402f;
     private static final float[] PORT = {118, 350};
     private static final float[] STARBOARD = {592, 180};

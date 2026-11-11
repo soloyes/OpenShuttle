@@ -533,6 +533,20 @@ public class GameScreen extends BaseScreen {
         if (Gamepad.get().isPulse() && !frozen && !Rules.GAME_OVER) {
             firePulseEffect();
         }
+        if (!frozen) {
+            // EMP knock-back: a shove outward that fades within a second.
+            for (int i = 0; i < anomalyJoiner.size(); i++) {
+                AbstractAnomaly a = anomalyJoiner.get(i);
+                if (a.knock.isZero(1f)) {
+                    a.knock.setZero();
+                    continue;
+                }
+                if (a.isActive() && !a.isTaken()) {
+                    a.getPosition().mulAdd(a.knock, dt);
+                }
+                a.knock.scl(Math.max(0f, 1f - 3f * dt));
+            }
+        }
         sectorBorder.update(dt);
         if (!frozen) {
             Shelters.update(dt);
@@ -1082,10 +1096,18 @@ public class GameScreen extends BaseScreen {
                 killed = true;
             }
         }
+        // Everything else in range loses the scent and is thrown back, harder the closer it was.
         for (int i = 0; i < anomalyJoiner.size(); i++) {
             AbstractAnomaly a = anomalyJoiner.get(i);
-            if (a.isActive() && a.getPosition().dst2(Buran.position) <= r2) {
+            if (a.isActive() && !a.isTaken() && a.getPosition().dst2(Buran.position) <= r2) {
                 a.setHungry(false);
+                float d = a.getPosition().dst(Buran.position);
+                float k = 1f - 0.6f * d / Rules.PULSE_RANGE;
+                a.knock.set(a.getPosition()).sub(Buran.position);
+                if (a.knock.isZero(0.01f)) {
+                    a.knock.set(1f, 0f);
+                }
+                a.knock.nor().scl(Rules.PULSE_PUSH * k);
             }
         }
         if (killed) {
