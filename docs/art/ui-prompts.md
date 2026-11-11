@@ -149,6 +149,5 @@ flat solid pure green #00FF00, no gradient, no shadow, no glow, no white border.
 ## Уже готово (в игре)
 
 `menu.jpg`, `crew_commander / medic / scientist / mechanic / military.jpg`, `clear.jpg`,
-`lost.jpg`, `sector01–04.jpg`, `codex_corrosive / electric / magnetic / rift.jpg`.
-
-Ещё нужен `codex_radiation.jpg` (раздел 2).
+`lost.jpg`, `sector01–04.jpg`, `codex_corrosive / electric / radiation / magnetic / rift.jpg`,
+`layers/menu_shuttle.jpg` (фон меню без шаттла теперь `menu.jpg`). Слои меню: `tools/art/menu_layers.py`.
