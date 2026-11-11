@@ -1,63 +1,133 @@
-# Art prompts: menu, sectors, crew, codex
+# Art prompts: sectors, codex (Nano Banana)
 
-Same look as the intro. In Nano Banana attach **assets/intro/p08.jpg** (Object-19) to every
-prompt and add: *"in the same style as the attached image"*. No text in images; the game adds it.
-Save results into `art/ui/raw/` with the names below (any format).
+Все картинки должны быть в стиле интро. Поэтому в каждый запрос прикладывается **одна**
+картинка из интро как образец стиля, и промпт начинается со слов «in the same style as the
+attached image».
 
-Style anchor (already in every prompt):
-> cinematic graphic novel panel, muted palette of deep navy and black with warm amber light
-> accents, soft film grain, painterly, high contrast, large dark areas, minimal detail,
-> 1980s Soviet space program, lonely quiet atmosphere, no text, no letters, no frame
+## Как делать (каждую картинку)
 
-## 1. Main menu backdrop (16:9) — `menu.png`
+1. Открой **новый чат** в Gemini (Nano Banana). В старом чате он тянет стиль из прошлых картинок.
+2. Приложи файл-образец из колонки «Реф» (Finder: папка проекта → `art/intro/raw/`).
+   Прикладывай только его, без других картинок.
+3. Вставь промпт из блока целиком, как есть.
+4. Если на картинке появились буквы, подписи, схемы, рамка или планета, которой нет в промпте,
+   нажми «перегенерировать». Подписи в игре добавляю я, в картинке их быть не должно.
+5. Сохрани результат в `art/ui/raw/` под именем из заголовка (`sector01.jpg` и т. д.).
+   Скажи мне, я вставлю в игру.
 
-The menu list sits on the left third, so that part must be calm and dark.
+Образцы (рефы):
 
-> wide view of deep space, on the right side the white Soviet Buran shuttle drifting slowly
-> toward a distant pale glowing anomaly, a broken ring-shaped station far away, faint dust,
-> the left third of the image is empty dark space with a few stars, cinematic graphic novel
-> panel, muted palette of deep navy and black with warm amber light accents, soft film grain,
-> painterly, high contrast, large dark areas, minimal detail, 1980s Soviet space program,
-> lonely quiet atmosphere, no text, no letters, no frame
+| Реф | Что на нём | Для чего |
+|---|---|---|
+| [p10.jpg](../../art/intro/raw/p10.jpg) | разбросанные космонавты в облаке | sector01 |
+| [p09.jpg](../../art/intro/raw/p09.jpg) | взрыв станции, обломки | sector02 |
+| [p08.jpg](../../art/intro/raw/p08.jpg) | Объект-19, светящаяся аномалия | sector03, codex (кроме rift) |
+| [p11.jpg](../../art/intro/raw/p11.jpg) | разлом, чёрная дыра с диском | sector04, codex_rift |
 
-## 2. Sector cards (16:9) — shown on the flight plan and the briefing
+---
 
-| File | Prompt (add the style anchor at the end) |
-|---|---|
-| `sector01.png` | two tiny cosmonauts in white Soviet spacesuits drifting far apart in empty dark space, one small warm beacon light blinking on each suit, total silence, vast emptiness |
-| `sector02.png` | a slow field of dark rocky asteroids and metal debris lit from one side by a distant amber sun, a thin red laser line burning one rock, dust glowing |
-| `sector03.png` | crackling pale-blue electric discharges drifting like jellyfish in dark space, a cosmonaut far away, static and haze, the light is cold and nervous |
-| `sector04.png` | the rift: a slowly spinning black hole with a disc of sand-like debris, small round shelter domes glowing amber at a safe distance, the tiny shuttle at the edge of the pull |
+## 1. Карточки секторов (широкие, 16:9)
 
-## 3. Crew portraits (1:1) — Codex, rescue moment, results
+### `sector01.jpg` — реф [p10.jpg](../../art/intro/raw/p10.jpg)
 
-Helmet and visor, face mostly hidden or in shadow, shoulder patch with a simple symbol (no letters).
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. Two tiny cosmonauts in white Soviet spacesuits drifting
+far apart in empty dark space, a small warm amber beacon light blinking on each suit, total
+silence, vast emptiness, deep navy and black. No Earth, no station, no explosion. No text, no
+letters, no labels, no frame, no white border.
+```
 
-| File | Prompt (add the style anchor at the end) |
-|---|---|
-| `crew_commander.png` | portrait of a Soviet cosmonaut commander in a white spacesuit and helmet, calm and tired, visor reflecting a distant Earth, a single amber light on the side |
-| `crew_medic.png` | portrait of a Soviet cosmonaut medic in a white spacesuit, a red cross shape on the shoulder patch, visor half open, gentle face in shadow |
-| `crew_scientist.png` | portrait of a Soviet cosmonaut scientist in a white spacesuit, a small instrument in hand, visor reflecting a pale glowing anomaly |
-| `crew_mechanic.png` | portrait of a Soviet cosmonaut mechanic in a scuffed white spacesuit, a wrench clipped to the suit, frost on the visor |
-| `crew_military.png` | portrait of a Soviet military cosmonaut in a darker spacesuit, stern posture, visor down, a red star shape on the patch |
+### `sector02.jpg` — реф [p09.jpg](../../art/intro/raw/p09.jpg)
 
-## 4. Codex plates (1:1) — one object alone on black
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. A slow field of dark rocky asteroids and twisted metal
+debris lit from one side by a distant amber sun, a thin red laser beam burning into one rock,
+glowing dust. No explosion, no station, no Earth. No text, no letters, no labels, no frame,
+no white border.
+```
 
-The words "scientific illustration" make Nano Banana draw a labelled poster with insets and
-captions (first tries are in `art/ui/raw/rejected/`). Ask for a single painted object instead,
-and repeat the ban on text at the end.
+### `sector03.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
 
-| File | Prompt (add the style anchor at the end) |
-|---|---|
-| `codex_corrosive.png` | a drifting cloud of brownish acid dust in dark space, eating into a small metal panel, one single object centred on plain black, no labels, no diagrams, no insets, no annotations, no captions |
-| `codex_electric.png` | a pale blue ball of crackling electric discharge in dark space, thin arcs, one single object centred on plain black, no labels, no diagrams, no insets, no annotations, no captions |
-| `codex_radiation.png` | a sickly green glowing cloud with a faint shimmer, radiation in dark space, one single object centred on plain black, no labels, no diagrams, no insets, no annotations, no captions |
-| `codex_magnetic.png` | a violet swirl of magnetic field lines bending small metal debris around it in dark space, one single object centred on plain black, no labels, no diagrams, no insets, no annotations, no captions |
-| `codex_rift.png` | a small black hole with an accretion disc of sand and debris, light bending around it, one single object centred on plain black, no labels, no diagrams, no insets, no annotations, no captions |
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. Crackling pale-blue electric discharges drifting like
+jellyfish in dark space, thin lightning arcs between them, one tiny cosmonaut far away, cold
+nervous light, static haze. No station, no Earth. No text, no letters, no labels, no frame,
+no white border.
+```
 
-## 5. Endings / clear (16:9)
+### `sector04.jpg` — реф [p11.jpg](../../art/intro/raw/p11.jpg)
 
-| File | Prompt (add the style anchor at the end) |
-|---|---|
-| `clear.png` | inside a cramped dark shuttle cabin, two cosmonauts in white suits resting, one with a hand on the other's shoulder, a small amber lamp, Earth through a small window |
-| `lost.png` | an empty white spacesuit helmet drifting slowly away into dark space, tiny reflection of the shuttle in the visor |
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. The rift: a slowly spinning black hole with a disc of
+sand-like debris, a few small round shelter domes glowing amber at a safe distance from it,
+the tiny white Buran shuttle at the edge of the pull. No Earth. No text, no letters, no
+labels, no frame, no white border.
+```
+
+---
+
+## 2. Кодекс (квадрат, 1:1)
+
+Один объект по центру на чёрном фоне. Не пиши в запросе «scientific illustration», иначе
+выйдет плакат с подписями и врезками (неудачные попытки лежат в `art/ui/raw/rejected/`).
+
+### `codex_electric.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Square 1:1 image. One single pale-blue ball of crackling electric
+discharge with thin lightning arcs, centred on plain black space. Only this one object.
+No station, no shuttle, no Earth. No text, no letters, no labels, no diagrams, no insets,
+no annotations, no frame, no white border.
+```
+
+### `codex_corrosive.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Square 1:1 image. One single drifting cloud of brownish acid dust
+eating into a small torn metal panel, centred on plain black space. Only this one object.
+No station, no shuttle, no Earth. No text, no letters, no labels, no diagrams, no insets,
+no annotations, no frame, no white border.
+```
+
+### `codex_radiation.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Square 1:1 image. One single sickly green glowing cloud with a faint
+shimmer, centred on plain black space. Only this one object. No station, no shuttle, no
+Earth. No text, no letters, no labels, no diagrams, no insets, no annotations, no frame,
+no white border.
+```
+
+### `codex_magnetic.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Square 1:1 image. One single violet swirl of magnetic field lines
+bending small metal debris around it, centred on plain black space. Only this one object.
+No station, no shuttle, no Earth. No text, no letters, no labels, no diagrams, no insets,
+no annotations, no frame, no white border.
+```
+
+### `codex_rift.jpg` — реф [p11.jpg](../../art/intro/raw/p11.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Square 1:1 image. One single small black hole with an accretion disc
+of sand and debris, light bending around it, centred on plain black space. Only this one
+object. No station, no shuttle, no Earth. No text, no letters, no labels, no diagrams,
+no insets, no annotations, no frame, no white border.
+```
+
+---
+
+## Уже готово (в игре)
+
+`menu.jpg`, `crew_commander / medic / scientist / mechanic / military.jpg`, `clear.jpg`,
+`lost.jpg`.
