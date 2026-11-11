@@ -99,6 +99,7 @@ public class Codex {
     private final TextureRegion shieldCrate;
     private final TextureRegion question;
     private final TextureRegion electric;
+    private final TextureRegion astro;
 
     public Codex() {
         TextureRegion[] astronaut = Regions.split(region(PaintConstants.ASTRONAUT_REGION), 1, 5, 5);
@@ -114,6 +115,7 @@ public class Codex {
         shieldCrate = region(PaintConstants.SHIELD_CRATE_REGION);
         question = icons.getRegion(Sticker.PATTERN);
         electric = sheet(PaintConstants.ANOMALY_ELECTRIC_REGION, 4, 4, PaintConstants.ANOMALY_ELECTRIC_FRAMES)[0];
+        astro = astronaut[1];
 
         // ---------------------------------------------------------------- threats
         Group threats = group("THREATS");
@@ -198,6 +200,22 @@ public class Codex {
         damaged.overlay = icons.getRegion(Sticker.SHABBY);
 
         // ---------------------------------------------------------------- items
+        // ---------------------------------------------------------------- ship systems
+        Group systems = group("SHIP SYSTEMS");
+        Entry ram = add(systems, new Entry("RAM SHIELD", "SYSTEM  -  {A} ON / OFF", new TextureRegion[]{ship}, 0f,
+                "Metal fragments charge it, four levels: tan, green, yellow, red. Switched on it breaks every "
+                        + "corrosive anomaly below its level, softens rock hits and slowly drains. With it on, crew "
+                        + "come aboard only over the wings: the nose and tail kill. Switched off, everything comes in safely."));
+        ram.demo = this::demoRam;
+        Entry emp = add(systems, new Entry("EMP PULSE", "SYSTEM  -  {Y}  -  COSTS SHIELD", new TextureRegion[]{ship}, 0f,
+                "Burns out every electric discharge nearby and throws all other anomalies back; they lose your "
+                        + "trail. Each pulse costs a third of the shield and takes eight seconds to recharge."));
+        emp.demo = this::demoEmp;
+        Entry shelter = add(systems, new Entry("SHELTER", "STATION REMAINS", new TextureRegion[]{ship}, 0f,
+                "A shielded dome left from the station. Inside it nothing hunts you and the shield mends fast. "
+                        + "Its field wears thin while you hide and switches off for a while when spent."));
+        shelter.demo = this::demoShelter;
+
         Group items = group("ITEMS");
         item(items, Sticker.FREEZE, "Every anomaly stops hunting for ten seconds.", this::demoFreeze);
         item(items, Sticker.DEGRADE, "All corrosive anomalies drop to the weakest level.", this::demoDegrade);
@@ -624,6 +642,92 @@ public class Codex {
             glowDot(b, x, cy, r * 0.5f, Color.RED, a * 0.5f * (1f - k));
         }
         shipAt(b, x, cy, r, 0f, a);
+    }
+
+    private static final Color RAM_GREEN = Color.valueOf("6cc24aff");
+    private static final Color AMBER = Color.valueOf("ffb547ff");
+
+    /**
+     * Ram shield: on, a corrosive anomaly breaks against it; a crew member comes in over the
+     * wing; then the shield goes off and the next one comes in over the nose, safely.
+     */
+    private void demoRam(Batch b, float cx, float cy, float r, float t, float a) {
+        boolean on = t < 4f;
+        float off = sm(t, 4f, 4.4f);
+        if (t < 4.4f) {
+            float pulse = 0.75f + 0.2f * MathUtils.sin(time * 5f);
+            glowDot(b, cx, cy, r * 0.75f * (1f + 0.3f * off), RAM_GREEN, a * 0.35f * (1f - off));
+            ringAt(b, cx, cy, r * 0.28f * (1f + 0.3f * off), RAM_GREEN, a * pulse * (1f - off));
+        }
+        // An anomaly from the right breaks on the shield.
+        float hit = 1.3f;
+        if (t < hit) {
+            sprite(b, anomaly, MathUtils.lerp(cx + r * 0.95f, cx + r * 0.3f, sm(t, 0f, hit)), cy, r * 0.26f, time * 90f, Color.TAN, a);
+        } else {
+            burst(b, cx + r * 0.3f, cy, r, sm(t, hit, hit + 0.7f), Color.TAN, a);
+        }
+        // Crew from above, over the wing (the side).
+        float in1 = 3.2f;
+        if (t > 1.6f && t < in1) {
+            sprite(b, astro, cx, MathUtils.lerp(cy + r * 0.95f, cy + r * 0.2f, sm(t, 1.6f, in1)), r * 0.24f, 0f, Color.WHITE, a);
+        } else if (t >= in1 && t < in1 + 0.4f) {
+            glowDot(b, cx, cy + r * 0.2f, r * 0.4f, Color.WHITE, a * (1f - sm(t, in1, in1 + 0.4f)));
+        }
+        // Shield off: the next one comes straight at the nose, safely.
+        float in2 = 5.6f;
+        if (!on && t < in2) {
+            sprite(b, astro, MathUtils.lerp(cx + r * 0.95f, cx + r * 0.25f, sm(t, 4.4f, in2)), cy, r * 0.24f, 0f, Color.WHITE, a);
+        } else if (t >= in2 && t < in2 + 0.4f) {
+            glowDot(b, cx + r * 0.25f, cy, r * 0.4f, Color.WHITE, a * (1f - sm(t, in2, in2 + 0.4f)));
+        }
+        shipAt(b, cx, cy, r, 0f, a);
+    }
+
+    /** EMP: the ring goes out, the discharge burns, the rest are thrown back; the shield pays. */
+    private void demoEmp(Batch b, float cx, float cy, float r, float t, float a) {
+        float go = 1.5f;
+        float k = sm(t, go, go + 0.5f);
+        float push = sm(t, go + 0.1f, go + 1.4f);
+        float[] ang = {0.4f, 2.3f, 4.1f};
+        for (int i = 0; i < 3; i++) {
+            float d = r * (MathUtils.lerp(0.75f, 0.5f, sm(Math.min(t, go), 0f, go)) + 0.42f * push);
+            sprite(b, anomaly, cx + MathUtils.cos(ang[i]) * d, cy + MathUtils.sin(ang[i]) * d, r * 0.24f,
+                    time * 90f, CORROSIVE[i], a * (1f - sm(t, go + 1.6f, go + 2.2f)));
+        }
+        float ex = cx - r * 0.4f;
+        float ey = cy - r * 0.25f;
+        if (t < go + 0.2f) {
+            sprite(b, electric, ex, ey, r * 0.28f, time * 60f, Color.WHITE, a);
+        } else {
+            burst(b, ex, ey, r, sm(t, go + 0.2f, go + 0.9f), BLUE, a);
+        }
+        if (t > go && t < go + 0.6f) {
+            ringAt(b, cx, cy, r * 0.95f * k, BLUE, a * (1f - k));
+        }
+        // The shield bar under the ship: a third gone at the pulse, slowly back.
+        float level = t < go ? 1f : MathUtils.lerp(0.66f, 0.8f, sm(t, go + 0.5f, 5.5f));
+        float bw = r * 0.6f;
+        Theme.rect(b, cx - bw / 2f, cy - r * 0.3f, bw, 8f, Theme.TRACK, a);
+        Theme.rect(b, cx - bw / 2f, cy - r * 0.3f, bw * level, 8f, BLUE, a);
+        shipAt(b, cx, cy, r, 0f, a);
+    }
+
+    /** Shelter: inside the dome nothing hunts you, the shield fills; hunters circle outside. */
+    private void demoShelter(Batch b, float cx, float cy, float r, float t, float a) {
+        float dome = r * 0.5f;
+        ringAt(b, cx, cy, dome, AMBER, a * (0.35f + 0.1f * MathUtils.sin(time * 2f)));
+        glowDot(b, cx, cy, dome * 2f, AMBER, a * 0.08f);
+        for (int i = 0; i < 3; i++) {
+            float ang = time * 0.6f + i * MathUtils.PI2 / 3f;
+            float d = r * 0.78f;
+            sprite(b, anomaly, cx + MathUtils.cos(ang) * d, cy + MathUtils.sin(ang) * d, r * 0.22f, time * 90f,
+                    CORROSIVE[i], a);
+        }
+        float level = MathUtils.lerp(0.2f, 1f, sm(t, 0.3f, 4.5f));
+        float bw = r * 0.6f;
+        Theme.rect(b, cx - bw / 2f, cy - r * 0.3f, bw, 8f, Theme.TRACK, a);
+        Theme.rect(b, cx - bw / 2f, cy - r * 0.3f, bw * level, 8f, BLUE, a);
+        shipAt(b, cx, cy, r, 0f, a);
     }
 
     /** Shards flying apart from a broken object (k: 0..1). */
