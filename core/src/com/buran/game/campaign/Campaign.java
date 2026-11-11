@@ -104,6 +104,135 @@ public final class Campaign {
         SECTORS.add(s6);
 
         chapterTwo();
+        chapterThree();
+    }
+
+    /**
+     * Chapter three: home. The commander's lost crew, the graveyard, the guarded cargo, the
+     * tide of the rift, a blind sector, everything at once, and the way home (tips 6, 7, 37).
+     */
+    private static void chapterThree() {
+        com.buran.game.labelsticker.Sticker ROCKETS = com.buran.game.labelsticker.Sticker.ROCKETS;
+        com.buran.game.labelsticker.Sticker FREEZE = com.buran.game.labelsticker.Sticker.FREEZE;
+        Sector s13 = new Sector(13, "ECHOES", Sector.Goal.RESCUE, 4,
+                "His crew is still out here. Their beacons are old, the signals weak. Radiation and magnets everywhere. Four to bring home.",
+                null);
+        empty(s13);
+        s13.chapter = 3;
+        s13.radiationMax = 2;
+        s13.magneticMax = 2;
+        s13.fuelMax = 2;
+        s13.astronautMax = 4;
+        s13.startItems.put(ROCKETS, 3);
+        s13.borderDamage = true;
+        s13.space = 2.2f;
+        SECTORS.add(s13);
+
+        Sector s14 = new Sector(14, "GRAVEYARD", Sector.Goal.SALVAGE, 50,
+                "The station's graveyard. Everything that broke is drifting toward the rift. We need metal for the hull before we go in. Fifty pieces.",
+                null);
+        empty(s14);
+        s14.chapter = 3;
+        s14.blackhole = true;
+        s14.shelters = 1;
+        s14.asteroidMax = 16;
+        s14.asteroidRespawn = 2f;
+        s14.corrosiveMax = 4;
+        s14.corrosiveRespawn = 8f;
+        s14.startWithLaser = true;
+        s14.borderDamage = true;
+        s14.space = 2.4f;
+        SECTORS.add(s14);
+
+        Sector s15 = new Sector(15, "WARDENS", Sector.Goal.CARGO, 6,
+                "The field is guarding the way. Discharges and packs, all around the cargo we need. Six crates. Take them and run.",
+                null);
+        empty(s15);
+        s15.chapter = 3;
+        s15.crateMax = 4;
+        s15.storageMax = 2;
+        s15.electricMax = 2;
+        s15.corrosiveMax = 8;
+        s15.corrosiveRespawn = 4f;
+        s15.corrosiveHuntTime = 20f;
+        s15.shelters = 2;
+        s15.startItems.put(FREEZE, 2);
+        s15.borderDamage = true;
+        s15.space = 2.4f;
+        SECTORS.add(s15);
+
+        Sector s16 = new Sector(16, "TIDE", Sector.Goal.RESCUE, 5,
+                "The tide is turning. The rift pulls harder every minute. Five more of ours on its edge. Be quick.",
+                null);
+        empty(s16);
+        s16.chapter = 3;
+        s16.blackhole = true;
+        s16.shelters = 2;
+        s16.astronautMax = 5;
+        s16.corrosiveMax = 4;
+        s16.corrosiveRespawn = 6f;
+        s16.asteroidMax = 8;
+        s16.escalate = true;
+        s16.borderDamage = true;
+        s16.space = 2.4f;
+        SECTORS.add(s16);
+
+        Sector s17 = new Sector(17, "BLIND", Sector.Goal.RESCUE, 4,
+                "The radar is dead. Nothing on the screen now. Only your eyes, and the beacons. Find four of them.",
+                "NO RADAR      FOLLOW THE BEACONS");
+        empty(s17);
+        s17.chapter = 3;
+        s17.noRadar = true;
+        s17.astronautMax = 4;
+        s17.corrosiveMax = 6;
+        s17.corrosiveRespawn = 5f;
+        s17.electricMax = 1;
+        s17.asteroidMax = 10;
+        s17.borderDamage = true;
+        s17.space = 2.4f;
+        SECTORS.add(s17);
+
+        Sector s18 = new Sector(18, "THRESHOLD", Sector.Goal.RESCUE, 6,
+                "This is the threshold. Everything the field has, it throws at us now. Six voices. The last ones.",
+                null);
+        empty(s18);
+        s18.chapter = 3;
+        s18.blackhole = true;
+        s18.shelters = 2;
+        s18.astronautMax = 6;
+        s18.corrosiveMax = 8;
+        s18.corrosiveRespawn = 4f;
+        s18.electricMax = 2;
+        s18.radiationMax = 1;
+        s18.magneticMax = 1;
+        s18.asteroidMax = 12;
+        s18.crateMax = 2;
+        s18.fuelMax = 2;
+        s18.escalate = true;
+        s18.borderDamage = true;
+        s18.startItems.put(ROCKETS, 2);
+        s18.startItems.put(FREEZE, 2);
+        s18.space = 2.8f;
+        SECTORS.add(s18);
+
+        Sector s19 = new Sector(19, "HOME", Sector.Goal.RESCUE, 1,
+                "He is waiting at the edge of the rift. The last one. Bring him aboard, then follow the light home.",
+                "THE LAST ONE      THEN INTO THE LIGHT");
+        empty(s19);
+        s19.chapter = 3;
+        s19.blackhole = true;
+        s19.shelters = 2;
+        s19.astronautMax = 1;
+        s19.corrosiveMax = 10;
+        s19.corrosiveRespawn = 3f;
+        s19.electricMax = 2;
+        s19.asteroidMax = 10;
+        s19.escalate = true;
+        s19.beaconAtRift = true;
+        s19.borderDamage = true;
+        s19.startItems.put(FREEZE, 2);
+        s19.space = 2.6f;
+        SECTORS.add(s19);
     }
 
     /**
@@ -199,7 +328,8 @@ public final class Campaign {
 
     /** Chapter titles for the flight plan. */
     public static String chapterTitle(int chapter) {
-        return chapter == 1 ? "CHAPTER ONE  -  SILENCE" : chapter == 2 ? "CHAPTER TWO  -  THE VOICE" : "CHAPTER " + chapter;
+        return chapter == 1 ? "CHAPTER ONE  -  SILENCE" : chapter == 2 ? "CHAPTER TWO  -  THE VOICE"
+                : chapter == 3 ? "CHAPTER THREE  -  HOME" : "CHAPTER " + chapter;
     }
 
     /** Containers taken aboard in this run (sector goal CARGO counts them). */

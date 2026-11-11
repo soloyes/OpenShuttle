@@ -522,6 +522,60 @@ public class GameScreen extends BaseScreen {
     }
 
     private float endBlur;
+    private float censusTime;
+
+    /** One line of what is in the sector: live objects per kind, whole rocks apart from fragments. */
+    private void census(float dt) {
+        censusTime += dt;
+        if (censusTime < 2f) {
+            return;
+        }
+        censusTime = 0f;
+        int rocks = 0;
+        int frags = 0;
+        for (int i = 0; i < asteroidsJoiner.size(); i++) {
+            com.buran.game.bot.asteroids.AbstractAsteroid r = asteroidsJoiner.get(i);
+            if (r.isActive()) {
+                if (r.isFragmented()) {
+                    frags++;
+                } else {
+                    rocks++;
+                }
+            }
+        }
+        StringBuilder b = new StringBuilder("CENSUS");
+        b.append(" sector=").append(sectorRun == null ? 0 : sectorRun.sector().number);
+        b.append(" phase=").append(sectorRun == null ? "-" : sectorRun.phase().name());
+        b.append(" corrosive=").append(live(corrosiveAnomalyEmitter.getActiveList()));
+        b.append(" electric=").append(live(electricalAnomalyEmitter.getActiveList()));
+        b.append(" radiation=").append(live(radiationAnomalyEmitter.getActiveList()));
+        b.append(" magnetic=").append(live(magneticAnomalyEmitter.getActiveList()));
+        b.append(" rocks=").append(rocks).append(" fragments=").append(frags);
+        b.append(" crew=").append(live(astronautEmitter.getActiveList()));
+        b.append(" crates=").append(live(crateEmitter.getActiveList()));
+        b.append(" storages=").append(live(storageEmitter.getActiveList()));
+        b.append(" fuel=").append(live(fuelEmitter.getActiveList()));
+        b.append(" volleys=").append(asteroidLaunchEmitter.getActiveList().size());
+        b.append(" hole=").append(Blackhole.enabled);
+        b.append(" shelters=").append(Shelters.all().size);
+        b.append(" radar=").append(com.buran.game.player.navigation.Radar.isActive);
+        b.append(" laser=").append(Buran.isLaser);
+        b.append(" step=").append(Standing.getInstance().getPlayingLevel());
+        b.append(" death=").append(Rules.DEATH_MODE);
+        b.append(" items=").append(SelectorGroup.getInstance().getSelectorCount());
+        Gdx.app.log("CENSUS", b.toString());
+    }
+
+    private static int live(java.util.List<?> list) {
+        int n = 0;
+        for (Object o : list) {
+            com.buran.game.utils.pool.AbstractPoolable p = (com.buran.game.utils.pool.AbstractPoolable) o;
+            if (p.isActive() && !p.isTaken()) {
+                n++;
+            }
+        }
+        return n;
+    }
 
     /** The sector is over (cleared or lost): only the report is on screen. */
     private boolean ended() {
@@ -555,6 +609,15 @@ public class GameScreen extends BaseScreen {
                 }
                 a.knock.scl(Math.max(0f, 1f - 3f * dt));
             }
+        }
+        if (Rules.DEBUG_GOD) {
+            Standing g = Standing.getInstance();
+            g.setHp(g.getMaxHp());
+            g.setLifeShield(g.getMaxLifeShield());
+            g.setFuel(g.getMaxFuel());
+        }
+        if (Rules.DEBUG_CENSUS) {
+            census(dt);
         }
         sectorBorder.update(dt);
         if (!frozen) {

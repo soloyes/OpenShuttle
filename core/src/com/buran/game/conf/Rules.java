@@ -51,7 +51,13 @@ public final class Rules {
     /** ?ram: the ram shield starts charged to level 3 (for trying it out). */
     public static boolean DEBUG_RAM = false;
     /** ?chapter: the chapter one ending plays instead of the intro. */
-    public static boolean DEBUG_CHAPTER = false;
+    public static int DEBUG_CHAPTER = 0;
+    /** ?god: hull, shield and fuel stay full (long automated runs). */
+    public static boolean DEBUG_GOD = false;
+    /** ?census: logs what is in the sector every two seconds (content checks). */
+    public static boolean DEBUG_CENSUS = false;
+    /** ?sector=N: skip the intro and the menu and fly sector N (automated checks). */
+    public static int DEBUG_SECTOR = 0;
     /** Test builds: every campaign sector can be started. */
     public static boolean DEBUG_UNLOCK = false;
     /** Test builds: a sector starts a third of the way to its goal. */

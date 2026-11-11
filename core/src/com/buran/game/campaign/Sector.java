@@ -52,6 +52,39 @@ public final class Sector {
     public final java.util.LinkedHashMap<com.buran.game.labelsticker.Sticker, Integer> startItems = new java.util.LinkedHashMap<>();
     /** The field grows harder every 40 seconds (more hunters, faster respawn). */
     public boolean escalate;
+    /** The radar is dead for the whole sector (flying by eye). */
+    public boolean noRadar;
+    /** The extraction beacon sits at the edge of the rift (the way home). */
+    public boolean beaconAtRift;
+    /**
+     * What a crate may hold here: only things that make sense in this sector. TRASH never (it
+     * launches rocks); anomaly tools only where there are anomalies.
+     */
+    public java.util.List<com.buran.game.labelsticker.Sticker> loot() {
+        java.util.List<com.buran.game.labelsticker.Sticker> l = new java.util.ArrayList<>();
+        l.add(com.buran.game.labelsticker.Sticker.REPAIR);
+        l.add(com.buran.game.labelsticker.Sticker.SHIELD);
+        l.add(com.buran.game.labelsticker.Sticker.SCAN);
+        l.add(com.buran.game.labelsticker.Sticker.BOOST);
+        if (corrosiveMax > 0) {
+            l.add(com.buran.game.labelsticker.Sticker.FREEZE);
+            l.add(com.buran.game.labelsticker.Sticker.DEGRADE);
+            l.add(com.buran.game.labelsticker.Sticker.SPLASH);
+        }
+        if (corrosiveMax + electricMax + radiationMax + magneticMax > 0) {
+            l.add(com.buran.game.labelsticker.Sticker.ROCKETS);
+        }
+        return l;
+    }
+
+    /** A single storage's content here: rockets, or the radar where there is one to restore. */
+    public com.buran.game.labelsticker.Sticker storageLoot() {
+        if (!noRadar && com.badlogic.gdx.math.MathUtils.randomBoolean()) {
+            return com.buran.game.labelsticker.Sticker.RADAR;
+        }
+        return com.buran.game.labelsticker.Sticker.ROCKETS;
+    }
+
     /** Chapter this sector belongs to (headers on the flight plan). */
     public int chapter = 1;
 

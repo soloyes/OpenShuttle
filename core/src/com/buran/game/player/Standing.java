@@ -222,7 +222,8 @@ public final class Standing {
                 colored
         );
         calcScoreToLevel();
-        if (score - scoreToLevel >= 0) {
+        // Steps, extra lives and the collapse belong to the arcade; a campaign sector has its own goal.
+        if (score - scoreToLevel >= 0 && com.buran.game.campaign.Campaign.current() == null) {
             playingLevel += 1;
             if (playingLevel >= 19) {
                 playingLevel = 19;

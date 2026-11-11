@@ -143,6 +143,11 @@ public class Crate extends AbstractConsumable {
     }
 
     private Sticker generateSafe() {
+        com.buran.game.campaign.Sector sector = com.buran.game.campaign.Campaign.current();
+        if (sector != null) {
+            java.util.List<Sticker> loot = sector.loot();
+            return loot.get(MathUtils.random(loot.size() - 1));
+        }
         float r = MathUtils.random(0.0f, 1.0f);
         if (r >= 0.0f && r < 0.25f) {
             return Sticker.SPLASH;

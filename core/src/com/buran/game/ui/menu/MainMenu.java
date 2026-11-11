@@ -65,6 +65,7 @@ public class MainMenu extends Group implements MenuNav.Target {
 
     // Detail pane content (results / codex).
     private DetailedResultDAO detailResult;
+    private com.buran.game.campaign.Sector detailSector;
     private Codex codex;
     private Codex.Group codexGroup;
     private BackButton backButton;
@@ -268,8 +269,10 @@ public class MainMenu extends Group implements MenuNav.Target {
             }
         }
         int last = com.buran.game.campaign.Campaign.sectors().size();
-        panel.add(new Row.Info("SECTORS " + (last + 1 < 10 ? "0" : "") + (last + 1) + " - 19", smallFont, "SIGNAL LOST"));
-        playRows.add(null);
+        if (last < com.buran.game.campaign.Campaign.TOTAL) {
+            panel.add(new Row.Info("SECTORS " + (last + 1 < 10 ? "0" : "") + (last + 1) + " - 19", smallFont, "SIGNAL LOST"));
+            playRows.add(null);
+        }
         arcadeRow = playRows.size();
         playRows.add(null);
         panel.add(new Row.Action("ARCADE   -   ENDLESS", rowFont, () -> {
@@ -294,6 +297,7 @@ public class MainMenu extends Group implements MenuNav.Target {
         open = p;
         retireArmed = false;
         detailResult = null;
+        detailSector = null;
         detailSticker = null;
         detailTitle = null;
         panel.clearRows();
@@ -448,7 +452,46 @@ public class MainMenu extends Group implements MenuNav.Target {
         openPanel(Panel.PILOTS);
     }
 
+    /** RESULTS rows -> their sector (null for headers and arcade runs). */
+    private final java.util.List<com.buran.game.campaign.Sector> resultRows = new java.util.ArrayList<>();
+
+    /**
+     * The flight log: the campaign first (each sector's best time and medals, by chapter), then
+     * every arcade run. A sector row shows its card and records; a run shows its telemetry.
+     */
     private void buildResults() {
+        resultRows.clear();
+        int cleared = 0;
+        int medals = 0;
+        for (com.buran.game.campaign.Sector sec : com.buran.game.campaign.Campaign.sectors()) {
+            if (com.buran.game.campaign.Campaign.isDone(sec.number)) {
+                cleared++;
+            }
+            medals += Integer.bitCount(com.buran.game.campaign.Campaign.medals(sec.number));
+        }
+        panel.add(new Row.Info("CAMPAIGN", smallFont, cleared + " / " + com.buran.game.campaign.Campaign.TOTAL
+                + " CLEAR      " + medals + " MEDALS"));
+        resultRows.add(null);
+        int chapter = 0;
+        int unlocked = com.buran.game.campaign.Campaign.unlocked();
+        for (com.buran.game.campaign.Sector sec : com.buran.game.campaign.Campaign.sectors()) {
+            if (sec.chapter != chapter) {
+                chapter = sec.chapter;
+                panel.add(new Row.Info(com.buran.game.campaign.Campaign.chapterTitle(chapter), smallFont, null));
+                resultRows.add(null);
+            }
+            float best = com.buran.game.campaign.Campaign.best(sec.number);
+            int m = Integer.bitCount(com.buran.game.campaign.Campaign.medals(sec.number));
+            int of = sec.goal == com.buran.game.campaign.Sector.Goal.RESCUE ? 3 : 2;
+            String value = best > 0f ? com.buran.game.campaign.Campaign.formatTime(best) + "    " + m + " / " + of
+                    : sec.number <= unlocked ? "NOT CLEARED" : "LOCKED";
+            panel.add(new Row.Action("SECTOR " + sec.code() + "   " + sec.name, smallFont, null)
+                    .withValue(value, best > 0f ? Theme.OK : Theme.FAINT));
+            resultRows.add(sec);
+        }
+        panel.add(new Row.Info("ARCADE LOG", smallFont, null));
+        resultRows.add(null);
+        final int runsFrom = resultRows.size();
         final List<ResultDAO> all = new ArrayList<ResultDAO>();
         ProfileDAO p = activePilot();
         if (p != null) {
@@ -463,18 +506,21 @@ public class MainMenu extends Group implements MenuNav.Target {
             }
         });
         if (all.isEmpty()) {
-            panel.add(new Row.Text("No flights logged yet. Every run is recorded here: score, time in "
-                    + "the sector, crew rescued and how it ended.", smallFont));
+            panel.add(new Row.Text("No arcade runs yet. Every endless run is logged here: score, time, "
+                    + "crew rescued and how it ended.", smallFont));
         }
         for (final ResultDAO r : all) {
             String label = formatDate(r) + "  " + levelName(r.getLevel());
             panel.add(new Row.Action(label, smallFont, null).withValue(formatScore(r.getCurrent().getScore())));
         }
         panel.onFocus((row, index) -> {
-            int i = index - (all.isEmpty() ? 1 : 0);
-            if (i >= 0 && i < all.size()) {
+            detailSector = index < resultRows.size() ? resultRows.get(index) : null;
+            int i = index - runsFrom - (all.isEmpty() ? 1 : 0);
+            if (detailSector == null && i >= 0 && i < all.size()) {
                 detailResult = all.get(i).getCurrent();
                 detailTitle = formatDate(all.get(i)) + "  " + levelName(all.get(i).getLevel());
+            } else {
+                detailResult = null;
             }
         });
     }
@@ -760,6 +806,8 @@ public class MainMenu extends Group implements MenuNav.Target {
 
         if (open == Panel.PLAY) {
             drawSectorCard(batch, x, y, w, a);
+        } else if (open == Panel.RESULTS && detailSector != null) {
+            drawSectorCard(batch, x, y, w, a, resultRows);
         } else if (open == Panel.RESULTS && detailResult != null) {
             DetailedResultDAO d = detailResult;
             y -= 20f;
@@ -796,6 +844,12 @@ public class MainMenu extends Group implements MenuNav.Target {
 
     /** Flight plan: the focused sector's painted card, its name and goal. */
     private void drawSectorCard(Batch batch, float x, float top, float w, float a) {
+        drawSectorCard(batch, x, top, w, a, playRows);
+    }
+
+    private void drawSectorCard(Batch batch, float x, float top, float w, float a,
+                                java.util.List<com.buran.game.campaign.Sector> rows) {
+        java.util.List<com.buran.game.campaign.Sector> playRows = rows;
         int i = panel.focusIndex();
         if (i != cardIndex) {
             cardIndex = i;
@@ -803,7 +857,7 @@ public class MainMenu extends Group implements MenuNav.Target {
         }
         cardAge += Gdx.graphics.getDeltaTime();
         com.buran.game.campaign.Sector sec = i >= 0 && i < playRows.size() ? playRows.get(i) : null;
-        if (sec == null && i == arcadeRow) {
+        if (sec == null && rows == this.playRows && i == arcadeRow) {
             drawArcadeCard(batch, x, top, w, a);
             return;
         }

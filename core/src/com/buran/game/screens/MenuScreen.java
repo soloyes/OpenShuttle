@@ -44,16 +44,23 @@ public class MenuScreen extends BaseScreen {
         stage.addActor(mainMenu);
         MainMenu.onIntro = this::playIntro;
         // Every launch opens with the intro (skippable); coming back from a flight does not.
-        if (!introShown) {
+        if (com.buran.game.conf.Rules.DEBUG_SECTOR > 0 && !introShown) {
+            introShown = true;
+            com.buran.game.platform.Shell.introPending(false);
+            directSector = com.buran.game.conf.Rules.DEBUG_SECTOR;
+        } else if (!introShown) {
             introShown = true;
             com.buran.game.platform.Shell.introPending(true);
-            if (com.buran.game.conf.Rules.DEBUG_CHAPTER) {
-                playComic(com.buran.game.ui.menu.Intro.CHAPTER_ONE);
+            if (com.buran.game.conf.Rules.DEBUG_CHAPTER > 0) {
+                playComic(chapterEnd(com.buran.game.conf.Rules.DEBUG_CHAPTER));
             } else {
                 playIntro();
             }
-        } else if (com.buran.game.campaign.Campaign.takeChapterEnd() == 1) {
-            playComic(com.buran.game.ui.menu.Intro.CHAPTER_ONE);
+        } else {
+            int ended = com.buran.game.campaign.Campaign.takeChapterEnd();
+            if (ended > 0) {
+                playComic(chapterEnd(ended));
+            }
         }
     }
 
@@ -63,6 +70,11 @@ public class MenuScreen extends BaseScreen {
      */
     private static boolean introShown;
     private boolean heroWanted;
+
+    private static com.buran.game.ui.menu.Intro.Script chapterEnd(int chapter) {
+        return chapter == 1 ? com.buran.game.ui.menu.Intro.CHAPTER_ONE
+                : chapter == 2 ? com.buran.game.ui.menu.Intro.CHAPTER_TWO : com.buran.game.ui.menu.Intro.CHAPTER_THREE;
+    }
 
     private void playIntro() {
         playComic(com.buran.game.ui.menu.Intro.INTRO);
@@ -81,8 +93,18 @@ public class MenuScreen extends BaseScreen {
         stage.addActor(intro);
     }
 
+    private int directSector;
+
     @Override
     public void render(float delta) {
+        if (directSector > 0) {
+            int n = directSector;
+            directSector = 0;
+            java.util.List<com.buran.game.campaign.Sector> all = com.buran.game.campaign.Campaign.sectors();
+            com.buran.game.campaign.Campaign.start(all.get(Math.max(0, Math.min(all.size() - 1, n - 1))));
+            ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME);
+            return;
+        }
         super.render(delta);
         space.update(delta);
         stage.act(delta);

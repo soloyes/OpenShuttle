@@ -43,7 +43,12 @@ public class WebLauncher {
         com.buran.game.conf.Rules.DEBUG_THIRD = query().contains("third");
         com.buran.game.conf.Rules.DEBUG_CARD = query().contains("card");
         com.buran.game.conf.Rules.DEBUG_RAM = query().contains("ram");
-        com.buran.game.conf.Rules.DEBUG_CHAPTER = query().contains("chapter");
+        com.buran.game.conf.Rules.DEBUG_GOD = query().contains("god");
+        com.buran.game.conf.Rules.DEBUG_CENSUS = query().contains("census");
+        java.util.regex.Matcher sm = java.util.regex.Pattern.compile("sector=(\\d+)").matcher(query());
+        com.buran.game.conf.Rules.DEBUG_SECTOR = sm.find() ? Integer.parseInt(sm.group(1)) : 0;
+        com.buran.game.conf.Rules.DEBUG_CHAPTER = query().contains("chapter=3") ? 3 : query().contains("chapter=2") ? 2
+                : query().contains("chapter") ? 1 : 0;
         com.buran.game.platform.Shell.bridge = new com.buran.game.platform.Shell.Bridge() {
             @Override
             public boolean shown() {

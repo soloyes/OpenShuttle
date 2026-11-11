@@ -103,6 +103,9 @@ public final class SectorRun {
         }
         Rules.CONSUMABLE_CRATE_DANGER_PROBABILITY = sector.dangerOdds;
         Rules.CONSUMABLE_STORAGE_DANGER_PROBABILITY = sector.dangerOdds;
+        if (sector.noRadar) {
+            com.buran.game.player.navigation.Radar.isActive = false;
+        }
         for (java.util.Map.Entry<com.buran.game.labelsticker.Sticker, Integer> it : sector.startItems.entrySet()) {
             com.buran.game.ui.groups.selector.SelectorGroup.getInstance().addSelector(it.getKey(), it.getValue());
         }
@@ -112,6 +115,15 @@ public final class SectorRun {
         baseline = counter();
         if (Rules.DEBUG_CARD) {
             com.buran.game.ui.hud.CrewCard.show(com.buran.game.labelsticker.Sticker.MEDIC, "MEDIC", "HULL REPAIRED");
+        }
+        if (Rules.DEBUG_CENSUS) {
+            com.badlogic.gdx.Gdx.app.log("CENSUS", "CAPS sector=" + sector.number + " corrosive=" + sector.corrosiveMax
+                    + " electric=" + sector.electricMax + " radiation=" + sector.radiationMax + " magnetic=" + sector.magneticMax
+                    + " rocks=" + sector.asteroidMax + " crew=" + sector.astronautMax + " crates=" + sector.crateMax
+                    + " storages=" + sector.storageMax + " fuel=" + sector.fuelMax + " hole=" + sector.blackhole
+                    + " shelters=" + sector.shelters + " noradar=" + sector.noRadar + " laser=" + sector.startWithLaser
+                    + " escalate=" + sector.escalate + " items=" + sector.startItems.size()
+                    + " loot=" + sector.loot());
         }
         if (Rules.DEBUG_RAM) {
             Standing.getInstance().changeRamPower(3.2f - Standing.getInstance().getRamPower());
@@ -200,6 +212,9 @@ public final class SectorRun {
 
     public void update(float dt) {
         time += dt;
+        if (sector.noRadar) {
+            com.buran.game.player.navigation.Radar.isActive = false;   // nothing brings it back here
+        }
         phaseTime += dt;
         switch (phase) {
             case BRIEFING:
@@ -446,6 +461,13 @@ public final class SectorRun {
         float minDist = Rules.DEBUG_FAST_GOAL ? 0f : Math.min(Rules.SPACE_WIDTH, Rules.SPACE_HEIGHT) * 0.45f;
         if (Rules.DEBUG_FAST_GOAL) {
             beacon.set(Buran.position.x + 700f, Buran.position.y);
+            boomBox.playSound(MSConstants.UP);
+            setPhase(Phase.EXTRACT);
+            return;
+        }
+        if (sector.beaconAtRift && Blackhole.enabled) {
+            // The way home: just outside the rift's ring, on the side facing the ship.
+            beacon.set(Buran.position).sub(Blackhole.position).nor().scl(Buffs.getBlackholeTakeRange() * 1.2f).add(Blackhole.position);
             boomBox.playSound(MSConstants.UP);
             setPhase(Phase.EXTRACT);
             return;

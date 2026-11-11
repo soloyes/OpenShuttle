@@ -27,6 +27,8 @@ SPEC = {
     "intro13": [("intro13a", ("silence", 1.5)), ("intro13b", ("silence", 1.6)), ("intro13c", ("silence", 0.4))],
     "ch1_03": [("ch1_03a", ("silence", 1.4)), ("ch1_03b", ("static", 1.6)), ("ch1_03c", ("silence", 0.6))],
     "ch1_04": [("ch1_04a", ("static", 1.8)), ("ch1_04b", ("static", 2.4))],
+    "ch2_03": [("ch2_03a", ("silence", 1.6)), ("ch2_03b", ("silence", 2.2))],
+    "ch3_04": [("ch3_04a", ("static", 1.6)), ("ch3_04b", ("static", 1.4)), ("ch3_04c", ("silence", 2.6))],
 }
 
 if len(sys.argv) > 2:

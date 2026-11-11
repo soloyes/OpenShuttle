@@ -108,6 +108,40 @@ public class Intro extends Actor implements MenuNav.Target {
             },
             "ch1_%02d", "SKIP");
 
+    /** Chapter two ends: the voice is the commander of Object-19, and the way home is open. */
+    public static final Script CHAPTER_TWO = new Script(
+            new String[]{
+                    "THE VOICE KNOWS OUR NAMES.",
+                    "IT IS THE COMMANDER OF OBJECT-19.  HE WENT INTO THE RIFT IN 1991.",
+                    "INSIDE, HE SAYS, IT IS STILL 1991.|AND THE WAY HOME IS OPEN.|END OF CHAPTER TWO",
+            },
+            new int[][]{{0, 0, 0, 2, 2}, {1, 0, 0, 2, 2}, {2, 0, 0, 2, 2}},
+            new float[][]{null, null, {0f, 5.52f, 7.6f}},
+            new String[][]{
+                    {"chapter2/p01.jpg", "intro/p12.jpg"},
+                    {"chapter2/p02.jpg", "intro/p08.jpg"},
+                    {"chapter2/p03.jpg", "intro/p11.jpg"},
+            },
+            "ch2_%02d", "SKIP");
+
+    /** The end: into the light, Earth whole, and Baikonur answering at last. */
+    public static final Script CHAPTER_THREE = new Script(
+            new String[]{
+                    "WE WENT IN.  ALL OF US.",
+                    "NO SOUND.  NO TIME.  ONLY THE LIGHT.",
+                    "THEN... EARTH.  BLUE, AND WHOLE.",
+                    "BURAN-19, THIS IS BAIKONUR.|WE HEAR YOU.|WELCOME HOME.|THE END",
+            },
+            new int[][]{{0, 0, 0, 2, 2}, {1, 0, 0, 2, 2}, {2, 0, 0, 2, 2}, {3, 0, 0, 2, 2}},
+            new float[][]{null, null, null, {0f, 5.28f, 7.8f, 9.6f}},
+            new String[][]{
+                    {"chapter3/p01.jpg", "intro/p11.jpg"},
+                    {"chapter3/p02.jpg", "intro/p09.jpg"},
+                    {"chapter3/p03.jpg", "intro/p03.jpg"},
+                    {"chapter3/p04.jpg", "intro/p01.jpg"},
+            },
+            "ch3_%02d", "SKIP");
+
     /** The intro has its own mix, outside the settings: the score under, the voice on top. */
     private static final float MUSIC_VOLUME = 0.5f;
     private static final float VOICE_VOLUME = 1f;

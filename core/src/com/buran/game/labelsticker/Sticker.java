@@ -707,10 +707,37 @@ public enum Sticker {
     public abstract void sound();
 
     private static void consumeShabby(AbstractConsumable consumable) {
+        if (com.buran.game.campaign.Campaign.current() != null) {
+            campaignGamble(consumable);
+            return;
+        }
         if (MathUtils.random(0, 1) == 0) {
             getPositive(consumable);
         } else {
             getNegative(consumable);
+        }
+    }
+
+    /**
+     * A burnt crate in the campaign: still a gamble, but it never brings anything into the sector
+     * that the sector does not have. Half the time one item from the sector's loot, half the time
+     * the burnt cargo hurts the hull.
+     */
+    private static void campaignGamble(AbstractConsumable consumable) {
+        com.buran.game.campaign.Sector sector = com.buran.game.campaign.Campaign.current();
+        if (MathUtils.randomBoolean()) {
+            java.util.List<Sticker> loot = sector.loot();
+            Sticker s = loot.get(MathUtils.random(loot.size() - 1));
+            SelectorGroup.getInstance().addSelector(s, consumable.isGolden() ? 2 : 1);
+            GameInfoSystem.setup(consumable.getPosition().x, consumable.getPosition().y,
+                    "[GREEN]+" + s.name() + "[]", 3.0f, true);
+            boomBox.playSound(MSConstants.ADD_SELECTABLE);
+        } else {
+            float hit = Standing.getInstance().getMaxHp() * (consumable.isGolden() ? 0.35f : 0.2f);
+            Standing.getInstance().changeHP(-hit);
+            GameInfoSystem.setup(consumable.getPosition().x, consumable.getPosition().y,
+                    "[RED]BURNT CARGO  -" + Math.round(hit) + " HULL[]", 3.0f, true);
+            boomBox.playSound(MSConstants.DEL_SCORE);
         }
     }
 

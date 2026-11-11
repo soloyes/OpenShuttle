@@ -287,6 +287,144 @@ no white border.
 
 ---
 
+## 7. Финал второй главы (16:9) — `art/chapter2/raw/p01…p03.jpg`
+
+### `p01.jpg` — реф [p12.jpg](../../art/intro/raw/p12.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. The shuttle cockpit in darkness, the radio panel glowing, a cosmonaut in a white suit
+leaning toward the speaker, listening, the reflection of a cold light on his visor. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `p02.jpg` — реф [p06.jpg](../../art/intro/raw/p06.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. An old Soviet cosmonaut commander from 1991, seen as a faint ghostly figure inside a cold
+light, worn spacesuit with an old mission patch, calm and patient, face half in shadow. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `p03.jpg` — реф [p11.jpg](../../art/intro/raw/p11.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. The rift seen from close, and inside its dark centre a tiny warm amber glow like a window,
+the shuttle small in front of it, hesitant. No text, no letters, no labels, no frame,
+no white border.
+```
+
+---
+
+## 8. Финал игры (16:9) — `art/chapter3/raw/p01…p04.jpg`
+
+### `p01.jpg` — реф [p11.jpg](../../art/intro/raw/p11.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. The white shuttle diving straight into the centre of the rift, debris and light spiralling
+around it, seen from behind, everything pulled forward. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `p02.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. Pure white light filling almost the whole frame, the faint outline of the shuttle
+dissolving into it, silence, soft grain. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `p03.jpg` — реф [p03.jpg](../../art/intro/raw/p03.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. The whole blue Earth from orbit, bright and alive, sunrise on the horizon, the small white
+shuttle in the foreground, hopeful. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `p04.jpg` — реф [p01.jpg](../../art/intro/raw/p01.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. Baikonur at dawn, the launch pad and the steppe, a few people in coats looking up at the
+sky, warm morning light, hope. No text, no letters, no labels, no frame,
+no white border.
+```
+
+---
+
+## 9. Карточки секторов третьей главы (16:9) — `art/ui/raw/sector13…sector19.jpg`
+
+### `sector13.jpg` — реф [p10.jpg](../../art/intro/raw/p10.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. Old cosmonauts in worn white suits drifting among green radiation clouds and violet magnetic
+swirls, faint old beacon lights on their suits. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `sector14.jpg` — реф [p09.jpg](../../art/intro/raw/p09.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. A graveyard of station wreckage and rocks slowly drifting toward a black hole in the
+distance, a shuttle burning a rock with a red laser. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `sector15.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. Cargo crates floating in space guarded by blue electric discharges and brown acid clouds,
+a shuttle slipping between them. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `sector16.jpg` — реф [p11.jpg](../../art/intro/raw/p11.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. The rift pulling everything in like a tide, streams of debris and five small figures on its
+edge, a shuttle racing along the ring. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `sector17.jpg` — реф [p12.jpg](../../art/intro/raw/p12.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. A dead dark radar screen in the cockpit, through the window only darkness and a few faint
+beacon lights far away. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `sector18.jpg` — реф [p09.jpg](../../art/intro/raw/p09.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. Every kind of anomaly at once around the rift: acid clouds, lightning, green and violet
+glows, the shuttle in the middle of the chaos. No text, no letters, no labels, no frame,
+no white border.
+```
+
+### `sector19.jpg` — реф [p11.jpg](../../art/intro/raw/p11.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink lines, same
+colours and lighting. Wide 16:9 image. One cosmonaut floating alone at the very edge of the rift, a warm light behind him, the
+shuttle approaching slowly. No text, no letters, no labels, no frame,
+no white border.
+```
+
+---
+
 ## Уже готово (в игре)
 
 `menu.jpg`, `crew_commander / medic / scientist / mechanic / military.jpg`, `clear.jpg`,

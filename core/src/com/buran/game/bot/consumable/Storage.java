@@ -216,6 +216,14 @@ public class Storage extends AbstractConsumable {
     }
 
     private Sticker generateSafe() {
+        com.buran.game.campaign.Sector sector = com.buran.game.campaign.Campaign.current();
+        if (sector != null) {
+            if (size == Size.SINGLE) {
+                return sector.storageLoot();
+            }
+            java.util.List<Sticker> loot = sector.loot();
+            return loot.get(MathUtils.random(loot.size() - 1));
+        }
         int r;
         switch (size) {
             case SINGLE:
