@@ -26,3 +26,4 @@ assets/.prefs/
 # OS
 .DS_Store
 Thumbs.db
+art/sprites/raw/*.stl
