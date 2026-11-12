@@ -324,8 +324,12 @@ public class Buran extends AbstractBuran {
             batch.setColor(0.75f, 0.85f, 1f, 0.16f);
             batch.draw(halo, position.x - hs / 2f, position.y - hs / 2f, hs, hs);
             batch.setColor(0f, 0f, 0.02f, 0.55f);
-            batch.draw(rollFrame(), position.x - width / 2, position.y - height / 2, width / 2, height / 2,
-                    width, height, scaleX * 1.07f, scaleY * 1.07f * (bank < 0f && rollFrame() != textureRegion[0] ? -1f : 1f), angle);
+            TextureRegion rf = rollFrame();
+            float rk = width / (float) textureRegion[0].getRegionWidth();
+            float rw = rf == textureRegion[0] ? width : rf.getRegionWidth() * rk;
+            float rh = rf == textureRegion[0] ? height : rf.getRegionHeight() * rk;
+            batch.draw(rf, position.x - rw / 2, position.y - rh / 2, rw / 2, rh / 2,
+                    rw, rh, scaleX * 1.07f, scaleY * 1.07f * (bank < 0f && rf != textureRegion[0] ? -1f : 1f), angle);
             tmpColor.set(cr, cg, cb, ca);
             batch.setColor(cr, cg, cb, ca);
         }
@@ -336,13 +340,16 @@ public class Buran extends AbstractBuran {
         // the same frame mirrored. Without frames the ship flies level.
         TextureRegion frame = !Rules.GAME_OVER ? rollFrame() : textureRegion[1];
         // A rolled frame is narrower: keep the length, use its own proportions.
-        float fh = frame == textureRegion[0] || Rules.GAME_OVER ? height
-                : width * frame.getRegionHeight() / (float) frame.getRegionWidth();
+        // Frames share one scale: the level ship's width maps to the ship's width in the world.
+        float k = frame == textureRegion[0] || Rules.GAME_OVER ? 1f
+                : width / (float) textureRegion[0].getRegionWidth();
+        float fw = frame == textureRegion[0] || Rules.GAME_OVER ? width : frame.getRegionWidth() * k;
+        float fh = frame == textureRegion[0] || Rules.GAME_OVER ? height : frame.getRegionHeight() * k;
         batch.draw(
                 frame,
-                position.x - width / 2, position.y - fh / 2,
-                width / 2, fh / 2,
-                width, fh,
+                position.x - fw / 2, position.y - fh / 2,
+                fw / 2, fh / 2,
+                fw, fh,
                 scaleX, scaleY * (bank < 0f && frame != textureRegion[0] ? -1f : 1f),
                 angle
         );

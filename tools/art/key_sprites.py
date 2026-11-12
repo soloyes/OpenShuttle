@@ -82,6 +82,25 @@ def main():
             continue
         rgba, keep = key(img)
         px = size_for(name)
+        if name == "sprite_buran_roll_sheet":
+            # Four ships left to right: level, then rolled more and more. One scale for all four,
+            # so the frames match in size.
+            lab, n = nd.label(keep)
+            sizes = nd.sum(keep, lab, range(1, n + 1))
+            big = sorted([i + 1 for i, s_ in enumerate(sizes) if s_ > 2000],
+                         key=lambda i: nd.center_of_mass(keep, lab, i)[1])[:4]
+            names = ["sprite_buran", "sprite_buran_roll20", "sprite_buran_roll40", "sprite_buran_roll60"]
+            ys, xs = np.nonzero(lab == big[0])
+            k = 256 / (xs.max() - xs.min() + 7)
+            for nm, i in zip(names, big):
+                m = lab == i
+                ys, xs = np.nonzero(m)
+                crop = Image.fromarray(np.where(m[..., None], rgba, 0).astype(np.uint8)[
+                    max(0, ys.min() - 3):ys.max() + 4, max(0, xs.min() - 3):xs.max() + 4], "RGBA")
+                crop = crop.resize((max(1, round(crop.width * k)), max(1, round(crop.height * k))), Image.LANCZOS)
+                crop.save(os.path.join(DST, nm + ".png"), optimize=True)
+                print(nm, crop.size)
+            continue
         if name.startswith("sprite_fragments"):
             lab, n = nd.label(keep)
             sizes = nd.sum(keep, lab, range(1, n + 1))
