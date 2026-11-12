@@ -102,7 +102,7 @@ public class Codex {
     private final TextureRegion astro;
 
     public Codex() {
-        TextureRegion[] astronaut = Regions.split(region(PaintConstants.ASTRONAUT_REGION), 1, 5, 5);
+        TextureRegion[] astronaut = com.buran.game.bot.consumable.Astronaut.crewRegions();
         TextureRegion[] corrosive = sheet(PaintConstants.ANOMALY_CORROSIVE_REGION, 3, 4, PaintConstants.ANOMALY_CORROSIVE_FRAMES);
         TextureRegion[] metal = sheet(PaintConstants.ASTEROID_METAL_REGION, 8, 8, PaintConstants.ASTEROID_METAL_FRAMES);
 
@@ -428,10 +428,14 @@ public class Codex {
             text(batch, labelFont, l, sx + s / 2f - Theme.width(labelFont, l) / 2f, sy + s + 44f, Theme.HEAD, alpha);
         }
         float is = s * 0.78f;
+        // Keep the sprite's own proportions inside the square.
+        float rk = is / Math.max(icon.getRegionWidth(), icon.getRegionHeight());
+        float iw = icon.getRegionWidth() * rk;
+        float ih = icon.getRegionHeight() * rk;
         Color tint = e.variants != null ? e.variants[variantIndex(e)] : Color.WHITE;
         float rot = e.spin ? time * 25f : 0f;
         batch.setColor(tint.r, tint.g, tint.b, alpha);
-        batch.draw(icon, sx + (s - is) / 2f, sy + (s - is) / 2f, is / 2f, is / 2f, is, is, 1f, 1f, rot);
+        batch.draw(icon, sx + (s - iw) / 2f, sy + (s - ih) / 2f, iw / 2f, ih / 2f, iw, ih, 1f, 1f, rot);
         batch.setColor(Color.WHITE);
     }
 

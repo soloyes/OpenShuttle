@@ -29,8 +29,7 @@ public class Astronaut extends AbstractConsumable {
     public Astronaut(ParticleEmitter particleEmitter) {
         super(particleEmitter);
         this.particleEmitter = particleEmitter;
-        this.regions = Regions.split(
-                Assets.getInstance().getAtlas().findRegion(PaintConstants.ASTRONAUT_REGION), 1, 5, 5);
+        this.regions = crewRegions();
         this.width = PaintConstants.ASTRONAUT_WIDTH;
         this.height = PaintConstants.ASTRONAUT_HEIGHT;
         this.type = Type.ASTRONAUT;
@@ -108,7 +107,41 @@ public class Astronaut extends AbstractConsumable {
         }
         this.labels.get(Label.Layer.LABEL).get(0).setSticker(Sticker.ASTRONAUTS.get(multiplier));
         this.texture = regions[multiplier];
+        // Painted crew have their own shape: keep the proportions, the longest side about 200.
+        float side = Math.max(texture.getRegionWidth(), texture.getRegionHeight());
+        float k = painted ? 200f / side : PaintConstants.ASTRONAUT_WIDTH / side;
+        this.width = (int) (texture.getRegionWidth() * k);
+        this.height = (int) (texture.getRegionHeight() * k);
         playSound();
+    }
+
+    private static TextureRegion[] crew;
+    private static boolean painted;
+
+    /**
+     * One region per profession (COMMANDER, MEDIC, SCIENTIST, MECHANIC, MILITARY): the painted
+     * sprites in assets/sprites when present, the old atlas strip otherwise.
+     */
+    public static TextureRegion[] crewRegions() {
+        if (crew != null) {
+            return crew;
+        }
+        String[] n = {"commander", "medic", "scientist", "mechanic", "military"};
+        TextureRegion[] r = new TextureRegion[5];
+        boolean all = true;
+        for (int i = 0; i < 5; i++) {
+            com.badlogic.gdx.files.FileHandle f = com.badlogic.gdx.Gdx.files.internal("sprites/sprite_crew_" + n[i] + ".png");
+            if (!f.exists()) {
+                all = false;
+                break;
+            }
+            com.badlogic.gdx.graphics.Texture t = new com.badlogic.gdx.graphics.Texture(f);
+            t.setFilter(com.badlogic.gdx.graphics.Texture.TextureFilter.Linear, com.badlogic.gdx.graphics.Texture.TextureFilter.Linear);
+            r[i] = new TextureRegion(t);
+        }
+        painted = all;
+        crew = all ? r : Regions.split(Assets.getInstance().getAtlas().findRegion(PaintConstants.ASTRONAUT_REGION), 1, 5, 5);
+        return crew;
     }
 
     public Sticker getProfession() {

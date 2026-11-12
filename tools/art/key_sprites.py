@@ -82,6 +82,35 @@ def main():
             continue
         rgba, keep = key(img)
         px = size_for(name)
+        if name == "sprite_sheet_ship_crew":
+            # Top row: the ship level, 20, 40, 60 degrees (one scale). Bottom row: the five crew.
+            lab, n = nd.label(keep)
+            sizes = nd.sum(keep, lab, range(1, n + 1))
+            big = [i + 1 for i, s_ in enumerate(sizes) if s_ > 3000]
+            h = keep.shape[0]
+            cy = {i: nd.center_of_mass(keep, lab, i) for i in big}
+            top = sorted([i for i in big if cy[i][0] < h * 0.45], key=lambda i: cy[i][1])[:4]
+            bottom = sorted([i for i in big if cy[i][0] >= h * 0.45], key=lambda i: cy[i][1])[:5]
+
+            def cut(i, nm, k):
+                m = lab == i
+                ys, xs = np.nonzero(m)
+                crop = Image.fromarray(np.where(m[..., None], rgba, 0).astype(np.uint8)[
+                    max(0, ys.min() - 3):ys.max() + 4, max(0, xs.min() - 3):xs.max() + 4], "RGBA")
+                crop = crop.resize((max(1, round(crop.width * k)), max(1, round(crop.height * k))), Image.LANCZOS)
+                crop.save(os.path.join(DST, nm + ".png"), optimize=True)
+                print(nm, crop.size)
+
+            ys, xs = np.nonzero(lab == top[0])
+            k = 256 / (xs.max() - xs.min() + 7)
+            for nm, i in zip(["sprite_buran", "sprite_buran_roll20", "sprite_buran_roll40", "sprite_buran_roll60"], top):
+                cut(i, nm, k)
+            hmax = max(np.ptp(np.nonzero(lab == i)[0]) for i in bottom)
+            k = 192 / (hmax + 7)
+            for nm, i in zip(["sprite_crew_commander", "sprite_crew_medic", "sprite_crew_scientist",
+                              "sprite_crew_mechanic", "sprite_crew_military"], bottom):
+                cut(i, nm, k)
+            continue
         if name == "sprite_buran_roll_sheet":
             # Four ships left to right: level, then rolled more and more. One scale for all four,
             # so the frames match in size.
