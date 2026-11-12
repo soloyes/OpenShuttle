@@ -1,6 +1,7 @@
 package com.buran.game.player;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -323,28 +324,28 @@ public class Buran extends AbstractBuran {
             batch.setColor(0.75f, 0.85f, 1f, 0.16f);
             batch.draw(halo, position.x - hs / 2f, position.y - hs / 2f, hs, hs);
             batch.setColor(0f, 0f, 0.02f, 0.55f);
-            batch.draw(textureRegion[0], position.x - width / 2, position.y - height / 2, width / 2, height / 2,
-                    width, height, scaleX * 1.07f, scaleY * 1.07f * rollScale(), angle);
+            batch.draw(rollFrame(), position.x - width / 2, position.y - height / 2, width / 2, height / 2,
+                    width, height, scaleX * 1.07f, scaleY * 1.07f * (bank < 0f && rollFrame() != textureRegion[0] ? -1f : 1f), angle);
             tmpColor.set(cr, cg, cb, ca);
             batch.setColor(cr, cg, cb, ca);
         }
         float dis = isTaken ? dissolveAmount() : rematerialize / REMATERIALIZE_TIME;
         batch.setColor(tmpColor);
         boolean dissolving = dis > 0f && com.buran.game.effects.Dissolve.begin(batch, dis);
-        // Rolling on the long axis: the wings narrow and the hull darkens a little as it banks.
-        float shade = 1f - 0.18f * Math.abs(com.badlogic.gdx.math.MathUtils.sinDeg(bank));
-        Color c0 = batch.getColor();
-        float r0 = c0.r, g0 = c0.g, b0 = c0.b, a0 = c0.a;
-        batch.setColor(r0 * shade, g0 * shade, b0 * shade, a0);
+        // Rolling on the long axis with painted frames (20, 40, 60 degrees); the other way is
+        // the same frame mirrored. Without frames the ship flies level.
+        TextureRegion frame = !Rules.GAME_OVER ? rollFrame() : textureRegion[1];
+        // A rolled frame is narrower: keep the length, use its own proportions.
+        float fh = frame == textureRegion[0] || Rules.GAME_OVER ? height
+                : width * frame.getRegionHeight() / (float) frame.getRegionWidth();
         batch.draw(
-                textureRegion[!Rules.GAME_OVER ? 0 : 1],
-                position.x - width / 2, position.y - height / 2,
-                width / 2, height / 2,
-                width, height,
-                scaleX, scaleY * rollScale(),
+                frame,
+                position.x - width / 2, position.y - fh / 2,
+                width / 2, fh / 2,
+                width, fh,
+                scaleX, scaleY * (bank < 0f && frame != textureRegion[0] ? -1f : 1f),
                 angle
         );
-        batch.setColor(r0, g0, b0, a0);
         if (dissolving) {
             com.buran.game.effects.Dissolve.end(batch);
         }
@@ -414,8 +415,28 @@ public class Buran extends AbstractBuran {
     private float prevAngle = Float.NaN;
     private float swayTime;
 
-    private float rollScale() {
-        return Math.max(0.5f, com.badlogic.gdx.math.MathUtils.cosDeg(bank));
+    private static TextureRegion[] rolls;
+
+    /** The painted frame for the current bank, or the level ship when there are no frames. */
+    private TextureRegion rollFrame() {
+        if (rolls == null) {
+            rolls = new TextureRegion[3];
+            int[] deg = {20, 40, 60};
+            for (int i = 0; i < 3; i++) {
+                com.badlogic.gdx.files.FileHandle f = Gdx.files.internal("sprites/sprite_buran_roll" + deg[i] + ".png");
+                if (f.exists()) {
+                    com.badlogic.gdx.graphics.Texture t = new com.badlogic.gdx.graphics.Texture(f);
+                    t.setFilter(com.badlogic.gdx.graphics.Texture.TextureFilter.Linear, com.badlogic.gdx.graphics.Texture.TextureFilter.Linear);
+                    rolls[i] = new TextureRegion(t);
+                }
+            }
+        }
+        float b = Math.abs(bank);
+        int i = b < 12f ? -1 : b < 30f ? 0 : b < 50f ? 1 : 2;
+        if (i < 0 || rolls[i] == null) {
+            return textureRegion[0];
+        }
+        return rolls[i];
     }
 
     private void updateBank(float dt) {
@@ -431,8 +452,7 @@ public class Buran extends AbstractBuran {
             turn = d / dt;   // degrees per second
         }
         prevAngle = angle;
-        float target = com.badlogic.gdx.math.MathUtils.clamp(turn * 0.35f, -50f, 50f)
-                + 5f * com.badlogic.gdx.math.MathUtils.sin(swayTime * 0.9f);
+        float target = com.badlogic.gdx.math.MathUtils.clamp(turn * 0.35f, -60f, 60f);
         bank += (target - bank) * Math.min(1f, dt * 5f);
     }
 
