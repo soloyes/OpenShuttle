@@ -789,6 +789,320 @@ In the same style as the attached image: same graphic novel drawing, same ink ou
 
 ---
 
+## 11. Анимации: раскадровки 8 кадров (аномалии и экипаж)
+
+Чтобы всё в секторе шевелилось, как старые аномалии, нужен не один кадр, а **8 кадров одной
+закольцованной анимации на одной картинке**: сетка 4 × 2, белые линии между клетками, зелёный
+фон. Я режу сетку на кадры сам. Покадровая анимация на одной картинке работает лучше, чем кадры
+по отдельности: генератор видит все кадры сразу и держит объект одинаковым.
+
+**Как делать:**
+1. Новый чат (ChatGPT или Nano Banana), один объект — одна картинка.
+2. Приложи реф из заголовка: [anomalies_static.png](../../art/sprites/ref/anomalies_static.png)
+   для аномалий, [ship_crew_static.png](../../art/sprites/ref/ship_crew_static.png) для экипажа.
+   Можно дописать: «the subject should look like the one in cell N of the attached image».
+3. Вставь промпт целиком.
+4. Проверь:
+   - ровно 8 клеток 4 × 2;
+   - объект один и тот же во всех клетках;
+   - движение маленькими шагами;
+   - 8-й кадр плавно переходит в 1-й.
+5. Сохрани в `art/sprites/raw/` под именем из заголовка.
+
+Если 8 кадров не держатся, попроси 4 кадра в ряд (сетка 4 × 1): тоже подойдёт.
+
+### Аномалии
+
+### `anim_corrosive.png` — реф [anomalies_static.png](../../art/sprites/ref/anomalies_static.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Corrosive anomaly: a drifting cloud of acid dust with a dense swirling core, in neutral grey and white only (the game tints it by level).
+
+MOTION over the 8 frames: The swirl turns slowly clockwise (about 45 degrees over the 8 frames, so the loop is seamless), puffs on the edge boil and drift outward and fade, new puffs appear; the core gently brightens on frames 3-4 and dims again.
+```
+
+### `anim_electric.png` — реф [anomalies_static.png](../../art/sprites/ref/anomalies_static.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Electric anomaly: a ball of pale-blue electric discharge with thin crackling arcs.
+
+MOTION over the 8 frames: The ball pulses (slightly larger on frames 2 and 6); the lightning arcs around it are DIFFERENT in every frame - they jump, fork and vanish like real lightning; one bright flash on frame 5.
+```
+
+### `anim_radiation.png` — реф [anomalies_static.png](../../art/sprites/ref/anomalies_static.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Radiation anomaly: a sickly green glowing cloud with soft tendrils.
+
+MOTION over the 8 frames: The cloud breathes: expands slowly over frames 1-4 and contracts over 5-8; the tendrils sway like seaweed; a faint green shimmer travels around the edge.
+```
+
+### `anim_magnetic.png` — реф [anomalies_static.png](../../art/sprites/ref/anomalies_static.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Magnetic anomaly: a violet swirl of magnetic field lines with small metal shards caught in it.
+
+MOTION over the 8 frames: The field lines rotate counter-clockwise (about 45 degrees over the 8 frames); the metal shards orbit with them and tumble; the bright violet core flickers.
+```
+
+### `anim_boss_mother.png` — реф [anomalies_static.png](../../art/sprites/ref/anomalies_static.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: The Mother: a huge heavy cloud of dark acid dust with a glowing amber core like an eye.
+
+MOTION over the 8 frames: The whole mass churns slowly; the amber core pulses like a heartbeat (bright on frames 1 and 5); small clouds bud off the edge on frames 3 and 7 and drift away.
+```
+
+### `anim_boss_storm.png` — реф [anomalies_static.png](../../art/sprites/ref/anomalies_static.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: The Storm Heart: a huge sphere of blue lightning around a bright core.
+
+MOTION over the 8 frames: Thick lightning cage crawls and reshapes every frame; the core flares strongly on frame 4 and frame 8; the whole sphere trembles slightly.
+```
+
+### Экипаж
+
+### `anim_crew_commander.png` — реф [ship_crew_static.png](../../art/sprites/ref/ship_crew_static.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Soviet cosmonaut commander: white suit with red-and-gold shoulder stripes, gold helmet band, mirrored gold visor (no face), one arm raised holding an amber signal lamp, other hand on hip, legs together.
+
+MOTION over the 8 frames: He floats in zero gravity: the raised arm slowly waves the lamp left and right, the lamp blinks (bright on frames 1-2 and 5-6), the legs drift a little apart and back, the body sways gently.
+```
+
+### `anim_crew_medic.png` — реф [ship_crew_static.png](../../art/sprites/ref/ship_crew_static.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Soviet cosmonaut medic: white suit with red cuffs and red boots, mirrored gold visor (no face), curled up hugging a big white case with a red cross.
+
+MOTION over the 8 frames: Curled up, slowly tumbling: the whole figure rotates about 45 degrees over the 8 frames, the knees open slightly and close again, a red light on the case blinks on frames 1 and 5.
+```
+
+### `anim_crew_scientist.png` — реф [ship_crew_static.png](../../art/sprites/ref/ship_crew_static.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Soviet cosmonaut scientist: white suit with pale-blue panels, mirrored gold visor (no face), sitting cross-legged holding a glowing pale-blue tablet, a thin antenna on the backpack.
+
+MOTION over the 8 frames: Sitting cross-legged in zero gravity: bobs gently up and down, the antenna sways, the tablet screen glows brighter and dimmer, the head tilts slightly as if reading.
+```
+
+### `anim_crew_mechanic.png` — реф [ship_crew_static.png](../../art/sprites/ref/ship_crew_static.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Soviet cosmonaut mechanic: scuffed white suit with an orange tool belt and orange knee pads, mirrored gold visor (no face), tumbling sideways holding a big wrench in an outstretched arm, a long tether cable from the belt.
+
+MOTION over the 8 frames: Slowly tumbling: the body rotates about 45 degrees over the 8 frames, the free arm and legs flail softly, the tether cable snakes and curls differently each frame.
+```
+
+### `anim_crew_military.png` — реф [ship_crew_static.png](../../art/sprites/ref/ship_crew_static.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Soviet military cosmonaut: dark olive-green armoured suit with heavy shoulders and a red star on the chest, mirrored gold visor (no face), standing at attention, saluting.
+
+MOTION over the 8 frames: Holds the salute, floating: the whole body drifts and sways slightly, the free arm swings a little, the knees bend and straighten a bit, a small red light on the helmet blinks on frames 1 and 5.
+```
+
+---
+
 ## Уже готово (в игре)
 
 `sector07`, `sector08`, `sector10`, `sector11`, `sector12`, `codex_fuel`, `sprite_buran`;
