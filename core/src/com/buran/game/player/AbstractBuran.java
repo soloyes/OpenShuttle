@@ -69,6 +69,15 @@ public class AbstractBuran implements InputProcessor {
         this.tmp3V2 = new Vector2();
         this.width = PaintConstants.BURAN_WIDTH;
         this.height = PaintConstants.BURAN_HEIGHT;
+        // The painted ship (assets/sprites/sprite_buran.png, nose right, no padding) when present.
+        com.badlogic.gdx.files.FileHandle painted = com.badlogic.gdx.Gdx.files.internal("sprites/sprite_buran.png");
+        if (painted.exists()) {
+            com.badlogic.gdx.graphics.Texture t = new com.badlogic.gdx.graphics.Texture(painted);
+            t.setFilter(com.badlogic.gdx.graphics.Texture.TextureFilter.Linear, com.badlogic.gdx.graphics.Texture.TextureFilter.Linear);
+            this.textureRegion[0] = new TextureRegion(t);
+            this.width = 215;
+            this.height = 215 * t.getHeight() / t.getWidth();
+        }
         this.widthBlur = PaintConstants.BURAN_BLUR_WIDTH;
         this.heightBlur = PaintConstants.BURAN_BLUR_HEIGHT;
         this.scaleX = this.scaleY = 1.0f;

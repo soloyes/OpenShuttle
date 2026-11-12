@@ -447,36 +447,64 @@ no white border.
 In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The white Soviet Buran space shuttle seen from directly above, nose pointing to the right, wings spread, black heat-shield edges, a small red star on the left wing, three engine bells at the back. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
 ```
 
-### Экипаж (у каждой профессии свой акцент на скафандре)
+### Экипаж (у каждого свой силуэт и цвет скафандра)
+
+Первая попытка вышла с одинаковыми позами и мелкими различиями, все пятеро как близнецы.
+Теперь отличие в позе и цвете, чтобы читалось даже крошкой на экране. Лица не видно ни у кого.
 
 ### `sprite_crew_commander.jpg` — реф [p10.jpg](../../art/intro/raw/p10.jpg)
 
 ```
-In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One Soviet cosmonaut in a white spacesuit floating in space, seen from directly above, arms and legs spread like a starfish, helmet towards the top, a gold stripe on the helmet and an amber light on the chest. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One Soviet cosmonaut commander floating in space: one arm raised high waving a small amber signal lamp, the other arm on the hip, legs straight and together (a tall, narrow silhouette). White spacesuit with broad red-and-gold stripes on the shoulders and a gold band around the helmet. The helmet visor is closed and mirrored gold: no face visible. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole figure visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the figure. No text, no letters, no numbers, no frame, no white border.
 ```
 
 ### `sprite_crew_medic.jpg` — реф [p10.jpg](../../art/intro/raw/p10.jpg)
 
 ```
-In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One Soviet cosmonaut in a white spacesuit floating in space, seen from directly above, arms and legs spread like a starfish, helmet towards the top, a red cross shape on the shoulder and a white medical pack. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One Soviet cosmonaut medic floating in space, curled up with knees drawn to the chest, hugging a large white medical case with a big red cross on it (a round, compact silhouette). White spacesuit with red cuffs and red boots. The helmet visor is closed and mirrored gold: no face visible. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole figure visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the figure. No text, no letters, no numbers, no frame, no white border.
 ```
 
 ### `sprite_crew_scientist.jpg` — реф [p10.jpg](../../art/intro/raw/p10.jpg)
 
 ```
-In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One Soviet cosmonaut in a white spacesuit floating in space, seen from directly above, arms and legs spread like a starfish, helmet towards the top, a small instrument case clipped to the belt and a pale blue visor. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One Soviet cosmonaut scientist floating in space, sitting cross-legged in zero gravity and holding a glowing pale-blue instrument tablet in both hands in front of the chest, a thin antenna on the backpack. White spacesuit with pale blue panels on the arms and legs. The helmet visor is closed and mirrored gold: no face visible. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole figure visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the figure. No text, no letters, no numbers, no frame, no white border.
 ```
 
 ### `sprite_crew_mechanic.jpg` — реф [p10.jpg](../../art/intro/raw/p10.jpg)
 
 ```
-In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One Soviet cosmonaut in a white spacesuit floating in space, seen from directly above, arms and legs spread like a starfish, helmet towards the top, a wrench and a coil of cable clipped to the suit, scuffed knees. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One Soviet cosmonaut mechanic tumbling sideways in space, one arm stretched far out gripping a huge wrench, a long tether cable snaking out from the belt (a wide, diagonal silhouette). Scuffed, dirty white spacesuit with a bright orange tool belt and orange knee pads. The helmet visor is closed and mirrored gold: no face visible. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole figure visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the figure. No text, no letters, no numbers, no frame, no white border.
 ```
 
 ### `sprite_crew_military.jpg` — реф [p10.jpg](../../art/intro/raw/p10.jpg)
 
 ```
-In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One Soviet cosmonaut in a white spacesuit floating in space, seen from directly above, arms and legs spread like a starfish, helmet towards the top, a darker grey-green suit and a red star on the helmet. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One Soviet military cosmonaut floating upright in space, standing straight at attention and saluting with one hand (a stiff, upright silhouette). Dark olive-green military spacesuit, not white, with heavier armoured shoulders and a red star on the chest. The helmet visor is closed and mirrored gold: no face visible. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole figure visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the figure. No text, no letters, no numbers, no frame, no white border.
+```
+
+### Кадры крена шаттла (правка твоего шаттла)
+
+Для микро-анимации: шаттл наклоняется на крыло по продольной оси. Нужны три кадра наклона
+в одну сторону, в другую сторону я сделаю зеркалом. Приложи [sprite_buran.jpg](../../art/sprites/raw/sprite_buran.jpg)
+и вставь промпт, меняя только число градусов. Если детали от кадра к кадру заметно гуляют,
+оставим крен кодом, как сейчас.
+
+### `sprite_buran_roll20.jpg` — реф [sprite_buran.jpg](../../art/sprites/raw/sprite_buran.jpg)
+
+```
+Edit the attached image. The same shuttle, exactly the same drawing, details, colours and size, still seen from directly above with the nose pointing to the right, but rolled 20 degrees around its long nose-to-tail axis: the upper wing tilts away from the viewer and looks shorter and slightly darker, the lower wing tilts towards the viewer, the side of the fuselage becomes a little visible. Keep the same position in the frame and the same flat solid pure green #00FF00 background. No text, no frame.
+```
+
+### `sprite_buran_roll40.jpg` — реф [sprite_buran.jpg](../../art/sprites/raw/sprite_buran.jpg)
+
+```
+Edit the attached image. The same shuttle, exactly the same drawing, details, colours and size, still seen from directly above with the nose pointing to the right, but rolled 40 degrees around its long nose-to-tail axis: the upper wing tilts away from the viewer and looks shorter and slightly darker, the lower wing tilts towards the viewer, the side of the fuselage becomes a little visible. Keep the same position in the frame and the same flat solid pure green #00FF00 background. No text, no frame.
+```
+
+### `sprite_buran_roll60.jpg` — реф [sprite_buran.jpg](../../art/sprites/raw/sprite_buran.jpg)
+
+```
+Edit the attached image. The same shuttle, exactly the same drawing, details, colours and size, still seen from directly above with the nose pointing to the right, but rolled 60 degrees around its long nose-to-tail axis: the upper wing tilts away from the viewer and looks shorter and slightly darker, the lower wing tilts towards the viewer, the side of the fuselage becomes a little visible. Keep the same position in the frame and the same flat solid pure green #00FF00 background. No text, no frame.
 ```
 
 ### Аномалии
@@ -763,6 +791,7 @@ In the same style as the attached image: same graphic novel drawing, same ink ou
 
 ## Уже готово (в игре)
 
+`sector07`, `sector08`, `sector10`, `sector11`, `sector12`, `codex_fuel`, `sprite_buran`;
 `menu.jpg`, `crew_commander / medic / scientist / mechanic / military.jpg`, `clear.jpg`,
 `lost.jpg`, `sector01–04.jpg`, `codex_corrosive / electric / radiation / magnetic / rift.jpg`,
 `layers/menu_shuttle.jpg` (фон меню без шаттла теперь `menu.jpg`). Слои меню: `tools/art/menu_layers.py`.

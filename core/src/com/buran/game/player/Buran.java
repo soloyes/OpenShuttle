@@ -324,21 +324,27 @@ public class Buran extends AbstractBuran {
             batch.draw(halo, position.x - hs / 2f, position.y - hs / 2f, hs, hs);
             batch.setColor(0f, 0f, 0.02f, 0.55f);
             batch.draw(textureRegion[0], position.x - width / 2, position.y - height / 2, width / 2, height / 2,
-                    width, height, scaleX * 1.07f, scaleY * 1.07f, angle);
+                    width, height, scaleX * 1.07f, scaleY * 1.07f * rollScale(), angle);
             tmpColor.set(cr, cg, cb, ca);
             batch.setColor(cr, cg, cb, ca);
         }
         float dis = isTaken ? dissolveAmount() : rematerialize / REMATERIALIZE_TIME;
         batch.setColor(tmpColor);
         boolean dissolving = dis > 0f && com.buran.game.effects.Dissolve.begin(batch, dis);
+        // Rolling on the long axis: the wings narrow and the hull darkens a little as it banks.
+        float shade = 1f - 0.18f * Math.abs(com.badlogic.gdx.math.MathUtils.sinDeg(bank));
+        Color c0 = batch.getColor();
+        float r0 = c0.r, g0 = c0.g, b0 = c0.b, a0 = c0.a;
+        batch.setColor(r0 * shade, g0 * shade, b0 * shade, a0);
         batch.draw(
                 textureRegion[!Rules.GAME_OVER ? 0 : 1],
                 position.x - width / 2, position.y - height / 2,
                 width / 2, height / 2,
                 width, height,
-                scaleX, scaleY,
+                scaleX, scaleY * rollScale(),
                 angle
         );
+        batch.setColor(r0, g0, b0, a0);
         if (dissolving) {
             com.buran.game.effects.Dissolve.end(batch);
         }
@@ -403,7 +409,35 @@ public class Buran extends AbstractBuran {
     /** Seconds left of re-assembling from sand after the black hole throws the ship out. */
     private float rematerialize;
 
+    /** Bank angle in degrees: into the turn, plus a slow idle sway. */
+    private float bank;
+    private float prevAngle = Float.NaN;
+    private float swayTime;
+
+    private float rollScale() {
+        return Math.max(0.5f, com.badlogic.gdx.math.MathUtils.cosDeg(bank));
+    }
+
+    private void updateBank(float dt) {
+        if (dt <= 0f) {
+            return;
+        }
+        swayTime += dt;
+        float turn = 0f;
+        if (!Float.isNaN(prevAngle)) {
+            float d = angle - prevAngle;
+            while (d > 180f) d -= 360f;
+            while (d < -180f) d += 360f;
+            turn = d / dt;   // degrees per second
+        }
+        prevAngle = angle;
+        float target = com.badlogic.gdx.math.MathUtils.clamp(turn * 0.35f, -50f, 50f)
+                + 5f * com.badlogic.gdx.math.MathUtils.sin(swayTime * 0.9f);
+        bank += (target - bank) * Math.min(1f, dt * 5f);
+    }
+
     public void update(float dt) {
+        updateBank(dt);
         if (rematerialize > 0f) {
             rematerialize = Math.max(0f, rematerialize - dt);
         }
