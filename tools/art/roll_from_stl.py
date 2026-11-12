@@ -44,8 +44,33 @@ def load_points():
         N[:, 0] *= -1
         P[:, 1] *= -1
         N[:, 1] *= -1
-    # Roll axis through the fuselage: centre of the span, and the hull's mid height.
-    P[:, 1] -= np.median(P[:, 1])
+    # PCA leaves the ship slightly skewed: turn it about the vertical until the top view is
+    # mirror-symmetric (left wing onto right wing), then put the axis on the plane of symmetry.
+    def asym(P2):
+        y0 = (P2[:, 1].min() + P2[:, 1].max()) / 2
+        g = 160
+        xs = np.clip(((P2[:, 0] - P2[:, 0].min()) / np.ptp(P2[:, 0]) * (g - 1)).astype(int), 0, g - 1)
+        yr = max(P2[:, 1].max() - y0, y0 - P2[:, 1].min())
+        ys = np.clip(((P2[:, 1] - y0) / yr * (g // 2 - 1) + g // 2).astype(int), 0, g - 1)
+        occ = np.zeros((g, g), bool)
+        occ[ys, xs] = True
+        return (occ ^ occ[::-1]).sum()
+
+    best = (None, 0.0)
+    for deg in np.arange(-12, 12.01, 0.25):
+        t = math.radians(deg)
+        c2, s2 = math.cos(t), math.sin(t)
+        Q = P.copy()
+        Q[:, 0], Q[:, 1] = c2 * P[:, 0] - s2 * P[:, 1], s2 * P[:, 0] + c2 * P[:, 1]
+        v = asym(Q)
+        if best[0] is None or v < best[0]:
+            best = (v, deg)
+    t = math.radians(best[1])
+    c2, s2 = math.cos(t), math.sin(t)
+    P[:, 0], P[:, 1] = c2 * P[:, 0] - s2 * P[:, 1], s2 * P[:, 0] + c2 * P[:, 1]
+    N[:, 0], N[:, 1] = c2 * N[:, 0] - s2 * N[:, 1], s2 * N[:, 0] + c2 * N[:, 1]
+    print("symmetry turn", best[1], "deg")
+    P[:, 1] -= (P[:, 1].min() + P[:, 1].max()) / 2
     P[:, 2] -= np.percentile(P[:, 2], 40)
     return P, N
 
@@ -86,7 +111,6 @@ def main():
     my0, my1 = (-P0[:, 1]).min(), (-P0[:, 1]).max()
     scale = (bx1 - bx0) / (mx1 - mx0)
     yscale = (by1 - by0) / (my1 - my0)
-    scale = min(scale, yscale) if abs(scale - yscale) / scale > 0.25 else scale
     off = (mx0 - bx0 / scale, my0 - (by0 + (by1 - by0 - (my1 - my0) * scale) / 2) / scale)
     big = np.asarray(sprite.resize((W, H), Image.LANCZOS)).astype(float)
     # Level view: which points the camera sees, and the sprite colour each of them carries.
@@ -101,8 +125,43 @@ def main():
     near_top = np.zeros(len(P0), bool)
     kk = iy0[ok] * W + ix0[ok]
     near_top[np.nonzero(ok)[0]] = P0[ok, 2] >= topz[kk] - 0.6
+    # Lay the drawing onto the model column by column: at every x the sprite's top and bottom
+    # edges are stretched onto the model's, so wings and hull line up exactly.
+    mask0 = nd.binary_fill_holes(nd.binary_closing(buf0 >= 0, iterations=2))
+    alpha_big = big[..., 3] > 128
+    M0 = np.full(W, -1)
+    M1 = np.full(W, -1)
+    S0 = np.full(W, -1)
+    S1 = np.full(W, -1)
+    for x in range(W):
+        r = np.nonzero(mask0[:, x])[0]
+        q = np.nonzero(alpha_big[:, x])[0]
+        if len(r) and len(q):
+            M0[x], M1[x], S0[x], S1[x] = r.min(), r.max(), q.min(), q.max()
+    # Two pieces per column: the hull band keeps one width (no waves in the panel lines), the
+    # wings stretch from the hull edge to the wing edge.
+    cm = (M0 + M1) / 2.0
+    cs = (S0 + S1) / 2.0
+    Hm = (M1 - M0) / 2.0
+    Hs = (S1 - S0) / 2.0
+    xr = int(W * 0.78)
+    Rm = Hm[xr] if Hm[xr] > 0 else 26 * SS
+    Rs = Hs[xr] if Hs[xr] > 0 else 26 * SS
     colour = np.zeros((len(P0), 4))
-    colour[ok] = big[iy0[ok], ix0[ok]]
+    idx = np.nonzero(ok)[0]
+    xs_ = ix0[idx]
+    good = M0[xs_] >= 0
+    idx, xs_ = idx[good], xs_[good]
+    d = iy0[idx] - cm[xs_]
+    hm, hs = Hm[xs_], Hs[xs_]
+    narrow = hm <= Rm * 1.05
+    ad = np.abs(d)
+    inner = ad <= Rm
+    mapped = np.where(narrow, d * hs / np.maximum(1, hm),
+                      np.where(inner, d * Rs / Rm,
+                               np.sign(d) * (Rs + (ad - Rm) * (hs - Rs) / np.maximum(1, hm - Rm))))
+    sy = np.clip(np.round(cs[xs_] + mapped).astype(int), 0, H - 1)
+    colour[idx] = big[sy, xs_]
     painted = near_top & (colour[:, 3] > 128)
     hull = np.array([200, 204, 210, 255.0])
     colour[~painted] = hull
