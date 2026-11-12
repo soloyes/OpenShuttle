@@ -257,7 +257,7 @@ public class Codex {
     }
 
     private void crew(Group g, String name, TextureRegion frame, Sticker s, String text) {
-        TextureRegion[] loop = com.buran.game.utils.Anim.frames("crew_" + name.toLowerCase(), 8);
+        TextureRegion[] loop = com.buran.game.utils.Anim.frames("crew_" + name.toLowerCase());
         Entry e = add(g, new Entry(name, "CREW", loop != null ? loop : new TextureRegion[]{frame}, loop != null ? 7f : 0f,
                 text + " Fly close and the tractor beam takes them aboard. With the ram shield on, catch them "
                         + "over the wings: the nose and tail kill. Switch it off and they come in safely."));
@@ -275,7 +275,7 @@ public class Codex {
 
     /** The painted loop when it exists, else the atlas frames. */
     private static TextureRegion[] painted(String name, TextureRegion[] atlas) {
-        TextureRegion[] p = com.buran.game.utils.Anim.frames(name, 8);
+        TextureRegion[] p = com.buran.game.utils.Anim.frames(name);
         return p != null ? p : atlas;
     }
 

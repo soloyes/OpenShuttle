@@ -8,6 +8,7 @@ Usage: python3 tools/art/anim_frames.py
 """
 import glob
 import os
+import re
 
 import numpy as np
 from PIL import Image, ImageSequence
@@ -23,14 +24,21 @@ def side(name):
         return 384
     if "crew" in name:
         return 200
+    if "buran" in name:
+        return 256
     return 256
+
+
+def grid(name):
+    m = re.search(r"_(\d+)x(\d+)$", name)
+    return (int(m.group(1)), int(m.group(2))) if m else (4, 2)
 
 
 def frames_of(path):
     if path.endswith(".gif"):
         return [f.convert("RGB") for f in ImageSequence.Iterator(Image.open(path))]
     im = Image.open(path).convert("RGB")
-    cols, rows = 4, 2
+    cols, rows = grid(os.path.splitext(os.path.basename(path))[0])
     w, h = im.width // cols, im.height // rows
     m = 6   # skip the white grid lines
     return [im.crop((c * w + m, r * h + m, (c + 1) * w - m, (r + 1) * h - m)) for r in range(rows) for c in range(cols)]
@@ -62,8 +70,11 @@ def key(img, by_distance=False):
 def main():
     os.makedirs(DST, exist_ok=True)
     for path in sorted(glob.glob(os.path.join(SRC, "anim_*.*"))):
-        name = os.path.splitext(os.path.basename(path))[0]
+        raw = os.path.splitext(os.path.basename(path))[0]
+        name = re.sub(r"_\d+x\d+$", "", raw)
         frames = [key(f, "radiation" in name) for f in frames_of(path)]
+        if "buran" in name:
+            frames = [f for f in frames]
         h = min(f.shape[0] for f in frames)
         w = min(f.shape[1] for f in frames)
         frames = [f[:h, :w] for f in frames]
@@ -72,12 +83,14 @@ def main():
             union |= f[..., 3] > 20
         ys, xs = np.nonzero(union)
         y0, y1, x0, x1 = max(0, ys.min() - 4), min(h, ys.max() + 5), max(0, xs.min() - 4), min(w, xs.max() + 5)
+        # Square cells (the game reads the frame count as width / height), content centred.
         k = side(name) / max(y1 - y0, x1 - x0)
         cw, ch = round((x1 - x0) * k), round((y1 - y0) * k)
-        strip = Image.new("RGBA", (cw * len(frames), ch))
+        sq = max(cw, ch)
+        strip = Image.new("RGBA", (sq * len(frames), sq))
         for i, f in enumerate(frames):
             cell = Image.fromarray(f[y0:y1, x0:x1], "RGBA").resize((cw, ch), Image.LANCZOS)
-            strip.paste(cell, (i * cw, 0))
+            strip.paste(cell, (i * sq + (sq - cw) // 2, (sq - ch) // 2))
         strip.save(os.path.join(DST, name + ".png"), optimize=True)
         print(name, len(frames), "frames", (cw, ch))
 

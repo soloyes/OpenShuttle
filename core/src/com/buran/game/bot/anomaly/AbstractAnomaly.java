@@ -50,13 +50,13 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
 
     /** Painted frames replace the atlas ones when they exist. */
     protected void usePainted(String name, String boss) {
-        TextureRegion[] p = com.buran.game.utils.Anim.frames(name, 8);
+        TextureRegion[] p = com.buran.game.utils.Anim.frames(name);
         if (p != null) {
             textureRegions = p;
             fps = com.buran.game.utils.Anim.FPS;
         }
         if (boss != null) {
-            bossRegions = com.buran.game.utils.Anim.frames(boss, 8);
+            bossRegions = com.buran.game.utils.Anim.frames(boss);
         }
     }
 

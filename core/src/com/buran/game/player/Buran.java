@@ -326,10 +326,11 @@ public class Buran extends AbstractBuran {
             batch.setColor(0f, 0f, 0.02f, 0.55f);
             TextureRegion rf = rollFrame();
             float rk = width / (float) textureRegion[0].getRegionWidth();
-            float rw = rf == textureRegion[0] ? width : rf.getRegionWidth() * rk;
-            float rh = rf == textureRegion[0] ? height : rf.getRegionHeight() * rk;
+            boolean ranim = rollAnim() != null;
+            float rw = ranim ? width : rf == textureRegion[0] ? width : rf.getRegionWidth() * rk;
+            float rh = ranim ? width : rf == textureRegion[0] ? height : rf.getRegionHeight() * rk;
             batch.draw(rf, position.x - rw / 2, position.y - rh / 2, rw / 2, rh / 2,
-                    rw, rh, scaleX * 1.07f, scaleY * 1.07f * (bank < 0f && rf != textureRegion[0] ? -1f : 1f), angle);
+                    rw, rh, scaleX * 1.07f, scaleY * 1.07f * (bank < 0f && (ranim || rf != textureRegion[0]) ? -1f : 1f), angle);
             tmpColor.set(cr, cg, cb, ca);
             batch.setColor(cr, cg, cb, ca);
         }
@@ -341,16 +342,17 @@ public class Buran extends AbstractBuran {
         TextureRegion frame = !Rules.GAME_OVER ? rollFrame() : textureRegion[1];
         // A rolled frame is narrower: keep the length, use its own proportions.
         // Frames share one scale: the level ship's width maps to the ship's width in the world.
+        boolean anim = rollAnim() != null && !Rules.GAME_OVER;
         float k = frame == textureRegion[0] || Rules.GAME_OVER ? 1f
                 : width / (float) textureRegion[0].getRegionWidth();
-        float fw = frame == textureRegion[0] || Rules.GAME_OVER ? width : frame.getRegionWidth() * k;
-        float fh = frame == textureRegion[0] || Rules.GAME_OVER ? height : frame.getRegionHeight() * k;
+        float fw = anim ? width : frame == textureRegion[0] || Rules.GAME_OVER ? width : frame.getRegionWidth() * k;
+        float fh = anim ? width : frame == textureRegion[0] || Rules.GAME_OVER ? height : frame.getRegionHeight() * k;
         batch.draw(
                 frame,
                 position.x - fw / 2, position.y - fh / 2,
                 fw / 2, fh / 2,
                 fw, fh,
-                scaleX, scaleY * (bank < 0f && frame != textureRegion[0] ? -1f : 1f),
+                scaleX, scaleY * (bank < 0f && (anim || frame != textureRegion[0]) ? -1f : 1f),
                 angle
         );
         if (dissolving) {
@@ -425,7 +427,24 @@ public class Buran extends AbstractBuran {
     private static TextureRegion[] rolls;
 
     /** The painted frame for the current bank, or the level ship when there are no frames. */
+    private static TextureRegion[] rollAnim;
+    private static boolean rollAnimTried;
+
+    /** A full painted roll (level to 60 degrees, many frames) when it exists. */
+    private static TextureRegion[] rollAnim() {
+        if (!rollAnimTried) {
+            rollAnimTried = true;
+            rollAnim = com.buran.game.utils.Anim.frames("buran_roll");
+        }
+        return rollAnim;
+    }
+
     private TextureRegion rollFrame() {
+        TextureRegion[] ra = rollAnim();
+        if (ra != null) {
+            int i = Math.round(Math.min(1f, Math.abs(bank) / 60f) * (ra.length - 1));
+            return ra[i];
+        }
         if (rolls == null) {
             rolls = new TextureRegion[3];
             int[] deg = {20, 40, 60};

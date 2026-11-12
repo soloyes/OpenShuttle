@@ -9,8 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Painted looping animations (assets/sprites/anim_<name>.png: frames side by side, square-ish
- * equal cells, made by tools/art/anim_frames.py). Null when the strip is not there.
+ * Painted looping animations (assets/sprites/anim_<name>.png: square frames side by side, made by tools/art/anim_frames.py). Null when the strip is not there.
  */
 public final class Anim {
     /** Frames per second of the painted loops (drawn at 150 ms a frame). */
@@ -18,6 +17,11 @@ public final class Anim {
     private static final Map<String, TextureRegion[]> CACHE = new HashMap<>();
 
     private Anim() {
+    }
+
+    /** Square frames side by side: the count is width / height. */
+    public static TextureRegion[] frames(String name) {
+        return frames(name, -1);
     }
 
     public static TextureRegion[] frames(String name, int count) {
@@ -29,6 +33,9 @@ public final class Anim {
         if (f.exists()) {
             Texture t = new Texture(f);
             t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            if (count <= 0) {
+                count = Math.max(1, t.getWidth() / t.getHeight());
+            }
             int w = t.getWidth() / count;
             r = new TextureRegion[count];
             for (int i = 0; i < count; i++) {

@@ -126,7 +126,7 @@ public class Astronaut extends AbstractConsumable {
             String[] n = {"commander", "medic", "scientist", "mechanic", "military"};
             crewAnim = new TextureRegion[5][];
             for (int i = 0; i < 5; i++) {
-                crewAnim[i] = com.buran.game.utils.Anim.frames("crew_" + n[i], 8);
+                crewAnim[i] = com.buran.game.utils.Anim.frames("crew_" + n[i]);
             }
         }
         TextureRegion[] f = crewAnim[multiplier];
