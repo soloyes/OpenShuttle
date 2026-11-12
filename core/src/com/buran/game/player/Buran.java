@@ -433,10 +433,13 @@ public class Buran extends AbstractBuran {
         }
         float b = Math.abs(bank);
         int i = b < 12f ? -1 : b < 30f ? 0 : b < 50f ? 1 : 2;
-        if (i < 0 || rolls[i] == null) {
-            return textureRegion[0];
+        // The strongest painted frame up to this bank (a missing 40 or 60 falls back to 20).
+        for (; i >= 0; i--) {
+            if (rolls[i] != null) {
+                return rolls[i];
+            }
         }
-        return rolls[i];
+        return textureRegion[0];
     }
 
     private void updateBank(float dt) {
