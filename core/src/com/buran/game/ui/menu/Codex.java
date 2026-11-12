@@ -103,7 +103,7 @@ public class Codex {
 
     public Codex() {
         TextureRegion[] astronaut = com.buran.game.bot.consumable.Astronaut.crewRegions();
-        TextureRegion[] corrosive = sheet(PaintConstants.ANOMALY_CORROSIVE_REGION, 3, 4, PaintConstants.ANOMALY_CORROSIVE_FRAMES);
+        TextureRegion[] corrosive = painted("corrosive", sheet(PaintConstants.ANOMALY_CORROSIVE_REGION, 3, 4, PaintConstants.ANOMALY_CORROSIVE_FRAMES));
         TextureRegion[] metal = sheet(PaintConstants.ASTEROID_METAL_REGION, 8, 8, PaintConstants.ASTEROID_METAL_FRAMES);
 
         dot = makeDot();
@@ -114,7 +114,7 @@ public class Codex {
         crate = region(PaintConstants.CRATE_REGION);
         shieldCrate = region(PaintConstants.SHIELD_CRATE_REGION);
         question = icons.getRegion(Sticker.PATTERN);
-        electric = sheet(PaintConstants.ANOMALY_ELECTRIC_REGION, 4, 4, PaintConstants.ANOMALY_ELECTRIC_FRAMES)[0];
+        electric = painted("electric", sheet(PaintConstants.ANOMALY_ELECTRIC_REGION, 4, 4, PaintConstants.ANOMALY_ELECTRIC_FRAMES))[0];
         astro = astronaut[1];
 
         // ---------------------------------------------------------------- threats
@@ -127,15 +127,15 @@ public class Codex {
         c.plate = "ui/codex_corrosive.jpg";
         c.variantNames = new String[]{"LEVEL 1  -  TAN", "LEVEL 2  -  GREEN", "LEVEL 3  -  YELLOW", "LEVEL 4  -  RED"};
         add(threats, new Entry("ELECTRIC ANOMALY", "THREAT",
-                sheet(PaintConstants.ANOMALY_ELECTRIC_REGION, 4, 4, PaintConstants.ANOMALY_ELECTRIC_FRAMES), 16f,
+                painted("electric", sheet(PaintConstants.ANOMALY_ELECTRIC_REGION, 4, 4, PaintConstants.ANOMALY_ELECTRIC_FRAMES)), 16f,
                 "A fast discharge that never fades on its own. It hunts at high speed and knocks out radar and "
                         + "laser. Let it come close and fire the EMP pulse, or send rockets after it."));
         add(threats, new Entry("RADIATION ANOMALY", "THREAT",
-                sheet(PaintConstants.ANOMALY_RADIATION_REGION, 4, 4, PaintConstants.ANOMALY_RADIATION_FRAMES), 14f,
+                painted("radiation", sheet(PaintConstants.ANOMALY_RADIATION_REGION, 4, 4, PaintConstants.ANOMALY_RADIATION_FRAMES)), 14f,
                 "Sticks to the hull and feeds on your score while it holds on. Burns out after two minutes. "
                         + "Rockets break it apart."));
         add(threats, new Entry("MAGNETIC ANOMALY", "THREAT",
-                sheet(PaintConstants.ANOMALY_MAGNETIC_REGION, 4, 4, PaintConstants.ANOMALY_MAGNETIC_FRAMES), 14f,
+                painted("magnetic", sheet(PaintConstants.ANOMALY_MAGNETIC_REGION, 4, 4, PaintConstants.ANOMALY_MAGNETIC_FRAMES)), 14f,
                 "Clamps onto the hull and siphons fuel. Burns out after two minutes. Mechanics aboard make the "
                         + "leak smaller. Rockets break it apart."));
         add(threats, new Entry("METAL ASTEROID", "THREAT", metal, 20f,
@@ -257,7 +257,8 @@ public class Codex {
     }
 
     private void crew(Group g, String name, TextureRegion frame, Sticker s, String text) {
-        Entry e = add(g, new Entry(name, "CREW", new TextureRegion[]{frame}, 0f,
+        TextureRegion[] loop = com.buran.game.utils.Anim.frames("crew_" + name.toLowerCase(), 8);
+        Entry e = add(g, new Entry(name, "CREW", loop != null ? loop : new TextureRegion[]{frame}, loop != null ? 7f : 0f,
                 text + " Fly close and the tractor beam takes them aboard. With the ram shield on, catch them "
                         + "over the wings: the nose and tail kill. Switch it off and they come in safely."));
         e.badge = icons.getRegion(s);
@@ -270,6 +271,12 @@ public class Codex {
         Entry e = add(g, new Entry(s.name(), system ? "SYSTEM" : onPickup ? "WORKS THE MOMENT YOU PICK IT UP" : "ITEM  -  USE WITH {X}",
                 new TextureRegion[]{icons.getRegion(s)}, 0f, text));
         e.demo = demo;
+    }
+
+    /** The painted loop when it exists, else the atlas frames. */
+    private static TextureRegion[] painted(String name, TextureRegion[] atlas) {
+        TextureRegion[] p = com.buran.game.utils.Anim.frames(name, 8);
+        return p != null ? p : atlas;
     }
 
     private static TextureRegion region(String name) {

@@ -813,6 +813,8 @@ In the same style as the attached image: same graphic novel drawing, same ink ou
 
 ### Аномалии
 
+Готово (GIF, в игре): все шесть аномалий и боссов, все пять космонавтов.
+
 ### `anim_corrosive.png` — реф [anomalies_static.png](../../art/sprites/ref/anomalies_static.png)
 
 ```
@@ -1099,6 +1101,344 @@ No text, no numbers, no labels, no frame around the whole image.
 SUBJECT: Soviet military cosmonaut: dark olive-green armoured suit with heavy shoulders and a red star on the chest, mirrored gold visor (no face), standing at attention, saluting.
 
 MOTION over the 8 frames: Holds the salute, floating: the whole body drifts and sways slightly, the free arm swings a little, the knees bend and straighten a bit, a small red light on the helmet blinks on frames 1 and 5.
+```
+
+---
+
+## 12. Анимации: остальное (камни, груз, убежище, маяк, ракета)
+
+Так же, как раздел 11: одна картинка с 8 кадрами 4 × 2, или анимированный GIF с 8 кадрами на
+зелёном фоне (как ты прислал в прошлый раз, это тоже подходит). Клади в `art/sprites/raw/` под
+именем из заголовка (`.png` или `.gif`), скрипт `tools/art/anim_frames.py` сам режет кадры.
+
+### `anim_rock_metal_1` — реф [sprite_sheet_ship_crew.png](../../art/sprites/raw/sprite_sheet_ship_crew.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Corrosive anomaly: a drifting cloud of acid dust with a dense swirling core, in neutral grey and white only (the game tints it by level).
+
+MOTION over the 8 frames: The swirl turns slowly clockwise (about 45 degrees over the 8 frames, so the loop is seamless), puffs on the edge boil and drift outward and fade, new puffs appear; the core gently brightens on frames 3-4 and dims again.
+
+SUBJECT: A dark metallic asteroid made of twisted station wreckage and iron rock.
+
+MOTION over the 8 frames: It tumbles slowly in place: rotates a full 360 degrees over the 8 frames so the loop is seamless, light catches the metal edges as it turns.
+```
+
+### `anim_rock_metal_2` — реф [sprite_sheet_ship_crew.png](../../art/sprites/raw/sprite_sheet_ship_crew.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Corrosive anomaly: a drifting cloud of acid dust with a dense swirling core, in neutral grey and white only (the game tints it by level).
+
+MOTION over the 8 frames: The swirl turns slowly clockwise (about 45 degrees over the 8 frames, so the loop is seamless), puffs on the edge boil and drift outward and fade, new puffs appear; the core gently brightens on frames 3-4 and dims again.
+
+SUBJECT: A second, differently shaped dark metallic asteroid of wreckage and iron.
+
+MOTION over the 8 frames: It tumbles slowly: a full 360-degree turn over the 8 frames, seamless loop.
+```
+
+### `anim_rock_mineral_1` — реф [sprite_sheet_ship_crew.png](../../art/sprites/raw/sprite_sheet_ship_crew.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Corrosive anomaly: a drifting cloud of acid dust with a dense swirling core, in neutral grey and white only (the game tints it by level).
+
+MOTION over the 8 frames: The swirl turns slowly clockwise (about 45 degrees over the 8 frames, so the loop is seamless), puffs on the edge boil and drift outward and fade, new puffs appear; the core gently brightens on frames 3-4 and dims again.
+
+SUBJECT: A grey-brown stony asteroid with pale mineral veins.
+
+MOTION over the 8 frames: It tumbles slowly: a full 360-degree turn over the 8 frames, the mineral veins glint faintly as they face the light.
+```
+
+### `anim_rock_mineral_2` — реф [sprite_sheet_ship_crew.png](../../art/sprites/raw/sprite_sheet_ship_crew.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Corrosive anomaly: a drifting cloud of acid dust with a dense swirling core, in neutral grey and white only (the game tints it by level).
+
+MOTION over the 8 frames: The swirl turns slowly clockwise (about 45 degrees over the 8 frames, so the loop is seamless), puffs on the edge boil and drift outward and fade, new puffs appear; the core gently brightens on frames 3-4 and dims again.
+
+SUBJECT: A second, differently shaped grey-brown stony asteroid with pale mineral veins.
+
+MOTION over the 8 frames: It tumbles slowly: a full 360-degree turn over the 8 frames, seamless loop.
+```
+
+### `anim_crate` — реф [codex_crate.jpg](../../art/ui/raw/codex_crate.jpg)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Corrosive anomaly: a drifting cloud of acid dust with a dense swirling core, in neutral grey and white only (the game tints it by level).
+
+MOTION over the 8 frames: The swirl turns slowly clockwise (about 45 degrees over the 8 frames, so the loop is seamless), puffs on the edge boil and drift outward and fade, new puffs appear; the core gently brightens on frames 3-4 and dims again.
+
+SUBJECT: The olive-grey Soviet metal cargo crate, seen from directly above, the lid visible, a small amber status light on the lid.
+
+MOTION over the 8 frames: It drifts and rotates slowly (about 45 degrees over the 8 frames), the amber light blinks: on in frames 1-2 and 5-6, off otherwise.
+```
+
+### `anim_crate_gold` — реф [codex_crate.jpg](../../art/ui/raw/codex_crate.jpg)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Corrosive anomaly: a drifting cloud of acid dust with a dense swirling core, in neutral grey and white only (the game tints it by level).
+
+MOTION over the 8 frames: The swirl turns slowly clockwise (about 45 degrees over the 8 frames, so the loop is seamless), puffs on the edge boil and drift outward and fade, new puffs appear; the core gently brightens on frames 3-4 and dims again.
+
+SUBJECT: The same cargo crate painted in worn gold and amber, seen from directly above.
+
+MOTION over the 8 frames: It rotates slowly (about 45 degrees over the 8 frames) and a soft golden shine sweeps across the lid from left to right once per loop.
+```
+
+### `anim_storage` — реф [codex_storage.jpg](../../art/ui/raw/codex_storage.jpg)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Corrosive anomaly: a drifting cloud of acid dust with a dense swirling core, in neutral grey and white only (the game tints it by level).
+
+MOTION over the 8 frames: The swirl turns slowly clockwise (about 45 degrees over the 8 frames, so the loop is seamless), puffs on the edge boil and drift outward and fade, new puffs appear; the core gently brightens on frames 3-4 and dims again.
+
+SUBJECT: The cylindrical Soviet storage module, seen from directly above, the round hatch on top, amber light leaking from a seam.
+
+MOTION over the 8 frames: It rotates slowly (about 45 degrees over the 8 frames), the amber seam light pulses softly, brightest on frame 4.
+```
+
+### `anim_fuel` — реф [codex_fuel.jpg](../../art/ui/raw/codex_fuel.jpg)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Corrosive anomaly: a drifting cloud of acid dust with a dense swirling core, in neutral grey and white only (the game tints it by level).
+
+MOTION over the 8 frames: The swirl turns slowly clockwise (about 45 degrees over the 8 frames, so the loop is seamless), puffs on the edge boil and drift outward and fade, new puffs appear; the core gently brightens on frames 3-4 and dims again.
+
+SUBJECT: The spherical Soviet fuel tank, white insulated skin with dark seams and two valves, seen from directly above.
+
+MOTION over the 8 frames: It turns slowly (about 45 degrees over the 8 frames), a thin wisp of vapour leaks from one valve and curls differently each frame.
+```
+
+### `anim_shelter` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Corrosive anomaly: a drifting cloud of acid dust with a dense swirling core, in neutral grey and white only (the game tints it by level).
+
+MOTION over the 8 frames: The swirl turns slowly clockwise (about 45 degrees over the 8 frames, so the loop is seamless), puffs on the edge boil and drift outward and fade, new puffs appear; the core gently brightens on frames 3-4 and dims again.
+
+SUBJECT: A small round shelter dome from a space station, seen from directly above: a dark metal ring with a softly glowing amber dome in the middle.
+
+MOTION over the 8 frames: The amber dome breathes: glows brighter over frames 1-4 and dimmer over 5-8; small lights on the ring chase around it clockwise.
+```
+
+### `anim_beacon` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Corrosive anomaly: a drifting cloud of acid dust with a dense swirling core, in neutral grey and white only (the game tints it by level).
+
+MOTION over the 8 frames: The swirl turns slowly clockwise (about 45 degrees over the 8 frames, so the loop is seamless), puffs on the edge boil and drift outward and fade, new puffs appear; the core gently brightens on frames 3-4 and dims again.
+
+SUBJECT: A small extraction beacon seen from directly above: a metal tripod frame with a bright warm amber lamp in the centre.
+
+MOTION over the 8 frames: The lamp pulses like a lighthouse: a bright flash with a soft ring on frame 1, fading through frame 4, dim on 5-7, rising on 8.
+```
+
+### `anim_rocket` — реф [sprite_sheet_ship_crew.png](../../art/sprites/raw/sprite_sheet_ship_crew.png)
+
+```
+Make ONE image: an animation sprite sheet for a 2D top-down space game.
+
+LAYOUT (strict):
+- A grid of 4 columns x 2 rows = 8 equal SQUARE cells, wide 2:1 image.
+- Thin straight white lines between the cells. Nothing crosses a line.
+- Read order: left to right, top row first. Frame 1 is top-left, frame 8 is bottom-right.
+- In every cell the subject is centred at the same spot and at the same size, filling about 70% of the cell, never touching the cell edges.
+- Background in every cell: flat solid pure green #00FF00, no gradient, no shadow, no glow spilling onto the green.
+
+ANIMATION (the most important part):
+- The 8 frames are ONE continuous seamless LOOP: frame 8 flows straight back into frame 1.
+- The subject is the SAME object in every frame: same design, same colours, same size, same line work. Only the motion described below changes, a little from each frame to the next (small steps, like a real animation, not 8 different pictures).
+- Seen strictly from directly above.
+
+STYLE: the same graphic-novel look as the attached reference image: ink outlines, muted painterly colours, soft film grain.
+
+No text, no numbers, no labels, no frame around the whole image.
+
+SUBJECT: Corrosive anomaly: a drifting cloud of acid dust with a dense swirling core, in neutral grey and white only (the game tints it by level).
+
+MOTION over the 8 frames: The swirl turns slowly clockwise (about 45 degrees over the 8 frames, so the loop is seamless), puffs on the edge boil and drift outward and fade, new puffs appear; the core gently brightens on frames 3-4 and dims again.
+
+SUBJECT: A small Soviet missile seen from directly above, nose pointing to the right, white body with a red tip and four small fins, an engine flame at the back.
+
+MOTION over the 8 frames: The body stays still; only the engine flame flickers: longer and shorter, changing shape every frame.
 ```
 
 ---

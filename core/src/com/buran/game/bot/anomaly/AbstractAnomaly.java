@@ -43,6 +43,29 @@ public abstract class AbstractAnomaly extends AbstractPoolable {
     public int temper = -1;
     /** A lurker has made its lunge. */
     public boolean lunged;
+    /** Frame rate of the current frames (painted loops are slower than the old atlas ones). */
+    protected float fps = 24f;
+    /** Painted boss frames for this kind (null = none). */
+    protected TextureRegion[] bossRegions;
+
+    /** Painted frames replace the atlas ones when they exist. */
+    protected void usePainted(String name, String boss) {
+        TextureRegion[] p = com.buran.game.utils.Anim.frames(name, 8);
+        if (p != null) {
+            textureRegions = p;
+            fps = com.buran.game.utils.Anim.FPS;
+        }
+        if (boss != null) {
+            bossRegions = com.buran.game.utils.Anim.frames(boss, 8);
+        }
+    }
+
+    /** The frame to draw now: the boss's own loop for a boss, else this kind's. */
+    protected TextureRegion currentFrame() {
+        TextureRegion[] r = bossHp > 0 && bossRegions != null ? bossRegions : textureRegions;
+        return r[(int) (frame % r.length)];
+    }
+
     /** Boss hit points (0 = not a boss): rockets, boosted rams or EMP take one each (tip 8). */
     public int bossHp;
     /** Seconds before a boss can be hit again. */

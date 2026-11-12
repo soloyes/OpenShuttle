@@ -57,6 +57,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         this.glowRegion = Assets.getInstance().getAtlas().findRegion(PaintConstants.ANOMALY_GLOW);
         this.width = PaintConstants.ANOMALY_CORROSIVE_WIDTH;
         this.height = PaintConstants.ANOMALY_CORROSIVE_HEIGHT;
+        usePainted("corrosive", "boss_mother");
         this.glowWidth = PaintConstants.ANOMALY_GLOW_WIDTH;
         this.glowHeight = PaintConstants.ANOMALY_GLOW_HEIGHT;
         this.type = Type.CORROSIVE;
@@ -123,8 +124,18 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
-        batch.setColor(color);
+        // Painted frames are drawn normally (additive washes them out); the Mother keeps her colours.
+        boolean painted = fps < 20f;
+        if (!painted) {
+            batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
+        }
+        if (bossHp > 0 && bossRegions != null) {
+            batch.setColor(1f, 1f, 1f, 1f);
+        } else if (painted) {
+            batch.setColor(0.55f + 0.45f * color.r, 0.55f + 0.45f * color.g, 0.55f + 0.45f * color.b, 1f);
+        } else {
+            batch.setColor(color);
+        }
         basicRender(batch);
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -255,7 +266,7 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
         );
 
         batch.draw(
-                textureRegions[(int) (frame % PaintConstants.ANOMALY_CORROSIVE_FRAMES)],
+                currentFrame(),
                 position.x - width / 2, position.y - height / 2,
                 width / 2, height / 2,
                 width, height,
@@ -267,8 +278,8 @@ public class CorrosiveAnomaly extends AbstractAnomaly {
     }
 
     public void basicUpdate(float dt) {
-        frame += 24 * dt;
-        if (frame >= PaintConstants.ANOMALY_CORROSIVE_FRAMES) {
+        frame += fps * dt;
+        if (frame >= textureRegions.length * 64) {
             frame = 0.0f;
         }
 

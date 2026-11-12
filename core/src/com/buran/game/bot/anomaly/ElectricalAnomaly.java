@@ -41,6 +41,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
         );
         this.width = PaintConstants.ANOMALY_ELECTRIC_WIDTH;
         this.height = PaintConstants.ANOMALY_ELECTRIC_HEIGHT;
+        usePainted("electric", "boss_storm");
         this.type = Type.ELECTRIC;
         this.moveProcessor = new MoveProcessor();
     }
@@ -71,7 +72,9 @@ public class ElectricalAnomaly extends AbstractAnomaly {
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
+        if (fps >= 20f) {
+            batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);   // old glowy atlas frames
+        }
         batch.setColor(1.0f, 1.0f, 1.0f, color.a);
         basicRender(batch);
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -81,7 +84,7 @@ public class ElectricalAnomaly extends AbstractAnomaly {
     @Override
     public void basicRender(SpriteBatch batch) {
         batch.draw(
-                textureRegions[(int) (frame % textureRegions.length)],
+                currentFrame(),
                 position.x - width / 2, position.y - height / 2,
                 width / 2, height / 2,
                 width, height,
@@ -94,9 +97,9 @@ public class ElectricalAnomaly extends AbstractAnomaly {
 
     @Override
     public void basicUpdate(float dt) {
-        frame += 24 * dt;
+        frame += fps * dt;
         angle += 48 * dt;
-        if (frame >= textureRegions.length)
+        if (frame >= textureRegions.length * 64)
             frame = 0.0f;
         if (angle >= 365)
             angle = 0;

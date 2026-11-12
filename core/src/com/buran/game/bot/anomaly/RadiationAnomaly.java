@@ -55,6 +55,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
         );
         this.width = PaintConstants.ANOMALY_RADIATION_WIDTH;
         this.height = PaintConstants.ANOMALY_RADIATION_HEIGHT;
+        usePainted("radiation", null);
         this.type = Type.RADIATION;
         this.moveProcessor = new MoveProcessor();
     }
@@ -85,7 +86,9 @@ public class RadiationAnomaly extends AbstractAnomaly {
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
+        if (fps >= 20f) {
+            batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);   // old glowy atlas frames
+        }
         batch.setColor(1.0f, 1.0f, 1.0f, color.a);
         basicRender(batch);
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -95,7 +98,7 @@ public class RadiationAnomaly extends AbstractAnomaly {
     @Override
     public void basicRender(SpriteBatch batch) {
         batch.draw(
-                textureRegions[(int) (frame % textureRegions.length)],
+                currentFrame(),
                 position.x - width / 2, position.y - height / 2,
                 width / 2, height / 2,
                 width, height,
@@ -108,8 +111,8 @@ public class RadiationAnomaly extends AbstractAnomaly {
 
     @Override
     public void basicUpdate(float dt) {
-        frame += 12 * dt;
-        if (frame >= textureRegions.length) {
+        frame += fps * dt;
+        if (frame >= textureRegions.length * 64) {
             frame = 0.0f;
         }
     }

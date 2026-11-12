@@ -107,12 +107,34 @@ public class Astronaut extends AbstractConsumable {
         }
         this.labels.get(Label.Layer.LABEL).get(0).setSticker(Sticker.ASTRONAUTS.get(multiplier));
         this.texture = regions[multiplier];
+        this.animTime = MathUtils.random(10f);
+        animate(0f);
         // Painted crew have their own shape: keep the proportions, the longest side about 200.
         float side = Math.max(texture.getRegionWidth(), texture.getRegionHeight());
-        float k = painted ? 200f / side : PaintConstants.ASTRONAUT_WIDTH / side;
+        float k = painted || crewAnim != null ? 200f / side : PaintConstants.ASTRONAUT_WIDTH / side;
         this.width = (int) (texture.getRegionWidth() * k);
         this.height = (int) (texture.getRegionHeight() * k);
         playSound();
+    }
+
+    private static TextureRegion[][] crewAnim;
+    private float animTime;
+
+    /** Painted crew loops: advance the frame (called from update). */
+    private void animate(float dt) {
+        if (crewAnim == null) {
+            String[] n = {"commander", "medic", "scientist", "mechanic", "military"};
+            crewAnim = new TextureRegion[5][];
+            for (int i = 0; i < 5; i++) {
+                crewAnim[i] = com.buran.game.utils.Anim.frames("crew_" + n[i], 8);
+            }
+        }
+        TextureRegion[] f = crewAnim[multiplier];
+        if (f == null) {
+            return;
+        }
+        animTime += dt;
+        texture = f[(int) (animTime * com.buran.game.utils.Anim.FPS) % f.length];
     }
 
     private static TextureRegion[] crew;
@@ -156,6 +178,7 @@ public class Astronaut extends AbstractConsumable {
 
     @Override
     public void update(float dt) {
+        animate(dt);
         basicUpdate(dt);
         moveProcessor.update(this, dt);
         boundCheck.keepInside(this);
