@@ -484,7 +484,7 @@ In the same style as the attached image: same graphic novel drawing, same ink ou
 
 ### `anim_buran_roll.gif` (или `anim_buran_roll_4x3.png`) — реф [ship_crew_static.png](../../art/sprites/ref/ship_crew_static.png)
 
-Плавный крен: 12 кадров от ровного до 60°, в одну сторону. Обратную сторону игра делает
+Плавный крен: 12 кадров от ровного до 30°, в одну сторону, корпус крутится вместе с крыльями. Обратную сторону игра делает
 зеркалом, итого 24 положения, и кадр выбирается по крутизне поворота, без скачков.
 
 ```
@@ -498,18 +498,18 @@ LAYOUT (strict):
 
 SUBJECT: the white Soviet Buran space shuttle from the attached image (top row, first ship), seen strictly from directly above: same drawing, same black heat-shield edges, same red stars, same engines, same cockpit windows. Exactly two wings and one tail in every frame - never add, remove or duplicate a wing.
 
-MOTION: the ship rolls around its long nose-to-tail axis, smoothly, in 12 EVEN steps from 0 to 60 degrees, about 5 degrees more in every frame:
-- frame 1: perfectly level, both wings equal and fully visible;
-- frames 2-6: the upper wing (the one at the top of the cell) gradually tilts away: it gets a little shorter and a little darker each frame, the lower wing a little wider and brighter;
-- frames 7-12: the upper wing keeps shortening into a thin dark sliver, the side of the fuselage becomes visible more and more, the lower wing looks wide; frame 12 is banked about 60 degrees, almost on edge.
-The nose, length and position never move; only the roll changes, by small equal steps, like frames of one smooth animation.
+MOTION: the WHOLE ship rolls as one rigid body around its long nose-to-tail axis, gently, in 12 EVEN steps from 0 to only 30 degrees (about 2.5 degrees more in every frame). The fuselage rolls together with the wings - it is one solid object, the body must NOT stay flat while only the wings move:
+- frame 1: perfectly level, both wings equal, the cockpit windows and the top of the fuselage centred;
+- frames 2-12: little by little the fuselage turns: its top surface, the cockpit windows, the panel lines and the engine bells all shift slightly towards the lower side, a thin strip of the fuselage's upper side becomes visible and slightly darker; the upper wing gets a little shorter and darker, the lower wing a little wider and brighter;
+- frame 12: rolled only about 30 degrees - a clear but gentle bank, the ship still reads as seen from above, nowhere near on edge.
+The nose, length and position never move; only the roll changes, by tiny equal steps, like frames of one smooth animation.
 
 STYLE: the same graphic-novel look as the attached image: ink outlines, muted painterly colours, soft film grain.
 
 No text, no numbers, no labels, no frame around the whole image.
 ```
 
-Если 12 кадров не держит, попроси 8 (сетка 4 × 2, шаг около 8°): тоже будет плавнее, чем сейчас.
+Если 12 кадров не держит, попроси 8 (сетка 4 × 2, шаг около 4°): тоже будет плавнее, чем сейчас.
 
 ### Кадры крена шаттла (старый способ, по одному кадру)
 
