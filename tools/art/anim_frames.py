@@ -73,8 +73,8 @@ def main():
         raw = os.path.splitext(os.path.basename(path))[0]
         name = re.sub(r"_\d+x\d+$", "", raw)
         frames = [key(f, "radiation" in name) for f in frames_of(path)]
-        if "buran" in name:
-            frames = [f for f in frames]
+        # Drop empty cells (a grid with fewer frames than cells).
+        frames = [f for f in frames if (f[..., 3] > 20).sum() > 500]
         h = min(f.shape[0] for f in frames)
         w = min(f.shape[1] for f in frames)
         frames = [f[:h, :w] for f in frames]
