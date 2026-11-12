@@ -425,6 +425,342 @@ no white border.
 
 ---
 
+## 10. Игровые спрайты (квадрат 1:1, на зелёном)
+
+Чтобы всё, что летает в секторе, было в одном стиле с интро и меню. Сейчас в игре плоский
+мультяшный шаттл рядом с почти фотографичными камнями.
+
+Правила для этого раздела:
+- **Фон** ровный ярко-зелёный (#00FF00). Я снимаю зелень сам, как сделал со шаттлом для меню.
+  Если зелень заползла на объект или фон неровный, перегенерируй.
+- **Ракурс** строго сверху: в игре камера смотрит сверху.
+- **Кадров анимации не надо.** Одна картинка на объект. Вращение, пульсацию, мерцание игра
+  делает сама.
+- **Новый чат на каждую картинку,** реф указан в заголовке.
+- **Куда класть:** в `art/sprites/raw/` под именем из заголовка.
+
+### Корабль
+
+### `sprite_buran.jpg` — реф [menu_shuttle.jpg](../../art/ui/raw/layers/menu_shuttle.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The white Soviet Buran space shuttle seen from directly above, nose pointing to the right, wings spread, black heat-shield edges, a small red star on the left wing, three engine bells at the back. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### Экипаж (у каждой профессии свой акцент на скафандре)
+
+### `sprite_crew_commander.jpg` — реф [p10.jpg](../../art/intro/raw/p10.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One Soviet cosmonaut in a white spacesuit floating in space, seen from directly above, arms and legs spread like a starfish, helmet towards the top, a gold stripe on the helmet and an amber light on the chest. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_crew_medic.jpg` — реф [p10.jpg](../../art/intro/raw/p10.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One Soviet cosmonaut in a white spacesuit floating in space, seen from directly above, arms and legs spread like a starfish, helmet towards the top, a red cross shape on the shoulder and a white medical pack. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_crew_scientist.jpg` — реф [p10.jpg](../../art/intro/raw/p10.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One Soviet cosmonaut in a white spacesuit floating in space, seen from directly above, arms and legs spread like a starfish, helmet towards the top, a small instrument case clipped to the belt and a pale blue visor. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_crew_mechanic.jpg` — реф [p10.jpg](../../art/intro/raw/p10.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One Soviet cosmonaut in a white spacesuit floating in space, seen from directly above, arms and legs spread like a starfish, helmet towards the top, a wrench and a coil of cable clipped to the suit, scuffed knees. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_crew_military.jpg` — реф [p10.jpg](../../art/intro/raw/p10.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One Soviet cosmonaut in a white spacesuit floating in space, seen from directly above, arms and legs spread like a starfish, helmet towards the top, a darker grey-green suit and a red star on the helmet. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### Аномалии
+
+### `sprite_corrosive.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One cloud of drifting acid dust with a dense swirling core and ragged edges, in pale neutral grey and white only (the game colours it by level). Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_electric.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One ball of pale-blue electric discharge with thin crackling arcs around it. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_radiation.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One sickly green glowing cloud with a faint shimmer and soft tendrils. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_magnetic.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One violet swirl of magnetic field lines with a few small metal shards caught in it. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_boss_mother.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One huge, heavy cloud of acid dust, darker and denser than an ordinary one, with a glowing amber core like an eye and small clouds budding off its edges, menacing. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_boss_storm.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One huge heart of pale-blue lightning: a bright core inside a cage of thick electric arcs, menacing. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### Камни и обломки
+
+### `sprite_rock_metal_1.jpg` — реф [p09.jpg](../../art/intro/raw/p09.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One dark metallic asteroid made of twisted station wreckage and iron rock, variant 1: a different shape from the others. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_rock_metal_2.jpg` — реф [p09.jpg](../../art/intro/raw/p09.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One dark metallic asteroid made of twisted station wreckage and iron rock, variant 2: a different shape from the others. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_rock_metal_3.jpg` — реф [p09.jpg](../../art/intro/raw/p09.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One dark metallic asteroid made of twisted station wreckage and iron rock, variant 3: a different shape from the others. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_rock_mineral_1.jpg` — реф [p09.jpg](../../art/intro/raw/p09.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One grey-brown stony asteroid with pale mineral veins, variant 1: a different shape from the others. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_rock_mineral_2.jpg` — реф [p09.jpg](../../art/intro/raw/p09.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One grey-brown stony asteroid with pale mineral veins, variant 2: a different shape from the others. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_rock_mineral_3.jpg` — реф [p09.jpg](../../art/intro/raw/p09.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One grey-brown stony asteroid with pale mineral veins, variant 3: a different shape from the others. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_fragments_metal.jpg` — реф [p09.jpg](../../art/intro/raw/p09.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. Six small separate metal fragments and scraps of plating, spread apart with clear green space between each piece, none touching. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_fragments_mineral.jpg` — реф [p09.jpg](../../art/intro/raw/p09.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. Six small separate stone chips with pale mineral veins, spread apart with clear green space between each piece, none touching. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### Груз, ракета, убежище, маяк
+
+### `sprite_crate.jpg` — реф [codex_crate.jpg](../../art/ui/raw/codex_crate.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The olive-grey Soviet metal cargo crate from the reference, seen from directly above, the lid visible. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_crate_gold.jpg` — реф [codex_crate.jpg](../../art/ui/raw/codex_crate.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The same cargo crate but painted in worn gold and amber, seen from directly above, the lid visible. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_storage.jpg` — реф [codex_storage.jpg](../../art/ui/raw/codex_storage.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The cylindrical Soviet storage module from the reference, seen from directly above, the round hatch on top. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_storage_gold.jpg` — реф [codex_storage.jpg](../../art/ui/raw/codex_storage.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The same storage module but in worn gold and amber, seen from directly above, the round hatch on top. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_fuel.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One spherical Soviet fuel tank, white insulated skin with dark seams and two valves, seen from directly above. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_fuel_gold.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The same spherical fuel tank but in worn gold and amber, seen from directly above. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_rocket.jpg` — реф [menu_shuttle.jpg](../../art/ui/raw/layers/menu_shuttle.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One small Soviet missile seen from directly above, nose pointing to the right, white body with a red tip and four small fins. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_shelter.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One small round shelter dome from a space station, seen from directly above, dark metal ring with a softly glowing amber dome in the middle. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `sprite_beacon.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. One small extraction beacon, seen from directly above: a metal tripod frame with a bright warm amber lamp in the centre. Seen strictly from directly above (top-down game sprite), centred, filling about 70% of the square, the whole object visible and not cropped. Flat solid pure green #00FF00 background, no gradient, no shadow on the background, no glow outside the object. No text, no letters, no numbers, no frame, no white border.
+```
+
+### Иконки предметов и меток (значки в одном стиле)
+
+### `icon_boost.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a stylised rocket engine flame with two speed lines. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `icon_repair.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a wrench crossed with a hull plate. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `icon_shield.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a hexagonal shield over a small crate. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `icon_splash.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a burst of droplets breaking outwards. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `icon_scan.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a radar sweep arc over a closed crate. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `icon_rockets.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: two small rockets side by side pointing up. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `icon_freeze.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a six-pointed snowflake. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `icon_degrade.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a downward arrow breaking a cloud in half. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `icon_laser.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a thin straight beam from a lens. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `icon_radar.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a round radar screen with a sweep line. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `icon_trash.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a crate with a crack and falling rocks. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `icon_fuel.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a fuel drop inside a canister outline. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `mark_sealed.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a closed padlock. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `mark_burnt.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a scorched crate with a small flame. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `badge_commander.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a five-pointed star with a laurel branch. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `badge_medic.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a red cross. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `badge_scientist.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: an atom with three orbits. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `badge_mechanic.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a gear and a wrench. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### `badge_military.jpg` — реф [p08.jpg](../../art/intro/raw/p08.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Square 1:1 image. The pictogram: a red star with crossed rifles. A round dark enamel badge in the style of a Soviet space-program pin: a thin amber rim, a dark navy field, one simple bold pictogram in warm white and amber in the middle. Seen straight on, centred, filling about 80% of the square. Flat solid pure green #00FF00 background outside the badge. No text, no letters, no numbers, no frame, no white border.
+```
+
+### Фоны глав (широкие 16:9)
+
+### `bg_chapter1.jpg` — реф [p13.jpg](../../art/intro/raw/p13.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Wide 16:9 image. Empty deep space as a game background, seen as if from above, cold and silent: deep navy, sparse stars, a faint cold blue nebula. Very dark overall so objects on top read clearly, low contrast, soft grain, no planets, no ships, no objects, no bright spots. No text, no letters, no frame, no white border.
+```
+
+### `bg_chapter2.jpg` — реф [p13.jpg](../../art/intro/raw/p13.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Wide 16:9 image. Empty deep space as a game background, seen as if from above, uneasy: deep navy with a violet and sickly green nebula, distant lightning glints. Very dark overall so objects on top read clearly, low contrast, soft grain, no planets, no ships, no objects, no bright spots. No text, no letters, no frame, no white border.
+```
+
+### `bg_chapter3.jpg` — реф [p13.jpg](../../art/intro/raw/p13.jpg)
+
+```
+In the same style as the attached image: same graphic novel drawing, same ink outlines, same muted colours and lighting. Wide 16:9 image. Empty deep space as a game background, seen as if from above, the end of the road: dark navy turning warm, an amber and red nebula, the glow of a rift far away. Very dark overall so objects on top read clearly, low contrast, soft grain, no planets, no ships, no objects, no bright spots. No text, no letters, no frame, no white border.
+```
+
+---
+
 ## Уже готово (в игре)
 
 `menu.jpg`, `crew_commander / medic / scientist / mechanic / military.jpg`, `clear.jpg`,
